@@ -1,0 +1,38 @@
+/* ==============================================================*/
+.heading{
+	margin-left: 300px;
+}
+.text-header{
+   /*display: inline-block;*/
+   margin-top: -140px;
+   margin-left: 500px;
+}
+.text-header > p{
+   font: 2em arial; color: #004266;
+}
+.text-header > span{
+   font: 1.7em arial; color: white;
+}
+main > .content-heading{
+   height: 300px;
+}
+#pesquisa{
+	display: none;
+	box-shadow: 1px 2px 5px #888888;
+	width: 96.5em;
+	margin-left: -4.4em;
+	margin-top: -2em;
+	height: 10%;
+}
+#pesquisa > .col-md-4 > .form-group{
+	width: 90%;
+	margin-left: 2em; 
+	margin-top: 1em;
+	margin-bottom: 1em;
+}
+#pesquisa > .col-md-4 > .form-group > .form-control{
+	font-size: 14pt;
+	width: 300%; 
+	margin-left: -100%;
+	border-bottom: none !important;
+}
