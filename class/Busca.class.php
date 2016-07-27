@@ -1043,7 +1043,7 @@ class Busca extends Conexao {
 		//declarando retorno
 		$retorno = "";
 
-		$query = $this->mysqli->query("SELECT itens.id, itens.id_item_processo, itens.num_processo, itens.nome_fornecedor, itens.cod_reduzido, itens.complemento_item, itens.vl_unitario, itens.qt_contrato, itens.qt_utilizado, itens.vl_utilizado, itens.qt_saldo, itens.vl_saldo FROM itens WHERE num_processo LIKE '%{$busca}%' AND cancelado = 0;");
+		$query = $this->mysqli->query("SELECT itens.id, itens.id_item_processo, itens.nome_fornecedor, itens.cod_reduzido, itens.complemento_item, itens.vl_unitario, itens.qt_contrato, itens.qt_utilizado, itens.vl_utilizado, itens.qt_saldo, itens.vl_saldo FROM itens WHERE num_processo LIKE '%{$busca}%' AND cancelado = 0;");
 
 		while ($item = $query->fetch_object()) {
 			//remove as aspas do complemento_item
@@ -1057,7 +1057,6 @@ class Busca extends Conexao {
 				<td>
 					<a class=\"modal-close\" href=\"javascript:checkItemPedido({$item->id}, '{$item->vl_unitario}', {$item->qt_saldo});\"><span class=\"icon\">add<span></a>
 				</td>
-				<td>{$item->num_processo}</td>
 				<td>{$item->nome_fornecedor}</td>
 				<td>{$item->cod_reduzido}</td>
 				<td><input type=\"number\" id=\"qtd{$item->id}\" min=\"1\" max=\"$item->qt_saldo\"></td>
@@ -1247,7 +1246,7 @@ class Busca extends Conexao {
 					<tr>
 						<td>{$processo->num_processo}</td>
 						<td>
-							<button title=\"Imprimir\" onclick=\"pesquisarProcesso('{$processo->num_processo}')\" style=\"text-transform: none !important;font-weight: bold;\" class=\"btn btn-default btn-sm\"><span class=\"icon\">search</span></button>
+							<button title=\"Pesquisar Processo\" onclick=\"pesquisarProcesso('{$processo->num_processo}')\" style=\"text-transform: none !important;font-weight: bold;\" class=\"btn btn-default btn-sm\"><span class=\"icon\">search</span></button>
 						</td>
 					</tr>
 				";

@@ -42,28 +42,6 @@ $saldo_mes_anterior = $obj_Busca->getSaldoMesAnterior($_SESSION["id_setor"]);
   <head>
    <body class="page-brand" onload="iniPagSolicitacoes();">
      <header class="header header-transparent header-waterfall affix">
-      <nav class="tab-nav pull-left hidden-xx">
-        <ul class="nav nav-list">
-          <li>
-            <a class="waves-attach" href="javascript:abreModal('#listRascunhos');"><span class="text-white"><span class="icon">drafts</span>RASCUNHOS</span></a>
-          </li>
-          <li>
-            <a class="waves-attach" href="javascript:abreModal('#listMeusPedidos');"><span class="text-white"><span class="icon">description</span>MEUS PEDIDOS</span></a>
-          </li>
-          <li>
-            <a class="waves-attach" href="javascript:abreModal('#saldos');"><span class="text-white"><span class="icon">attach_money</span>SALDOS</span></a>
-          </li>
-          <li>
-            <a class="waves-attach" href="javascript:abreModal('#listMeusAdiantamentos');"><span class="text-white"><span class="icon">money_off</span>MEUS ADIANTAMENTOS</span></a>
-          </li>
-          <li>
-            <a class="waves-attach" href="javascript:abreModal('#listSolicAltPedidos');"><span class="text-white"><span class="icon">autorenew</span>SOLIC ALTERAÇÕES PEDIDOS</span></a>
-          </li>
-          <li>
-              <a class="waves-attach" href="javascript:abreModal('#listProcessos');"><span class="text-white"><span class="icon">label</span>PROCESSOS</span></a>
-            </li>
-        </ul>
-      </nav>
       <nav class="tab-nav pull-right hidden-xx">
         <ul class="nav nav-list">
           <li>
@@ -127,7 +105,6 @@ $saldo_mes_anterior = $obj_Busca->getSaldoMesAnterior($_SESSION["id_setor"]);
             <table class="table" id="tableProcessos">
               <thead>
                 <th></th>
-                <th>NUM_PROCESSO</th>
                 <th>NOME_FORNECEDOR</th>
                 <th>COD_REDUZIDO</th>
                 <th>QT_SOLICITADA</th>
