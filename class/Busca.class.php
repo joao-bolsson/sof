@@ -18,19 +18,17 @@ class Busca extends Conexao {
 		//atribuindo valor a variavel que realiza as consultas
 		$this->mysqli = parent::getConexao();
 	}
-	//------------------------------------------------------------------------
 	/**
-	 * Função que retorna a quantidade de setores cadastrados
+	 *	Função que retorna as permissões do usuario
 	 *
-	 * @access public
-	 * @return int
+	 *	@access public
+	 *	@return object
 	 */
-	public function getQtdSetores() {
-		$query = $this->mysqli->query("SELECT count(id) AS count FROM setores");
-		$obj = $query->fetch_object();
-		$count = $obj->count;
+	public function getPermissoes($id_user) {
+		$query = $this->mysqli->query("SELECT usuario_permissoes.noticias, usuario_permissoes.saldos, usuario_permissoes.pedidos FROM usuario_permissoes WHERE usuario_permissoes.id_usuario = {$id_user};");
+		$obj_permissoes = $query->fetch_object();
 		$query->close();
-		return $count;
+		return $obj_permissoes;
 	}
 	# ========================================================================================
 	#                                          PÚBLICO
@@ -136,8 +134,7 @@ class Busca extends Conexao {
 	 * Função para popular os slides na página inicial
 	 *
 	 * @access public
-	 * @param $id_setor -> visualização de notícias por setores / público
-	 *        $slide (1 ou 2)-> o primeiro mostra as últimas notícias e o segundo aleatórias
+	 * @param $slide (1 ou 2)-> o primeiro mostra as últimas notícias e o segundo aleatórias
 	 * @return string
 	 */
 	public function getSlide($slide) {

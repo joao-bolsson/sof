@@ -9,6 +9,11 @@ if (!isset($_SESSION["id_setor"]) || $_SESSION["id_setor"] != 2) {
 include_once '../class/Busca.class.php';
 //instanciando classe de busca para popular o select de estados
 $obj_Busca = new Busca();
+
+$permissao = $obj_Busca->getPermissoes($_SESSION["id"]);
+if (!$permissao->noticias) {
+	header("Location: adminsolicitacoes.php");
+}
 ?>
 <!DOCTYPE html>
 <html lang="pt">

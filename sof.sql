@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Tempo de geração: 24/07/2016 às 02:58
+-- Tempo de geração: 29/07/2016 às 02:39
 -- Versão do servidor: 5.5.50-0ubuntu0.14.04.1
 -- Versão do PHP: 7.0.9-1+deb.sury.org~trusty+1
 
@@ -4998,7 +4998,8 @@ CREATE TABLE `itens_pedido` (
 
 INSERT INTO `itens_pedido` (`id`, `id_pedido`, `id_item`, `qtd`, `valor`) VALUES
 (3, 1, 3498, 1000, '11100'),
-(4, 1, 3499, 1000, '10900');
+(4, 1, 3499, 1000, '10900'),
+(5, 2, 4245, 1, '8800');
 
 -- --------------------------------------------------------
 
@@ -5076,7 +5077,8 @@ CREATE TABLE `pedido` (
 --
 
 INSERT INTO `pedido` (`id`, `id_setor`, `data_pedido`, `ref_mes`, `alteracao`, `prioridade`, `status`, `valor`) VALUES
-(1, 3, '2016-07-23', 'julho', 0, 'normal', 'Enviado ao Ordenador', '22000.000');
+(1, 3, '2016-07-23', 'julho', 0, 'normal', 'Enviado ao Ordenador', '22000.000'),
+(2, 3, '2016-07-26', 'Julho', 1, 'rascunho', 'Rascunho', '8800.000');
 
 -- --------------------------------------------------------
 
@@ -5160,6 +5162,13 @@ CREATE TABLE `saldos_adiantados` (
   `justificativa` text NOT NULL,
   `status` tinyint(1) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Fazendo dump de dados para tabela `saldos_adiantados`
+--
+
+INSERT INTO `saldos_adiantados` (`id`, `id_setor`, `data_solicitacao`, `data_analise`, `mes_subtraido`, `ano`, `valor_adiantado`, `justificativa`, `status`) VALUES
+(1, 3, '2016-07-24', '0000-00-00', 13, 2016, '400', 'preciso de um adiantamento urgente', 2);
 
 -- --------------------------------------------------------
 
@@ -5256,6 +5265,13 @@ CREATE TABLE `solic_alt_pedido` (
   `status` tinyint(1) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
+--
+-- Fazendo dump de dados para tabela `solic_alt_pedido`
+--
+
+INSERT INTO `solic_alt_pedido` (`id`, `id_pedido`, `id_setor`, `data_solicitacao`, `data_analise`, `justificativa`, `status`) VALUES
+(1, 1, 3, '2016-07-27', '0000-00-00', 'Preciso adicionar mais itens e remover alguns.', 2);
+
 -- --------------------------------------------------------
 
 --
@@ -5284,6 +5300,35 @@ INSERT INTO `usuario` (`id`, `nome`, `login`, `senha`, `id_setor`) VALUES
 (7, 'UO Dispensas de Licitacao', 'uodisp', '$1$beMT2G77$0mocKkwHwwXO95LqPWYp1/', 8),
 (8, 'Nutricao', 'nutricao', '$1$qTKe.0zX$E.Kbi3YBEVNz1G9KcHSqD1', 9),
 (9, 'Divisao Administrativa Finance', 'divadmin', '$1$OZtbi1V0$Lu2Qp1RUFtjRuA2u7mQEi0', 10);
+
+-- --------------------------------------------------------
+
+--
+-- Estrutura para tabela `usuario_permissoes`
+--
+
+CREATE TABLE `usuario_permissoes` (
+  `id` int(10) UNSIGNED NOT NULL,
+  `id_usuario` int(10) UNSIGNED NOT NULL,
+  `noticias` tinyint(1) NOT NULL,
+  `saldos` tinyint(1) NOT NULL,
+  `pedidos` tinyint(1) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Fazendo dump de dados para tabela `usuario_permissoes`
+--
+
+INSERT INTO `usuario_permissoes` (`id`, `id_usuario`, `noticias`, `saldos`, `pedidos`) VALUES
+(1, 1, 1, 1, 1),
+(2, 2, 0, 0, 0),
+(3, 3, 0, 0, 0),
+(4, 4, 0, 0, 0),
+(5, 5, 0, 0, 0),
+(6, 6, 0, 0, 0),
+(7, 7, 0, 0, 0),
+(8, 8, 0, 0, 0),
+(9, 9, 0, 0, 0);
 
 --
 -- Índices de tabelas apagadas
@@ -5381,6 +5426,13 @@ ALTER TABLE `usuario`
   ADD KEY `id_setor` (`id_setor`);
 
 --
+-- Índices de tabela `usuario_permissoes`
+--
+ALTER TABLE `usuario_permissoes`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `id_usuario` (`id_usuario`);
+
+--
 -- AUTO_INCREMENT de tabelas apagadas
 --
 
@@ -5398,7 +5450,7 @@ ALTER TABLE `itens`
 -- AUTO_INCREMENT de tabela `itens_pedido`
 --
 ALTER TABLE `itens_pedido`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 --
 -- AUTO_INCREMENT de tabela `mes`
 --
@@ -5413,7 +5465,7 @@ ALTER TABLE `paginas_post`
 -- AUTO_INCREMENT de tabela `pedido`
 --
 ALTER TABLE `pedido`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 --
 -- AUTO_INCREMENT de tabela `postagens`
 --
@@ -5423,7 +5475,7 @@ ALTER TABLE `postagens`
 -- AUTO_INCREMENT de tabela `saldos_adiantados`
 --
 ALTER TABLE `saldos_adiantados`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 --
 -- AUTO_INCREMENT de tabela `saldo_fixo`
 --
@@ -5443,11 +5495,16 @@ ALTER TABLE `setores`
 -- AUTO_INCREMENT de tabela `solic_alt_pedido`
 --
 ALTER TABLE `solic_alt_pedido`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 --
 -- AUTO_INCREMENT de tabela `usuario`
 --
 ALTER TABLE `usuario`
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+--
+-- AUTO_INCREMENT de tabela `usuario_permissoes`
+--
+ALTER TABLE `usuario_permissoes`
   MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 --
 -- Restrições para dumps de tabelas
@@ -5510,6 +5567,12 @@ ALTER TABLE `solic_alt_pedido`
 --
 ALTER TABLE `usuario`
   ADD CONSTRAINT `usuario_ibfk_1` FOREIGN KEY (`id_setor`) REFERENCES `setores` (`id`);
+
+--
+-- Restrições para tabelas `usuario_permissoes`
+--
+ALTER TABLE `usuario_permissoes`
+  ADD CONSTRAINT `usuario_permissoes_ibfk_1` FOREIGN KEY (`id_usuario`) REFERENCES `usuario` (`id`);
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;

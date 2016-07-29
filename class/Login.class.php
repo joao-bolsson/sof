@@ -67,8 +67,8 @@ class Login extends Conexao {
 				$_SESSION[$this->campoSetor] = $usuario->{$this->campoSetor};
 
 				//definindo os slides para evitar recarregamentos desnecessários
-				$_SESSION["slide1"] = $this->obj_Busca->getSlide($usuario->{$this->campoSetor}, 1);
-				$_SESSION["slide2"] = $this->obj_Busca->getSlide($usuario->{$this->campoSetor}, 2);
+				$_SESSION["slide1"] = $this->obj_Busca->getSlide(1);
+				$_SESSION["slide2"] = $this->obj_Busca->getSlide(2);
 
 				$retorno = $usuario->{$this->campoSetor};
 			}
