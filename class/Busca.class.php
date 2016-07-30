@@ -1,9 +1,10 @@
 <?php
 /**
- * Classe com as funções de buscas utilizadas pelo ajax
+ *  Classe com as funções de busca utilizadas principalmente pelo arquivo php/busca.php
+ *  qualquer função que RETORNE dados do banco, devem ser feitas nesta classe
  *
- * @author João Bolsson
- * @since Version 1.0
+ *  @author João Bolsson
+ *  @since Version 1.0
  */
 ini_set('display_erros', true);
 error_reporting(E_ALL);

@@ -23,10 +23,13 @@ error_reporting(E_ALL);
 session_start();
 include_once '../class/Geral.class.php';
 include_once '../class/Busca.class.php';
+include_once '../class/Util.class.php';
 //instanciando a classe Geral
 $obj_Geral = new Geral();
 //instanciando a classe Busca
 $obj_Busca = new Busca();
+//instanciando a classe Busca
+$obj_Util = new Util();
 
 if (isset($_POST["admin"]) && isset($_SESSION["id_setor"]) && $_SESSION["id_setor"] == 2) {
 	// variável que controla o que deve ser feito quando geral.php for chamado
@@ -254,44 +257,10 @@ if (isset($_POST["admin"]) && isset($_SESSION["id_setor"]) && $_SESSION["id_seto
 		$assunto = utf8_decode($_POST["assunto"]);
 		$mensagem = utf8_decode($_POST["mensagem"]);
 
-		date_default_timezone_set('Etc/UTC');
-		require '../class/phpmailer/PHPMailerAutoload.php';
-		//Create a new PHPMailer instance
-		$mail = new PHPMailer;
-		//Tell PHPMailer to use SMTP
-		$mail->isSMTP();
-		$mail->SMTPDebug = 0;
-		//Ask for HTML-friendly debug output
-		//$mail->Debugoutput = 'html';
-		//Set the hostname of the mail server
-		$mail->Host = 'smtp.gmail.com';
-		// use
-		// $mail->Host = gethostbyname('smtp.gmail.com');
-		// if your network does not support SMTP over IPv6
-		//Set the SMTP port number - 587 for authenticated TLS, a.k.a. RFC4409 SMTP submission
-		$mail->Port = 587;
-		//Set the encryption system to use - ssl (deprecated) or tls
-		$mail->SMTPSecure = 'tls';
-		//Whether to use SMTP authentication
-		$mail->SMTPAuth = true;
-		//Username to use for SMTP authentication - use full email address for gmail
-		$mail->Username = "sofhusm@gmail.com";
-		//Password to use for SMTP authentication
-		$mail->Password = "joaovictor201610816@[]";
-		//Set who the message is to be sent from
-		$mail->setFrom($email, $nome);
-		//Set an alternative reply-to address
-		$mail->addReplyTo($email, $nome);
-		//Set who the message is to be sent to
-		$mail->addAddress('orcamentofinancashusm@gmail.com', 'Setor de Orçamento e Finanças do HUSM');
-		//Set the subject line
-		$mail->Subject = $assunto;
-		//Read an HTML message body from an external file, convert referenced images to embedded,
-		//convert HTML into a basic plain-text alternative body
-		$mail->msgHTML(file_get_contents('contents.html'), dirname(__FILE__));
-		//Replace the plain text body with one created manually
-		$mail->AltBody = 'SOF Fale Conosco';
-		$mail->Body = $mensagem;
+		$altBody = 'SOF Fale Conosco';
+		$body = $mensagem;
+
+		$obj_Util->preparaEmail($email, $nome, $assunto, $altBody, $body);
 
 		/*=========== ANEXANDO OS ARQUIVOS ========  */
 		if ($_POST["qtd-arquivos"] != 0) {
@@ -334,16 +303,17 @@ if (isset($_POST["admin"]) && isset($_SESSION["id_setor"]) && $_SESSION["id_seto
 					$nome_final = md5(time()) . '.pdf';
 				}
 
-				$mail->addAttachment($_FILES["file-$i"]['tmp_name'], $_FILES["file-$i"]['name']);
+				$obj_Util->mail->addAttachment($_FILES["file-$i"]['tmp_name'], $_FILES["file-$i"]['name']);
 			}
 		}
 		//send the message, check for errors
-		if (!$mail->send()) {
-			echo "Mailer Error: " . $mail->ErrorInfo;
+		if (!$obj_Util->mail->send()) {
+			echo "Mailer Error: " . $obj_Util->mail->ErrorInfo;
 		} else {
 			$_SESSION["email_sucesso"] = 1;
 			header("Location: ../view/faleconosco.php");
 		}
+
 		break;
 
 	default:

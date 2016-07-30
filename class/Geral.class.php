@@ -1,6 +1,10 @@
 <?php
 /**
- * Classe com as funções de cadastros
+ *  Classe com as funções de cadastrados utilizadas pelo arquivo php/geral.php
+ *  toda função de ENTRADA de dados no banco devem ficar nesta classe
+ *
+ *  @author João Bolsson
+ *  @since Version 1.0
  */
 ini_set('display_erros', true);
 error_reporting(E_ALL);
