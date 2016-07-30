@@ -355,14 +355,25 @@ class Busca extends Conexao {
 			$exc = str_replace("saldo_setor", "saldo_fixo", $exc);
 			$query = $this->mysqli->query("SELECT setores.id AS id_setor, setores.nome, saldo_fixo.saldo_padrao AS saldo_incr FROM setores, saldo_fixo WHERE setores.id = saldo_fixo.id_setor AND setores.id <> 1{$exc};");
 		}
-		while ($saldo = $query->fetch_object()) {
-			$retorno .= "
-			<tr>
-				<td>{$saldo->nome}</td>
-				<td>{$saldo->saldo_incr}</td>
-				<td>{$sigla_mes} / {$ano_atual}</td>
-				<td><a class=\"modal-close\" href=\"javascript:liberaSaldo({$saldo->id_setor}, {$mes_atual}, {$ano_atual}, '{$saldo->saldo_incr}');\" title=\"Liberar Saldo\"><span class=\"icon\">done_all<span></span></span></a></td>
-			</tr>
+		if ($query->num_rows > 0) {
+			while ($saldo = $query->fetch_object()) {
+				$retorno .= "
+				<tr>
+					<td>{$saldo->nome}</td>
+					<td>{$saldo->saldo_incr}</td>
+					<td>{$sigla_mes} / {$ano_atual}</td>
+					<td><a class=\"modal-close\" href=\"javascript:liberaSaldo({$saldo->id_setor}, {$mes_atual}, {$ano_atual}, '{$saldo->saldo_incr}');\" title=\"Liberar Saldo\"><span class=\"icon\">done_all<span></span></span></a></td>
+				</tr>
+				";
+			}
+		} else {
+			$retorno = "
+				<tr>
+					<td collspan=\"3\">Nenhum saldo para liberar.</td>
+					<td></td>
+					<td></td>
+					<td></td>
+				</tr>
 			";
 		}
 		$query->close();
