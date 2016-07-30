@@ -136,6 +136,24 @@ function destroyDataTable(tabela) {
 	}).destroy();
 }
 
+function resetSenha() {
+	document.getElementById("loaderResetSenha").style.display = 'inline-block';
+	var email = document.getElementById('userReset').value;
+	$.post('../php/geral.php', {
+		form: 'resetSenha',
+		email: email
+	}, function(resposta) {
+		if (resposta) {
+			alert("Sua senha foi resetada e enviada para o seu e-mail.");
+		} else {
+			alert("Ocorreu um erro no servidor. Contate o administrador.");
+		}
+		$('#esqueceuSenha').modal('hide');
+		document.getElementById('formReset').reset();
+		document.getElementById("loaderResetSenha").style.display = 'none';
+	});
+}
+
 function novaSenha() {
 	document.getElementById("loader").style.display = 'inline-block';
 	var senhaAtual = document.getElementById('senhaAtualUser').value;
@@ -154,8 +172,8 @@ function novaSenha() {
 			alert("Ocorreu um erro no servidor. Contate o administrador.");
 			location.reload();
 		}
+		document.getElementById("loader").style.display = 'none';
 	});
-	document.getElementById("loader").style.display = 'none';
 }
 
 function carregaPostsPag(tabela) {

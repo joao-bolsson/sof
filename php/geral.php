@@ -249,18 +249,59 @@ if (isset($_POST["admin"]) && isset($_SESSION["id_setor"]) && $_SESSION["id_seto
 	$form = $_POST["form"];
 	switch ($form) {
 
+	// resetando senha
+
+	case 'resetSenha':
+		$email = $_POST["email"];
+		// gera uma senha aleatória (sem criptografia)
+		$senha = $obj_Util->criaSenha();
+
+		$reset = $obj_Geral->resetSenha($email, $senha);
+
+		if ($reset == "Sucesso") {
+			$from = $obj_Util->mail->Username;
+			$nome_from = "Setor de Orçamento e Finanças do HUSM";
+			$nome_from = utf8_decode($nome_from);
+			$assunto = "Reset Senha";
+			$altBody = "Sua senha resetada";
+			$body = "Sua nova senha:<strong>{$senha}</strong>";
+			$body .= utf8_decode("
+			<br>
+			<br> Não responda à esse e-mail.
+			<br>
+			<br>Caso tenha problemas, contate orcamentofinancashusm@gmail.com
+			<br>
+			<br>Atenciosamente,
+			<br>equipe do SOF.
+			");
+
+			$obj_Util->preparaEmail($from, $nome_from, $email, "Usuário", $assunto, $altBody, $body);
+
+			//send the message, check for errors
+			if ($obj_Util->mail->send()) {
+				echo true;
+			} else {
+				echo false;
+			}
+		} else {
+			echo false;
+		}
+		break;
+
 	// formulário para contato
 
 	case 'faleconosco':
-		$nome = utf8_decode($_POST["nome"]);
-		$email = $_POST["email"];
+		$nome_from = utf8_decode($_POST["nome"]);
+		$from = $_POST["email"];
+		$para = "orcamentofinancashusm@gmail.com";
+		$nome_para = "Setor de Orçamento e Finanças do HUSM";
 		$assunto = utf8_decode($_POST["assunto"]);
 		$mensagem = utf8_decode($_POST["mensagem"]);
 
 		$altBody = 'SOF Fale Conosco';
 		$body = $mensagem;
 
-		$obj_Util->preparaEmail($email, $nome, $assunto, $altBody, $body);
+		$obj_Util->preparaEmail($from, $nome_from, $para, $nome_para, $assunto, $altBody, $body);
 
 		/*=========== ANEXANDO OS ARQUIVOS ========  */
 		if ($_POST["qtd-arquivos"] != 0) {
@@ -313,7 +354,6 @@ if (isset($_POST["admin"]) && isset($_SESSION["id_setor"]) && $_SESSION["id_seto
 			$_SESSION["email_sucesso"] = 1;
 			header("Location: ../view/faleconosco.php");
 		}
-
 		break;
 
 	default:

@@ -416,6 +416,41 @@ if ($btnSair) {
     </div>
   </footer>
 
+  <div class="modal fade" id="esqueceuSenha" role="dialog">
+    <div class="modal-dialog" style="width: 40%;">
+      <div class="modal-content">
+        <div class="modal-heading">
+          <a class="modal-close" data-dismiss="modal">×</a>
+          <h2 class="modal-title content-sub-heading">Esqueceu a Senha?</h2>
+        </div>
+        <form id="formReset" action="javascript:resetSenha();" method="post">
+          <div id="innerLogin" class="modal-inner">
+            <div class="form-group form-group-label">
+              <label class="floating-label" for="userReset"><span class="icon">perm_identity</span>&nbsp;E-mail</label>
+              <input class="form-control" id="userReset" name="login" type="text" required>
+            </div>
+            <div id="loaderResetSenha" class="progress-circular" style="margin-left: 45%; display: none;">
+                <div class="progress-circular-wrapper">
+                    <div class="progress-circular-inner">
+                        <div class="progress-circular-left">
+                            <div class="progress-circular-spinner"></div>
+                        </div>
+                        <div class="progress-circular-gap"></div>
+                        <div class="progress-circular-right">
+                            <div class="progress-circular-spinner"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+          </div>
+          <div class="modal-footer margin-bottom">
+            <button class="btn btn-brand waves-attach waves-light waves-effect" type="submit" style="width: 100%;"><span class="icon">autorenew</span>&nbsp;Resetar</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
   <div class="modal fade" id="login" role="dialog">
 		<div class="modal-dialog" style="width: 40%;">
 			<div class="modal-content">
@@ -443,6 +478,7 @@ if ($btnSair) {
               <label class="floating-label" for="senha"><span class="icon">lock_outline</span>&nbsp;Senha</label>
               <input class="form-control" id="senha" name="senha" type="password" required>
             </div>
+            <a class="" href="javascript:abreModal('#esqueceuSenha');">Esqueceu a senha?</a>
             <div id="loader" class="progress-circular" style="margin-left: 45%; display: none;">
                 <div class="progress-circular-wrapper">
                     <div class="progress-circular-inner">

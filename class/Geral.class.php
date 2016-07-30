@@ -18,6 +18,30 @@ class Geral extends Conexao {
 		parent::__construct();
 		$this->mysqli = parent::getConexao();
 	}
+	// ------------------------------------------------------------------------------
+	/**
+	 *  Função para dar update numa senha de acordo com o email
+	 *
+	 *  @access public
+	 *  @return string
+	 */
+	public function resetSenha($email, $senha) {
+		// evita SQL Injections
+		$email = $this->mysqli->real_escape_string($email);
+		// verificando se o e-mail consta no sistema
+		$query_email = $this->mysqli->query("SELECT id FROM usuario WHERE email = '{$email}';");
+		if ($query_email->num_rows == 1) {
+			$id = $query_email->fetch_object()->id;
+			// criptografando a senha
+			$senha = crypt($senha);
+			$query = $this->mysqli->query("UPDATE usuario SET senha = '{$senha}' WHERE id = {$id};");
+			if ($query) {
+				return "Sucesso";
+			}
+			return false;
+		}
+		return false;
+	}
 	// -------------------------------------------------------------------------
 	/**
 	 *	Função usada para o usuário alterar a sua senha

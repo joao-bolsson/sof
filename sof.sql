@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Tempo de geração: 29/07/2016 às 02:39
+-- Tempo de geração: 30/07/2016 às 19:01
 -- Versão do servidor: 5.5.50-0ubuntu0.14.04.1
 -- Versão do PHP: 7.0.9-1+deb.sury.org~trusty+1
 
@@ -5283,23 +5283,24 @@ CREATE TABLE `usuario` (
   `nome` varchar(30) NOT NULL,
   `login` varchar(15) NOT NULL,
   `senha` varchar(34) NOT NULL,
-  `id_setor` int(10) UNSIGNED NOT NULL
+  `id_setor` int(10) UNSIGNED NOT NULL,
+  `email` varchar(30) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
 -- Fazendo dump de dados para tabela `usuario`
 --
 
-INSERT INTO `usuario` (`id`, `nome`, `login`, `senha`, `id_setor`) VALUES
-(1, 'Joao Bolsson', 'joao', '$1$lFMH8jqN$6jug1zUb3nmOevrD7k2Ny.', 2),
-(2, 'Farmacia de Medicamentos', 'farmacia', '$1$uCY0jCs5$XdBQwU869rnuFb61UyvHS/', 3),
-(3, 'Farmacia de Materiais', 'farmateriais', '$1$UOfSgz1p$gdFpvb37zKezEPqYZYjNU1', 4),
-(4, 'Almoxarifado Geral', 'almoxarifado', '$1$fzKLXJL4$TJNKtI50IdScQxn5990cX0', 5),
-(5, 'Divisao de Logistica', 'divlog', '$1$2NB./YBc$P.7AV4DtacU1fYCtI9zsH1', 6),
-(6, 'UO Traumato', 'uotraumato', '$1$PQbgUgC1$cFeOLcqwL9n6DoPQkhVq2/', 7),
-(7, 'UO Dispensas de Licitacao', 'uodisp', '$1$beMT2G77$0mocKkwHwwXO95LqPWYp1/', 8),
-(8, 'Nutricao', 'nutricao', '$1$qTKe.0zX$E.Kbi3YBEVNz1G9KcHSqD1', 9),
-(9, 'Divisao Administrativa Finance', 'divadmin', '$1$OZtbi1V0$Lu2Qp1RUFtjRuA2u7mQEi0', 10);
+INSERT INTO `usuario` (`id`, `nome`, `login`, `senha`, `id_setor`, `email`) VALUES
+(1, 'Joao Bolsson', 'joao', '$1$6RmFqcEN$5Elpbeu3wuEGs9.Cu4s6Q0', 2, 'joaovictorbolsson@gmail.com'),
+(2, 'Farmacia de Medicamentos', 'farmacia', '$1$uCY0jCs5$XdBQwU869rnuFb61UyvHS/', 3, ''),
+(3, 'Farmacia de Materiais', 'farmateriais', '$1$UOfSgz1p$gdFpvb37zKezEPqYZYjNU1', 4, ''),
+(4, 'Almoxarifado Geral', 'almoxarifado', '$1$fzKLXJL4$TJNKtI50IdScQxn5990cX0', 5, ''),
+(5, 'Divisao de Logistica', 'divlog', '$1$2NB./YBc$P.7AV4DtacU1fYCtI9zsH1', 6, ''),
+(6, 'UO Traumato', 'uotraumato', '$1$PQbgUgC1$cFeOLcqwL9n6DoPQkhVq2/', 7, ''),
+(7, 'UO Dispensas de Licitacao', 'uodisp', '$1$beMT2G77$0mocKkwHwwXO95LqPWYp1/', 8, ''),
+(8, 'Nutricao', 'nutricao', '$1$qTKe.0zX$E.Kbi3YBEVNz1G9KcHSqD1', 9, ''),
+(9, 'Divisao Administrativa Finance', 'divadmin', '$1$OZtbi1V0$Lu2Qp1RUFtjRuA2u7mQEi0', 10, '');
 
 -- --------------------------------------------------------
 
