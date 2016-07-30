@@ -61,9 +61,16 @@ if (!$permissao->noticias) {
 <body class="page-brand">
   <input id="div_ajax" type="hidden">
   <header class="header header-transparent header-waterfall affix">
+    <nav class="tab-nav pull-left hidden-xx">
+      <ul class="nav nav-list">
+       <li>
+         <a class="btn btn-flat waves-attach waves-light" href="javascript:abreModal('#redefinirSenha');"><span class="text-white"><span class="icon">lock_outline</span>REDEFINIR SENHA</span></a>
+       </li>
+     </ul>
+   </nav>
    <nav class="tab-nav pull-right hidden-xx">
     <ul class="nav nav-list">
-     <li class="active">
+     <li>
        <a class="btn btn-flat waves-attach waves-light" href="sair.php"><span class="text-white"><span class="icon">power_settings_new</span>SAIR</span></a>
      </li>
    </ul>
@@ -86,19 +93,16 @@ if (!$permissao->noticias) {
     <section class="content-inner margin-top-no">
      <nav class="tab-nav ui-tab-tab">
       <ul class="nav nav-list">
-        <li class="active">
+        <li>
           <a class="waves-attach" href="../view/"><span style="color: white;"><span class="icon">home</span>INÍCIO</span></a>
         </li>
-        <li class="active">
+        <li>
           <a class="waves-attach" href="javascript:abreModal('#listArquivos');"><span style="color: white;"><span class="icon">insert_drive_file</span>LISTA DE ARQUIVOS</span></a>
         </li>
-        <li class="active">
+        <li>
           <a class="waves-attach" href="javascript:abreModal('#listNoticias');"><span style="color: white;"><span class="icon">note_add</span>EDITAR NOTÍCIA</span></a>
         </li>
-        <li class="active">
-          <a class="waves-attach" href="javascript:abreModal('#users');"><span style="color: white;"><span class="icon">perm_identity</span>USUÁRIOS</span></a>
-        </li>
-        <li class="active">
+        <li>
           <a class="waves-attach" href="adminsolicitacoes.php"><span style="color: white;"><span class="icon">payment</span>SOLICITAÇÕES</span></a>
         </li>
       </ul>
@@ -246,21 +250,20 @@ echo $obj_Busca->getPostarEm();
     </div>
   </div>
 </div>
-<div class="modal fade" id="users" role="dialog">
+<div class="modal fade" id="redefinirSenha" role="dialog">
   <div class="modal-dialog" style="width: 40%;">
     <div class="modal-content">
       <div class="modal-heading">
         <a class="modal-close" data-dismiss="modal">×</a>
-        <h2 class="modal-title content-sub-heading">Usuários</h2>
+        <h2 class="modal-title content-sub-heading">Redefinir Senha</h2>
       </div>
-      <form id="alterSenha" action="javascript:alterSenha();" method="post">
+      <form id="alterSenha" action="javascript:novaSenha();" method="post">
         <div class="modal-inner">
-          <div id="formLog" class="form-group">
-            <select id="loginUser" class="form-control" name="loginUser" required>
-              <?php echo $obj_Busca->getUsers(); ?>
-            </select>
+          <div class="form-group form-group-label">
+            <label class="floating-label" for="senhaAtualUser"><span class="icon">lock_outline</span>&nbsp;Senha Atual</label>
+            <input class="form-control" id="senhaAtualUser" name="senhaAtualUser" type="password" required>
           </div>
-          <div id="formPass" class="form-group form-group-label">
+          <div class="form-group form-group-label">
             <label class="floating-label" for="senhaUser"><span class="icon">lock_outline</span>&nbsp;Nova Senha</label>
             <input class="form-control" id="senhaUser" name="senhaUser" type="password" required>
           </div>
@@ -356,6 +359,6 @@ echo $obj_Busca->getPostarEm();
 
 <script type="text/javascript" src="../plugins/dataTables/datatables.min.js"></script>
 
-<script type="text/javascript" src="../ini.js"></script>
+<script type="text/javascript" src="../ini.min.js"></script>
 </body>
 </html>

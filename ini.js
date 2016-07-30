@@ -136,7 +136,30 @@ function destroyDataTable(tabela) {
 	}).destroy();
 }
 
+function novaSenha() {
+	document.getElementById("loader").style.display = 'inline-block';
+	var senhaAtual = document.getElementById('senhaAtualUser').value;
+	var novaSenha = document.getElementById('senhaUser').value;
+	$.post('../php/geral.php', {
+		users: 1,
+		form: 'novaSenha',
+		novaSenha: novaSenha,
+		senhaAtual: senhaAtual
+	}, function(resposta) {
+		if (resposta) {
+			$('#redefinirSenha').modal('hide');
+			document.getElementById('alterSenha').reset();
+			avisoSnack('Sua senha foi redefinida com sucesso!', 'body');
+		} else {
+			alert("Ocorreu um erro no servidor. Contate o administrador.");
+			location.reload();
+		}
+	});
+	document.getElementById("loader").style.display = 'none';
+}
+
 function carregaPostsPag(tabela) {
+	document.getElementById('loader');
 	$.post('../php/busca.php', {
 		admin: 1,
 		form: 'carregaPostsPag',
@@ -302,37 +325,6 @@ function analisaAdi(id, acao) {
 			iniTableSolicAdiant(2);
 		});
 	}
-}
-
-function alterSenha() {
-	// Colocamos os valores de cada campo em uma váriavel para facilitar a manipulação
-	var id_user = document.getElementById("loginUser").value;
-	var senha = document.getElementById("senhaUser").value;
-	document.getElementById("loader").style.display = 'inline-block';
-
-	$.post('../php/geral.php', {
-		admin: 1,
-		form: 'alterSenha',
-		id_user: id_user,
-		senha: senha
-	}, function(resposta) {
-		// Quando terminada a requisição
-		// Se a resposta é um erro
-		if (resposta != false) {
-			// Exibe o erro na div
-			$("#users").html(resposta);
-		}
-		// Se resposta for false, ou seja, não ocorreu nenhum erro
-		else {
-			avisoSnack('Senha alterada com Sucesso !', 'body');
-			//fechando o modal
-			$('#users').modal('hide');
-			//reestabelecendo modal orginal
-			document.getElementById("alterSenha").reset();
-			document.getElementById("loader").style.display = 'none';
-		}
-
-	});
 }
 
 // FUNÇÃO DISPARADA QUANDO O ITEM É CLICADO P/ ADC ---------------------------------

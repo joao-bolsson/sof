@@ -16,6 +16,27 @@ class Geral extends Conexao {
 	}
 	// -------------------------------------------------------------------------
 	/**
+	 *	Função usada para o usuário alterar a sua senha
+	 *
+	 *	@access public
+	 *	@return bool
+	 */
+	public function novaSenha($id_user, $novaSenha, $senhaAtual) {
+		$query = $this->mysqli->query("SELECT senha FROM usuario WHERE id = {$id_user};")->fetch_object();
+		if (crypt($senhaAtual, $query->senha) == $query->senha) {
+			$novaSenha = crypt($novaSenha);
+			$altera = $this->mysqli->query("UPDATE usuario SET senha = '{$novaSenha}' WHERE id = {$id_user};");
+			return true;
+		} else {
+			// remove all session variables
+			session_unset();
+			// destroy the session
+			session_destroy();
+			return false;
+		}
+	}
+	// -------------------------------------------------------------------------
+	/**
 	 *	Função que analisa as solicitações de alteração de pedido
 	 *
 	 *	@access public

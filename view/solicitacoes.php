@@ -42,196 +42,203 @@ $saldo_mes_anterior = $obj_Busca->getSaldoMesAnterior($_SESSION["id_setor"]);
   <head>
    <body class="page-brand" onload="iniPagSolicitacoes();">
      <header class="header header-transparent header-waterfall affix">
-      <nav class="tab-nav pull-right hidden-xx">
+      <nav class="tab-nav pull-left hidden-xx">
         <ul class="nav nav-list">
           <li>
-            <a class="btn btn-flat waves-attach waves-light" href="../admin/sair.php"><span class="text-white"><span class="icon">undo</span>SAIR</span></a>
-          </li>
-        </ul>
-      </nav>
-    </header>
-    <main class="content">
-     <div class="content-heading">
-      <div class="container">
-        <div class="row">
-          <h1 class="heading module wow slideInRight animated"><img src="../sof_files/logo_blue.png" alt="Setor de Orçamento e Finanças – HUSM" /></h1>
-          <div class="text-header module wow slideInLeft animated">
-            <p>Setor de Orçamento e Finanças</p>
-            <span>Hospital Universitário de Santa Maria</span>
-          </div>
+           <a class="btn btn-flat waves-attach waves-light" href="javascript:abreModal('#redefinirSenha');"><span class="text-white"><span class="icon">lock_outline</span>REDEFINIR SENHA</span></a>
+         </li>
+       </ul>
+     </nav>
+     <nav class="tab-nav pull-right hidden-xx">
+      <ul class="nav nav-list">
+        <li>
+          <a class="btn btn-flat waves-attach waves-light" href="../admin/sair.php"><span class="text-white"><span class="icon">undo</span>SAIR</span></a>
+        </li>
+      </ul>
+    </nav>
+  </header>
+  <main class="content">
+   <div class="content-heading">
+    <div class="container">
+      <div class="row">
+        <h1 class="heading module wow slideInRight animated"><img src="../sof_files/logo_blue.png" alt="Setor de Orçamento e Finanças – HUSM" /></h1>
+        <div class="text-header module wow slideInLeft animated">
+          <p>Setor de Orçamento e Finanças</p>
+          <span>Hospital Universitário de Santa Maria</span>
         </div>
       </div>
     </div>
-    <div class="container">
-      <div class="row">
-        <section class="content-inner margin-top-no">
-         <nav class="tab-nav ui-tab-tab">
-          <ul class="nav nav-list">
-            <li>
-              <a class="waves-attach" href="javascript:abreModal('#listRascunhos');"><span class="text-white"><span class="icon">drafts</span>RASCUNHOS</span></a>
-            </li>
-            <li>
-              <a class="waves-attach" href="javascript:abreModal('#listMeusPedidos');"><span class="text-white"><span class="icon">description</span>MEUS PEDIDOS</span></a>
-            </li>
-            <li>
-              <a class="waves-attach" href="javascript:abreModal('#saldos');"><span class="text-white"><span class="icon">attach_money</span>SALDOS</span></a>
-            </li>
-            <li>
-              <a class="waves-attach" href="javascript:abreModal('#listMeusAdiantamentos');"><span class="text-white"><span class="icon">money_off</span>MEUS ADIANTAMENTOS</span></a>
-            </li>
-            <li>
-              <a class="waves-attach" href="javascript:abreModal('#listSolicAltPedidos');"><span class="text-white"><span class="icon">autorenew</span>SOLIC ALTERAÇÕES PEDIDOS</span></a>
-            </li>
-            <li>
-              <a class="waves-attach" href="javascript:abreModal('#listProcessos');"><span class="text-white"><span class="icon">label</span>PROCESSOS</span></a>
-            </li>
-          </ul>
-        </nav>
-      </div><!-- ./row -->
-      <div class="row">
-        <div id="card" class="card margin-top-no">
-         <div class="card-main">
-           <div class="card-header card-brand">
-             <div class="card-header-side pull-left">
-               <p class="card-heading">Solicitações</p>
-             </div>
-           </div><!--  ./card-header -->
-           <div id="groupNumProc" class="form-group form-group-label">
-            <label class="floating-label padding-left" for="searchProcesso" style="font-size: 14pt;"><span class="icon">search</span>&nbsp;Digite o número do processo</label>
-            <input class="form-control padding-left" id="searchProcesso" name="search" type="text" style="font-size: 14pt;">
-          </div>
-          <button class="btn waves-attach" type="button" onclick="pesquisarProcesso(0);" style="width: 100%;"><span class="icon" style="font-weight: bold;">search</span></button>
-          <div class="card-inner">
-            <table class="table" id="tableProcessos">
-              <thead>
-                <th></th>
-                <th>NOME_FORNECEDOR</th>
-                <th>COD_REDUZIDO</th>
-                <th>QT_SOLICITADA</th>
-                <th>COMPLEMENTO_ITEM</th>
-                <th style="display: none;"></th>
-                <th>VL_UNITARIO</th>
-                <th>QT_SALDO</th>
-                <th>QT_UTILIZADO</th>
-                <th>VL_SALDO</th>
-                <th>VL_UTILIZADO</th>
-                <th>QT_CONTRATO</th>
-              </thead>
-              <tbody id="conteudoProcesso">
-
-              </tbody>
-            </table>
-          </div><!-- ./card-inner -->
-        </div><!-- ./card-main -->
-      </div> <!-- ./card -->
-    </div>
+  </div>
+  <div class="container">
     <div class="row">
-      <div class="card margin-top-no">
+      <section class="content-inner margin-top-no">
+       <nav class="tab-nav ui-tab-tab">
+        <ul class="nav nav-list">
+          <li>
+            <a class="waves-attach" href="javascript:abreModal('#listRascunhos');"><span class="text-white"><span class="icon">drafts</span>RASCUNHOS</span></a>
+          </li>
+          <li>
+            <a class="waves-attach" href="javascript:abreModal('#listMeusPedidos');"><span class="text-white"><span class="icon">description</span>MEUS PEDIDOS</span></a>
+          </li>
+          <li>
+            <a class="waves-attach" href="javascript:abreModal('#saldos');"><span class="text-white"><span class="icon">attach_money</span>SALDOS</span></a>
+          </li>
+          <li>
+            <a class="waves-attach" href="javascript:abreModal('#listMeusAdiantamentos');"><span class="text-white"><span class="icon">money_off</span>MEUS ADIANTAMENTOS</span></a>
+          </li>
+          <li>
+            <a class="waves-attach" href="javascript:abreModal('#listSolicAltPedidos');"><span class="text-white"><span class="icon">autorenew</span>SOLIC ALTERAÇÕES PEDIDOS</span></a>
+          </li>
+          <li>
+            <a class="waves-attach" href="javascript:abreModal('#listProcessos');"><span class="text-white"><span class="icon">label</span>PROCESSOS</span></a>
+          </li>
+        </ul>
+      </nav>
+    </div><!-- ./row -->
+    <div class="row">
+      <div id="card" class="card margin-top-no">
        <div class="card-main">
          <div class="card-header card-brand">
            <div class="card-header-side pull-left">
-             <p class="card-heading">Pedido</p>
-           </div>
-           <div class="card-header-side pull-right" style="margin-left: 70%;">
-             <p class="card-heading">SALDO <span id="text_saldo_total">R$ <?php echo $saldo_total ?><span></p>
+             <p class="card-heading">Solicitações</p>
            </div>
          </div><!--  ./card-header -->
-         <form action="../php/geral.php" method="POST">
-          <input type="hidden" name="users" value="1"></input>
-          <input type="hidden" name="form" value="pedido"></input>
-          <input id="pedido" type="hidden" name="pedido" value="0"></input>
-          <div class="card-inner">
-            <table class="table">
-              <thead>
-                <th></th>
-                <th>COD_REDUZIDO</th>
-                <th>COMPLEMENTO_ITEM</th>
-                <th>VL_UNITARIO</th>
-                <th>NOME_FORNECEDOR</th>
-                <th>NUM_LICITACAO</th>
-                <th>QT_SOLICITADA</th>
-                <th>VALOR</th>
-              </thead>
-              <tbody id="conteudoPedido">
+         <div id="groupNumProc" class="form-group form-group-label">
+          <label class="floating-label padding-left" for="searchProcesso" style="font-size: 14pt;"><span class="icon">search</span>&nbsp;Digite o número do processo</label>
+          <input class="form-control padding-left" id="searchProcesso" name="search" type="text" style="font-size: 14pt;">
+        </div>
+        <button class="btn waves-attach" type="button" onclick="pesquisarProcesso(0);" style="width: 100%;"><span class="icon" style="font-weight: bold;">search</span></button>
+        <div class="card-inner">
+          <table class="table" id="tableProcessos">
+            <thead>
+              <th></th>
+              <th>NOME_FORNECEDOR</th>
+              <th>COD_REDUZIDO</th>
+              <th>QT_SOLICITADA</th>
+              <th>COMPLEMENTO_ITEM</th>
+              <th style="display: none;"></th>
+              <th>VL_UNITARIO</th>
+              <th>QT_SALDO</th>
+              <th>QT_UTILIZADO</th>
+              <th>VL_SALDO</th>
+              <th>VL_UTILIZADO</th>
+              <th>QT_CONTRATO</th>
+            </thead>
+            <tbody id="conteudoProcesso">
 
-              </tbody>
-            </table>
-            <table class="table">
-              <tr>
-                <td>
-
-                  <div class="form-group form-group-label">
-                    <label class="floating-label padding-left" for="refMes" style="font-size: 14pt;"><span class="icon">comment</span>&nbsp;Referente ao mês de</label>
-                    <input class="form-control padding-left" id="refMes" name="refMes" style="font-size: 14pt;" type="text" required>
-                  </div>
-                </td>
-                <td>
-                  <div class="form-group form-group-label control-highlight">
-                    <label class="floating-label padding-left" for="total" style="font-size: 14pt;"><span class="icon">attach_money</span>&nbsp;Total</label>
-                    <input class="form-control padding-left" id="total" name="total" style="font-size: 14pt;" type="text" disabled value="R$ 0">
-                  </div>
-                </td>
-              </tr>
-              <input id="total_hidden" type="hidden" name="total_hidden" value="0">
-              <input id="saldo_total" type="hidden" name="saldo_total" value="<?php echo $saldo_total ?>">
-            </table>
-            <div class="form-group">
-              <table class="table">
-                <tr>
-                  <td>
-                    <div class="radiobtn radiobtn-adv">
-                      <label for="stNormal">
-                        <input type="radio" name="st" id="stNormal" class="access-hide" checked="" value="normal">Normal
-                        <span class="radiobtn-circle"></span><span class="radiobtn-circle-check"></span>
-                      </label>
-                    </div>
-                  </td>
-                  <td>
-                    <div class="radiobtn radiobtn-adv">
-                      <label for="stPreferencial">
-                        <input type="radio" name="st" id="stPreferencial" class="access-hide" value="preferencial">Preferencial
-                        <span class="radiobtn-circle"></span><span class="radiobtn-circle-check"></span>
-                      </label>
-                    </div>
-                  </td>
-                  <td>
-                    <div class="radiobtn radiobtn-adv">
-                      <label for="stUrgente">
-                        <input type="radio" name="st" id="stUrgente" class="access-hide" value="urgente">Urgente
-                        <span class="radiobtn-circle"></span><span class="radiobtn-circle-check"></span>
-                      </label>
-                    </div>
-                  </td>
-                  <td>
-                    <div class="radiobtn radiobtn-adv">
-                      <label for="stEmergencial">
-                        <input type="radio" name="st" id="stEmergencial" class="access-hide" value="emergencial">Emergencial
-                        <span class="radiobtn-circle"></span><span class="radiobtn-circle-check"></span>
-                      </label>
-                    </div>
-                  </td>
-                  <td>
-                    <div class="radiobtn radiobtn-adv">
-                      <label for="stRascunho">
-                        <input type="radio" name="st" id="stRascunho" class="access-hide" checked="" value="rascunho">Rascunho
-                        <span class="radiobtn-circle"></span><span class="radiobtn-circle-check"></span>
-                      </label>
-                    </div>
-                  </td>
-                </tr>
-              </table>
-            </div>
-          </div><!-- ./card-inner -->
-          <div class="card-action">
-            <div class="card-action-btn">
-              <button class="btn btn-brand waves-attach" type="button" onclick="javascript:imprimir(0);" style="width: 50%;"><span class="icon">print</span>&nbsp;Imprimir Pedido</button>
-              <button class="btn btn-brand waves-attach" type="submit" style="width: 49%;"><span class="icon">check</span>&nbsp;Enviar Pedido / Salvar Rascunho</button>
-            </div>
-          </div>
-        </form>
+            </tbody>
+          </table>
+        </div><!-- ./card-inner -->
       </div><!-- ./card-main -->
     </div> <!-- ./card -->
   </div>
+  <div class="row">
+    <div class="card margin-top-no">
+     <div class="card-main">
+       <div class="card-header card-brand">
+         <div class="card-header-side pull-left">
+           <p class="card-heading">Pedido</p>
+         </div>
+         <div class="card-header-side pull-right" style="margin-left: 70%;">
+           <p class="card-heading">SALDO <span id="text_saldo_total">R$ <?php echo $saldo_total ?><span></p>
+         </div>
+       </div><!--  ./card-header -->
+       <form action="../php/geral.php" method="POST">
+        <input type="hidden" name="users" value="1"></input>
+        <input type="hidden" name="form" value="pedido"></input>
+        <input id="pedido" type="hidden" name="pedido" value="0"></input>
+        <div class="card-inner">
+          <table class="table">
+            <thead>
+              <th></th>
+              <th>COD_REDUZIDO</th>
+              <th>COMPLEMENTO_ITEM</th>
+              <th>VL_UNITARIO</th>
+              <th>NOME_FORNECEDOR</th>
+              <th>NUM_LICITACAO</th>
+              <th>QT_SOLICITADA</th>
+              <th>VALOR</th>
+            </thead>
+            <tbody id="conteudoPedido">
+
+            </tbody>
+          </table>
+          <table class="table">
+            <tr>
+              <td>
+
+                <div class="form-group form-group-label">
+                  <label class="floating-label padding-left" for="refMes" style="font-size: 14pt;"><span class="icon">comment</span>&nbsp;Referente ao mês de</label>
+                  <input class="form-control padding-left" id="refMes" name="refMes" style="font-size: 14pt;" type="text" required>
+                </div>
+              </td>
+              <td>
+                <div class="form-group form-group-label control-highlight">
+                  <label class="floating-label padding-left" for="total" style="font-size: 14pt;"><span class="icon">attach_money</span>&nbsp;Total</label>
+                  <input class="form-control padding-left" id="total" name="total" style="font-size: 14pt;" type="text" disabled value="R$ 0">
+                </div>
+              </td>
+            </tr>
+            <input id="total_hidden" type="hidden" name="total_hidden" value="0">
+            <input id="saldo_total" type="hidden" name="saldo_total" value="<?php echo $saldo_total ?>">
+          </table>
+          <div class="form-group">
+            <table class="table">
+              <tr>
+                <td>
+                  <div class="radiobtn radiobtn-adv">
+                    <label for="stNormal">
+                      <input type="radio" name="st" id="stNormal" class="access-hide" checked="" value="normal">Normal
+                      <span class="radiobtn-circle"></span><span class="radiobtn-circle-check"></span>
+                    </label>
+                  </div>
+                </td>
+                <td>
+                  <div class="radiobtn radiobtn-adv">
+                    <label for="stPreferencial">
+                      <input type="radio" name="st" id="stPreferencial" class="access-hide" value="preferencial">Preferencial
+                      <span class="radiobtn-circle"></span><span class="radiobtn-circle-check"></span>
+                    </label>
+                  </div>
+                </td>
+                <td>
+                  <div class="radiobtn radiobtn-adv">
+                    <label for="stUrgente">
+                      <input type="radio" name="st" id="stUrgente" class="access-hide" value="urgente">Urgente
+                      <span class="radiobtn-circle"></span><span class="radiobtn-circle-check"></span>
+                    </label>
+                  </div>
+                </td>
+                <td>
+                  <div class="radiobtn radiobtn-adv">
+                    <label for="stEmergencial">
+                      <input type="radio" name="st" id="stEmergencial" class="access-hide" value="emergencial">Emergencial
+                      <span class="radiobtn-circle"></span><span class="radiobtn-circle-check"></span>
+                    </label>
+                  </div>
+                </td>
+                <td>
+                  <div class="radiobtn radiobtn-adv">
+                    <label for="stRascunho">
+                      <input type="radio" name="st" id="stRascunho" class="access-hide" checked="" value="rascunho">Rascunho
+                      <span class="radiobtn-circle"></span><span class="radiobtn-circle-check"></span>
+                    </label>
+                  </div>
+                </td>
+              </tr>
+            </table>
+          </div>
+        </div><!-- ./card-inner -->
+        <div class="card-action">
+          <div class="card-action-btn">
+            <button class="btn btn-brand waves-attach" type="button" onclick="javascript:imprimir(0);" style="width: 50%;"><span class="icon">print</span>&nbsp;Imprimir Pedido</button>
+            <button class="btn btn-brand waves-attach" type="submit" style="width: 49%;"><span class="icon">check</span>&nbsp;Enviar Pedido / Salvar Rascunho</button>
+          </div>
+        </div>
+      </form>
+    </div><!-- ./card-main -->
+  </div> <!-- ./card -->
+</div>
 </section>
 </div>
 </div>
@@ -333,7 +340,7 @@ $saldo_mes_anterior = $obj_Busca->getSaldoMesAnterior($_SESSION["id_setor"]);
             </tr>
           </thead>
           <tbody>
-<?php echo $obj_Busca->getProcessos(); ?>
+            <?php echo $obj_Busca->getProcessos(); ?>
           </tbody>
         </table>
       </div>

@@ -181,6 +181,16 @@ if (isset($_POST["admin"]) && isset($_SESSION["id_setor"]) && $_SESSION["id_seto
 
 	switch ($form) {
 
+	// redefindo uma nova senha
+	case 'novaSenha':
+		$id_user = $_SESSION["id"];
+		$novaSenha = $_POST["novaSenha"];
+		$senhaAtual = $_POST["senhaAtual"];
+
+		$redefini = $obj_Geral->novaSenha($id_user, $novaSenha, $senhaAtual);
+		echo $redefini;
+		break;
+
 	// solicitação para alterar um pedido
 
 	case 'alt_pedido':

@@ -35,27 +35,29 @@ $permissao = $obj_Busca->getPermissoes($_SESSION["id"]);
 <body class="page-brand" onload="iniAdminSolicitacoes();">
   <input id="div_ajax" type="hidden">
   <header class="header header-transparent header-waterfall affix">
-    <?php
+    <ul class="nav nav-list pull-left">
+      <?php
 if ($permissao->noticias) {
 	echo "
-     <ul class=\"nav nav-list pull-left\">
-      <li>
+       <li>
         <a class=\"btn btn-flat waves-attach waves-light\" href=\"index.php\">
           <span class=\"text-white\"><span class=\"icon icon-lg\">undo</span>VOLTAR</span>
         </a>
       </li>
-    </ul>
-    ";
+      ";
 }
 ?>
-
-  <nav class="tab-nav pull-right hidden-xx">
-    <ul class="nav nav-list">
-      <li>
-        <a class="btn btn-flat waves-attach waves-light" href="sair.php"><span class="text-white"><span class="icon">undo</span>SAIR</span></a>
-      </li>
-    </ul>
-  </nav>
+    <li>
+     <a class="btn btn-flat waves-attach waves-light" href="javascript:abreModal('#redefinirSenha');"><span class="text-white"><span class="icon">lock_outline</span>REDEFINIR SENHA</span></a>
+   </li>
+ </ul>
+ <nav class="tab-nav pull-right hidden-xx">
+  <ul class="nav nav-list">
+    <li>
+      <a class="btn btn-flat waves-attach waves-light" href="sair.php"><span class="text-white"><span class="icon">power_settings_new</span>SAIR</span></a>
+    </li>
+  </ul>
+</nav>
 </header>
 <main class="content">
  <div class="content-heading">
@@ -76,9 +78,6 @@ if ($permissao->noticias) {
       <ul class="nav nav-list">
         <li>
           <a class="waves-attach" href="../view/"><span style="color: white;"><span class="icon">home</span>INÍCIO</span></a>
-        </li>
-        <li>
-          <a class="waves-attach" href="javascript:abreModal('#users');"><span style="color: white;"><span class="icon">perm_identity</span>USUÁRIOS</span></a>
         </li>
         <li class="active">
           <a class="waves-attach" href="adminsolicitacoes.php"><span style="color: white;"><span class="icon">payment</span>SOLICITAÇÕES</span></a>
@@ -160,60 +159,60 @@ if ($permissao->saldos) {
 <?php
 if ($permissao->pedidos) {
 	echo "
-<div class=\"row\">
- <div class=\"card margin-top-no\">
-   <div class=\"card-main\">
-     <div class=\"card-header card-brand\">
-       <div class=\"card-header-side pull-left\">
-         <p class=\"card-heading\">Solicitações de Alteração de Pedidos</p>
-       </div>
-     </div><!--  ./card-header -->
-     <div class=\"card-inner\">
-      <table class=\"table\">
-        <tr>
-          <td>
-            <div class=\"radiobtn radiobtn-adv\">
-              <label for=\"stAltAbertos\">
-                <input type=\"radio\" id=\"stAltAbertos\" name=\"stAlt\" class=\"access-hide\" onclick=\"iniTableSolicAltPed(2);\" checked>Abertos
-                <span class=\"radiobtn-circle\"></span><span class=\"radiobtn-circle-check\"></span>
-              </label>
-            </div>
-          </td>
-          <td>
-            <div class=\"radiobtn radiobtn-adv\">
-              <label for=\"stAltAprovados\">
-                <input type=\"radio\" id=\"stAltAprovados\" name=\"stAlt\" class=\"access-hide\" onclick=\"iniTableSolicAltPed(1);\">Aprovados
-                <span class=\"radiobtn-circle\"></span><span class=\"radiobtn-circle-check\"></span>
-              </label>
-            </div>
-          </td>
-          <td>
-            <div class=\"radiobtn radiobtn-adv\">
-              <label for=\"stAltReprovado\">
-                <input type=\"radio\" id=\"stAltReprovado\" name=\"stAlt\" class=\"access-hide\" onclick=\"iniTableSolicAltPed(0);\">Reprovados
-                <span class=\"radiobtn-circle\"></span><span class=\"radiobtn-circle-check\"></span>
-              </label>
-            </div>
-          </td>
-        </tr>
-      </table>
-      <table id=\"tableSolicAltPedido\" class=\"table\" style=\"width: 100%;\">
-        <thead>
-          <th></th>
-          <th>#PEDIDO</th>
-          <th>SETOR</th>
-          <th>DATA_SOLICITACAO</th>
-          <th>DATA_ANALISE</th>
-          <th>JUSTIFICATIVA</th>
-          <th>STATUS</th>
-        </thead>
-        <tbody id=\"contSolicAltPedido\">
+  <div class=\"row\">
+   <div class=\"card margin-top-no\">
+     <div class=\"card-main\">
+       <div class=\"card-header card-brand\">
+         <div class=\"card-header-side pull-left\">
+           <p class=\"card-heading\">Solicitações de Alteração de Pedidos</p>
+         </div>
+       </div><!--  ./card-header -->
+       <div class=\"card-inner\">
+        <table class=\"table\">
+          <tr>
+            <td>
+              <div class=\"radiobtn radiobtn-adv\">
+                <label for=\"stAltAbertos\">
+                  <input type=\"radio\" id=\"stAltAbertos\" name=\"stAlt\" class=\"access-hide\" onclick=\"iniTableSolicAltPed(2);\" checked>Abertos
+                  <span class=\"radiobtn-circle\"></span><span class=\"radiobtn-circle-check\"></span>
+                </label>
+              </div>
+            </td>
+            <td>
+              <div class=\"radiobtn radiobtn-adv\">
+                <label for=\"stAltAprovados\">
+                  <input type=\"radio\" id=\"stAltAprovados\" name=\"stAlt\" class=\"access-hide\" onclick=\"iniTableSolicAltPed(1);\">Aprovados
+                  <span class=\"radiobtn-circle\"></span><span class=\"radiobtn-circle-check\"></span>
+                </label>
+              </div>
+            </td>
+            <td>
+              <div class=\"radiobtn radiobtn-adv\">
+                <label for=\"stAltReprovado\">
+                  <input type=\"radio\" id=\"stAltReprovado\" name=\"stAlt\" class=\"access-hide\" onclick=\"iniTableSolicAltPed(0);\">Reprovados
+                  <span class=\"radiobtn-circle\"></span><span class=\"radiobtn-circle-check\"></span>
+                </label>
+              </div>
+            </td>
+          </tr>
+        </table>
+        <table id=\"tableSolicAltPedido\" class=\"table\" style=\"width: 100%;\">
+          <thead>
+            <th></th>
+            <th>#PEDIDO</th>
+            <th>SETOR</th>
+            <th>DATA_SOLICITACAO</th>
+            <th>DATA_ANALISE</th>
+            <th>JUSTIFICATIVA</th>
+            <th>STATUS</th>
+          </thead>
+          <tbody id=\"contSolicAltPedido\">
 
-        </tbody>
-      </table>
-    </div><!-- ./card-inner -->
-  </div><!-- ./card-main -->
-</div> <!-- ./card -->
+          </tbody>
+        </table>
+      </div><!-- ./card-inner -->
+    </div><!-- ./card-main -->
+  </div> <!-- ./card -->
 </div> <!-- ./row -->
 
 <!-- TABELA COM OS PEDIDOS ENVIADOS AO SOF -->
@@ -439,7 +438,7 @@ if ($permissao->pedidos) {
   </div><!-- ./card-main -->
 </div> <!-- ./card -->
 </div> <!-- ./row -->
-    ";
+";
 }
 ?>
 </section>
@@ -477,21 +476,20 @@ if ($permissao->pedidos) {
     </div>
   </div>
 </footer>
-<div class="modal fade" id="users" role="dialog">
+<div class="modal fade" id="redefinirSenha" role="dialog">
   <div class="modal-dialog" style="width: 40%;">
     <div class="modal-content">
       <div class="modal-heading">
         <a class="modal-close" data-dismiss="modal">×</a>
-        <h2 class="modal-title content-sub-heading">Usuários</h2>
+        <h2 class="modal-title content-sub-heading">Redefinir Senha</h2>
       </div>
-      <form id="alterSenha" action="javascript:alterSenha();" method="post">
+      <form id="alterSenha" action="javascript:novaSenha();" method="post">
         <div class="modal-inner">
-          <div id="formLog" class="form-group">
-            <select id="loginUser" class="form-control" name="loginUser" required>
-              <?php echo $obj_Busca->getUsers(); ?>
-            </select>
+          <div class="form-group form-group-label">
+            <label class="floating-label" for="senhaAtualUser"><span class="icon">lock_outline</span>&nbsp;Senha Atual</label>
+            <input class="form-control" id="senhaAtualUser" name="senhaAtualUser" type="password" required>
           </div>
-          <div id="formPass" class="form-group form-group-label">
+          <div class="form-group form-group-label">
             <label class="floating-label" for="senhaUser"><span class="icon">lock_outline</span>&nbsp;Nova Senha</label>
             <input class="form-control" id="senhaUser" name="senhaUser" type="password" required>
           </div>
@@ -567,6 +565,6 @@ if ($permissao->pedidos) {
 
 <script type="text/javascript" src="../plugins/dataTables/datatables.min.js"></script>
 
-<script type="text/javascript" src="../ini.js"></script>
+<script type="text/javascript" src="../ini.min.js"></script>
 </body>
 </html>
