@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Tempo de geração: 30/07/2016 às 19:01
+-- Tempo de geração: 31/07/2016 às 00:15
 -- Versão do servidor: 5.5.50-0ubuntu0.14.04.1
 -- Versão do PHP: 7.0.9-1+deb.sury.org~trusty+1
 
@@ -5220,7 +5220,14 @@ CREATE TABLE `saldo_setor` (
 
 INSERT INTO `saldo_setor` (`id`, `id_setor`, `saldo`, `saldo_suplementado`, `saldo_aditivado`, `mes`, `ano`) VALUES
 (1, 3, '1978000.000', '2000000.000', '0.000', 7, 2016),
-(2, 4, '500000', '500000.000', '0.000', 7, 2016);
+(2, 4, '500000', '500000.000', '0.000', 7, 2016),
+(3, 2, '0', '0.000', '0.000', 7, 2016),
+(4, 5, '1500000', '1500000.000', '0.000', 7, 2016),
+(5, 6, '200000', '200000.000', '0.000', 7, 2016),
+(6, 7, '250000', '250000.000', '0.000', 7, 2016),
+(7, 8, '100000', '100000.000', '0.000', 7, 2016),
+(8, 9, '300000', '300000.000', '0.000', 7, 2016),
+(9, 10, '310000', '310000.000', '0.000', 7, 2016);
 
 -- --------------------------------------------------------
 
@@ -5486,7 +5493,7 @@ ALTER TABLE `saldo_fixo`
 -- AUTO_INCREMENT de tabela `saldo_setor`
 --
 ALTER TABLE `saldo_setor`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 --
 -- AUTO_INCREMENT de tabela `setores`
 --
