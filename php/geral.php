@@ -39,6 +39,58 @@ if (isset($_POST["admin"]) && isset($_SESSION["id_setor"]) && $_SESSION["id_seto
 
 	// comentário
 
+	case 'importItens':
+		echo "Uso de memoria no inicio:" . memory_get_usage() . " bytes<br>";
+		// Tamanho máximo do arquivo (em Bytes)
+		$_UP['tamanho'] = 1024 * 1024 * 1024 * 1024 * 1024 * 1024 * 1024 * 1024 * 1024 * 1024 * 1024; //
+		// Array com as extensões permitidas
+		$_UP['extensoes'] = array('tsv');
+		// Renomeia o arquivo? (Se true, o arquivo será salvo como .jpg e um nome único)
+		$_UP['renomeia'] = false;
+		// Array com os tipos de erros de upload do PHP
+		$_UP['erros'][0] = 'Não houve erro';
+		$_UP['erros'][1] = 'O arquivo no upload é maior do que o limite do PHP';
+		$_UP['erros'][2] = 'O arquivo ultrapassa o limite de tamanho especifiado no HTML';
+		$_UP['erros'][3] = 'O upload do arquivo foi feito parcialmente';
+		$_UP['erros'][4] = 'Não foi feito o upload do arquivo';
+		//fazendo o upload
+		// Verifica se houve algum erro com o upload. Se sim, exibe a mensagem do erro
+		if ($_FILES["file"]["error"] != 0) {
+			die("Não foi possível fazer o upload, erro:" . $_UP['erros'][$_FILES["file"]['error']]);
+			exit; // Para a execução do script
+		}
+		// Caso script chegue a esse ponto, não houve erro com o upload e o PHP pode continuar
+		// Faz a verificação da extensão do arquivo
+		$file_name = $_FILES["file"]['name'];
+		$tmp = explode('.', $file_name);
+		$file_extension = end($tmp);
+		$extensao = strtolower($file_extension);
+		if (array_search($extensao, $_UP['extensoes']) === false) {
+			echo "Por favor, envie arquivos com as seguintes extensões: tsv";
+			exit;
+		}
+		// Faz a verificação do tamanho do arquivo
+		if ($_UP['tamanho'] < $_FILES["file"]['size']) {
+			echo "O arquivo enviado é muito grande, envie arquivos de até XMb.";
+			exit;
+		}
+		$nome_final = $_FILES["file"]['name'];
+		// O arquivo passou em todas as verificações, hora de tentar movê-lo para a pasta
+		// Primeiro verifica se deve trocar o nome do arquivo
+		if ($_UP['renomeia'] == true) {
+			// Cria um nome baseado no UNIX TIMESTAMP atual e com extensão .jpg
+			$nome_final = md5(time()) . '.tsv';
+		}
+		$array_sql = $obj_Util->preparaImportacao($_FILES["file"]['tmp_name']);
+		unset($_FILES["file"]);
+		$importa = $obj_Geral->importaItens($array_sql);
+		unset($array_sql);
+		echo "Uso de memoria no final:" . memory_get_usage() . " bytes<br>";
+		echo "O Pico de memoria:" . memory_get_peak_usage() . " bytes<br>";
+		break;
+
+	// comentário
+
 	case 'analisaSolicAlt':
 		$id_solic = $_POST["id_solic"];
 		$id_pedido = $_POST["id_pedido"];

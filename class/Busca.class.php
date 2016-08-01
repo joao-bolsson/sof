@@ -11,7 +11,7 @@ error_reporting(E_ALL);
 
 include_once 'Conexao.class.php';
 class Busca extends Conexao {
-	private $obj_Conexao, $mysqli;
+	private $mysqli;
 
 	function __construct() {
 		//chama o método contrutor da classe Conexao

@@ -91,6 +91,9 @@ if ($permissao->saldos) {
         ";
 }
 ?>
+      <li>
+        <a class="waves-attach" href="javascript:abreModal('#importItens');"><span style="color: white;"><span class="icon">backup</span>IMPORTAR ITENS</span></a>
+      </li>
     </ul>
   </nav>
 </div><!-- ./row -->
@@ -476,6 +479,43 @@ if ($permissao->pedidos) {
     </div>
   </div>
 </footer>
+<div class="modal fade" id="importItens" role="dialog">
+  <div class="modal-dialog" style="width: 40%;">
+    <div class="modal-content">
+      <div class="modal-heading">
+        <a class="modal-close" data-dismiss="modal">×</a>
+        <h2 class="modal-title content-sub-heading">Importar Itens</h2>
+      </div>
+      <form enctype="multipart/form-data" action="../php/geral.php" method="post">
+        <input type="hidden" name="admin" value="1">
+        <input type="hidden" name="form" value="importItens">
+        <div class="modal-inner">
+          <div class="form-group form-group-label">
+            <label class="floating-label" for="file"><span class="icon">insert_drive_file</span>&nbsp;Arquivo</label>
+            <input id="file" class="form-control" type="file" style="text-transform: none !important;" name="file">
+          </div>
+          <p class="help-block">Max. 32MB</p>
+          <div id="loaderImport" class="progress-circular" style="margin-left: 45%; display: none;">
+            <div class="progress-circular-wrapper">
+              <div class="progress-circular-inner">
+                <div class="progress-circular-left">
+                  <div class="progress-circular-spinner"></div>
+                </div>
+                <div class="progress-circular-gap"></div>
+                <div class="progress-circular-right">
+                  <div class="progress-circular-spinner"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer margin-bottom">
+          <button class="btn btn-brand waves-attach waves-light waves-effect" type="submit" style="width: 100%;"><span class="icon">backup</span>&nbsp;Enviar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
 <div class="modal fade" id="redefinirSenha" role="dialog">
   <div class="modal-dialog" style="width: 40%;">
     <div class="modal-content">

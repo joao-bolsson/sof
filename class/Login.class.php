@@ -17,8 +17,7 @@ class Login extends Conexao {
 	//variáveis usadas para armazenar os campos a serem consultas no banco
 	private $tabela, $campoID, $campoNome, $campoLogin, $campoSenha, $campoSetor;
 	//variáveis usadas como objetos da classe Conexao
-	private $obj_Conexao, $mysqli;
-	private $obj_Busca;
+	private $obj_Busca, $mysqli;
 	function __construct($tabela = 'usuario', $campoID = 'id', $campoNome = 'nome', $campoLogin = 'login', $campoSenha = 'senha', $campoSetor = 'id_setor') {
 
 		$this->obj_Busca = new Busca();

@@ -12,11 +12,29 @@ error_reporting(E_ALL);
 include_once 'Conexao.class.php';
 class Geral extends Conexao {
 
-	private $obj_Conexao, $mysqli;
+	private $mysqli;
 	function __construct() {
 		//chama o método contrutor da classe Conexao
 		parent::__construct();
 		$this->mysqli = parent::getConexao();
+	}
+	// ------------------------------------------------------------------------------
+	/**
+	 *	Função que importa itens por SQL
+	 *
+	 *	@access public
+	 *	@return bool
+	 */
+	public function importaItens($array_sql) {
+/*
+for ($i = 0; $i < count($array_sql); $i++) {
+$array_sql[$i] = utf8_encode($array_sql[$i]);
+$this->mysqli->query($array_sql[$i]);
+unset($array_sql[$i]);
+}
+$this->mysqli->close();
+ */
+		return true;
 	}
 	// ------------------------------------------------------------------------------
 	/**
