@@ -504,6 +504,6 @@ $saldo_mes_anterior = $obj_Busca->getSaldoMesAnterior($_SESSION["id_setor"]);
 
 <script type="text/javascript" src="../plugins/dataTables/datatables.min.js"></script>
 
-<script type="text/javascript" src="../ini.js"></script>
+<script type="text/javascript" src="../ini.min.js"></script>
 </body>
 </html>

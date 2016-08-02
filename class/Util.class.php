@@ -71,9 +71,8 @@ class Util extends Conexao {
 				$values .= "(NULL, {$dados[0]}, {$dados[1]}, '{$dados[2]}', '{$dados[3]}', '{$dados[4]}', '{$dados[5]}', '{$dados[6]}', '{$dados[7]}', '{$dados[8]}', '{$dados[9]}', '{$dados[10]}', '{$dados[11]}', '{$dados[12]}', '{$dados[13]}', '{$dados[14]}', '{$dados[15]}', '{$dados[16]}', '{$dados[17]}', '{$dados[18]}', '{$dados[19]}', '{$dados[20]}', '{$dados[21]}', {$dados[22]}, '{$dados[23]}', {$dados[24]}, '{$dados[25]}', {$dados[26]}, '{$dados[27]}', '{$dados[28]}', '{$dados[29]}', 0), ";
 				$cont++;
 			}
-			// está inserindo 11 vezes a mesma linha (CORRIGIR)
-			if ($cont == 11) {
-				$array_sql[$index] = $insert . $values;
+			if ($cont == 200) {
+				$array_sql[$index] = $insert . $values . ";";
 				$cont = 0;
 				$values = "";
 				$pos = strrpos($array_sql[$index], ", ");
@@ -81,13 +80,14 @@ class Util extends Conexao {
 				$index++;
 			}
 		}
-		$array_sql[$index] = $insert . $values;
+		$array_sql[$index] = $insert . $values . ";";
 		fclose($arquivo);
 		$max = count($array_sql) - 1;
 		$pos = strrpos($array_sql[$max], ", ");
 		if ($pos) {
 			$array_sql[$max][$pos] = "";
 		}
+		echo $array_sql[0];
 		return $array_sql;
 	}
 	/**
