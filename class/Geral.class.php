@@ -337,14 +337,22 @@ class Geral extends Conexao {
 				$this->mysqli->query("INSERT INTO itens_pedido VALUES(NULL, {$pedido}, {$id_item[$i]}, {$qtd_solicitada[$i]}, '{$valor[$i]}');");
 			}
 		} else {
-			// enviado ao sof
 			// atualiza saldo
 			$this->mysqli->query("UPDATE saldo_setor SET saldo = '{$saldo_total}' WHERE id_setor = {$id_setor} AND mes = {$mes};");
-			// atualizando pedido
-			$this->mysqli->query("UPDATE pedido SET data_pedido = '{$hoje}', ref_mes = '{$refMes}', alteracao = 0, prioridade = '{$prioridade}', status = 'Em Analise', valor = '{$total_pedido}' WHERE id = {$pedido};");
+			// enviado ao sof
+			if ($pedido == 0) {
+				//inserindo os dados iniciais do pedido
+				$query_pedido = $this->mysqli->query("INSERT INTO pedido VALUES(NULL, {$id_setor}, '{$hoje}', '{$refMes}', 0, '{$prioridade}', 'Em Analise', '{$total_pedido}');");
+				$pedido = $this->mysqli->insert_id;
+			} else {
+				// atualizando pedido
+				$this->mysqli->query("UPDATE pedido SET data_pedido = '{$hoje}', ref_mes = '{$refMes}', alteracao = 0, prioridade = '{$prioridade}', status = 'Em Analise', valor = '{$total_pedido}' WHERE id = {$pedido};");
+			}
+			//remover resgistros antigos do pedido
+			$this->mysqli->query("DELETE FROM itens_pedido WHERE id_pedido = {$pedido};");
 			// alterando infos dos itens solicitados
 			for ($i = 0; $i < count($id_item); $i++) {
-				$this->mysqli->query("INSERT INTO itens_pedido VALUES(NULL, {$id_pedido}, {$id_item[$i]}, {$qtd_solicitada[$i]}, '{$valor[$i]}');");
+				$this->mysqli->query("INSERT INTO itens_pedido VALUES(NULL, {$pedido}, {$id_item[$i]}, {$qtd_solicitada[$i]}, '{$valor[$i]}');");
 				// qtd_disponivel == qt_saldo
 				$qtd_disponivel[$i] -= $qtd_solicitada[$i];
 				$qtd_utilizado[$i] += $qtd_solicitada[$i];
