@@ -274,6 +274,44 @@ $saldo_mes_anterior = $obj_Busca->getSaldoMesAnterior($_SESSION["id_setor"]);
     </div>
   </div>
 </footer>
+<div class="modal fade" id="redefinirSenha" role="dialog">
+  <div class="modal-dialog" style="width: 40%;">
+    <div class="modal-content">
+      <div class="modal-heading">
+        <a class="modal-close" data-dismiss="modal">×</a>
+        <h2 class="modal-title content-sub-heading">Redefinir Senha</h2>
+      </div>
+      <form id="alterSenha" action="javascript:novaSenha();" method="post">
+        <div class="modal-inner">
+          <div class="form-group form-group-label">
+            <label class="floating-label" for="senhaAtualUser"><span class="icon">lock_outline</span>&nbsp;Senha Atual</label>
+            <input class="form-control" id="senhaAtualUser" name="senhaAtualUser" type="password" required>
+          </div>
+          <div class="form-group form-group-label">
+            <label class="floating-label" for="senhaUser"><span class="icon">lock_outline</span>&nbsp;Nova Senha</label>
+            <input class="form-control" id="senhaUser" name="senhaUser" type="password" required>
+          </div>
+          <div id="loader" class="progress-circular" style="margin-left: 45%; display: none;">
+            <div class="progress-circular-wrapper">
+              <div class="progress-circular-inner">
+                <div class="progress-circular-left">
+                  <div class="progress-circular-spinner"></div>
+                </div>
+                <div class="progress-circular-gap"></div>
+                <div class="progress-circular-right">
+                  <div class="progress-circular-spinner"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer margin-bottom">
+          <button class="btn btn-brand waves-attach waves-light waves-effect" type="submit" style="width: 100%;"><span class="icon">autorenew</span>&nbsp;Atualizar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
 <div aria-hidden="true" class="modal fade" id="listMeusAdiantamentos" role="dialog" tabindex="-1">
   <div class="modal-dialog">
     <div class="modal-content">
