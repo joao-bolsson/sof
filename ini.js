@@ -196,6 +196,20 @@ function iniAdminSolicitacoes() {
 	iniTableSolicAltPed(2);
 	iniTableSolicAdiant(2);
 	iniFreeSaldos();
+	iniRecepcao();
+	avisoSnack('Carregamento concluído !', 'body');
+}
+
+function iniRecepcao() {
+	$.post('../php/busca.php', {
+		admin: 1,
+		form: 'tableRecepcao',
+	}, function(resposta) {
+		// Quando terminada a requisição
+		destroyDataTable('#tableRecepcao');
+		document.getElementById('conteudoRecepcao').innerHTML = resposta;
+		iniDataTable('#tableRecepcao');
+	});
 }
 
 function iniSolicitacoes() {
@@ -308,7 +322,6 @@ function iniTableSolicAdiant(st) {
 		document.getElementById('conteudoSolicitacoesAdiantamento').innerHTML = resposta;
 		iniDataTable('#tableSolicitacoesAdiantamento');
 	});
-	avisoSnack('Carregamento concluído !', 'body');
 }
 
 function iniTableSolicAltPed(st) {

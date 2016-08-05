@@ -19,6 +19,38 @@ class Busca extends Conexao {
 		//atribuindo valor a variavel que realiza as consultas
 		$this->mysqli = parent::getConexao();
 	}
+	public function getTabelaRecepcao() {
+		$retorno = "";
+		$query = $this->mysqli->query("SELECT DISTINCT num_processo FROM itens;");
+		if ($query->num_rows < 1) {
+			return "
+				<tr>
+					<td collspan=\"2\">Nenhum processo cadastrado.</td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+				</tr>
+			";
+		}
+		while ($processo = $query->fetch_object()) {
+			$retorno .= "
+				<tr>
+					<td></td>
+					<td>{$processo->num_processo}</td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+				</tr>
+			";
+		}
+		$query->fetch_object();
+		return $retorno;
+	}
 	/**
 	 *	Função que retorna as permissões do usuario
 	 *
@@ -26,7 +58,7 @@ class Busca extends Conexao {
 	 *	@return object
 	 */
 	public function getPermissoes($id_user) {
-		$query = $this->mysqli->query("SELECT usuario_permissoes.noticias, usuario_permissoes.saldos, usuario_permissoes.pedidos FROM usuario_permissoes WHERE usuario_permissoes.id_usuario = {$id_user};");
+		$query = $this->mysqli->query("SELECT usuario_permissoes.noticias, usuario_permissoes.saldos, usuario_permissoes.pedidos, usuario_permissoes.recepcao FROM usuario_permissoes WHERE usuario_permissoes.id_usuario = {$id_user};");
 		$obj_permissoes = $query->fetch_object();
 		$query->close();
 		return $obj_permissoes;

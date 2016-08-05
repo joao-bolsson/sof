@@ -91,12 +91,51 @@ if ($permissao->saldos) {
         ";
 }
 ?>
-      <li>
-        <a class="waves-attach" href="javascript:abreModal('#importItens');"><span style="color: white;"><span class="icon">backup</span>IMPORTAR ITENS</span></a>
+<?php
+if ($permissao->pedidos) {
+	echo "
+    <li>
+        <a class=\"waves-attach\" href=\"javascript:abreModal('#importItens');\"><span style=\"color: white;\"><span class=\"icon\">backup</span>IMPORTAR ITENS</span></a>
       </li>
+  ";
+}
+?>
     </ul>
   </nav>
 </div><!-- ./row -->
+<?php
+if ($permissao->recepcao) {
+	echo "
+  <div class=\"row\">
+   <div class=\"card margin-top-no\">
+     <div class=\"card-main\">
+       <div class=\"card-header card-brand\">
+         <div class=\"card-header-side pull-left\">
+           <p class=\"card-heading\">Processos</p>
+         </div>
+       </div><!--  ./card-header -->
+       <div class=\"card-inner\">
+        <table class=\"table stripe\" id=\"tableRecepcao\" style=\"width: 100%;\">
+          <thead>
+            <th></th>
+            <th>PROCESSO</th>
+            <th>TIPO</th>
+            <th>ENTRADA EM</th>
+            <th>SAIDA EM</th>
+            <th>RETIRADA?</th>
+            <th>DATA</th>
+          </thead>
+          <tbody id=\"conteudoRecepcao\">
+
+          </tbody>
+        </table>
+      </div><!-- ./card-inner -->
+    </div><!-- ./card-main -->
+  </div> <!-- ./card -->
+</div>
+";
+}
+?>
 <?php
 if ($permissao->saldos) {
 	echo "

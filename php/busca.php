@@ -29,6 +29,11 @@ if (isset($_POST["admin"]) && isset($_SESSION["id_setor"]) && $_SESSION["id_seto
 
 	switch ($form) {
 
+	// retornar a tabela com os processos para edição na recepção
+	case 'tableRecepcao':
+		echo $obj_Busca->getTabelaRecepcao();
+		break;
+
 	// retornar a tabela com as solicitações de alteração de pedidos
 
 	case 'iniTableSolicAltPed':

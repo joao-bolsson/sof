@@ -40,7 +40,6 @@ if (isset($_POST["admin"]) && isset($_SESSION["id_setor"]) && $_SESSION["id_seto
 	// comentário
 
 	case 'importItens':
-		//echo "Uso de memoria no inicio:" . memory_get_usage() . " bytes<br>";
 		// Tamanho máximo do arquivo (em Bytes)
 		$_UP['tamanho'] = 1024 * 1024 * 1024 * 1024 * 1024 * 1024 * 1024 * 1024 * 1024 * 1024 * 1024; //
 		// Array com as extensões permitidas
@@ -85,8 +84,14 @@ if (isset($_POST["admin"]) && isset($_SESSION["id_setor"]) && $_SESSION["id_seto
 		unset($_FILES["file"]);
 		$importa = $obj_Geral->importaItens($array_sql);
 		unset($array_sql);
-		//echo "Uso de memoria no final:" . memory_get_usage() . " bytes<br>";
-		//echo "O Pico de memoria:" . memory_get_peak_usage() . " bytes<br>";
+		if ($importa) {
+			header("Location: ../admin/adminsolicitacoes.php");
+		} else {
+			echo "Ocorreu um erro no servidor. Contate o administrador.";
+			session_unset();
+			session_destroy();
+			exit;
+		}
 		break;
 
 	// comentário
