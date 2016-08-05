@@ -26,15 +26,6 @@ class Geral extends Conexao {
 	 *	@return bool
 	 */
 	public function importaItens($array_sql) {
-		/*
-			for ($i = 0; $i < count($array_sql); $i++) {
-				//$array_sql[$i] = utf8_encode($array_sql[$i]);
-				//$this->mysqli->query($array_sql[$i]);
-				echo $array_sql[$i] . "<br>";
-				unset($array_sql[$i]);
-			}
-		*/
-		//$this->mysqli->close();
 		for ($i = 0; $i < count($array_sql); $i++) {
 			$query = $array_sql[$i];
 			$this->mysqli->query($query);
