@@ -29,8 +29,8 @@ class Geral extends Conexao {
 		for ($i = 0; $i < count($array_sql); $i++) {
 			$query = $array_sql[$i];
 			$this->mysqli->query($query);
-			echo $array_sql[$i];
 		}
+		$this->mysqli->close();
 		return true;
 	}
 	// ------------------------------------------------------------------------------

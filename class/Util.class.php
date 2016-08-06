@@ -78,9 +78,11 @@ class Util extends Conexao {
 				}
 			}
 			fclose($handle);
-			$pos = strrpos($values, ", ");
-			$values[$pos] = ";";
-			$array_sql[$i] = $insert . $values;
+			if ($row < 70) {
+				$pos = strrpos($values, ", ");
+				$values[$pos] = ";";
+				$array_sql[$i] = $insert . $values;
+			}
 		}
 		return $array_sql;
 	}
