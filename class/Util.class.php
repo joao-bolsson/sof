@@ -35,19 +35,6 @@ class Util extends Conexao {
 	}
 	// ---------------------------------------------------------------------------
 	/**
-	 *	Função para formatar datas no formato dd/mm/yyyy para YYYY-MM-DD
-	 *
-	 *	@access private
-	 *	@return string
-	 */
-	private function formataData($data) {
-		$ano = substr($data, 6, 4);
-		$mes = substr($data, 3, 2);
-		$dia = substr($data, 0, 2);
-		$data = $ano . "-" . $mes . "-" . $dia;
-		return $data;
-	}
-	/**
 	 *	Função utilizada para auxiliar a importação dos itens
 	 *
 	 *	@access public
