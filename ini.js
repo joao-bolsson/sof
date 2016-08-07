@@ -136,6 +136,12 @@ function destroyDataTable(tabela) {
 	}).destroy();
 }
 
+function addProcesso(numProcesso){
+    $('#addProcesso').modal();
+    document.getElementById('numProcesso').value = numProcesso;
+    $('#divNumProc').addClass('control-highlight');
+}
+
 function resetSenha() {
 	document.getElementById("loaderResetSenha").style.display = 'inline-block';
 	var email = document.getElementById('userReset').value;
@@ -192,6 +198,7 @@ function carregaPostsPag(tabela) {
 
 function iniAdminSolicitacoes() {
 	iniDataTable('#tableItensPedido');
+    iniDataTable('#tableListProcessos');
 	iniSolicitacoes();
 	iniTableSolicAltPed(2);
 	iniTableSolicAdiant(2);

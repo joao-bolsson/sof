@@ -25,31 +25,20 @@ class Busca extends Conexao {
 
     public function getTabelaRecepcao() {
         $retorno = "";
-        $query = $this->mysqli->query("SELECT DISTINCT num_processo FROM itens;");
-        if ($query->num_rows < 1) {
-            return "
-				<tr>
-					<td collspan=\"2\">Nenhum processo cadastrado.</td>
-					<td></td>
-					<td></td>
-					<td></td>
-					<td></td>
-					<td></td>
-					<td></td>
-				</tr>
-			";
-        }
-        while ($processo = $query->fetch_object()) {
+        $query = $this->mysqli->query("SELECT processos.id, processos.num_processo, processos.tipo, processos.estante, processos.prateleira, processos.entrada, processos.saida, processos.responsavel, processos.retorno FROM processos ORDER BY id ASC;");
 
+        while ($processo = $query->fetch_object()) {
             $retorno .= "
 				<tr>
 					<td></td>
 					<td>{$processo->num_processo}</td>
-					<td></td>
-					<td></td>
-					<td></td>
-					<td></td>
-					<td></td>
+					<td>{$processo->tipo}</td>
+					<td>{$processo->estante}</td>
+					<td>{$processo->prateleira}</td>
+					<td>{$processo->entrada}</td>
+					<td>{$processo->saida}</td>
+                    <td>{$processo->responsavel}</td>
+					<td>{$processo->retorno}</td>
 				</tr>
 			";
         }
@@ -948,6 +937,7 @@ class Busca extends Conexao {
      * 	@access public
      * 	@return string
      */
+
     public function getSolicAltPedidos($id_setor) {
         $retorno = "";
         $query = $this->mysqli->query("SELECT solic_alt_pedido.id_pedido, DATE_FORMAT(solic_alt_pedido.data_solicitacao, '%d/%m/%Y') AS data_solicitacao, DATE_FORMAT(solic_alt_pedido.data_analise, '%d/%m/%Y') AS data_analise, solic_alt_pedido.justificativa, solic_alt_pedido.status FROM solic_alt_pedido WHERE solic_alt_pedido.id_setor = {$id_setor};");
@@ -1312,16 +1302,27 @@ class Busca extends Conexao {
         return $retorno;
     }
 
-    public function getProcessos() {
+    public function getProcessos($tela) {
         $retorno = "";
-        $query = $this->mysqli->query("SELECT DISTINCT num_processo FROM itens;");
+        $sql = "SELECT DISTINCT num_processo FROM itens;";
+        $onclick = "pesquisarProcesso";
+        $title = "Pesquisar Processo";
+        $icon = "search";
+        if ($tela == "recepcao") {
+            $sql = "SELECT DISTINCT itens.num_processo FROM itens WHERE itens.num_processo NOT IN (SELECT DISTINCT processos.num_processo FROM processos);
+";
+            $onclick = "addProcesso";
+            $title = "Adicionar Processo";
+            $icon = "add";
+        }
+        $query = $this->mysqli->query($sql);
         if ($query->num_rows > 0) {
             while ($processo = $query->fetch_object()) {
                 $retorno .= "
 					<tr>
 						<td>{$processo->num_processo}</td>
 						<td>
-							<button title=\"Pesquisar Processo\" onclick=\"pesquisarProcesso('{$processo->num_processo}')\" style=\"text-transform: none !important;font-weight: bold;\" class=\"btn btn-default btn-sm\"><span class=\"icon\">search</span></button>
+							<button title=\"{$title}\" onclick=\"{$onclick}('{$processo->num_processo}')\" style=\"text-transform: none !important;font-weight: bold;\" class=\"btn btn-default btn-sm\"><span class=\"icon\">{$icon}</span></button>
 						</td>
 					</tr>
 				";

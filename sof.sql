@@ -3,9 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Tempo de geração: 31/07/2016 às 00:15
+-- Generation Time: 07-Ago-2016 às 04:13
 -- Versão do servidor: 5.5.50-0ubuntu0.14.04.1
--- Versão do PHP: 7.0.9-1+deb.sury.org~trusty+1
+-- PHP Version: 7.0.9-1+deb.sury.org~trusty+1
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET time_zone = "+00:00";
@@ -17,13 +17,13 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Banco de dados: `sof`
+-- Database: `sof`
 --
 
 -- --------------------------------------------------------
 
 --
--- Estrutura para tabela `comentarios`
+-- Estrutura da tabela `comentarios`
 --
 
 CREATE TABLE `comentarios` (
@@ -37,7 +37,7 @@ CREATE TABLE `comentarios` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Fazendo dump de dados para tabela `comentarios`
+-- Extraindo dados da tabela `comentarios`
 --
 
 INSERT INTO `comentarios` (`id`, `id_pedido`, `data_coment`, `prioridade`, `status`, `valor`, `comentario`) VALUES
@@ -46,7 +46,7 @@ INSERT INTO `comentarios` (`id`, `id_pedido`, `data_coment`, `prioridade`, `stat
 -- --------------------------------------------------------
 
 --
--- Estrutura para tabela `itens`
+-- Estrutura da tabela `itens`
 --
 
 CREATE TABLE `itens` (
@@ -85,7 +85,7 @@ CREATE TABLE `itens` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Fazendo dump de dados para tabela `itens`
+-- Extraindo dados da tabela `itens`
 --
 
 INSERT INTO `itens` (`id`, `id_item_processo`, `id_item_contrato`, `cod_despesa`, `descr_despesa`, `descr_tipo_doc`, `num_contrato`, `num_processo`, `descr_mod_compra`, `num_licitacao`, `dt_inicio`, `dt_fim`, `dt_geracao`, `cgc_fornecedor`, `nome_fornecedor`, `num_extrato`, `cod_estruturado`, `nome_unidade`, `cod_reduzido`, `complemento_item`, `descricao`, `id_extrato_contr`, `vl_unitario`, `qt_contrato`, `vl_contrato`, `qt_utilizado`, `vl_utilizado`, `qt_saldo`, `vl_saldo`, `id_unidade`, `ano_orcamento`, `cancelado`) VALUES
@@ -4425,7 +4425,7 @@ INSERT INTO `itens` (`id`, `id_item_processo`, `id_item_contrato`, `cod_despesa`
 (4284, 316343, 194756, '3.3.9.0.30.36', 'MATERIAL HOSPITALAR', 'Registro de Preço Gerado', '002227/2015', '23541.000002/2016-52', '05 - Pregão EBSERH', '11', '18/03/2016', '11/03/2017', '31/03/2016', '06099967000159', 'ASTRO 34 COMÉRCIO E SERVIÇOS LTDA - EPP', '002831/2015', '10.00.00.00.0.0', 'HOSPITAL UNIVERSITÁRIO DE SANTA MARIA - HUSM', '4600004', 'REFRATÔMETRO UTILIZADO PARA DETERMINAÇÃO DE CONCENTRAÇÃO DE SOLUÇÕES ATRAVÉS DA REFRAÇÃO DA LUZ UTILIZANDO PEQUENOS VOLUMES DE AMOSTRAR DE SORO OU URINA. FAIXA DE MEDIÇÃO 0 A 12 G/DL/1.000 A 1040 SG. ESCALAMÍNIMA 0,2 G/DL/0,0002 SG. ABASTECIDO COM PILHA P', 'Unidade', 38972, '415', 10, '4150', 0, '0', 10, '4150', 163, 2015, 0),
 (4285, 316325, 194757, '3.3.9.0.30.22', 'MATERIAL DE LIMPEZA E PRODUTOS HIGIENIZAÇÃO', 'Registro de Preço Gerado', '002228/2015', '23541.000002/2016-52', '05 - Pregão EBSERH', '11', '18/03/2016', '11/03/2017', '31/03/2016', '06879626000104', 'CINORD SUDESTE QUÍMICA LTDA - EPP', '002832/2015', '10.00.00.00.0.0', 'HOSPITAL UNIVERSITÁRIO DE SANTA MARIA - HUSM', '2600009', 'HIPOCLORITO DE SÓDIO 1% PARA USO NA DESINFECÇÃO DE SUPERFÍCIES FIXAS EM GERAL. DEVE ESTAR ACONDICIONADO EM GALÃO DE 5 LITROS RESISTENTE E QUE IMPEÇA A PENETRAÇÃO DA LUZ. APRESENTAR FICHATÉCNICA DA COMPOSIÇÃO DO PRODUTO ACABADO. APRESENTAR REGISTRO NA ANV', 'Litros', 38973, '2,72', 8000, '21760', 600, '1632', 7400, '20128', 163, 2015, 0),
 (4286, 0, 194820, '3.3.9.0.30.09', 'Material Farmacológico', 'Registro de Preço', '000012/2016', '23541.000116/2016-01', '05 - Pregão EBSERH', '0', '23/03/2016', '03/06/2016', '23/03/2016', '44734671000151', 'CRISTALIA PROD.QUIM.FARM.LTDA.', '000028/2016', '10.00.00.00.0.0', 'HOSPITAL UNIVERSITÁRIO DE SANTA MARIA - HUSM', 'METAD010C.', 'Item 08 - Adesão - Pregão 91/2015 HU-UFPE METADONA, DOSAGEM 10 MG', 'Comprimido', 38986, '0,66', 5200, '3432', 2600, '1716', 2600, '1716', 163, 2016, 0),
-(4287, 315234, 194821, '3.3.9.0.30.09', 'Material Farmacológico', 'Registro de Preço Gerado', '002237/2015', '23541.000469/2015-11', '05 - Pregão EBSERH', '160', '23/03/2016', '13/03/2017', '08/04/2016', '01440590000136', 'FRESENIUS MEDICAL CARE LTDA', '002841/2015', '10.00.00.00.0.0', 'HOSPITAL UNIVERSITÁRIO DE SANTA MARIA - HUSM', 'DPAP2425U.', 'Diálise Peritoneal Ambulatorial, solução a 4.25% de glicose, contendo 3.5 mEq/L de Cálcio, bolsa com 2.5 litros, para uso em cicladora, marca Fresenius Medical Care, solução tipo peritosteril 3 (tampa vermelha), estéril, embalagem compatível com a legisla', 'Unidade', 38987, '11,13', 50, '556.5', 0, '0', 50, '556.5', 163, 2015, 0),
+(4287, 315234, 194821, '3.3.9.0.30.09', 'Material Farmacológico', 'Registro de Preço Gerado', '002237/2015', '23541.000469/2015-11', '05 - Pregão EBSERH', '160', '23/03/2016', '13/03/2017', '08/04/2016', '01440590000136', 'FRESENIUS MEDICAL CARE LTDA', '002841/2015', '10.00.00.00.0.0', 'HOSPITAL UNIVERSITÁRIO DE SANTA MARIA - HUSM', 'DPAP2425U.', 'Diálise Peritoneal Ambulatorial, solução a 4.25% de glicose, contendo 3.5 mEq/L de Cálcio, bolsa com 2.5 litros, para uso em cicladora, marca Fresenius Medical Care, solução tipo peritosteril 3 (tampa vermelha), estéril, embalagem compatível com a legisla', 'Unidade', 38987, '11,13', 50, '556.5', 10, '111.3', 40, '445.2', 163, 2015, 0),
 (4288, 315265, 194822, '3.3.9.0.30.09', 'Material Farmacológico', 'Registro de Preço Gerado', '002237/2015', '23541.000469/2015-11', '05 - Pregão EBSERH', '160', '23/03/2016', '13/03/2017', '08/04/2016', '01440590000136', 'FRESENIUS MEDICAL CARE LTDA', '002841/2015', '10.00.00.00.0.0', 'HOSPITAL UNIVERSITÁRIO DE SANTA MARIA - HUSM', 'DPAD2425U.', 'Solução polieletrolítica para diálise peritoneal, sistema ANDY DISC, solução a 4,25% de glicose, contendo 3.5mEq/L de Cálcio, sistema fechado, bolsa plástica com 2 litros, estéril, descartável, embalagem compatível com a legislação vigente (Marca aprovada', 'Unidade', 38987, '11,42', 360, '4111.2', 0, '0', 360, '4111.2', 163, 2015, 0),
 (4289, 315246, 194823, '3.3.9.0.30.09', 'Material Farmacológico', 'Registro de Preço Gerado', '002238/2015', '23541.000469/2015-11', '05 - Pregão EBSERH', '160', '23/03/2016', '13/03/2017', '08/04/2016', '01571702000198', 'HALEX ISTAR IND. FARM. LTDA', '002842/2015', '10.00.00.00.0.0', 'HOSPITAL UNIVERSITÁRIO DE SANTA MARIA - HUSM', 'GLCAL010A.', 'Gliconato de Cálcio 10%, solução injetável, ampola plástica ou vidro com 10mL', 'Ampola', 38988, '1,25', 12000, '15000', 0, '0', 12000, '15000', 163, 2015, 0),
 (4290, 315267, 194824, '3.3.9.0.30.09', 'Material Farmacológico', 'Registro de Preço Gerado', '002238/2015', '23541.000469/2015-11', '05 - Pregão EBSERH', '160', '23/03/2016', '13/03/2017', '08/04/2016', '01571702000198', 'HALEX ISTAR IND. FARM. LTDA', '002842/2015', '10.00.00.00.0.0', 'HOSPITAL UNIVERSITÁRIO DE SANTA MARIA - HUSM', 'RLSSS001U', 'Solução de Ringer com Lactato de Sódio, sistema fechado, bolsa flexível, sem sobre bolsa, volume de 1.000 mL', 'Unidade', 38988, '5,2', 60000, '312000', 0, '0', 60000, '312000', 163, 2015, 0),
@@ -4597,7 +4597,7 @@ INSERT INTO `itens` (`id`, `id_item_processo`, `id_item_contrato`, `cod_despesa`
 (4454, 317615, 195142, '3.3.9.0.30.09', 'Material Farmacológico', 'Registro de Preço Gerado', '000051/2016', '23541.000033/2016-11', '05 - Pregão EBSERH', '20', '12/04/2016', '02/04/2017', '19/04/2016', '11145401000156', 'LA DALLA PORTA JUNIOR', '000069/2016', '10.00.00.00.0.0', 'HOSPITAL UNIVERSITÁRIO DE SANTA MARIA - HUSM', 'GENTA080A.', 'Gentamicina, sulfato, 40 mg/mL, solução injetável, ampola com 2 mL', 'Ampola', 39076, '0,48', 12000, '5760', 0, '0', 12000, '5760', 163, 2016, 0),
 (4455, 317551, 195155, '3.3.9.0.30.09', 'Material Farmacológico', 'Registro de Preço Gerado', '000055/2016', '23541.000033/2016-11', '05 - Pregão EBSERH', '20', '12/04/2016', '02/04/2017', '19/04/2016', '09944371000104', 'SULMEDIC COMERCIO DE MEDICAMENTOS LTDA', '000073/2016', '10.00.00.00.0.0', 'HOSPITAL UNIVERSITÁRIO DE SANTA MARIA - HUSM', 'FENTA002A.', 'Fentanila, citrato, 0.1mg, solução injetável, ampola com 2mL', 'Ampola', 39080, '0,86', 7000, '6020', 1000, '860', 6000, '5160', 163, 2016, 0),
 (4456, 317607, 195156, '3.3.9.0.30.09', 'Material Farmacológico', 'Registro de Preço Gerado', '000055/2016', '23541.000033/2016-11', '05 - Pregão EBSERH', '20', '12/04/2016', '02/04/2017', '19/04/2016', '09944371000104', 'SULMEDIC COMERCIO DE MEDICAMENTOS LTDA', '000073/2016', '10.00.00.00.0.0', 'HOSPITAL UNIVERSITÁRIO DE SANTA MARIA - HUSM', 'SUXAM100A.', 'Suxametônio, cloreto, 100mg, pó liofilizado, frasco-ampola', 'Frasco-Ampola', 39080, '8,92', 2400, '21408', 0, '0', 2400, '21408', 163, 2016, 0),
-(4457, 316053, 195512, '3.3.9.0.30.01', 'Combustiveis e Lubrificantes Automotivos', 'Registro de Preço Gerado', '002324/2015', '23541.000495/2015-40', '05 - Pregão EBSERH', '6', '22/04/2016', '15/10/2016', '29/04/2016', '05537296000106', 'PETROFFACIL COMBUSTIVEIS LTDA', '002951/2015', '10.00.00.00.0.0', 'HOSPITAL UNIVERSITÁRIO DE SANTA MARIA - HUSM', '1000012', 'ÓLEO DIESEL', 'Litros', 39155, '2,9688', 25000, '74220', 0, '0', 25000, '74220', 163, 2015, 0),
+(4457, 316053, 195512, '3.3.9.0.30.01', 'Combustiveis e Lubrificantes Automotivos', 'Registro de Preço Gerado', '002324/2015', '23541.000495/2015-40', '05 - Pregão EBSERH', '6', '22/04/2016', '15/10/2016', '29/04/2016', '05537296000106', 'PETROFFACIL COMBUSTIVEIS LTDA', '002951/2015', '10.00.00.00.0.0', 'HOSPITAL UNIVERSITÁRIO DE SANTA MARIA - HUSM', '1000012', 'ÓLEO DIESEL', 'Litros', 39155, '2,9688', 25000, '74220', 300, '890.64', 24700, '73329.36', 163, 2015, 0),
 (4458, 316054, 195513, '3.3.9.0.30.01', 'Combustiveis e Lubrificantes Automotivos', 'Registro de Preço Gerado', '002324/2015', '23541.000495/2015-40', '05 - Pregão EBSERH', '6', '22/04/2016', '15/10/2016', '29/04/2016', '05537296000106', 'PETROFFACIL COMBUSTIVEIS LTDA', '002951/2015', '10.00.00.00.0.0', 'HOSPITAL UNIVERSITÁRIO DE SANTA MARIA - HUSM', '5400105', 'ÓLEO COMBUSTÍVEL PETROQUÍMICO B 1. OBSERVAÇÕES PARA O HUSM: 1- As entregas para o item Óleo Petroquímico serão entre 12.000 e 15.000 Kg, conforme solicitação do HUSM e para o item Óleo Diesel serão de 5.000 litros. 2- A data de entrega será agend', 'Kilogramas', 39155, '1,9248', 300000, '577440', 0, '0', 300000, '577440', 163, 2015, 0),
 (4459, 0, 195587, '3.3.9.0.30.36', 'MATERIAL HOSPITALAR', 'Registro de Preço', '000066/2016', '23541.000132/2016-95', '05 - Pregão EBSERH', '0', '28/03/2016', '16/06/2016', '26/04/2016', '18622350000155', 'JULIANO CESAR DAS CHAGAS - ME', '000116/2016', '10.00.00.00.0.0', 'HOSPITAL UNIVERSITÁRIO DE SANTA MARIA - HUSM', '4800703', 'Item 248 - Adesão - Pregão 157/2015 UFSM Álcool etílico absoluto P.A. ACS 99,5%, fórmula molecular C2H6O, peso molecular 46,07, número CAS 64-17-5. Frasco com 1000 mL.', 'Litros', 39192, '11', 775, '8525', 0, '0', 775, '8525', 163, 2016, 0),
 (4460, 0, 194820, '3.3.9.0.30.09', 'Material Farmacológico', 'Registro de Preço', '000012/2016', '23541.000116/2016-01', '05 - Pregão EBSERH', '0', '23/03/2016', '03/06/2016', '23/03/2016', '44734671000151', 'CRISTALIA PROD.QUIM.FARM.LTDA.', '000028/2016', '10.00.00.00.0.0', 'HOSPITAL UNIVERSITÁRIO DE SANTA MARIA - HUSM', 'METAD010C.', 'Item 08 - Adesão - Pregão 91/2015 HU-UFPE METADONA, DOSAGEM 10 MG', 'Comprimido', 38986, '0,66', 5200, '3432', 2600, '1716', 2600, '1716', 163, 2016, 0),
@@ -4981,7 +4981,7 @@ INSERT INTO `itens` (`id`, `id_item_processo`, `id_item_contrato`, `cod_despesa`
 -- --------------------------------------------------------
 
 --
--- Estrutura para tabela `itens_pedido`
+-- Estrutura da tabela `itens_pedido`
 --
 
 CREATE TABLE `itens_pedido` (
@@ -4993,18 +4993,20 @@ CREATE TABLE `itens_pedido` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Fazendo dump de dados para tabela `itens_pedido`
+-- Extraindo dados da tabela `itens_pedido`
 --
 
 INSERT INTO `itens_pedido` (`id`, `id_pedido`, `id_item`, `qtd`, `valor`) VALUES
 (3, 1, 3498, 1000, '11100'),
 (4, 1, 3499, 1000, '10900'),
-(5, 2, 4245, 1, '8800');
+(5, 2, 4245, 1, '8800'),
+(6, 3, 4457, 100, '296.88'),
+(7, 4, 4287, 10, '111.3');
 
 -- --------------------------------------------------------
 
 --
--- Estrutura para tabela `mes`
+-- Estrutura da tabela `mes`
 --
 
 CREATE TABLE `mes` (
@@ -5013,7 +5015,7 @@ CREATE TABLE `mes` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Fazendo dump de dados para tabela `mes`
+-- Extraindo dados da tabela `mes`
 --
 
 INSERT INTO `mes` (`id`, `sigla_mes`) VALUES
@@ -5034,7 +5036,7 @@ INSERT INTO `mes` (`id`, `sigla_mes`) VALUES
 -- --------------------------------------------------------
 
 --
--- Estrutura para tabela `paginas_post`
+-- Estrutura da tabela `paginas_post`
 --
 
 CREATE TABLE `paginas_post` (
@@ -5044,7 +5046,7 @@ CREATE TABLE `paginas_post` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Fazendo dump de dados para tabela `paginas_post`
+-- Extraindo dados da tabela `paginas_post`
 --
 
 INSERT INTO `paginas_post` (`id`, `tabela`, `nome`) VALUES
@@ -5058,7 +5060,7 @@ INSERT INTO `paginas_post` (`id`, `tabela`, `nome`) VALUES
 -- --------------------------------------------------------
 
 --
--- Estrutura para tabela `pedido`
+-- Estrutura da tabela `pedido`
 --
 
 CREATE TABLE `pedido` (
@@ -5073,17 +5075,19 @@ CREATE TABLE `pedido` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Fazendo dump de dados para tabela `pedido`
+-- Extraindo dados da tabela `pedido`
 --
 
 INSERT INTO `pedido` (`id`, `id_setor`, `data_pedido`, `ref_mes`, `alteracao`, `prioridade`, `status`, `valor`) VALUES
 (1, 3, '2016-07-23', 'julho', 0, 'normal', 'Enviado ao Ordenador', '22000.000'),
-(2, 3, '2016-07-26', 'Julho', 1, 'rascunho', 'Rascunho', '8800.000');
+(2, 3, '2016-07-26', 'Julho', 1, 'rascunho', 'Rascunho', '8800.000'),
+(3, 5, '2016-08-04', 'Agosto', 1, 'rascunho', 'Rascunho', '296.880'),
+(4, 5, '2016-08-04', 'Agosto', 0, 'normal', 'Em Analise', '111.300');
 
 -- --------------------------------------------------------
 
 --
--- Estrutura para tabela `postagens`
+-- Estrutura da tabela `postagens`
 --
 
 CREATE TABLE `postagens` (
@@ -5096,7 +5100,7 @@ CREATE TABLE `postagens` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Fazendo dump de dados para tabela `postagens`
+-- Extraindo dados da tabela `postagens`
 --
 
 INSERT INTO `postagens` (`id`, `tabela`, `titulo`, `data`, `ativa`, `postagem`) VALUES
@@ -5148,7 +5152,25 @@ INSERT INTO `postagens` (`id`, `tabela`, `titulo`, `data`, `ativa`, `postagem`) 
 -- --------------------------------------------------------
 
 --
--- Estrutura para tabela `saldos_adiantados`
+-- Estrutura da tabela `processos`
+--
+
+CREATE TABLE `processos` (
+  `id` int(10) UNSIGNED NOT NULL,
+  `num_processo` varchar(25) NOT NULL,
+  `tipo` varchar(30) NOT NULL,
+  `estante` varchar(30) NOT NULL,
+  `prateleira` varchar(30) NOT NULL,
+  `entrada` varchar(10) NOT NULL,
+  `saida` varchar(10) NOT NULL,
+  `responsavel` varchar(30) NOT NULL,
+  `retorno` varchar(10) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
+-- Estrutura da tabela `saldos_adiantados`
 --
 
 CREATE TABLE `saldos_adiantados` (
@@ -5164,16 +5186,16 @@ CREATE TABLE `saldos_adiantados` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Fazendo dump de dados para tabela `saldos_adiantados`
+-- Extraindo dados da tabela `saldos_adiantados`
 --
 
 INSERT INTO `saldos_adiantados` (`id`, `id_setor`, `data_solicitacao`, `data_analise`, `mes_subtraido`, `ano`, `valor_adiantado`, `justificativa`, `status`) VALUES
-(1, 3, '2016-07-24', '0000-00-00', 13, 2016, '400', 'preciso de um adiantamento urgente', 2);
+(1, 3, '2016-07-24', '2016-08-07', 13, 2016, '400', 'preciso de um adiantamento urgente', 0);
 
 -- --------------------------------------------------------
 
 --
--- Estrutura para tabela `saldo_fixo`
+-- Estrutura da tabela `saldo_fixo`
 --
 
 CREATE TABLE `saldo_fixo` (
@@ -5183,7 +5205,7 @@ CREATE TABLE `saldo_fixo` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Fazendo dump de dados para tabela `saldo_fixo`
+-- Extraindo dados da tabela `saldo_fixo`
 --
 
 INSERT INTO `saldo_fixo` (`id`, `id_setor`, `saldo_padrao`) VALUES
@@ -5201,7 +5223,7 @@ INSERT INTO `saldo_fixo` (`id`, `id_setor`, `saldo_padrao`) VALUES
 -- --------------------------------------------------------
 
 --
--- Estrutura para tabela `saldo_setor`
+-- Estrutura da tabela `saldo_setor`
 --
 
 CREATE TABLE `saldo_setor` (
@@ -5215,7 +5237,7 @@ CREATE TABLE `saldo_setor` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Fazendo dump de dados para tabela `saldo_setor`
+-- Extraindo dados da tabela `saldo_setor`
 --
 
 INSERT INTO `saldo_setor` (`id`, `id_setor`, `saldo`, `saldo_suplementado`, `saldo_aditivado`, `mes`, `ano`) VALUES
@@ -5227,12 +5249,14 @@ INSERT INTO `saldo_setor` (`id`, `id_setor`, `saldo`, `saldo_suplementado`, `sal
 (6, 7, '250000', '250000.000', '0.000', 7, 2016),
 (7, 8, '100000', '100000.000', '0.000', 7, 2016),
 (8, 9, '300000', '300000.000', '0.000', 7, 2016),
-(9, 10, '310000', '310000.000', '0.000', 7, 2016);
+(9, 10, '310000', '310000.000', '0.000', 7, 2016),
+(10, 3, '3978000', '2000000.000', '0.000', 8, 2016),
+(11, 5, '2999888.700', '1500000.000', '0.000', 8, 2016);
 
 -- --------------------------------------------------------
 
 --
--- Estrutura para tabela `setores`
+-- Estrutura da tabela `setores`
 --
 
 CREATE TABLE `setores` (
@@ -5241,7 +5265,7 @@ CREATE TABLE `setores` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Fazendo dump de dados para tabela `setores`
+-- Extraindo dados da tabela `setores`
 --
 
 INSERT INTO `setores` (`id`, `nome`) VALUES
@@ -5259,7 +5283,7 @@ INSERT INTO `setores` (`id`, `nome`) VALUES
 -- --------------------------------------------------------
 
 --
--- Estrutura para tabela `solic_alt_pedido`
+-- Estrutura da tabela `solic_alt_pedido`
 --
 
 CREATE TABLE `solic_alt_pedido` (
@@ -5273,7 +5297,7 @@ CREATE TABLE `solic_alt_pedido` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Fazendo dump de dados para tabela `solic_alt_pedido`
+-- Extraindo dados da tabela `solic_alt_pedido`
 --
 
 INSERT INTO `solic_alt_pedido` (`id`, `id_pedido`, `id_setor`, `data_solicitacao`, `data_analise`, `justificativa`, `status`) VALUES
@@ -5282,7 +5306,7 @@ INSERT INTO `solic_alt_pedido` (`id`, `id_pedido`, `id_setor`, `data_solicitacao
 -- --------------------------------------------------------
 
 --
--- Estrutura para tabela `usuario`
+-- Estrutura da tabela `usuario`
 --
 
 CREATE TABLE `usuario` (
@@ -5295,7 +5319,7 @@ CREATE TABLE `usuario` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Fazendo dump de dados para tabela `usuario`
+-- Extraindo dados da tabela `usuario`
 --
 
 INSERT INTO `usuario` (`id`, `nome`, `login`, `senha`, `id_setor`, `email`) VALUES
@@ -5307,12 +5331,14 @@ INSERT INTO `usuario` (`id`, `nome`, `login`, `senha`, `id_setor`, `email`) VALU
 (6, 'UO Traumato', 'uotraumato', '$1$PQbgUgC1$cFeOLcqwL9n6DoPQkhVq2/', 7, ''),
 (7, 'UO Dispensas de Licitacao', 'uodisp', '$1$beMT2G77$0mocKkwHwwXO95LqPWYp1/', 8, ''),
 (8, 'Nutricao', 'nutricao', '$1$qTKe.0zX$E.Kbi3YBEVNz1G9KcHSqD1', 9, ''),
-(9, 'Divisao Administrativa Finance', 'divadmin', '$1$OZtbi1V0$Lu2Qp1RUFtjRuA2u7mQEi0', 10, '');
+(9, 'Divisao Administrativa Finance', 'divadmin', '$1$OZtbi1V0$Lu2Qp1RUFtjRuA2u7mQEi0', 10, ''),
+(10, 'Iara', 'iara', '$1$/TgtrTgd$FKlo.4KrTGnbH5G5xLNc80', 2, 'iara@ufsm.br'),
+(11, 'Recepcao', 'recepcao', '$1$6RmFqcEN$5Elpbeu3wuEGs9.Cu4s6Q0', 2, 'joaovictorbolsson@gmail.com');
 
 -- --------------------------------------------------------
 
 --
--- Estrutura para tabela `usuario_permissoes`
+-- Estrutura da tabela `usuario_permissoes`
 --
 
 CREATE TABLE `usuario_permissoes` (
@@ -5320,43 +5346,46 @@ CREATE TABLE `usuario_permissoes` (
   `id_usuario` int(10) UNSIGNED NOT NULL,
   `noticias` tinyint(1) NOT NULL,
   `saldos` tinyint(1) NOT NULL,
-  `pedidos` tinyint(1) NOT NULL
+  `pedidos` tinyint(1) NOT NULL,
+  `recepcao` tinyint(1) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Fazendo dump de dados para tabela `usuario_permissoes`
+-- Extraindo dados da tabela `usuario_permissoes`
 --
 
-INSERT INTO `usuario_permissoes` (`id`, `id_usuario`, `noticias`, `saldos`, `pedidos`) VALUES
-(1, 1, 1, 1, 1),
-(2, 2, 0, 0, 0),
-(3, 3, 0, 0, 0),
-(4, 4, 0, 0, 0),
-(5, 5, 0, 0, 0),
-(6, 6, 0, 0, 0),
-(7, 7, 0, 0, 0),
-(8, 8, 0, 0, 0),
-(9, 9, 0, 0, 0);
+INSERT INTO `usuario_permissoes` (`id`, `id_usuario`, `noticias`, `saldos`, `pedidos`, `recepcao`) VALUES
+(1, 1, 1, 1, 1, 0),
+(2, 2, 0, 0, 0, 0),
+(3, 3, 0, 0, 0, 0),
+(4, 4, 0, 0, 0, 0),
+(5, 5, 0, 0, 0, 0),
+(6, 6, 0, 0, 0, 0),
+(7, 7, 0, 0, 0, 0),
+(8, 8, 0, 0, 0, 0),
+(9, 9, 0, 0, 0, 0),
+(10, 10, 1, 1, 1, 0),
+(11, 11, 0, 0, 0, 1);
 
 --
--- Índices de tabelas apagadas
+-- Indexes for dumped tables
 --
 
 --
--- Índices de tabela `comentarios`
+-- Indexes for table `comentarios`
 --
 ALTER TABLE `comentarios`
   ADD PRIMARY KEY (`id`),
   ADD KEY `id_pedido` (`id_pedido`);
 
 --
--- Índices de tabela `itens`
+-- Indexes for table `itens`
 --
 ALTER TABLE `itens`
   ADD PRIMARY KEY (`id`);
 
 --
--- Índices de tabela `itens_pedido`
+-- Indexes for table `itens_pedido`
 --
 ALTER TABLE `itens_pedido`
   ADD PRIMARY KEY (`id`),
@@ -5364,33 +5393,39 @@ ALTER TABLE `itens_pedido`
   ADD KEY `id_item` (`id_item`);
 
 --
--- Índices de tabela `mes`
+-- Indexes for table `mes`
 --
 ALTER TABLE `mes`
   ADD PRIMARY KEY (`id`);
 
 --
--- Índices de tabela `paginas_post`
+-- Indexes for table `paginas_post`
 --
 ALTER TABLE `paginas_post`
   ADD PRIMARY KEY (`id`);
 
 --
--- Índices de tabela `pedido`
+-- Indexes for table `pedido`
 --
 ALTER TABLE `pedido`
   ADD PRIMARY KEY (`id`),
   ADD KEY `id_setor` (`id_setor`);
 
 --
--- Índices de tabela `postagens`
+-- Indexes for table `postagens`
 --
 ALTER TABLE `postagens`
   ADD PRIMARY KEY (`id`),
   ADD KEY `tabela` (`tabela`);
 
 --
--- Índices de tabela `saldos_adiantados`
+-- Indexes for table `processos`
+--
+ALTER TABLE `processos`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `saldos_adiantados`
 --
 ALTER TABLE `saldos_adiantados`
   ADD PRIMARY KEY (`id`),
@@ -5398,14 +5433,14 @@ ALTER TABLE `saldos_adiantados`
   ADD KEY `mes_subtraido` (`mes_subtraido`);
 
 --
--- Índices de tabela `saldo_fixo`
+-- Indexes for table `saldo_fixo`
 --
 ALTER TABLE `saldo_fixo`
   ADD PRIMARY KEY (`id`),
   ADD KEY `id_setor` (`id_setor`);
 
 --
--- Índices de tabela `saldo_setor`
+-- Indexes for table `saldo_setor`
 --
 ALTER TABLE `saldo_setor`
   ADD PRIMARY KEY (`id`),
@@ -5413,13 +5448,13 @@ ALTER TABLE `saldo_setor`
   ADD KEY `mes` (`mes`);
 
 --
--- Índices de tabela `setores`
+-- Indexes for table `setores`
 --
 ALTER TABLE `setores`
   ADD PRIMARY KEY (`id`);
 
 --
--- Índices de tabela `solic_alt_pedido`
+-- Indexes for table `solic_alt_pedido`
 --
 ALTER TABLE `solic_alt_pedido`
   ADD PRIMARY KEY (`id`),
@@ -5427,157 +5462,162 @@ ALTER TABLE `solic_alt_pedido`
   ADD KEY `id_setor` (`id_setor`);
 
 --
--- Índices de tabela `usuario`
+-- Indexes for table `usuario`
 --
 ALTER TABLE `usuario`
   ADD PRIMARY KEY (`id`),
   ADD KEY `id_setor` (`id_setor`);
 
 --
--- Índices de tabela `usuario_permissoes`
+-- Indexes for table `usuario_permissoes`
 --
 ALTER TABLE `usuario_permissoes`
   ADD PRIMARY KEY (`id`),
   ADD KEY `id_usuario` (`id_usuario`);
 
 --
--- AUTO_INCREMENT de tabelas apagadas
+-- AUTO_INCREMENT for dumped tables
 --
 
 --
--- AUTO_INCREMENT de tabela `comentarios`
+-- AUTO_INCREMENT for table `comentarios`
 --
 ALTER TABLE `comentarios`
   MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 --
--- AUTO_INCREMENT de tabela `itens`
+-- AUTO_INCREMENT for table `itens`
 --
 ALTER TABLE `itens`
   MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4832;
 --
--- AUTO_INCREMENT de tabela `itens_pedido`
+-- AUTO_INCREMENT for table `itens_pedido`
 --
 ALTER TABLE `itens_pedido`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 --
--- AUTO_INCREMENT de tabela `mes`
+-- AUTO_INCREMENT for table `mes`
 --
 ALTER TABLE `mes`
   MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
 --
--- AUTO_INCREMENT de tabela `paginas_post`
+-- AUTO_INCREMENT for table `paginas_post`
 --
 ALTER TABLE `paginas_post`
   MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 --
--- AUTO_INCREMENT de tabela `pedido`
+-- AUTO_INCREMENT for table `pedido`
 --
 ALTER TABLE `pedido`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 --
--- AUTO_INCREMENT de tabela `postagens`
+-- AUTO_INCREMENT for table `postagens`
 --
 ALTER TABLE `postagens`
   MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=45;
 --
--- AUTO_INCREMENT de tabela `saldos_adiantados`
+-- AUTO_INCREMENT for table `processos`
+--
+ALTER TABLE `processos`
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
+--
+-- AUTO_INCREMENT for table `saldos_adiantados`
 --
 ALTER TABLE `saldos_adiantados`
   MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 --
--- AUTO_INCREMENT de tabela `saldo_fixo`
+-- AUTO_INCREMENT for table `saldo_fixo`
 --
 ALTER TABLE `saldo_fixo`
   MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 --
--- AUTO_INCREMENT de tabela `saldo_setor`
+-- AUTO_INCREMENT for table `saldo_setor`
 --
 ALTER TABLE `saldo_setor`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 --
--- AUTO_INCREMENT de tabela `setores`
+-- AUTO_INCREMENT for table `setores`
 --
 ALTER TABLE `setores`
   MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 --
--- AUTO_INCREMENT de tabela `solic_alt_pedido`
+-- AUTO_INCREMENT for table `solic_alt_pedido`
 --
 ALTER TABLE `solic_alt_pedido`
   MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 --
--- AUTO_INCREMENT de tabela `usuario`
+-- AUTO_INCREMENT for table `usuario`
 --
 ALTER TABLE `usuario`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 --
--- AUTO_INCREMENT de tabela `usuario_permissoes`
+-- AUTO_INCREMENT for table `usuario_permissoes`
 --
 ALTER TABLE `usuario_permissoes`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 --
--- Restrições para dumps de tabelas
+-- Constraints for dumped tables
 --
 
 --
--- Restrições para tabelas `comentarios`
+-- Limitadores para a tabela `comentarios`
 --
 ALTER TABLE `comentarios`
   ADD CONSTRAINT `comentarios_ibfk_1` FOREIGN KEY (`id_pedido`) REFERENCES `pedido` (`id`);
 
 --
--- Restrições para tabelas `itens_pedido`
+-- Limitadores para a tabela `itens_pedido`
 --
 ALTER TABLE `itens_pedido`
   ADD CONSTRAINT `itens_pedido_ibfk_1` FOREIGN KEY (`id_pedido`) REFERENCES `pedido` (`id`),
   ADD CONSTRAINT `itens_pedido_ibfk_2` FOREIGN KEY (`id_item`) REFERENCES `itens` (`id`);
 
 --
--- Restrições para tabelas `pedido`
+-- Limitadores para a tabela `pedido`
 --
 ALTER TABLE `pedido`
   ADD CONSTRAINT `pedido_ibfk_1` FOREIGN KEY (`id_setor`) REFERENCES `setores` (`id`);
 
 --
--- Restrições para tabelas `postagens`
+-- Limitadores para a tabela `postagens`
 --
 ALTER TABLE `postagens`
   ADD CONSTRAINT `postagens_ibfk_1` FOREIGN KEY (`tabela`) REFERENCES `paginas_post` (`id`);
 
 --
--- Restrições para tabelas `saldos_adiantados`
+-- Limitadores para a tabela `saldos_adiantados`
 --
 ALTER TABLE `saldos_adiantados`
   ADD CONSTRAINT `saldos_adiantados_ibfk_1` FOREIGN KEY (`id_setor`) REFERENCES `setores` (`id`),
   ADD CONSTRAINT `saldos_adiantados_ibfk_2` FOREIGN KEY (`mes_subtraido`) REFERENCES `mes` (`id`);
 
 --
--- Restrições para tabelas `saldo_fixo`
+-- Limitadores para a tabela `saldo_fixo`
 --
 ALTER TABLE `saldo_fixo`
   ADD CONSTRAINT `saldo_fixo_ibfk_1` FOREIGN KEY (`id_setor`) REFERENCES `setores` (`id`);
 
 --
--- Restrições para tabelas `saldo_setor`
+-- Limitadores para a tabela `saldo_setor`
 --
 ALTER TABLE `saldo_setor`
   ADD CONSTRAINT `saldo_setor_ibfk_1` FOREIGN KEY (`id_setor`) REFERENCES `setores` (`id`),
   ADD CONSTRAINT `saldo_setor_ibfk_2` FOREIGN KEY (`mes`) REFERENCES `mes` (`id`);
 
 --
--- Restrições para tabelas `solic_alt_pedido`
+-- Limitadores para a tabela `solic_alt_pedido`
 --
 ALTER TABLE `solic_alt_pedido`
   ADD CONSTRAINT `solic_alt_pedido_ibfk_1` FOREIGN KEY (`id_pedido`) REFERENCES `pedido` (`id`),
   ADD CONSTRAINT `solic_alt_pedido_ibfk_2` FOREIGN KEY (`id_setor`) REFERENCES `setores` (`id`);
 
 --
--- Restrições para tabelas `usuario`
+-- Limitadores para a tabela `usuario`
 --
 ALTER TABLE `usuario`
   ADD CONSTRAINT `usuario_ibfk_1` FOREIGN KEY (`id_setor`) REFERENCES `setores` (`id`);
 
 --
--- Restrições para tabelas `usuario_permissoes`
+-- Limitadores para a tabela `usuario_permissoes`
 --
 ALTER TABLE `usuario_permissoes`
   ADD CONSTRAINT `usuario_permissoes_ibfk_1` FOREIGN KEY (`id_usuario`) REFERENCES `usuario` (`id`);

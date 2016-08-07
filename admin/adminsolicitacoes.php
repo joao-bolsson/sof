@@ -13,30 +13,30 @@ $permissao = $obj_Busca->getPermissoes($_SESSION["id"]);
 ?>
 <!DOCTYPE html>
 <html lang="pt">
-<head>
-  <meta charset="UTF-8">
-  <meta content="IE=edge" http-equiv="X-UA-Compatible">
-  <meta content="initial-scale=1.0, maximum-scale=1.0, user-scalable=no, width=device-width" name="viewport">
-  <title>Setor de Orçamento e Finanças – HUSM</title>
-  <link href="../plugins/animate/animate.min.css" rel="stylesheet">
-  <!-- css -->
-  <link href="../material/css/base.min.css" rel="stylesheet">
+    <head>
+        <meta charset="UTF-8">
+        <meta content="IE=edge" http-equiv="X-UA-Compatible">
+        <meta content="initial-scale=1.0, maximum-scale=1.0, user-scalable=no, width=device-width" name="viewport">
+        <title>Setor de Orçamento e Finanças – HUSM</title>
+        <link href="../plugins/animate/animate.min.css" rel="stylesheet">
+        <!-- css -->
+        <link href="../material/css/base.min.css" rel="stylesheet">
 
-  <!-- css for doc -->
-  <link href="../material/css/project.min.css" rel="stylesheet">
-  <link href="../sof_files/estilo.min.css" rel="stylesheet">
+        <!-- css for doc -->
+        <link href="../material/css/project.min.css" rel="stylesheet">
+        <link href="../sof_files/estilo.min.css" rel="stylesheet">
 
-  <link rel="stylesheet" type="text/css" href="../plugins/dataTables/datatables.min.css"/>
+        <link rel="stylesheet" type="text/css" href="../plugins/dataTables/datatables.min.css"/>
 
-  <!-- favicon -->
-  <link rel="icon" href="../favicon.ico">
-</head>
+        <!-- favicon -->
+        <link rel="icon" href="../favicon.ico">
+    </head>
 
-<body class="page-brand" onload="iniAdminSolicitacoes();">
-  <input id="div_ajax" type="hidden">
-  <header class="header header-transparent header-waterfall affix">
-    <ul class="nav nav-list pull-left">
-      <?php
+    <body class="page-brand" onload="iniAdminSolicitacoes();">
+        <input id="div_ajax" type="hidden">
+        <header class="header header-transparent header-waterfall affix">
+            <ul class="nav nav-list pull-left">
+                <?php
 if ($permissao->noticias) {
 	echo "
        <li>
@@ -47,42 +47,42 @@ if ($permissao->noticias) {
       ";
 }
 ?>
-    <li>
-     <a class="btn btn-flat waves-attach waves-light" href="javascript:abreModal('#redefinirSenha');"><span class="text-white"><span class="icon">lock_outline</span>REDEFINIR SENHA</span></a>
-   </li>
- </ul>
- <nav class="tab-nav pull-right hidden-xx">
-  <ul class="nav nav-list">
-    <li>
-      <a class="btn btn-flat waves-attach waves-light" href="sair.php"><span class="text-white"><span class="icon">power_settings_new</span>SAIR</span></a>
-    </li>
-  </ul>
-</nav>
-</header>
-<main class="content">
- <div class="content-heading">
-  <div class="container">
-    <div class="row">
-      <h1 class="heading module wow slideInRight animated"><img src="../sof_files/logo_blue.png" alt="Setor de Orçamento e Finanças – HUSM" /></h1>
-      <div class="text-header module wow slideInLeft animated">
-        <p>Setor de Orçamento e Finanças</p>
-        <span>Hospital Universitário de Santa Maria</span>
-      </div>
-    </div>
-  </div>
-</div>
-<div class="container">
-  <div class="row">
-    <section class="content-inner margin-top-no">
-     <nav class="tab-nav ui-tab-tab">
-      <ul class="nav nav-list">
-        <li>
-          <a class="waves-attach" href="../view/"><span style="color: white;"><span class="icon">home</span>INÍCIO</span></a>
-        </li>
-        <li class="active">
-          <a class="waves-attach" href="adminsolicitacoes.php"><span style="color: white;"><span class="icon">payment</span>SOLICITAÇÕES</span></a>
-        </li>
-        <?php
+                <li>
+                    <a class="btn btn-flat waves-attach waves-light" href="javascript:abreModal('#redefinirSenha');"><span class="text-white"><span class="icon">lock_outline</span>REDEFINIR SENHA</span></a>
+                </li>
+            </ul>
+            <nav class="tab-nav pull-right hidden-xx">
+                <ul class="nav nav-list">
+                    <li>
+                        <a class="btn btn-flat waves-attach waves-light" href="sair.php"><span class="text-white"><span class="icon">power_settings_new</span>SAIR</span></a>
+                    </li>
+                </ul>
+            </nav>
+        </header>
+        <main class="content">
+            <div class="content-heading">
+                <div class="container">
+                    <div class="row">
+                        <h1 class="heading module wow slideInRight animated"><img src="../sof_files/logo_blue.png" alt="Setor de Orçamento e Finanças – HUSM" /></h1>
+                        <div class="text-header module wow slideInLeft animated">
+                            <p>Setor de Orçamento e Finanças</p>
+                            <span>Hospital Universitário de Santa Maria</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="container">
+                <div class="row">
+                    <section class="content-inner margin-top-no">
+                        <nav class="tab-nav ui-tab-tab">
+                            <ul class="nav nav-list">
+                                <li>
+                                    <a class="waves-attach" href="../view/"><span style="color: white;"><span class="icon">home</span>INÍCIO</span></a>
+                                </li>
+                                <li class="active">
+                                    <a class="waves-attach" href="adminsolicitacoes.php"><span style="color: white;"><span class="icon">payment</span>SOLICITAÇÕES</span></a>
+                                </li>
+                                <?php
 if ($permissao->saldos) {
 	echo "
          <li>
@@ -90,8 +90,6 @@ if ($permissao->saldos) {
         </li>
         ";
 }
-?>
-<?php
 if ($permissao->pedidos) {
 	echo "
     <li>
@@ -99,11 +97,16 @@ if ($permissao->pedidos) {
       </li>
   ";
 }
+if ($permissao->recepcao) {
+	echo "<li>
+            <a class=\"waves-attach\" href=\"javascript:abreModal('#listProcessos');\"><span class=\"text-white\"><span class=\"icon\">label</span>PROCESSOS</span></a>
+          </li>";
+}
 ?>
-    </ul>
-  </nav>
-</div><!-- ./row -->
-<?php
+                            </ul>
+                        </nav>
+                </div><!-- ./row -->
+                <?php
 if ($permissao->recepcao) {
 	echo "
   <div class=\"row\">
@@ -117,13 +120,15 @@ if ($permissao->recepcao) {
        <div class=\"card-inner\">
         <table class=\"table stripe\" id=\"tableRecepcao\" style=\"width: 100%;\">
           <thead>
-            <th></th>
+            <th>#</th>
             <th>PROCESSO</th>
             <th>TIPO</th>
+            <th>ESTANTE</th>
+            <th>PRATELEIRA</th>
             <th>ENTRADA EM</th>
             <th>SAIDA EM</th>
-            <th>RETIRADA?</th>
-            <th>DATA</th>
+            <th>RESPONSÁVEL</th>
+            <th>RETORNO EM</th>
           </thead>
           <tbody id=\"conteudoRecepcao\">
 
@@ -135,8 +140,6 @@ if ($permissao->recepcao) {
 </div>
 ";
 }
-?>
-<?php
 if ($permissao->saldos) {
 	echo "
   <div class=\"row\">
@@ -197,8 +200,6 @@ if ($permissao->saldos) {
 </div>
 ";
 }
-?>
-<?php
 if ($permissao->pedidos) {
 	echo "
   <div class=\"row\">
@@ -483,167 +484,287 @@ if ($permissao->pedidos) {
 ";
 }
 ?>
-</section>
-</div>
-</div>
-</main>
-<footer class="footer">
-  <div class="col-md-4 col-sm-6">
-    <div class="container" style="text-align: center; margin-left: 100px;">
-      <p>
-        Hospital Universitário de Santa Maria<br>
-        HUSM - UFSM - EBSERH<br>
-        Endereço: Av. Roraima, 1000, Prédio 22<br>
-        Bairro Camobi, Santa Maria - RS<br>
-        CEP 97105-900
-      </p>
-    </div>
-  </div>
-  <div class="col-md-4 col-sm-6">
-    <div class="conteiner">
-      <div id="info-img" class="margin-bottom" style="text-align: center;">
-        <a href="http://www.husm.ufsm.br/"><img src="../sof_files/logo husm.png" rel="" title=""></a>
-        <a href="http://www.ebserh.gov.br/"><img src="../sof_files/logo ebserh.png" rel="" title=""></a>
-        <a href="http://site.ufsm.br/"><img src="../sof_files/logo ufsm.png" rel="" title=""></a>
-      </div>
-    </div>
-  </div>
-  <div class="col-md-4 col-sm-6">
-    <div class="container" style="text-align: center; margin-right: 100px;">
-      <p>
-        Telefone: (55) 3213 - 1610<br>
-        E-mail: orcamentofinancashusm@gmail.com<br>
-        Horário de Atend.: 07h às 12h e 13h às 17h
-      </p>
-    </div>
-  </div>
-</footer>
-<div class="modal fade" id="importItens" role="dialog">
-  <div class="modal-dialog" style="width: 40%;">
-    <div class="modal-content">
-      <div class="modal-heading">
-        <a class="modal-close" data-dismiss="modal">×</a>
-        <h2 class="modal-title content-sub-heading">Importar Itens</h2>
-      </div>
-      <form enctype="multipart/form-data" action="../php/geral.php" method="post">
-        <input type="hidden" name="admin" value="1">
-        <input type="hidden" name="form" value="importItens">
-        <div class="modal-inner">
-          <div class="form-group form-group-label">
-            <label class="floating-label" for="file"><span class="icon">insert_drive_file</span>&nbsp;Arquivo</label>
-            <input id="file" class="form-control" type="file" style="text-transform: none !important;" name="file">
-          </div>
-          <p class="help-block">Max. 32MB</p>
-          <div id="loaderImport" class="progress-circular" style="margin-left: 45%; display: none;">
-            <div class="progress-circular-wrapper">
-              <div class="progress-circular-inner">
-                <div class="progress-circular-left">
-                  <div class="progress-circular-spinner"></div>
-                </div>
-                <div class="progress-circular-gap"></div>
-                <div class="progress-circular-right">
-                  <div class="progress-circular-spinner"></div>
-                </div>
-              </div>
+                </section>
             </div>
-          </div>
         </div>
-        <div class="modal-footer margin-bottom">
-          <button class="btn btn-brand waves-attach waves-light waves-effect" type="submit" style="width: 100%;"><span class="icon">backup</span>&nbsp;Enviar</button>
-        </div>
-      </form>
-    </div>
-  </div>
-</div>
-<div class="modal fade" id="redefinirSenha" role="dialog">
-  <div class="modal-dialog" style="width: 40%;">
-    <div class="modal-content">
-      <div class="modal-heading">
-        <a class="modal-close" data-dismiss="modal">×</a>
-        <h2 class="modal-title content-sub-heading">Redefinir Senha</h2>
-      </div>
-      <form id="alterSenha" action="javascript:novaSenha();" method="post">
-        <div class="modal-inner">
-          <div class="form-group form-group-label">
-            <label class="floating-label" for="senhaAtualUser"><span class="icon">lock_outline</span>&nbsp;Senha Atual</label>
-            <input class="form-control" id="senhaAtualUser" name="senhaAtualUser" type="password" required>
-          </div>
-          <div class="form-group form-group-label">
-            <label class="floating-label" for="senhaUser"><span class="icon">lock_outline</span>&nbsp;Nova Senha</label>
-            <input class="form-control" id="senhaUser" name="senhaUser" type="password" required>
-          </div>
-          <div id="loader" class="progress-circular" style="margin-left: 45%; display: none;">
-            <div class="progress-circular-wrapper">
-              <div class="progress-circular-inner">
-                <div class="progress-circular-left">
-                  <div class="progress-circular-spinner"></div>
-                </div>
-                <div class="progress-circular-gap"></div>
-                <div class="progress-circular-right">
-                  <div class="progress-circular-spinner"></div>
-                </div>
-              </div>
+    </main>
+    <footer class="footer">
+        <div class="col-md-4 col-sm-6">
+            <div class="container" style="text-align: center; margin-left: 100px;">
+                <p>
+                    Hospital Universitário de Santa Maria<br>
+                    HUSM - UFSM - EBSERH<br>
+                    Endereço: Av. Roraima, 1000, Prédio 22<br>
+                    Bairro Camobi, Santa Maria - RS<br>
+                    CEP 97105-900
+                </p>
             </div>
-          </div>
         </div>
-        <div class="modal-footer margin-bottom">
-          <button class="btn btn-brand waves-attach waves-light waves-effect" type="submit" style="width: 100%;"><span class="icon">autorenew</span>&nbsp;Atualizar</button>
+        <div class="col-md-4 col-sm-6">
+            <div class="conteiner">
+                <div id="info-img" class="margin-bottom" style="text-align: center;">
+                    <a href="http://www.husm.ufsm.br/"><img src="../sof_files/logo husm.png" rel="" title=""></a>
+                    <a href="http://www.ebserh.gov.br/"><img src="../sof_files/logo ebserh.png" rel="" title=""></a>
+                    <a href="http://site.ufsm.br/"><img src="../sof_files/logo ufsm.png" rel="" title=""></a>
+                </div>
+            </div>
         </div>
-      </form>
+        <div class="col-md-4 col-sm-6">
+            <div class="container" style="text-align: center; margin-right: 100px;">
+                <p>
+                    Telefone: (55) 3213 - 1610<br>
+                    E-mail: orcamentofinancashusm@gmail.com<br>
+                    Horário de Atend.: 07h às 12h e 13h às 17h
+                </p>
+            </div>
+        </div>
+    </footer>
+    <?php
+if ($permissao->pedidos) {
+	echo "<div class=\"modal fade\" id=\"importItens\" role=\"dialog\">
+        <div class=\"modal-dialog\" style=\"width: 40%;\">
+            <div class=\"modal-content\">
+                <div class=\"modal-heading\">
+                    <a class=\"modal-close\" data-dismiss=\"modal\">×</a>
+                    <h2 class=\"modal-title content-sub-heading\">Importar Itens</h2>
+                </div>
+                <form enctype=\"multipart/form-data\" action=\"../php/geral.php\" method=\"post\">
+                    <input type=\"hidden\" name=\"admin\" value=\"1\">
+                    <input type=\"hidden\" name=\"form\" value=\"importItens\">
+                    <div class=\"modal-inner\">
+                        <div class=\"form-group form-group-label\">
+                            <label class=\"floating-label\" for=\"file\"><span class=\"icon\">insert_drive_file</span>&nbsp;Arquivo</label>
+                            <input id=\"file\" class=\"form-control\" type=\"file\" style=\"text-transform: none !important;\" name=\"file\">
+                        </div>
+                        <p class=\"help-block\">Max. 32MB</p>
+                        <div id=\"loaderImport\" class=\"progress-circular\" style=\"margin-left: 45%; display: none;\">
+                            <div class=\"progress-circular-wrapper\">
+                                <div class=\"progress-circular-inner\">
+                                    <div class=\"progress-circular-left\">
+                                        <div class=\"progress-circular-spinner\"></div>
+                                    </div>
+                                    <div class=\"progress-circular-gap\"></div>
+                                    <div class=\"progress-circular-right\">
+                                        <div class=\"progress-circular-spinner\"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class=\"modal-footer margin-bottom\">
+                        <button class=\"btn btn-brand waves-attach waves-light waves-effect\" type=\"submit\" style=\"width: 100%;\"><span class=\"icon\">backup</span>&nbsp;Enviar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>";
+}
+if ($permissao->saldos) {
+	echo "<div aria-hidden=\"true\" class=\"modal fade\" id=\"freeSaldos\" role=\"dialog\" tabindex=\"-1\">
+        <div class=\"modal-dialog\">
+            <div class=\"modal-content\">
+                <div class=\"modal-heading\">
+                    <a class=\"modal-close\" data-dismiss=\"modal\">×</a>
+                    <h2 class=\"modal-title content-sub-heading\">Liberar Saldos</h2>
+                </div>
+                <div class=\"modal-inner\">
+                    <table class=\"table\">
+                        <thead>
+                            <tr>
+                                <th>Setor</th>
+                                <th>Valor</th>
+                                <th>Liberar valor mês/ano</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody id=\"contFreeSaldos\">
+
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>";
+}
+if ($permissao->recepcao) {
+	echo "<div aria-hidden=\"true\" class=\"modal fade\" id=\"listProcessos\" role=\"dialog\" tabindex=\"-1\">
+        <div class=\"modal-dialog\" style=\"width: 40%;\">
+            <div class=\"modal-content\">
+                <div class=\"modal-heading\">
+                    <a class=\"modal-close\" data-dismiss=\"modal\">×</a>
+                    <h2 class=\"modal-title content-sub-heading\">Processos Atendidos pelo SOF</h2>
+                </div>
+                <div class=\"modal-inner\">
+                    <table id=\"tableListProcessos\" class=\"table\" style=\"width: 100%;\">
+                        <thead>
+                            <tr>
+                                <th>Número do Processo</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+        {$obj_Busca->getProcessos("recepcao")}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>";
+}
+?>
+    <div aria-hidden="true" class="modal fade" id="addProcesso" role="dialog" tabindex="-1">
+        <div class="modal-dialog" style="width: 50%;">
+            <div class="modal-content">
+                <div class="modal-heading">
+                    <a class="modal-close" data-dismiss="modal">×</a>
+                    <h2 class="modal-title content-sub-heading">Adicionar Processo</h2>
+                </div>
+                <form id="formLogin" action="javascript:cadastraProcesso();" method="post">
+                    <div class="modal-inner">
+                        <table style="width: 100%;">
+                            <tbody>
+                                <tr>
+                                    <td>
+                                        <div id="divNumProc" class="form-group form-group-label">
+                                            <label class="floating-label" for="numProcesso"><span class="icon">label</span>&nbsp;Processo</label>
+                                            <input class="form-control" id="numProcesso" name="num_processo" type="text" required>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="form-group form-group-label">
+                                            <label class="floating-label" for="tipo"><span class="icon">lock_outline</span>&nbsp;Tipo</label>
+                                            <input class="form-control" id="tipo" name="tipo" type="text" required>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <div class="form-group form-group-label">
+                                            <label class="floating-label" for="estante"><span class="icon">line_weight</span>&nbsp;Estante</label>
+                                            <input class="form-control" id="estante" name="estante" type="text" required>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="form-group form-group-label">
+                                            <label class="floating-label" for="prateleira"><span class="icon">list</span>&nbsp;Prateleira</label>
+                                            <input class="form-control" id="prateleira" name="prateleira" type="text" required>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <div class="form-group form-group-label">
+                                            <label class="floating-label" for="entrada"><span class="icon">date_range</span>&nbsp;Entrada</label>
+                                            <input class="form-control" id="entrada" name="entrada" type="text" required>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="form-group form-group-label">
+                                            <label class="floating-label" for="saida"><span class="icon">alarm</span>&nbsp;Saída</label>
+                                            <input class="form-control" id="saida" name="saida" type="text" required>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <div class="form-group form-group-label">
+                                            <label class="floating-label" for="responsavel"><span class="icon">perm_identity</span>&nbsp;Responsável</label>
+                                            <input class="form-control" id="responsavel" name="responsavel" type="text">
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="form-group form-group-label">
+                                            <label class="floating-label" for="retorno"><span class="icon">date_range</span>&nbsp;Retorno</label>
+                                            <input class="form-control" id="retorno" name="retorno" type="text">
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <div id="loading" class="progress-circular" style="margin-left: 45%; display: none;">
+                            <div class="progress-circular-wrapper">
+                                <div class="progress-circular-inner">
+                                    <div class="progress-circular-left">
+                                        <div class="progress-circular-spinner"></div>
+                                    </div>
+                                    <div class="progress-circular-gap"></div>
+                                    <div class="progress-circular-right">
+                                        <div class="progress-circular-spinner"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer margin-bottom">
+                        <button class="btn btn-brand waves-attach waves-light waves-effect" type="submit" style="width: 100%;"><span class="icon">send</span>&nbsp;Enviar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
     </div>
-  </div>
-</div>
-<div aria-hidden="true" class="modal modal-va-middle fade" id="viewCompl" role="dialog" tabindex="-1">
-  <div class="modal-dialog modal-xs">
-    <div class="modal-content">
-      <div class="modal-heading">
-        <a class="modal-close" data-dismiss="modal">×</a>
-      </div>
-      <div class="modal-inner" id="complementoItem">
-
-      </div>
-      <div class="modal-footer margin-bottom">
-        <p class="text-right"><a class="btn waves-attach waves-effect" data-dismiss="modal">OK</a></p>
-
-      </div>
+    <div class="modal fade" id="redefinirSenha" role="dialog">
+        <div class="modal-dialog" style="width: 40%;">
+            <div class="modal-content">
+                <div class="modal-heading">
+                    <a class="modal-close" data-dismiss="modal">×</a>
+                    <h2 class="modal-title content-sub-heading">Redefinir Senha</h2>
+                </div>
+                <form id="alterSenha" action="javascript:novaSenha();" method="post">
+                    <div class="modal-inner">
+                        <div class="form-group form-group-label">
+                            <label class="floating-label" for="senhaAtualUser"><span class="icon">lock_outline</span>&nbsp;Senha Atual</label>
+                            <input class="form-control" id="senhaAtualUser" name="senhaAtualUser" type="password" required>
+                        </div>
+                        <div class="form-group form-group-label">
+                            <label class="floating-label" for="senhaUser"><span class="icon">lock_outline</span>&nbsp;Nova Senha</label>
+                            <input class="form-control" id="senhaUser" name="senhaUser" type="password" required>
+                        </div>
+                        <div id="loader" class="progress-circular" style="margin-left: 45%; display: none;">
+                            <div class="progress-circular-wrapper">
+                                <div class="progress-circular-inner">
+                                    <div class="progress-circular-left">
+                                        <div class="progress-circular-spinner"></div>
+                                    </div>
+                                    <div class="progress-circular-gap"></div>
+                                    <div class="progress-circular-right">
+                                        <div class="progress-circular-spinner"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer margin-bottom">
+                        <button class="btn btn-brand waves-attach waves-light waves-effect" type="submit" style="width: 100%;"><span class="icon">autorenew</span>&nbsp;Atualizar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
     </div>
-  </div>
-</div>
+    <div aria-hidden="true" class="modal modal-va-middle fade" id="viewCompl" role="dialog" tabindex="-1">
+        <div class="modal-dialog modal-xs">
+            <div class="modal-content">
+                <div class="modal-heading">
+                    <a class="modal-close" data-dismiss="modal">×</a>
+                </div>
+                <div class="modal-inner" id="complementoItem">
 
-<div aria-hidden="true" class="modal fade" id="freeSaldos" role="dialog" tabindex="-1">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-heading">
-        <a class="modal-close" data-dismiss="modal">×</a>
-        <h2 class="modal-title content-sub-heading">Liberar Saldos</h2>
-      </div>
-      <div class="modal-inner">
-        <table class="table">
-          <thead>
-            <tr>
-              <th>Setor</th>
-              <th>Valor</th>
-              <th>Liberar valor mês/ano</th>
-              <th></th>
-            </tr>
-          </thead>
-          <tbody id="contFreeSaldos">
+                </div>
+                <div class="modal-footer margin-bottom">
+                    <p class="text-right"><a class="btn waves-attach waves-effect" data-dismiss="modal">OK</a></p>
 
-          </tbody>
-        </table>
-      </div>
+                </div>
+            </div>
+        </div>
     </div>
-  </div>
-</div>
-<!-- js -->
-<script src="../plugins/jQuery/jquery.min.js"></script>
-<script src="../material/js/base.min.js"></script>
+    <!-- js -->
+    <script src="../plugins/jQuery/jquery.min.js"></script>
+    <script src="../material/js/base.min.js"></script>
 
-<!-- js for doc -->
-<script src="../material/js/project.min.js"></script>
+    <!-- js for doc -->
+    <script src="../material/js/project.min.js"></script>
 
-<script type="text/javascript" src="../plugins/dataTables/datatables.min.js"></script>
+    <script type="text/javascript" src="../plugins/dataTables/datatables.min.js"></script>
 
-<script type="text/javascript" src="../ini.min.js"></script>
+    <script type="text/javascript" src="../ini.js"></script>
 </body>
 </html>
