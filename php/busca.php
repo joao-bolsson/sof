@@ -29,6 +29,12 @@ if (isset($_POST["admin"]) && isset($_SESSION["id_setor"]) && $_SESSION["id_seto
 
 	switch ($form) {
 
+	// comentário
+	case 'addProcesso':
+		$id_processo = $_POST["id_processo"];
+		echo $obj_Busca->getInfoProcesso($id_processo);
+		break;
+
 	// retornar a tabela com os processos para edição na recepção
 	case 'tableRecepcao':
 		echo $obj_Busca->getTabelaRecepcao();

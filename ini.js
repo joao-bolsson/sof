@@ -136,12 +136,6 @@ function destroyDataTable(tabela) {
 	}).destroy();
 }
 
-function addProcesso(numProcesso){
-    $('#addProcesso').modal();
-    document.getElementById('numProcesso').value = numProcesso;
-    $('#divNumProc').addClass('control-highlight');
-}
-
 function resetSenha() {
 	document.getElementById("loaderResetSenha").style.display = 'inline-block';
 	var email = document.getElementById('userReset').value;
@@ -198,7 +192,7 @@ function carregaPostsPag(tabela) {
 
 function iniAdminSolicitacoes() {
 	iniDataTable('#tableItensPedido');
-    iniDataTable('#tableListProcessos');
+	iniDataTable('#tableListProcessos');
 	iniSolicitacoes();
 	iniTableSolicAltPed(2);
 	iniTableSolicAdiant(2);
@@ -212,10 +206,59 @@ function iniRecepcao() {
 		admin: 1,
 		form: 'tableRecepcao',
 	}, function(resposta) {
-		// Quando terminada a requisição
 		destroyDataTable('#tableRecepcao');
 		document.getElementById('conteudoRecepcao').innerHTML = resposta;
 		iniDataTable('#tableRecepcao');
+	});
+}
+
+function addProcesso(numProcesso, id) {
+	$('#addProcesso').modal();
+	document.getElementById("id_processo").value = id;
+	if (id === 0) {
+		document.getElementById('num_processo').value = numProcesso;
+		$('#divNumProc').addClass('control-highlight');
+	} else {
+		$.post('../php/busca.php', {
+			admin: 1,
+			form: 'addProcesso',
+			id_processo: id
+		}, function(resposta) {
+			var obj = jQuery.parseJSON(resposta);
+			document.getElementById("num_processo").value = obj.num_processo;
+			document.getElementById("tipo").value = obj.tipo;
+			document.getElementById("estante").value = obj.estante;
+			document.getElementById("prateleira").value = obj.prateleira;
+			document.getElementById("entrada").value = obj.entrada;
+			document.getElementById("saida").value = obj.saida;
+			document.getElementById("responsavel").value = obj.responsavel;
+			document.getElementById("retorno").value = obj.retorno;
+			$('#formProcesso .form-group').addClass('control-highlight');
+		});
+	}
+}
+
+function updateProcesso() {
+	var campos = ["id_processo", "num_processo", "tipo", "estante", "prateleira", "entrada", "saida", "responsavel", "retorno"];
+	var dados = [];
+	for (var i = 0; i < campos.length; i++) {
+		dados[i] = document.getElementById(campos[i]).value;
+	}
+	$.post('../php/geral.php', {
+		admin: 1,
+		form: 'recepcao',
+		dados: dados
+	}, function(resposta) {
+		if (resposta === "true") {
+			iniRecepcao();
+			document.getElementById('formProcesso').reset();
+			document.getElementById('id_processo').value = 0;
+			$('#addProcesso').modal('hide');
+			avisoSnack('Sucesso!');
+		} else {
+			alert('Ocorreu um erro no servidor. Contate o administrador');
+			window.location.href = "sair.php";
+		}
 	});
 }
 

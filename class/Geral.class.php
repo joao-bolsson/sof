@@ -20,6 +20,39 @@ class Geral extends Conexao {
 	}
 	// ------------------------------------------------------------------------------
 	/**
+	 *	Função para cadastrar/editar um processo
+	 *
+	 *	@access public
+	 *	@param $dados é um array que contém os dados do processo
+	 *	@param $dados["id_processo"] contém o id do processo, se for 0 então é para adc, se não dar update
+	 *	@return boolean
+	 */
+	public function updateProcesso($dados) {
+		for ($i = 0; $i < count($dados); $i++) {
+			$dados[$i] = trim($dados[$i]);
+			if ($dados[$i] == "") {
+				$dados[$i] = "----------";
+			}
+			$dados[$i] = $this->mysqli->real_escape_string($dados[$i]);
+		}
+		if ($dados[0] == 0) {
+			//  ["id_processo", "num_processo", "tipo", "estante", "prateleira", "entrada", "saida", "responsavel", "retorno"];
+			// INSERT
+			$query = $this->mysqli->query("INSERT INTO processos VALUES(NULL, '{$dados[1]}', '{$dados[2]}', '{$dados[3]}', '{$dados[4]}', '{$dados[5]}', '{$dados[6]}', '{$dados[7]}', '{$dados[8]}');");
+			if ($query) {
+				return true;
+			}
+			return false;
+		} else {
+			$query = $this->mysqli->query("UPDATE processos SET num_processo = '{$dados[1]}', tipo = '{$dados[2]}', estante = '{$dados[3]}', prateleira = '{$dados[4]}', entrada = '{$dados[5]}', saida = '{$dados[6]}', responsavel = '{$dados[7]}', retorno = '{$dados[8]}' WHERE id = {$dados[0]};");
+			if ($query) {
+				return true;
+			}
+			return false;
+		}
+	}
+	// ------------------------------------------------------------------------------
+	/**
 	 *	Função que importa itens por SQL
 	 *
 	 *	@access public

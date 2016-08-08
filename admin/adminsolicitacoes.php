@@ -118,9 +118,10 @@ if ($permissao->recepcao) {
          </div>
        </div><!--  ./card-header -->
        <div class=\"card-inner\">
+       <a class=\"\" href=\"javascript:addProcesso(' ', 0);\"><span class=\"icon\">add</span>Adicionar Processo</a>
         <table class=\"table stripe\" id=\"tableRecepcao\" style=\"width: 100%;\">
           <thead>
-            <th>#</th>
+            <th></th>
             <th>PROCESSO</th>
             <th>TIPO</th>
             <th>ESTANTE</th>
@@ -611,97 +612,100 @@ if ($permissao->recepcao) {
         </div>
     </div>";
 }
-?>
-    <div aria-hidden="true" class="modal fade" id="addProcesso" role="dialog" tabindex="-1">
-        <div class="modal-dialog" style="width: 50%;">
-            <div class="modal-content">
-                <div class="modal-heading">
-                    <a class="modal-close" data-dismiss="modal">×</a>
-                    <h2 class="modal-title content-sub-heading">Adicionar Processo</h2>
+if ($permissao->recepcao) {
+	echo "<div aria-hidden=\"true\" class=\"modal fade\" id=\"addProcesso\" role=\"dialog\" tabindex=\"-1\">
+        <div class=\"modal-dialog\" style=\"width: 50%;\">
+            <div class=\"modal-content\">
+                <div class=\"modal-heading\">
+                    <a class=\"modal-close\" data-dismiss=\"modal\">×</a>
+                    <h2 class=\"modal-title content-sub-heading\">Processo</h2>
                 </div>
-                <form id="formLogin" action="javascript:cadastraProcesso();" method="post">
-                    <div class="modal-inner">
-                        <table style="width: 100%;">
+                <form id=\"formProcesso\" action=\"javascript:updateProcesso();\" method=\"post\">
+                    <input id=\"id_processo\" type=\"hidden\" value=\"0\"></input>
+                    <div class=\"modal-inner\">
+                        <table style=\"width: 100%;\">
                             <tbody>
                                 <tr>
                                     <td>
-                                        <div id="divNumProc" class="form-group form-group-label">
-                                            <label class="floating-label" for="numProcesso"><span class="icon">label</span>&nbsp;Processo</label>
-                                            <input class="form-control" id="numProcesso" name="num_processo" type="text" required>
+                                        <div id=\"divNumProc\" class=\"form-group form-group-label\">
+                                            <label class=\"floating-label\" for=\"num_processo\"><span class=\"icon\">label</span>&nbsp;Processo</label>
+                                            <input class=\"form-control\" id=\"num_processo\" name=\"num_processo\" type=\"text\" required>
                                         </div>
                                     </td>
                                     <td>
-                                        <div class="form-group form-group-label">
-                                            <label class="floating-label" for="tipo"><span class="icon">lock_outline</span>&nbsp;Tipo</label>
-                                            <input class="form-control" id="tipo" name="tipo" type="text" required>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <div class="form-group form-group-label">
-                                            <label class="floating-label" for="estante"><span class="icon">line_weight</span>&nbsp;Estante</label>
-                                            <input class="form-control" id="estante" name="estante" type="text" required>
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <div class="form-group form-group-label">
-                                            <label class="floating-label" for="prateleira"><span class="icon">list</span>&nbsp;Prateleira</label>
-                                            <input class="form-control" id="prateleira" name="prateleira" type="text" required>
+                                        <div class=\"form-group form-group-label\">
+                                            <label class=\"floating-label\" for=\"tipo\"><span class=\"icon\">lock_outline</span>&nbsp;Tipo</label>
+                                            <input class=\"form-control\" id=\"tipo\" name=\"tipo\" type=\"text\" required>
                                         </div>
                                     </td>
                                 </tr>
                                 <tr>
                                     <td>
-                                        <div class="form-group form-group-label">
-                                            <label class="floating-label" for="entrada"><span class="icon">date_range</span>&nbsp;Entrada</label>
-                                            <input class="form-control" id="entrada" name="entrada" type="text" required>
+                                        <div class=\"form-group form-group-label\">
+                                            <label class=\"floating-label\" for=\"estante\"><span class=\"icon\">line_weight</span>&nbsp;Estante</label>
+                                            <input class=\"form-control\" id=\"estante\" name=\"estante\" type=\"text\" required>
                                         </div>
                                     </td>
                                     <td>
-                                        <div class="form-group form-group-label">
-                                            <label class="floating-label" for="saida"><span class="icon">alarm</span>&nbsp;Saída</label>
-                                            <input class="form-control" id="saida" name="saida" type="text" required>
+                                        <div class=\"form-group form-group-label\">
+                                            <label class=\"floating-label\" for=\"prateleira\"><span class=\"icon\">list</span>&nbsp;Prateleira</label>
+                                            <input class=\"form-control\" id=\"prateleira\" name=\"prateleira\" type=\"text\" required>
                                         </div>
                                     </td>
                                 </tr>
                                 <tr>
                                     <td>
-                                        <div class="form-group form-group-label">
-                                            <label class="floating-label" for="responsavel"><span class="icon">perm_identity</span>&nbsp;Responsável</label>
-                                            <input class="form-control" id="responsavel" name="responsavel" type="text">
+                                        <div class=\"form-group form-group-label\">
+                                          <label class=\"floating-label\" for=\"entrada\"><span class=\"icon\">date_range</span>&nbsp;Entrada (dd/mm/yyyy)</label>
+                                          <input class=\"form-control\" id=\"entrada\" name=\"entrada\" type=\"text\" required maxlength=\"10\">
                                         </div>
                                     </td>
                                     <td>
-                                        <div class="form-group form-group-label">
-                                            <label class="floating-label" for="retorno"><span class="icon">date_range</span>&nbsp;Retorno</label>
-                                            <input class="form-control" id="retorno" name="retorno" type="text">
+                                        <div class=\"form-group form-group-label\">
+                                            <label class=\"floating-label\" for=\"saida\"><span class=\"icon\">alarm</span>&nbsp;Saída (dd/mm/yyyy)</label>
+                                            <input class=\"form-control\" id=\"saida\" name=\"saida\" type=\"text\" maxlength=\"10\">
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <div class=\"form-group form-group-label\">
+                                            <label class=\"floating-label\" for=\"responsavel\"><span class=\"icon\">perm_identity</span>&nbsp;Responsável</label>
+                                            <input class=\"form-control\" id=\"responsavel\" name=\"responsavel\" type=\"text\">
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class=\"form-group form-group-label\">
+                                            <label class=\"floating-label\" for=\"retorno\"><span class=\"icon\">date_range</span>&nbsp;Retorno (dd/mm/yyyy)</label>
+                                            <input class=\"form-control\" id=\"retorno\" name=\"retorno\" type=\"text\" maxlength=\"10\">
                                         </div>
                                     </td>
                                 </tr>
                             </tbody>
                         </table>
-                        <div id="loading" class="progress-circular" style="margin-left: 45%; display: none;">
-                            <div class="progress-circular-wrapper">
-                                <div class="progress-circular-inner">
-                                    <div class="progress-circular-left">
-                                        <div class="progress-circular-spinner"></div>
+                        <div id=\"loading\" class=\"progress-circular\" style=\"margin-left: 45%; display: none;\">
+                            <div class=\"progress-circular-wrapper\">
+                                <div class=\"progress-circular-inner\">
+                                    <div class=\"progress-circular-left\">
+                                        <div class=\"progress-circular-spinner\"></div>
                                     </div>
-                                    <div class="progress-circular-gap"></div>
-                                    <div class="progress-circular-right">
-                                        <div class="progress-circular-spinner"></div>
+                                    <div class=\"progress-circular-gap\"></div>
+                                    <div class=\"progress-circular-right\">
+                                        <div class=\"progress-circular-spinner\"></div>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <div class="modal-footer margin-bottom">
-                        <button class="btn btn-brand waves-attach waves-light waves-effect" type="submit" style="width: 100%;"><span class="icon">send</span>&nbsp;Enviar</button>
+                    <div class=\"modal-footer margin-bottom\">
+                        <button class=\"btn btn-brand waves-attach waves-light waves-effect\" type=\"submit\" style=\"width: 100%;\"><span class=\"icon\">send</span>&nbsp;Enviar</button>
                     </div>
                 </form>
             </div>
         </div>
-    </div>
+    </div>";
+}
+?>
     <div class="modal fade" id="redefinirSenha" role="dialog">
         <div class="modal-dialog" style="width: 40%;">
             <div class="modal-content">
@@ -751,20 +755,19 @@ if ($permissao->recepcao) {
                 </div>
                 <div class="modal-footer margin-bottom">
                     <p class="text-right"><a class="btn waves-attach waves-effect" data-dismiss="modal">OK</a></p>
-
                 </div>
             </div>
         </div>
     </div>
     <!-- js -->
     <script src="../plugins/jQuery/jquery.min.js"></script>
-    <script src="../material/js/base.min.js"></script>
+    <script src="../material/js/base.js"></script>
 
     <!-- js for doc -->
     <script src="../material/js/project.min.js"></script>
 
     <script type="text/javascript" src="../plugins/dataTables/datatables.min.js"></script>
 
-    <script type="text/javascript" src="../ini.js"></script>
+    <script type="text/javascript" src="../ini.min.js"></script>
 </body>
 </html>

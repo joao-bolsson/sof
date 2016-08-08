@@ -39,6 +39,21 @@ if (isset($_POST["admin"]) && isset($_SESSION["id_setor"]) && $_SESSION["id_seto
 
 	// comentário
 
+	case 'recepcao':
+		// array com os dados
+		$dados = $_POST["dados"];
+		$update = $obj_Geral->updateProcesso($dados);
+
+		if ($update) {
+			echo "true";
+		} else {
+			echo "false";
+		}
+
+		break;
+
+	// comentário
+
 	case 'importItens':
 		// Tamanho máximo do arquivo (em Bytes)
 		$_UP['tamanho'] = 1024 * 1024 * 1024 * 1024 * 1024 * 1024 * 1024 * 1024 * 1024 * 1024 * 1024; //
