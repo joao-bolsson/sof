@@ -761,7 +761,7 @@ if ($permissao->recepcao) {
     </div>
     <!-- js -->
     <script src="../plugins/jQuery/jquery.min.js"></script>
-    <script src="../material/js/base.js"></script>
+    <script src="../material/js/base.min.js"></script>
 
     <!-- js for doc -->
     <script src="../material/js/project.min.js"></script>
