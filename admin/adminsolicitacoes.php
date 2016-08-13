@@ -33,7 +33,6 @@ $permissao = $obj_Busca->getPermissoes($_SESSION["id"]);
     </head>
 
     <body class="page-brand" onload="iniAdminSolicitacoes();">
-        <input id="div_ajax" type="hidden">
         <header class="header header-transparent header-waterfall affix">
             <ul class="nav nav-list pull-left">
                 <?php
@@ -54,7 +53,7 @@ if ($permissao->noticias) {
             <nav class="tab-nav pull-right hidden-xx">
                 <ul class="nav nav-list">
                     <li>
-                        <a class="btn btn-flat waves-attach waves-light" href="sair.php"><span class="text-white"><span class="icon">power_settings_new</span>SAIR</span></a>
+                        <a class="btn btn-flat waves-attach waves-light" href="sair.php"><span class="text-white"><span class="icon">exit_to_app</span>SAIR</span></a>
                     </li>
                 </ul>
             </nav>
@@ -130,6 +129,7 @@ if ($permissao->recepcao) {
             <th>SAIDA EM</th>
             <th>RESPONSÁVEL</th>
             <th>RETORNO EM</th>
+            <th>OBS</th>
           </thead>
           <tbody id=\"conteudoRecepcao\">
 
@@ -344,60 +344,9 @@ if ($permissao->pedidos) {
 
           </tbody>
         </table>
-        <table class=\"table\">
-          <tr>
-            <td>
-              <div class=\"form-group form-group-label control-highlight\">
-                <label class=\"floating-label padding-left\" for=\"refMes\" style=\"font-size: 14pt;\"><span class=\"icon\">comment</span>&nbsp;Referente ao mês de</label>
-                <input class=\"form-control padding-left\" id=\"refMes\" name=\"refMes\" style=\"font-size: 14pt;\" type=\"text\" disabled value=\"--------------------\" required>
-              </div>
-            </td>
-            <td>
-              <div class=\"form-group form-group-label control-highlight\">
-                <label class=\"floating-label padding-left\" for=\"total\" style=\"font-size: 14pt;\"><span class=\"icon\">attach_money</span>&nbsp;Total</label>
-                <input class=\"form-control padding-left\" id=\"total\" name=\"total\" style=\"font-size: 14pt;\" type=\"text\" disabled value=\"R$ 0\" required>
-              </div>
-            </td>
-          </tr>
-          <input id=\"total_hidden\" type=\"hidden\" name=\"total_hidden\" value=\"0\">
-          <input id=\"saldo_total\" type=\"hidden\" name=\"saldo_total\" value=\"0.000\">
-        </table>
-        <table class=\"table\">
-          <tr>
-            <td>
-              <div class=\"radiobtn radiobtn-adv\">
-                <label for=\"stnormal\">
-                  <input type=\"radio\" name=\"prioridade\" required=\"true\" id=\"stnormal\" class=\"access-hide\" value=\"normal\">Normal
-                  <span class=\"radiobtn-circle\"></span><span class=\"radiobtn-circle-check\"></span>
-                </label>
-              </div>
-            </td>
-            <td>
-              <div class=\"radiobtn radiobtn-adv\">
-                <label for=\"stpreferencial\">
-                  <input type=\"radio\" name=\"prioridade\" required=\"true\" id=\"stpreferencial\" class=\"access-hide\" value=\"preferencial\">Preferencial
-                  <span class=\"radiobtn-circle\"></span><span class=\"radiobtn-circle-check\"></span>
-                </label>
-              </div>
-            </td>
-            <td>
-              <div class=\"radiobtn radiobtn-adv\">
-                <label for=\"sturgente\">
-                  <input type=\"radio\" name=\"prioridade\" required=\"true\" id=\"sturgente\" class=\"access-hide\" value=\"urgente\" >Urgente
-                  <span class=\"radiobtn-circle\"></span><span class=\"radiobtn-circle-check\"></span>
-                </label>
-              </div>
-            </td>
-            <td>
-              <div class=\"radiobtn radiobtn-adv\">
-                <label for=\"stemergencial\">
-                  <input type=\"radio\" name=\"prioridade\" required=\"true\" id=\"stemergencial\" class=\"access-hide\" value=\"emergencial\" >Emergencial
-                  <span class=\"radiobtn-circle\"></span><span class=\"radiobtn-circle-check\"></span>
-                </label>
-              </div>
-            </td>
-          </tr>
-        </table>
+        <input id=\"total_hidden\" type=\"hidden\" name=\"total_hidden\" value=\"0\">
+        <input id=\"saldo_total\" type=\"hidden\" name=\"saldo_total\" value=\"0.000\">
+        <input id=\"prioridade\" type=\"hidden\" name=\"prioridade\" value=\"0\">
         <table class=\"table\">
           <tr>
             <td>
@@ -452,7 +401,7 @@ if ($permissao->pedidos) {
             </td>
             <td>
               <div class=\"radiobtn radiobtn-adv\">
-                <label for=\"stEnviadoAoOrdenador\">
+                <label for=\"stEnviadoaoOrdenador\">
                   <input type=\"radio\" name=\"fase\" required id=\"stEnviadoaoOrdenador\" class=\"access-hide\" value=\"Enviado ao Ordenador\">Enviado Ao Ordenador
                   <span class=\"radiobtn-circle\"></span><span class=\"radiobtn-circle-check\"></span>
                 </label>
@@ -681,6 +630,15 @@ if ($permissao->recepcao) {
                                         </div>
                                     </td>
                                 </tr>
+                                <tr>
+                                    <td colspan=\"2\">
+                                      <div class=\"form-group form-group-label\">
+                                          <label class=\"floating-label\" for=\"obs\"><span class=\"icon\">announcement</span>&nbsp;Observação</label>
+                                          <textarea class=\"form-control textarea-autosize\" id=\"obs\" name=\"obs\" rows=\"1\" required></textarea>
+                                      </div>
+                                    </td>
+                                    <td></td>
+                                </tr>
                             </tbody>
                         </table>
                         <div id=\"loading\" class=\"progress-circular\" style=\"margin-left: 45%; display: none;\">
@@ -768,6 +726,6 @@ if ($permissao->recepcao) {
 
     <script type="text/javascript" src="../plugins/dataTables/datatables.min.js"></script>
 
-    <script type="text/javascript" src="../ini.min.js"></script>
+    <script type="text/javascript" src="../ini.js"></script>
 </body>
 </html>

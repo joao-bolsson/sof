@@ -19,7 +19,6 @@ $obj_Geral = new Geral();
 $obj_Geral->checkSolicAdi();
 //se a variável dos slides não existe então devemos criá-la, para evitar recarregamentos desnecessários
 if (!isset($_SESSION["slide1"]) || !isset($_SESSION["slide2"])) {
-// 0 -> id setor público, 1 -> slide 1
 	$_SESSION["slide1"] = $obj_Busca->getSlide(1);
 	$_SESSION["slide2"] = $obj_Busca->getSlide(2);
 }
@@ -27,6 +26,8 @@ if (!isset($_SESSION["slide1"]) || !isset($_SESSION["slide2"])) {
 if (isset($_SESSION["admin"])) {
 //redireciona para a página do admin
 	header('Location: admin/');
+} else if (isset($_SESSION["id_setor"]) && $_SESSION["id_setor"] != 0) {
+	header("Location: view/solicitacoes.php");
 } else {
 	header("Location: view/");
 }

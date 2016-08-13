@@ -4,7 +4,7 @@ error_reporting(E_ALL);
 
 session_start();
 if (!isset($_SESSION["id_setor"]) || $_SESSION["id_setor"] != 2) {
-    header("Location: ../");
+	header("Location: ../");
 }
 include_once '../class/Busca.class.php';
 //instanciando classe de busca para popular o select de estados
@@ -12,7 +12,7 @@ $obj_Busca = new Busca();
 
 $permissao = $obj_Busca->getPermissoes($_SESSION["id"]);
 if (!$permissao->noticias) {
-    header("Location: adminsolicitacoes.php");
+	header("Location: adminsolicitacoes.php");
 }
 ?>
 <!DOCTYPE html>
@@ -59,7 +59,6 @@ if (!$permissao->noticias) {
     </head>
 
     <body class="page-brand">
-        <input id="div_ajax" type="hidden">
         <header class="header header-transparent header-waterfall affix">
             <nav class="tab-nav pull-left hidden-xx">
                 <ul class="nav nav-list">
@@ -71,7 +70,7 @@ if (!$permissao->noticias) {
             <nav class="tab-nav pull-right hidden-xx">
                 <ul class="nav nav-list">
                     <li>
-                        <a class="btn btn-flat waves-attach waves-light" href="sair.php"><span class="text-white"><span class="icon">power_settings_new</span>SAIR</span></a>
+                        <a class="btn btn-flat waves-attach waves-light" href="sair.php"><span class="text-white"><span class="icon">exit_to_app</span>SAIR</span></a>
                     </li>
                 </ul>
             </nav>
@@ -147,8 +146,8 @@ if (!$permissao->noticias) {
                                         <h2 class="content-sub-heading">Postar em: </h2>
                                         <select id="pag" class="form-control" name="pag" required>
                                             <?php
-                                            echo $obj_Busca->getPostarEm();
-                                            ?>
+echo $obj_Busca->getPostarEm();
+?>
                                         </select>
                                     </div>
                                     <h2 class="content-sub-heading">Data de Publicação: </h2>

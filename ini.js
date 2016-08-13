@@ -59,7 +59,7 @@ function avisoSnack(aviso, corpo) {
 }
 
 function iniDataTable(tabela) {
-	$(tabela).DataTable({
+	var myTable = $(tabela).DataTable({
 		destroy: true,
 		searching: true,
 		language: {
@@ -98,42 +98,7 @@ function iniDataTable(tabela) {
 }
 
 function destroyDataTable(tabela) {
-	$(tabela).DataTable({
-		destroy: true,
-		searching: true,
-		language: {
-			"decimal": "",
-			"emptyTable": "Nenhum dado na tabela",
-			"info": "",
-			"infoEmpty": "",
-			"infoFiltered": "",
-			"infoPostFix": "",
-			"thousands": ",",
-			"lengthMenu": "Monstrando _MENU_ entradas",
-			"loadingRecords": "Carregando...",
-			"processing": "Processando...",
-			"search": "Pesquisar:",
-			"zeroRecords": "Nenhum resultado encontrado",
-			"paginate": {
-				"first": "Primeiro",
-				"last": "Último",
-				"next": "Próximo",
-				"previous": "Anterior"
-			},
-			"aria": {
-				"sortAscending": ": activate to sort column ascending",
-				"sortDescending": ": activate to sort column descending"
-			}
-		},
-		"lengthMenu": [
-			[5, 10, 25, 50, -1],
-			[5, 10, 25, 50, "All"]
-		],
-		"scrollY": "400px",
-		"scrollCollapse": true,
-		"paging": false,
-		"scrollX": true
-	}).destroy();
+	$(tabela).DataTable().destroy();
 }
 
 function resetSenha() {
@@ -233,13 +198,14 @@ function addProcesso(numProcesso, id) {
 			document.getElementById("saida").value = obj.saida;
 			document.getElementById("responsavel").value = obj.responsavel;
 			document.getElementById("retorno").value = obj.retorno;
+			document.getElementById("obs").value = obj.obs;
 			$('#formProcesso .form-group').addClass('control-highlight');
 		});
 	}
 }
 
 function updateProcesso() {
-	var campos = ["id_processo", "num_processo", "tipo", "estante", "prateleira", "entrada", "saida", "responsavel", "retorno"];
+	var campos = ["id_processo", "num_processo", "tipo", "estante", "prateleira", "entrada", "saida", "responsavel", "retorno", "obs"];
 	var dados = [];
 	for (var i = 0; i < campos.length; i++) {
 		dados[i] = document.getElementById(campos[i]).value;
@@ -644,16 +610,13 @@ function analisarPedido(id_pedido, id_setor) {
 		var obj = jQuery.parseJSON(retorno);
 		//valor do pedido
 		document.getElementById('total_hidden').value = obj.valor;
-		document.getElementById('total').value = "R$ " + obj.valor;
 
 		//saldo
 		document.getElementById('saldo_total').value = parseFloat(obj.saldo).toFixed(3);
 		document.getElementById('text_saldo_total').innerHTML = "R$ " + parseFloat(obj.saldo).toFixed(3);
 
-		document.getElementById('refMes').value = obj.ref_mes;
 		//prioridade
-		document.getElementById('st' + obj.prioridade).checked = true;
-
+		document.getElementById('prioridade').value = obj.prioridade;
 		//status
 		document.getElementById('st' + obj.status).checked = true;
 	});

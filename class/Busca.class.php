@@ -24,13 +24,39 @@ class Busca extends Conexao {
 	}
 	// ------------------------------------------------------------------------------
 	/**
+	 *	Função que retornar os radioBtn das prioridades dos pedidos.
+	 *
+	 *	@access public
+	 *	@return string
+	 */
+	public function getPrioridades() {
+		$retorno = "";
+		$query = $this->mysqli->query("SELECT nome FROM prioridade;");
+		while ($prioridade = $query->fetch_object()) {
+			$nome = ucfirst($prioridade->nome);
+			$retorno .= "
+			<td>
+				<div class=\"radiobtn radiobtn-adv\">
+					<label for=\"st{$nome}\">
+						<input type=\"radio\" name=\"st\" id=\"st{$nome}\" class=\"access-hide\" checked=\"\" value=\"{$prioridade->nome}\">{$nome}
+						<span class=\"radiobtn-circle\"></span><span class=\"radiobtn-circle-check\"></span>
+					</label>
+				</div>
+			</td>
+			";
+		}
+		$query->close();
+		return $retorno;
+	}
+	// ------------------------------------------------------------------------------
+	/**
 	 *   Função utilizada para retornar as informações de um processo clicado da tabela da recepção
 	 *
 	 *   @access public
 	 *   @return string
 	 */
 	public function getInfoProcesso($id_processo) {
-		$query = $this->mysqli->query("SELECT processos.num_processo, processos.tipo, processos.estante, processos.prateleira, processos.entrada, processos.saida, processos.responsavel, processos.retorno FROM processos WHERE processos.id = {$id_processo};");
+		$query = $this->mysqli->query("SELECT processos.num_processo, processos.tipo, processos.estante, processos.prateleira, processos.entrada, processos.saida, processos.responsavel, processos.retorno, processos.obs FROM processos WHERE processos.id = {$id_processo};");
 		$obj = $query->fetch_object();
 		$query->close();
 		return json_encode($obj);
@@ -44,7 +70,7 @@ class Busca extends Conexao {
 	 */
 	public function getTabelaRecepcao() {
 		$retorno = "";
-		$query = $this->mysqli->query("SELECT processos.id, processos.num_processo, processos.tipo, processos.estante, processos.prateleira, processos.entrada, processos.saida, processos.responsavel, processos.retorno FROM processos ORDER BY id ASC;");
+		$query = $this->mysqli->query("SELECT processos.id, processos.num_processo, processos.tipo, processos.estante, processos.prateleira, processos.entrada, processos.saida, processos.responsavel, processos.retorno, processos.obs FROM processos ORDER BY id ASC;");
 
 		while ($processo = $query->fetch_object()) {
 			$retorno .= "
@@ -58,8 +84,11 @@ class Busca extends Conexao {
 					<td>{$processo->prateleira}</td>
 					<td>{$processo->entrada}</td>
 					<td>{$processo->saida}</td>
-                    <td>{$processo->responsavel}</td>
+          <td>{$processo->responsavel}</td>
 					<td>{$processo->retorno}</td>
+					<td>
+						<button onclick=\"viewCompl('{$processo->obs}');\" class=\"btn btn-flat waves-attach waves-effect\" type=\"button\" title=\"Ver Observação\">OBS</button>
+					</td>
 				</tr>
 			";
 		}
@@ -286,7 +315,7 @@ class Busca extends Conexao {
 		if ($busca == "") {
 			$retorno .= "
 										<tr>
-											<td collspan=\"2\">Digite algo para pesquisar...</td>
+											<td colspan=\"2\">Digite algo para pesquisar...</td>
 											<td></td>
 										</tr>
 										";
@@ -296,7 +325,7 @@ class Busca extends Conexao {
 			if ($query->num_rows == 0) {
 				$retorno .= "
 											<tr>
-												<td collspan=\"2\">Nenhum resultado para '{$busca}'</td>
+												<td colspan=\"2\">Nenhum resultado para '{$busca}'</td>
 												<td></td>
 											</tr>
 											";
@@ -426,7 +455,7 @@ class Busca extends Conexao {
 		} else {
 			$retorno = "
 				<tr>
-					<td collspan=\"3\">Nenhum saldo para liberar.</td>
+					<td colspan=\"3\">Nenhum saldo para liberar.</td>
 					<td></td>
 					<td></td>
 					<td></td>
@@ -599,7 +628,6 @@ class Busca extends Conexao {
 
 				while ($item = $query_itens->fetch_object()) {
 					$item->complemento_item = utf8_encode($item->complemento_item);
-					$item->complemento_item = substr($item->complemento_item, 0, 73);
 					$item->complemento_item = mb_strtoupper($item->complemento_item, 'UTF-8');
 					$retorno .= "
 							<tr>
@@ -941,7 +969,7 @@ class Busca extends Conexao {
 	public function getInfoPedidoAnalise($id_pedido, $id_setor) {
 		$mes = date("n");
 		$ano = date("Y");
-		$query = $this->mysqli->query("SELECT saldo_setor.saldo, pedido.prioridade, pedido.status, pedido.ref_mes, pedido.valor FROM saldo_setor, pedido WHERE saldo_setor.id_setor = {$id_setor} AND saldo_setor.mes = {$mes} AND saldo_setor.ano = {$ano} AND pedido.id = {$id_pedido};");
+		$query = $this->mysqli->query("SELECT saldo_setor.saldo, pedido.prioridade, pedido.status, pedido.valor FROM saldo_setor, pedido WHERE saldo_setor.id_setor = {$id_setor} AND saldo_setor.mes = {$mes} AND saldo_setor.ano = {$ano} AND pedido.id = {$id_pedido};");
 		$pedido = $query->fetch_object();
 		$pedido->status = str_replace(" ", "", $pedido->status);
 		$query->close();
@@ -1221,6 +1249,7 @@ class Busca extends Conexao {
 				<td>R$ {$rascunho->valor}</td>
 				<td>
 					<button class=\"btn btn-default btn-sm\" style=\"text-transform: none !important;font-weight: bold;\" onclick=\"editaPedido({$rascunho->id});\" title=\"Editar\"><span class=\"icon\">create</span></button>
+					<button class=\"btn btn-default btn-sm\" style=\"text-transform: none !important;font-weight: bold;\" onclick=\"imprimir({$rascunho->id});\" title=\"Imprimir\"><span class=\"icon\">print</span></button>
 				</td>
 			</tr>
 			";
