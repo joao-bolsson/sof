@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: 07-Ago-2016 às 04:13
+-- Generation Time: 13-Ago-2016 às 15:40
 -- Versão do servidor: 5.5.50-0ubuntu0.14.04.1
 -- PHP Version: 7.0.9-1+deb.sury.org~trusty+1
 
@@ -41,7 +41,10 @@ CREATE TABLE `comentarios` (
 --
 
 INSERT INTO `comentarios` (`id`, `id_pedido`, `data_coment`, `prioridade`, `status`, `valor`, `comentario`) VALUES
-(1, 1, '2016-07-23', 'normal', 'Enviado ao Ordenador', '22000.000', 'pedido encaminhado');
+(1, 1, '2016-07-23', 'normal', 'Enviado ao Ordenador', '22000.000', 'pedido encaminhado'),
+(2, 1, '2016-08-10', 'normal', 'Empenhado', '22000.000', 'Testandoo'),
+(3, 1, '2016-08-10', 'rascunho', 'Rascunho', '22000.000', 'Teste retornardo'),
+(4, 4, '2016-08-10', 'normal', 'Enviado ao Ordenador', '111.300', 'testando');
 
 -- --------------------------------------------------------
 
@@ -3627,8 +3630,8 @@ INSERT INTO `itens` (`id`, `id_item_processo`, `id_item_contrato`, `cod_despesa`
 (3496, 310848, 191421, '3.3.9.0.30.35', 'MATERIAL LABORATORIAL', 'Registro de Preço Gerado', '001842/2015', '23541.000340/2015-11', '05 - Pregão EBSERH', '119', '26/11/2015', '08/11/2016', '11/12/2015', '10238563000176', 'AAMED COMÉRCIO DE EQUIPAMENTOS EIRELI - EPP', '002304/2015', '10.00.00.00.0.0', 'HOSPITAL UNIVERSITÁRIO DE SANTA MARIA - HUSM', '4600303', 'GRUPO 2 - MANGUEIRA ESPIRALADA AMARELA DE CONEXÃO DO TORNIQUETE AO GARROTE PNEUMÁTICO GERAR, COM CONECTORES. ENVIAR CATÁLOGO.', 'Unidade', 38419, '607,8', 3, '1823.4', 1, '607.8', 2, '1215.6', 163, 2015, 0),
 (3497, 310849, 191422, '3.3.9.0.30.35', 'MATERIAL LABORATORIAL', 'Registro de Preço Gerado', '001842/2015', '23541.000340/2015-11', '05 - Pregão EBSERH', '119', '26/11/2015', '08/11/2016', '11/12/2015', '10238563000176', 'AAMED COMÉRCIO DE EQUIPAMENTOS EIRELI - EPP', '002304/2015', '10.00.00.00.0.0', 'HOSPITAL UNIVERSITÁRIO DE SANTA MARIA - HUSM', '4600304', 'GRUPO 2 - MANGUEIRA ESPIRALADA AZUL DE CONEXÃO DO TORNIQUETE AO GARROTE PNEUMÁTICO GERAR, COM CONECTORES. ENVIAR CATÁLOGO.', 'Unidade', 38419, '607,8', 3, '1823.4', 1, '607.8', 2, '1215.6', 163, 2015, 0);
 INSERT INTO `itens` (`id`, `id_item_processo`, `id_item_contrato`, `cod_despesa`, `descr_despesa`, `descr_tipo_doc`, `num_contrato`, `num_processo`, `descr_mod_compra`, `num_licitacao`, `dt_inicio`, `dt_fim`, `dt_geracao`, `cgc_fornecedor`, `nome_fornecedor`, `num_extrato`, `cod_estruturado`, `nome_unidade`, `cod_reduzido`, `complemento_item`, `descricao`, `id_extrato_contr`, `vl_unitario`, `qt_contrato`, `vl_contrato`, `qt_utilizado`, `vl_utilizado`, `qt_saldo`, `vl_saldo`, `id_unidade`, `ano_orcamento`, `cancelado`) VALUES
-(3498, 311556, 191423, '3.3.9.0.30.17', 'MATERIAL DE PROCESSAMENTO DE DADOS', 'Registro de Preço Gerado', '001843/2015', '23541.000352/2015-38', '05 - Pregão EBSERH', '121', '26/11/2015', '08/11/2016', '11/12/2015', '89054050000165', 'FABESUL DISTRIBUIDORA LTDA.', '002305/2015', '10.00.00.00.0.0', 'HOSPITAL UNIVERSITÁRIO DE SANTA MARIA - HUSM', '3801030', 'PAPEL A4, RECICLADO, 75 G/M², EMBALAGEM LACRADA, ONDE CONSTAM ESPECIFICAÇÕES PARA USO EM INK-JET, LASER E COPIADORAS COLORIDAS, UNIDADE INDUSTRIAL COM ISO 9002. EMBALADO EM PACOTE COM 500 FOLHAS.', 'Pacote', 38420, '11,1', 3000, '33300', 1500, '16650', 1500, '16650', 163, 2015, 0),
-(3499, 311555, 191424, '3.3.9.0.30.17', 'MATERIAL DE PROCESSAMENTO DE DADOS', 'Registro de Preço Gerado', '001844/2015', '23541.000352/2015-38', '05 - Pregão EBSERH', '121', '26/11/2015', '08/11/2016', '11/12/2015', '83413591000318', 'DICAPEL PAPEIS E EMBALAGENS LTDA', '002306/2015', '10.00.00.00.0.0', 'HOSPITAL UNIVERSITÁRIO DE SANTA MARIA - HUSM', '3800355', 'PAPEL A4, BRANCO ALCALINO, 75 G/M², EMBALAGEM LACRADA, ONDE CONSTAM ESPECIFICAÇÕES PARA USO EM INK-JET, LASER E COPIADORAS COLORIDAS, UNIDADE INDUSTRIAL COM ISO 9002. EMBALADO EM PACOTE COM 500 FOLHAS.', 'Pacote', 38421, '10,9', 10000, '109000', 2900, '31610', 7100, '77390', 163, 2015, 0),
+(3498, 311556, 191423, '3.3.9.0.30.17', 'MATERIAL DE PROCESSAMENTO DE DADOS', 'Registro de Preço Gerado', '001843/2015', '23541.000352/2015-38', '05 - Pregão EBSERH', '121', '26/11/2015', '08/11/2016', '11/12/2015', '89054050000165', 'FABESUL DISTRIBUIDORA LTDA.', '002305/2015', '10.00.00.00.0.0', 'HOSPITAL UNIVERSITÁRIO DE SANTA MARIA - HUSM', '3801030', 'PAPEL A4, RECICLADO, 75 G/M², EMBALAGEM LACRADA, ONDE CONSTAM ESPECIFICAÇÕES PARA USO EM INK-JET, LASER E COPIADORAS COLORIDAS, UNIDADE INDUSTRIAL COM ISO 9002. EMBALADO EM PACOTE COM 500 FOLHAS.', 'Pacote', 38420, '11,1', 3000, '33300', 2500, '27750', 500, '5550', 163, 2015, 0),
+(3499, 311555, 191424, '3.3.9.0.30.17', 'MATERIAL DE PROCESSAMENTO DE DADOS', 'Registro de Preço Gerado', '001844/2015', '23541.000352/2015-38', '05 - Pregão EBSERH', '121', '26/11/2015', '08/11/2016', '11/12/2015', '83413591000318', 'DICAPEL PAPEIS E EMBALAGENS LTDA', '002306/2015', '10.00.00.00.0.0', 'HOSPITAL UNIVERSITÁRIO DE SANTA MARIA - HUSM', '3800355', 'PAPEL A4, BRANCO ALCALINO, 75 G/M², EMBALAGEM LACRADA, ONDE CONSTAM ESPECIFICAÇÕES PARA USO EM INK-JET, LASER E COPIADORAS COLORIDAS, UNIDADE INDUSTRIAL COM ISO 9002. EMBALADO EM PACOTE COM 500 FOLHAS.', 'Pacote', 38421, '10,9', 10000, '109000', 3900, '42510', 6100, '66490', 163, 2015, 0),
 (3500, 311514, 191425, '3.3.9.0.30.16', 'MATERIAL DE EXPEDIENTE', 'Registro de Preço Gerado', '001845/2015', '23541.000352/2015-38', '05 - Pregão EBSERH', '121', '26/11/2015', '08/11/2016', '11/12/2015', '07245458000150', 'DAGEAL COMÉRCIO DE MATERIAL DE ESCRITÓRIO LTDA', '002307/2015', '10.00.00.00.0.0', 'HOSPITAL UNIVERSITÁRIO DE SANTA MARIA - HUSM', '3000127', 'APONTADOR DE LÁPIS, PLÁSTICO, TIPO ESCOLAR.', 'Unidade', 38422, '0,15', 400, '60', 0, '0', 400, '60', 163, 2015, 0),
 (3501, 311516, 191426, '3.3.9.0.30.16', 'MATERIAL DE EXPEDIENTE', 'Registro de Preço Gerado', '001845/2015', '23541.000352/2015-38', '05 - Pregão EBSERH', '121', '26/11/2015', '08/11/2016', '11/12/2015', '07245458000150', 'DAGEAL COMÉRCIO DE MATERIAL DE ESCRITÓRIO LTDA', '002307/2015', '10.00.00.00.0.0', 'HOSPITAL UNIVERSITÁRIO DE SANTA MARIA - HUSM', '3000038', 'BLOCO DE ANOTAÇÕES AUTO-ADESIVAS TIPO POST-IT, MEDIDAS: 76 X 76MM, CONJUNTO C/ 4 BLOCOS DE 100 FOLHAS, COM PELO MENOS DUAS CORES. ENVIAR CATÁLOGO.', 'Conjunto', 38422, '12,5', 1000, '12500', 0, '0', 1000, '12500', 163, 2015, 0),
 (3502, 311527, 191427, '3.3.9.0.30.16', 'MATERIAL DE EXPEDIENTE', 'Registro de Preço Gerado', '001845/2015', '23541.000352/2015-38', '05 - Pregão EBSERH', '121', '26/11/2015', '08/11/2016', '11/12/2015', '07245458000150', 'DAGEAL COMÉRCIO DE MATERIAL DE ESCRITÓRIO LTDA', '002307/2015', '10.00.00.00.0.0', 'HOSPITAL UNIVERSITÁRIO DE SANTA MARIA - HUSM', '3000254', 'CANETA PARA RETRO-PROJETOR 2 MM. COR VERMELHA.', 'Unidade', 38422, '1,55', 500, '775', 72, '111.6', 428, '663.4', 163, 2015, 0),
@@ -4997,11 +5000,11 @@ CREATE TABLE `itens_pedido` (
 --
 
 INSERT INTO `itens_pedido` (`id`, `id_pedido`, `id_item`, `qtd`, `valor`) VALUES
-(3, 1, 3498, 1000, '11100'),
-(4, 1, 3499, 1000, '10900'),
 (5, 2, 4245, 1, '8800'),
 (6, 3, 4457, 100, '296.88'),
-(7, 4, 4287, 10, '111.3');
+(7, 4, 4287, 10, '111.3'),
+(8, 1, 3498, 1000, '11100'),
+(9, 1, 3499, 1000, '10900');
 
 -- --------------------------------------------------------
 
@@ -5010,7 +5013,7 @@ INSERT INTO `itens_pedido` (`id`, `id_pedido`, `id_item`, `qtd`, `valor`) VALUES
 --
 
 CREATE TABLE `mes` (
-  `id` int(10) UNSIGNED NOT NULL,
+  `id` int(2) UNSIGNED NOT NULL,
   `sigla_mes` varchar(3) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
@@ -5079,10 +5082,10 @@ CREATE TABLE `pedido` (
 --
 
 INSERT INTO `pedido` (`id`, `id_setor`, `data_pedido`, `ref_mes`, `alteracao`, `prioridade`, `status`, `valor`) VALUES
-(1, 3, '2016-07-23', 'julho', 0, 'normal', 'Enviado ao Ordenador', '22000.000'),
+(1, 3, '2016-08-10', 'Agosto', 0, 'normal', 'Em Analise', '22000.000'),
 (2, 3, '2016-07-26', 'Julho', 1, 'rascunho', 'Rascunho', '8800.000'),
 (3, 5, '2016-08-04', 'Agosto', 1, 'rascunho', 'Rascunho', '296.880'),
-(4, 5, '2016-08-04', 'Agosto', 0, 'normal', 'Em Analise', '111.300');
+(4, 5, '2016-08-04', 'Agosto', 0, 'normal', 'Enviado ao Ordenador', '111.300');
 
 -- --------------------------------------------------------
 
@@ -5152,6 +5155,28 @@ INSERT INTO `postagens` (`id`, `tabela`, `titulo`, `data`, `ativa`, `postagem`) 
 -- --------------------------------------------------------
 
 --
+-- Estrutura da tabela `prioridade`
+--
+
+CREATE TABLE `prioridade` (
+  `id` int(2) NOT NULL,
+  `nome` varchar(50) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Extraindo dados da tabela `prioridade`
+--
+
+INSERT INTO `prioridade` (`id`, `nome`) VALUES
+(1, 'normal'),
+(2, 'preferencial'),
+(3, 'urgente'),
+(4, 'emergencial'),
+(5, 'rascunho');
+
+-- --------------------------------------------------------
+
+--
 -- Estrutura da tabela `processos`
 --
 
@@ -5164,8 +5189,16 @@ CREATE TABLE `processos` (
   `entrada` varchar(10) NOT NULL,
   `saida` varchar(10) NOT NULL,
   `responsavel` varchar(30) NOT NULL,
-  `retorno` varchar(10) NOT NULL
+  `retorno` varchar(10) NOT NULL,
+  `obs` text NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Extraindo dados da tabela `processos`
+--
+
+INSERT INTO `processos` (`id`, `num_processo`, `tipo`, `estante`, `prateleira`, `entrada`, `saida`, `responsavel`, `retorno`, `obs`) VALUES
+(1, '23541.000495/2015-40', 'Despesa', '80', 'iu89K', '13/08/2016', '----------', '----------', '----------', 'Testando 2');
 
 -- --------------------------------------------------------
 
@@ -5178,7 +5211,7 @@ CREATE TABLE `saldos_adiantados` (
   `id_setor` int(10) UNSIGNED NOT NULL,
   `data_solicitacao` date NOT NULL,
   `data_analise` date NOT NULL,
-  `mes_subtraido` int(10) UNSIGNED NOT NULL,
+  `mes_subtraido` int(2) UNSIGNED NOT NULL,
   `ano` int(4) UNSIGNED NOT NULL,
   `valor_adiantado` varchar(50) NOT NULL,
   `justificativa` text NOT NULL,
@@ -5190,7 +5223,7 @@ CREATE TABLE `saldos_adiantados` (
 --
 
 INSERT INTO `saldos_adiantados` (`id`, `id_setor`, `data_solicitacao`, `data_analise`, `mes_subtraido`, `ano`, `valor_adiantado`, `justificativa`, `status`) VALUES
-(1, 3, '2016-07-24', '2016-08-07', 13, 2016, '400', 'preciso de um adiantamento urgente', 0);
+(1, 3, '2016-07-24', '2016-08-13', 13, 2016, '400', 'preciso de um adiantamento urgente', 0);
 
 -- --------------------------------------------------------
 
@@ -5232,7 +5265,7 @@ CREATE TABLE `saldo_setor` (
   `saldo` varchar(50) NOT NULL,
   `saldo_suplementado` varchar(50) NOT NULL,
   `saldo_aditivado` varchar(50) NOT NULL,
-  `mes` int(10) UNSIGNED NOT NULL,
+  `mes` int(2) UNSIGNED NOT NULL,
   `ano` int(4) UNSIGNED NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
@@ -5250,7 +5283,7 @@ INSERT INTO `saldo_setor` (`id`, `id_setor`, `saldo`, `saldo_suplementado`, `sal
 (7, 8, '100000', '100000.000', '0.000', 7, 2016),
 (8, 9, '300000', '300000.000', '0.000', 7, 2016),
 (9, 10, '310000', '310000.000', '0.000', 7, 2016),
-(10, 3, '3978000', '2000000.000', '0.000', 8, 2016),
+(10, 3, '3956000.000', '2000000.000', '0.000', 8, 2016),
 (11, 5, '2999888.700', '1500000.000', '0.000', 8, 2016);
 
 -- --------------------------------------------------------
@@ -5301,7 +5334,19 @@ CREATE TABLE `solic_alt_pedido` (
 --
 
 INSERT INTO `solic_alt_pedido` (`id`, `id_pedido`, `id_setor`, `data_solicitacao`, `data_analise`, `justificativa`, `status`) VALUES
-(1, 1, 3, '2016-07-27', '0000-00-00', 'Preciso adicionar mais itens e remover alguns.', 2);
+(1, 1, 3, '2016-07-27', '2016-08-11', 'Preciso adicionar mais itens e remover alguns.', 0),
+(2, 1, 3, '2016-08-09', '0000-00-00', 'preciso', 2);
+
+-- --------------------------------------------------------
+
+--
+-- Estrutura da tabela `status`
+--
+
+CREATE TABLE `status` (
+  `id` int(2) NOT NULL,
+  `nome` varchar(50) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
 
@@ -5419,6 +5464,12 @@ ALTER TABLE `postagens`
   ADD KEY `tabela` (`tabela`);
 
 --
+-- Indexes for table `prioridade`
+--
+ALTER TABLE `prioridade`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indexes for table `processos`
 --
 ALTER TABLE `processos`
@@ -5462,6 +5513,12 @@ ALTER TABLE `solic_alt_pedido`
   ADD KEY `id_setor` (`id_setor`);
 
 --
+-- Indexes for table `status`
+--
+ALTER TABLE `status`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indexes for table `usuario`
 --
 ALTER TABLE `usuario`
@@ -5483,7 +5540,7 @@ ALTER TABLE `usuario_permissoes`
 -- AUTO_INCREMENT for table `comentarios`
 --
 ALTER TABLE `comentarios`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 --
 -- AUTO_INCREMENT for table `itens`
 --
@@ -5493,12 +5550,12 @@ ALTER TABLE `itens`
 -- AUTO_INCREMENT for table `itens_pedido`
 --
 ALTER TABLE `itens_pedido`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 --
 -- AUTO_INCREMENT for table `mes`
 --
 ALTER TABLE `mes`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
+  MODIFY `id` int(2) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
 --
 -- AUTO_INCREMENT for table `paginas_post`
 --
@@ -5515,10 +5572,15 @@ ALTER TABLE `pedido`
 ALTER TABLE `postagens`
   MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=45;
 --
+-- AUTO_INCREMENT for table `prioridade`
+--
+ALTER TABLE `prioridade`
+  MODIFY `id` int(2) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+--
 -- AUTO_INCREMENT for table `processos`
 --
 ALTER TABLE `processos`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 --
 -- AUTO_INCREMENT for table `saldos_adiantados`
 --
@@ -5543,7 +5605,12 @@ ALTER TABLE `setores`
 -- AUTO_INCREMENT for table `solic_alt_pedido`
 --
 ALTER TABLE `solic_alt_pedido`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+--
+-- AUTO_INCREMENT for table `status`
+--
+ALTER TABLE `status`
+  MODIFY `id` int(2) NOT NULL AUTO_INCREMENT;
 --
 -- AUTO_INCREMENT for table `usuario`
 --
