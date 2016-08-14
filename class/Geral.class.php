@@ -97,11 +97,15 @@ class Geral extends Conexao {
 	 *	@access public
 	 *	@return bool
 	 */
-	public function novaSenha($id_user, $novaSenha, $senhaAtual) {
+	public function altInfoUser($id_user, $nome, $email, $novaSenha, $senhaAtual) {
 		$query = $this->mysqli->query("SELECT senha FROM usuario WHERE id = {$id_user};")->fetch_object();
 		if (crypt($senhaAtual, $query->senha) == $query->senha) {
+			$nome = $this->mysqli->real_escape_string($nome);
+			$email = $this->mysqli->real_escape_string($email);
 			$novaSenha = crypt($novaSenha);
-			$altera = $this->mysqli->query("UPDATE usuario SET senha = '{$novaSenha}' WHERE id = {$id_user};");
+			$altera = $this->mysqli->query("UPDATE usuario SET nome = '{$nome}', email = '{$email}', senha = '{$novaSenha}' WHERE id = {$id_user};");
+			$_SESSION["nome"] = $nome;
+			$_SESSION["email"] = $email;
 			return true;
 		} else {
 			// remove all session variables

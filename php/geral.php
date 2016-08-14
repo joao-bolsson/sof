@@ -256,13 +256,15 @@ if (isset($_POST["admin"]) && isset($_SESSION["id_setor"]) && $_SESSION["id_seto
 
 	switch ($form) {
 
-	// redefindo uma nova senha
-	case 'novaSenha':
+	// redefinindo informações do usuário
+	case 'infoUser':
 		$id_user = $_SESSION["id"];
+		$nome = $_POST["nome"];
+		$email = $_POST["email"];
 		$novaSenha = $_POST["novaSenha"];
 		$senhaAtual = $_POST["senhaAtual"];
 
-		$redefini = $obj_Geral->novaSenha($id_user, $novaSenha, $senhaAtual);
+		$redefini = $obj_Geral->altInfoUser($id_user, $nome, $email, $novaSenha, $senhaAtual);
 		echo $redefini;
 		break;
 

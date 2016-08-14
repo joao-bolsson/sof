@@ -15,10 +15,10 @@ include_once 'Busca.class.php';
 class Login extends Conexao {
 
 	//variáveis usadas para armazenar os campos a serem consultas no banco
-	private $tabela, $campoID, $campoNome, $campoLogin, $campoSenha, $campoSetor;
+	private $tabela, $campoID, $campoNome, $campoLogin, $campoSenha, $campoEmail, $campoSetor;
 	//variáveis usadas como objetos da classe Conexao
 	private $obj_Busca, $mysqli;
-	function __construct($tabela = 'usuario', $campoID = 'id', $campoNome = 'nome', $campoLogin = 'login', $campoSenha = 'senha', $campoSetor = 'id_setor') {
+	function __construct($tabela = 'usuario', $campoID = 'id', $campoNome = 'nome', $campoLogin = 'login', $campoSenha = 'senha', $campoSetor = 'id_setor', $campoEmail = 'email') {
 
 		$this->obj_Busca = new Busca();
 		//chama o método contrutor da classe Conexao
@@ -33,6 +33,7 @@ class Login extends Conexao {
 		$this->campoLogin = $campoLogin;
 		$this->campoSenha = $campoSenha;
 		$this->campoSetor = $campoSetor;
+		$this->campoEmail = $campoEmail;
 	}
 
 	/**
@@ -49,7 +50,7 @@ class Login extends Conexao {
 		//escapando caracteres especiais para evitar SQL Injections
 		$login = $this->mysqli->real_escape_string($login);
 		//fazendo a consulta
-		$query = $this->mysqli->query("SELECT {$this->campoID}, {$this->campoNome}, {$this->campoSenha}, {$this->campoSetor} FROM {$this->tabela}
+		$query = $this->mysqli->query("SELECT {$this->campoID}, {$this->campoNome}, {$this->campoSenha}, {$this->campoEmail}, {$this->campoSetor} FROM {$this->tabela}
             WHERE BINARY {$this->campoLogin} = '{$login}'
             LIMIT 1");
 
@@ -63,6 +64,7 @@ class Login extends Conexao {
 				//atribuindo valores à sessão
 				$_SESSION[$this->campoID] = $usuario->{$this->campoID};
 				$_SESSION[$this->campoNome] = $usuario->{$this->campoNome};
+				$_SESSION[$this->campoEmail] = $usuario->{$this->campoEmail};
 				$_SESSION[$this->campoSetor] = $usuario->{$this->campoSetor};
 
 				//definindo os slides para evitar recarregamentos desnecessários

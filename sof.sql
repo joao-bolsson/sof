@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: 14-Ago-2016 às 04:33
+-- Generation Time: 14-Ago-2016 às 15:35
 -- Versão do servidor: 5.5.50-0ubuntu0.14.04.1
 -- PHP Version: 7.0.9-1+deb.sury.org~trusty+1
 
@@ -5410,8 +5410,8 @@ CREATE TABLE `usuario` (
 --
 
 INSERT INTO `usuario` (`id`, `nome`, `login`, `senha`, `id_setor`, `email`) VALUES
-(1, 'Joao Bolsson', 'joao', '$1$6RmFqcEN$5Elpbeu3wuEGs9.Cu4s6Q0', 2, 'joaovictorbolsson@gmail.com'),
-(2, 'Farmacia de Medicamentos', 'farmacia', '$1$uCY0jCs5$XdBQwU869rnuFb61UyvHS/', 3, 'joaovictorbolsson@gmail.com'),
+(1, 'JoÃ£o Bolsson', 'joao', '$1$/ek2CsOE$O.unChFRZ4sHFVs3wRwTY/', 2, 'joaovictorbolsson@gmail.com'),
+(2, 'FarmÃ¡cia de Medicamentos', 'farmacia', '$1$R.D6UD4W$hJ.SXctdcArzyMs/30HCI1', 3, 'teste_ola@gmail.com'),
 (3, 'Farmacia de Materiais', 'farmateriais', '$1$UOfSgz1p$gdFpvb37zKezEPqYZYjNU1', 4, 'joaovictorbolsson@gmail.com'),
 (4, 'Almoxarifado Geral', 'almoxarifado', '$1$fzKLXJL4$TJNKtI50IdScQxn5990cX0', 5, 'joaovictorbolsson@gmail.com'),
 (5, 'Divisao de Logistica', 'divlog', '$1$2NB./YBc$P.7AV4DtacU1fYCtI9zsH1', 6, 'joaovictorbolsson@gmail.com'),
@@ -5688,9 +5688,9 @@ ALTER TABLE `usuario_permissoes`
 -- Limitadores para a tabela `comentarios`
 --
 ALTER TABLE `comentarios`
-  ADD CONSTRAINT `comentarios_ibfk_3` FOREIGN KEY (`prioridade`) REFERENCES `prioridade` (`id`),
   ADD CONSTRAINT `comentarios_ibfk_1` FOREIGN KEY (`id_pedido`) REFERENCES `pedido` (`id`),
-  ADD CONSTRAINT `comentarios_ibfk_2` FOREIGN KEY (`status`) REFERENCES `status` (`id`);
+  ADD CONSTRAINT `comentarios_ibfk_2` FOREIGN KEY (`status`) REFERENCES `status` (`id`),
+  ADD CONSTRAINT `comentarios_ibfk_3` FOREIGN KEY (`prioridade`) REFERENCES `prioridade` (`id`);
 
 --
 -- Limitadores para a tabela `itens_pedido`
@@ -5703,10 +5703,10 @@ ALTER TABLE `itens_pedido`
 -- Limitadores para a tabela `pedido`
 --
 ALTER TABLE `pedido`
-  ADD CONSTRAINT `pedido_ibfk_4` FOREIGN KEY (`prioridade`) REFERENCES `prioridade` (`id`),
   ADD CONSTRAINT `pedido_ibfk_1` FOREIGN KEY (`id_setor`) REFERENCES `setores` (`id`),
   ADD CONSTRAINT `pedido_ibfk_2` FOREIGN KEY (`ref_mes`) REFERENCES `mes` (`id`),
-  ADD CONSTRAINT `pedido_ibfk_3` FOREIGN KEY (`status`) REFERENCES `status` (`id`);
+  ADD CONSTRAINT `pedido_ibfk_3` FOREIGN KEY (`status`) REFERENCES `status` (`id`),
+  ADD CONSTRAINT `pedido_ibfk_4` FOREIGN KEY (`prioridade`) REFERENCES `prioridade` (`id`);
 
 --
 -- Limitadores para a tabela `postagens`

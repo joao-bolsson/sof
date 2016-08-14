@@ -47,7 +47,7 @@ if ($permissao->noticias) {
 }
 ?>
     <li>
-      <a class="btn btn-flat waves-attach waves-light" href="javascript:abreModal('#redefinirSenha');"><span class="text-white"><span class="icon">lock_outline</span>REDEFINIR SENHA</span></a>
+      <a class="btn btn-flat waves-attach waves-light" href="javascript:abreModal('#myInfos');"><span class="text-white"><span class="icon">lock_outline</span><span id="userLogado"><?php echo $_SESSION["nome"] ?></span></span></a>
     </li>
   </ul>
   <nav class="tab-nav pull-right hidden-xx">
@@ -597,15 +597,23 @@ if ($permissao->recepcao) {
 </div>";
 }
 ?>
-<div class="modal fade" id="redefinirSenha" role="dialog">
+<div class="modal fade" id="myInfos" role="dialog">
   <div class="modal-dialog" style="width: 40%;">
     <div class="modal-content">
       <div class="modal-heading">
         <a class="modal-close" data-dismiss="modal">×</a>
-        <h2 class="modal-title content-sub-heading">Redefinir Senha</h2>
+        <h2 class="modal-title content-sub-heading">Informações do Usuário</h2>
       </div>
-      <form id="alterSenha" action="javascript:novaSenha();" method="post">
+      <form id="altInfo" action="javascript:altInfoUser();" method="post">
         <div class="modal-inner">
+          <div class="form-group form-group-label">
+            <label class="floating-label" for="nameUser"><span class="icon">perm_identity</span>&nbsp;Nome</label>
+            <input class="form-control" id="nameUser" name="nameUser" type="text" value="<?php echo $_SESSION['nome'] ?>" required>
+          </div>
+          <div class="form-group form-group-label">
+            <label class="floating-label" for="emailUser"><span class="icon">message</span>&nbsp;E-mail</label>
+            <input class="form-control" id="emailUser" name="emailUser" type="email" value="<?php echo $_SESSION['email'] ?>" required>
+          </div>
           <div class="form-group form-group-label">
             <label class="floating-label" for="senhaAtualUser"><span class="icon">lock_outline</span>&nbsp;Senha Atual</label>
             <input class="form-control" id="senhaAtualUser" name="senhaAtualUser" type="password" required>

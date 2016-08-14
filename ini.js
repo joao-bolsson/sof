@@ -119,20 +119,27 @@ function resetSenha() {
 	});
 }
 
-function novaSenha() {
+function altInfoUser() {
 	document.getElementById("loader").style.display = 'inline-block';
+	var nome = document.getElementById('nameUser').value;
+	var email = document.getElementById('emailUser').value;
 	var senhaAtual = document.getElementById('senhaAtualUser').value;
 	var novaSenha = document.getElementById('senhaUser').value;
 	$.post('../php/geral.php', {
 		users: 1,
-		form: 'novaSenha',
+		form: 'infoUser',
+		nome: nome,
+		email: email,
 		novaSenha: novaSenha,
 		senhaAtual: senhaAtual
 	}, function(resposta) {
 		if (resposta) {
-			$('#redefinirSenha').modal('hide');
-			document.getElementById('alterSenha').reset();
-			avisoSnack('Sua senha foi redefinida com sucesso!', 'body');
+			$('#myInfos').modal('hide');
+			document.getElementById('altInfo').reset();
+			avisoSnack('Suas informações foram salvas com sucesso!', 'body');
+			document.getElementById('nameUser').value = nome;
+			document.getElementById('emailUser').value = email;
+			document.getElementById('userLogado').innerHTML = nome;
 		} else {
 			alert("Ocorreu um erro no servidor. Contate o administrador.");
 			location.reload();
