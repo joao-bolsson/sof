@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: 14-Ago-2016 às 03:34
+-- Generation Time: 14-Ago-2016 às 04:33
 -- Versão do servidor: 5.5.50-0ubuntu0.14.04.1
 -- PHP Version: 7.0.9-1+deb.sury.org~trusty+1
 
@@ -5261,7 +5261,13 @@ INSERT INTO `saldo_fixo` (`id`, `id_setor`, `saldo_padrao`) VALUES
 (7, 7, '250000.000'),
 (8, 8, '100000.000'),
 (9, 9, '300000.000'),
-(10, 10, '310000.000');
+(10, 10, '310000.000'),
+(11, 11, '2000000.000'),
+(12, 12, '2000000.000'),
+(13, 13, '2000000.000'),
+(14, 14, '2000000.000'),
+(15, 15, '2000000.000'),
+(16, 16, '2000000.000');
 
 -- --------------------------------------------------------
 
@@ -5294,7 +5300,13 @@ INSERT INTO `saldo_setor` (`id`, `id_setor`, `saldo`, `saldo_suplementado`, `sal
 (8, 9, '300000', '300000.000', '0.000', 7, 2016),
 (9, 10, '310000', '310000.000', '0.000', 7, 2016),
 (10, 3, '3909520.000', '2000000.000', '0.000', 8, 2016),
-(11, 5, '2999888.700', '1500000.000', '0.000', 8, 2016);
+(11, 5, '2999888.700', '1500000.000', '0.000', 8, 2016),
+(12, 11, '2000000.000', '2000000.000', '0.000', 8, 2016),
+(13, 12, '2000000.000', '2000000.000', '0.000', 8, 2016),
+(14, 13, '2000000.000', '2000000.000', '0.000', 8, 2016),
+(15, 14, '2000000.000', '2000000.000', '0.000', 8, 2016),
+(16, 15, '2000000.000', '2000000.000', '0.000', 8, 2016),
+(17, 16, '2000000.000', '2000000.000', '0.000', 8, 2016);
 
 -- --------------------------------------------------------
 
@@ -5321,7 +5333,13 @@ INSERT INTO `setores` (`id`, `nome`) VALUES
 (7, 'UO Traumato'),
 (8, 'UO Dispensas de LicitaÃ§Ã£o'),
 (9, 'NutriÃ§Ã£o'),
-(10, 'DivisÃ£o Administrativa Financeira');
+(10, 'DivisÃ£o Administrativa Financeira'),
+(11, 'NVE'),
+(12, 'Unidade de Apoio'),
+(13, 'Psiquiatria'),
+(14, 'Radiologia'),
+(15, 'SGPTI'),
+(16, 'UO Protese Auditiva');
 
 -- --------------------------------------------------------
 
@@ -5393,16 +5411,22 @@ CREATE TABLE `usuario` (
 
 INSERT INTO `usuario` (`id`, `nome`, `login`, `senha`, `id_setor`, `email`) VALUES
 (1, 'Joao Bolsson', 'joao', '$1$6RmFqcEN$5Elpbeu3wuEGs9.Cu4s6Q0', 2, 'joaovictorbolsson@gmail.com'),
-(2, 'Farmacia de Medicamentos', 'farmacia', '$1$uCY0jCs5$XdBQwU869rnuFb61UyvHS/', 3, ''),
-(3, 'Farmacia de Materiais', 'farmateriais', '$1$UOfSgz1p$gdFpvb37zKezEPqYZYjNU1', 4, ''),
-(4, 'Almoxarifado Geral', 'almoxarifado', '$1$fzKLXJL4$TJNKtI50IdScQxn5990cX0', 5, ''),
-(5, 'Divisao de Logistica', 'divlog', '$1$2NB./YBc$P.7AV4DtacU1fYCtI9zsH1', 6, ''),
-(6, 'UO Traumato', 'uotraumato', '$1$PQbgUgC1$cFeOLcqwL9n6DoPQkhVq2/', 7, ''),
-(7, 'UO Dispensas de Licitacao', 'uodisp', '$1$beMT2G77$0mocKkwHwwXO95LqPWYp1/', 8, ''),
-(8, 'Nutricao', 'nutricao', '$1$qTKe.0zX$E.Kbi3YBEVNz1G9KcHSqD1', 9, ''),
-(9, 'Divisao Administrativa Finance', 'divadmin', '$1$OZtbi1V0$Lu2Qp1RUFtjRuA2u7mQEi0', 10, ''),
+(2, 'Farmacia de Medicamentos', 'farmacia', '$1$uCY0jCs5$XdBQwU869rnuFb61UyvHS/', 3, 'joaovictorbolsson@gmail.com'),
+(3, 'Farmacia de Materiais', 'farmateriais', '$1$UOfSgz1p$gdFpvb37zKezEPqYZYjNU1', 4, 'joaovictorbolsson@gmail.com'),
+(4, 'Almoxarifado Geral', 'almoxarifado', '$1$fzKLXJL4$TJNKtI50IdScQxn5990cX0', 5, 'joaovictorbolsson@gmail.com'),
+(5, 'Divisao de Logistica', 'divlog', '$1$2NB./YBc$P.7AV4DtacU1fYCtI9zsH1', 6, 'joaovictorbolsson@gmail.com'),
+(6, 'UO Traumato', 'uotraumato', '$1$PQbgUgC1$cFeOLcqwL9n6DoPQkhVq2/', 7, 'joaovictorbolsson@gmail.com'),
+(7, 'UO Dispensas de Licitacao', 'uodisp', '$1$beMT2G77$0mocKkwHwwXO95LqPWYp1/', 8, 'joaovictorbolsson@gmail.com'),
+(8, 'Nutricao', 'nutricao', '$1$qTKe.0zX$E.Kbi3YBEVNz1G9KcHSqD1', 9, 'joaovictorbolsson@gmail.com'),
+(9, 'Divisao Administrativa Finance', 'divadmin', '$1$OZtbi1V0$Lu2Qp1RUFtjRuA2u7mQEi0', 10, 'joaovictorbolsson@gmail.com'),
 (10, 'Iara', 'iara', '$1$/TgtrTgd$FKlo.4KrTGnbH5G5xLNc80', 2, 'iara@ufsm.br'),
-(11, 'Recepcao', 'recepcao', '$1$6RmFqcEN$5Elpbeu3wuEGs9.Cu4s6Q0', 2, 'joaovictorbolsson@gmail.com');
+(11, 'Recepcao', 'recepcao', '$1$6RmFqcEN$5Elpbeu3wuEGs9.Cu4s6Q0', 2, 'joaovictorbolsson@gmail.com'),
+(12, 'User NVE', 'nve', '$1$6RmFqcEN$5Elpbeu3wuEGs9.Cu4s6Q0', 11, 'joaovictorbolsson@gmail.com'),
+(13, 'User Unidade de Apoio', 'apoio', '$1$6RmFqcEN$5Elpbeu3wuEGs9.Cu4s6Q0', 12, 'joaovictorbolsson@gmail.com'),
+(14, 'User Psiquiatria', 'psiquiatria', '$1$6RmFqcEN$5Elpbeu3wuEGs9.Cu4s6Q0', 13, 'joaovictorbolsson@gmail.com'),
+(15, 'User Radiologia', 'radio', '$1$6RmFqcEN$5Elpbeu3wuEGs9.Cu4s6Q0', 14, 'joaovictorbolsson@gmail.com'),
+(16, 'User SGPTI', 'sgpti', '$1$6RmFqcEN$5Elpbeu3wuEGs9.Cu4s6Q0', 15, 'joaovictorbolsson@gmail.com'),
+(17, 'User Protese Auditiva', 'protauditiva', '$1$6RmFqcEN$5Elpbeu3wuEGs9.Cu4s6Q0', 16, 'joaovictorbolsson@gmail.com');
 
 -- --------------------------------------------------------
 
@@ -5434,7 +5458,13 @@ INSERT INTO `usuario_permissoes` (`id`, `id_usuario`, `noticias`, `saldos`, `ped
 (8, 8, 0, 0, 0, 0),
 (9, 9, 0, 0, 0, 0),
 (10, 10, 1, 1, 1, 0),
-(11, 11, 0, 0, 0, 1);
+(11, 11, 0, 0, 0, 1),
+(12, 12, 0, 0, 0, 0),
+(13, 13, 0, 0, 0, 0),
+(14, 14, 0, 0, 0, 0),
+(15, 15, 0, 0, 0, 0),
+(16, 16, 0, 0, 0, 0),
+(17, 17, 0, 0, 0, 0);
 
 --
 -- Indexes for dumped tables
@@ -5619,17 +5649,17 @@ ALTER TABLE `saldos_adiantados`
 -- AUTO_INCREMENT for table `saldo_fixo`
 --
 ALTER TABLE `saldo_fixo`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
 --
 -- AUTO_INCREMENT for table `saldo_setor`
 --
 ALTER TABLE `saldo_setor`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
 --
 -- AUTO_INCREMENT for table `setores`
 --
 ALTER TABLE `setores`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
 --
 -- AUTO_INCREMENT for table `solic_alt_pedido`
 --
@@ -5644,12 +5674,12 @@ ALTER TABLE `status`
 -- AUTO_INCREMENT for table `usuario`
 --
 ALTER TABLE `usuario`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
 --
 -- AUTO_INCREMENT for table `usuario_permissoes`
 --
 ALTER TABLE `usuario_permissoes`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
 --
 -- Constraints for dumped tables
 --

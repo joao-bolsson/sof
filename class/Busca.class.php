@@ -24,6 +24,20 @@ class Busca extends Conexao {
 	}
 	// ------------------------------------------------------------------------------
 	/**
+	 *	Função que retornar o id do setor do pedido
+	 *
+	 *	@access public
+	 *	@param $id_pedido Id do pedido.
+	 *	@return int.
+	 */
+	public function getSetorPedido($id_pedido) {
+		$query = $this->mysqli->query("SELECT id_setor FROM pedido WHERE id = {$id_pedido};");
+		$obj = $query->fetch_object();
+		$query->close();
+		return $obj->id_setor;
+	}
+	// ------------------------------------------------------------------------------
+	/**
 	 *	Função que constroi os radioBtn da análise dos pedidos.
 	 *
 	 *	@access public
