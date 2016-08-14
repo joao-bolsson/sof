@@ -485,8 +485,7 @@ if ($permissao->recepcao) {
               <th></th>
             </tr>
           </thead>
-          <tbody>
-            {$obj_Busca->getProcessos("recepcao")}
+          <tbody id=\"contentListProcessos\">
           </tbody>
         </table>
       </div>

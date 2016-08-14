@@ -29,6 +29,12 @@ if (isset($_POST["admin"]) && isset($_SESSION["id_setor"]) && $_SESSION["id_seto
 
 	switch ($form) {
 
+	// comment.
+
+	case 'listProcessos':
+		echo $obj_Busca->getProcessos("recepcao");
+		break;
+
 	// comentário
 	case 'addProcesso':
 		$id_processo = $_POST["id_processo"];
@@ -102,7 +108,11 @@ if (isset($_POST["admin"]) && isset($_SESSION["id_setor"]) && $_SESSION["id_seto
 	$form = $_POST["form"];
 
 	switch ($form) {
+	// comment.
 
+	case 'iniSolicAltPedSetor':
+		echo $obj_Busca->getSolicAltPedidos($_SESSION["id_setor"]);
+		break;
 	// retorna a tabela de solicitações de adiantamento de um setor
 
 	case 'iniPagSolicitacoes':

@@ -164,7 +164,6 @@ function carregaPostsPag(tabela) {
 
 function iniAdminSolicitacoes() {
 	iniDataTable('#tableItensPedido');
-	iniDataTable('#tableListProcessos');
 	iniSolicitacoes();
 	iniTableSolicAltPed(2);
 	iniTableSolicAdiant(2);
@@ -181,6 +180,18 @@ function iniRecepcao() {
 		destroyDataTable('#tableRecepcao');
 		document.getElementById('conteudoRecepcao').innerHTML = resposta;
 		iniDataTable('#tableRecepcao');
+	});
+	iniListProcessos();
+}
+
+function iniListProcessos() {
+	$.post('../php/busca.php', {
+		admin: 1,
+		form: 'listProcessos',
+	}, function(resposta) {
+		destroyDataTable('#tableListProcessos');
+		document.getElementById('contentListProcessos').innerHTML = resposta;
+		iniDataTable('#tableListProcessos');
 	});
 }
 
@@ -226,6 +237,7 @@ function updateProcesso() {
 			iniRecepcao();
 			document.getElementById('formProcesso').reset();
 			document.getElementById('id_processo').value = 0;
+			iniListProcessos();
 			$('#addProcesso').modal('hide');
 			avisoSnack('Sucesso!');
 		} else {
@@ -316,13 +328,34 @@ function liberaSaldo(id_setor, mes, ano, valor) {
 		}
 	});
 }
+/**
+ *	Função para inicializar / reiniar tabela com as solicitações de alteração de pedidos do setor logado.
+ *
+ */
+function iniSolicAltPedSetor() {
+	$.post('../php/busca.php', {
+		users: 1,
+		form: 'iniSolicAltPedSetor'
+	}, function(resposta) {
+		// Quando terminada a requisição
+		destroyDataTable('#tableSolicAltPedido');
+		document.getElementById('contentSolicAltPedido').innerHTML = resposta;
+		iniDataTable('#tableSolicAltPedido');
+	});
+}
+/**
+ *	Função ao clicar no botão para mostrar as solicitações de alteraçõa de pedidos do setor logado.
+ */
+function listSolicAltPedidos() {
+	iniSolicAltPedSetor();
+	$('#listSolicAltPedidos').modal();
+}
 
 function iniPagSolicitacoes() {
 	iniDataTable('#tableProcessos');
 	iniDataTable('#tableListProcessos');
 	iniDataTable('#tableMeusPedidos');
 	iniDataTable('#tableRascunhos');
-	iniDataTable('#tableSolicAltPedido');
 	$.post('../php/busca.php', {
 		users: 1,
 		form: 'iniPagSolicitacoes'

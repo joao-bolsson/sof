@@ -85,7 +85,7 @@ $saldo_mes_anterior = $obj_Busca->getSaldoMesAnterior($_SESSION["id_setor"]);
                                         <a class="waves-attach" href="javascript:abreModal('#listMeusAdiantamentos');"><span class="text-white"><span class="icon">money_off</span>MEUS ADIANTAMENTOS</span></a>
                                     </li>
                                     <li>
-                                        <a class="waves-attach" href="javascript:abreModal('#listSolicAltPedidos');"><span class="text-white"><span class="icon">autorenew</span>SOLIC ALTERAÇÕES PEDIDOS</span></a>
+                                        <a class="waves-attach" href="javascript:listSolicAltPedidos();"><span class="text-white"><span class="icon">autorenew</span>SOLIC ALTERAÇÕES PEDIDOS</span></a>
                                     </li>
                                     <li>
                                         <a class="waves-attach" href="javascript:abreModal('#listProcessos');"><span class="text-white"><span class="icon">label</span>PROCESSOS</span></a>
@@ -303,7 +303,7 @@ $saldo_mes_anterior = $obj_Busca->getSaldoMesAnterior($_SESSION["id_setor"]);
                         <a class="modal-close" data-dismiss="modal">×</a>
                         <h2 class="modal-title content-sub-heading">Meus Pedidos</h2>
                     </div>
-                    <div id="noticias-editar" class="modal-inner">
+                    <div class="modal-inner">
                         <table id="tableMeusPedidos" class="table" style="width: 100%;">
                             <thead>
                                 <th>RefMes</th>
@@ -376,17 +376,17 @@ $saldo_mes_anterior = $obj_Busca->getSaldoMesAnterior($_SESSION["id_setor"]);
                         <a class="modal-close" data-dismiss="modal">×</a>
                         <h2 class="modal-title content-sub-heading">Solicitações de Alteração de Pedidos</h2>
                     </div>
-                    <div id="noticias-editar" class="modal-inner">
+                    <div class="modal-inner">
                         <table id="tableSolicAltPedido" class="table" style="width: 100%;">
                             <thead>
-                                <th>#</th>
+                                <th>#PEDIDO</th>
                                 <th>DATA_SOLICITACAO</th>
                                 <th>DATA_ANALISE</th>
                                 <th>JUSTIFICATIVA</th>
                                 <th>STATUS</th>
                             </thead>
-                            <tbody>
-                                <?php echo $obj_Busca->getSolicAltPedidos($_SESSION["id_setor"]); ?>
+                            <tbody id="contentSolicAltPedido">
+
                             </tbody>
                         </table>
                     </div>
@@ -400,7 +400,7 @@ $saldo_mes_anterior = $obj_Busca->getSaldoMesAnterior($_SESSION["id_setor"]);
                         <a class="modal-close" data-dismiss="modal">×</a>
                         <h2 class="modal-title content-sub-heading">Rascunhos</h2>
                     </div>
-                    <div id="noticias-editar" class="modal-inner">
+                    <div class="modal-inner">
                         <table id="tableRascunhos" class="table" style="width: 100%;">
                             <thead>
                                 <th>RefMes</th>
@@ -423,7 +423,7 @@ $saldo_mes_anterior = $obj_Busca->getSaldoMesAnterior($_SESSION["id_setor"]);
                         <a class="modal-close" data-dismiss="modal">×</a>
                         <h2 class="modal-title content-sub-heading">Saldos</h2>
                     </div>
-                    <div id="noticias-editar" class="modal-inner">
+                    <div class="modal-inner">
                         <table class="table">
                             <tr>
                                 <td>Saldo Restante do Mês Anterior</td>
