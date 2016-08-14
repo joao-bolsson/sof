@@ -1249,7 +1249,8 @@ class Busca extends Conexao {
 		$item = $query->fetch_object();
 		$query->close();
 		$item->complemento_item = str_replace("\"", "", $item->complemento_item);
-
+		$item->complemento_item = utf8_encode($item->complemento_item);
+		$item->nome_fornecedor = utf8_encode($item->nome_fornecedor);
 		$item->vl_unitario = str_replace(",", ".", $item->vl_unitario);
 		$valor = $qtd * $item->vl_unitario;
 		$retorno = "
