@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: 14-Ago-2016 às 03:20
+-- Generation Time: 14-Ago-2016 às 03:34
 -- Versão do servidor: 5.5.50-0ubuntu0.14.04.1
 -- PHP Version: 7.0.9-1+deb.sury.org~trusty+1
 
@@ -30,8 +30,8 @@ CREATE TABLE `comentarios` (
   `id` int(10) UNSIGNED NOT NULL,
   `id_pedido` int(10) UNSIGNED NOT NULL,
   `data_coment` date NOT NULL,
-  `prioridade` varchar(15) NOT NULL,
-  `status` varchar(100) NOT NULL,
+  `prioridade` int(1) UNSIGNED NOT NULL,
+  `status` int(1) UNSIGNED NOT NULL,
   `valor` varchar(50) NOT NULL,
   `comentario` text NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
@@ -41,15 +41,15 @@ CREATE TABLE `comentarios` (
 --
 
 INSERT INTO `comentarios` (`id`, `id_pedido`, `data_coment`, `prioridade`, `status`, `valor`, `comentario`) VALUES
-(1, 1, '2016-07-23', 'normal', 'Enviado ao Ordenador', '22000.000', 'pedido encaminhado'),
-(2, 1, '2016-08-10', 'normal', 'Empenhado', '22000.000', 'Testandoo'),
-(3, 1, '2016-08-10', 'rascunho', 'Rascunho', '22000.000', 'Teste retornardo'),
-(4, 4, '2016-08-10', 'normal', 'Enviado ao Ordenador', '111.300', 'testando'),
-(5, 4, '2016-08-14', 'normal', '2', '111.300', 'Enviando novamente para anÃ¡lise. Apenas fazendo testes aqui.'),
-(6, 1, '2016-08-14', '1', '4', '22000.000', 'Testando'),
-(7, 1, '2016-08-14', '1', '1', '22000.000', 'Retornardo ao setor'),
-(8, 1, '2016-08-14', '1', '1', '22000.000', 'Enviando para o setor novamente. '),
-(9, 1, '2016-08-14', '5', '1', '22000.000', 'Agora vai dar.');
+(1, 1, '2016-07-23', 1, 7, '22000.000', 'pedido encaminhado'),
+(2, 1, '2016-08-10', 1, 6, '22000.000', 'Testandoo'),
+(3, 1, '2016-08-10', 5, 1, '22000.000', 'Teste retornardo'),
+(4, 4, '2016-08-10', 1, 7, '111.300', 'testando'),
+(5, 4, '2016-08-14', 1, 2, '111.300', 'Enviando novamente para anÃ¡lise. Apenas fazendo testes aqui.'),
+(6, 1, '2016-08-14', 1, 4, '22000.000', 'Testando'),
+(7, 1, '2016-08-14', 1, 1, '22000.000', 'Retornardo ao setor'),
+(8, 1, '2016-08-14', 1, 1, '22000.000', 'Enviando para o setor novamente. '),
+(9, 1, '2016-08-14', 5, 1, '22000.000', 'Agora vai dar.');
 
 -- --------------------------------------------------------
 
@@ -5445,7 +5445,9 @@ INSERT INTO `usuario_permissoes` (`id`, `id_usuario`, `noticias`, `saldos`, `ped
 --
 ALTER TABLE `comentarios`
   ADD PRIMARY KEY (`id`),
-  ADD KEY `id_pedido` (`id_pedido`);
+  ADD KEY `id_pedido` (`id_pedido`),
+  ADD KEY `status` (`status`),
+  ADD KEY `prioridade` (`prioridade`);
 
 --
 -- Indexes for table `itens`
@@ -5656,7 +5658,9 @@ ALTER TABLE `usuario_permissoes`
 -- Limitadores para a tabela `comentarios`
 --
 ALTER TABLE `comentarios`
-  ADD CONSTRAINT `comentarios_ibfk_1` FOREIGN KEY (`id_pedido`) REFERENCES `pedido` (`id`);
+  ADD CONSTRAINT `comentarios_ibfk_3` FOREIGN KEY (`prioridade`) REFERENCES `prioridade` (`id`),
+  ADD CONSTRAINT `comentarios_ibfk_1` FOREIGN KEY (`id_pedido`) REFERENCES `pedido` (`id`),
+  ADD CONSTRAINT `comentarios_ibfk_2` FOREIGN KEY (`status`) REFERENCES `status` (`id`);
 
 --
 -- Limitadores para a tabela `itens_pedido`

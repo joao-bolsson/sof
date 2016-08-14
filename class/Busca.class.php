@@ -718,9 +718,10 @@ class Busca extends Conexao {
 	 */
 	public function getComentarios($id_pedido) {
 		$retorno = "";
-		$query = $this->mysqli->query("SELECT DATE_FORMAT(comentarios.data_coment, '%d/%m/%Y') AS data_coment, comentarios.prioridade, comentarios.status, comentarios.valor, comentarios.comentario FROM comentarios WHERE comentarios.id_pedido = {$id_pedido};");
+		$query = $this->mysqli->query("SELECT DATE_FORMAT(comentarios.data_coment, '%d/%m/%Y') AS data_coment, prioridade.nome AS prioridade, status.nome AS status, comentarios.valor, comentarios.comentario FROM comentarios, prioridade, status WHERE prioridade.id = comentarios.prioridade AND status.id = comentarios.status AND comentarios.id_pedido = {$id_pedido};");
 		if ($query->num_rows > 0) {
 			while ($comentario = $query->fetch_object()) {
+				$comentario->prioridade = ucfirst($comentario->prioridade);
 				$retorno .= "
 				<fieldset class=\"preg\">
 					<table>
@@ -900,6 +901,7 @@ class Busca extends Conexao {
 		$retorno = "";
 		$query = $this->mysqli->query("SELECT pedido.id, pedido.id_setor, setores.nome AS nome_setor, DATE_FORMAT(pedido.data_pedido, '%d/%m/%Y') AS data_pedido, mes.sigla_mes AS ref_mes, prioridade.nome AS prioridade, status.nome AS status, pedido.valor FROM pedido, setores, mes, prioridade, status WHERE status.id = pedido.status AND prioridade.id = pedido.prioridade AND mes.id = pedido.ref_mes AND pedido.alteracao = 0 AND pedido.id_setor = setores.id ORDER BY data_pedido DESC;");
 		while ($pedido = $query->fetch_object()) {
+			$pedido->prioridade = ucfirst($pedido->prioridade);
 			$retorno .= "
 			<tr>
 				<td>
