@@ -353,16 +353,16 @@ class Geral extends Conexao {
 		$hoje = date('Y-m-d');
 		$mes = date("n");
 
-		if ($prioridade == 'rascunho') {
+		if ($prioridade == 5) {
 			if ($pedido == 0) {
 				// NOVO
 				//inserindo os dados iniciais do pedido
-				$query_pedido = $this->mysqli->query("INSERT INTO pedido VALUES(NULL, {$id_setor}, '{$hoje}', '{$mes}', 1, '{$prioridade}', 'Rascunho', '{$total_pedido}');");
+				$query_pedido = $this->mysqli->query("INSERT INTO pedido VALUES(NULL, {$id_setor}, '{$hoje}', '{$mes}', 1, {$prioridade}, 1, '{$total_pedido}');");
 				$pedido = $this->mysqli->insert_id;
 			} else {
 				//remover resgistros antigos do rascunho
 				$this->mysqli->query("DELETE FROM itens_pedido WHERE id_pedido = {$pedido};");
-				$this->mysqli->query("UPDATE pedido SET data_pedido = '{$hoje}', ref_mes = '{$mes}', prioridade = '{$prioridade}', valor = '{$total_pedido}' WHERE id = {$pedido};");
+				$this->mysqli->query("UPDATE pedido SET data_pedido = '{$hoje}', ref_mes = {$mes}, prioridade = {$prioridade}, valor = '{$total_pedido}' WHERE id = {$pedido};");
 			}
 			//inserindo os itens do pedido
 			for ($i = 0; $i < count($id_item); $i++) {
@@ -378,7 +378,7 @@ class Geral extends Conexao {
 				$pedido = $this->mysqli->insert_id;
 			} else {
 				// atualizando pedido
-				$this->mysqli->query("UPDATE pedido SET data_pedido = '{$hoje}', ref_mes = '{$mes}', alteracao = 0, prioridade = '{$prioridade}', status = 'Em Analise', valor = '{$total_pedido}' WHERE id = {$pedido};");
+				$this->mysqli->query("UPDATE pedido SET data_pedido = '{$hoje}', ref_mes = {$mes}, alteracao = 0, prioridade = {$prioridade}, status = 2, valor = '{$total_pedido}' WHERE id = {$pedido};");
 			}
 			//remover resgistros antigos do pedido
 			$this->mysqli->query("DELETE FROM itens_pedido WHERE id_pedido = {$pedido};");
@@ -415,8 +415,9 @@ class Geral extends Conexao {
 		$id_setor = $obj_id->id_setor;
 		// alterar o status do pedido
 		$alteracao = 0;
-		if ($prioridade == 'rascunho') {
+		if ($fase == 1) {
 			$alteracao = 1;
+			$prioridade = 5;
 		}
 		$update_st = $this->mysqli->query("UPDATE pedido SET status = '{$fase}', prioridade = '{$prioridade}', alteracao = {$alteracao} WHERE id = {$id_pedido};");
 		// verificando itens cancelados

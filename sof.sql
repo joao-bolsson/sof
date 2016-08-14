@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: 14-Ago-2016 às 01:46
+-- Generation Time: 14-Ago-2016 às 03:20
 -- Versão do servidor: 5.5.50-0ubuntu0.14.04.1
 -- PHP Version: 7.0.9-1+deb.sury.org~trusty+1
 
@@ -44,7 +44,12 @@ INSERT INTO `comentarios` (`id`, `id_pedido`, `data_coment`, `prioridade`, `stat
 (1, 1, '2016-07-23', 'normal', 'Enviado ao Ordenador', '22000.000', 'pedido encaminhado'),
 (2, 1, '2016-08-10', 'normal', 'Empenhado', '22000.000', 'Testandoo'),
 (3, 1, '2016-08-10', 'rascunho', 'Rascunho', '22000.000', 'Teste retornardo'),
-(4, 4, '2016-08-10', 'normal', 'Enviado ao Ordenador', '111.300', 'testando');
+(4, 4, '2016-08-10', 'normal', 'Enviado ao Ordenador', '111.300', 'testando'),
+(5, 4, '2016-08-14', 'normal', '2', '111.300', 'Enviando novamente para anÃ¡lise. Apenas fazendo testes aqui.'),
+(6, 1, '2016-08-14', '1', '4', '22000.000', 'Testando'),
+(7, 1, '2016-08-14', '1', '1', '22000.000', 'Retornardo ao setor'),
+(8, 1, '2016-08-14', '1', '1', '22000.000', 'Enviando para o setor novamente. '),
+(9, 1, '2016-08-14', '5', '1', '22000.000', 'Agora vai dar.');
 
 -- --------------------------------------------------------
 
@@ -156,7 +161,7 @@ INSERT INTO `itens` (`id`, `id_item_processo`, `id_item_contrato`, `cod_despesa`
 (62, 308001, 191659, '4.4.9.0.52.34', 'MAQUINAS, UTENSILIOS E EQUIPAMENTOS DIVERSOS', 'Registro de Preço Gerado', '001931/2015', '23081.009335/2015-21', '05 - Pregão', '196', '03/12/2015', '21/11/2016', '03/12/2015', '21446397000110', 'NOVA COMERCIAL LTDA - ME', '002409/2015', '01.18.00.00.0.1', 'CENTRAL DE AQUISIÇÕES - DEMAPA', '234778', 'Bebedouro água de garrafão plástico, vertical, elétrico, corpo metálico, 20 litros, 220 V, 2 litros hora água gelada, duas torneiras para água gelada e normal. Apresentar catálogo (ou cópia) com especificações técnicas do produto ofertado. Garantia mínim', 'Unidade', 38524, '371', 150, '55650', 8, '2968', 142, '52682', 1740, 2015, 0),
 (63, 308002, 191660, '4.4.9.0.52.34', 'MAQUINAS, UTENSILIOS E EQUIPAMENTOS DIVERSOS', 'Registro de Preço Gerado', '001931/2015', '23081.009335/2015-21', '05 - Pregão', '196', '03/12/2015', '21/11/2016', '03/12/2015', '21446397000110', 'NOVA COMERCIAL LTDA - ME', '002409/2015', '01.18.00.00.0.1', 'CENTRAL DE AQUISIÇÕES - DEMAPA', '234778', 'Bebedouro elétrico, modelo tradicional de coluna, com gabinete em inox, com duas torneiras (jato e copo) de pressão-com regulagem de jato d\'água, capacidade mínima de refrigeração de 4,0 litros/h, termostato regulável, reservatório em aço inox, ralo sifon', 'Unidade', 38524, '450', 200, '90000', 3, '1350', 197, '88650', 1740, 2015, 0),
 (64, 308003, 191661, '4.4.9.0.52.34', 'MAQUINAS, UTENSILIOS E EQUIPAMENTOS DIVERSOS', 'Registro de Preço Gerado', '001931/2015', '23081.009335/2015-21', '05 - Pregão', '196', '03/12/2015', '21/11/2016', '03/12/2015', '21446397000110', 'NOVA COMERCIAL LTDA - ME', '002409/2015', '01.18.00.00.0.1', 'CENTRAL DE AQUISIÇÕES - DEMAPA', '234778', 'Bebedouro elétrico conjugado (para atender pessoas com necessidades especiais) modelo coluna, com gabinete em inox, com três torneiras (2 jatos e 1 copo) de pressão-com regulagem de jato d\'água, capacidade mínima de refrigeração de 4,0 litros/h, termostat', 'Unidade', 38524, '556', 100, '55600', 6, '3336', 94, '52264', 1740, 2015, 0),
-(65, 302749, 194806, '3.3.9.0.30.17', 'MATERIAL DE PROCESSAMENTO DE DADOS', 'Registro de Preço Gerado', '002235/2015', '23081.007335/2015-96', '05 - Pregão', '32', '21/03/2016', '06/03/2017', '21/03/2016', '09196543000109', 'META PLURAL COMERCIO E SERVIÇOS EM EQUIPAMENTOS DE ÁUDIO', '002839/2015', '01.18.00.00.0.1', 'CENTRAL DE AQUISIÇÕES - DEMAPA', '8602', 'Lâmpada para projetor Multimidia Marca Sony, Modelo VPL-CX11. Nova. Vida útil mínima da lâmpada: 2000 horas (modo normal); 3.000 horas (modo econômico). Embalagem lacrada de fábrica. Garantia mínima de 06 (seis) meses contra defeitos de fabricação, a cont', 'Unidade', 38983, '496', 10, '4960', 0, '0', 10, '4960', 1740, 2015, 0),
+(65, 302749, 194806, '3.3.9.0.30.17', 'MATERIAL DE PROCESSAMENTO DE DADOS', 'Registro de Preço Gerado', '002235/2015', '23081.007335/2015-96', '05 - Pregão', '32', '21/03/2016', '06/03/2017', '21/03/2016', '09196543000109', 'META PLURAL COMERCIO E SERVIÇOS EM EQUIPAMENTOS DE ÁUDIO', '002839/2015', '01.18.00.00.0.1', 'CENTRAL DE AQUISIÇÕES - DEMAPA', '8602', 'Lâmpada para projetor Multimidia Marca Sony, Modelo VPL-CX11. Nova. Vida útil mínima da lâmpada: 2000 horas (modo normal); 3.000 horas (modo econômico). Embalagem lacrada de fábrica. Garantia mínima de 06 (seis) meses contra defeitos de fabricação, a cont', 'Unidade', 38983, '496', 10, '4960', 10, '4960', 0, '0', 1740, 2015, 0),
 (66, 302731, 194807, '3.3.9.0.30.17', 'MATERIAL DE PROCESSAMENTO DE DADOS', 'Registro de Preço Gerado', '002236/2015', '23081.007335/2015-96', '05 - Pregão', '32', '21/03/2016', '06/03/2017', '21/03/2016', '15274536000172', 'F-TECH COMERCIAL EIRELI', '002840/2015', '01.18.00.00.0.1', 'CENTRAL DE AQUISIÇÕES - DEMAPA', '8609', 'Lâmpada para projetor Multmidia Marca Próxima, modelo S520 (Lâmpada VHB). Nova. Vida útil mínima da lâmpada: 2000 horas (modo normal); 3.000 horas (modo econômico). Embalagem lacrada de fábrica. Garantia mínima de 06 (seis) meses contra defeitos de fabric', 'Unidade', 38984, '492,95', 10, '4929.5', 0, '0', 10, '4929.5', 1740, 2015, 0),
 (67, 302745, 194808, '3.3.9.0.30.17', 'MATERIAL DE PROCESSAMENTO DE DADOS', 'Registro de Preço Gerado', '002236/2015', '23081.007335/2015-96', '05 - Pregão', '32', '21/03/2016', '06/03/2017', '21/03/2016', '15274536000172', 'F-TECH COMERCIAL EIRELI', '002840/2015', '01.18.00.00.0.1', 'CENTRAL DE AQUISIÇÕES - DEMAPA', '8581', 'Lâmpada para projetor Multimidia Marca Infocus, modelo LP640. Nova. Vida útil mínima da lâmpada: 2000 horas (modo normal); 3.000 horas (modo econômico). Embalagem lacrada de fábrica. Garantia mínima de 06 (seis) meses contra defeitos de fabricação, a cont', 'Unidade', 38984, '580', 10, '5800', 0, '0', 10, '5800', 1740, 2015, 0),
 (68, 302744, 194809, '3.3.9.0.30.17', 'MATERIAL DE PROCESSAMENTO DE DADOS', 'Registro de Preço Gerado', '002236/2015', '23081.007335/2015-96', '05 - Pregão', '32', '21/03/2016', '06/03/2017', '21/03/2016', '15274536000172', 'F-TECH COMERCIAL EIRELI', '002840/2015', '01.18.00.00.0.1', 'CENTRAL DE AQUISIÇÕES - DEMAPA', '9865', 'Lâmpada para projetor Multimidia Marca SONY, Modelo VPL EX7. Nova. Vida útil mínima da lâmpada: 2000 horas (modo normal); 3.000 horas (modo econômico). Embalagem lacrada de fábrica. Garantia mínima de 06 (seis) meses contra defeitos de fabricação, a conta', 'Unidade', 38984, '551,33', 20, '11026.6', 0, '0', 20, '11026.6', 1740, 2015, 0),
@@ -3630,8 +3635,8 @@ INSERT INTO `itens` (`id`, `id_item_processo`, `id_item_contrato`, `cod_despesa`
 (3496, 310848, 191421, '3.3.9.0.30.35', 'MATERIAL LABORATORIAL', 'Registro de Preço Gerado', '001842/2015', '23541.000340/2015-11', '05 - Pregão EBSERH', '119', '26/11/2015', '08/11/2016', '11/12/2015', '10238563000176', 'AAMED COMÉRCIO DE EQUIPAMENTOS EIRELI - EPP', '002304/2015', '10.00.00.00.0.0', 'HOSPITAL UNIVERSITÁRIO DE SANTA MARIA - HUSM', '4600303', 'GRUPO 2 - MANGUEIRA ESPIRALADA AMARELA DE CONEXÃO DO TORNIQUETE AO GARROTE PNEUMÁTICO GERAR, COM CONECTORES. ENVIAR CATÁLOGO.', 'Unidade', 38419, '607,8', 3, '1823.4', 1, '607.8', 2, '1215.6', 163, 2015, 0),
 (3497, 310849, 191422, '3.3.9.0.30.35', 'MATERIAL LABORATORIAL', 'Registro de Preço Gerado', '001842/2015', '23541.000340/2015-11', '05 - Pregão EBSERH', '119', '26/11/2015', '08/11/2016', '11/12/2015', '10238563000176', 'AAMED COMÉRCIO DE EQUIPAMENTOS EIRELI - EPP', '002304/2015', '10.00.00.00.0.0', 'HOSPITAL UNIVERSITÁRIO DE SANTA MARIA - HUSM', '4600304', 'GRUPO 2 - MANGUEIRA ESPIRALADA AZUL DE CONEXÃO DO TORNIQUETE AO GARROTE PNEUMÁTICO GERAR, COM CONECTORES. ENVIAR CATÁLOGO.', 'Unidade', 38419, '607,8', 3, '1823.4', 1, '607.8', 2, '1215.6', 163, 2015, 0);
 INSERT INTO `itens` (`id`, `id_item_processo`, `id_item_contrato`, `cod_despesa`, `descr_despesa`, `descr_tipo_doc`, `num_contrato`, `num_processo`, `descr_mod_compra`, `num_licitacao`, `dt_inicio`, `dt_fim`, `dt_geracao`, `cgc_fornecedor`, `nome_fornecedor`, `num_extrato`, `cod_estruturado`, `nome_unidade`, `cod_reduzido`, `complemento_item`, `descricao`, `id_extrato_contr`, `vl_unitario`, `qt_contrato`, `vl_contrato`, `qt_utilizado`, `vl_utilizado`, `qt_saldo`, `vl_saldo`, `id_unidade`, `ano_orcamento`, `cancelado`) VALUES
-(3498, 311556, 191423, '3.3.9.0.30.17', 'MATERIAL DE PROCESSAMENTO DE DADOS', 'Registro de Preço Gerado', '001843/2015', '23541.000352/2015-38', '05 - Pregão EBSERH', '121', '26/11/2015', '08/11/2016', '11/12/2015', '89054050000165', 'FABESUL DISTRIBUIDORA LTDA.', '002305/2015', '10.00.00.00.0.0', 'HOSPITAL UNIVERSITÁRIO DE SANTA MARIA - HUSM', '3801030', 'PAPEL A4, RECICLADO, 75 G/M², EMBALAGEM LACRADA, ONDE CONSTAM ESPECIFICAÇÕES PARA USO EM INK-JET, LASER E COPIADORAS COLORIDAS, UNIDADE INDUSTRIAL COM ISO 9002. EMBALADO EM PACOTE COM 500 FOLHAS.', 'Pacote', 38420, '11,1', 3000, '33300', 2500, '27750', 500, '5550', 163, 2015, 0),
-(3499, 311555, 191424, '3.3.9.0.30.17', 'MATERIAL DE PROCESSAMENTO DE DADOS', 'Registro de Preço Gerado', '001844/2015', '23541.000352/2015-38', '05 - Pregão EBSERH', '121', '26/11/2015', '08/11/2016', '11/12/2015', '83413591000318', 'DICAPEL PAPEIS E EMBALAGENS LTDA', '002306/2015', '10.00.00.00.0.0', 'HOSPITAL UNIVERSITÁRIO DE SANTA MARIA - HUSM', '3800355', 'PAPEL A4, BRANCO ALCALINO, 75 G/M², EMBALAGEM LACRADA, ONDE CONSTAM ESPECIFICAÇÕES PARA USO EM INK-JET, LASER E COPIADORAS COLORIDAS, UNIDADE INDUSTRIAL COM ISO 9002. EMBALADO EM PACOTE COM 500 FOLHAS.', 'Pacote', 38421, '10,9', 10000, '109000', 3900, '42510', 6100, '66490', 163, 2015, 0),
+(3498, 311556, 191423, '3.3.9.0.30.17', 'MATERIAL DE PROCESSAMENTO DE DADOS', 'Registro de Preço Gerado', '001843/2015', '23541.000352/2015-38', '05 - Pregão EBSERH', '121', '26/11/2015', '08/11/2016', '11/12/2015', '89054050000165', 'FABESUL DISTRIBUIDORA LTDA.', '002305/2015', '10.00.00.00.0.0', 'HOSPITAL UNIVERSITÁRIO DE SANTA MARIA - HUSM', '3801030', 'PAPEL A4, RECICLADO, 75 G/M², EMBALAGEM LACRADA, ONDE CONSTAM ESPECIFICAÇÕES PARA USO EM INK-JET, LASER E COPIADORAS COLORIDAS, UNIDADE INDUSTRIAL COM ISO 9002. EMBALADO EM PACOTE COM 500 FOLHAS.', 'Pacote', 38420, '11,1', 3000, '33300', 4500, '49950', -1500, '-16650', 163, 2015, 0),
+(3499, 311555, 191424, '3.3.9.0.30.17', 'MATERIAL DE PROCESSAMENTO DE DADOS', 'Registro de Preço Gerado', '001844/2015', '23541.000352/2015-38', '05 - Pregão EBSERH', '121', '26/11/2015', '08/11/2016', '11/12/2015', '83413591000318', 'DICAPEL PAPEIS E EMBALAGENS LTDA', '002306/2015', '10.00.00.00.0.0', 'HOSPITAL UNIVERSITÁRIO DE SANTA MARIA - HUSM', '3800355', 'PAPEL A4, BRANCO ALCALINO, 75 G/M², EMBALAGEM LACRADA, ONDE CONSTAM ESPECIFICAÇÕES PARA USO EM INK-JET, LASER E COPIADORAS COLORIDAS, UNIDADE INDUSTRIAL COM ISO 9002. EMBALADO EM PACOTE COM 500 FOLHAS.', 'Pacote', 38421, '10,9', 10000, '109000', 5900, '64310', 4100, '44690', 163, 2015, 0),
 (3500, 311514, 191425, '3.3.9.0.30.16', 'MATERIAL DE EXPEDIENTE', 'Registro de Preço Gerado', '001845/2015', '23541.000352/2015-38', '05 - Pregão EBSERH', '121', '26/11/2015', '08/11/2016', '11/12/2015', '07245458000150', 'DAGEAL COMÉRCIO DE MATERIAL DE ESCRITÓRIO LTDA', '002307/2015', '10.00.00.00.0.0', 'HOSPITAL UNIVERSITÁRIO DE SANTA MARIA - HUSM', '3000127', 'APONTADOR DE LÁPIS, PLÁSTICO, TIPO ESCOLAR.', 'Unidade', 38422, '0,15', 400, '60', 0, '0', 400, '60', 163, 2015, 0),
 (3501, 311516, 191426, '3.3.9.0.30.16', 'MATERIAL DE EXPEDIENTE', 'Registro de Preço Gerado', '001845/2015', '23541.000352/2015-38', '05 - Pregão EBSERH', '121', '26/11/2015', '08/11/2016', '11/12/2015', '07245458000150', 'DAGEAL COMÉRCIO DE MATERIAL DE ESCRITÓRIO LTDA', '002307/2015', '10.00.00.00.0.0', 'HOSPITAL UNIVERSITÁRIO DE SANTA MARIA - HUSM', '3000038', 'BLOCO DE ANOTAÇÕES AUTO-ADESIVAS TIPO POST-IT, MEDIDAS: 76 X 76MM, CONJUNTO C/ 4 BLOCOS DE 100 FOLHAS, COM PELO MENOS DUAS CORES. ENVIAR CATÁLOGO.', 'Conjunto', 38422, '12,5', 1000, '12500', 0, '0', 1000, '12500', 163, 2015, 0),
 (3502, 311527, 191427, '3.3.9.0.30.16', 'MATERIAL DE EXPEDIENTE', 'Registro de Preço Gerado', '001845/2015', '23541.000352/2015-38', '05 - Pregão EBSERH', '121', '26/11/2015', '08/11/2016', '11/12/2015', '07245458000150', 'DAGEAL COMÉRCIO DE MATERIAL DE ESCRITÓRIO LTDA', '002307/2015', '10.00.00.00.0.0', 'HOSPITAL UNIVERSITÁRIO DE SANTA MARIA - HUSM', '3000254', 'CANETA PARA RETRO-PROJETOR 2 MM. COR VERMELHA.', 'Unidade', 38422, '1,55', 500, '775', 72, '111.6', 428, '663.4', 163, 2015, 0),
@@ -5003,11 +5008,12 @@ INSERT INTO `itens_pedido` (`id`, `id_pedido`, `id_item`, `qtd`, `valor`) VALUES
 (5, 2, 4245, 1, '8800'),
 (6, 3, 4457, 100, '296.88'),
 (7, 4, 4287, 10, '111.3'),
-(8, 1, 3498, 1000, '11100'),
-(9, 1, 3499, 1000, '10900'),
 (22, 5, 77, 2, '15386'),
 (23, 5, 4457, 100, '296.88'),
-(24, 5, 4287, 10, '111.3');
+(24, 5, 4287, 10, '111.3'),
+(28, 1, 3498, 1000, '11100'),
+(29, 1, 3499, 1000, '10900'),
+(30, 1, 65, 5, '2480');
 
 -- --------------------------------------------------------
 
@@ -5075,7 +5081,7 @@ CREATE TABLE `pedido` (
   `data_pedido` date NOT NULL,
   `ref_mes` int(2) UNSIGNED NOT NULL,
   `alteracao` tinyint(1) NOT NULL,
-  `prioridade` varchar(15) NOT NULL,
+  `prioridade` int(1) UNSIGNED NOT NULL,
   `status` int(1) UNSIGNED NOT NULL,
   `valor` varchar(50) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
@@ -5085,11 +5091,11 @@ CREATE TABLE `pedido` (
 --
 
 INSERT INTO `pedido` (`id`, `id_setor`, `data_pedido`, `ref_mes`, `alteracao`, `prioridade`, `status`, `valor`) VALUES
-(1, 3, '2016-08-10', 8, 0, 'normal', 2, '22000.000'),
-(2, 3, '2016-07-26', 7, 1, 'rascunho', 1, '8800.000'),
-(3, 5, '2016-08-04', 8, 1, 'rascunho', 1, '296.880'),
-(4, 5, '2016-08-04', 8, 0, 'normal', 7, '111.300'),
-(5, 3, '2016-08-13', 8, 1, 'rascunho', 1, '15794.180');
+(1, 3, '2016-08-14', 8, 0, 2, 2, '22000.000'),
+(2, 3, '2016-07-26', 7, 1, 5, 1, '8800.000'),
+(3, 5, '2016-08-04', 8, 1, 5, 1, '296.880'),
+(4, 5, '2016-08-04', 8, 0, 1, 2, '111.300'),
+(5, 3, '2016-08-13', 8, 1, 5, 1, '15794.180');
 
 -- --------------------------------------------------------
 
@@ -5163,7 +5169,7 @@ INSERT INTO `postagens` (`id`, `tabela`, `titulo`, `data`, `ativa`, `postagem`) 
 --
 
 CREATE TABLE `prioridade` (
-  `id` int(2) NOT NULL,
+  `id` int(1) UNSIGNED NOT NULL,
   `nome` varchar(50) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
@@ -5287,7 +5293,7 @@ INSERT INTO `saldo_setor` (`id`, `id_setor`, `saldo`, `saldo_suplementado`, `sal
 (7, 8, '100000', '100000.000', '0.000', 7, 2016),
 (8, 9, '300000', '300000.000', '0.000', 7, 2016),
 (9, 10, '310000', '310000.000', '0.000', 7, 2016),
-(10, 3, '3956000.000', '2000000.000', '0.000', 8, 2016),
+(10, 3, '3909520.000', '2000000.000', '0.000', 8, 2016),
 (11, 5, '2999888.700', '1500000.000', '0.000', 8, 2016);
 
 -- --------------------------------------------------------
@@ -5474,7 +5480,8 @@ ALTER TABLE `pedido`
   ADD PRIMARY KEY (`id`),
   ADD KEY `id_setor` (`id_setor`),
   ADD KEY `ref_mes` (`ref_mes`),
-  ADD KEY `status` (`status`);
+  ADD KEY `status` (`status`),
+  ADD KEY `prioridade` (`prioridade`);
 
 --
 -- Indexes for table `postagens`
@@ -5560,7 +5567,7 @@ ALTER TABLE `usuario_permissoes`
 -- AUTO_INCREMENT for table `comentarios`
 --
 ALTER TABLE `comentarios`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 --
 -- AUTO_INCREMENT for table `itens`
 --
@@ -5570,7 +5577,7 @@ ALTER TABLE `itens`
 -- AUTO_INCREMENT for table `itens_pedido`
 --
 ALTER TABLE `itens_pedido`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=25;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=31;
 --
 -- AUTO_INCREMENT for table `mes`
 --
@@ -5595,7 +5602,7 @@ ALTER TABLE `postagens`
 -- AUTO_INCREMENT for table `prioridade`
 --
 ALTER TABLE `prioridade`
-  MODIFY `id` int(2) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id` int(1) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 --
 -- AUTO_INCREMENT for table `processos`
 --
@@ -5662,9 +5669,10 @@ ALTER TABLE `itens_pedido`
 -- Limitadores para a tabela `pedido`
 --
 ALTER TABLE `pedido`
-  ADD CONSTRAINT `pedido_ibfk_3` FOREIGN KEY (`status`) REFERENCES `status` (`id`),
+  ADD CONSTRAINT `pedido_ibfk_4` FOREIGN KEY (`prioridade`) REFERENCES `prioridade` (`id`),
   ADD CONSTRAINT `pedido_ibfk_1` FOREIGN KEY (`id_setor`) REFERENCES `setores` (`id`),
-  ADD CONSTRAINT `pedido_ibfk_2` FOREIGN KEY (`ref_mes`) REFERENCES `mes` (`id`);
+  ADD CONSTRAINT `pedido_ibfk_2` FOREIGN KEY (`ref_mes`) REFERENCES `mes` (`id`),
+  ADD CONSTRAINT `pedido_ibfk_3` FOREIGN KEY (`status`) REFERENCES `status` (`id`);
 
 --
 -- Limitadores para a tabela `postagens`
