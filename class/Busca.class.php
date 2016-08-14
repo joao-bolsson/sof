@@ -24,6 +24,41 @@ class Busca extends Conexao {
 	}
 	// ------------------------------------------------------------------------------
 	/**
+	 *	Função que constroi os radioBtn da análise dos pedidos.
+	 *
+	 *	@access public
+	 *	@param $cont Número de radioBtn por linha.
+	 *	@return string
+	 */
+	public function getStatus($cont) {
+		$retorno = "<tr>";
+		$i = 0;
+		$query = $this->mysqli->query("SELECT id, nome FROM status;");
+		while ($status = $query->fetch_object()) {
+			if ($i == $cont) {
+				$i = 0;
+				$retorno .= "</tr><tr>";
+			}
+			$nome = trim($status->nome);
+			$retorno .= "
+			<td>
+				<div class=\"radiobtn radiobtn-adv\">
+					<label for=\"st{$nome}\">
+						<input type=\"radio\" name=\"fase\" required id=\"st{$nome}\" class=\"access-hide\" value=\"{$status->id}\">{$status->nome}
+						<span class=\"radiobtn-circle\"></span><span class=\"radiobtn-circle-check\"></span>
+					</label>
+				</div>
+			</td>
+			";
+			$i++;
+		}
+		$retorno .= "</tr>";
+		$query->close();
+		return $retorno;
+	}
+
+	// ------------------------------------------------------------------------------
+	/**
 	 *	Função que retornar os radioBtn das prioridades dos pedidos.
 	 *
 	 *	@access public
@@ -533,7 +568,7 @@ class Busca extends Conexao {
 	 * @return string
 	 */
 	public function getHeader($id_pedido) {
-		$pedido = $this->mysqli->query("SELECT id, DATE_FORMAT(data_pedido, '%d/%m/%Y') AS data_pedido, EXTRACT(YEAR FROM data_pedido) AS ano, ref_mes, status, valor FROM pedido WHERE id = {$id_pedido};")->fetch_object();
+		$pedido = $this->mysqli->query("SELECT pedido.id, DATE_FORMAT(pedido.data_pedido, '%d/%m/%Y') AS data_pedido, EXTRACT(YEAR FROM pedido.data_pedido) AS ano, mes.sigla_mes AS ref_mes, pedido.status, pedido.valor FROM pedido, mes WHERE pedido.id = {$id_pedido} AND mes.id = pedido.ref_mes;")->fetch_object();
 		$ano = substr($pedido->data_pedido, 0, 4);
 		$pedido->valor = str_replace(".", ",", $pedido->valor);
 		$retorno = "
@@ -863,7 +898,7 @@ class Busca extends Conexao {
 	public function getSolicitacoesAdmin() {
 		//declarando retorno
 		$retorno = "";
-		$query = $this->mysqli->query("SELECT pedido.id, pedido.id_setor, setores.nome AS nome_setor, DATE_FORMAT(pedido.data_pedido, '%d/%m/%Y') AS data_pedido, pedido.ref_mes, pedido.prioridade, pedido.status, pedido.valor FROM pedido, setores WHERE pedido.alteracao = 0 AND pedido.id_setor = setores.id ORDER BY data_pedido DESC;");
+		$query = $this->mysqli->query("SELECT pedido.id, pedido.id_setor, setores.nome AS nome_setor, DATE_FORMAT(pedido.data_pedido, '%d/%m/%Y') AS data_pedido, mes.sigla_mes AS ref_mes, pedido.prioridade, pedido.status, pedido.valor FROM pedido, setores, mes WHERE mes.id = pedido.ref_mes AND pedido.alteracao = 0 AND pedido.id_setor = setores.id ORDER BY data_pedido DESC;");
 		while ($pedido = $query->fetch_object()) {
 			$retorno .= "
 			<tr>
@@ -969,9 +1004,9 @@ class Busca extends Conexao {
 	public function getInfoPedidoAnalise($id_pedido, $id_setor) {
 		$mes = date("n");
 		$ano = date("Y");
-		$query = $this->mysqli->query("SELECT saldo_setor.saldo, pedido.prioridade, pedido.status, pedido.valor FROM saldo_setor, pedido WHERE saldo_setor.id_setor = {$id_setor} AND saldo_setor.mes = {$mes} AND saldo_setor.ano = {$ano} AND pedido.id = {$id_pedido};");
+		$query = $this->mysqli->query("SELECT saldo_setor.saldo, pedido.prioridade, status.nome AS status, pedido.valor FROM saldo_setor, pedido, status WHERE status.id = pedido.status AND saldo_setor.id_setor = {$id_setor} AND saldo_setor.mes = {$mes} AND saldo_setor.ano = {$ano} AND pedido.id = {$id_pedido};");
 		$pedido = $query->fetch_object();
-		$pedido->status = str_replace(" ", "", $pedido->status);
+		$pedido->status = trim($pedido->status);
 		$query->close();
 		return json_encode($pedido);
 	}
@@ -1239,7 +1274,7 @@ class Busca extends Conexao {
 	public function getRascunhos($id_setor) {
 		//declarando retorno
 		$retorno = "";
-		$query = $this->mysqli->query("SELECT id, DATE_FORMAT(data_pedido, '%d/%m/%Y') AS data_pedido, ref_mes, valor FROM pedido WHERE id_setor = {$id_setor} AND alteracao = 1 AND status = 'Rascunho';");
+		$query = $this->mysqli->query("SELECT pedido.id, DATE_FORMAT(pedido.data_pedido, '%d/%m/%Y') AS data_pedido, mes.sigla_mes AS ref_mes, pedido.valor FROM pedido, mes WHERE id_setor = {$id_setor} AND alteracao = 1 AND status = 'Rascunho' AND mes.id = pedido.ref_mes;");
 
 		while ($rascunho = $query->fetch_object()) {
 			$retorno .= "
@@ -1315,7 +1350,7 @@ class Busca extends Conexao {
 	public function getPopulaRascunho($id_pedido, $id_setor) {
 		$mes = date("n");
 		$ano = date("Y");
-		$query = $this->mysqli->query("SELECT saldo_setor.saldo, pedido.ref_mes, pedido.valor FROM saldo_setor, pedido WHERE pedido.id = {$id_pedido} AND saldo_setor.id_setor = {$id_setor} AND saldo_setor.mes = {$mes} AND saldo_setor.ano = {$ano};");
+		$query = $this->mysqli->query("SELECT saldo_setor.saldo, pedido.valor FROM saldo_setor, pedido WHERE pedido.id = {$id_pedido} AND saldo_setor.id_setor = {$id_setor} AND saldo_setor.mes = {$mes} AND saldo_setor.ano = {$ano};");
 		$pedido = $query->fetch_object();
 		$query->close();
 		return json_encode($pedido);
@@ -1332,7 +1367,7 @@ class Busca extends Conexao {
 	public function getMeusPedidos($id_setor) {
 		//declarando retorno
 		$retorno = "";
-		$query = $this->mysqli->query("SELECT id, DATE_FORMAT(data_pedido, '%d/%m/%Y') AS data_pedido, ref_mes, prioridade, status, valor FROM pedido WHERE id_setor = {$id_setor} AND alteracao = 0 ORDER BY data_pedido DESC;");
+		$query = $this->mysqli->query("SELECT pedido.id, DATE_FORMAT(pedido.data_pedido, '%d/%m/%Y') AS data_pedido, mes.sigla_mes AS ref_mes, pedido.prioridade, pedido.status, pedido.valor FROM pedido, mes WHERE pedido.id_setor = {$id_setor} AND pedido.alteracao = 0 AND mes.id = pedido.ref_mes ORDER BY pedido.data_pedido DESC;");
 		while ($pedido = $query->fetch_object()) {
 			$retorno .= "
 			<tr>

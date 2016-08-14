@@ -8,7 +8,6 @@
 
 ini_set('display_erros', true);
 error_reporting(E_ALL);
-date_default_timezone_set('Etc/UTC');
 require 'phpmailer/PHPMailerAutoload.php';
 include_once 'Conexao.class.php';
 

@@ -1,6 +1,5 @@
 <?php
 session_start();
-
 ini_set('display_erros', true);
 error_reporting(E_ALL);
 
@@ -164,13 +163,6 @@ $saldo_mes_anterior = $obj_Busca->getSaldoMesAnterior($_SESSION["id_setor"]);
                                             </table>
                                             <table class="table">
                                                 <tr>
-                                                    <td>
-
-                                                        <div class="form-group form-group-label">
-                                                            <label class="floating-label padding-left" for="refMes" style="font-size: 14pt;"><span class="icon">comment</span>&nbsp;Referente ao mês de</label>
-                                                            <input class="form-control padding-left" id="refMes" name="refMes" style="font-size: 14pt;" type="text" required>
-                                                        </div>
-                                                    </td>
                                                     <td>
                                                         <div class="form-group form-group-label control-highlight">
                                                             <label class="floating-label padding-left" for="total" style="font-size: 14pt;"><span class="icon">attach_money</span>&nbsp;Total</label>
@@ -501,6 +493,6 @@ $saldo_mes_anterior = $obj_Busca->getSaldoMesAnterior($_SESSION["id_setor"]);
 
         <script type="text/javascript" src="../plugins/dataTables/datatables.min.js"></script>
 
-        <script type="text/javascript" src="../ini.min.js"></script>
+        <script type="text/javascript" src="../ini.js"></script>
     </body>
     </html>

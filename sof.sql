@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: 13-Ago-2016 às 15:40
+-- Generation Time: 14-Ago-2016 às 01:46
 -- Versão do servidor: 5.5.50-0ubuntu0.14.04.1
 -- PHP Version: 7.0.9-1+deb.sury.org~trusty+1
 
@@ -5004,7 +5004,10 @@ INSERT INTO `itens_pedido` (`id`, `id_pedido`, `id_item`, `qtd`, `valor`) VALUES
 (6, 3, 4457, 100, '296.88'),
 (7, 4, 4287, 10, '111.3'),
 (8, 1, 3498, 1000, '11100'),
-(9, 1, 3499, 1000, '10900');
+(9, 1, 3499, 1000, '10900'),
+(22, 5, 77, 2, '15386'),
+(23, 5, 4457, 100, '296.88'),
+(24, 5, 4287, 10, '111.3');
 
 -- --------------------------------------------------------
 
@@ -5070,10 +5073,10 @@ CREATE TABLE `pedido` (
   `id` int(10) UNSIGNED NOT NULL,
   `id_setor` int(10) UNSIGNED NOT NULL,
   `data_pedido` date NOT NULL,
-  `ref_mes` varchar(30) NOT NULL,
+  `ref_mes` int(2) UNSIGNED NOT NULL,
   `alteracao` tinyint(1) NOT NULL,
   `prioridade` varchar(15) NOT NULL,
-  `status` varchar(100) NOT NULL,
+  `status` int(1) UNSIGNED NOT NULL,
   `valor` varchar(50) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
@@ -5082,10 +5085,11 @@ CREATE TABLE `pedido` (
 --
 
 INSERT INTO `pedido` (`id`, `id_setor`, `data_pedido`, `ref_mes`, `alteracao`, `prioridade`, `status`, `valor`) VALUES
-(1, 3, '2016-08-10', 'Agosto', 0, 'normal', 'Em Analise', '22000.000'),
-(2, 3, '2016-07-26', 'Julho', 1, 'rascunho', 'Rascunho', '8800.000'),
-(3, 5, '2016-08-04', 'Agosto', 1, 'rascunho', 'Rascunho', '296.880'),
-(4, 5, '2016-08-04', 'Agosto', 0, 'normal', 'Enviado ao Ordenador', '111.300');
+(1, 3, '2016-08-10', 8, 0, 'normal', 2, '22000.000'),
+(2, 3, '2016-07-26', 7, 1, 'rascunho', 1, '8800.000'),
+(3, 5, '2016-08-04', 8, 1, 'rascunho', 1, '296.880'),
+(4, 5, '2016-08-04', 8, 0, 'normal', 7, '111.300'),
+(5, 3, '2016-08-13', 8, 1, 'rascunho', 1, '15794.180');
 
 -- --------------------------------------------------------
 
@@ -5223,7 +5227,7 @@ CREATE TABLE `saldos_adiantados` (
 --
 
 INSERT INTO `saldos_adiantados` (`id`, `id_setor`, `data_solicitacao`, `data_analise`, `mes_subtraido`, `ano`, `valor_adiantado`, `justificativa`, `status`) VALUES
-(1, 3, '2016-07-24', '2016-08-13', 13, 2016, '400', 'preciso de um adiantamento urgente', 0);
+(1, 3, '2016-07-24', '2016-08-14', 13, 2016, '400', 'preciso de um adiantamento urgente', 0);
 
 -- --------------------------------------------------------
 
@@ -5344,9 +5348,23 @@ INSERT INTO `solic_alt_pedido` (`id`, `id_pedido`, `id_setor`, `data_solicitacao
 --
 
 CREATE TABLE `status` (
-  `id` int(2) NOT NULL,
+  `id` int(1) UNSIGNED NOT NULL,
   `nome` varchar(50) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Extraindo dados da tabela `status`
+--
+
+INSERT INTO `status` (`id`, `nome`) VALUES
+(1, 'Rascunho'),
+(2, 'Em Analise'),
+(3, 'Reprovado'),
+(4, 'Aprovado'),
+(5, 'Aguarda Orcamento'),
+(6, 'Empenhado'),
+(7, 'Enviado ao Ordenador'),
+(8, 'Recebido da Unidade de Aprovacao');
 
 -- --------------------------------------------------------
 
@@ -5454,7 +5472,9 @@ ALTER TABLE `paginas_post`
 --
 ALTER TABLE `pedido`
   ADD PRIMARY KEY (`id`),
-  ADD KEY `id_setor` (`id_setor`);
+  ADD KEY `id_setor` (`id_setor`),
+  ADD KEY `ref_mes` (`ref_mes`),
+  ADD KEY `status` (`status`);
 
 --
 -- Indexes for table `postagens`
@@ -5550,7 +5570,7 @@ ALTER TABLE `itens`
 -- AUTO_INCREMENT for table `itens_pedido`
 --
 ALTER TABLE `itens_pedido`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=25;
 --
 -- AUTO_INCREMENT for table `mes`
 --
@@ -5565,7 +5585,7 @@ ALTER TABLE `paginas_post`
 -- AUTO_INCREMENT for table `pedido`
 --
 ALTER TABLE `pedido`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 --
 -- AUTO_INCREMENT for table `postagens`
 --
@@ -5610,7 +5630,7 @@ ALTER TABLE `solic_alt_pedido`
 -- AUTO_INCREMENT for table `status`
 --
 ALTER TABLE `status`
-  MODIFY `id` int(2) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(1) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 --
 -- AUTO_INCREMENT for table `usuario`
 --
@@ -5642,7 +5662,9 @@ ALTER TABLE `itens_pedido`
 -- Limitadores para a tabela `pedido`
 --
 ALTER TABLE `pedido`
-  ADD CONSTRAINT `pedido_ibfk_1` FOREIGN KEY (`id_setor`) REFERENCES `setores` (`id`);
+  ADD CONSTRAINT `pedido_ibfk_3` FOREIGN KEY (`status`) REFERENCES `status` (`id`),
+  ADD CONSTRAINT `pedido_ibfk_1` FOREIGN KEY (`id_setor`) REFERENCES `setores` (`id`),
+  ADD CONSTRAINT `pedido_ibfk_2` FOREIGN KEY (`ref_mes`) REFERENCES `mes` (`id`);
 
 --
 -- Limitadores para a tabela `postagens`
