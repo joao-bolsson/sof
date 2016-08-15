@@ -916,10 +916,14 @@ class Busca extends Conexao {
 		$query = $this->mysqli->query("SELECT pedido.id, pedido.id_setor, setores.nome AS nome_setor, DATE_FORMAT(pedido.data_pedido, '%d/%m/%Y') AS data_pedido, mes.sigla_mes AS ref_mes, prioridade.nome AS prioridade, status.nome AS status, pedido.valor FROM pedido, setores, mes, prioridade, status WHERE status.id = pedido.status AND prioridade.id = pedido.prioridade AND mes.id = pedido.ref_mes AND pedido.alteracao = 0 AND pedido.id_setor = setores.id ORDER BY data_pedido DESC;");
 		while ($pedido = $query->fetch_object()) {
 			$pedido->prioridade = ucfirst($pedido->prioridade);
+			$btnAnalisar = "";
+			if ($pedido->status == "Em Analise") {
+				$btnAnalisar = "<a class=\"modal-close\" href=\"javascript:analisarPedido({$pedido->id}, {$pedido->id_setor});\" title=\"Analisar\"><span class=\"icon\">create<span></a>";
+			}
 			$retorno .= "
 			<tr>
 				<td>
-					<a class=\"modal-close\" href=\"javascript:analisarPedido({$pedido->id}, {$pedido->id_setor});\" title=\"Analisar\"><span class=\"icon\">create<span></a>
+					{$btnAnalisar}
 					<a class=\"modal-close\" href=\"javascript:imprimir({$pedido->id});\" title=\"Imprimir\"><span class=\"icon\">print<span></a>
 				</td>
 				<td>{$pedido->id}</td>

@@ -105,6 +105,30 @@ if ($permissao->recepcao) {
    </ul>
  </nav>
 </div><!-- ./row -->
+<div class="row" style="margin-top: -5%;">
+  <table class="table">
+    <tbody>
+      <tr>
+        <?php
+if ($permissao->saldos) {
+	echo "
+              <td>
+                <a class=\"\" href=\"javascript:mostra('rowSolicAdi');\"><span class=\"icon\">add</span>Solicitações de Adiantamento</a>
+              </td>
+            ";
+}
+if ($permissao->pedidos) {
+	echo "
+        <td>
+          <a class=\"\" href=\"javascript:mostra('rowAltPed');\"><span class=\"icon\">add</span>Solicitações de Alteração de Pedidos</a>
+        </td>
+  ";
+}
+?>
+      </tr>
+    </tbody>
+  </table>
+</div>
 <?php
 if ($permissao->recepcao) {
 	echo "
@@ -143,7 +167,7 @@ if ($permissao->recepcao) {
 }
 if ($permissao->saldos) {
 	echo "
-  <div class=\"row\">
+  <div id=\"rowSolicAdi\" class=\"row\" style=\"display: block;\">
    <div class=\"card margin-top-no\">
      <div class=\"card-main\">
        <div class=\"card-header card-brand\">
@@ -203,7 +227,7 @@ if ($permissao->saldos) {
 }
 if ($permissao->pedidos) {
 	echo "
-  <div class=\"row\">
+  <div id=\"rowAltPed\" class=\"row\" style=\"display: block;\">
    <div class=\"card margin-top-no\">
      <div class=\"card-main\">
        <div class=\"card-header card-brand\">
@@ -478,7 +502,7 @@ if ($permissao->recepcao) {
         <h2 class=\"modal-title content-sub-heading\">Processos Atendidos pelo SOF</h2>
       </div>
       <div class=\"modal-inner\">
-        <table id=\"tableListProcessos\" class=\"table\" style=\"width: 100%;\">
+        <table id=\"tableListProcessos\" class=\"table\" style=\"width: 100%; display: none\">
           <thead>
             <tr>
               <th>Número do Processo</th>
@@ -666,6 +690,6 @@ if ($permissao->recepcao) {
 
 <script type="text/javascript" src="../plugins/dataTables/datatables.min.js"></script>
 
-<script type="text/javascript" src="../ini.min.js"></script>
+<script type="text/javascript" src="../ini.js"></script>
 </body>
 </html>

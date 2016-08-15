@@ -1,3 +1,16 @@
+/**
+ *	Comment.
+ */
+function mostra(row) {
+	var display = document.getElementById(row).style.display;
+	$('#' + row).css('transition-delay', '0.1s');
+	if (display == "block") {
+		display = "none";
+	} else {
+		display = "block";
+	}
+	document.getElementById(row).style.display = display;
+}
 // solicitação de alteração de pedidos
 function analisaSolicAlt(id_solic, id_pedido, acao) {
 	$.post('../php/geral.php', {
@@ -59,7 +72,7 @@ function avisoSnack(aviso, corpo) {
 }
 
 function iniDataTable(tabela) {
-	var myTable = $(tabela).DataTable({
+	$(tabela).DataTable({
 		destroy: true,
 		searching: true,
 		language: {
