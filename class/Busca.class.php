@@ -24,6 +24,25 @@ class Busca extends Conexao {
 	}
 	// ------------------------------------------------------------------------------
 	/**
+	 *	Função que retorna as options para tipo de processos para o cadastro de novos processos.
+	 *
+	 *	@access public
+	 *	@return string
+	 */
+	public function getTiposProcessos() {
+		$retorno = "";
+		$query = $this->mysqli->query("SELECT id, nome FROM processos_tipo;");
+		while ($tipo = $query->fetch_object()) {
+			$tipo->nome = utf8_encode($tipo->nome);
+			$retorno .= "
+				<option value=\"{$tipo->id}\">{$tipo->nome}</option>
+			";
+		}
+		$query->close();
+		return $retorno;
+	}
+	// ------------------------------------------------------------------------------
+	/**
 	 *	Função que retornar o id do setor do pedido
 	 *
 	 *	@access public
@@ -119,7 +138,7 @@ class Busca extends Conexao {
 	 */
 	public function getTabelaRecepcao() {
 		$retorno = "";
-		$query = $this->mysqli->query("SELECT processos.id, processos.num_processo, processos.tipo, processos.estante, processos.prateleira, processos.entrada, processos.saida, processos.responsavel, processos.retorno, processos.obs FROM processos ORDER BY id ASC;");
+		$query = $this->mysqli->query("SELECT processos.id, processos.num_processo, processos_tipo.nome as tipo, processos.estante, processos.prateleira, processos.entrada, processos.saida, processos.responsavel, processos.retorno, processos.obs FROM processos, processos_tipo WHERE processos.tipo = processos_tipo.id ORDER BY id ASC;");
 
 		while ($processo = $query->fetch_object()) {
 			$retorno .= "

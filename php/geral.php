@@ -36,7 +36,19 @@ if (isset($_POST["admin"]) && isset($_SESSION["id_setor"]) && $_SESSION["id_seto
 	$form = $_POST["form"];
 
 	switch ($form) {
+	// comentário
 
+	case 'newTypeProcess':
+		$tipo = $_POST["newType"];
+		$cadastra = $obj_Geral->newTypeProcess($tipo);
+		if (!$cadastra) {
+			// remove all session variables
+			session_unset();
+			// destroy the session
+			session_destroy();
+		}
+		header("Location: ../admin/adminsolicitacoes.php");
+		break;
 	// comentário
 
 	case 'recepcao':

@@ -97,9 +97,14 @@ if ($permissao->pedidos) {
           ";
 }
 if ($permissao->recepcao) {
-	echo "<li>
+	echo "
+      <li>
          <a class=\"waves-attach\" href=\"javascript:abreModal('#listProcessos');\"><span class=\"text-white\"><span class=\"icon\">label</span>PROCESSOS</span></a>
-       </li>";
+       </li>
+      <li>
+         <a class=\"waves-attach\" href=\"javascript:abreModal('#newTypeProcess');\"><span class=\"text-white\"><span class=\"icon\">add</span>NOVO TIPO</span></a>
+      </li>
+       ";
 }
 ?>
    </ul>
@@ -518,7 +523,8 @@ if ($permissao->recepcao) {
 </div>";
 }
 if ($permissao->recepcao) {
-	echo "<div aria-hidden=\"true\" class=\"modal fade\" id=\"addProcesso\" role=\"dialog\" tabindex=\"-1\">
+	echo "
+  <div aria-hidden=\"true\" class=\"modal fade\" id=\"addProcesso\" role=\"dialog\" tabindex=\"-1\">
   <div class=\"modal-dialog\" style=\"width: 50%;\">
     <div class=\"modal-content\">
       <div class=\"modal-heading\">
@@ -540,7 +546,12 @@ if ($permissao->recepcao) {
                 <td>
                   <div class=\"form-group form-group-label\">
                     <label class=\"floating-label\" for=\"tipo\"><span class=\"icon\">lock_outline</span>&nbsp;Tipo</label>
+                    <!--
                     <input class=\"form-control\" id=\"tipo\" name=\"tipo\" type=\"text\" required>
+                    -->
+                    <select id=\"tipo\" class=\"form-control\" name=\"tipo\" required>
+                      {$obj_Busca->getTiposProcessos()}
+                    </select>
                   </div>
                 </td>
               </tr>
@@ -617,7 +628,30 @@ if ($permissao->recepcao) {
       </form>
     </div>
   </div>
-</div>";
+</div>
+<div class=\"modal fade\" id=\"newTypeProcess\" role=\"dialog\">
+  <div class=\"modal-dialog\" style=\"width: 40%;\">
+    <div class=\"modal-content\">
+      <div class=\"modal-heading\">
+        <a class=\"modal-close\" data-dismiss=\"modal\">×</a>
+        <h2 class=\"modal-title content-sub-heading\">Novo Tipo de Processo</h2>
+      </div>
+      <form action=\"../php/geral.php\" method=\"post\">
+        <input type=\"hidden\" name=\"admin\" value=\"1\"></input>
+        <input type=\"hidden\" name=\"form\" value=\"newTypeProcess\"></input>
+        <div class=\"modal-inner\">
+          <div class=\"form-group form-group-label\">
+            <label class=\"floating-label\" for=\"newType\"><span class=\"icon\">perm_identity</span>&nbsp;Nome</label>
+            <input class=\"form-control\" id=\"newType\" name=\"newType\" type=\"text\" required>
+          </div>
+        <div class=\"modal-footer margin-bottom\">
+          <button class=\"btn btn-brand waves-attach waves-light waves-effect\" type=\"submit\" style=\"width: 100%;\"><span class=\"icon\">autorenew</span>&nbsp;Cadastrar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+";
 }
 ?>
 <div class="modal fade" id="myInfos" role="dialog">
@@ -690,6 +724,6 @@ if ($permissao->recepcao) {
 
 <script type="text/javascript" src="../plugins/dataTables/datatables.min.js"></script>
 
-<script type="text/javascript" src="../ini.js"></script>
+<script type="text/javascript" src="../ini.min.js"></script>
 </body>
 </html>

@@ -20,6 +20,21 @@ class Geral extends Conexao {
 	}
 	// ------------------------------------------------------------------------------
 	/**
+	 *	Função para cadastrar novo tipo de processo.
+	 *
+	 *	@access public
+	 *	@return boolean.
+	 */
+	public function newTypeProcess($tipo) {
+		$tipo = $this->mysqli->real_escape_string($tipo);
+		$insert = $this->mysqli->query("INSERT INTO processos_tipo VALUES(NULL, '{$tipo}');");
+		if ($insert) {
+			return true;
+		}
+		return false;
+	}
+	// ------------------------------------------------------------------------------
+	/**
 	 *	Função para cadastrar/editar um processo
 	 *
 	 *	@access public
