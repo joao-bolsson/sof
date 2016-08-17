@@ -341,43 +341,97 @@ function liberaSaldo(id_setor, mes, ano, valor) {
 		}
 	});
 }
-/**
- *	Função para inicializar / reiniar tabela com as solicitações de alteração de pedidos do setor logado.
- *
- */
-function iniSolicAltPedSetor() {
-	$.post('../php/busca.php', {
-		users: 1,
-		form: 'iniSolicAltPedSetor'
-	}, function(resposta) {
-		// Quando terminada a requisição
-		destroyDataTable('#tableSolicAltPedido');
-		document.getElementById('contentSolicAltPedido').innerHTML = resposta;
+$('#listSolicAltPedidos').on('shown.bs.modal', function(event) {
+	if (!$.fn.DataTable.isDataTable('#tableSolicAltPedido')) {
 		iniDataTable('#tableSolicAltPedido');
-	});
-}
-/**
- *	Função ao clicar no botão para mostrar as solicitações de alteraçõa de pedidos do setor logado.
- */
+	}
+});
+
 function listSolicAltPedidos() {
-	iniSolicAltPedSetor();
 	$('#listSolicAltPedidos').modal();
+	if (!$.fn.DataTable.isDataTable('#tableListProcessos')) {
+		$.post('../php/busca.php', {
+			users: 1,
+			form: 'iniSolicAltPedSetor'
+		}, function(resposta) {
+			document.getElementById('tbodySolicAltPedido').innerHTML = resposta;
+		});
+	}
+}
+$('#listProcessos').on('shown.bs.modal', function(event) {
+	if (!$.fn.DataTable.isDataTable('#tableListProcessos')) {
+		iniDataTable('#tableListProcessos');
+	}
+});
+
+function listProcessos() {
+	$('#listProcessos').modal('show');
+	if (!$.fn.DataTable.isDataTable('#tableListProcessos')) {
+		$.post('../php/busca.php', {
+			users: 1,
+			form: 'listProcessos'
+		}, function(resposta) {
+			document.getElementById('tbodyListProcessos').innerHTML = resposta;
+		});
+	}
+}
+
+$('#listAdiantamentos').on('shown.bs.modal', function(event) {
+	if (!$.fn.DataTable.isDataTable('#tableListAdiantamentos')) {
+		iniDataTable('#tableListAdiantamentos');
+	}
+});
+
+function listAdiantamentos() {
+	$('#listAdiantamentos').modal('show');
+	if (!$.fn.DataTable.isDataTable('#tableListProcessos')) {
+		$.post('../php/busca.php', {
+			users: 1,
+			form: 'listAdiantamentos'
+		}, function(resposta) {
+			document.getElementById('tbodyListAdiantamentos').innerHTML = resposta;
+		});
+	}
+}
+$('#listPedidos').on('shown.bs.modal', function(event) {
+	if (!$.fn.DataTable.isDataTable('#tableListPedidos')) {
+		iniDataTable('#tableListPedidos');
+	}
+});
+
+function listPedidos() {
+	$('#listPedidos').modal('show');
+	if (!$.fn.DataTable.isDataTable('#tableListPedidos')) {
+		$.post('../php/busca.php', {
+			users: 1,
+			form: 'listPedidos'
+		}, function(resposta) {
+			document.getElementById('tbodyListPedidos').innerHTML = resposta;
+		});
+	}
+}
+$('#listRascunhos').on('shown.bs.modal', function(event) {
+	if (!$.fn.DataTable.isDataTable('#tableListRascunhos')) {
+		iniDataTable('#tableListRascunhos');
+	}
+});
+
+function listRascunhos() {
+	tableListRascunhos
+	$('#listRascunhos').modal('show');
+	if (!$.fn.DataTable.isDataTable('#tableListRascunhos')) {
+		$.post('../php/busca.php', {
+			users: 1,
+			form: 'listRascunhos'
+		}, function(resposta) {
+			document.getElementById('tbodyListRascunhos').innerHTML = resposta;
+		});
+	}
 }
 
 function iniPagSolicitacoes() {
 	iniDataTable('#tableProcessos');
-	iniDataTable('#tableListProcessos');
-	iniDataTable('#tableMeusPedidos');
-	iniDataTable('#tableRascunhos');
-	$.post('../php/busca.php', {
-		users: 1,
-		form: 'iniPagSolicitacoes'
-	}, function(resposta) {
-		// Quando terminada a requisição
-		destroyDataTable('#tableSolicAdi');
-		document.getElementById('contSolicAdi').innerHTML = resposta;
-		iniDataTable('#tableSolicAdi');
-	});
+	avisoSnack('Carregamento concluído!', 'body');
 }
 
 function iniTableSolicAdiant(st) {
