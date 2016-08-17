@@ -144,18 +144,18 @@ class Busca extends Conexao {
 			$retorno .= "
 				<tr>
 					<td>
-            <a class=\"modal-close\" href=\"javascript:addProcesso('', {$processo->id});\"><span class=\"icon\">mode_edit</span></a>
+            <a class=\"modal-close\" href=\"javascript:addProcesso('', " . $processo->id . ");\"><span class=\"icon\">mode_edit</span></a>
           </td>
-					<td>{$processo->num_processo}</td>
-					<td>{$processo->tipo}</td>
-					<td>{$processo->estante}</td>
-					<td>{$processo->prateleira}</td>
-					<td>{$processo->entrada}</td>
-					<td>{$processo->saida}</td>
-          <td>{$processo->responsavel}</td>
-					<td>{$processo->retorno}</td>
+					<td>" . $processo->num_processo . "</td>
+					<td>" . $processo->tipo . "</td>
+					<td>" . $processo->estante . "</td>
+					<td>" . $processo->prateleira . "</td>
+					<td>" . $processo->entrada . "</td>
+					<td>" . $processo->saida . "</td>
+          <td>" . $processo->responsavel . "</td>
+					<td>" . $processo->retorno . "</td>
 					<td>
-						<button onclick=\"viewCompl('{$processo->obs}');\" class=\"btn btn-flat waves-attach waves-effect\" type=\"button\" title=\"Ver Observação\">OBS</button>
+						<button onclick=\"viewCompl('" . $processo->obs . "');\" class=\"btn btn-flat waves-attach waves-effect\" type=\"button\" title=\"Ver Observação\">OBS</button>
 					</td>
 				</tr>
 			";

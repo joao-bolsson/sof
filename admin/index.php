@@ -63,7 +63,7 @@ if (!$permissao->noticias) {
         <nav class="tab-nav pull-left hidden-xx">
             <ul class="nav nav-list">
                 <li>
-                  <a class="btn btn-flat waves-attach waves-light" href="javascript:abreModal('#myInfos');"><span class="text-white"><span class="icon">lock_outline</span><span id="userLogado"><?php echo $_SESSION["nome"] ?></span></span></a>
+                  <a class="btn btn-flat waves-attach waves-light" href="javascript:abreModal('#myInfos');"><span class="text-white"><span class="icon">lock_outline</span><span id="userLogado"><?=$_SESSION["nome"]?></span></span></a>
               </li>
           </ul>
       </nav>
@@ -145,9 +145,7 @@ if (!$permissao->noticias) {
                                 <div>
                                     <h2 class="content-sub-heading">Postar em: </h2>
                                     <select id="pag" class="form-control" name="pag" required>
-                                        <?php
-echo $obj_Busca->getPostarEm();
-?>
+                                        <?=$obj_Busca->getPostarEm();?>
                                     </select>
                                 </div>
                                 <h2 class="content-sub-heading">Data de Publicação: </h2>
@@ -214,7 +212,7 @@ echo $obj_Busca->getPostarEm();
                     <th>Opções</th>
                 </thead>
                 <tbody>
-                    <?php echo $obj_Busca->getArquivos(""); ?>
+                    <?=$obj_Busca->getArquivos("");?>
                 </tbody>
             </table>
         </div>
@@ -230,7 +228,7 @@ echo $obj_Busca->getPostarEm();
             <div class="modal-inner">
                 <table class="table">
                     <tr>
-                        <?php echo $obj_Busca->getTabsNoticias(); ?>
+                        <?=$obj_Busca->getTabsNoticias();?>
                     </tr>
                 </table>
                 <table id="tableNoticiasEditar" class="table" style="width: 100%;">
@@ -260,11 +258,11 @@ echo $obj_Busca->getPostarEm();
         <div class="modal-inner">
           <div class="form-group form-group-label">
             <label class="floating-label" for="nameUser"><span class="icon">perm_identity</span>&nbsp;Nome</label>
-            <input class="form-control" id="nameUser" name="nameUser" type="text" value="<?php echo $_SESSION['nome'] ?>" required>
+            <input class="form-control" id="nameUser" name="nameUser" type="text" value="<?=$_SESSION['nome']?>" required>
         </div>
         <div class="form-group form-group-label">
             <label class="floating-label" for="emailUser"><span class="icon">message</span>&nbsp;E-mail</label>
-            <input class="form-control" id="emailUser" name="emailUser" type="email" value="<?php echo $_SESSION['email'] ?>" required>
+            <input class="form-control" id="emailUser" name="emailUser" type="email" value="<?=$_SESSION['email']?>" required>
         </div>
         <div class="form-group form-group-label">
             <label class="floating-label" for="senhaAtualUser"><span class="icon">lock_outline</span>&nbsp;Senha Atual</label>

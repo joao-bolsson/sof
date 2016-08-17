@@ -35,17 +35,13 @@ $permissao = $obj_Busca->getPermissoes($_SESSION["id"]);
 <body class="page-brand" onload="iniAdminSolicitacoes();">
   <header class="header header-transparent header-waterfall affix">
     <ul class="nav nav-list pull-left">
-      <?php
-if ($permissao->noticias) {
-	echo "
-       <li>
-        <a class=\"btn btn-flat waves-attach waves-light\" href=\"index.php\">
-          <span class=\"text-white\"><span class=\"icon icon-lg\">undo</span>VOLTAR</span>
+    <?php if ($permissao->noticias): ?>
+      <li>
+        <a class="btn btn-flat waves-attach waves-light" href="index.php">
+          <span class="text-white"><span class="icon icon-lg">undo</span>VOLTAR</span>
         </a>
       </li>
-      ";
-}
-?>
+    <?php endif;?>
     <li>
       <a class="btn btn-flat waves-attach waves-light" href="javascript:abreModal('#myInfos');"><span class="text-white"><span class="icon">lock_outline</span><span id="userLogado"><?php echo $_SESSION["nome"] ?></span></span></a>
     </li>
@@ -81,32 +77,24 @@ if ($permissao->noticias) {
             <li class="active">
               <a class="waves-attach" href="adminsolicitacoes.php"><span style="color: white;"><span class="icon">payment</span>SOLICITAÇÕES</span></a>
             </li>
-            <?php
-if ($permissao->saldos) {
-	echo "
-             <li>
-              <a class=\"waves-attach\" href=\"javascript:abreModal('#freeSaldos');\"><span style=\"color: white;\"><span class=\"icon\">payment</span>LIBERAR SALDOS</span></a>
+            <?php if ($permissao->saldos): ?>
+            <li>
+              <a class="waves-attach" href="javascript:abreModal('#freeSaldos');"><span style="color: white;"><span class="icon">payment</span>LIBERAR SALDOS</span></a>
             </li>
-            ";
-}
-if ($permissao->pedidos) {
-	echo "
-           <li>
-            <a class=\"waves-attach\" href=\"javascript:abreModal('#importItens');\"><span style=\"color: white;\"><span class=\"icon\">backup</span>IMPORTAR ITENS</span></a>
-          </li>
-          ";
-}
-if ($permissao->recepcao) {
-	echo "
-         <li>
-           <a class=\"waves-attach\" href=\"javascript:abreModal('#listProcessos');\"><span class=\"text-white\"><span class=\"icon\">label</span>PROCESSOS</span></a>
-         </li>
-         <li>
-           <a class=\"waves-attach\" href=\"javascript:abreModal('#newTypeProcess');\"><span class=\"text-white\"><span class=\"icon\">add</span>NOVO TIPO</span></a>
-         </li>
-         ";
-}
-?>
+            <?php endif;?>
+            <?php if ($permissao->pedidos): ?>
+            <li>
+              <a class="waves-attach" href="javascript:abreModal('#importItens');"><span style="color: white;"><span class="icon">backup</span>IMPORTAR ITENS</span></a>
+            </li>
+            <?php endif;?>
+            <?php if ($permissao->recepcao): ?>
+            <li>
+              <a class="waves-attach" href="javascript:abreModal('#listProcessos');"><span class="text-white"><span class="icon">label</span>PROCESSOS</span></a>
+            </li>
+            <li>
+              <a class="waves-attach" href="javascript:abreModal('#newTypeProcess');"><span class="text-white"><span class="icon">add</span>NOVO TIPO</span></a>
+            </li>
+            <?php endif;?>
      </ul>
    </nav>
  </div><!-- ./row -->
@@ -114,40 +102,32 @@ if ($permissao->recepcao) {
   <table class="table">
     <tbody>
       <tr>
-        <?php
-if ($permissao->saldos) {
-	echo "
-         <td>
-          <a class=\"\" href=\"javascript:mostra('rowSolicAdi');\"><span class=\"icon\">add</span>Solicitações de Adiantamento</a>
+      <?php if ($permissao->saldos): ?>
+        <td>
+          <a href="javascript:mostra('rowSolicAdi');"><span class="icon">add</span>Solicitações de Adiantamento</a>
         </td>
-        ";
-}
-if ($permissao->pedidos) {
-	echo "
-       <td>
-        <a class=\"\" href=\"javascript:mostra('rowAltPed');\"><span class=\"icon\">add</span>Solicitações de Alteração de Pedidos</a>
-      </td>
-      ";
-}
-?>
+      <?php endif;?>
+      <?php if ($permissao->pedidos): ?>
+        <td>
+          <a href="javascript:mostra('rowAltPed');"><span class="icon">add</span>Solicitações de Alteração de Pedidos</a>
+        </td>
+      <?php endif;?>
   </tr>
 </tbody>
 </table>
 </div>
-<?php
-if ($permissao->recepcao) {
-	echo "
-  <div class=\"row\">
-   <div class=\"card margin-top-no\">
-     <div class=\"card-main\">
-       <div class=\"card-header card-brand\">
-         <div class=\"card-header-side pull-left\">
-           <p class=\"card-heading\">Processos</p>
+<?php if ($permissao->recepcao): ?>
+  <div class="row">
+   <div class="card margin-top-no">
+     <div class="card-main">
+       <div class="card-header card-brand">
+         <div class="card-header-side pull-left">
+           <p class="card-heading">Processos</p>
          </div>
        </div><!--  ./card-header -->
-       <div class=\"card-inner\">
-         <a class=\"\" href=\"javascript:addProcesso(' ', 0);\"><span class=\"icon\">add</span>Adicionar Processo</a>
-         <table class=\"table stripe\" id=\"tableRecepcao\" style=\"width: 100%;\">
+       <div class="card-inner">
+         <a href="javascript:addProcesso(' ', 0);"><span class="icon">add</span>Adicionar Processo</a>
+         <table class="table stripe" id="tableRecepcao" style="width: 100%;">
           <thead>
             <th></th>
             <th>PROCESSO</th>
@@ -160,7 +140,7 @@ if ($permissao->recepcao) {
             <th>RETORNO EM</th>
             <th>OBS</th>
           </thead>
-          <tbody id=\"conteudoRecepcao\">
+          <tbody id="conteudoRecepcao">
 
           </tbody>
         </table>
@@ -168,48 +148,46 @@ if ($permissao->recepcao) {
     </div><!-- ./card-main -->
   </div> <!-- ./card -->
 </div>
-";
-}
-if ($permissao->saldos) {
-	echo "
-  <div id=\"rowSolicAdi\" class=\"row\" style=\"display: block;\">
-   <div class=\"card margin-top-no\">
-     <div class=\"card-main\">
-       <div class=\"card-header card-brand\">
-         <div class=\"card-header-side pull-left\">
-           <p class=\"card-heading\">Solicitações de Adiantamento</p>
+<?php endif;?>
+<?php if ($permissao->saldos): ?>
+  <div id="rowSolicAdi" class="row" style="display: block;">
+   <div class="card margin-top-no">
+     <div class="card-main">
+       <div class="card-header card-brand">
+         <div class="card-header-side pull-left">
+           <p class="card-heading">Solicitações de Adiantamento</p>
          </div>
        </div><!--  ./card-header -->
-       <div class=\"card-inner\">
-        <table class=\"table\">
+       <div class="card-inner">
+        <table class="table">
           <tr>
             <td>
-              <div class=\"radiobtn radiobtn-adv\">
-                <label for=\"stabertos\">
-                  <input type=\"radio\" id=\"stabertos\" name=\"stadi\" class=\"access-hide\" onclick=\"iniTableSolicAdiant(2);\" checked>Abertos
-                  <span class=\"radiobtn-circle\"></span><span class=\"radiobtn-circle-check\"></span>
+              <div class="radiobtn radiobtn-adv">
+                <label for="stabertos">
+                  <input type="radio" id="stabertos" name="stadi" class="access-hide" onclick="iniTableSolicAdiant(2);" checked>Abertos
+                  <span class="radiobtn-circle"></span><span class="radiobtn-circle-check"></span>
                 </label>
               </div>
             </td>
             <td>
-              <div class=\"radiobtn radiobtn-adv\">
-                <label for=\"staprovados\">
-                  <input type=\"radio\" id=\"staprovados\" name=\"stadi\" class=\"access-hide\" onclick=\"iniTableSolicAdiant(1);\">Aprovados
-                  <span class=\"radiobtn-circle\"></span><span class=\"radiobtn-circle-check\"></span>
+              <div class="radiobtn radiobtn-adv">
+                <label for="staprovados">
+                  <input type="radio" id="staprovados" name="stadi" class="access-hide" onclick="iniTableSolicAdiant(1);">Aprovados
+                  <span class="radiobtn-circle"></span><span class="radiobtn-circle-check"></span>
                 </label>
               </div>
             </td>
             <td>
-              <div class=\"radiobtn radiobtn-adv\">
-                <label for=\"streprovado\">
-                  <input type=\"radio\" id=\"streprovado\" name=\"stadi\" class=\"access-hide\" onclick=\"iniTableSolicAdiant(0);\">Reprovados
-                  <span class=\"radiobtn-circle\"></span><span class=\"radiobtn-circle-check\"></span>
+              <div class="radiobtn radiobtn-adv">
+                <label for="streprovado">
+                  <input type="radio" id="streprovado" name="stadi" class="access-hide" onclick="iniTableSolicAdiant(0);">Reprovados
+                  <span class="radiobtn-circle"></span><span class="radiobtn-circle-check"></span>
                 </label>
               </div>
             </td>
           </tr>
         </table>
-        <table class=\"table stripe\" id=\"tableSolicitacoesAdiantamento\" style=\"width: 100%;\">
+        <table class="table stripe" id="tableSolicitacoesAdiantamento" style="width: 100%;">
           <thead>
             <th></th>
             <th>SETOR</th>
@@ -220,7 +198,7 @@ if ($permissao->saldos) {
             <th>JUSTIFICATIVA</th>
             <th>STATUS</th>
           </thead>
-          <tbody id=\"conteudoSolicitacoesAdiantamento\">
+          <tbody id="conteudoSolicitacoesAdiantamento">
 
           </tbody>
         </table>
@@ -228,48 +206,46 @@ if ($permissao->saldos) {
     </div><!-- ./card-main -->
   </div> <!-- ./card -->
 </div>
-";
-}
-if ($permissao->pedidos) {
-	echo "
-  <div id=\"rowAltPed\" class=\"row\" style=\"display: block;\">
-   <div class=\"card margin-top-no\">
-     <div class=\"card-main\">
-       <div class=\"card-header card-brand\">
-         <div class=\"card-header-side pull-left\">
-           <p class=\"card-heading\">Solicitações de Alteração de Pedidos</p>
+<?php endif;?>
+<?php if ($permissao->pedidos): ?>
+  <div id="rowAltPed" class="row" style="display: block;">
+   <div class="card margin-top-no">
+     <div class="card-main">
+       <div class="card-header card-brand">
+         <div class="card-header-side pull-left">
+           <p class="card-heading">Solicitações de Alteração de Pedidos</p>
          </div>
        </div><!--  ./card-header -->
-       <div class=\"card-inner\">
-        <table class=\"table\">
+       <div class="card-inner">
+        <table class="table">
           <tr>
             <td>
-              <div class=\"radiobtn radiobtn-adv\">
-                <label for=\"stAltAbertos\">
-                  <input type=\"radio\" id=\"stAltAbertos\" name=\"stAlt\" class=\"access-hide\" onclick=\"iniTableSolicAltPed(2);\" checked>Abertos
-                  <span class=\"radiobtn-circle\"></span><span class=\"radiobtn-circle-check\"></span>
+              <div class="radiobtn radiobtn-adv">
+                <label for="stAltAbertos">
+                  <input type="radio" id="stAltAbertos" name="stAlt" class="access-hide" onclick="iniTableSolicAltPed(2);" checked>Abertos
+                  <span class="radiobtn-circle"></span><span class="radiobtn-circle-check"></span>
                 </label>
               </div>
             </td>
             <td>
-              <div class=\"radiobtn radiobtn-adv\">
-                <label for=\"stAltAprovados\">
-                  <input type=\"radio\" id=\"stAltAprovados\" name=\"stAlt\" class=\"access-hide\" onclick=\"iniTableSolicAltPed(1);\">Aprovados
-                  <span class=\"radiobtn-circle\"></span><span class=\"radiobtn-circle-check\"></span>
+              <div class="radiobtn radiobtn-adv">
+                <label for="stAltAprovados">
+                  <input type="radio" id="stAltAprovados" name="stAlt" class="access-hide" onclick="iniTableSolicAltPed(1);">Aprovados
+                  <span class="radiobtn-circle"></span><span class="radiobtn-circle-check"></span>
                 </label>
               </div>
             </td>
             <td>
-              <div class=\"radiobtn radiobtn-adv\">
-                <label for=\"stAltReprovado\">
-                  <input type=\"radio\" id=\"stAltReprovado\" name=\"stAlt\" class=\"access-hide\" onclick=\"iniTableSolicAltPed(0);\">Reprovados
-                  <span class=\"radiobtn-circle\"></span><span class=\"radiobtn-circle-check\"></span>
+              <div class="radiobtn radiobtn-adv">
+                <label for="stAltReprovado">
+                  <input type="radio" id="stAltReprovado" name="stAlt" class="access-hide" onclick="iniTableSolicAltPed(0);">Reprovados
+                  <span class="radiobtn-circle"></span><span class="radiobtn-circle-check"></span>
                 </label>
               </div>
             </td>
           </tr>
         </table>
-        <table id=\"tableSolicAltPedido\" class=\"table\" style=\"width: 100%;\">
+        <table id="tableSolicAltPedido" class="table" style="width: 100%;">
           <thead>
             <th></th>
             <th>#PEDIDO</th>
@@ -279,7 +255,7 @@ if ($permissao->pedidos) {
             <th>JUSTIFICATIVA</th>
             <th>STATUS</th>
           </thead>
-          <tbody id=\"contSolicAltPedido\">
+          <tbody id="contSolicAltPedido">
 
           </tbody>
         </table>
@@ -290,16 +266,16 @@ if ($permissao->pedidos) {
 
 <!-- TABELA COM OS PEDIDOS ENVIADOS AO SOF -->
 
-<div class=\"row\">
- <div id=\"card\" class=\"card margin-top-no\">
-   <div class=\"card-main\">
-     <div class=\"card-header card-brand\">
-       <div class=\"card-header-side pull-left\">
-         <p class=\"card-heading\">Pedidos</p>
+<div class="row">
+ <div id="card" class="card margin-top-no">
+   <div class="card-main">
+     <div class="card-header card-brand">
+       <div class="card-header-side pull-left">
+         <p class="card-heading">Pedidos</p>
        </div>
      </div><!--  ./card-header -->
-     <div class=\"card-inner\">
-      <table class=\"table stripe\" id=\"tableSolicitacoes\" style=\"width: 100%;\">
+     <div class="card-inner">
+      <table class="table stripe" id="tableSolicitacoes" style="width: 100%;">
         <thead>
           <th></th>
           <th>#PEDIDO</th>
@@ -310,7 +286,7 @@ if ($permissao->pedidos) {
           <th>STATUS</th>
           <th>VALOR</th>
         </thead>
-        <tbody id=\"conteudoSolicitacoes\">
+        <tbody id="conteudoSolicitacoes">
 
         </tbody>
       </table>
@@ -321,24 +297,24 @@ if ($permissao->pedidos) {
 
 <!-- DETALHES DO PEDIDO -->
 
-<div class=\"row\">
-  <div class=\"card margin-top-no\">
-   <div class=\"card-main\">
-     <div class=\"card-header card-brand\">
-       <div class=\"card-header-side pull-left\">
-         <p class=\"card-heading\">Detalhes do Pedido</p>
+<div class="row">
+  <div class="card margin-top-no">
+   <div class="card-main">
+     <div class="card-header card-brand">
+       <div class="card-header-side pull-left">
+         <p class="card-heading">Detalhes do Pedido</p>
        </div>
-       <div class=\"card-header-side pull-right\" style=\"margin-left: 70%;\">
-         <p class=\"card-heading\">SALDO <span id=\"text_saldo_total\">R$ 0.000<span></p>
+       <div class="card-header-side pull-right" style="margin-left: 70%;">
+         <p class="card-heading">SALDO <span id="text_saldo_total">R$ 0.000<span></p>
        </div>
      </div><!--  ./card-header -->
-     <form action=\"../php/geral.php\" method=\"POST\">
-      <input type=\"hidden\" name=\"admin\" value=\"1\"></input>
-      <input type=\"hidden\" name=\"form\" value=\"gerenciaPedido\"></input>
-      <input id=\"id_pedido\" type=\"hidden\" name=\"id_pedido\" value=\"0\"></input>
-      <input id=\"id_setor\" type=\"hidden\" name=\"id_setor\" value=\"0\"></input>
-      <div class=\"card-inner\">
-        <table class=\"table stripe\" id=\"tableItensPedido\">
+     <form action="../php/geral.php" method="POST">
+      <input type="hidden" name="admin" value="1"></input>
+      <input type="hidden" name="form" value="gerenciaPedido"></input>
+      <input id="id_pedido" type="hidden" name="id_pedido" value="0"></input>
+      <input id="id_setor" type="hidden" name="id_setor" value="0"></input>
+      <div class="card-inner">
+        <table class="table stripe" id="tableItensPedido">
           <thead>
             <th></th>
             <th>COD_REDUZIDO</th>
@@ -369,33 +345,31 @@ if ($permissao->pedidos) {
             <th>VALOR</th>
             <th></th>
           </thead>
-          <tbody id=\"conteudoPedido\">
+          <tbody id="conteudoPedido">
 
           </tbody>
         </table>
-        <input id=\"total_hidden\" type=\"hidden\" name=\"total_hidden\" value=\"0\">
-        <input id=\"saldo_total\" type=\"hidden\" name=\"saldo_total\" value=\"0.000\">
-        <input id=\"prioridade\" type=\"hidden\" name=\"prioridade\" value=\"0\">
-        <table class=\"table\">
-          {$obj_Busca->getStatus(4)}
+        <input id="total_hidden" type="hidden" name="total_hidden" value="0">
+        <input id="saldo_total" type="hidden" name="saldo_total" value="0.000">
+        <input id="prioridade" type="hidden" name="prioridade" value="0">
+        <table class="table">
+          <?=$obj_Busca->getStatus(4)?>
         </table>
-        <div class=\"form-group form-group-label\">
-          <label class=\"floating-label\" for=\"comentario\"><span class=\"icon\">announcement</span>&nbsp;Comentário</label>
-          <textarea class=\"form-control textarea-autosize\" id=\"comentario\" name=\"comentario\" rows=\"1\" required></textarea>
+        <div class="form-group form-group-label">
+          <label class="floating-label" for="comentario"><span class="icon">announcement</span>&nbsp;Comentário</label>
+          <textarea class="form-control textarea-autosize" id="comentario" name="comentario" rows="1" required></textarea>
         </div>
       </div><!-- ./card-inner -->
-      <div class=\"card-action\">
-        <div class=\"card-action-btn\">
-          <button class=\"btn btn-brand waves-attach\" type=\"submit\" style=\"width: 100%;\"><span class=\"icon\">check</span>&nbsp;Salvar Alterações</button>
+      <div class="card-action">
+        <div class="card-action-btn">
+          <button class="btn btn-brand waves-attach" type="submit" style="width: 100%;"><span class="icon">check</span>&nbsp;Salvar Alterações</button>
         </div>
       </div>
     </form>
   </div><!-- ./card-main -->
 </div> <!-- ./card -->
 </div> <!-- ./row -->
-";
-}
-?>
+<?php endif;?>
 </section>
 </div>
 </div>
@@ -431,56 +405,55 @@ if ($permissao->pedidos) {
     </div>
   </div>
 </footer>
-<?php
-if ($permissao->pedidos) {
-	echo "<div class=\"modal fade\" id=\"importItens\" role=\"dialog\">
-  <div class=\"modal-dialog\" style=\"width: 40%;\">
-    <div class=\"modal-content\">
-      <div class=\"modal-heading\">
-        <a class=\"modal-close\" data-dismiss=\"modal\">×</a>
-        <h2 class=\"modal-title content-sub-heading\">Importar Itens</h2>
+<?php if ($permissao->pedidos): ?>
+<div class="modal fade" id="importItens" role="dialog">
+  <div class="modal-dialog" style="width: 40%;">
+    <div class="modal-content">
+      <div class="modal-heading">
+        <a class="modal-close" data-dismiss="modal">×</a>
+        <h2 class="modal-title content-sub-heading">Importar Itens</h2>
       </div>
-      <form enctype=\"multipart/form-data\" action=\"../php/geral.php\" method=\"post\">
-        <input type=\"hidden\" name=\"admin\" value=\"1\">
-        <input type=\"hidden\" name=\"form\" value=\"importItens\">
-        <div class=\"modal-inner\">
-          <div class=\"form-group form-group-label\">
-            <label class=\"floating-label\" for=\"file\"><span class=\"icon\">insert_drive_file</span>&nbsp;Arquivo</label>
-            <input id=\"file\" class=\"form-control\" type=\"file\" style=\"text-transform: none !important;\" name=\"file\">
+      <form enctype="multipart/form-data" action="../php/geral.php" method="post">
+        <input type="hidden" name="admin" value="1">
+        <input type="hidden" name="form" value="importItens">
+        <div class="modal-inner">
+          <div class="form-group form-group-label">
+            <label class="floating-label" for="file"><span class="icon">insert_drive_file</span>&nbsp;Arquivo</label>
+            <input id="file" class="form-control" type="file" style="text-transform: none !important;" name="file">
           </div>
-          <p class=\"help-block\">Max. 32MB</p>
-          <div id=\"loaderImport\" class=\"progress-circular\" style=\"margin-left: 45%; display: none;\">
-            <div class=\"progress-circular-wrapper\">
-              <div class=\"progress-circular-inner\">
-                <div class=\"progress-circular-left\">
-                  <div class=\"progress-circular-spinner\"></div>
+          <p class="help-block">Max. 32MB</p>
+          <div id="loaderImport" class="progress-circular" style="margin-left: 45%; display: none;">
+            <div class="progress-circular-wrapper">
+              <div class="progress-circular-inner">
+                <div class="progress-circular-left">
+                  <div class="progress-circular-spinner"></div>
                 </div>
-                <div class=\"progress-circular-gap\"></div>
-                <div class=\"progress-circular-right\">
-                  <div class=\"progress-circular-spinner\"></div>
+                <div class="progress-circular-gap"></div>
+                <div class="progress-circular-right">
+                  <div class="progress-circular-spinner"></div>
                 </div>
               </div>
             </div>
           </div>
         </div>
-        <div class=\"modal-footer margin-bottom\">
-          <button class=\"btn btn-brand waves-attach waves-light waves-effect\" type=\"submit\" style=\"width: 100%;\"><span class=\"icon\">backup</span>&nbsp;Enviar</button>
+        <div class="modal-footer margin-bottom">
+          <button class="btn btn-brand waves-attach waves-light waves-effect" type="submit" style="width: 100%;"><span class="icon">backup</span>&nbsp;Enviar</button>
         </div>
       </form>
     </div>
   </div>
-</div>";
-}
-if ($permissao->saldos) {
-	echo "<div aria-hidden=\"true\" class=\"modal fade\" id=\"freeSaldos\" role=\"dialog\" tabindex=\"-1\">
-  <div class=\"modal-dialog\">
-    <div class=\"modal-content\">
-      <div class=\"modal-heading\">
-        <a class=\"modal-close\" data-dismiss=\"modal\">×</a>
-        <h2 class=\"modal-title content-sub-heading\">Liberar Saldos</h2>
+</div>
+<?php endif;?>
+<?php if ($permissao->saldos): ?>
+<div aria-hidden="true" class="modal fade" id="freeSaldos" role="dialog" tabindex="-1">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-heading">
+        <a class="modal-close" data-dismiss="modal">×</a>
+        <h2 class="modal-title content-sub-heading">Liberar Saldos</h2>
       </div>
-      <div class=\"modal-inner\">
-        <table class=\"table\">
+      <div class="modal-inner">
+        <table class="table">
           <thead>
             <tr>
               <th>Setor</th>
@@ -489,169 +462,191 @@ if ($permissao->saldos) {
               <th></th>
             </tr>
           </thead>
-          <tbody id=\"contFreeSaldos\">
+          <tbody id="contFreeSaldos">
 
           </tbody>
         </table>
       </div>
     </div>
   </div>
-</div>";
-}
-if ($permissao->recepcao) {
-	echo "<div aria-hidden=\"true\" class=\"modal fade\" id=\"listProcessos\" role=\"dialog\" tabindex=\"-1\">
-  <div class=\"modal-dialog\" style=\"width: 40%;\">
-    <div class=\"modal-content\">
-      <div class=\"modal-heading\">
-        <a class=\"modal-close\" data-dismiss=\"modal\">×</a>
-        <h2 class=\"modal-title content-sub-heading\">Processos Atendidos pelo SOF</h2>
+</div>
+<?php endif;?>
+<?php if ($permissao->saldos): ?>
+<div aria-hidden="true" class="modal fade" id="freeSaldos" role="dialog" tabindex="-1">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-heading">
+        <a class="modal-close" data-dismiss="modal">×</a>
+        <h2 class="modal-title content-sub-heading">Liberar Saldos</h2>
       </div>
-      <div class=\"modal-inner\">
-        <table id=\"tableListProcessos\" class=\"table\" style=\"width: 100%;\">
+      <div class="modal-inner">
+        <table class="table">
+          <thead>
+            <tr>
+              <th>Setor</th>
+              <th>Valor</th>
+              <th>Liberar valor mês/ano</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody id="contFreeSaldos">
+
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+<?php endif;?>
+<?php if ($permissao->recepcao): ?>
+<div aria-hidden="true" class="modal fade" id="listProcessos" role="dialog" tabindex="-1">
+  <div class="modal-dialog" style="width: 40%;">
+    <div class="modal-content">
+      <div class="modal-heading">
+        <a class="modal-close" data-dismiss="modal">×</a>
+        <h2 class="modal-title content-sub-heading">Processos Atendidos pelo SOF</h2>
+      </div>
+      <div class="modal-inner">
+        <table id="tableListProcessos" class="table" style="width: 100%;">
           <thead>
             <tr>
               <th>Número do Processo</th>
               <th></th>
             </tr>
           </thead>
-          <tbody id=\"contentListProcessos\">
+          <tbody id="contentListProcessos">
           </tbody>
         </table>
       </div>
     </div>
   </div>
-</div>";
-}
-if ($permissao->recepcao) {
-	echo "
-  <div aria-hidden=\"true\" class=\"modal fade\" id=\"addProcesso\" role=\"dialog\" tabindex=\"-1\">
-    <div class=\"modal-dialog\" style=\"width: 50%;\">
-      <div class=\"modal-content\">
-        <div class=\"modal-heading\">
-          <a class=\"modal-close\" data-dismiss=\"modal\">×</a>
-          <h2 class=\"modal-title content-sub-heading\">Processo</h2>
+</div>
+<div aria-hidden="true" class="modal fade" id="addProcesso" role="dialog" tabindex="-1">
+    <div class="modal-dialog" style="width: 50%;">
+      <div class="modal-content">
+        <div class="modal-heading">
+          <a class="modal-close" data-dismiss="modal">×</a>
+          <h2 class="modal-title content-sub-heading">Processo</h2>
         </div>
-        <form id=\"formProcesso\" action=\"javascript:updateProcesso();\" method=\"post\">
-          <input id=\"id_processo\" type=\"hidden\" value=\"0\"></input>
-          <div class=\"modal-inner\">
-            <table style=\"width: 100%;\">
+        <form id="formProcesso" action="javascript:updateProcesso();" method="post">
+          <input id="id_processo" type="hidden" value="0"></input>
+          <div class="modal-inner">
+            <table style="width: 100%;">
               <tbody>
                 <tr>
                   <td>
-                    <div id=\"divNumProc\" class=\"form-group form-group-label\">
-                      <label class=\"floating-label\" for=\"num_processo\"><span class=\"icon\">label</span>&nbsp;Processo</label>
-                      <input class=\"form-control\" id=\"num_processo\" name=\"num_processo\" type=\"text\" required>
+                    <div id="divNumProc" class="form-group form-group-label">
+                      <label class="floating-label" for="num_processo"><span class="icon">label</span>&nbsp;Processo</label>
+                      <input class="form-control" id="num_processo" name="num_processo" type="text" required>
                     </div>
                   </td>
                   <td>
-                    <div class=\"form-group form-group-label\">
-                      <label class=\"floating-label\" for=\"tipo\"><span class=\"icon\">lock_outline</span>&nbsp;Tipo</label>
-                      <select id=\"tipo\" class=\"form-control\" name=\"tipo\" required>
-                        {$obj_Busca->getTiposProcessos()}
+                    <div class="form-group form-group-label">
+                      <label class="floating-label" for="tipo"><span class="icon">lock_outline</span>&nbsp;Tipo</label>
+                      <select id="tipo" class="form-control" name="tipo" required>
+                        <?=$obj_Busca->getTiposProcessos()?>
                       </select>
                     </div>
                   </td>
                 </tr>
                 <tr>
                   <td>
-                    <div class=\"form-group form-group-label\">
-                      <label class=\"floating-label\" for=\"estante\"><span class=\"icon\">line_weight</span>&nbsp;Estante</label>
-                      <input class=\"form-control\" id=\"estante\" name=\"estante\" type=\"text\" required>
+                    <div class="form-group form-group-label">
+                      <label class="floating-label" for="estante"><span class="icon">line_weight</span>&nbsp;Estante</label>
+                      <input class="form-control" id="estante" name="estante" type="text" required>
                     </div>
                   </td>
                   <td>
-                    <div class=\"form-group form-group-label\">
-                      <label class=\"floating-label\" for=\"prateleira\"><span class=\"icon\">list</span>&nbsp;Prateleira</label>
-                      <input class=\"form-control\" id=\"prateleira\" name=\"prateleira\" type=\"text\" required>
+                    <div class="form-group form-group-label">
+                      <label class="floating-label" for="prateleira"><span class="icon">list</span>&nbsp;Prateleira</label>
+                      <input class="form-control" id="prateleira" name="prateleira" type="text" required>
                     </div>
                   </td>
                 </tr>
                 <tr>
                   <td>
-                    <div class=\"form-group form-group-label\">
-                      <label class=\"floating-label\" for=\"entrada\"><span class=\"icon\">date_range</span>&nbsp;Entrada (dd/mm/yyyy)</label>
-                      <input class=\"form-control\" id=\"entrada\" name=\"entrada\" type=\"text\" required maxlength=\"10\">
+                    <div class="form-group form-group-label">
+                      <label class="floating-label" for="entrada"><span class="icon">date_range</span>&nbsp;Entrada (dd/mm/yyyy)</label>
+                      <input class="form-control" id="entrada" name="entrada" type="text" required maxlength="10">
                     </div>
                   </td>
                   <td>
-                    <div class=\"form-group form-group-label\">
-                      <label class=\"floating-label\" for=\"saida\"><span class=\"icon\">alarm</span>&nbsp;Saída (dd/mm/yyyy)</label>
-                      <input class=\"form-control\" id=\"saida\" name=\"saida\" type=\"text\" maxlength=\"10\">
+                    <div class="form-group form-group-label">
+                      <label class="floating-label" for="saida"><span class="icon">alarm</span>&nbsp;Saída (dd/mm/yyyy)</label>
+                      <input class="form-control" id="saida" name="saida" type="text" maxlength="10">
                     </div>
                   </td>
                 </tr>
                 <tr>
                   <td>
-                    <div class=\"form-group form-group-label\">
-                      <label class=\"floating-label\" for=\"responsavel\"><span class=\"icon\">perm_identity</span>&nbsp;Responsável</label>
-                      <input class=\"form-control\" id=\"responsavel\" name=\"responsavel\" type=\"text\">
+                    <div class="form-group form-group-label">
+                      <label class="floating-label" for="responsavel"><span class="icon">perm_identity</span>&nbsp;Responsável</label>
+                      <input class="form-control" id="responsavel" name="responsavel" type="text">
                     </div>
                   </td>
                   <td>
-                    <div class=\"form-group form-group-label\">
-                      <label class=\"floating-label\" for=\"retorno\"><span class=\"icon\">date_range</span>&nbsp;Retorno (dd/mm/yyyy)</label>
-                      <input class=\"form-control\" id=\"retorno\" name=\"retorno\" type=\"text\" maxlength=\"10\">
+                    <div class="form-group form-group-label">
+                      <label class="floating-label" for="retorno"><span class="icon">date_range</span>&nbsp;Retorno (dd/mm/yyyy)</label>
+                      <input class="form-control" id="retorno" name="retorno" type="text" maxlength="10">
                     </div>
                   </td>
                 </tr>
                 <tr>
-                  <td colspan=\"2\">
-                    <div class=\"form-group form-group-label\">
-                      <label class=\"floating-label\" for=\"obs\"><span class=\"icon\">announcement</span>&nbsp;Observação</label>
-                      <textarea class=\"form-control textarea-autosize\" id=\"obs\" name=\"obs\" rows=\"1\" required></textarea>
+                  <td colspan="2">
+                    <div class="form-group form-group-label">
+                      <label class="floating-label" for="obs"><span class="icon">announcement</span>&nbsp;Observação</label>
+                      <textarea class="form-control textarea-autosize" id="obs" name="obs" rows="1" required></textarea>
                     </div>
                   </td>
                   <td></td>
                 </tr>
               </tbody>
             </table>
-            <div id=\"loading\" class=\"progress-circular\" style=\"margin-left: 45%; display: none;\">
-              <div class=\"progress-circular-wrapper\">
-                <div class=\"progress-circular-inner\">
-                  <div class=\"progress-circular-left\">
-                    <div class=\"progress-circular-spinner\"></div>
+            <div id="loading" class="progress-circular" style="margin-left: 45%; display: none;">
+              <div class="progress-circular-wrapper">
+                <div class="progress-circular-inner">
+                  <div class="progress-circular-left">
+                    <div class="progress-circular-spinner"></div>
                   </div>
-                  <div class=\"progress-circular-gap\"></div>
-                  <div class=\"progress-circular-right\">
-                    <div class=\"progress-circular-spinner\"></div>
+                  <div class="progress-circular-gap"></div>
+                  <div class="progress-circular-right">
+                    <div class="progress-circular-spinner"></div>
                   </div>
                 </div>
               </div>
             </div>
           </div>
-          <div class=\"modal-footer margin-bottom\">
-            <button class=\"btn btn-brand waves-attach waves-light waves-effect\" type=\"submit\" style=\"width: 100%;\"><span class=\"icon\">send</span>&nbsp;Enviar</button>
+          <div class="modal-footer margin-bottom">
+            <button class="btn btn-brand waves-attach waves-light waves-effect" type="submit" style="width: 100%;"><span class="icon">send</span>&nbsp;Enviar</button>
           </div>
         </form>
       </div>
     </div>
   </div>
-  <div class=\"modal fade\" id=\"newTypeProcess\" role=\"dialog\">
-    <div class=\"modal-dialog\" style=\"width: 40%;\">
-      <div class=\"modal-content\">
-        <div class=\"modal-heading\">
-          <a class=\"modal-close\" data-dismiss=\"modal\">×</a>
-          <h2 class=\"modal-title content-sub-heading\">Novo Tipo de Processo</h2>
+  <div class="modal fade" id="newTypeProcess" role="dialog">
+    <div class="modal-dialog" style="width: 40%;">
+      <div class="modal-content">
+        <div class="modal-heading">
+          <a class="modal-close" data-dismiss="modal">×</a>
+          <h2 class="modal-title content-sub-heading">Novo Tipo de Processo</h2>
         </div>
-        <form action=\"../php/geral.php\" method=\"post\">
-          <input type=\"hidden\" name=\"admin\" value=\"1\"></input>
-          <input type=\"hidden\" name=\"form\" value=\"newTypeProcess\"></input>
-          <div class=\"modal-inner\">
-            <div class=\"form-group form-group-label\">
-              <label class=\"floating-label\" for=\"newType\"><span class=\"icon\">perm_identity</span>&nbsp;Nome</label>
-              <input class=\"form-control\" id=\"newType\" name=\"newType\" type=\"text\" required>
+        <form action="../php/geral.php" method="post">
+          <input type="hidden" name="admin" value="1"></input>
+          <input type="hidden" name="form" value="newTypeProcess"></input>
+          <div class="modal-inner">
+            <div class="form-group form-group-label">
+              <label class="floating-label" for="newType"><span class="icon">perm_identity</span>&nbsp;Nome</label>
+              <input class="form-control" id="newType" name="newType" type="text" required>
             </div>
-            <div class=\"modal-footer margin-bottom\">
-              <button class=\"btn btn-brand waves-attach waves-light waves-effect\" type=\"submit\" style=\"width: 100%;\"><span class=\"icon\">autorenew</span>&nbsp;Cadastrar</button>
+            <div class="modal-footer margin-bottom">
+              <button class="btn btn-brand waves-attach waves-light waves-effect" type="submit" style="width: 100%;"><span class="icon">autorenew</span>&nbsp;Cadastrar</button>
             </div>
           </form>
         </div>
       </div>
     </div>
   </div>
-  ";
-}
-?>
+<?php endif;?>
 <div class="modal fade" id="myInfos" role="dialog">
   <div class="modal-dialog" style="width: 40%;">
     <div class="modal-content">
@@ -724,5 +719,6 @@ if ($permissao->recepcao) {
 <script type="text/javascript" src="../plugins/dataTables/datatables.min.js"></script>
 
 <script type="text/javascript" src="../ini.min.js"></script>
+
 </body>
 </html>

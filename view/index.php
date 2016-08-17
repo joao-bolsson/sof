@@ -6,7 +6,7 @@ error_reporting(E_ALL);
 
 require_once '../defines.php';
 
-if (!isset($_SESSION["slide1"]) || !isset($_SESSION["slide2"])) {
+if (!isset($_COOKIE['slide1']) || !isset($_COOKIE['slide2'])) {
 	header("Location: ../");
 }
 //define se o botão de LOGIN deve ou não existir
@@ -65,29 +65,20 @@ if (!isset($_SESSION["id_setor"]) || $_SESSION["id_setor"] == 0) {
     </ul>
 		<nav class="tab-nav pull-right ">
 			<ul class="nav nav-list">
-        <?php
-if ($btnAdmin) {
-	echo "
-              <li class=\"active\">
-                <a class=\"btn btn-flat waves-attach waves-light\" href=\"../admin/\"><span class=\"text-white\"><span class=\"icon\">power_settings_new</span>ADMIN</span></a>
-              </li>
-            ";
-}
-if ($btnLogin) {
-	echo "
-              <li class=\"active\">
-                <a class=\"btn btn-flat waves-attach waves-light\" href=" . HREF_MODAL_LOGIN . "><span class=\"text-white\"><span class=\"icon\">power_settings_new</span>LOGIN</span></a>
-              </li>
-            ";
-}
-if ($btnSair) {
-	echo "
-              <li>
-                <a class=\"btn btn-flat waves-attach waves-light\" href=\"../admin/sair.php\"><span class=\"text-white\"><span class=\"icon\">undo</span>SAIR</span></a>
-              </li>
-            ";
-}
-?>
+      <?php if ($btnAdmin): ?>
+        <li>
+          <a class="btn btn-flat waves-attach waves-light" href="../admin/"><span class="text-white"><span class="icon">power_settings_new</span>ADMIN</span></a>
+        </li>
+      <?php else: ?>
+        <li class="active">
+          <a class="btn btn-flat waves-attach waves-light" href="javascript:abreModal('#login');"><span class="text-white"><span class="icon">power_settings_new</span>LOGIN</span></a>
+        </li>
+      <?php endif;?>
+      <?php if ($btnSair): ?>
+        <li>
+          <a class="btn btn-flat waves-attach waves-light" href="../admin/sair.php"><span class="text-white"><span class="icon">undo</span>SAIR</span></a>
+        </li>
+      <?php endif;?>
 			</ul>
 		</nav>
 	</header>
@@ -348,7 +339,7 @@ if ($btnSair) {
                         <div class="slider">
                           <div class="mascara">
                             <ul>
-                                <?php echo $_SESSION["slide1"] ?>
+                                <?php echo $_COOKIE['slide1'] ?>
                             </ul>
                           </div>
                           <div class="barra-progresso"></div>
@@ -367,7 +358,7 @@ if ($btnSair) {
                         <div class="slider">
                           <div class="mascara">
                             <ul>
-                                <?php echo $_SESSION["slide2"] ?>
+                                <?php echo $_COOKIE['slide2'] ?>
                             </ul>
                           </div>
                           <div class="barra-progresso"></div>

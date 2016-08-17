@@ -1,10 +1,9 @@
 <?php
 /**
- *	Arquivo principal do sistema.
+ * 	Arquivo principal do sistema.
  *
- *	@author João Bolsson
+ * 	@author João Bolsson
  */
-
 ini_set('display_erros', true);
 error_reporting(E_ALL);
 
@@ -17,11 +16,9 @@ include_once 'class/Geral.class.php';
 $obj_Geral = new Geral();
 // verifica as solicitações de adiantamento que já venceram e reprova-as
 $obj_Geral->checkSolicAdi();
-//se a variável dos slides não existe então devemos criá-la, para evitar recarregamentos desnecessários
-if (!isset($_SESSION["slide1"]) || !isset($_SESSION["slide2"])) {
-	$_SESSION["slide1"] = $obj_Busca->getSlide(1);
-	$_SESSION["slide2"] = $obj_Busca->getSlide(2);
-}
+
+setcookie('slide1', $obj_Busca->getSlide(1), 0);
+setcookie('slide2', $obj_Busca->getSlide(2), 0);
 
 if (isset($_SESSION["admin"])) {
 //redireciona para a página do admin
@@ -31,5 +28,4 @@ if (isset($_SESSION["admin"])) {
 } else {
 	header("Location: view/");
 }
-
 ?>

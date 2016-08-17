@@ -279,9 +279,7 @@ if ($btnSair) {
     <div class="card-main">
 
       <div class="card-inner fr-view">
-        <?php
-echo $obj_Busca->getInfoNoticia($id);
-?>
+        <?=$obj_Busca->getInfoNoticia($id);?>
       </div>
       <div class="card-action">
         <div class="card-action-btn pull-left">
@@ -445,6 +443,6 @@ unset($_SESSION["id_noticia"]);
 <!-- js for doc -->
 <script src="../material/js/project.min.js"></script>
 
-<script type="text/javascript" src="../ini.js"></script>
+<script type="text/javascript" src="../ini.min.js"></script>
 </body>
 </html>
