@@ -6,7 +6,7 @@
  *	existem algumas variáveis controladoras, tal como 'admin', 'form' e 'user'
  *
  *	se a variável admin existir, então a ação foi feita por um usuário do SOF e deve ser
- *	autenticada com isset($_SESSION["id_setor"]) && $_SESSION["id_setor"] == 2
+ *	autenticada com isset($_SESSION['id_setor']) && $_SESSION['id_setor'] == 2
  *
  *	form controla o que fazer quando este arquivo for chamado
  *
@@ -24,7 +24,7 @@ include_once '../class/Busca.class.php';
 //instanciando classe de busca
 $obj_Busca = new Busca();
 
-if (isset($_POST["admin"]) && isset($_SESSION["id_setor"]) && $_SESSION["id_setor"] == 2) {
+if (isset($_POST["admin"]) && isset($_SESSION['id_setor']) && $_SESSION['id_setor'] == 2) {
 	$form = $_POST["form"];
 
 	switch ($form) {
@@ -90,7 +90,7 @@ if (isset($_POST["admin"]) && isset($_SESSION["id_setor"]) && $_SESSION["id_seto
 
 	case 'infoPedido':
 		$id_pedido = $_POST["id_pedido"];
-		$id_setor = $_POST["id_setor"];
+		$id_setor = $_POST['id_setor'];
 		echo $obj_Busca->getInfoPedidoAnalise($id_pedido, $id_setor);
 		break;
 
@@ -104,19 +104,36 @@ if (isset($_POST["admin"]) && isset($_SESSION["id_setor"]) && $_SESSION["id_seto
 	default:
 		break;
 	}
-} else if (isset($_POST["users"]) && isset($_SESSION["id_setor"]) && $_SESSION["id_setor"] != 0) {
+} else if (isset($_POST["users"]) && isset($_SESSION['id_setor']) && $_SESSION['id_setor'] != 0) {
 	$form = $_POST["form"];
 
 	switch ($form) {
+
+	// comment.
+
+	case 'listRascunhos':
+		echo $obj_Busca->getRascunhos($_SESSION['id_setor']);
+		break;
+
+	// comment.
+
+	case 'listPedidos':
+		echo $obj_Busca->getMeusPedidos($_SESSION['id_setor']);
+		break;
+	// comment.
+
+	case 'listProcessos':
+		echo $obj_Busca->getProcessos("solicitacoes");
+		break;
 	// comment.
 
 	case 'iniSolicAltPedSetor':
-		echo $obj_Busca->getSolicAltPedidos($_SESSION["id_setor"]);
+		echo $obj_Busca->getSolicAltPedidos($_SESSION['id_setor']);
 		break;
 	// retorna a tabela de solicitações de adiantamento de um setor
 
-	case 'iniPagSolicitacoes':
-		echo $obj_Busca->getSolicAdiSetor($_SESSION["id_setor"]);
+	case 'listAdiantamentos':
+		echo $obj_Busca->getSolicAdiSetor($_SESSION['id_setor']);
 		break;
 
 	// adiciona um item ao pedido
@@ -139,7 +156,7 @@ if (isset($_POST["admin"]) && isset($_SESSION["id_setor"]) && $_SESSION["id_seto
 
 	case 'populaRascunho':
 		$id_pedido = $_POST["id_pedido"];
-		$id_setor = $_SESSION["id_setor"];
+		$id_setor = $_SESSION['id_setor'];
 
 		echo $obj_Busca->getPopulaRascunho($id_pedido, $id_setor);
 		break;

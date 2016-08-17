@@ -1,4 +1,4 @@
-<?php
+    <?php
 session_start();
 ini_set('display_erros', true);
 error_reporting(E_ALL);
@@ -18,14 +18,13 @@ $saldo_aditivado = $obj_Saldo->saldo_aditivado;
 
 $saldo_mes_anterior = $obj_Busca->getSaldoMesAnterior($_SESSION["id_setor"]);
 ?>
-<!DOCTYPE html>
-<html lang="pt">
-<head>
+   <!DOCTYPE html>
+   <html lang="pt">
+   <head>
     <meta charset="UTF-8">
     <meta content="IE=edge" http-equiv="X-UA-Compatible">
     <meta content="initial-scale=1.0, maximum-scale=1.0, user-scalable=no, width=device-width" name="viewport">
     <title>Setor de Orçamento e Finanças – HUSM</title>
-    <link href="../plugins/animate/animate.min.css" rel="stylesheet">
     <!-- css -->
     <link href="../material/css/base.min.css" rel="stylesheet">
 
@@ -43,7 +42,7 @@ $saldo_mes_anterior = $obj_Busca->getSaldoMesAnterior($_SESSION["id_setor"]);
                 <nav class="tab-nav pull-left hidden-xx">
                     <ul class="nav nav-list">
                         <li>
-                            <a class="btn btn-flat waves-attach waves-light" href="javascript:abreModal('#myInfos');"><span class="text-white"><span class="icon">lock_outline</span><span id="userLogado"><?php echo $_SESSION["nome"] ?></span></span></a>
+                            <a class="btn btn-flat waves-attach waves-light" href="javascript:abreModal('#myInfos');"><span class="text-white"><span class="icon">lock_outline</span><span id="userLogado"><?=$_SESSION["nome"]?></span></span></a>
                         </li>
                     </ul>
                 </nav>
@@ -59,8 +58,8 @@ $saldo_mes_anterior = $obj_Busca->getSaldoMesAnterior($_SESSION["id_setor"]);
                 <div class="content-heading">
                     <div class="container">
                         <div class="row">
-                            <h1 class="heading module wow slideInRight animated"><img src="../sof_files/logo_blue.png" alt="Setor de Orçamento e Finanças – HUSM" /></h1>
-                            <div class="text-header module wow slideInLeft animated">
+                            <h1 class="heading"><img src="../sof_files/logo_blue.png" alt="Setor de Orçamento e Finanças – HUSM" /></h1>
+                            <div class="text-header">
                                 <p>Setor de Orçamento e Finanças</p>
                                 <span>Hospital Universitário de Santa Maria</span>
                             </div>
@@ -73,22 +72,22 @@ $saldo_mes_anterior = $obj_Busca->getSaldoMesAnterior($_SESSION["id_setor"]);
                             <nav class="tab-nav ui-tab-tab">
                                 <ul class="nav nav-list">
                                     <li>
-                                        <a class="waves-attach" href="javascript:abreModal('#listRascunhos');"><span class="text-white"><span class="icon">drafts</span>RASCUNHOS</span></a>
+                                        <a class="waves-attach" href="javascript:listRascunhos();"><span class="text-white"><span class="icon">drafts</span>RASCUNHOS</span></a>
                                     </li>
                                     <li>
-                                        <a class="waves-attach" href="javascript:abreModal('#listMeusPedidos');"><span class="text-white"><span class="icon">description</span>MEUS PEDIDOS</span></a>
+                                        <a class="waves-attach" href="javascript:listPedidos();"><span class="text-white"><span class="icon">description</span>MEUS PEDIDOS</span></a>
                                     </li>
                                     <li>
                                         <a class="waves-attach" href="javascript:abreModal('#saldos');"><span class="text-white"><span class="icon">attach_money</span>SALDOS</span></a>
                                     </li>
                                     <li>
-                                        <a class="waves-attach" href="javascript:abreModal('#listMeusAdiantamentos');"><span class="text-white"><span class="icon">money_off</span>MEUS ADIANTAMENTOS</span></a>
+                                        <a class="waves-attach" href="javascript:listAdiantamentos();"><span class="text-white"><span class="icon">money_off</span>MEUS ADIANTAMENTOS</span></a>
                                     </li>
                                     <li>
                                         <a class="waves-attach" href="javascript:listSolicAltPedidos();"><span class="text-white"><span class="icon">autorenew</span>SOLIC ALTERAÇÕES PEDIDOS</span></a>
                                     </li>
                                     <li>
-                                        <a class="waves-attach" href="javascript:abreModal('#listProcessos');"><span class="text-white"><span class="icon">label</span>PROCESSOS</span></a>
+                                        <a class="waves-attach" href="javascript:listProcessos();"><span class="text-white"><span class="icon">label</span>PROCESSOS</span></a>
                                     </li>
                                 </ul>
                             </nav>
@@ -138,7 +137,7 @@ $saldo_mes_anterior = $obj_Busca->getSaldoMesAnterior($_SESSION["id_setor"]);
                                             <p class="card-heading">Pedido</p>
                                         </div>
                                         <div class="card-header-side pull-right" style="margin-left: 70%;">
-                                            <p class="card-heading">SALDO <span id="text_saldo_total">R$ <?php echo $saldo_total ?><span></p>
+                                            <p class="card-heading">SALDO <span id="text_saldo_total">R$ <?=$saldo_total?><span></p>
                                         </div>
                                     </div><!--  ./card-header -->
                                     <form action="../php/geral.php" method="POST">
@@ -171,12 +170,12 @@ $saldo_mes_anterior = $obj_Busca->getSaldoMesAnterior($_SESSION["id_setor"]);
                                                     </td>
                                                 </tr>
                                                 <input id="total_hidden" type="hidden" name="total_hidden" value="0">
-                                                <input id="saldo_total" type="hidden" name="saldo_total" value="<?php echo $saldo_total ?>">
+                                                <input id="saldo_total" type="hidden" name="saldo_total" value="<?=$saldo_total?>">
                                             </table>
                                             <div class="form-group">
                                                 <table class="table">
                                                     <tr>
-                                                        <?php echo $obj_Busca->getPrioridades(); ?>
+                                                        <?=$obj_Busca->getPrioridades();?>
                                                     </tr>
                                                 </table>
                                             </div>
@@ -236,11 +235,11 @@ $saldo_mes_anterior = $obj_Busca->getSaldoMesAnterior($_SESSION["id_setor"]);
                         <div class="modal-inner">
                             <div class="form-group form-group-label">
                                 <label class="floating-label" for="nameUser"><span class="icon">perm_identity</span>&nbsp;Nome</label>
-                                <input class="form-control" id="nameUser" name="nameUser" type="text" value="<?php echo $_SESSION['nome'] ?>" required>
+                                <input class="form-control" id="nameUser" name="nameUser" type="text" value="<?=$_SESSION['nome']?>" required>
                             </div>
                             <div class="form-group form-group-label">
                                 <label class="floating-label" for="emailUser"><span class="icon">message</span>&nbsp;E-mail</label>
-                                <input class="form-control" id="emailUser" name="emailUser" type="email" value="<?php echo $_SESSION['email'] ?>" required>
+                                <input class="form-control" id="emailUser" name="emailUser" type="email" value="<?=$_SESSION['email']?>" required>
                             </div>
                             <div class="form-group form-group-label">
                                 <label class="floating-label" for="senhaAtualUser"><span class="icon">lock_outline</span>&nbsp;Senha Atual</label>
@@ -271,7 +270,7 @@ $saldo_mes_anterior = $obj_Busca->getSaldoMesAnterior($_SESSION["id_setor"]);
                 </div>
             </div>
         </div>
-        <div aria-hidden="true" class="modal fade" id="listMeusAdiantamentos" role="dialog" tabindex="-1">
+        <div aria-hidden="true" class="modal fade" id="listAdiantamentos" role="dialog" tabindex="-1">
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-heading">
@@ -279,8 +278,8 @@ $saldo_mes_anterior = $obj_Busca->getSaldoMesAnterior($_SESSION["id_setor"]);
                         <h2 class="modal-title content-sub-heading">Solicitações de Adiantamentos</h2>
                     </div>
                     <div class="modal-inner">
-                        <table class="table" id="tableSolicAdi" style="width: 100%;">
-                            <thead style="width: 100%;">
+                        <table class="table" id="tableListAdiantamentos" style="width: 100%;">
+                            <thead>
                                 <th>DATA_SOLICITACAO</th>
                                 <th>DATA_ANALISE</th>
                                 <th>MES_SUBTRAIDO</th>
@@ -288,15 +287,13 @@ $saldo_mes_anterior = $obj_Busca->getSaldoMesAnterior($_SESSION["id_setor"]);
                                 <th>JUSTIFICATIVA</th>
                                 <th>STATUS</th>
                             </thead>
-                            <tbody id="contSolicAdi">
-
-                            </tbody>
+                            <tbody id="tbodyListAdiantamentos"></tbody>
                         </table>
                     </div>
                 </div>
             </div>
         </div>
-        <div aria-hidden="true" class="modal fade" id="listMeusPedidos" role="dialog" tabindex="-1">
+        <div aria-hidden="true" class="modal fade" id="listPedidos" role="dialog" tabindex="-1">
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-heading">
@@ -304,7 +301,7 @@ $saldo_mes_anterior = $obj_Busca->getSaldoMesAnterior($_SESSION["id_setor"]);
                         <h2 class="modal-title content-sub-heading">Meus Pedidos</h2>
                     </div>
                     <div class="modal-inner">
-                        <table id="tableMeusPedidos" class="table" style="width: 100%;">
+                        <table id="tableListPedidos" class="table" style="width: 100%;">
                             <thead>
                                 <th>RefMes</th>
                                 <th>Data de Envio</th>
@@ -313,9 +310,7 @@ $saldo_mes_anterior = $obj_Busca->getSaldoMesAnterior($_SESSION["id_setor"]);
                                 <th>Valor</th>
                                 <th>Opções</th>
                             </thead>
-                            <tbody>
-                                <?php echo $obj_Busca->getMeusPedidos($_SESSION["id_setor"]); ?>
-                            </tbody>
+                            <tbody id="tbodyListPedidos"></tbody>
                         </table>
                     </div>
                 </div>
@@ -336,9 +331,7 @@ $saldo_mes_anterior = $obj_Busca->getSaldoMesAnterior($_SESSION["id_setor"]);
                                     <th></th>
                                 </tr>
                             </thead>
-                            <tbody>
-                                <?php echo $obj_Busca->getProcessos("solicitacoes"); ?>
-                            </tbody>
+                            <tbody id="tbodyListProcessos"></tbody>
                         </table>
                     </div>
                 </div>
@@ -385,9 +378,7 @@ $saldo_mes_anterior = $obj_Busca->getSaldoMesAnterior($_SESSION["id_setor"]);
                                 <th>JUSTIFICATIVA</th>
                                 <th>STATUS</th>
                             </thead>
-                            <tbody id="contentSolicAltPedido">
-
-                            </tbody>
+                            <tbody id="tbodySolicAltPedido"></tbody>
                         </table>
                     </div>
                 </div>
@@ -401,16 +392,14 @@ $saldo_mes_anterior = $obj_Busca->getSaldoMesAnterior($_SESSION["id_setor"]);
                         <h2 class="modal-title content-sub-heading">Rascunhos</h2>
                     </div>
                     <div class="modal-inner">
-                        <table id="tableRascunhos" class="table" style="width: 100%;">
+                        <table id="tableListRascunhos" class="table" style="width: 100%;">
                             <thead>
                                 <th>RefMes</th>
                                 <th>Última modificação</th>
                                 <th>Valor</th>
                                 <th>Editar</th>
                             </thead>
-                            <tbody>
-                                <?php echo $obj_Busca->getRascunhos($_SESSION["id_setor"]); ?>
-                            </tbody>
+                            <tbody id="tbodyListRascunhos"></tbody>
                         </table>
                     </div>
                 </div>
@@ -427,19 +416,19 @@ $saldo_mes_anterior = $obj_Busca->getSaldoMesAnterior($_SESSION["id_setor"]);
                         <table class="table">
                             <tr>
                                 <td>Saldo Restante do Mês Anterior</td>
-                                <td>R$ <?php echo $saldo_mes_anterior ?></td>
+                                <td>R$ <?=$saldo_mes_anterior?></td>
                             </tr>
                             <tr>
                                 <td>Saldo Suplementado</td>
-                                <td>R$ <?php echo $saldo_suplementado ?></td>
+                                <td>R$ <?=$saldo_suplementado?></td>
                             </tr>
                             <tr>
                                 <td>Saldo Aditivado</td>
-                                <td>R$ <?php echo $saldo_aditivado ?></td>
+                                <td>R$ <?=$saldo_aditivado?></td>
                             </tr>
                             <tr>
                                 <td>Saldo Disponível</td>
-                                <td>R$ <?php echo $saldo_total ?></td>
+                                <td>R$ <?=$saldo_total?></td>
                             </tr>
                         </table>
                     </div>
