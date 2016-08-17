@@ -98,41 +98,41 @@ if ($permissao->pedidos) {
 }
 if ($permissao->recepcao) {
 	echo "
-      <li>
-         <a class=\"waves-attach\" href=\"javascript:abreModal('#listProcessos');\"><span class=\"text-white\"><span class=\"icon\">label</span>PROCESSOS</span></a>
-       </li>
-      <li>
-         <a class=\"waves-attach\" href=\"javascript:abreModal('#newTypeProcess');\"><span class=\"text-white\"><span class=\"icon\">add</span>NOVO TIPO</span></a>
-      </li>
-       ";
+         <li>
+           <a class=\"waves-attach\" href=\"javascript:abreModal('#listProcessos');\"><span class=\"text-white\"><span class=\"icon\">label</span>PROCESSOS</span></a>
+         </li>
+         <li>
+           <a class=\"waves-attach\" href=\"javascript:abreModal('#newTypeProcess');\"><span class=\"text-white\"><span class=\"icon\">add</span>NOVO TIPO</span></a>
+         </li>
+         ";
 }
 ?>
-   </ul>
- </nav>
-</div><!-- ./row -->
-<div class="row" style="margin-top: -5%;">
+     </ul>
+   </nav>
+ </div><!-- ./row -->
+ <div class="row" style="margin-top: -5%;">
   <table class="table">
     <tbody>
       <tr>
         <?php
 if ($permissao->saldos) {
 	echo "
-              <td>
-                <a class=\"\" href=\"javascript:mostra('rowSolicAdi');\"><span class=\"icon\">add</span>Solicitações de Adiantamento</a>
-              </td>
-            ";
+         <td>
+          <a class=\"\" href=\"javascript:mostra('rowSolicAdi');\"><span class=\"icon\">add</span>Solicitações de Adiantamento</a>
+        </td>
+        ";
 }
 if ($permissao->pedidos) {
 	echo "
-        <td>
-          <a class=\"\" href=\"javascript:mostra('rowAltPed');\"><span class=\"icon\">add</span>Solicitações de Alteração de Pedidos</a>
-        </td>
-  ";
+       <td>
+        <a class=\"\" href=\"javascript:mostra('rowAltPed');\"><span class=\"icon\">add</span>Solicitações de Alteração de Pedidos</a>
+      </td>
+      ";
 }
 ?>
-      </tr>
-    </tbody>
-  </table>
+  </tr>
+</tbody>
+</table>
 </div>
 <?php
 if ($permissao->recepcao) {
@@ -507,7 +507,7 @@ if ($permissao->recepcao) {
         <h2 class=\"modal-title content-sub-heading\">Processos Atendidos pelo SOF</h2>
       </div>
       <div class=\"modal-inner\">
-        <table id=\"tableListProcessos\" class=\"table\" style=\"width: 100%; display: none\">
+        <table id=\"tableListProcessos\" class=\"table\" style=\"width: 100%;\">
           <thead>
             <tr>
               <th>Número do Processo</th>
@@ -525,133 +525,131 @@ if ($permissao->recepcao) {
 if ($permissao->recepcao) {
 	echo "
   <div aria-hidden=\"true\" class=\"modal fade\" id=\"addProcesso\" role=\"dialog\" tabindex=\"-1\">
-  <div class=\"modal-dialog\" style=\"width: 50%;\">
-    <div class=\"modal-content\">
-      <div class=\"modal-heading\">
-        <a class=\"modal-close\" data-dismiss=\"modal\">×</a>
-        <h2 class=\"modal-title content-sub-heading\">Processo</h2>
-      </div>
-      <form id=\"formProcesso\" action=\"javascript:updateProcesso();\" method=\"post\">
-        <input id=\"id_processo\" type=\"hidden\" value=\"0\"></input>
-        <div class=\"modal-inner\">
-          <table style=\"width: 100%;\">
-            <tbody>
-              <tr>
-                <td>
-                  <div id=\"divNumProc\" class=\"form-group form-group-label\">
-                    <label class=\"floating-label\" for=\"num_processo\"><span class=\"icon\">label</span>&nbsp;Processo</label>
-                    <input class=\"form-control\" id=\"num_processo\" name=\"num_processo\" type=\"text\" required>
+    <div class=\"modal-dialog\" style=\"width: 50%;\">
+      <div class=\"modal-content\">
+        <div class=\"modal-heading\">
+          <a class=\"modal-close\" data-dismiss=\"modal\">×</a>
+          <h2 class=\"modal-title content-sub-heading\">Processo</h2>
+        </div>
+        <form id=\"formProcesso\" action=\"javascript:updateProcesso();\" method=\"post\">
+          <input id=\"id_processo\" type=\"hidden\" value=\"0\"></input>
+          <div class=\"modal-inner\">
+            <table style=\"width: 100%;\">
+              <tbody>
+                <tr>
+                  <td>
+                    <div id=\"divNumProc\" class=\"form-group form-group-label\">
+                      <label class=\"floating-label\" for=\"num_processo\"><span class=\"icon\">label</span>&nbsp;Processo</label>
+                      <input class=\"form-control\" id=\"num_processo\" name=\"num_processo\" type=\"text\" required>
+                    </div>
+                  </td>
+                  <td>
+                    <div class=\"form-group form-group-label\">
+                      <label class=\"floating-label\" for=\"tipo\"><span class=\"icon\">lock_outline</span>&nbsp;Tipo</label>
+                      <select id=\"tipo\" class=\"form-control\" name=\"tipo\" required>
+                        {$obj_Busca->getTiposProcessos()}
+                      </select>
+                    </div>
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    <div class=\"form-group form-group-label\">
+                      <label class=\"floating-label\" for=\"estante\"><span class=\"icon\">line_weight</span>&nbsp;Estante</label>
+                      <input class=\"form-control\" id=\"estante\" name=\"estante\" type=\"text\" required>
+                    </div>
+                  </td>
+                  <td>
+                    <div class=\"form-group form-group-label\">
+                      <label class=\"floating-label\" for=\"prateleira\"><span class=\"icon\">list</span>&nbsp;Prateleira</label>
+                      <input class=\"form-control\" id=\"prateleira\" name=\"prateleira\" type=\"text\" required>
+                    </div>
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    <div class=\"form-group form-group-label\">
+                      <label class=\"floating-label\" for=\"entrada\"><span class=\"icon\">date_range</span>&nbsp;Entrada (dd/mm/yyyy)</label>
+                      <input class=\"form-control\" id=\"entrada\" name=\"entrada\" type=\"text\" required maxlength=\"10\">
+                    </div>
+                  </td>
+                  <td>
+                    <div class=\"form-group form-group-label\">
+                      <label class=\"floating-label\" for=\"saida\"><span class=\"icon\">alarm</span>&nbsp;Saída (dd/mm/yyyy)</label>
+                      <input class=\"form-control\" id=\"saida\" name=\"saida\" type=\"text\" maxlength=\"10\">
+                    </div>
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    <div class=\"form-group form-group-label\">
+                      <label class=\"floating-label\" for=\"responsavel\"><span class=\"icon\">perm_identity</span>&nbsp;Responsável</label>
+                      <input class=\"form-control\" id=\"responsavel\" name=\"responsavel\" type=\"text\">
+                    </div>
+                  </td>
+                  <td>
+                    <div class=\"form-group form-group-label\">
+                      <label class=\"floating-label\" for=\"retorno\"><span class=\"icon\">date_range</span>&nbsp;Retorno (dd/mm/yyyy)</label>
+                      <input class=\"form-control\" id=\"retorno\" name=\"retorno\" type=\"text\" maxlength=\"10\">
+                    </div>
+                  </td>
+                </tr>
+                <tr>
+                  <td colspan=\"2\">
+                    <div class=\"form-group form-group-label\">
+                      <label class=\"floating-label\" for=\"obs\"><span class=\"icon\">announcement</span>&nbsp;Observação</label>
+                      <textarea class=\"form-control textarea-autosize\" id=\"obs\" name=\"obs\" rows=\"1\" required></textarea>
+                    </div>
+                  </td>
+                  <td></td>
+                </tr>
+              </tbody>
+            </table>
+            <div id=\"loading\" class=\"progress-circular\" style=\"margin-left: 45%; display: none;\">
+              <div class=\"progress-circular-wrapper\">
+                <div class=\"progress-circular-inner\">
+                  <div class=\"progress-circular-left\">
+                    <div class=\"progress-circular-spinner\"></div>
                   </div>
-                </td>
-                <td>
-                  <div class=\"form-group form-group-label\">
-                    <label class=\"floating-label\" for=\"tipo\"><span class=\"icon\">lock_outline</span>&nbsp;Tipo</label>
-                    <!--
-                    <input class=\"form-control\" id=\"tipo\" name=\"tipo\" type=\"text\" required>
-                    -->
-                    <select id=\"tipo\" class=\"form-control\" name=\"tipo\" required>
-                      {$obj_Busca->getTiposProcessos()}
-                    </select>
+                  <div class=\"progress-circular-gap\"></div>
+                  <div class=\"progress-circular-right\">
+                    <div class=\"progress-circular-spinner\"></div>
                   </div>
-                </td>
-              </tr>
-              <tr>
-                <td>
-                  <div class=\"form-group form-group-label\">
-                    <label class=\"floating-label\" for=\"estante\"><span class=\"icon\">line_weight</span>&nbsp;Estante</label>
-                    <input class=\"form-control\" id=\"estante\" name=\"estante\" type=\"text\" required>
-                  </div>
-                </td>
-                <td>
-                  <div class=\"form-group form-group-label\">
-                    <label class=\"floating-label\" for=\"prateleira\"><span class=\"icon\">list</span>&nbsp;Prateleira</label>
-                    <input class=\"form-control\" id=\"prateleira\" name=\"prateleira\" type=\"text\" required>
-                  </div>
-                </td>
-              </tr>
-              <tr>
-                <td>
-                  <div class=\"form-group form-group-label\">
-                    <label class=\"floating-label\" for=\"entrada\"><span class=\"icon\">date_range</span>&nbsp;Entrada (dd/mm/yyyy)</label>
-                    <input class=\"form-control\" id=\"entrada\" name=\"entrada\" type=\"text\" required maxlength=\"10\">
-                  </div>
-                </td>
-                <td>
-                  <div class=\"form-group form-group-label\">
-                    <label class=\"floating-label\" for=\"saida\"><span class=\"icon\">alarm</span>&nbsp;Saída (dd/mm/yyyy)</label>
-                    <input class=\"form-control\" id=\"saida\" name=\"saida\" type=\"text\" maxlength=\"10\">
-                  </div>
-                </td>
-              </tr>
-              <tr>
-                <td>
-                  <div class=\"form-group form-group-label\">
-                    <label class=\"floating-label\" for=\"responsavel\"><span class=\"icon\">perm_identity</span>&nbsp;Responsável</label>
-                    <input class=\"form-control\" id=\"responsavel\" name=\"responsavel\" type=\"text\">
-                  </div>
-                </td>
-                <td>
-                  <div class=\"form-group form-group-label\">
-                    <label class=\"floating-label\" for=\"retorno\"><span class=\"icon\">date_range</span>&nbsp;Retorno (dd/mm/yyyy)</label>
-                    <input class=\"form-control\" id=\"retorno\" name=\"retorno\" type=\"text\" maxlength=\"10\">
-                  </div>
-                </td>
-              </tr>
-              <tr>
-                <td colspan=\"2\">
-                  <div class=\"form-group form-group-label\">
-                    <label class=\"floating-label\" for=\"obs\"><span class=\"icon\">announcement</span>&nbsp;Observação</label>
-                    <textarea class=\"form-control textarea-autosize\" id=\"obs\" name=\"obs\" rows=\"1\" required></textarea>
-                  </div>
-                </td>
-                <td></td>
-              </tr>
-            </tbody>
-          </table>
-          <div id=\"loading\" class=\"progress-circular\" style=\"margin-left: 45%; display: none;\">
-            <div class=\"progress-circular-wrapper\">
-              <div class=\"progress-circular-inner\">
-                <div class=\"progress-circular-left\">
-                  <div class=\"progress-circular-spinner\"></div>
-                </div>
-                <div class=\"progress-circular-gap\"></div>
-                <div class=\"progress-circular-right\">
-                  <div class=\"progress-circular-spinner\"></div>
                 </div>
               </div>
             </div>
           </div>
-        </div>
-        <div class=\"modal-footer margin-bottom\">
-          <button class=\"btn btn-brand waves-attach waves-light waves-effect\" type=\"submit\" style=\"width: 100%;\"><span class=\"icon\">send</span>&nbsp;Enviar</button>
-        </div>
-      </form>
-    </div>
-  </div>
-</div>
-<div class=\"modal fade\" id=\"newTypeProcess\" role=\"dialog\">
-  <div class=\"modal-dialog\" style=\"width: 40%;\">
-    <div class=\"modal-content\">
-      <div class=\"modal-heading\">
-        <a class=\"modal-close\" data-dismiss=\"modal\">×</a>
-        <h2 class=\"modal-title content-sub-heading\">Novo Tipo de Processo</h2>
-      </div>
-      <form action=\"../php/geral.php\" method=\"post\">
-        <input type=\"hidden\" name=\"admin\" value=\"1\"></input>
-        <input type=\"hidden\" name=\"form\" value=\"newTypeProcess\"></input>
-        <div class=\"modal-inner\">
-          <div class=\"form-group form-group-label\">
-            <label class=\"floating-label\" for=\"newType\"><span class=\"icon\">perm_identity</span>&nbsp;Nome</label>
-            <input class=\"form-control\" id=\"newType\" name=\"newType\" type=\"text\" required>
+          <div class=\"modal-footer margin-bottom\">
+            <button class=\"btn btn-brand waves-attach waves-light waves-effect\" type=\"submit\" style=\"width: 100%;\"><span class=\"icon\">send</span>&nbsp;Enviar</button>
           </div>
-        <div class=\"modal-footer margin-bottom\">
-          <button class=\"btn btn-brand waves-attach waves-light waves-effect\" type=\"submit\" style=\"width: 100%;\"><span class=\"icon\">autorenew</span>&nbsp;Cadastrar</button>
-        </div>
-      </form>
+        </form>
+      </div>
     </div>
   </div>
-</div>
-";
+  <div class=\"modal fade\" id=\"newTypeProcess\" role=\"dialog\">
+    <div class=\"modal-dialog\" style=\"width: 40%;\">
+      <div class=\"modal-content\">
+        <div class=\"modal-heading\">
+          <a class=\"modal-close\" data-dismiss=\"modal\">×</a>
+          <h2 class=\"modal-title content-sub-heading\">Novo Tipo de Processo</h2>
+        </div>
+        <form action=\"../php/geral.php\" method=\"post\">
+          <input type=\"hidden\" name=\"admin\" value=\"1\"></input>
+          <input type=\"hidden\" name=\"form\" value=\"newTypeProcess\"></input>
+          <div class=\"modal-inner\">
+            <div class=\"form-group form-group-label\">
+              <label class=\"floating-label\" for=\"newType\"><span class=\"icon\">perm_identity</span>&nbsp;Nome</label>
+              <input class=\"form-control\" id=\"newType\" name=\"newType\" type=\"text\" required>
+            </div>
+            <div class=\"modal-footer margin-bottom\">
+              <button class=\"btn btn-brand waves-attach waves-light waves-effect\" type=\"submit\" style=\"width: 100%;\"><span class=\"icon\">autorenew</span>&nbsp;Cadastrar</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+  ";
 }
 ?>
 <div class="modal fade" id="myInfos" role="dialog">
@@ -711,6 +709,7 @@ if ($permissao->recepcao) {
       </div>
       <div class="modal-footer margin-bottom">
         <p class="text-right"><a class="btn waves-attach waves-effect" data-dismiss="modal">OK</a></p>
+
       </div>
     </div>
   </div>
