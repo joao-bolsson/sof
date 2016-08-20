@@ -350,7 +350,6 @@ $('#listProcessos').on('shown.bs.modal', function(event) {
 	}
 });
 
-<<<<<<< HEAD
 function listProcessos(permissao) {
 	if (!$.fn.DataTable.isDataTable('#tableListProcessos')) {
 		if (permissao == 'users') {
@@ -370,18 +369,6 @@ function listProcessos(permissao) {
 		}
 	}
 	$('#listProcessos').modal('show');
-=======
-function listProcessos() {
-	$('#listProcessos').modal('show');
-	if (!$.fn.DataTable.isDataTable('#tableListProcessos')) {
-		$.post('../php/busca.php', {
-			users: 1,
-			form: 'listProcessos'
-		}, function(resposta) {
-			document.getElementById('tbodyListProcessos').innerHTML = resposta;
-		});
-	}
->>>>>>> 8f5598b472ebcfab676d578234e4ea7d1a784be3
 }
 
 $('#listAdiantamentos').on('shown.bs.modal', function(event) {
@@ -425,10 +412,6 @@ $('#listRascunhos').on('shown.bs.modal', function(event) {
 });
 
 function listRascunhos() {
-<<<<<<< HEAD
-=======
-	tableListRascunhos
->>>>>>> 8f5598b472ebcfab676d578234e4ea7d1a784be3
 	$('#listRascunhos').modal('show');
 	if (!$.fn.DataTable.isDataTable('#tableListRascunhos')) {
 		$.post('../php/busca.php', {
