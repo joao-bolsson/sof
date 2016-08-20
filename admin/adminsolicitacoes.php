@@ -43,7 +43,7 @@ $permissao = $obj_Busca->getPermissoes($_SESSION["id"]);
       </li>
     <?php endif;?>
     <li>
-      <a class="btn btn-flat waves-attach waves-light" href="javascript:abreModal('#myInfos');"><span class="text-white"><span class="icon">lock_outline</span><span id="userLogado"><?php echo $_SESSION["nome"] ?></span></span></a>
+      <a class="btn btn-flat waves-attach waves-light" href="javascript:abreModal('#myInfos');"><span class="text-white"><span class="icon">lock_outline</span><span id="userLogado"><?=$_SESSION["nome"]?></span></span></a>
     </li>
   </ul>
   <nav class="tab-nav pull-right hidden-xx">
@@ -89,7 +89,7 @@ $permissao = $obj_Busca->getPermissoes($_SESSION["id"]);
             <?php endif;?>
             <?php if ($permissao->recepcao): ?>
             <li>
-              <a class="waves-attach" href="javascript:abreModal('#listProcessos');"><span class="text-white"><span class="icon">label</span>PROCESSOS</span></a>
+              <a class="waves-attach" href="javascript:listProcessos('admin');"><span class="text-white"><span class="icon">label</span>PROCESSOS</span></a>
             </li>
             <li>
               <a class="waves-attach" href="javascript:abreModal('#newTypeProcess');"><span class="text-white"><span class="icon">add</span>NOVO TIPO</span></a>
@@ -294,9 +294,6 @@ $permissao = $obj_Busca->getPermissoes($_SESSION["id"]);
   </div><!-- ./card-main -->
 </div> <!-- ./card -->
 </div> <!-- ./row -->
-
-<!-- DETALHES DO PEDIDO -->
-
 <div class="row">
   <div class="card margin-top-no">
    <div class="card-main">
@@ -514,8 +511,7 @@ $permissao = $obj_Busca->getPermissoes($_SESSION["id"]);
               <th></th>
             </tr>
           </thead>
-          <tbody id="contentListProcessos">
-          </tbody>
+          <tbody id="tbodyListProcessos"></tbody>
         </table>
       </div>
     </div>
@@ -658,11 +654,11 @@ $permissao = $obj_Busca->getPermissoes($_SESSION["id"]);
         <div class="modal-inner">
           <div class="form-group form-group-label">
             <label class="floating-label" for="nameUser"><span class="icon">perm_identity</span>&nbsp;Nome</label>
-            <input class="form-control" id="nameUser" name="nameUser" type="text" value="<?php echo $_SESSION['nome'] ?>" required>
+            <input class="form-control" id="nameUser" name="nameUser" type="text" value="<?=$_SESSION['nome']?>" required>
           </div>
           <div class="form-group form-group-label">
             <label class="floating-label" for="emailUser"><span class="icon">message</span>&nbsp;E-mail</label>
-            <input class="form-control" id="emailUser" name="emailUser" type="email" value="<?php echo $_SESSION['email'] ?>" required>
+            <input class="form-control" id="emailUser" name="emailUser" type="email" value="<?=$_SESSION['email']?>" required>
           </div>
           <div class="form-group form-group-label">
             <label class="floating-label" for="senhaAtualUser"><span class="icon">lock_outline</span>&nbsp;Senha Atual</label>

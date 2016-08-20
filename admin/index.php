@@ -248,50 +248,50 @@ if (!$permissao->noticias) {
     </div>
 </div>
 <div class="modal fade" id="myInfos" role="dialog">
-  <div class="modal-dialog" style="width: 40%;">
-    <div class="modal-content">
-      <div class="modal-heading">
-        <a class="modal-close" data-dismiss="modal">×</a>
-        <h2 class="modal-title content-sub-heading">Informações do Usuário</h2>
+    <div class="modal-dialog" style="width: 40%;">
+        <div class="modal-content">
+            <div class="modal-heading">
+                <a class="modal-close" data-dismiss="modal">×</a>
+                <h2 class="modal-title content-sub-heading">Informações do Usuário</h2>
+            </div>
+            <form id="altInfo" action="javascript:altInfoUser();" method="post">
+                <div class="modal-inner">
+                    <div class="form-group form-group-label">
+                        <label class="floating-label" for="nameUser"><span class="icon">perm_identity</span>&nbsp;Nome</label>
+                        <input class="form-control" id="nameUser" name="nameUser" type="text" value="<?=$_SESSION['nome']?>" required>
+                    </div>
+                    <div class="form-group form-group-label">
+                        <label class="floating-label" for="emailUser"><span class="icon">message</span>&nbsp;E-mail</label>
+                        <input class="form-control" id="emailUser" name="emailUser" type="email" value="<?=$_SESSION['email']?>" required>
+                    </div>
+                    <div class="form-group form-group-label">
+                        <label class="floating-label" for="senhaAtualUser"><span class="icon">lock_outline</span>&nbsp;Senha Atual</label>
+                        <input class="form-control" id="senhaAtualUser" name="senhaAtualUser" type="password" required>
+                    </div>
+                    <div class="form-group form-group-label">
+                        <label class="floating-label" for="senhaUser"><span class="icon">lock_outline</span>&nbsp;Nova Senha</label>
+                        <input class="form-control" id="senhaUser" name="senhaUser" type="password" required>
+                    </div>
+                    <div id="loader" class="progress-circular" style="margin-left: 45%; display: none;">
+                        <div class="progress-circular-wrapper">
+                            <div class="progress-circular-inner">
+                                <div class="progress-circular-left">
+                                    <div class="progress-circular-spinner"></div>
+                                </div>
+                                <div class="progress-circular-gap"></div>
+                                <div class="progress-circular-right">
+                                    <div class="progress-circular-spinner"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer margin-bottom">
+                  <button class="btn btn-brand waves-attach waves-light waves-effect" type="submit" style="width: 100%;"><span class="icon">autorenew</span>&nbsp;Atualizar</button>
+                </div>
+            </form>
+        </div>
     </div>
-    <form id="altInfo" action="javascript:altInfoUser();" method="post">
-        <div class="modal-inner">
-          <div class="form-group form-group-label">
-            <label class="floating-label" for="nameUser"><span class="icon">perm_identity</span>&nbsp;Nome</label>
-            <input class="form-control" id="nameUser" name="nameUser" type="text" value="<?=$_SESSION['nome']?>" required>
-        </div>
-        <div class="form-group form-group-label">
-            <label class="floating-label" for="emailUser"><span class="icon">message</span>&nbsp;E-mail</label>
-            <input class="form-control" id="emailUser" name="emailUser" type="email" value="<?=$_SESSION['email']?>" required>
-        </div>
-        <div class="form-group form-group-label">
-            <label class="floating-label" for="senhaAtualUser"><span class="icon">lock_outline</span>&nbsp;Senha Atual</label>
-            <input class="form-control" id="senhaAtualUser" name="senhaAtualUser" type="password" required>
-        </div>
-        <div class="form-group form-group-label">
-            <label class="floating-label" for="senhaUser"><span class="icon">lock_outline</span>&nbsp;Nova Senha</label>
-            <input class="form-control" id="senhaUser" name="senhaUser" type="password" required>
-        </div>
-        <div id="loader" class="progress-circular" style="margin-left: 45%; display: none;">
-            <div class="progress-circular-wrapper">
-              <div class="progress-circular-inner">
-                <div class="progress-circular-left">
-                  <div class="progress-circular-spinner"></div>
-              </div>
-              <div class="progress-circular-gap"></div>
-              <div class="progress-circular-right">
-                  <div class="progress-circular-spinner"></div>
-              </div>
-          </div>
-      </div>
-  </div>
-</div>
-<div class="modal-footer margin-bottom">
-  <button class="btn btn-brand waves-attach waves-light waves-effect" type="submit" style="width: 100%;"><span class="icon">autorenew</span>&nbsp;Atualizar</button>
-</div>
-</form>
-</div>
-</div>
 </div>
 <!-- js -->
 <script src="../plugins/jQuery/jquery.min.js"></script>
@@ -345,15 +345,15 @@ if (!$permissao->noticias) {
             charCounterCount: false,
             heightMin: 100,
             heightMax: 400,
-                                        // Set the image upload URL.
-                                        imageUploadURL: 'upload_image.php',
-                                        // Set the file upload URL.
-                                        fileUploadURL: 'upload_file.php',
-                                        // Set the image upload URL.
-                                        imageManagerLoadURL: 'load_images.php',
-                                        // Set the image delete URL.
-                                        imageManagerDeleteURL: 'delete_image.php',
-                                    });
+            // Set the image upload URL.
+            imageUploadURL: 'upload_image.php',
+            // Set the file upload URL.
+            fileUploadURL: 'upload_file.php',
+            // Set the image upload URL.
+            imageManagerLoadURL: 'load_images.php',
+            // Set the image delete URL.
+            imageManagerDeleteURL: 'delete_image.php',
+        });
         $('#data').datepicker({
             format: "yyyy-mm-dd",
             selectMonths: false,

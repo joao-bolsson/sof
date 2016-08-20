@@ -1,6 +1,3 @@
-/**
- *	Comment.
- */
 function mostra(row) {
 	var display = document.getElementById(row).style.display;
 	$('#' + row).css('transition-delay', '0.1s');
@@ -194,7 +191,6 @@ function iniRecepcao() {
 		document.getElementById('conteudoRecepcao').innerHTML = resposta;
 		iniDataTable('#tableRecepcao');
 	});
-	iniListProcessos();
 }
 
 function iniListProcessos() {
@@ -203,7 +199,7 @@ function iniListProcessos() {
 		form: 'listProcessos',
 	}, function(resposta) {
 		destroyDataTable('#tableListProcessos');
-		document.getElementById('contentListProcessos').innerHTML = resposta;
+		document.getElementById('tbodyListProcessos').innerHTML = resposta;
 		iniDataTable('#tableListProcessos');
 	});
 }
@@ -307,17 +303,7 @@ function iniFreeSaldos() {
 		admin: 1,
 		form: 'iniFreeSaldos'
 	}, function(resposta) {
-		// Quando terminada a requisição
-		// Se a resposta é um erro
-		if (resposta == false) {
-			// Exibe o erro na div
-			alert(resposta);
-			window.location.href = 'index.php';
-		}
-		// Se resposta for false, ou seja, não ocorreu nenhum erro
-		else {
-			document.getElementById('contFreeSaldos').innerHTML = resposta;
-		}
+		document.getElementById('contFreeSaldos').innerHTML = resposta;
 	});
 }
 
@@ -364,16 +350,25 @@ $('#listProcessos').on('shown.bs.modal', function(event) {
 	}
 });
 
-function listProcessos() {
-	$('#listProcessos').modal('show');
+function listProcessos(permissao) {
 	if (!$.fn.DataTable.isDataTable('#tableListProcessos')) {
-		$.post('../php/busca.php', {
-			users: 1,
-			form: 'listProcessos'
-		}, function(resposta) {
-			document.getElementById('tbodyListProcessos').innerHTML = resposta;
-		});
+		if (permissao == 'users') {
+			$.post('../php/busca.php', {
+				users: 1,
+				form: 'listProcessos'
+			}, function(resposta) {
+				document.getElementById('tbodyListProcessos').innerHTML = resposta;
+			});
+		} else if (permissao == 'admin') {
+			$.post('../php/busca.php', {
+				admin: 1,
+				form: 'listProcessos'
+			}, function(resposta) {
+				document.getElementById('tbodyListProcessos').innerHTML = resposta;
+			});
+		}
 	}
+	$('#listProcessos').modal('show');
 }
 
 $('#listAdiantamentos').on('shown.bs.modal', function(event) {
@@ -417,7 +412,6 @@ $('#listRascunhos').on('shown.bs.modal', function(event) {
 });
 
 function listRascunhos() {
-	tableListRascunhos
 	$('#listRascunhos').modal('show');
 	if (!$.fn.DataTable.isDataTable('#tableListRascunhos')) {
 		$.post('../php/busca.php', {

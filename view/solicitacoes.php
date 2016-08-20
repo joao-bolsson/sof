@@ -87,7 +87,7 @@ $saldo_mes_anterior = $obj_Busca->getSaldoMesAnterior($_SESSION["id_setor"]);
                                 <a class="waves-attach" href="javascript:listSolicAltPedidos();"><span class="text-white"><span class="icon">autorenew</span>SOLIC ALTERAÇÕES PEDIDOS</span></a>
                             </li>
                             <li>
-                                <a class="waves-attach" href="javascript:listProcessos();"><span class="text-white"><span class="icon">label</span>PROCESSOS</span></a>
+                                <a class="waves-attach" href="javascript:listProcessos('users');"><span class="text-white"><span class="icon">label</span>PROCESSOS</span></a>
                             </li>
                         </ul>
                     </nav>
