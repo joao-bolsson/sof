@@ -1,4 +1,4 @@
-<?php
+    <?php
 session_start();
 ini_set('display_erros', true);
 error_reporting(E_ALL);
@@ -18,9 +18,9 @@ $saldo_aditivado = $obj_Saldo->saldo_aditivado;
 
 $saldo_mes_anterior = $obj_Busca->getSaldoMesAnterior($_SESSION["id_setor"]);
 ?>
-<!DOCTYPE html>
-<html lang="pt">
-<head>
+   <!DOCTYPE html>
+   <html lang="pt">
+   <head>
     <meta charset="UTF-8">
     <meta content="IE=edge" http-equiv="X-UA-Compatible">
     <meta content="initial-scale=1.0, maximum-scale=1.0, user-scalable=no, width=device-width" name="viewport">
@@ -36,6 +36,7 @@ $saldo_mes_anterior = $obj_Busca->getSaldoMesAnterior($_SESSION["id_setor"]);
 
     <!-- favicon -->
     <link rel="icon" href="../favicon.ico">
+<<<<<<< HEAD
 </head>
 <body class="page-brand" onload="iniPagSolicitacoes();">
     <header class="header header-transparent header-waterfall affix">
@@ -188,6 +189,162 @@ $saldo_mes_anterior = $obj_Busca->getSaldoMesAnterior($_SESSION["id_setor"]);
                             </form>
                         </div><!-- ./card-main -->
                     </div> <!-- ./card -->
+=======
+    <head>
+        <body class="page-brand" onload="iniPagSolicitacoes();">
+            <header class="header header-transparent header-waterfall affix">
+                <nav class="tab-nav pull-left hidden-xx">
+                    <ul class="nav nav-list">
+                        <li>
+                            <a class="btn btn-flat waves-attach waves-light" href="javascript:abreModal('#myInfos');"><span class="text-white"><span class="icon">lock_outline</span><span id="userLogado"><?=$_SESSION["nome"]?></span></span></a>
+                        </li>
+                    </ul>
+                </nav>
+                <nav class="tab-nav pull-right hidden-xx">
+                    <ul class="nav nav-list">
+                        <li>
+                            <a class="btn btn-flat waves-attach waves-light" href="../admin/sair.php"><span class="text-white"><span class="icon">exit_to_app</span>SAIR</span></a>
+                        </li>
+                    </ul>
+                </nav>
+            </header>
+            <main class="content">
+                <div class="content-heading">
+                    <div class="container">
+                        <div class="row">
+                            <h1 class="heading"><img src="../sof_files/logo_blue.png" alt="Setor de Orçamento e Finanças – HUSM" /></h1>
+                            <div class="text-header">
+                                <p>Setor de Orçamento e Finanças</p>
+                                <span>Hospital Universitário de Santa Maria</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="container">
+                    <div class="row">
+                        <section class="content-inner margin-top-no">
+                            <nav class="tab-nav ui-tab-tab">
+                                <ul class="nav nav-list">
+                                    <li>
+                                        <a class="waves-attach" href="javascript:listRascunhos();"><span class="text-white"><span class="icon">drafts</span>RASCUNHOS</span></a>
+                                    </li>
+                                    <li>
+                                        <a class="waves-attach" href="javascript:listPedidos();"><span class="text-white"><span class="icon">description</span>MEUS PEDIDOS</span></a>
+                                    </li>
+                                    <li>
+                                        <a class="waves-attach" href="javascript:abreModal('#saldos');"><span class="text-white"><span class="icon">attach_money</span>SALDOS</span></a>
+                                    </li>
+                                    <li>
+                                        <a class="waves-attach" href="javascript:listAdiantamentos();"><span class="text-white"><span class="icon">money_off</span>MEUS ADIANTAMENTOS</span></a>
+                                    </li>
+                                    <li>
+                                        <a class="waves-attach" href="javascript:listSolicAltPedidos();"><span class="text-white"><span class="icon">autorenew</span>SOLIC ALTERAÇÕES PEDIDOS</span></a>
+                                    </li>
+                                    <li>
+                                        <a class="waves-attach" href="javascript:listProcessos();"><span class="text-white"><span class="icon">label</span>PROCESSOS</span></a>
+                                    </li>
+                                </ul>
+                            </nav>
+                        </div><!-- ./row -->
+                        <div class="row">
+                            <div id="card" class="card margin-top-no">
+                                <div class="card-main">
+                                    <div class="card-header card-brand">
+                                        <div class="card-header-side pull-left">
+                                            <p class="card-heading">Solicitações</p>
+                                        </div>
+                                    </div><!--  ./card-header -->
+                                    <div id="groupNumProc" class="form-group form-group-label">
+                                        <label class="floating-label padding-left" for="searchProcesso" style="font-size: 14pt;"><span class="icon">search</span>&nbsp;Digite o número do processo</label>
+                                        <input class="form-control padding-left" id="searchProcesso" name="search" type="text" style="font-size: 14pt;">
+                                    </div>
+                                    <button class="btn waves-attach" type="button" onclick="pesquisarProcesso(0);" style="width: 100%;"><span class="icon" style="font-weight: bold;">search</span></button>
+                                    <div class="card-inner">
+                                        <table class="table" id="tableProcessos">
+                                            <thead>
+                                                <th></th>
+                                                <th>NOME_FORNECEDOR</th>
+                                                <th>COD_REDUZIDO</th>
+                                                <th>QT_SOLICITADA</th>
+                                                <th>COMPLEMENTO_ITEM</th>
+                                                <th style="display: none;"></th>
+                                                <th>VL_UNITARIO</th>
+                                                <th>QT_SALDO</th>
+                                                <th>QT_UTILIZADO</th>
+                                                <th>VL_SALDO</th>
+                                                <th>VL_UTILIZADO</th>
+                                                <th>QT_CONTRATO</th>
+                                            </thead>
+                                            <tbody id="conteudoProcesso">
+
+                                            </tbody>
+                                        </table>
+                                    </div><!-- ./card-inner -->
+                                </div><!-- ./card-main -->
+                            </div> <!-- ./card -->
+                        </div>
+                        <div class="row">
+                            <div class="card margin-top-no">
+                                <div class="card-main">
+                                    <div class="card-header card-brand">
+                                        <div class="card-header-side pull-left">
+                                            <p class="card-heading">Pedido</p>
+                                        </div>
+                                        <div class="card-header-side pull-right" style="margin-left: 70%;">
+                                            <p class="card-heading">SALDO <span id="text_saldo_total">R$ <?=$saldo_total?><span></p>
+                                        </div>
+                                    </div><!--  ./card-header -->
+                                    <form action="../php/geral.php" method="POST">
+                                        <input type="hidden" name="users" value="1"></input>
+                                        <input type="hidden" name="form" value="pedido"></input>
+                                        <input id="pedido" type="hidden" name="pedido" value="0"></input>
+                                        <div class="card-inner">
+                                            <table class="table">
+                                                <thead>
+                                                    <th></th>
+                                                    <th>COD_REDUZIDO</th>
+                                                    <th>COMPLEMENTO_ITEM</th>
+                                                    <th>VL_UNITARIO</th>
+                                                    <th>NOME_FORNECEDOR</th>
+                                                    <th>NUM_LICITACAO</th>
+                                                    <th>QT_SOLICITADA</th>
+                                                    <th>VALOR</th>
+                                                </thead>
+                                                <tbody id="conteudoPedido">
+
+                                                </tbody>
+                                            </table>
+                                            <table class="table">
+                                                <tr>
+                                                    <td>
+                                                        <div class="form-group form-group-label control-highlight">
+                                                            <label class="floating-label padding-left" for="total" style="font-size: 14pt;"><span class="icon">attach_money</span>&nbsp;Total</label>
+                                                            <input class="form-control padding-left" id="total" name="total" style="font-size: 14pt;" type="text" disabled value="R$ 0">
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                                <input id="total_hidden" type="hidden" name="total_hidden" value="0">
+                                                <input id="saldo_total" type="hidden" name="saldo_total" value="<?=$saldo_total?>">
+                                            </table>
+                                            <div class="form-group">
+                                                <table class="table">
+                                                    <tr>
+                                                        <?=$obj_Busca->getPrioridades();?>
+                                                    </tr>
+                                                </table>
+                                            </div>
+                                        </div><!-- ./card-inner -->
+                                        <div class="card-action">
+                                            <div class="card-action-btn">
+                                                <button class="btn btn-brand waves-attach" type="submit" style="width: 100%;"><span class="icon">check</span>&nbsp;Enviar Pedido / Salvar Rascunho</button>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div><!-- ./card-main -->
+                            </div> <!-- ./card -->
+                        </div>
+                    </section>
+>>>>>>> 8f5598b472ebcfab676d578234e4ea7d1a784be3
                 </div>
             </section>
         </div>
@@ -241,6 +398,7 @@ $saldo_mes_anterior = $obj_Busca->getSaldoMesAnterior($_SESSION["id_setor"]);
                         <label class="floating-label" for="emailUser"><span class="icon">message</span>&nbsp;E-mail</label>
                         <input class="form-control" id="emailUser" name="emailUser" type="email" value="<?=$_SESSION['email']?>" required>
                     </div>
+<<<<<<< HEAD
                     <div class="form-group form-group-label">
                         <label class="floating-label" for="senhaAtualUser"><span class="icon">lock_outline</span>&nbsp;Senha Atual</label>
                         <input class="form-control" id="senhaAtualUser" name="senhaAtualUser" type="password" required>
@@ -258,6 +416,37 @@ $saldo_mes_anterior = $obj_Busca->getSaldoMesAnterior($_SESSION["id_setor"]);
                                 <div class="progress-circular-gap"></div>
                                 <div class="progress-circular-right">
                                     <div class="progress-circular-spinner"></div>
+=======
+                    <form id="altInfo" action="javascript:altInfoUser();" method="post">
+                        <div class="modal-inner">
+                            <div class="form-group form-group-label">
+                                <label class="floating-label" for="nameUser"><span class="icon">perm_identity</span>&nbsp;Nome</label>
+                                <input class="form-control" id="nameUser" name="nameUser" type="text" value="<?=$_SESSION['nome']?>" required>
+                            </div>
+                            <div class="form-group form-group-label">
+                                <label class="floating-label" for="emailUser"><span class="icon">message</span>&nbsp;E-mail</label>
+                                <input class="form-control" id="emailUser" name="emailUser" type="email" value="<?=$_SESSION['email']?>" required>
+                            </div>
+                            <div class="form-group form-group-label">
+                                <label class="floating-label" for="senhaAtualUser"><span class="icon">lock_outline</span>&nbsp;Senha Atual</label>
+                                <input class="form-control" id="senhaAtualUser" name="senhaAtualUser" type="password" required>
+                            </div>
+                            <div class="form-group form-group-label">
+                                <label class="floating-label" for="senhaUser"><span class="icon">lock_outline</span>&nbsp;Nova Senha</label>
+                                <input class="form-control" id="senhaUser" name="senhaUser" type="password" required>
+                            </div>
+                            <div id="loader" class="progress-circular" style="margin-left: 45%; display: none;">
+                                <div class="progress-circular-wrapper">
+                                    <div class="progress-circular-inner">
+                                        <div class="progress-circular-left">
+                                            <div class="progress-circular-spinner"></div>
+                                        </div>
+                                        <div class="progress-circular-gap"></div>
+                                        <div class="progress-circular-right">
+                                            <div class="progress-circular-spinner"></div>
+                                        </div>
+                                    </div>
+>>>>>>> 8f5598b472ebcfab676d578234e4ea7d1a784be3
                                 </div>
                             </div>
                         </div>
@@ -291,6 +480,7 @@ $saldo_mes_anterior = $obj_Busca->getSaldoMesAnterior($_SESSION["id_setor"]);
                 </table>
             </div>
         </div>
+<<<<<<< HEAD
     </div>
 </div>
 <div aria-hidden="true" class="modal fade" id="listPedidos" role="dialog" tabindex="-1">
@@ -333,6 +523,52 @@ $saldo_mes_anterior = $obj_Busca->getSaldoMesAnterior($_SESSION["id_setor"]);
                     </thead>
                     <tbody id="tbodyListProcessos"></tbody>
                 </table>
+=======
+        <div aria-hidden="true" class="modal fade" id="listAdiantamentos" role="dialog" tabindex="-1">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-heading">
+                        <a class="modal-close" data-dismiss="modal">×</a>
+                        <h2 class="modal-title content-sub-heading">Solicitações de Adiantamentos</h2>
+                    </div>
+                    <div class="modal-inner">
+                        <table class="table" id="tableListAdiantamentos" style="width: 100%;">
+                            <thead>
+                                <th>DATA_SOLICITACAO</th>
+                                <th>DATA_ANALISE</th>
+                                <th>MES_SUBTRAIDO</th>
+                                <th>VALOR_ADIANTADO</th>
+                                <th>JUSTIFICATIVA</th>
+                                <th>STATUS</th>
+                            </thead>
+                            <tbody id="tbodyListAdiantamentos"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div aria-hidden="true" class="modal fade" id="listPedidos" role="dialog" tabindex="-1">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-heading">
+                        <a class="modal-close" data-dismiss="modal">×</a>
+                        <h2 class="modal-title content-sub-heading">Meus Pedidos</h2>
+                    </div>
+                    <div class="modal-inner">
+                        <table id="tableListPedidos" class="table" style="width: 100%;">
+                            <thead>
+                                <th>RefMes</th>
+                                <th>Data de Envio</th>
+                                <th>Prioridade</th>
+                                <th>Status</th>
+                                <th>Valor</th>
+                                <th>Opções</th>
+                            </thead>
+                            <tbody id="tbodyListPedidos"></tbody>
+                        </table>
+                    </div>
+                </div>
+>>>>>>> 8f5598b472ebcfab676d578234e4ea7d1a784be3
             </div>
         </div>
     </div>
@@ -350,9 +586,22 @@ $saldo_mes_anterior = $obj_Busca->getSaldoMesAnterior($_SESSION["id_setor"]);
                         <label class="floating-label" for="id_pedido_alt"><span class="icon">label</span>&nbsp;Pedido</label>
                         <input class="form-control" id="id_pedido_alt" name="id_pedido_alt" type="number" required disabled>
                     </div>
+<<<<<<< HEAD
                     <div class="form-group form-group-label">
                         <label class="floating-label" for="justificativa_alt_ped"><span class="icon">announcement</span>&nbsp;Justificativa</label>
                         <textarea class="form-control textarea-autosize" id="justificativa_alt_ped" name="justificativa_alt_ped" rows="1" required></textarea>
+=======
+                    <div class="modal-inner">
+                        <table id="tableListProcessos" class="table" style="width: 100%;">
+                            <thead>
+                                <tr>
+                                    <th>Número do Processo</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody id="tbodyListProcessos"></tbody>
+                        </table>
+>>>>>>> 8f5598b472ebcfab676d578234e4ea7d1a784be3
                     </div>
                 </div>
                 <div class="modal-footer margin-bottom">
@@ -382,6 +631,7 @@ $saldo_mes_anterior = $obj_Busca->getSaldoMesAnterior($_SESSION["id_setor"]);
                 </table>
             </div>
         </div>
+<<<<<<< HEAD
     </div>
 </div>
 <div aria-hidden="true" class="modal fade" id="listRascunhos" role="dialog" tabindex="-1">
@@ -452,6 +702,77 @@ $saldo_mes_anterior = $obj_Busca->getSaldoMesAnterior($_SESSION["id_setor"]);
                     <div class="form-group form-group-label">
                         <label class="floating-label" for="valor_adiantamento"><span class="icon">attach_money</span>&nbsp;Valor</label>
                         <input class="form-control" id="valor_adiantamento" name="valor_adiantamento" type="number" step="0.001" min="0.001" max="2000.000" required>
+=======
+        <div aria-hidden="true" class="modal fade" id="listSolicAltPedidos" role="dialog" tabindex="-1">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-heading">
+                        <a class="modal-close" data-dismiss="modal">×</a>
+                        <h2 class="modal-title content-sub-heading">Solicitações de Alteração de Pedidos</h2>
+                    </div>
+                    <div class="modal-inner">
+                        <table id="tableSolicAltPedido" class="table" style="width: 100%;">
+                            <thead>
+                                <th>#PEDIDO</th>
+                                <th>DATA_SOLICITACAO</th>
+                                <th>DATA_ANALISE</th>
+                                <th>JUSTIFICATIVA</th>
+                                <th>STATUS</th>
+                            </thead>
+                            <tbody id="tbodySolicAltPedido"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div aria-hidden="true" class="modal fade" id="listRascunhos" role="dialog" tabindex="-1">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-heading">
+                        <a class="modal-close" data-dismiss="modal">×</a>
+                        <h2 class="modal-title content-sub-heading">Rascunhos</h2>
+                    </div>
+                    <div class="modal-inner">
+                        <table id="tableListRascunhos" class="table" style="width: 100%;">
+                            <thead>
+                                <th>RefMes</th>
+                                <th>Última modificação</th>
+                                <th>Valor</th>
+                                <th>Editar</th>
+                            </thead>
+                            <tbody id="tbodyListRascunhos"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div aria-hidden="true" class="modal fade" id="saldos" role="dialog" tabindex="-1">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-heading">
+                        <a class="modal-close" data-dismiss="modal">×</a>
+                        <h2 class="modal-title content-sub-heading">Saldos</h2>
+                    </div>
+                    <div class="modal-inner">
+                        <table class="table">
+                            <tr>
+                                <td>Saldo Restante do Mês Anterior</td>
+                                <td>R$ <?=$saldo_mes_anterior?></td>
+                            </tr>
+                            <tr>
+                                <td>Saldo Suplementado</td>
+                                <td>R$ <?=$saldo_suplementado?></td>
+                            </tr>
+                            <tr>
+                                <td>Saldo Aditivado</td>
+                                <td>R$ <?=$saldo_aditivado?></td>
+                            </tr>
+                            <tr>
+                                <td>Saldo Disponível</td>
+                                <td>R$ <?=$saldo_total?></td>
+                            </tr>
+                        </table>
+>>>>>>> 8f5598b472ebcfab676d578234e4ea7d1a784be3
                     </div>
                     <div class="form-group form-group-label">
                         <label class="floating-label" for="justificativa"><span class="icon">announcement</span>&nbsp;Justificativa</label>
