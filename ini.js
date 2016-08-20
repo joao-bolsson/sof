@@ -107,10 +107,6 @@ function iniDataTable(tabela) {
 	});
 }
 
-function destroyDataTable(tabela) {
-	$(tabela).DataTable().destroy();
-}
-
 function resetSenha() {
 	document.getElementById("loaderResetSenha").style.display = 'inline-block';
 	var email = document.getElementById('userReset').value;
@@ -165,8 +161,7 @@ function carregaPostsPag(tabela) {
 		form: 'carregaPostsPag',
 		tabela: tabela
 	}, function(resposta) {
-		// Quando terminada a requisição
-		destroyDataTable('#tableNoticiasEditar');
+		$('#tableNoticiasEditar').DataTable().destroy();
 		document.getElementById('contNoticiasEditar').innerHTML = resposta;
 		iniDataTable('#tableNoticiasEditar');
 	});
@@ -187,7 +182,7 @@ function iniRecepcao() {
 		admin: 1,
 		form: 'tableRecepcao',
 	}, function(resposta) {
-		destroyDataTable('#tableRecepcao');
+		$('#tableRecepcao').DataTable().destroy();
 		document.getElementById('conteudoRecepcao').innerHTML = resposta;
 		iniDataTable('#tableRecepcao');
 	});
@@ -198,7 +193,7 @@ function iniListProcessos() {
 		admin: 1,
 		form: 'listProcessos',
 	}, function(resposta) {
-		destroyDataTable('#tableListProcessos');
+		$('#tableListProcessos').DataTable().destroy();
 		document.getElementById('tbodyListProcessos').innerHTML = resposta;
 		iniDataTable('#tableListProcessos');
 	});
@@ -261,8 +256,7 @@ function iniSolicitacoes() {
 		admin: 1,
 		form: 'tableItensPedido'
 	}, function(resposta) {
-		// Quando terminada a requisição
-		destroyDataTable('#tableSolicitacoes');
+		$('#tableSolicitacoes').DataTable().destroy();
 		document.getElementById('conteudoSolicitacoes').innerHTML = resposta;
 		iniDataTable('#tableSolicitacoes');
 	});
@@ -434,8 +428,7 @@ function iniTableSolicAdiant(st) {
 		form: 'tableSolicitacoesAdiantamento',
 		status: st
 	}, function(resposta) {
-		// Quando terminada a requisição
-		destroyDataTable('#tableSolicitacoesAdiantamento');
+		$('#tableSolicitacoesAdiantamento').DataTable().destroy();
 		document.getElementById('conteudoSolicitacoesAdiantamento').innerHTML = resposta;
 		iniDataTable('#tableSolicitacoesAdiantamento');
 	});
@@ -448,8 +441,7 @@ function iniTableSolicAltPed(st) {
 		form: 'iniTableSolicAltPed',
 		status: st
 	}, function(resposta) {
-		// Quando terminada a requisição
-		destroyDataTable('#' + table);
+		$('#' + table).DataTable().destroy();
 		document.getElementById('contSolicAltPedido').innerHTML = resposta;
 		iniDataTable('#' + table);
 	});
@@ -574,10 +566,10 @@ function pesquisarProcesso(busca) {
 			form: 'pesquisarProcesso',
 			busca: busca
 		}, function(resposta) {
-			avisoSnack('Busca Realizada com Sucesso !', 'body');
-			destroyDataTable('#tableProcessos');
+			$('#tableProcessos').DataTable().destroy();
 			document.getElementById("conteudoProcesso").innerHTML = resposta;
 			iniDataTable('#tableProcessos');
+			avisoSnack('Busca Realizada com Sucesso !', 'body');
 		});
 	}
 }
@@ -729,10 +721,10 @@ function analisarPedido(id_pedido, id_setor) {
 		form: 'analisaPedido',
 		id_pedido: id_pedido
 	}, function(resposta) {
-		avisoSnack('Busca Realizada com Sucesso !', 'body');
-		destroyDataTable('#tableItensPedido');
+		$('#tableItensPedido').DataTable().destroy();
 		document.getElementById("conteudoPedido").innerHTML = resposta;
 		iniDataTable('#tableItensPedido');
+		avisoSnack('Busca Realizada com Sucesso !', 'body');
 	});
 }
 // cancelar um item
