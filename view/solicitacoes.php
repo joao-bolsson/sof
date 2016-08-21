@@ -97,14 +97,10 @@ $saldo_mes_anterior = $obj_Busca->getSaldoMesAnterior($_SESSION["id_setor"]);
                         <div class="card-main">
                             <div class="card-header card-brand">
                                 <div class="card-header-side pull-left">
-                                    <p class="card-heading">Solicitações</p>
+                                    <p class="card-heading">Itens</p>
                                 </div>
                             </div><!--  ./card-header -->
-                            <div id="groupNumProc" class="form-group form-group-label">
-                                <label class="floating-label padding-left" for="searchProcesso" style="font-size: 14pt;"><span class="icon">search</span>&nbsp;Digite o número do processo</label>
-                                <input class="form-control padding-left" id="searchProcesso" name="search" type="text" style="font-size: 14pt;">
-                            </div>
-                            <button class="btn waves-attach" type="button" onclick="pesquisarProcesso(0);" style="width: 100%;"><span class="icon" style="font-weight: bold;">search</span></button>
+                            <input id="searchProcesso" type="hidden">
                             <div class="card-inner">
                                 <table class="table" id="tableProcessos">
                                     <thead>

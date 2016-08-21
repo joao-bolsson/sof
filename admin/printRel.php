@@ -38,7 +38,7 @@ if (isset($_SESSION["relatorioProcessos"]) && $_SESSION["relatorioProcessos"] &&
     border-collapse: collapse;
     border-spacing: 0;
     font-size: 7pt;
-    width: 100%;
+    width: 100% !important;
     background-color: #ffffff;
     border: 0;
   }
@@ -87,7 +87,7 @@ if (isset($_SESSION["relatorioProcessos"]) && $_SESSION["relatorioProcessos"] &&
   </fieldset><br>
   ";
 
-	//$html_itens .= $obj_Busca->getRelatorioProcessos($tipo);
+	$html_itens .= $obj_Busca->getRelatorioProcessos($tipo);
 
 	$html = $html_style . $html_header . $html_table_itens . $html_itens . "</body>";
 

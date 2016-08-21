@@ -554,7 +554,6 @@ function pesquisarProcesso(busca) {
 		busca = document.getElementById("searchProcesso").value;
 	} else {
 		document.getElementById("searchProcesso").value = busca;
-		$('#groupNumProc').addClass('control-highlight');
 		$('#listProcessos').modal('hide');
 	}
 	len = busca.length;

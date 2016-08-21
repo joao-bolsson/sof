@@ -18,7 +18,6 @@ $permissao = $obj_Busca->getPermissoes($_SESSION["id"]);
   <meta content="IE=edge" http-equiv="X-UA-Compatible">
   <meta content="initial-scale=1.0, maximum-scale=1.0, user-scalable=no, width=device-width" name="viewport">
   <title>Setor de Orçamento e Finanças – HUSM</title>
-  <link href="../plugins/animate/animate.min.css" rel="stylesheet">
   <!-- css -->
   <link href="../material/css/base.min.css" rel="stylesheet">
 
@@ -58,8 +57,8 @@ $permissao = $obj_Busca->getPermissoes($_SESSION["id"]);
   <div class="content-heading">
     <div class="container">
       <div class="row">
-        <h1 class="heading module wow slideInRight animated"><img src="../sof_files/logo_blue.png" alt="Setor de Orçamento e Finanças – HUSM" /></h1>
-        <div class="text-header module wow slideInLeft animated">
+        <h1 class="heading"><img src="../sof_files/logo_blue.png" alt="Setor de Orçamento e Finanças – HUSM" /></h1>
+        <div class="text-header">
           <p>Setor de Orçamento e Finanças</p>
           <span>Hospital Universitário de Santa Maria</span>
         </div>
@@ -741,7 +740,7 @@ $permissao = $obj_Busca->getPermissoes($_SESSION["id"]);
 
 <script type="text/javascript" src="../plugins/dataTables/datatables.min.js"></script>
 
-<script type="text/javascript" src="../ini.js"></script>
+<script type="text/javascript" src="../ini.min.js"></script>
 
 </body>
 </html>
