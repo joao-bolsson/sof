@@ -688,6 +688,17 @@ function imprimir(id_pedido) {
 		form: 'imprimirPedido',
 		id_pedido: id_pedido
 	}, function(resposta) {
+		window.open("printPedido.php");
+	});
+}
+// função para recepção para gerar relatórios
+function print() {
+	var tipo = document.getElementById('type').value;
+	$.post('../php/busca.php', {
+		admin: 1,
+		form: 'relatorioProcessos',
+		tipo: tipo
+	}, function(resposta) {
 		window.open("printRel.php");
 	});
 }

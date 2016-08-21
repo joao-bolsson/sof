@@ -28,6 +28,12 @@ if (isset($_POST["admin"]) && isset($_SESSION['id_setor']) && $_SESSION['id_seto
 	$form = $_POST["form"];
 
 	switch ($form) {
+	// comment.
+
+	case 'relatorioProcessos':
+		$_SESSION["relatorioProcessos"] = 1;
+		$_SESSION["relatorioTipo"] = $_POST["tipo"];
+		break;
 
 	// comment.
 

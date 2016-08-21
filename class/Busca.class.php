@@ -23,6 +23,17 @@ class Busca extends Conexao {
 		$this->mysqli = parent::getConexao();
 	}
 	// ------------------------------------------------------------------------------
+	public function getRelatorioProcessos($tipo) {
+		$retorno = "";
+		$sql = "SELECT processos.num_processo, processos_tipo.nome AS tipo, processos.estante, processos.prateleira, processos.entrada, processos.saida, processos.responsavel, processos.retorno, processos.obs FROM processos, processos_tipo WHERE processos.tipo = processos_tipo.id;";
+		$query = $this->mysqli->query($sql);
+		while ($processo = $query->fetch_object()) {
+			$retorno .= "
+
+			";
+		}
+	}
+	// ------------------------------------------------------------------------------
 	/**
 	 *	Função que retorna as options para tipo de processos para o cadastro de novos processos.
 	 *
@@ -34,9 +45,7 @@ class Busca extends Conexao {
 		$query = $this->mysqli->query("SELECT id, nome FROM processos_tipo;");
 		while ($tipo = $query->fetch_object()) {
 			$tipo->nome = utf8_encode($tipo->nome);
-			$retorno .= "
-				<option value=\"{$tipo->id}\">{$tipo->nome}</option>
-			";
+			$retorno .= "<option value=\"{$tipo->id}\">{$tipo->nome}</option>";
 		}
 		$query->close();
 		return $retorno;

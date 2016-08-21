@@ -94,6 +94,9 @@ $permissao = $obj_Busca->getPermissoes($_SESSION["id"]);
             <li>
               <a class="waves-attach" href="javascript:abreModal('#newTypeProcess');"><span class="text-white"><span class="icon">add</span>NOVO TIPO</span></a>
             </li>
+            <li>
+              <a class="waves-attach" href="javascript:abreModal('#relatorio');"><span class="text-white"><span class="icon">print</span>RELATÓRIO</span></a>
+            </li>
             <?php endif;?>
      </ul>
    </nav>
@@ -637,8 +640,32 @@ $permissao = $obj_Busca->getPermissoes($_SESSION["id"]);
             <div class="modal-footer margin-bottom">
               <button class="btn btn-brand waves-attach waves-light waves-effect" type="submit" style="width: 100%;"><span class="icon">autorenew</span>&nbsp;Cadastrar</button>
             </div>
-          </form>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+  <div class="modal fade" id="relatorio" role="dialog">
+    <div class="modal-dialog" style="width: 40%;">
+      <div class="modal-content">
+        <div class="modal-heading">
+          <a class="modal-close" data-dismiss="modal">×</a>
+          <h2 class="modal-title content-sub-heading">Gerar Relatório</h2>
         </div>
+        <form action="javascript:print();" method="post">
+          <div class="modal-inner">
+            <div class="form-group form-group-label">
+              <label class="floating-label" for="type"><span class="icon">label</span>&nbsp;Tipo</label>
+              <select id="type" class="form-control" name="type" required>
+                <option value="0">Todos</option>
+                <?=$obj_Busca->getTiposProcessos()?>
+              </select>
+            </div>
+            <div class="modal-footer margin-bottom">
+              <button class="btn btn-brand waves-attach waves-light waves-effect" type="submit" style="width: 100%;"><span class="icon">print</span>&nbsp;Gerar</button>
+            </div>
+          </div>
+        </form>
       </div>
     </div>
   </div>
@@ -714,7 +741,7 @@ $permissao = $obj_Busca->getPermissoes($_SESSION["id"]);
 
 <script type="text/javascript" src="../plugins/dataTables/datatables.min.js"></script>
 
-<script type="text/javascript" src="../ini.min.js"></script>
+<script type="text/javascript" src="../ini.js"></script>
 
 </body>
 </html>
