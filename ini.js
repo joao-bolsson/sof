@@ -1,12 +1,25 @@
-function mostra(row) {
+function mostra(row, id_icon) {
 	var display = document.getElementById(row).style.display;
-	$('#' + row).css('transition-delay', '0.1s');
-	if (display == "block") {
-		display = "none";
+	var icon = '';
+	if (display == 'block') {
+		display = 'none';
+		icon = 'keyboard_arrow_down';
 	} else {
-		display = "block";
+		display = 'block';
+		icon = 'keyboard_arrow_up';
 	}
 	document.getElementById(row).style.display = display;
+	document.getElementById(id_icon).innerHTML = icon;
+}
+
+function mostraSolicAdiant() {
+	mostra('rowSolicAdi', 'iconSolicAdi');
+	iniTableSolicAdiant();
+}
+
+function mostraSolicAltPed() {
+	mostra('rowAltPed', 'iconSolicAlt');
+	iniTableSolicAltPed();
 }
 // solicitação de alteração de pedidos
 function analisaSolicAlt(id_solic, id_pedido, acao) {
@@ -27,7 +40,7 @@ function analisaSolicAlt(id_solic, id_pedido, acao) {
 		// Se resposta for false, ou seja, não ocorreu nenhum erro
 		else {
 			iniSolicitacoes();
-			iniTableSolicAltPed(2);
+			iniTableSolicAltPed();
 		}
 	});
 }
@@ -170,8 +183,6 @@ function carregaPostsPag(tabela) {
 function iniAdminSolicitacoes() {
 	iniDataTable('#tableItensPedido');
 	iniSolicitacoes();
-	iniTableSolicAltPed(2);
-	iniTableSolicAdiant(2);
 	iniFreeSaldos();
 	iniRecepcao();
 	avisoSnack('Carregamento concluído !', 'body');
@@ -422,7 +433,15 @@ function iniPagSolicitacoes() {
 	avisoSnack('Carregamento concluído!', 'body');
 }
 
-function iniTableSolicAdiant(st) {
+function iniTableSolicAdiant() {
+	var status = ['stabertos', 'staprovados', 'streprovado'];
+	var st = null;
+	for (var i = 0; i < status.length; i++) {
+		var element = document.getElementById(status[i]);
+		if (element.checked) {
+			st = element.value;
+		}
+	}
 	$.post('../php/busca.php', {
 		admin: 1,
 		form: 'tableSolicitacoesAdiantamento',
@@ -434,8 +453,16 @@ function iniTableSolicAdiant(st) {
 	});
 }
 
-function iniTableSolicAltPed(st) {
+function iniTableSolicAltPed() {
 	var table = 'tableSolicAltPedido';
+	var status = ['stAltAbertos', 'stAltAprovados', 'stAltReprovado'];
+	var st = null;
+	for (var i = 0; i < status.length; i++) {
+		var element = document.getElementById(status[i]);
+		if (element.checked) {
+			st = element.value;
+		}
+	}
 	$.post('../php/busca.php', {
 		admin: 1,
 		form: 'iniTableSolicAltPed',
@@ -461,8 +488,7 @@ function analisaAdi(id, acao) {
 			id: id,
 			acao: acao
 		}, function(resposta) {
-			// Quando terminada a requisição
-			iniTableSolicAdiant(2);
+			iniTableSolicAdiant();
 		});
 	}
 }

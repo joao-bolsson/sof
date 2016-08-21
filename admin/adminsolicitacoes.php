@@ -106,12 +106,12 @@ $permissao = $obj_Busca->getPermissoes($_SESSION["id"]);
       <tr>
       <?php if ($permissao->saldos): ?>
         <td>
-          <a href="javascript:mostra('rowSolicAdi');"><span class="icon">add</span>Solicitações de Adiantamento</a>
+          <a href="javascript:mostraSolicAdiant();"><span id="iconSolicAdi" class="icon">keyboard_arrow_down</span>Solicitações de Adiantamento</a>
         </td>
       <?php endif;?>
       <?php if ($permissao->pedidos): ?>
         <td>
-          <a href="javascript:mostra('rowAltPed');"><span class="icon">add</span>Solicitações de Alteração de Pedidos</a>
+          <a href="javascript:mostraSolicAltPed();"><span id="iconSolicAlt" class="icon">keyboard_arrow_down</span>Solicitações de Alteração de Pedidos</a>
         </td>
       <?php endif;?>
   </tr>
@@ -152,7 +152,7 @@ $permissao = $obj_Busca->getPermissoes($_SESSION["id"]);
 </div>
 <?php endif;?>
 <?php if ($permissao->saldos): ?>
-  <div id="rowSolicAdi" class="row" style="display: block;">
+  <div id="rowSolicAdi" class="row" style="display: none;">
    <div class="card margin-top-no">
      <div class="card-main">
        <div class="card-header card-brand">
@@ -166,7 +166,7 @@ $permissao = $obj_Busca->getPermissoes($_SESSION["id"]);
             <td>
               <div class="radiobtn radiobtn-adv">
                 <label for="stabertos">
-                  <input type="radio" id="stabertos" name="stadi" class="access-hide" onclick="iniTableSolicAdiant(2);" checked>Abertos
+                  <input type="radio" id="stabertos" name="stadi" class="access-hide" onclick="iniTableSolicAdiant();" checked value="2">Abertos
                   <span class="radiobtn-circle"></span><span class="radiobtn-circle-check"></span>
                 </label>
               </div>
@@ -174,7 +174,7 @@ $permissao = $obj_Busca->getPermissoes($_SESSION["id"]);
             <td>
               <div class="radiobtn radiobtn-adv">
                 <label for="staprovados">
-                  <input type="radio" id="staprovados" name="stadi" class="access-hide" onclick="iniTableSolicAdiant(1);">Aprovados
+                  <input type="radio" id="staprovados" name="stadi" class="access-hide" onclick="iniTableSolicAdiant();" value="1">Aprovados
                   <span class="radiobtn-circle"></span><span class="radiobtn-circle-check"></span>
                 </label>
               </div>
@@ -182,7 +182,7 @@ $permissao = $obj_Busca->getPermissoes($_SESSION["id"]);
             <td>
               <div class="radiobtn radiobtn-adv">
                 <label for="streprovado">
-                  <input type="radio" id="streprovado" name="stadi" class="access-hide" onclick="iniTableSolicAdiant(0);">Reprovados
+                  <input type="radio" id="streprovado" name="stadi" class="access-hide" onclick="iniTableSolicAdiant();" value="0">Reprovados
                   <span class="radiobtn-circle"></span><span class="radiobtn-circle-check"></span>
                 </label>
               </div>
@@ -210,7 +210,7 @@ $permissao = $obj_Busca->getPermissoes($_SESSION["id"]);
 </div>
 <?php endif;?>
 <?php if ($permissao->pedidos): ?>
-  <div id="rowAltPed" class="row" style="display: block;">
+  <div id="rowAltPed" class="row" style="display: none;">
    <div class="card margin-top-no">
      <div class="card-main">
        <div class="card-header card-brand">
@@ -224,7 +224,7 @@ $permissao = $obj_Busca->getPermissoes($_SESSION["id"]);
             <td>
               <div class="radiobtn radiobtn-adv">
                 <label for="stAltAbertos">
-                  <input type="radio" id="stAltAbertos" name="stAlt" class="access-hide" onclick="iniTableSolicAltPed(2);" checked>Abertos
+                  <input type="radio" id="stAltAbertos" name="stAlt" class="access-hide" onclick="iniTableSolicAltPed();" value="2" checked>Abertos
                   <span class="radiobtn-circle"></span><span class="radiobtn-circle-check"></span>
                 </label>
               </div>
@@ -232,7 +232,7 @@ $permissao = $obj_Busca->getPermissoes($_SESSION["id"]);
             <td>
               <div class="radiobtn radiobtn-adv">
                 <label for="stAltAprovados">
-                  <input type="radio" id="stAltAprovados" name="stAlt" class="access-hide" onclick="iniTableSolicAltPed(1);">Aprovados
+                  <input type="radio" id="stAltAprovados" name="stAlt" class="access-hide" onclick="iniTableSolicAltPed();" value="1" >Aprovados
                   <span class="radiobtn-circle"></span><span class="radiobtn-circle-check"></span>
                 </label>
               </div>
@@ -240,7 +240,7 @@ $permissao = $obj_Busca->getPermissoes($_SESSION["id"]);
             <td>
               <div class="radiobtn radiobtn-adv">
                 <label for="stAltReprovado">
-                  <input type="radio" id="stAltReprovado" name="stAlt" class="access-hide" onclick="iniTableSolicAltPed(0);">Reprovados
+                  <input type="radio" id="stAltReprovado" name="stAlt" class="access-hide" onclick="iniTableSolicAltPed();" value="0">Reprovados
                   <span class="radiobtn-circle"></span><span class="radiobtn-circle-check"></span>
                 </label>
               </div>
