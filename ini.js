@@ -734,6 +734,10 @@ function print() {
 
 function analisarPedido(id_pedido, id_setor) {
 	document.getElementById('id_setor').value = id_setor;
+	$('#tableSolicitacoes tr').css('background-color', '');
+	$('#rowPedido' + id_pedido).css('background-color', '#c1df9f');
+	//document.getElementById('tableSolicitacoes').style.backgroundColor = "";
+	//document.getElementById('rowPedido' + id_pedido).style.backgroundColor = "#8bc34a";
 	$.post('../php/busca.php', {
 		admin: 1,
 		form: 'infoPedido',

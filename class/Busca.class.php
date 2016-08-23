@@ -165,6 +165,23 @@ class Busca extends Conexao {
 	}
 	// ------------------------------------------------------------------------------
 	/**
+	 *	Função que retornar se um pedido é ou não rascunho
+	 *
+	 *	@access public
+	 *	@param $id_pedido id do pedido
+	 *	@return boolean
+	 */
+	public function getRequestDraft($id_pedido) {
+		$query = $this->mysqli->query("SELECT prioridade.nome FROM pedido, prioridade WHERE pedido.id = 3 AND pedido.prioridade = prioridade.id;");
+		$obj = $query->fetch_object();
+		$query->close();
+		if ($obj->nome == 'rascunho') {
+			return true;
+		}
+		return false;
+	}
+	// ------------------------------------------------------------------------------
+	/**
 	 *	Função que constroi os radioBtn da análise dos pedidos.
 	 *
 	 *	@access public
@@ -709,7 +726,7 @@ class Busca extends Conexao {
 	 * @return string
 	 */
 	public function getHeader($id_pedido) {
-		$pedido = $this->mysqli->query("SELECT pedido.id, DATE_FORMAT(pedido.data_pedido, '%d/%m/%Y') AS data_pedido, EXTRACT(YEAR FROM pedido.data_pedido) AS ano, mes.sigla_mes AS ref_mes, pedido.status, pedido.valor, pedido.obs FROM pedido, mes WHERE pedido.id = {$id_pedido} AND mes.id = pedido.ref_mes;")->fetch_object();
+		$pedido = $this->mysqli->query("SELECT pedido.id, DATE_FORMAT(pedido.data_pedido, '%d/%m/%Y') AS data_pedido, EXTRACT(YEAR FROM pedido.data_pedido) AS ano, mes.sigla_mes AS ref_mes, status.nome AS status, pedido.valor, pedido.obs FROM pedido, mes, status WHERE status.id = pedido.status AND pedido.id = {$id_pedido} AND mes.id = pedido.ref_mes;")->fetch_object();
 		$ano = substr($pedido->data_pedido, 0, 4);
 		$pedido->valor = str_replace(".", ",", $pedido->valor);
 		$retorno = "
@@ -1049,7 +1066,7 @@ class Busca extends Conexao {
 				$btnAnalisar = "<a class=\"modal-close\" href=\"javascript:analisarPedido({$pedido->id}, {$pedido->id_setor});\" title=\"Analisar\"><span class=\"icon\">create<span></a>";
 			}
 			$retorno .= "
-			<tr>
+			<tr id=\"rowPedido{$pedido->id}\">
 				<td>
 					{$btnAnalisar}
 					<a class=\"modal-close\" href=\"javascript:imprimir({$pedido->id});\" title=\"Imprimir\"><span class=\"icon\">print<span></a>
