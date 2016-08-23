@@ -348,6 +348,10 @@ $permissao = $obj_Busca->getPermissoes($_SESSION["id"]);
 
           </tbody>
         </table>
+        <div id="divObs" class="form-group form-group-label">
+          <label class="floating-label" for="obs"><span class="icon">announcement</span>&nbsp;Observações</label>
+          <textarea class="form-control textarea-autosize" id="obs" name="obs" disabled></textarea>
+        </div>
         <input id="total_hidden" type="hidden" name="total_hidden" value="0">
         <input id="saldo_total" type="hidden" name="saldo_total" value="0.000">
         <input id="prioridade" type="hidden" name="prioridade" value="0">

@@ -709,7 +709,7 @@ class Busca extends Conexao {
 	 * @return string
 	 */
 	public function getHeader($id_pedido) {
-		$pedido = $this->mysqli->query("SELECT pedido.id, DATE_FORMAT(pedido.data_pedido, '%d/%m/%Y') AS data_pedido, EXTRACT(YEAR FROM pedido.data_pedido) AS ano, mes.sigla_mes AS ref_mes, pedido.status, pedido.valor FROM pedido, mes WHERE pedido.id = {$id_pedido} AND mes.id = pedido.ref_mes;")->fetch_object();
+		$pedido = $this->mysqli->query("SELECT pedido.id, DATE_FORMAT(pedido.data_pedido, '%d/%m/%Y') AS data_pedido, EXTRACT(YEAR FROM pedido.data_pedido) AS ano, mes.sigla_mes AS ref_mes, pedido.status, pedido.valor, pedido.obs FROM pedido, mes WHERE pedido.id = {$id_pedido} AND mes.id = pedido.ref_mes;")->fetch_object();
 		$ano = substr($pedido->data_pedido, 0, 4);
 		$pedido->valor = str_replace(".", ",", $pedido->valor);
 		$retorno = "
@@ -723,6 +723,7 @@ class Busca extends Conexao {
 				Total do Pedido: R$ {$pedido->valor}
 			</p>
 			<p>Observação: </p>
+			<p style=\"font-weight: normal !important;\">	{$pedido->obs}</p>
 		</fieldset><br>
 		";
 		return $retorno;
@@ -1151,7 +1152,7 @@ class Busca extends Conexao {
 	public function getInfoPedidoAnalise($id_pedido, $id_setor) {
 		$mes = date("n");
 		$ano = date("Y");
-		$query = $this->mysqli->query("SELECT saldo_setor.saldo, pedido.prioridade, status.nome AS status, pedido.valor FROM saldo_setor, pedido, status WHERE status.id = pedido.status AND saldo_setor.id_setor = {$id_setor} AND saldo_setor.mes = {$mes} AND saldo_setor.ano = {$ano} AND pedido.id = {$id_pedido};");
+		$query = $this->mysqli->query("SELECT saldo_setor.saldo, pedido.prioridade, status.nome AS status, pedido.valor, pedido.obs FROM saldo_setor, pedido, status WHERE status.id = pedido.status AND saldo_setor.id_setor = {$id_setor} AND saldo_setor.mes = {$mes} AND saldo_setor.ano = {$ano} AND pedido.id = {$id_pedido};");
 		$pedido = $query->fetch_object();
 		$pedido->status = trim($pedido->status);
 		$query->close();
@@ -1455,8 +1456,8 @@ class Busca extends Conexao {
 		while ($item = $query->fetch_object()) {
 			$id_item = $item->id_itens;
 			$item->complemento_item = str_replace("\"", "", $item->complemento_item);
+			$item->complemento_item = utf8_encode($item->complemento_item);
 			$item->vl_unitario = str_replace(",", ".", $item->vl_unitario);
-
 			$retorno .= "
 			<tr id=\"row{$id_item}\">
 				<td><a class=\"modal-close\" href=\"javascript:removeTableRow($id_item, '$item->valor');\"><span class=\"icon\">delete</span></a></td>
@@ -1498,7 +1499,7 @@ class Busca extends Conexao {
 	public function getPopulaRascunho($id_pedido, $id_setor) {
 		$mes = date("n");
 		$ano = date("Y");
-		$query = $this->mysqli->query("SELECT saldo_setor.saldo, pedido.valor FROM saldo_setor, pedido WHERE pedido.id = {$id_pedido} AND saldo_setor.id_setor = {$id_setor} AND saldo_setor.mes = {$mes} AND saldo_setor.ano = {$ano};");
+		$query = $this->mysqli->query("SELECT saldo_setor.saldo, pedido.valor, pedido.obs FROM saldo_setor, pedido WHERE pedido.id = {$id_pedido} AND saldo_setor.id_setor = {$id_setor} AND saldo_setor.mes = {$mes} AND saldo_setor.ano = {$ano};");
 		$pedido = $query->fetch_object();
 		$query->close();
 		return json_encode($pedido);

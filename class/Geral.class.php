@@ -366,8 +366,9 @@ class Geral extends Conexao {
 	 *   @param $pedido Id do pedido. Se 0, pedido novo, senão editando rascunho ou enviando ao SOF.
 	 *   @return boolean
 	 */
-	public function insertPedido($id_setor, $id_item, $qtd_solicitada, $qtd_disponivel, $qtd_contrato, $qtd_utilizado, $vl_saldo, $vl_contrato, $vl_utilizado, $valor, $total_pedido, $saldo_total, $prioridade, $pedido) {
+	public function insertPedido($id_setor, $id_item, $qtd_solicitada, $qtd_disponivel, $qtd_contrato, $qtd_utilizado, $vl_saldo, $vl_contrato, $vl_utilizado, $valor, $total_pedido, $saldo_total, $prioridade, $obs, $pedido) {
 
+		$obs = $this->mysqli->real_escape_string($obs);
 		$retorno = false;
 		$hoje = date('Y-m-d');
 		$mes = date("n");
@@ -376,12 +377,12 @@ class Geral extends Conexao {
 			if ($pedido == 0) {
 				// NOVO
 				//inserindo os dados iniciais do pedido
-				$query_pedido = $this->mysqli->query("INSERT INTO pedido VALUES(NULL, {$id_setor}, '{$hoje}', '{$mes}', 1, {$prioridade}, 1, '{$total_pedido}');");
+				$query_pedido = $this->mysqli->query("INSERT INTO pedido VALUES(NULL, {$id_setor}, '{$hoje}', '{$mes}', 1, {$prioridade}, 1, '{$total_pedido}', '{$obs}');");
 				$pedido = $this->mysqli->insert_id;
 			} else {
 				//remover resgistros antigos do rascunho
 				$this->mysqli->query("DELETE FROM itens_pedido WHERE id_pedido = {$pedido};");
-				$this->mysqli->query("UPDATE pedido SET data_pedido = '{$hoje}', ref_mes = {$mes}, prioridade = {$prioridade}, valor = '{$total_pedido}' WHERE id = {$pedido};");
+				$this->mysqli->query("UPDATE pedido SET data_pedido = '{$hoje}', ref_mes = {$mes}, prioridade = {$prioridade}, valor = '{$total_pedido}', obs = '{$obs}' WHERE id = {$pedido};");
 			}
 			//inserindo os itens do pedido
 			for ($i = 0; $i < count($id_item); $i++) {
@@ -393,11 +394,11 @@ class Geral extends Conexao {
 			// enviado ao sof
 			if ($pedido == 0) {
 				//inserindo os dados iniciais do pedido
-				$query_pedido = $this->mysqli->query("INSERT INTO pedido VALUES(NULL, {$id_setor}, '{$hoje}', '{$mes}', 0, '{$prioridade}', 'Em Analise', '{$total_pedido}');");
+				$query_pedido = $this->mysqli->query("INSERT INTO pedido VALUES(NULL, {$id_setor}, '{$hoje}', '{$mes}', 0, {$prioridade}, 2, '{$total_pedido}', '{$obs}');");
 				$pedido = $this->mysqli->insert_id;
 			} else {
 				// atualizando pedido
-				$this->mysqli->query("UPDATE pedido SET data_pedido = '{$hoje}', ref_mes = {$mes}, alteracao = 0, prioridade = {$prioridade}, status = 2, valor = '{$total_pedido}' WHERE id = {$pedido};");
+				$this->mysqli->query("UPDATE pedido SET data_pedido = '{$hoje}', ref_mes = {$mes}, alteracao = 0, prioridade = {$prioridade}, status = 2, valor = '{$total_pedido}', obs = '{$obs}' WHERE id = {$pedido};");
 			}
 			//remover resgistros antigos do pedido
 			$this->mysqli->query("DELETE FROM itens_pedido WHERE id_pedido = {$pedido};");

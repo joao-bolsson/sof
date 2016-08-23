@@ -175,6 +175,10 @@ $saldo_mes_anterior = $obj_Busca->getSaldoMesAnterior($_SESSION["id_setor"]);
                                             </tr>
                                         </table>
                                     </div>
+                                    <div id="divObs" class="form-group form-group-label">
+                                        <label class="floating-label" for="obs"><span class="icon">announcement</span>&nbsp;Observações</label>
+                                        <textarea class="form-control textarea-autosize" id="obs" name="obs" rows="1" required></textarea>
+                                    </div>
                                 </div><!-- ./card-inner -->
                                 <div class="card-action">
                                     <div class="card-action-btn">

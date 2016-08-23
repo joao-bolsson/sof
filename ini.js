@@ -614,6 +614,10 @@ function editaPedido(id_pedido) {
 		//saldo
 		document.getElementById('saldo_total').value = parseFloat(obj.saldo - obj.valor).toFixed(3);
 		document.getElementById('text_saldo_total').innerHTML = "R$ " + parseFloat(obj.saldo - obj.valor).toFixed(3);
+
+		// obs
+		$('#divObs').addClass('control-highlight');
+		document.getElementById('obs').value = obj.obs;
 	});
 	document.getElementById("pedido").value = id_pedido;
 	$('#listRascunhos').modal('hide');
@@ -739,15 +743,16 @@ function analisarPedido(id_pedido, id_setor) {
 		var obj = jQuery.parseJSON(retorno);
 		//valor do pedido
 		document.getElementById('total_hidden').value = obj.valor;
-
 		//saldo
 		document.getElementById('saldo_total').value = parseFloat(obj.saldo).toFixed(3);
 		document.getElementById('text_saldo_total').innerHTML = "R$ " + parseFloat(obj.saldo).toFixed(3);
-
 		//prioridade
 		document.getElementById('prioridade').value = obj.prioridade;
 		//status
 		document.getElementById('st' + obj.status).checked = true;
+		//obs
+		$('#divObs').addClass('control-highlight');
+		document.getElementById('obs').value = obj.obs;
 	});
 
 	document.getElementById("id_pedido").value = id_pedido;
