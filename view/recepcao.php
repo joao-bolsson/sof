@@ -276,25 +276,22 @@ if ($btnSair) {
       </div><!--  ./card-header -->
       <div class="card-inner" style="text-indent: 1.5em; text-align: justify; font-size: 12pt;">
        <div class="card">
-        <aside class="card-side card-side-img pull-left">
-         <img alt="alt text" src="../uploads/recepcao.jpg" width="197" height="148">
-       </aside>
-       <div class="card-main">
-         <div class="card-inner">
-          <p class="margin-bottom-lg">
-           Entre as atribuições do Serviço de Recepção do Setor de Orçamento e Finanças – SOF
-           estão o recebimento de notas fiscais e a distribuição dessas notas entre os serviços
-           internos do SOF, o recebimento e o despacho de documentos, o arquivamento de
-           processos, o gerenciamento das ligações telefônicas, a consulta e a alteração no
-           status de notas fiscais, o controle da documentação dos bolsistas lotados no setor,
-           bem como outras atividades pertinentes ao serviço.
-         </p>
+         <div class="card-main">
+           <div class="card-inner">
+            <p class="margin-bottom-lg">
+             Entre as atribuições do Serviço de Recepção do Setor de Orçamento e Finanças – SOF
+             estão o recebimento de notas fiscais e a distribuição dessas notas entre os serviços
+             internos do SOF, o recebimento e o despacho de documentos, o arquivamento de
+             processos, o gerenciamento das ligações telefônicas, a consulta e a alteração no
+             status de notas fiscais, o controle da documentação dos bolsistas lotados no setor,
+             bem como outras atividades pertinentes ao serviço.
+           </p>
+         </div>
        </div>
      </div>
+     <span class="label">Ramal 1610</span>
    </div>
-   <span class="label">Ramal 1610</span>
- </div>
-</div><!-- ./card-main -->
+ </div><!-- ./card-main -->
 </div> <!-- ./card -->
 </div>
 </section>
