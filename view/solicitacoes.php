@@ -16,7 +16,7 @@ $saldo_total = $obj_Saldo->saldo;
 $saldo_suplementado = $obj_Saldo->saldo_suplementado;
 $saldo_aditivado = $obj_Saldo->saldo_aditivado;
 
-$saldo_mes_anterior = $obj_Busca->getSaldoMesAnterior($_SESSION["id_setor"]);
+$saldo_mes_anterior = $obj_Saldo->saldo_mes_anterior;
 ?>
 <!DOCTYPE html>
 <html lang="pt">

@@ -23,9 +23,9 @@ class Geral extends Conexao {
 	 *	Função para cadastrar novo tipo de processo.
 	 *
 	 *	@access public
-	 *	@return boolean.
+	 *	@return bool.
 	 */
-	public function newTypeProcess($tipo) {
+	public function newTypeProcess($tipo): bool{
 		$tipo = $this->mysqli->real_escape_string($tipo);
 		$insert = $this->mysqli->query("INSERT INTO processos_tipo VALUES(NULL, '{$tipo}');");
 		if ($insert) {
@@ -40,9 +40,9 @@ class Geral extends Conexao {
 	 *	@access public
 	 *	@param $dados é um array que contém os dados do processo
 	 *	@param $dados["id_processo"] contém o id do processo, se for 0 então é para adc, se não dar update
-	 *	@return boolean
+	 *	@return bool
 	 */
-	public function updateProcesso($dados) {
+	public function updateProcesso($dados): bool {
 		for ($i = 0; $i < count($dados); $i++) {
 			$dados[$i] = trim($dados[$i]);
 			if ($dados[$i] == "") {
@@ -73,7 +73,7 @@ class Geral extends Conexao {
 	 *	@access public
 	 *	@return bool
 	 */
-	public function importaItens($array_sql) {
+	public function importaItens($array_sql): bool {
 		for ($i = 0; $i < count($array_sql); $i++) {
 			$query = $array_sql[$i];
 			$this->mysqli->query($query);
@@ -112,7 +112,7 @@ class Geral extends Conexao {
 	 *	@access public
 	 *	@return bool
 	 */
-	public function altInfoUser($id_user, $nome, $email, $novaSenha, $senhaAtual) {
+	public function altInfoUser($id_user, $nome, $email, $novaSenha, $senhaAtual): bool{
 		$query = $this->mysqli->query("SELECT senha FROM usuario WHERE id = {$id_user};")->fetch_object();
 		if (crypt($senhaAtual, $query->senha) == $query->senha) {
 			$nome = $this->mysqli->real_escape_string($nome);
@@ -137,7 +137,7 @@ class Geral extends Conexao {
 	 *	@access public
 	 *	@return bool
 	 */
-	public function analisaSolicAlt($id_solic, $id_pedido, $acao) {
+	public function analisaSolicAlt($id_solic, $id_pedido, $acao): bool{
 		$hoje = date('Y-m-d');
 		$update = $this->mysqli->query("UPDATE solic_alt_pedido SET data_analise = '{$hoje}', status = {$acao} WHERE id = {$id_solic};");
 		if ($acao) {
@@ -152,7 +152,7 @@ class Geral extends Conexao {
 	 *	@access public
 	 *	@return bool
 	 */
-	public function solicAltPedido($id_pedido, $id_setor, $justificativa) {
+	public function solicAltPedido($id_pedido, $id_setor, $justificativa): bool{
 		$hoje = date('Y-m-d');
 		$justificativa = $this->mysqli->real_escape_string($justificativa);
 		$solicita = $this->mysqli->query("INSERT INTO solic_alt_pedido VALUES(NULL, {$id_pedido}, {$id_setor}, '{$hoje}', '0000-00-00', '{$justificativa}', 2);");
@@ -169,7 +169,7 @@ class Geral extends Conexao {
 	 *	@access public
 	 *	@return bool
 	 */
-	public function checkSolicAdi() {
+	public function checkSolicAdi(): bool{
 		$hoje = date('Y-m-d');
 		$mes_atual = date("n");
 		$ano_atual = date("Y");
@@ -184,9 +184,9 @@ class Geral extends Conexao {
 	 *	Função para liberação de saldo de um setor
 	 *
 	 *	@access public
-	 *	@return string
+	 *	@return bool
 	 */
-	public function liberaSaldo($id_setor, $mes, $ano, $valor, $saldo_anterior) {
+	public function liberaSaldo($id_setor, $mes, $ano, $valor, $saldo_anterior): bool{
 		$saldo = $saldo_anterior + $valor;
 		$insert = $this->mysqli->query("INSERT INTO saldo_setor VALUES(NULL, {$id_setor}, '{$saldo}', '{$valor}', '0.000', {$mes}, {$ano});");
 		if ($insert) {
@@ -202,7 +202,7 @@ class Geral extends Conexao {
 	 *	@param $acao 0 -> reprovado | 1 -> aprovado
 	 *	@return bool
 	 */
-	public function analisaAdi($id, $acao) {
+	public function analisaAdi($id, $acao): bool{
 		$hoje = date('Y-m-d');
 		$mes_subtraido = $mes = date("n");
 		$ano_subtraido = $ano = date("Y");
@@ -244,7 +244,7 @@ class Geral extends Conexao {
 	 *	@access public
 	 *	@return bool
 	 */
-	public function solicitaAdiantamento($id_setor, $valor, $justificativa) {
+	public function solicitaAdiantamento($id_setor, $valor, $justificativa): bool{
 		$valor = $this->mysqli->real_escape_string($valor);
 		$justificativa = $this->mysqli->real_escape_string($justificativa);
 		$hoje = date('Y-m-d');
@@ -283,13 +283,12 @@ class Geral extends Conexao {
 	 *   @access public
 	 *   @return bool
 	 */
-	public function updateSenha($id_user, $senha) {
+	public function updateSenha($id_user, $senha): bool{
 		$update = $this->mysqli->query("UPDATE usuario SET senha = '{$senha}' WHERE id = {$id_user}");
 		if ($update) {
 			return true;
-		} else {
-			return false;
 		}
+		return false;
 	}
 	//--------------------------------------------------------------------------
 	/**
@@ -321,7 +320,7 @@ class Geral extends Conexao {
 	 *   Função para editar uma postagem
 	 *
 	 *   @access public
-	 *   @return boolean
+	 *   @return bool
 	 */
 	public function editPost($data, $id, $postagem, $pag) {
 		//escapando string especiais para evitar SQL Injections
@@ -342,7 +341,7 @@ class Geral extends Conexao {
 	 *       a publicação não é totalmente excluída, apenas o sistema passará a não mostrá-la
 	 *
 	 *   @access public
-	 *   @return boolean
+	 *   @return bool
 	 */
 	public function excluirNoticia($id) {
 		//escapando string especiais para evitar SQL Injections
@@ -364,7 +363,7 @@ class Geral extends Conexao {
 	 *   @param $qtd Array com as quantidades dos itens do pedido.
 	 *   @param $valor Array com os valores dos itens do pedido.
 	 *   @param $pedido Id do pedido. Se 0, pedido novo, senão editando rascunho ou enviando ao SOF.
-	 *   @return boolean
+	 *   @return bool
 	 */
 	public function insertPedido($id_setor, $id_item, $qtd_solicitada, $qtd_disponivel, $qtd_contrato, $qtd_utilizado, $vl_saldo, $vl_contrato, $vl_utilizado, $valor, $total_pedido, $saldo_total, $prioridade, $obs, $pedido) {
 
