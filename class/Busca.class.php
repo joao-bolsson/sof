@@ -35,22 +35,14 @@ class Busca extends Conexao {
 		if ($id_setor != 2) {
 			$where = "AND saldos_lancamentos.id_setor = {$id_setor}";
 		}
-		$query = $this->mysqli->query("SELECT setores.nome, DATE_FORMAT(saldos_lancamentos.data, '%d/%m/%Y') AS data, saldos_lancamentos.valor FROM setores, saldos_lancamentos WHERE setores.id = saldos_lancamentos.id_setor {$where} ORDER BY saldos_lancamentos.id DESC;");
-		if ($query->num_rows < 1) {
-			return "
-				<tr>
-					<td></td>
-					<td></td>
-					<td></td>
-				</tr>
-			";
-		}
+		$query = $this->mysqli->query("SELECT setores.nome, DATE_FORMAT(saldos_lancamentos.data, '%d/%m/%Y') AS data, saldos_lancamentos.valor, saldo_categoria.nome AS categoria FROM setores, saldos_lancamentos, saldo_categoria WHERE setores.id = saldos_lancamentos.id_setor {$where} AND saldos_lancamentos.categoria = saldo_categoria.id ORDER BY saldos_lancamentos.id DESC;");
 		while ($lancamento = $query->fetch_object()) {
 			$retorno .= "
 				<tr>
 					<td>{$lancamento->nome}</td>
 					<td>{$lancamento->data}</td>
 					<td>R$ {$lancamento->valor}</td>
+					<td>{$lancamento->categoria}</td>
 				</tr>
 			";
 		}
@@ -665,11 +657,11 @@ class Busca extends Conexao {
 	 * 	Função que retorna as solicitações de adiantamentos de saldos enviadas ao SOF para análise
 	 *
 	 * 	@access public
+	 *	@param $st Status
 	 * 	@return string
-	 *
 	 */
 	public function getSolicAdiantamentos($st): string{
-		$query = $this->mysqli->query("SELECT saldos_adiantados.id, setores.nome, DATE_FORMAT(saldos_adiantados.data_solicitacao, '%d/%m/%Y') AS data_solicitacao, DATE_FORMAT(saldos_adiantados.data_analise, '%d/%m/%Y') AS data_analise, mes.sigla_mes AS mes_subtraido, saldos_adiantados.ano, saldos_adiantados.valor_adiantado, saldos_adiantados.justificativa FROM saldos_adiantados, setores, mes WHERE saldos_adiantados.id_setor = setores.id AND saldos_adiantados.status = {$st} AND saldos_adiantados.mes_subtraido = mes.id ORDER BY saldos_adiantados.data_solicitacao DESC;");
+		$query = $this->mysqli->query("SELECT saldos_adiantados.id, setores.nome, DATE_FORMAT(saldos_adiantados.data_solicitacao, '%d/%m/%Y') AS data_solicitacao, DATE_FORMAT(saldos_adiantados.data_analise, '%d/%m/%Y') AS data_analise, saldos_adiantados.valor_adiantado, saldos_adiantados.justificativa FROM saldos_adiantados, setores WHERE saldos_adiantados.id_setor = setores.id AND saldos_adiantados.status = {$st} ORDER BY saldos_adiantados.data_solicitacao DESC;");
 		// declarando retorno
 		$retorno = "";
 		$status = $label = "";
@@ -705,7 +697,6 @@ class Busca extends Conexao {
 					<td>{$solic->nome}</td>
 					<td>{$solic->data_solicitacao}</td>
 					<td>{$solic->data_analise}</td>
-					<td>{$solic->mes_subtraido} / {$solic->ano}</td>
 					<td>R$ {$solic->valor_adiantado}</td>
 					<td>
 						<button onclick=\"viewCompl('{$solic->justificativa}');\" class=\"btn btn-flat waves-attach waves-effect\" type=\"button\" title=\"Ver Justificativa\">JUSTIFICATIVA</button>
@@ -1250,7 +1241,7 @@ class Busca extends Conexao {
 	 */
 	public function getSolicAdiSetor($id_setor): string{
 		$retorno = "";
-		$query = $this->mysqli->query("SELECT saldos_adiantados.id, DATE_FORMAT(saldos_adiantados.data_solicitacao, '%d/%m/%Y') AS data_solicitacao, DATE_FORMAT(saldos_adiantados.data_analise, '%d/%m/%Y') AS data_analise, mes.sigla_mes, saldos_adiantados.ano, saldos_adiantados.valor_adiantado, saldos_adiantados.justificativa, saldos_adiantados.status FROM saldos_adiantados, mes WHERE saldos_adiantados.id_setor = {$id_setor} AND (mes.id = saldos_adiantados.mes_subtraido || saldos_adiantados.mes_subtraido = 0) ORDER BY saldos_adiantados.id DESC;");
+		$query = $this->mysqli->query("SELECT saldos_adiantados.id, DATE_FORMAT(saldos_adiantados.data_solicitacao, '%d/%m/%Y') AS data_solicitacao, DATE_FORMAT(saldos_adiantados.data_analise, '%d/%m/%Y') AS data_analise, saldos_adiantados.valor_adiantado, saldos_adiantados.justificativa, saldos_adiantados.status FROM saldos_adiantados WHERE saldos_adiantados.id_setor = {$id_setor} ORDER BY saldos_adiantados.id DESC;");
 		$label = $status = "";
 		while ($solic = $query->fetch_object()) {
 			switch ($solic->status) {
@@ -1272,7 +1263,6 @@ class Busca extends Conexao {
 			<tr>
 				<td>{$solic->data_solicitacao}</td>
 				<td>{$solic->data_analise}</td>
-				<td>{$solic->sigla_mes} / {$solic->ano}</td>
 				<td>R$ {$solic->valor_adiantado}</td>
 				<td>
 					<button onclick=\"viewCompl('{$solic->justificativa}');\" class=\"btn btn-flat waves-attach waves-effect\" type=\"button\" title=\"Ver Justificativa\">JUSTIFICATIVA</button>
@@ -1538,9 +1528,8 @@ class Busca extends Conexao {
 			$icon = "add";
 		}
 		$query = $this->mysqli->query($sql);
-		if ($query->num_rows > 0) {
-			while ($processo = $query->fetch_object()) {
-				$retorno .= "
+		while ($processo = $query->fetch_object()) {
+			$retorno .= "
 					<tr>
 						<td>{$processo->num_processo}</td>
 						<td>
@@ -1548,9 +1537,6 @@ class Busca extends Conexao {
 						</td>
 					</tr>
 				";
-			}
-		} else {
-			$retorno = "Ocorreu um erro no servidor. Contate o administrador.";
 		}
 		return $retorno;
 	}

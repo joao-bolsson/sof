@@ -278,7 +278,6 @@ $saldo_total = $obj_Busca->getSaldoAtual($id_setor);
                     <thead>
                         <th>DATA_SOLICITACAO</th>
                         <th>DATA_ANALISE</th>
-                        <th>MES_SUBTRAIDO</th>
                         <th>VALOR_ADIANTADO</th>
                         <th>JUSTIFICATIVA</th>
                         <th>STATUS</th>
@@ -421,6 +420,7 @@ $saldo_total = $obj_Busca->getSaldoAtual($id_setor);
                       <th>Setor</th>
                       <th>Data</th>
                       <th>Valor</th>
+                      <th>Categoria</th>
                     </tr>
                   </thead>
                   <tbody id="tbodyListLancamentos"></tbody>
@@ -484,6 +484,6 @@ $saldo_total = $obj_Busca->getSaldoAtual($id_setor);
 
 <script type="text/javascript" src="../plugins/dataTables/datatables.min.js"></script>
 
-<script type="text/javascript" src="../ini.js"></script>
+<script type="text/javascript" src="../ini.min.js"></script>
 </body>
 </html>

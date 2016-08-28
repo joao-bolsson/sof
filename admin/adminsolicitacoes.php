@@ -198,7 +198,6 @@ $permissao = $obj_Busca->getPermissoes($_SESSION["id"]);
             <th>SETOR</th>
             <th>DATA_SOLICITACAO</th>
             <th>DATA_ANALISE</th>
-            <th>MES_SUBTRAIDO</th>
             <th>VALOR_ADIANTADO</th>
             <th>JUSTIFICATIVA</th>
             <th>STATUS</th>
@@ -427,7 +426,7 @@ $permissao = $obj_Busca->getPermissoes($_SESSION["id"]);
             <label class="floating-label" for="file"><span class="icon">insert_drive_file</span>&nbsp;Arquivo</label>
             <input id="file" class="form-control" type="file" style="text-transform: none !important;" name="file">
           </div>
-          <p class="help-block">Max. 32MB</p>
+          <p class="help-block">Tamanho máximo: 5 MB</p>
           <div id="loaderImport" class="progress-circular" style="margin-left: 45%; display: none;">
             <div class="progress-circular-wrapper">
               <div class="progress-circular-inner">
@@ -507,6 +506,7 @@ $permissao = $obj_Busca->getPermissoes($_SESSION["id"]);
               <th>Setor</th>
               <th>Data</th>
               <th>Valor</th>
+              <th>Categoria</th>
             </tr>
           </thead>
           <tbody id="tbodyListLancamentos"></tbody>
@@ -759,7 +759,7 @@ $permissao = $obj_Busca->getPermissoes($_SESSION["id"]);
 
 <script type="text/javascript" src="../plugins/dataTables/datatables.min.js"></script>
 
-<script type="text/javascript" src="../ini.js"></script>
+<script type="text/javascript" src="../ini.min.js"></script>
 
 </body>
 </html>

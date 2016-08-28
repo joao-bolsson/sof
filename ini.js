@@ -507,6 +507,7 @@ function analisaAdi(id, acao) {
 			id: id,
 			acao: acao
 		}, function(resposta) {
+			$('#tableListLancamentos').DataTable().destroy();
 			iniTableSolicAdiant();
 		});
 	}
