@@ -10,9 +10,10 @@ ini_set('display_erros', true);
 error_reporting(E_ALL);
 
 include_once 'Conexao.class.php';
+include_once 'Busca.class.php';
 class Geral extends Conexao {
 
-	private $mysqli;
+	private $mysqli, $obj_Busca;
 	function __construct() {
 		//chama o método contrutor da classe Conexao
 		parent::__construct();
@@ -184,11 +185,20 @@ class Geral extends Conexao {
 	 *	Função para liberação de saldo de um setor
 	 *
 	 *	@access public
+	 *	@param $id_setor Comment.
+	 *	@param $valor Comment.
+	 *	@param $saldo_atual Comment.
 	 *	@return bool
 	 */
-	public function liberaSaldo($id_setor, $mes, $ano, $valor, $saldo_anterior): bool{
-		$saldo = $saldo_anterior + $valor;
-		$insert = $this->mysqli->query("INSERT INTO saldo_setor VALUES(NULL, {$id_setor}, '{$saldo}', '{$valor}', '0.000', {$mes}, {$ano});");
+	public function liberaSaldo($id_setor, $valor, $saldo_atual): bool{
+		$saldo = $saldo_atual + $valor;
+		$verifica = $this->mysqli->query("SELECT saldo_setor.id FROM saldo_setor WHERE saldo_setor.id_setor = {$id_setor};");
+		if ($verifica->num_rows < 1) {
+			$query = $this->mysqli->query("INSERT INTO saldo_setor VALUES(NULL, {$id_setor}, '0.000');");
+		}
+		$update = $this->mysqli->query("UPDATE saldo_setor SET saldo = '{$saldo}' WHERE id_setor = {$id_setor};");
+		$hoje = date('Y-m-d');
+		$insert = $this->mysqli->query("INSERT INTO saldos_lancamentos VALUES(NULL, {$id_setor}, '{$hoje}', '{$valor}');");
 		if ($insert) {
 			return true;
 		}
@@ -202,40 +212,43 @@ class Geral extends Conexao {
 	 *	@param $acao 0 -> reprovado | 1 -> aprovado
 	 *	@return bool
 	 */
-	public function analisaAdi($id, $acao): bool{
-		$hoje = date('Y-m-d');
-		$mes_subtraido = $mes = date("n");
-		$ano_subtraido = $ano = date("Y");
-		if ($mes_subtraido == 12) {
-			$mes_subtraido = 1;
-			$ano_subtraido++;
-		} else {
-			$mes_subtraido++;
-		}
-		if (!$acao) {
-			// se reprovado
-			$mes_subtraido = 13;
-		}
-		$update = $this->mysqli->query("UPDATE saldos_adiantados SET data_analise = '{$hoje}', mes_subtraido = {$mes_subtraido}, ano = {$ano_subtraido}, status = {$acao} WHERE id = {$id}");
-		if ($update) {
-			if (!$acao) {
-				// se reprovado retorna
-				return true;
+	public function analisaAdi($id, $acao): bool {
+		/*
+			$hoje = date('Y-m-d');
+			$mes_subtraido = $mes = date("n");
+			$ano_subtraido = $ano = date("Y");
+			if ($mes_subtraido == 12) {
+				$mes_subtraido = 1;
+				$ano_subtraido++;
+			} else {
+				$mes_subtraido++;
 			}
-			// selecionando a soma entre o valor adiantado aprovado com o saldo atual do setor no mês
-			$query = $this->mysqli->query("SELECT saldo_setor.id_setor, saldo_setor.saldo + saldos_adiantados.valor_adiantado AS saldo_total, saldo_setor.saldo_aditivado + saldos_adiantados.valor_adiantado AS total_aditivado FROM saldo_setor, saldos_adiantados WHERE saldos_adiantados.id = {$id} AND saldos_adiantados.id_setor = saldo_setor.id_setor AND saldos_adiantados.mes_subtraido = {$mes_subtraido} AND saldos_adiantados.ano = {$ano_subtraido} AND saldo_setor.mes = {$mes} AND saldo_setor.ano = {$ano};");
-			$adiantamento = $query->fetch_object();
-			$query->close();
+			if (!$acao) {
+				// se reprovado
+				$mes_subtraido = 13;
+			}
+			$update = $this->mysqli->query("UPDATE saldos_adiantados SET data_analise = '{$hoje}', mes_subtraido = {$mes_subtraido}, ano = {$ano_subtraido}, status = {$acao} WHERE id = {$id}");
+			if ($update) {
+				if (!$acao) {
+					// se reprovado retorna
+					return true;
+				}
+				// selecionando a soma entre o valor adiantado aprovado com o saldo atual do setor no mês
+				$query = $this->mysqli->query("SELECT saldo_setor.id_setor, saldo_setor.saldo + saldos_adiantados.valor_adiantado AS saldo_total, saldo_setor.saldo_aditivado + saldos_adiantados.valor_adiantado AS total_aditivado FROM saldo_setor, saldos_adiantados WHERE saldos_adiantados.id = {$id} AND saldos_adiantados.id_setor = saldo_setor.id_setor AND saldos_adiantados.mes_subtraido = {$mes_subtraido} AND saldos_adiantados.ano = {$ano_subtraido} AND saldo_setor.mes = {$mes} AND saldo_setor.ano = {$ano};");
+				$adiantamento = $query->fetch_object();
+				$query->close();
 
-			$update_saldo = $this->mysqli->query("UPDATE saldo_setor SET saldo = '{$adiantamento->saldo_total}', saldo_aditivado = '{$adiantamento->total_aditivado}' WHERE id_setor = {$adiantamento->id_setor} AND mes = {$mes} AND ano = {$ano};");
-			if ($update_saldo) {
-				return true;
+				$update_saldo = $this->mysqli->query("UPDATE saldo_setor SET saldo = '{$adiantamento->saldo_total}', saldo_aditivado = '{$adiantamento->total_aditivado}' WHERE id_setor = {$adiantamento->id_setor} AND mes = {$mes} AND ano = {$ano};");
+				if ($update_saldo) {
+					return true;
+				} else {
+					return false;
+				}
 			} else {
 				return false;
 			}
-		} else {
-			return false;
-		}
+		*/
+		return true;
 	}
 	// -------------------------------------------------------------------------
 	/**
@@ -256,25 +269,6 @@ class Geral extends Conexao {
 			return true;
 		}
 		return false;
-	}
-	// -------------------------------------------------------------------------
-	/**
-	 *   Função para liberar o saldo para determinado setor
-	 *
-	 *   @access public
-	 *   @return bool
-	 */
-	public function freeSaldoSetor($id, $valor) {
-		$mes = date("n");
-		// obtendo saldo atual do setor
-		$query_saldo = $this->mysqli->query("SELECT saldo FROM saldo_setor WHERE id_setor = {$id} AND mes = {$mes}");
-		$obj = $query_saldo->fetch_object();
-		$saldo = $obj->saldo;
-		$query_saldo->close();
-
-		$novo_saldo = $saldo + $valor;
-// id | id_setor | saldo       | saldo_suplementado | saldo_aditivado | mes
-		$insert = $this->mysqli->query("INSERT INTO saldo_setor VALUES(NULL, {$id}, '$novo_saldo', '{$valor}', '0.000', {$mes});");
 	}
 	//--------------------------------------------------------------------------
 	/**
@@ -389,7 +383,7 @@ class Geral extends Conexao {
 			}
 		} else {
 			// atualiza saldo
-			$this->mysqli->query("UPDATE saldo_setor SET saldo = '{$saldo_total}' WHERE id_setor = {$id_setor} AND mes = {$mes};");
+			$this->mysqli->query("UPDATE saldo_setor SET saldo = '{$saldo_total}' WHERE id_setor = {$id_setor};");
 			// enviado ao sof
 			if ($pedido == 0) {
 				//inserindo os dados iniciais do pedido
@@ -449,11 +443,9 @@ class Geral extends Conexao {
 				$vl_utilizado -= $valor_item[$i];
 				$this->mysqli->query("UPDATE itens SET qt_saldo = '{$qt_saldo[$i]}', qt_utilizado = '{$qt_utilizado[$i]}', vl_saldo = '{$vl_saldo[$i]}', vl_utilizado = '{$vl_utilizado[$i]}', cancelado = 1 WHERE id = {$id_item[$i]};");
 				// o saldo do setor deve ser incrementado do valor total do item que foi solicitado mas cancelado
-				$mes = date("n");
-				$ano = date("Y");
 				$saldo_setor += $valor_item[$i];
 				$saldo_setor = number_format($saldo_setor, 3, '.', '');
-				$this->mysqli->query("UPDATE saldo_setor SET saldo = '{$saldo_setor}' WHERE id_setor = {$id_setor} AND mes = {$mes} AND ano = {$ano};");
+				$this->mysqli->query("UPDATE saldo_setor SET saldo = '{$saldo_setor}' WHERE id_setor = {$id_setor};");
 				// o pedido também deve ser alterado
 				$total_pedido -= $valor_item[$i];
 				$this->mysqli->query("UPDATE pedido SET valor = '{$total_pedido}' WHERE id = {$id_pedido};");

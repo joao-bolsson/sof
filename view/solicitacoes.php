@@ -10,13 +10,9 @@ if (!isset($_SESSION["id"])) {
 include_once '../class/Busca.class.php';
 //instanciando classe de busca para popular o select de estados
 $obj_Busca = new Busca();
-$obj_Saldo = $obj_Busca->getSaldoSetor($_SESSION["id_setor"]);
+$id_setor = $_SESSION["id_setor"];
+$saldo_total = $obj_Busca->getSaldoAtual($id_setor);
 
-$saldo_total = $obj_Saldo->saldo;
-$saldo_suplementado = $obj_Saldo->saldo_suplementado;
-$saldo_aditivado = $obj_Saldo->saldo_aditivado;
-
-$saldo_mes_anterior = $obj_Saldo->saldo_mes_anterior;
 ?>
 <!DOCTYPE html>
 <html lang="pt">
@@ -78,7 +74,7 @@ $saldo_mes_anterior = $obj_Saldo->saldo_mes_anterior;
                                 <a class="waves-attach" href="javascript:listPedidos();"><span class="text-white"><span class="icon">description</span>MEUS PEDIDOS</span></a>
                             </li>
                             <li>
-                                <a class="waves-attach" href="javascript:abreModal('#saldos');"><span class="text-white"><span class="icon">attach_money</span>SALDOS</span></a>
+                                <a class="waves-attach" href="javascript:listLancamentos(<?=$id_setor?>);"><span class="text-white"><span class="icon">attach_money</span>SALDOS</span></a>
                             </li>
                             <li>
                                 <a class="waves-attach" href="javascript:listAdiantamentos();"><span class="text-white"><span class="icon">money_off</span>MEUS ADIANTAMENTOS</span></a>
@@ -405,7 +401,7 @@ $saldo_mes_anterior = $obj_Saldo->saldo_mes_anterior;
         </div>
     </div>
 </div>
-<div aria-hidden="true" class="modal fade" id="saldos" role="dialog" tabindex="-1">
+<div aria-hidden="true" class="modal fade" id="listLancamentos" role="dialog" tabindex="-1">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-heading">
@@ -415,21 +411,19 @@ $saldo_mes_anterior = $obj_Saldo->saldo_mes_anterior;
             <div class="modal-inner">
                 <table class="table">
                     <tr>
-                        <td>Saldo Restante do Mês Anterior</td>
-                        <td>R$ <?=$saldo_mes_anterior?></td>
-                    </tr>
-                    <tr>
-                        <td>Saldo Suplementado</td>
-                        <td>R$ <?=$saldo_suplementado?></td>
-                    </tr>
-                    <tr>
-                        <td>Saldo Aditivado</td>
-                        <td>R$ <?=$saldo_aditivado?></td>
-                    </tr>
-                    <tr>
                         <td>Saldo Disponível</td>
                         <td>R$ <?=$saldo_total?></td>
                     </tr>
+                </table>
+                <table id="tableListLancamentos" class="table" style="width: 100%;">
+                  <thead>
+                    <tr>
+                      <th>Setor</th>
+                      <th>Data</th>
+                      <th>Valor</th>
+                    </tr>
+                  </thead>
+                  <tbody id="tbodyListLancamentos"></tbody>
                 </table>
             </div>
             <div class="modal-footer margin-bottom">
@@ -490,6 +484,6 @@ $saldo_mes_anterior = $obj_Saldo->saldo_mes_anterior;
 
 <script type="text/javascript" src="../plugins/dataTables/datatables.min.js"></script>
 
-<script type="text/javascript" src="../ini.min.js"></script>
+<script type="text/javascript" src="../ini.js"></script>
 </body>
 </html>

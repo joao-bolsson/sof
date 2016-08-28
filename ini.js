@@ -183,7 +183,6 @@ function carregaPostsPag(tabela) {
 function iniAdminSolicitacoes() {
 	iniDataTable('#tableItensPedido');
 	iniSolicitacoes();
-	iniFreeSaldos();
 	iniRecepcao();
 	avisoSnack('Carregamento concluído !', 'body');
 }
@@ -303,34 +302,54 @@ function solicAltPed(id_pedido) {
 	$('#div-lb-high').addClass('control-highlight');
 }
 
-function iniFreeSaldos() {
-	$.post('../php/busca.php', {
-		admin: 1,
-		form: 'iniFreeSaldos'
-	}, function(resposta) {
-		document.getElementById('contFreeSaldos').innerHTML = resposta;
-	});
-}
-
-function liberaSaldo(id_setor, mes, ano, valor) {
+function liberaSaldo() {
+	document.getElementById('loadingFree').style.display = 'block';
+	var setor = document.getElementById('setor').value;
+	var valor = document.getElementById('valorFree').value;
 	valor = parseFloat(valor).toFixed(3);
 	$.post('../php/geral.php', {
 		admin: 1,
 		form: 'liberaSaldo',
-		id_setor: id_setor,
-		mes: mes,
-		ano: ano,
+		id_setor: setor,
 		valor: valor
 	}, function(resposta) {
-		// Quando terminada a requisição
 		if (resposta) {
-			alert("O saldo do setor acaba de receber R$ " + valor + " referente ao período " + mes + "/" + ano);
-			iniFreeSaldos();
+			alert('O valor de R$ ' + valor + ' foi acrescentado ao saldo do setor com SUCESSO.');
+			document.getElementById('loadingFree').style.display = 'none';
+			$('#tableListLancamentos').DataTable().destroy();
+			$('#freeSaldos').modal('hide');
 		} else {
-			alert("Ocorreu um erro no servidor. Contate o administrador.");
-			window.location.href = "sair.php";
+			alert('Ocorreu um erro no servidor. Contate o administrador.');
+			window.location.href = 'sair.php';
 		}
 	});
+}
+
+$('#listLancamentos').on('shown.bs.modal', function(event) {
+	if (!$.fn.DataTable.isDataTable('#tableListLancamentos')) {
+		iniDataTable('#tableListLancamentos');
+	}
+});
+
+function listLancamentos(id_setor) {
+	$('#listLancamentos').modal();
+	if (!$.fn.DataTable.isDataTable('#tableListLancamentos')) {
+		if (id_setor === 0) {
+			$.post('../php/busca.php', {
+				admin: 1,
+				form: 'listLancamentos',
+			}, function(resposta) {
+				document.getElementById('tbodyListLancamentos').innerHTML = resposta;
+			});
+		} else {
+			$.post('../php/busca.php', {
+				users: 1,
+				form: 'listLancamentos',
+			}, function(resposta) {
+				document.getElementById('tbodyListLancamentos').innerHTML = resposta;
+			});
+		}
+	}
 }
 $('#listSolicAltPedidos').on('shown.bs.modal', function(event) {
 	if (!$.fn.DataTable.isDataTable('#tableSolicAltPedido')) {

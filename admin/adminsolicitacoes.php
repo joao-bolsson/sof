@@ -80,6 +80,9 @@ $permissao = $obj_Busca->getPermissoes($_SESSION["id"]);
             <li>
               <a class="waves-attach" href="javascript:abreModal('#freeSaldos');"><span style="color: white;"><span class="icon">payment</span>LIBERAR SALDOS</span></a>
             </li>
+            <li>
+              <a class="waves-attach" href="javascript:listLancamentos(0);"><span style="color: white;"><span class="icon">attach_money</span>LANÇAMENTOS DE SALDOS</span></a>
+            </li>
             <?php endif;?>
             <?php if ($permissao->pedidos): ?>
             <li>
@@ -449,52 +452,64 @@ $permissao = $obj_Busca->getPermissoes($_SESSION["id"]);
 <?php endif;?>
 <?php if ($permissao->saldos): ?>
 <div aria-hidden="true" class="modal fade" id="freeSaldos" role="dialog" tabindex="-1">
-  <div class="modal-dialog">
+  <div class="modal-dialog" style="width: 40%;">
     <div class="modal-content">
       <div class="modal-heading">
         <a class="modal-close" data-dismiss="modal">×</a>
-        <h2 class="modal-title content-sub-heading">Liberar Saldos</h2>
+        <h2 class="modal-title content-sub-heading">Liberar Saldo</h2>
       </div>
       <div class="modal-inner">
-        <table class="table">
-          <thead>
-            <tr>
-              <th>Setor</th>
-              <th>Valor</th>
-              <th>Liberar valor mês/ano</th>
-              <th></th>
-            </tr>
-          </thead>
-          <tbody id="contFreeSaldos">
-
-          </tbody>
-        </table>
+        <form action="javascript:liberaSaldo();" method="post">
+          <div class="modal-inner">
+            <div class="form-group form-group-label">
+              <label class="floating-label" for="setor"><span class="icon">perm_identity</span>&nbsp;Setor</label>
+              <select id="setor" class="form-control" name="setor" required>
+                <?=$obj_Busca->getOptionsSetores();?>
+              </select>
+            </div>
+            <div class="form-group form-group-label">
+              <label class="floating-label" for="valorFree"><span class="icon">attach_money</span>&nbsp;Valor</label>
+              <input class="form-control" id="valorFree" name="valor" type="number" step="0.001"required min="0.000">
+            </div>
+            <div id="loadingFree" class="progress-circular" style="margin-left: 45%; display: none;">
+              <div class="progress-circular-wrapper">
+                <div class="progress-circular-inner">
+                  <div class="progress-circular-left">
+                    <div class="progress-circular-spinner"></div>
+                  </div>
+                  <div class="progress-circular-gap"></div>
+                  <div class="progress-circular-right">
+                    <div class="progress-circular-spinner"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="modal-footer margin-bottom">
+            <button class="btn btn-brand waves-attach waves-light waves-effect" type="submit" style="width: 100%;"><span class="icon">autorenew</span>&nbsp;Liberar</button>
+          </div>
+        </form>
       </div>
     </div>
   </div>
 </div>
-<?php endif;?>
-<?php if ($permissao->saldos): ?>
-<div aria-hidden="true" class="modal fade" id="freeSaldos" role="dialog" tabindex="-1">
+<div aria-hidden="true" class="modal fade" id="listLancamentos" role="dialog" tabindex="-1">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-heading">
         <a class="modal-close" data-dismiss="modal">×</a>
-        <h2 class="modal-title content-sub-heading">Liberar Saldos</h2>
+        <h2 class="modal-title content-sub-heading">Lançamentos de Saldos</h2>
       </div>
       <div class="modal-inner">
-        <table class="table">
+        <table id="tableListLancamentos" class="table" style="width: 100%;">
           <thead>
             <tr>
               <th>Setor</th>
+              <th>Data</th>
               <th>Valor</th>
-              <th>Liberar valor mês/ano</th>
-              <th></th>
             </tr>
           </thead>
-          <tbody id="contFreeSaldos">
-
-          </tbody>
+          <tbody id="tbodyListLancamentos"></tbody>
         </table>
       </div>
     </div>
@@ -744,7 +759,7 @@ $permissao = $obj_Busca->getPermissoes($_SESSION["id"]);
 
 <script type="text/javascript" src="../plugins/dataTables/datatables.min.js"></script>
 
-<script type="text/javascript" src="../ini.min.js"></script>
+<script type="text/javascript" src="../ini.js"></script>
 
 </body>
 </html>

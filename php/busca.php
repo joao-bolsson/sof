@@ -28,6 +28,11 @@ if (isset($_POST["admin"]) && isset($_SESSION['id_setor']) && $_SESSION['id_seto
 	$form = $_POST["form"];
 
 	switch ($form) {
+
+	// comment.
+	case 'listLancamentos':
+		echo $obj_Busca->getLancamentos($_SESSION['id_setor']);
+		break;
 	// comment.
 
 	case 'relatorioProcessos':
@@ -57,12 +62,6 @@ if (isset($_POST["admin"]) && isset($_SESSION['id_setor']) && $_SESSION['id_seto
 	case 'iniTableSolicAltPed':
 		$status = $_POST["status"];
 		echo $obj_Busca->getAdminSolicAltPedidos($status);
-		break;
-
-	// retornar a tabela com os setores para liberação de saldo
-
-	case 'iniFreeSaldos':
-		echo $obj_Busca->getFreeSaldos();
 		break;
 
 	// comentário
@@ -114,6 +113,10 @@ if (isset($_POST["admin"]) && isset($_SESSION['id_setor']) && $_SESSION['id_seto
 	$form = $_POST["form"];
 
 	switch ($form) {
+	// comment.
+	case 'listLancamentos':
+		echo $obj_Busca->getLancamentos($_SESSION['id_setor']);
+		break;
 
 	// comment.
 

@@ -23,7 +23,63 @@ class Busca extends Conexao {
 		$this->mysqli = parent::getConexao();
 	}
 	// ------------------------------------------------------------------------------
-	public function getRelatorioProcessos($tipo) {
+	/**
+	 *	Função que retorna a tabela com os lançamentos de saldos pelo SOF
+	 *
+	 *	@access public
+	 *	@return string
+	 */
+	public function getLancamentos($id_setor): string{
+		$retorno = "";
+		$where = "";
+		if ($id_setor != 2) {
+			$where = "AND saldos_lancamentos.id_setor = {$id_setor}";
+		}
+		$query = $this->mysqli->query("SELECT setores.nome, DATE_FORMAT(saldos_lancamentos.data, '%d/%m/%Y') AS data, saldos_lancamentos.valor FROM setores, saldos_lancamentos WHERE setores.id = saldos_lancamentos.id_setor {$where} ORDER BY saldos_lancamentos.id DESC;");
+		if ($query->num_rows < 1) {
+			return "
+				<tr>
+					<td></td>
+					<td></td>
+					<td></td>
+				</tr>
+			";
+		}
+		while ($lancamento = $query->fetch_object()) {
+			$retorno .= "
+				<tr>
+					<td>{$lancamento->nome}</td>
+					<td>{$lancamento->data}</td>
+					<td>R$ {$lancamento->valor}</td>
+				</tr>
+			";
+		}
+		return $retorno;
+	}
+	// ------------------------------------------------------------------------------
+	/**
+	 *	Função que retorna as options com os setores cadastrados no sistema
+	 *
+	 *	@access public
+	 *	@return string
+	 */
+	public function getOptionsSetores(): string{
+		$retorno = "";
+		$query = $this->mysqli->query("SELECT setores.id, setores.nome FROM setores WHERE setores.id <> 1;");
+		while ($setor = $query->fetch_object()) {
+			$retorno .= "<option value=\"{$setor->id}\">{$setor->nome}</option>";
+		}
+		$query->close();
+		return $retorno;
+	}
+	// ------------------------------------------------------------------------------
+	/**
+	 *	Função que retorna um relatório para a recepção dos processos (ajustar)
+	 *
+	 *	@access public
+	 *	@return string
+	 */
+	public function getRelatorioProcessos($tipo): string{
 		$retorno = "";
 		// tratando tipo == 0 primeiro, buscando TODOS os processos
 		$where = "";
@@ -606,61 +662,6 @@ class Busca extends Conexao {
 
 	// -----------------------------------------------------------------------
 	/**
-	 * 	Função para retornar a tabela de liberar saldos para os setores
-	 * 	utilizada em adminsolicitacoes.php
-	 *
-	 * 	@access public
-	 * 	@return string
-	 */
-	public function getFreeSaldos(): string{
-		$retorno = "";
-		$mes_atual = $mes = date("n");
-		$ano_atual = $ano = date("Y");
-		if ($mes == 1) {
-			$mes = 12;
-			$ano--;
-		} else {
-			$mes--;
-		}
-		// contém os ids dos setores que já tiveram o seu saldo liberado no mês/ano atual
-		$exc = "";
-		$query_exc = $this->mysqli->query("SELECT saldo_setor.id_setor FROM saldo_setor WHERE mes = {$mes_atual} AND ano = {$ano_atual};");
-		while ($result = $query_exc->fetch_object()) {
-			$exc .= " AND saldo_setor.id_setor <> {$result->id_setor}";
-		}
-		$sigla_mes = $this->mysqli->query("SELECT sigla_mes FROM mes WHERE id = {$mes_atual}")->fetch_object()->sigla_mes;
-		$query = $this->mysqli->query("SELECT saldo_setor.id_setor, setores.nome, (saldo_padrao - saldo_aditivado) AS saldo_incr FROM saldo_setor, saldo_fixo, setores WHERE saldo_setor.id_setor = saldo_fixo.id_setor AND saldo_setor.id_setor = setores.id AND setores.id <> 1 AND saldo_setor.mes = {$mes} AND saldo_setor.ano = {$ano}{$exc};");
-		if ($query->num_rows < 1) {
-			$exc = str_replace("saldo_setor", "saldo_fixo", $exc);
-			$query = $this->mysqli->query("SELECT setores.id AS id_setor, setores.nome, saldo_fixo.saldo_padrao AS saldo_incr FROM setores, saldo_fixo WHERE setores.id = saldo_fixo.id_setor AND setores.id <> 1{$exc};");
-		}
-		if ($query->num_rows > 0) {
-			while ($saldo = $query->fetch_object()) {
-				$retorno .= "
-				<tr>
-					<td>{$saldo->nome}</td>
-					<td>{$saldo->saldo_incr}</td>
-					<td>{$sigla_mes} / {$ano_atual}</td>
-					<td><a class=\"modal-close\" href=\"javascript:liberaSaldo({$saldo->id_setor}, {$mes_atual}, {$ano_atual}, '{$saldo->saldo_incr}');\" title=\"Liberar Saldo\"><span class=\"icon\">done_all<span></span></span></a></td>
-				</tr>
-				";
-			}
-		} else {
-			$retorno = "
-				<tr>
-					<td colspan=\"3\">Nenhum saldo para liberar.</td>
-					<td></td>
-					<td></td>
-					<td></td>
-				</tr>
-			";
-		}
-		$query->close();
-		return $retorno;
-	}
-
-	// -----------------------------------------------------------------------
-	/**
 	 * 	Função que retorna as solicitações de adiantamentos de saldos enviadas ao SOF para análise
 	 *
 	 * 	@access public
@@ -1167,9 +1168,7 @@ class Busca extends Conexao {
 	 *
 	 */
 	public function getInfoPedidoAnalise($id_pedido, $id_setor): string{
-		$mes = date("n");
-		$ano = date("Y");
-		$query = $this->mysqli->query("SELECT saldo_setor.saldo, pedido.prioridade, status.nome AS status, pedido.valor, pedido.obs FROM saldo_setor, pedido, status WHERE status.id = pedido.status AND saldo_setor.id_setor = {$id_setor} AND saldo_setor.mes = {$mes} AND saldo_setor.ano = {$ano} AND pedido.id = {$id_pedido};");
+		$query = $this->mysqli->query("SELECT saldo_setor.saldo, pedido.prioridade, status.nome AS status, pedido.valor, pedido.obs FROM saldo_setor, pedido, status WHERE status.id = pedido.status AND saldo_setor.id_setor = {$id_setor} AND pedido.id = {$id_pedido};");
 		$pedido = $query->fetch_object();
 		$pedido->status = trim($pedido->status);
 		$query->close();
@@ -1288,57 +1287,23 @@ class Busca extends Conexao {
 
 	//------------------------------------------------------------------------
 	/**
-	 * Função para retornar o saldo disponível do setor logado
+	 *	Função para retornar o saldo do mês anterior
 	 *
-	 * @access public
-	 * @return object
-	 *
+	 * 	@access public
+	 *	@param $id_setor Setor que se quer pegar o saldo atual
+	 *	@return string
 	 */
-	public function getSaldoSetor($id_setor) {
-		//pegando data do mes
-		$mes = date("n");
-		$ano = date("Y");
+	public function getSaldoAtual($id_setor): string{
 		//executando query
-		$query = $this->mysqli->query("SELECT saldo, saldo_suplementado, saldo_aditivado FROM saldo_setor WHERE id_setor = {$id_setor} AND mes = {$mes} AND ano = {$ano};");
-		$obj_query = new stdClass;
-		if ($query->num_rows > 0) {
-			$obj_query = $query->fetch_object();
-		} else {
-			$obj_query->saldo = "0.000";
-			$obj_query->saldo_suplementado = "0.000";
-			$obj_query->saldo_aditivado = "0.000";
-		}
-		$obj_query->saldo_mes_anterior = Busca::getSaldoMesAnterior($id_setor);
-
-		return $obj_query;
-	}
-
-	//------------------------------------------------------------------------
-	/**
-	 * Função para retornar o saldo do mês anterior
-	 *
-	 * @access public
-	 * @return string
-	 */
-	public function getSaldoMesAnterior($id_setor): string{
-		$mes = date("n");
-		$ano = date("Y");
-		if ($mes == 1) {
-			$mes = 12;
-			$ano--;
-		} else {
-			$mes--;
-		}
-		//executando query
-		$query = $this->mysqli->query("SELECT saldo FROM saldo_setor WHERE id_setor = {$id_setor} AND mes = {$mes} AND ano = {$ano};");
+		$query = $this->mysqli->query("SELECT saldo FROM saldo_setor WHERE id_setor = {$id_setor};");
 
 		if ($query->num_rows < 1) {
-			return "0";
-		} else {
-			$obj_query = $query->fetch_object();
-
-			return $obj_query->saldo;
+			$query->close();
+			return '0';
 		}
+		$obj_query = $query->fetch_object();
+		$query->close();
+		return $obj_query->saldo;
 	}
 
 	//---------------------------------------------------------------------------------
@@ -1515,9 +1480,7 @@ class Busca extends Conexao {
 	 *
 	 */
 	public function getPopulaRascunho($id_pedido, $id_setor): string{
-		$mes = date("n");
-		$ano = date("Y");
-		$query = $this->mysqli->query("SELECT saldo_setor.saldo, pedido.valor, pedido.obs FROM saldo_setor, pedido WHERE pedido.id = {$id_pedido} AND saldo_setor.id_setor = {$id_setor} AND saldo_setor.mes = {$mes} AND saldo_setor.ano = {$ano};");
+		$query = $this->mysqli->query("SELECT saldo_setor.saldo, pedido.valor, pedido.obs FROM saldo_setor, pedido WHERE pedido.id = {$id_pedido} AND saldo_setor.id_setor = {$id_setor};");
 		$pedido = $query->fetch_object();
 		$query->close();
 		return json_encode($pedido);

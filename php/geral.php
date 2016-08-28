@@ -173,13 +173,11 @@ if (isset($_POST["admin"]) && isset($_SESSION["id_setor"]) && $_SESSION["id_seto
 
 	case 'liberaSaldo':
 		$id_setor = $_POST["id_setor"];
-		$mes = $_POST["mes"];
-		$ano = $_POST["ano"];
 		$valor = $_POST["valor"];
 
-		$saldo_anterior = $obj_Busca->getSaldoMesAnterior($id_setor);
+		$saldo_atual = $obj_Busca->getSaldoAtual($id_setor);
 
-		$libera = $obj_Geral->liberaSaldo($id_setor, $mes, $ano, $valor, $saldo_anterior);
+		$libera = $obj_Geral->liberaSaldo($id_setor, $valor, $saldo_atual);
 
 		if ($libera) {
 			echo true;
