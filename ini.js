@@ -136,12 +136,13 @@ function transfereSaldo() {
 	}, function(resposta) {
 		if (resposta) {
 			alert('O valor de R$ ' + valor + ' foi transferido com SUCESSO! ');
-			$('#transferencia').modal('hide');
 			$('#tableListLancamentos').DataTable().destroy();
 		} else {
-			window.location.href = 'sair.php';
+			alert('Saldo insuficiente para realizar a transferência');
 		}
 	});
+	$('#transferencia').modal('hide');
+	document.getElementById('formTransferencia').reset();
 	document.getElementById('loadingTransf').style.display = 'none';
 }
 
