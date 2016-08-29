@@ -83,6 +83,9 @@ $permissao = $obj_Busca->getPermissoes($_SESSION["id"]);
             <li>
               <a class="waves-attach" href="javascript:listLancamentos(0);"><span style="color: white;"><span class="icon">attach_money</span>LANÇAMENTOS DE SALDOS</span></a>
             </li>
+            <li>
+              <a class="waves-attach" href="javascript:abreModal('#transferencia');"><span style="color: white;"><span class="icon">payment</span>TRANSFERÊNCIAS</span></a>
+            </li>
             <?php endif;?>
             <?php if ($permissao->pedidos): ?>
             <li>
@@ -450,6 +453,58 @@ $permissao = $obj_Busca->getPermissoes($_SESSION["id"]);
 </div>
 <?php endif;?>
 <?php if ($permissao->saldos): ?>
+<div aria-hidden="true" class="modal fade" id="transferencia" role="dialog" tabindex="-1">
+  <div class="modal-dialog" style="width: 40%;">
+    <div class="modal-content">
+      <div class="modal-heading">
+        <a class="modal-close" data-dismiss="modal">×</a>
+        <h2 class="modal-title content-sub-heading">Nova Transferência</h2>
+      </div>
+      <div class="modal-inner">
+        <form id="formTransferencia" action="javascript:transfereSaldo();" method="post">
+          <div class="modal-inner">
+            <div class="form-group form-group-label">
+              <label class="floating-label" for="setorOri"><span class="icon">perm_identity</span>&nbsp;Setor Origem</label>
+              <select id="setorOri" class="form-control" name="setorOri" required>
+                <?=$obj_Busca->getOptionsSetores();?>
+              </select>
+            </div>
+            <div class="form-group form-group-label">
+              <label class="floating-label" for="setorDest"><span class="icon">perm_identity</span>&nbsp;Setor Destino</label>
+              <select id="setorDest" class="form-control" name="setorDest" required>
+                <?=$obj_Busca->getOptionsSetores();?>
+              </select>
+            </div>
+            <div class="form-group form-group-label">
+              <label class="floating-label" for="valorTransf"><span class="icon">attach_money</span>&nbsp;Valor</label>
+              <input class="form-control" id="valorTransf" name="valor" type="number" step="0.001"required min="0.000">
+            </div>
+            <div class="form-group form-group-label">
+              <label class="floating-label" for="justTransf"><span class="icon">announcement</span>&nbsp;Justificativa</label>
+              <textarea class="form-control textarea-autosize" id="justTransf" name="obs" rows="1" required></textarea>
+            </div>
+            <div id="loadingTransf" class="progress-circular" style="margin-left: 45%; display: none;">
+              <div class="progress-circular-wrapper">
+                <div class="progress-circular-inner">
+                  <div class="progress-circular-left">
+                    <div class="progress-circular-spinner"></div>
+                  </div>
+                  <div class="progress-circular-gap"></div>
+                  <div class="progress-circular-right">
+                    <div class="progress-circular-spinner"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="modal-footer margin-bottom">
+            <button class="btn btn-brand waves-attach waves-light waves-effect" type="submit" style="width: 100%;"><span class="icon">autorenew</span>&nbsp;Liberar</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
 <div aria-hidden="true" class="modal fade" id="freeSaldos" role="dialog" tabindex="-1">
   <div class="modal-dialog" style="width: 40%;">
     <div class="modal-content">

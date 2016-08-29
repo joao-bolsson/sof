@@ -120,6 +120,31 @@ function iniDataTable(tabela) {
 	});
 }
 
+function transfereSaldo() {
+	document.getElementById('loadingTransf').style.display = 'block';
+	var ori = document.getElementById('setorOri').value;
+	var dest = document.getElementById('setorDest').value;
+	var valor = document.getElementById('valorTransf').value;
+	var just = document.getElementById('justTransf').value;
+	$.post('../php/geral.php', {
+		admin: 1,
+		form: 'transfereSaldo',
+		ori: ori,
+		dest: dest,
+		valor: valor,
+		just: just
+	}, function(resposta) {
+		if (resposta) {
+			alert('O valor de R$ ' + valor + ' foi transferido com SUCESSO! ');
+			$('#transferencia').modal('hide');
+			$('#tableListLancamentos').DataTable().destroy();
+		} else {
+			window.location.href = 'sair.php';
+		}
+	});
+	document.getElementById('loadingTransf').style.display = 'none';
+}
+
 function resetSenha() {
 	document.getElementById("loaderResetSenha").style.display = 'inline-block';
 	var email = document.getElementById('userReset').value;

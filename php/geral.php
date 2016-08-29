@@ -36,6 +36,16 @@ if (isset($_POST["admin"]) && isset($_SESSION["id_setor"]) && $_SESSION["id_seto
 	$form = $_POST["form"];
 
 	switch ($form) {
+
+	// comentário
+	case 'transfereSaldo':
+		$ori = $_POST['ori'];
+		$dest = $_POST['dest'];
+		$valor = $_POST['valor'];
+		$just = $_POST['just'];
+		echo $transfere = $obj_Geral->transfereSaldo($ori, $dest, $valor, $just);
+
+		break;
 	// comentário
 
 	case 'newTypeProcess':
