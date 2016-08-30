@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: 29-Ago-2016 às 00:52
+-- Generation Time: 30-Ago-2016 às 00:45
 -- Versão do servidor: 5.5.50-0ubuntu0.14.04.1
 -- PHP Version: 7.0.10-1+deb.sury.org~trusty+1
 
@@ -35,6 +35,13 @@ CREATE TABLE `comentarios` (
   `valor` varchar(50) NOT NULL,
   `comentario` text NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Extraindo dados da tabela `comentarios`
+--
+
+INSERT INTO `comentarios` (`id`, `id_pedido`, `data_coment`, `prioridade`, `status`, `valor`, `comentario`) VALUES
+(1, 1, '2016-08-29', 1, 5, '2550.000', 'Pedido analisado, nenhum item foi cancelado e estÃ¡ tudo certo.');
 
 -- --------------------------------------------------------
 
@@ -4694,7 +4701,26 @@ CREATE TABLE `pedido` (
 --
 
 INSERT INTO `pedido` (`id`, `id_setor`, `data_pedido`, `ref_mes`, `alteracao`, `prioridade`, `status`, `valor`, `obs`) VALUES
-(1, 3, '2016-08-28', 8, 0, 1, 2, '2550.000', 'Teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste ');
+(1, 3, '2016-08-28', 8, 0, 1, 6, '2550.000', 'Teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste ');
+
+-- --------------------------------------------------------
+
+--
+-- Estrutura da tabela `pedido_empenho`
+--
+
+CREATE TABLE `pedido_empenho` (
+  `id` int(10) UNSIGNED NOT NULL,
+  `id_pedido` int(10) UNSIGNED NOT NULL,
+  `empenho` varchar(30) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Extraindo dados da tabela `pedido_empenho`
+--
+
+INSERT INTO `pedido_empenho` (`id`, `id_pedido`, `empenho`) VALUES
+(1, 1, '567aj');
 
 -- --------------------------------------------------------
 
@@ -4878,7 +4904,7 @@ INSERT INTO `saldos_lancamentos` (`id`, `id_setor`, `data`, `valor`, `categoria`
 (2, 3, '2016-08-28', '500.000', 2),
 (3, 3, '2016-08-28', '200.000', 2),
 (4, 3, '2016-08-29', '-400.000', 3),
-(5, 4, '2016-08-29', '+400.000', 3);
+(5, 4, '2016-08-29', '400.000', 3);
 
 -- --------------------------------------------------------
 
@@ -4939,7 +4965,8 @@ CREATE TABLE `saldo_setor` (
 
 INSERT INTO `saldo_setor` (`id`, `id_setor`, `saldo`) VALUES
 (1, 3, '1750.000'),
-(2, 4, '400.000');
+(2, 4, '400.000'),
+(3, 11, '0.000');
 
 -- --------------------------------------------------------
 
@@ -5141,6 +5168,13 @@ ALTER TABLE `pedido`
   ADD KEY `prioridade` (`prioridade`);
 
 --
+-- Indexes for table `pedido_empenho`
+--
+ALTER TABLE `pedido_empenho`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `id_pedido` (`id_pedido`);
+
+--
 -- Indexes for table `postagens`
 --
 ALTER TABLE `postagens`
@@ -5244,7 +5278,7 @@ ALTER TABLE `usuario_permissoes`
 -- AUTO_INCREMENT for table `comentarios`
 --
 ALTER TABLE `comentarios`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 --
 -- AUTO_INCREMENT for table `itens`
 --
@@ -5269,6 +5303,11 @@ ALTER TABLE `paginas_post`
 -- AUTO_INCREMENT for table `pedido`
 --
 ALTER TABLE `pedido`
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+--
+-- AUTO_INCREMENT for table `pedido_empenho`
+--
+ALTER TABLE `pedido_empenho`
   MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 --
 -- AUTO_INCREMENT for table `postagens`
@@ -5314,7 +5353,7 @@ ALTER TABLE `saldo_categoria`
 -- AUTO_INCREMENT for table `saldo_setor`
 --
 ALTER TABLE `saldo_setor`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 --
 -- AUTO_INCREMENT for table `setores`
 --
@@ -5367,6 +5406,12 @@ ALTER TABLE `pedido`
   ADD CONSTRAINT `pedido_ibfk_2` FOREIGN KEY (`ref_mes`) REFERENCES `mes` (`id`),
   ADD CONSTRAINT `pedido_ibfk_3` FOREIGN KEY (`status`) REFERENCES `status` (`id`),
   ADD CONSTRAINT `pedido_ibfk_4` FOREIGN KEY (`prioridade`) REFERENCES `prioridade` (`id`);
+
+--
+-- Limitadores para a tabela `pedido_empenho`
+--
+ALTER TABLE `pedido_empenho`
+  ADD CONSTRAINT `pedido_empenho_ibfk_1` FOREIGN KEY (`id_pedido`) REFERENCES `pedido` (`id`);
 
 --
 -- Limitadores para a tabela `postagens`

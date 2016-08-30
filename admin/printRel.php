@@ -5,6 +5,7 @@ error_reporting(E_ALL);
 session_start();
 
 if (isset($_SESSION["relatorioProcessos"]) && $_SESSION["relatorioProcessos"] && $_SESSION["id_setor"] != 0) {
+
 	include_once '../class/Busca.class.php';
 	$tipo = $_SESSION["relatorioTipo"];
 //instanciando classe de busca para popular o select de estados

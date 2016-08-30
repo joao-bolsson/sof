@@ -1,3 +1,60 @@
+$('.modal').on('hidden.bs.modal', function(event) {
+	$(this).removeClass('fv-modal-stack');
+	$('body').data('fv_open_modals', $('body').data('fv_open_modals') - 1);
+});
+
+$('.modal').on('shown.bs.modal', function(event) {
+	// keep track of the number of open modals
+	if (typeof($('body').data('fv_open_modals')) == 'undefined') {
+		$('body').data('fv_open_modals', 0);
+	}
+	// if the z-index of this modal has been set, ignore.
+	if ($(this).hasClass('fv-modal-stack')) {
+		return;
+	}
+	$(this).addClass('fv-modal-stack');
+	$('body').data('fv_open_modals', $('body').data('fv_open_modals') + 1);
+	$(this).css('z-index', 1040 + (10 * $('body').data('fv_open_modals')));
+	$('.modal-backdrop').not('.fv-modal-stack')
+		.css('z-index', 1039 + (10 * $('body').data('fv_open_modals')));
+	$('.modal-backdrop').not('fv-modal-stack')
+		.addClass('fv-modal-stack');
+});
+
+function cadEmpenho(id_pedido) {
+	$('#cadEmpenho').modal();
+	$('#div-lb-high').addClass('control-highlight');
+	document.getElementById('id_pedido_emp').value = id_pedido;
+}
+
+function enviaEmpenho() {
+	var id_pedido = document.getElementById('id_pedido_emp').value;
+	var empenho = document.getElementById('empenho').value;
+	$.post('../php/geral.php', {
+		admin: 1,
+		form: 'enviaEmpenho',
+		id_pedido: id_pedido,
+		empenho: empenho
+	}, function(resposta) {
+		if (resposta) {
+			$('#cadEmpenho').modal('hide');
+			iniSolicitacoes();
+		} else {
+			alert('Ocorreu um erro no servidor. Contate o administrador.');
+		}
+	});
+}
+
+function verEmpenho(id_pedido) {
+	$.post('../php/busca.php', {
+		users: 1,
+		form: 'verEmpenho',
+		id_pedido: id_pedido,
+	}, function(resposta) {
+		viewCompl(resposta);
+	});
+}
+
 function mostra(row, id_icon) {
 	var display = document.getElementById(row).style.display;
 	var icon = '';
@@ -49,28 +106,6 @@ function abreModal(id_modal) {
 	$(id_modal).modal();
 }
 
-$('.modal').on('hidden.bs.modal', function(event) {
-	$(this).removeClass('fv-modal-stack');
-	$('body').data('fv_open_modals', $('body').data('fv_open_modals') - 1);
-});
-
-$('.modal').on('shown.bs.modal', function(event) {
-	// keep track of the number of open modals
-	if (typeof($('body').data('fv_open_modals')) == 'undefined') {
-		$('body').data('fv_open_modals', 0);
-	}
-	// if the z-index of this modal has been set, ignore.
-	if ($(this).hasClass('fv-modal-stack')) {
-		return;
-	}
-	$(this).addClass('fv-modal-stack');
-	$('body').data('fv_open_modals', $('body').data('fv_open_modals') + 1);
-	$(this).css('z-index', 1040 + (10 * $('body').data('fv_open_modals')));
-	$('.modal-backdrop').not('.fv-modal-stack')
-		.css('z-index', 1039 + (10 * $('body').data('fv_open_modals')));
-	$('.modal-backdrop').not('fv-modal-stack')
-		.addClass('fv-modal-stack');
-});
 
 function avisoSnack(aviso, corpo) {
 	$(corpo).snackbar({

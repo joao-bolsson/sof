@@ -36,7 +36,13 @@ if (isset($_POST["admin"]) && isset($_SESSION["id_setor"]) && $_SESSION["id_seto
 	$form = $_POST["form"];
 
 	switch ($form) {
+	// comment.
 
+	case 'enviaEmpenho':
+		$id_pedido = $_POST['id_pedido'];
+		$empenho = $_POST['empenho'];
+		echo $cadastra = $obj_Geral->cadastraEmpenho($id_pedido, $empenho);
+		break;
 	// comentário
 	case 'transfereSaldo':
 		$ori = $_POST['ori'];

@@ -7,7 +7,7 @@ session_start();
 if (isset($_SESSION["imprimirPedido"]) && $_SESSION["imprimirPedido"] && $_SESSION["id_setor"] != 0) {
 	$id_setor = $_SESSION["id_pedido_setor"];
 	$id_pedido = $_SESSION["id_ped_imp"];
-  $pedido_rascunho = $_SESSION['pedido_rascunho']
+	$pedido_rascunho = $_SESSION['pedido_rascunho'];
 	include_once '../class/Busca.class.php';
 //instanciando classe de busca para popular o select de estados
 	$obj_Busca = new Busca();
@@ -101,12 +101,12 @@ if (isset($_SESSION["imprimirPedido"]) && $_SESSION["imprimirPedido"] && $_SESSI
 	$mpdf = new mPDF();
 //definimos o tipo de exibicao
 	$mpdf->SetDisplayMode('fullpage');
-  if ($pedido_rascunho) {
-    $mpdf->useOnlyCoreFonts = true;
-    $mpdf->watermark_font = 'DejaVuSansCondensed';
-    $mpdf->showWatermarkText = true;
-    $mpdf->SetWatermarkText('RASCUNHO');
-  }
+	if ($pedido_rascunho) {
+		$mpdf->useOnlyCoreFonts = true;
+		$mpdf->watermark_font = 'DejaVuSansCondensed';
+		$mpdf->showWatermarkText = true;
+		$mpdf->SetWatermarkText('RASCUNHO');
+	}
 	$data = date('j/m/Y  H:i');
 //definimos oque vai conter no rodape do pdf
 	$mpdf->SetFooter("{$data}||Pagina {PAGENO}/{nb}");

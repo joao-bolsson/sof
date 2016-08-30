@@ -114,6 +114,11 @@ if (isset($_POST["admin"]) && isset($_SESSION['id_setor']) && $_SESSION['id_seto
 
 	switch ($form) {
 	// comment.
+	case 'verEmpenho':
+		$id_pedido = $_POST['id_pedido'];
+		echo $obj_Busca->verEmpenho($id_pedido);
+		break;
+	// comment.
 	case 'listLancamentos':
 		echo $obj_Busca->getLancamentos($_SESSION['id_setor']);
 		break;

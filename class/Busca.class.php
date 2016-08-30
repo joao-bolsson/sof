@@ -24,6 +24,24 @@ class Busca extends Conexao {
 	}
 	// ------------------------------------------------------------------------------
 	/**
+	 *	Função que retornar o empenho de um pedido
+	 *
+	 *	@access public
+	 *	@param $id_pedido Id do pedido.
+	 *	@return string
+	 */
+	public function verEmpenho($id_pedido): string{
+		$retorno = '';
+		$query = $this->mysqli->query("SELECT empenho FROM pedido_empenho WHERE id_pedido = {$id_pedido};");
+		if ($query->num_rows < 1) {
+			return 'SEM EMPENHO CADASTRADO';
+		} else {
+			$obj = $query->fetch_object();
+			return 'Empenho: ' . $obj->empenho;
+		}
+	}
+	// ------------------------------------------------------------------------------
+	/**
 	 *	Função que retorna a tabela com os lançamentos de saldos pelo SOF
 	 *
 	 *	@access public
@@ -36,12 +54,18 @@ class Busca extends Conexao {
 			$where = "AND saldos_lancamentos.id_setor = {$id_setor}";
 		}
 		$query = $this->mysqli->query("SELECT setores.nome, DATE_FORMAT(saldos_lancamentos.data, '%d/%m/%Y') AS data, saldos_lancamentos.valor, saldo_categoria.nome AS categoria FROM setores, saldos_lancamentos, saldo_categoria WHERE setores.id = saldos_lancamentos.id_setor {$where} AND saldos_lancamentos.categoria = saldo_categoria.id ORDER BY saldos_lancamentos.id DESC;");
+		$cor = '';
 		while ($lancamento = $query->fetch_object()) {
+			if ($lancamento->valor < 0) {
+				$cor = 'red';
+			} else {
+				$cor = 'green';
+			}
 			$retorno .= "
 				<tr>
 					<td>{$lancamento->nome}</td>
 					<td>{$lancamento->data}</td>
-					<td>R$ {$lancamento->valor}</td>
+					<td style=\"color: {$cor};\">R$ {$lancamento->valor}</td>
 					<td>{$lancamento->categoria}</td>
 				</tr>
 			";
@@ -721,6 +745,7 @@ class Busca extends Conexao {
 		$pedido = $this->mysqli->query("SELECT pedido.id, DATE_FORMAT(pedido.data_pedido, '%d/%m/%Y') AS data_pedido, EXTRACT(YEAR FROM pedido.data_pedido) AS ano, mes.sigla_mes AS ref_mes, status.nome AS status, pedido.valor, pedido.obs FROM pedido, mes, status WHERE status.id = pedido.status AND pedido.id = {$id_pedido} AND mes.id = pedido.ref_mes;")->fetch_object();
 		$ano = substr($pedido->data_pedido, 0, 4);
 		$pedido->valor = str_replace(".", ",", $pedido->valor);
+		$empenho = Busca::verEmpenho($id_pedido);
 		$retorno = "
 		<fieldset>
 			<p>
@@ -731,6 +756,7 @@ class Busca extends Conexao {
 				Mês: {$pedido->ref_mes}&emsp;
 				Total do Pedido: R$ {$pedido->valor}
 			</p>
+			<p>{$empenho}</p>
 			<p>Observação: </p>
 			<p style=\"font-weight: normal !important;\">	{$pedido->obs}</p>
 		</fieldset><br>
@@ -885,7 +911,7 @@ class Busca extends Conexao {
 					</table>
 				</fieldset>
 				<fieldset>
-					<p>{$comentario->comentario}</p>
+					<p style=\"font-weight: normal;\">{$comentario->comentario}</p>
 				</fieldset>
 				";
 			}
@@ -1054,8 +1080,10 @@ class Busca extends Conexao {
 		while ($pedido = $query->fetch_object()) {
 			$pedido->prioridade = ucfirst($pedido->prioridade);
 			$btnAnalisar = "";
-			if ($pedido->status == "Em Analise") {
+			if ($pedido->status == 'Em Analise') {
 				$btnAnalisar = "<a class=\"modal-close\" href=\"javascript:analisarPedido({$pedido->id}, {$pedido->id_setor});\" title=\"Analisar\"><span class=\"icon\">create<span></a>";
+			} else if ($pedido->status == 'Aguarda Orcamento') {
+				$btnAnalisar = "<a class=\"modal-close\" href=\"javascript:cadEmpenho({$pedido->id});\" title=\"Cadastrar Empenho\"><span class=\"icon\">payment<span></a>";
 			}
 			$retorno .= "
 			<tr id=\"rowPedido{$pedido->id}\">
@@ -1070,6 +1098,9 @@ class Busca extends Conexao {
 				<td>{$pedido->prioridade}</td>
 				<td>{$pedido->status}</td>
 				<td>R$ {$pedido->valor}</td>
+				<td>
+					<button onclick=\"verEmpenho({$pedido->id});\" class=\"btn btn-flat waves-attach waves-effect\" type=\"button\" title=\"Ver Empenho\">EMPENHO</button>
+				</td>
 			</tr>
 			";
 		}

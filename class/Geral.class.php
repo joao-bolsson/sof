@@ -22,6 +22,29 @@ class Geral extends Conexao {
 	}
 	// ------------------------------------------------------------------------------
 	/**
+	 *	Função que cadastra o empenho de um pedido
+	 *
+	 *	@access public
+	 * @param $id_pedido Id do pedido
+	 *	@param $empenho Empenho a ser cadastrado
+	 *	@return bool
+	 */
+	public function cadastraEmpenho($id_pedido, $empenho): bool{
+		$empenho = $this->mysqli->real_escape_string($empenho);
+		// cadastrando empenho
+		$query = $this->mysqli->query("INSERT INTO pedido_empenho VALUES(NULL, {$id_pedido}, '{$empenho}');");
+		if (!$query) {
+			return false;
+		}
+		// mudando status do pedido
+		$query = $this->mysqli->query("UPDATE pedido SET status = 6 WHERE id = {$id_pedido};");
+		if (!$query) {
+			return false;
+		}
+		return true;
+	}
+	// ------------------------------------------------------------------------------
+	/**
 	 *	Função que transfere um valor do saldo de um setor para outro
 	 *
 	 *	@access public
@@ -52,7 +75,7 @@ class Geral extends Conexao {
 		$this->mysqli->query("INSERT INTO saldos_transferidos VALUES(NULL, {$ori}, {$dest}, '{$valor}', '{$justificativa}');");
 		// registrando na tabela de lançamentos
 		$hoje = date('Y-m-d');
-		$this->mysqli->query("INSERT INTO saldos_lancamentos VALUES(NULL, {$ori}, '{$hoje}', '-{$valor}', 3), (NULL, {$dest}, '{$hoje}', '+{$valor}', 3);");
+		$this->mysqli->query("INSERT INTO saldos_lancamentos VALUES(NULL, {$ori}, '{$hoje}', '-{$valor}', 3), (NULL, {$dest}, '{$hoje}', '{$valor}', 3);");
 		// atualizando o saldos dos setores
 		// atualizando o saldo do setor origem
 		$saldo_ori -= $valor;
