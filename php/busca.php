@@ -28,7 +28,10 @@ if (isset($_POST["admin"]) && isset($_SESSION['id_setor']) && $_SESSION['id_seto
 	$form = $_POST["form"];
 
 	switch ($form) {
-
+	// comment.
+	case 'permissoes':
+		echo json_encode($obj_Busca->getPermissoes($_SESSION["id"]));
+		break;
 	// comment.
 	case 'listLancamentos':
 		echo $obj_Busca->getLancamentos($_SESSION['id_setor']);

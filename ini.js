@@ -242,8 +242,18 @@ function carregaPostsPag(tabela) {
 }
 
 function iniAdminSolicitacoes() {
-	iniSolicitacoes();
-	iniRecepcao();
+	$.post('../php/busca.php', {
+		admin: 1,
+		form: 'permissoes',
+	}, function(resposta) {
+		var permissao = jQuery.parseJSON(resposta);
+		if (permissao.recepcao) {
+			iniRecepcao();
+		}
+		if (permissao.pedidos) {
+			iniSolicitacoes();
+		}
+	});
 	avisoSnack('Carregamento concluído !', 'body');
 }
 
