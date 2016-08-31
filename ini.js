@@ -242,7 +242,6 @@ function carregaPostsPag(tabela) {
 }
 
 function iniAdminSolicitacoes() {
-	iniDataTable('#tableItensPedido');
 	iniSolicitacoes();
 	iniRecepcao();
 	avisoSnack('Carregamento concluído !', 'body');
@@ -790,6 +789,7 @@ function pesquisar() {
 }
 
 function imprimir(id_pedido) {
+	$('a').blur();
 	if (id_pedido == 0) {
 		id_pedido = document.getElementById("pedido").value;
 	}
@@ -814,11 +814,11 @@ function print() {
 }
 
 function analisarPedido(id_pedido, id_setor) {
+	$('a').blur();
+	document.getElementById('form').value = 'gerenciaPedido';
 	document.getElementById('id_setor').value = id_setor;
 	$('#tableSolicitacoes tr').css('background-color', '');
 	$('#rowPedido' + id_pedido).css('background-color', '#c1df9f');
-	//document.getElementById('tableSolicitacoes').style.backgroundColor = "";
-	//document.getElementById('rowPedido' + id_pedido).style.backgroundColor = "#8bc34a";
 	$.post('../php/busca.php', {
 		admin: 1,
 		form: 'infoPedido',
@@ -847,11 +847,45 @@ function analisarPedido(id_pedido, id_setor) {
 		form: 'analisaPedido',
 		id_pedido: id_pedido
 	}, function(resposta) {
+		document.getElementById('tableItensPedido').style.display = 'block';
 		$('#tableItensPedido').DataTable().destroy();
 		document.getElementById("conteudoPedido").innerHTML = resposta;
 		iniDataTable('#tableItensPedido');
 		avisoSnack('Busca Realizada com Sucesso !', 'body');
 	});
+}
+
+function getStatus(id_pedido, id_setor) {
+	$('a').blur();
+	document.getElementById('form').value = 'altStatus';
+	document.getElementById('id_setor').value = id_setor;
+	document.getElementById('id_pedido').value = id_pedido;
+	$.post('../php/busca.php', {
+		admin: 1,
+		form: 'infoPedido',
+		id_pedido: id_pedido,
+		id_setor: id_setor
+	}, function(retorno) {
+		var obj = jQuery.parseJSON(retorno);
+		//obs
+		$('#divObs').addClass('control-highlight');
+		document.getElementById('obs').value = obj.obs;
+		//status
+		document.getElementById('st' + obj.status).checked = true;
+	});
+	avisoSnack('Carregamento concluído!', 'body');
+}
+
+function limpaTela() {
+	$('#tableItensPedido').DataTable().destroy();
+	document.getElementById('tableItensPedido').style.display = 'none';
+	document.getElementById('conteudoPedido').innerHTML = '';
+	$('#tableSolicitacoes tr').css('background-color', '');
+	document.getElementById('text_saldo_total').innerHTML = 'R$ 0.000';
+	$('#divObs').removeClass('control-highlight');
+	document.getElementById('formPedido').reset();
+	$('#btnLimpa').blur();
+	avisoSnack('Tela Limpa', 'body');
 }
 // cancelar um item
 function cancelaItem(id_item) {

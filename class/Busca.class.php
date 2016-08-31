@@ -1089,6 +1089,7 @@ class Busca extends Conexao {
 			<tr id=\"rowPedido{$pedido->id}\">
 				<td>
 					{$btnAnalisar}
+					<a class=\"modal-close\" href=\"javascript:getStatus({$pedido->id}, {$pedido->id_setor});\" title=\"Alterar Status\"><span class=\"icon\">build<span></a>
 					<a class=\"modal-close\" href=\"javascript:imprimir({$pedido->id});\" title=\"Imprimir\"><span class=\"icon\">print<span></a>
 				</td>
 				<td>{$pedido->id}</td>

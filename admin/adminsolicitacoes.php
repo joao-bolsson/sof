@@ -22,7 +22,7 @@ $permissao = $obj_Busca->getPermissoes($_SESSION["id"]);
   <link href="../material/css/base.min.css" rel="stylesheet">
 
   <!-- css for doc -->
-  <link href="../material/css/project.min.css" rel="stylesheet">
+  <link href="../material/css/project.css" rel="stylesheet">
   <link href="../sof_files/estilo.min.css" rel="stylesheet">
 
   <link rel="stylesheet" type="text/css" href="../plugins/dataTables/datatables.min.css"/>
@@ -313,13 +313,13 @@ $permissao = $obj_Busca->getPermissoes($_SESSION["id"]);
          <p class="card-heading">SALDO <span id="text_saldo_total">R$ 0.000<span></p>
        </div>
      </div><!--  ./card-header -->
-     <form action="../php/geral.php" method="POST">
+     <form id="formPedido" action="../php/geral.php" method="POST">
       <input type="hidden" name="admin" value="1"></input>
-      <input type="hidden" name="form" value="gerenciaPedido"></input>
+      <input id="form" type="hidden" name="form" value="" required></input>
       <input id="id_pedido" type="hidden" name="id_pedido" value="0"></input>
       <input id="id_setor" type="hidden" name="id_setor" value="0"></input>
       <div class="card-inner">
-        <table class="table stripe" id="tableItensPedido">
+        <table class="table stripe" id="tableItensPedido" style="display: none;">
           <thead>
             <th></th>
             <th>COD_REDUZIDO</th>
@@ -350,9 +350,7 @@ $permissao = $obj_Busca->getPermissoes($_SESSION["id"]);
             <th>VALOR</th>
             <th></th>
           </thead>
-          <tbody id="conteudoPedido">
-
-          </tbody>
+          <tbody id="conteudoPedido"></tbody>
         </table>
         <div id="divObs" class="form-group form-group-label">
           <label class="floating-label" for="obs"><span class="icon">announcement</span>&nbsp;Observações</label>
@@ -371,7 +369,8 @@ $permissao = $obj_Busca->getPermissoes($_SESSION["id"]);
       </div><!-- ./card-inner -->
       <div class="card-action">
         <div class="card-action-btn">
-          <button class="btn btn-brand waves-attach" type="submit" style="width: 100%;"><span class="icon">check</span>&nbsp;Salvar Alterações</button>
+          <button id="btnLimpa" class="btn btn-default waves-attach" type="button" style="width: 49%;" onclick="limpaTela();"><span class="icon">undo</span>&nbsp;Limpar</button>
+          <button class="btn btn-brand waves-attach" type="submit" style="width: 50%;"><span class="icon">check</span>&nbsp;Salvar Alterações</button>
         </div>
       </div>
     </form>
@@ -841,6 +840,5 @@ $permissao = $obj_Busca->getPermissoes($_SESSION["id"]);
 <script type="text/javascript" src="../plugins/dataTables/datatables.min.js"></script>
 
 <script type="text/javascript" src="../ini.min.js"></script>
-
 </body>
 </html>

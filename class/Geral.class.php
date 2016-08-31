@@ -22,6 +22,32 @@ class Geral extends Conexao {
 	}
 	// ------------------------------------------------------------------------------
 	/**
+	 *	Função para alterar somente o status do pedido
+	 *
+	 *	@access public
+	 *	@param $id_pedido Id do pedido
+	 *	@param $id_setor Id do setor que fez o pedido
+	 *	@param $comentario Comentário do SOF.
+	 *	@param $status Novo status do pedido
+	 *	@return bool
+	 */
+	public function altStatus($id_pedido, $id_setor, $comentario, $status): bool{
+		$update = $this->mysqli->query("UPDATE pedido SET status = {$status} WHERE id = {$id_pedido};");
+		if (!$update) {
+			return false;
+		}
+		$obj = $this->mysqli->query("SELECT pedido.prioridade, pedido.valor FROM pedido WHERE id = {$id_pedido};")->fetch_object();
+		$hoje = date('Y-m-d');
+		$comentario = $this->mysqli->real_escape_string($comentario);
+		$comment = $this->mysqli->query("INSERT INTO comentarios VALUES(NULL, {$id_pedido}, '{$hoje}', {$obj->prioridade}, {$status}, '{$obj->valor}', '{$comentario}');");
+		if (!$comment) {
+			return false;
+		}
+		$this->mysqli->close();
+		return true;
+	}
+	// ------------------------------------------------------------------------------
+	/**
 	 *	Função que cadastra o empenho de um pedido
 	 *
 	 *	@access public

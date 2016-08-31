@@ -147,7 +147,20 @@ if (isset($_POST["admin"]) && isset($_SESSION["id_setor"]) && $_SESSION["id_seto
 		$analisa = $obj_Geral->analisaSolicAlt($id_solic, $id_pedido, $acao);
 		echo $analisa;
 		break;
+	// comment.
 
+	case 'altStatus':
+		$id_pedido = $_POST['id_pedido'];
+		$id_setor = $_POST['id_setor'];
+		$comentario = $_POST['comentario'];
+		$status = $_POST['fase'];
+		$analisado = $obj_Geral->altStatus($id_pedido, $id_setor, $comentario, $status);
+		if ($analisado) {
+			header("Location: ../admin/adminsolicitacoes.php");
+		} else {
+			echo "Ocorreu algum erro no servidor. Contate o administrador.";
+		}
+		break;
 	// comentário
 
 	case 'gerenciaPedido':

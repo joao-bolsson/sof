@@ -68,6 +68,9 @@ if (isset($_SESSION["imprimirPedido"]) && $_SESSION["imprimirPedido"] && $_SESSI
     padding: 3px;
   }
 </style>
+<head>
+  <title>SOFHUSM | Impressão de pedido</title>
+</head>
 ";
 	// ===================================================================================
 	//                                         CABEÇALHO
