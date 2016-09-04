@@ -24,6 +24,21 @@ class Busca extends Conexao {
 	}
 	// ------------------------------------------------------------------------------
 	/**
+	 *	Função que que retorna informações de um item para possível edição
+	 *
+	 *	@access public
+	 *	@param Id do item da tbela itens
+	 *	@return object
+	 */
+	public function getInfoItem($id_item) {
+		$query = $this->mysqli->query("SELECT itens.complemento_item, itens.vl_unitario, itens.qt_contrato, itens.vl_contrato, itens.qt_utilizado, itens.vl_utilizado, itens.qt_saldo, itens.vl_saldo FROM itens WHERE itens.id = {$id_item};");
+		$obj = $query->fetch_object();
+		$this->mysqli->close();
+		$obj->complemento_item = utf8_encode($obj->complemento_item);
+		return json_encode($obj);
+	}
+	// ------------------------------------------------------------------------------
+	/**
 	 *	Função que retornar o empenho de um pedido
 	 *
 	 *	@access public
@@ -53,7 +68,7 @@ class Busca extends Conexao {
 		if ($id_setor != 2) {
 			$where = "AND saldos_lancamentos.id_setor = {$id_setor}";
 		}
-		$query = $this->mysqli->query("SELECT setores.nome, DATE_FORMAT(saldos_lancamentos.data, '%d/%m/%Y') AS data, saldos_lancamentos.valor, saldo_categoria.nome AS categoria FROM setores, saldos_lancamentos, saldo_categoria WHERE setores.id = saldos_lancamentos.id_setor {$where} AND saldos_lancamentos.categoria = saldo_categoria.id ORDER BY saldos_lancamentos.id DESC;");
+		$query = $this->mysqli->query("SELECT setores.nome, DATE_FORMAT(saldos_lancamentos.data, '%d/%m/%Y') AS data, saldos_lancamentos.valor, saldo_categoria.nome AS categoria FROM setores, saldos_lancamentos, saldo_categoria WHERE setores.id = saldos_lancamentos.id_setor {$where} AND saldos_lancamentos.categoria = saldo_categoria.id ORDER BY saldos_lancamentos.data DESC;");
 		$cor = '';
 		while ($lancamento = $query->fetch_object()) {
 			if ($lancamento->valor < 0) {
@@ -269,12 +284,11 @@ class Busca extends Conexao {
 				$i = 0;
 				$retorno .= "</tr><tr>";
 			}
-			$nome = trim($status->nome);
 			$retorno .= "
 			<td>
 				<div class=\"radiobtn radiobtn-adv\">
-					<label for=\"st{$nome}\">
-						<input type=\"radio\" name=\"fase\" required id=\"st{$nome}\" class=\"access-hide\" value=\"{$status->id}\">{$status->nome}
+					<label for=\"st{$status->id}\">
+						<input type=\"radio\" name=\"fase\" required id=\"st{$status->id}\" class=\"access-hide\" value=\"{$status->id}\">{$status->nome}
 						<span class=\"radiobtn-circle\"></span><span class=\"radiobtn-circle-check\"></span>
 					</label>
 				</div>
@@ -1076,14 +1090,16 @@ class Busca extends Conexao {
 	public function getSolicitacoesAdmin(): string{
 		//declarando retorno
 		$retorno = "";
-		$query = $this->mysqli->query("SELECT pedido.id, pedido.id_setor, setores.nome AS nome_setor, DATE_FORMAT(pedido.data_pedido, '%d/%m/%Y') AS data_pedido, mes.sigla_mes AS ref_mes, prioridade.nome AS prioridade, status.nome AS status, pedido.valor FROM pedido, setores, mes, prioridade, status WHERE status.id = pedido.status AND prioridade.id = pedido.prioridade AND mes.id = pedido.ref_mes AND pedido.alteracao = 0 AND pedido.id_setor = setores.id ORDER BY data_pedido DESC;");
+		$query = $this->mysqli->query("SELECT pedido.id, pedido.id_setor, setores.nome AS nome_setor, DATE_FORMAT(pedido.data_pedido, '%d/%m/%Y') AS data_pedido, mes.sigla_mes AS ref_mes, prioridade.nome AS prioridade, status.nome AS status, pedido.valor FROM pedido, setores, mes, prioridade, status WHERE status.id = pedido.status AND prioridade.id = pedido.prioridade AND mes.id = pedido.ref_mes AND pedido.alteracao = 0 AND pedido.id_setor = setores.id ORDER BY pedido.id DESC;");
 		while ($pedido = $query->fetch_object()) {
 			$pedido->prioridade = ucfirst($pedido->prioridade);
 			$btnAnalisar = "";
-			if ($pedido->status == 'Em Analise') {
-				$btnAnalisar = "<a class=\"modal-close\" href=\"javascript:analisarPedido({$pedido->id}, {$pedido->id_setor});\" title=\"Analisar\"><span class=\"icon\">create<span></a>";
-			} else if ($pedido->status == 'Aguarda Orcamento') {
-				$btnAnalisar = "<a class=\"modal-close\" href=\"javascript:cadEmpenho({$pedido->id});\" title=\"Cadastrar Empenho\"><span class=\"icon\">payment<span></a>";
+			if ($pedido->status != 'Reprovado' && $pedido->status != 'Aprovado') {
+				if ($pedido->status == 'Em Analise') {
+					$btnAnalisar = "<a class=\"modal-close\" href=\"javascript:analisarPedido({$pedido->id}, {$pedido->id_setor});\" title=\"Analisar\"><span class=\"icon\">create<span></a>";
+				} else if ($pedido->status == 'Aguarda Orcamento') {
+					$btnAnalisar = "<a class=\"modal-close\" href=\"javascript:cadEmpenho({$pedido->id});\" title=\"Cadastrar Empenho\"><span class=\"icon\">payment<span></a>";
+				}
 			}
 			$retorno .= "
 			<tr id=\"rowPedido{$pedido->id}\">
@@ -1133,6 +1149,8 @@ class Busca extends Conexao {
 			<tr id=\"row_item{$item->id_itens}\">
 				<td>
 					<a class=\"modal-close\" href=\"javascript:cancelaItem({$item->id_itens});\" title=\"Item Cancelado\"><span id=\"icon-cancela-item{$item->id_itens}\" class=\"icon text-red\">cancel<span>
+					</a>
+					<a class=\"modal-close\" href=\"javascript:editaItem({$item->id_itens});\" title=\"Editar\"><span class=\"icon\">edit<span>
 					</a>
 				</td>
 				<td>{$item->cod_reduzido}</td>
@@ -1191,9 +1209,9 @@ class Busca extends Conexao {
 	 *
 	 */
 	public function getInfoPedidoAnalise($id_pedido, $id_setor): string{
-		$query = $this->mysqli->query("SELECT saldo_setor.saldo, pedido.prioridade, status.nome AS status, pedido.valor, pedido.obs FROM saldo_setor, pedido, status WHERE status.id = pedido.status AND saldo_setor.id_setor = {$id_setor} AND pedido.id = {$id_pedido};");
+		$query = $this->mysqli->query("SELECT saldo_setor.saldo, pedido.prioridade, pedido.status, pedido.valor, pedido.obs FROM saldo_setor, pedido WHERE saldo_setor.id_setor = {$id_setor} AND pedido.id = {$id_pedido};");
 		$pedido = $query->fetch_object();
-		$pedido->status = trim($pedido->status);
+		//$pedido->status = trim($pedido->status);
 		$query->close();
 		return json_encode($pedido);
 	}

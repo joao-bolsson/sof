@@ -29,6 +29,11 @@ if (isset($_POST["admin"]) && isset($_SESSION['id_setor']) && $_SESSION['id_seto
 
 	switch ($form) {
 	// comment.
+	case 'infoItem':
+		$id_item = $_POST['id_item'];
+		echo $obj_Busca->getInfoItem($id_item);
+		break;
+	// comment.
 	case 'permissoes':
 		echo json_encode($obj_Busca->getPermissoes($_SESSION["id"]));
 		break;

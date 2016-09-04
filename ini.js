@@ -39,6 +39,7 @@ function enviaEmpenho() {
 		if (resposta) {
 			$('#cadEmpenho').modal('hide');
 			iniSolicitacoes();
+			limpaTela();
 		} else {
 			alert('Ocorreu um erro no servidor. Contate o administrador.');
 		}
@@ -120,6 +121,7 @@ function iniDataTable(tabela) {
 	$(tabela).DataTable({
 		destroy: true,
 		searching: true,
+		"ordering": false,
 		language: {
 			"decimal": "",
 			"emptyTable": "Nenhum dado na tabela",
@@ -845,6 +847,20 @@ function analisarPedido(id_pedido, id_setor) {
 		document.getElementById('prioridade').value = obj.prioridade;
 		//status
 		document.getElementById('st' + obj.status).checked = true;
+		if (obj.status == 2) {
+			// pedido em analise deve desabilitar certas opcoes de status
+			for (var i = 5; i <= 8; i++) {
+				document.getElementById('st' + i).disabled = true;
+			}
+		} else if (obj.status == 7) {
+			for (var i = 1; i <= 5; i++) {
+				document.getElementById('st' + i).disabled = true;
+			}
+		} else if (obj.status == 5) {
+			for (var i = 1; i <= 4; i++) {
+				document.getElementById('st' + i).disabled = true;
+			}
+		}
 		//obs
 		$('#divObs').addClass('control-highlight');
 		document.getElementById('obs').value = obj.obs;
@@ -866,7 +882,8 @@ function analisarPedido(id_pedido, id_setor) {
 }
 
 function getStatus(id_pedido, id_setor) {
-	$('a').blur();
+	limpaTela();
+	$('#rowPedido' + id_pedido).css('background-color', '#c1df9f');
 	document.getElementById('form').value = 'altStatus';
 	document.getElementById('id_setor').value = id_setor;
 	document.getElementById('id_pedido').value = id_pedido;
@@ -877,22 +894,37 @@ function getStatus(id_pedido, id_setor) {
 		id_setor: id_setor
 	}, function(retorno) {
 		var obj = jQuery.parseJSON(retorno);
+		document.getElementById('text_saldo_total').innerHTML = "R$ " + parseFloat(obj.saldo).toFixed(3);
 		//obs
 		$('#divObs').addClass('control-highlight');
 		document.getElementById('obs').value = obj.obs;
 		//status
 		document.getElementById('st' + obj.status).checked = true;
+		if (obj.status >= 5) {
+			for (var i = 1; i < 5; i++) {
+				document.getElementById('st' + i).disabled = true;
+			}
+		} else if (obj.status == 2) {
+			// pedido em analise deve desabilitar certas opcoes de status
+			for (var i = 5; i <= 8; i++) {
+				document.getElementById('st' + i).disabled = true;
+			}
+		}
 	});
 	avisoSnack('Carregamento concluído!', 'body');
 }
 
 function limpaTela() {
+	$('a').blur();
 	$('#tableItensPedido').DataTable().destroy();
 	document.getElementById('tableItensPedido').style.display = 'none';
 	document.getElementById('conteudoPedido').innerHTML = '';
 	$('#tableSolicitacoes tr').css('background-color', '');
 	document.getElementById('text_saldo_total').innerHTML = 'R$ 0.000';
 	$('#divObs').removeClass('control-highlight');
+	for (var i = 1; i <= 8; i++) {
+		document.getElementById('st' + i).disabled = false;
+	}
 	document.getElementById('formPedido').reset();
 	$('#btnLimpa').blur();
 	avisoSnack('Tela Limpa', 'body');
@@ -917,6 +949,22 @@ function cancelaItem(id_item) {
 			document.getElementById("row_item" + id_item).style.backgroundColor = "#ffe6e6";
 		}
 	}
+}
+
+function editaItem(id_item) {
+	$('a').blur();
+	$('#infoItem').modal();
+	$.post('../php/busca.php', {
+		admin: 1,
+		form: 'infoItem',
+		id_item: id_item
+	}, function(retorno) {
+		var obj = jQuery.parseJSON(retorno);
+		$('#infoItem table div').addClass('control-highlight');
+		alert(obj.vl_unitario);
+		document.getElementById('compItem').value = obj.complemento_item;
+		document.getElementById('vlUnitario').value = parseFloat(obj.vl_unitario).toFixed(3);
+	});
 }
 //removendo um input de arquivo para adicionar notícias
 function dropTile(id) {

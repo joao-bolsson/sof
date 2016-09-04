@@ -14,8 +14,6 @@ include_once 'class/Busca.class.php';
 $obj_Busca = new Busca();
 include_once 'class/Geral.class.php';
 $obj_Geral = new Geral();
-// verifica as solicitações de adiantamento que já venceram e reprova-as
-$obj_Geral->checkSolicAdi();
 
 setcookie('slide1', $obj_Busca->getSlide(1), 0);
 setcookie('slide2', $obj_Busca->getSlide(2), 0);

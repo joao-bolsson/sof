@@ -219,8 +219,8 @@ if (isset($_POST["admin"]) && isset($_SESSION["id_setor"]) && $_SESSION["id_seto
 	// comentário
 
 	case 'aprovaAdi':
-		$id = $_POST["id"];
-		$acao = $_POST["acao"];
+		$id = $_POST['id'];
+		$acao = $_POST['acao'];
 		$aprova = $obj_Geral->analisaAdi($id, $acao);
 		if (!$aprova) {
 			echo "Ocorreu um erro no servidor. Contate o administrador";

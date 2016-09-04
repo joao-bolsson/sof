@@ -57,9 +57,19 @@ class Geral extends Conexao {
 	 */
 	public function cadastraEmpenho($id_pedido, $empenho): bool{
 		$empenho = $this->mysqli->real_escape_string($empenho);
-		// cadastrando empenho
-		$query = $this->mysqli->query("INSERT INTO pedido_empenho VALUES(NULL, {$id_pedido}, '{$empenho}');");
-		if (!$query) {
+		$hoje = date('Y-m-d');
+		// verifica se o pedido ja não possui empenho
+		$query_check = $this->mysqli->query("SELECT pedido_empenho.id FROM pedido_empenho WHERE pedido_empenho.id = {$id_pedido};");
+		$sql = "";
+		if ($query_check->num_rows < 1) {
+			// cadastrando empenho
+			$sql = "INSERT INTO pedido_empenho VALUES(NULL, {$id_pedido}, '{$empenho}', '{$hoje}');";
+		} else {
+			// alterando empenho
+			$sql = "UPDATE pedido_empenho SET pedido_empenho.empenho = '{$empenho}', pedido_empenho.data = '{$hoje}' WHERE pedido_empenho.id_pedido = {$id_pedido};";
+		}
+		$query_cad = $this->mysqli->query($sql);
+		if (!$query_cad) {
 			return false;
 		}
 		// mudando status do pedido
@@ -261,24 +271,6 @@ class Geral extends Conexao {
 		$justificativa = $this->mysqli->real_escape_string($justificativa);
 		$solicita = $this->mysqli->query("INSERT INTO solic_alt_pedido VALUES(NULL, {$id_pedido}, {$id_setor}, '{$hoje}', '0000-00-00', '{$justificativa}', 2);");
 		if ($solicita) {
-			return true;
-		}
-		return false;
-	}
-	// -------------------------------------------------------------------------
-	/**
-	 *	Função que verifica cada vez que o site for acessado se existem solicitações
-	 *	de adiantamento que venceram (feitas em meses anteriores), se sim, reprova
-	 *
-	 *	@access public
-	 *	@return bool
-	 */
-	public function checkSolicAdi(): bool{
-		$hoje = date('Y-m-d');
-		$mes_atual = date("n");
-		$ano_atual = date("Y");
-		$update = $this->mysqli->query("UPDATE saldos_adiantados SET data_analise = '{$hoje}', status = 0 WHERE (SELECT EXTRACT(MONTH FROM data_solicitacao)) <> {$mes_atual} OR (SELECT EXTRACT(YEAR FROM data_solicitacao)) <> {$ano_atual};");
-		if ($update) {
 			return true;
 		}
 		return false;
@@ -506,39 +498,53 @@ class Geral extends Conexao {
 	 */
 	public function pedidoAnalisado($id_pedido, $fase, $prioridade, $id_item, $item_cancelado, $qtd_solicitada, $qt_saldo, $qt_utilizado, $vl_saldo, $vl_utilizado, $valor_item, $saldo_setor, $total_pedido, $comentario) {
 		// selecionando o id do setor que fez o pedido
-		$obj_id = $this->mysqli->query("SELECT id_setor FROM pedido WHERE id = {$id_pedido};");
+		$obj_id = $this->mysqli->query("SELECT id_setor FROM pedido WHERE id = {$id_pedido};")->fetch_object();
 		$id_setor = $obj_id->id_setor;
+		$hoje = date('Y-m-d');
+		// verificando itens cancelados, somente quando passam pela análise
+		if ($fase <= 4) {
+			if (in_array(1, $item_cancelado) || in_array(true, $item_cancelado)) {
+				for ($i = 0; $i < count($id_item); $i++) {
+					if ($item_cancelado[$i]) {
+						$qt_saldo[$i] += $qt_solicitada[$i];
+						$qt_utilizado[$i] -= $qtd_solicitada[$i];
+						$vl_saldo[$i] += $valor_item[$i];
+						$vl_utilizado -= $valor_item[$i];
+						$this->mysqli->query("UPDATE itens SET qt_saldo = '{$qt_saldo[$i]}', qt_utilizado = '{$qt_utilizado[$i]}', vl_saldo = '{$vl_saldo[$i]}', vl_utilizado = '{$vl_utilizado[$i]}', cancelado = 1 WHERE id = {$id_item[$i]};");
+						$saldo_setor += $valor_item[$i];
+						$total_pedido -= $valor_item[$i];
+						$this->mysqli->query("DELETE FROM itens_pedido WHERE id_pedido = {$id_pedido} AND id_item = {$id_item[$i]};");
+					}
+				}
+			}
+		}
 		// alterar o status do pedido
 		$alteracao = 0;
 		if ($fase == 1) {
 			$alteracao = 1;
 			$prioridade = 5;
-		}
-		$update_st = $this->mysqli->query("UPDATE pedido SET status = '{$fase}', prioridade = '{$prioridade}', alteracao = {$alteracao} WHERE id = {$id_pedido};");
-		// verificando itens cancelados
-		for ($i = 0; $i < count($id_item); $i++) {
-			if ($item_cancelado[$i]) {
-				// o item de id = $id_item[$i] foi cancelado e deve ser desativado, sua qt_solicitada deve ser devolvida à qt_saldo, e a qt_utilizada deve ser subtraida da qt_solicitada, bem como os valores de saldo e utilizado
-				$qt_saldo[$i] += $qt_solicitada[$i];
-				$qt_utilizado[$i] -= $qtd_solicitada[$i];
-				$vl_saldo[$i] += $valor_item[$i];
-				$vl_utilizado -= $valor_item[$i];
-				$this->mysqli->query("UPDATE itens SET qt_saldo = '{$qt_saldo[$i]}', qt_utilizado = '{$qt_utilizado[$i]}', vl_saldo = '{$vl_saldo[$i]}', vl_utilizado = '{$vl_utilizado[$i]}', cancelado = 1 WHERE id = {$id_item[$i]};");
-				// o saldo do setor deve ser incrementado do valor total do item que foi solicitado mas cancelado
-				$saldo_setor += $valor_item[$i];
-				$saldo_setor = number_format($saldo_setor, 3, '.', '');
-				$this->mysqli->query("UPDATE saldo_setor SET saldo = '{$saldo_setor}' WHERE id_setor = {$id_setor};");
-				// o pedido também deve ser alterado
-				$total_pedido -= $valor_item[$i];
-				$this->mysqli->query("UPDATE pedido SET valor = '{$total_pedido}' WHERE id = {$id_pedido};");
-				$this->mysqli->query("DELETE FROM itens_pedido WHERE id_pedido = {$id_pedido} AND id_item = {$id_item[$i]};");
+		} else if ($fase == 3 || $fase == 4) {
+			// somente se o pedido for reprovado ou aprovado
+			$total_pedido = number_format($total_pedido, 3, '.', '');
+			$this->mysqli->query("UPDATE pedido SET valor = '{$total_pedido}' WHERE id = {$id_pedido};");
+			if ($fase == 3) {
+				// reprovado
+				$saldo_setor += $total_pedido;
+			} else {
+				// aprovado
+				$this->mysqli->query("INSERT INTO saldos_lancamentos VALUES(NULL, {$id_setor}, '{$hoje}', '-{$total_pedido}', 4);");
+				// próxima fase
+				$fase++;
 			}
+			$saldo_setor = number_format($saldo_setor, 3, '.', '');
+			$this->mysqli->query("UPDATE saldo_setor SET saldo = '{$saldo_setor}' WHERE id_setor = {$id_setor};");
 		}
+		$this->mysqli->query("UPDATE pedido SET status = {$fase}, prioridade = {$prioridade}, alteracao = {$alteracao} WHERE id = {$id_pedido};");
 		// inserindo comentário da análise
-		$hoje = date('Y-m-d');
 		$comentario = $this->mysqli->real_escape_string($comentario);
 		$obj_tot = $this->mysqli->query("SELECT valor FROM pedido WHERE id = {$id_pedido};")->fetch_object();
-		$this->mysqli->query("INSERT INTO comentarios VALUES(NULL, {$id_pedido}, '{$hoje}', '{$prioridade}', '{$fase}', '{$obj_tot->valor}', '{$comentario}');");
+		$this->mysqli->query("INSERT INTO comentarios VALUES(NULL, {$id_pedido}, '{$hoje}', {$prioridade}, {$fase}, '{$obj_tot->valor}', '{$comentario}');");
+		$this->mysqli->close();
 		return true;
 	}
 }

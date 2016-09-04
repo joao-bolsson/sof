@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: 30-Ago-2016 às 00:45
+-- Generation Time: 04-Set-2016 às 04:19
 -- Versão do servidor: 5.5.50-0ubuntu0.14.04.1
 -- PHP Version: 7.0.10-1+deb.sury.org~trusty+1
 
@@ -41,7 +41,9 @@ CREATE TABLE `comentarios` (
 --
 
 INSERT INTO `comentarios` (`id`, `id_pedido`, `data_coment`, `prioridade`, `status`, `valor`, `comentario`) VALUES
-(1, 1, '2016-08-29', 1, 5, '2550.000', 'Pedido analisado, nenhum item foi cancelado e estÃ¡ tudo certo.');
+(1, 1, '2016-08-29', 1, 5, '2550.000', 'Pedido analisado, nenhum item foi cancelado e estÃ¡ tudo certo.'),
+(2, 1, '2016-08-31', 1, 7, '2550.000', 'Pedido enviado ao ordenador.'),
+(3, 2, '2016-09-04', 1, 5, '1737.420', 'alala');
 
 -- --------------------------------------------------------
 
@@ -94,7 +96,7 @@ INSERT INTO `itens` (`id`, `id_item_processo`, `id_item_contrato`, `cod_despesa`
 (3, 0, 180432, '4.4.9.0.52.35', 'EQUIPAMENTOS DE PROCESSAMENTO DE DADOS', 'Registro de PreÃ§o', '000383/2015', '23081.008979/2015-00', '05 - PregÃ£o', '0', '16/06/2015', '02/06/2016', '16/06/2015', '61797924000740', 'HEWLETT- PACKARD BRASIL LTDA', '000396/2015', '01.18.00.00.0.1', 'CENTRAL DE AQUISIÃ‡Ã•ES - DEMAPA', 'COMP00', 'Compra Compartilhada com a UFRGS-153114 do pregÃ£o 02/2015. Item 1: Computador HP EliteDesk 705 G1; processador AMD A6 Pro-7400B; memÃ³ria RAM de 4 GB (1x4GB); unidade de disco rÃ­gido de 500 GB; Monitor HP V206hz de 20; Windows  8.1 Pro', 'Unidade', 36498, '2680', 250, '670000', 190, '509200', 60, '160800', 1740, 2015, 0),
 (4, 0, 180433, '4.4.9.0.52.35', 'EQUIPAMENTOS DE PROCESSAMENTO DE DADOS', 'Registro de PreÃ§o', '000383/2015', '23081.008979/2015-00', '05 - PregÃ£o', '0', '16/06/2015', '02/06/2016', '16/06/2015', '61797924000740', 'HEWLETT- PACKARD BRASIL LTDA', '000396/2015', '01.18.00.00.0.1', 'CENTRAL DE AQUISIÃ‡Ã•ES - DEMAPA', 'COMP00', 'Compra compartilhada com a UFRGS-153114 do pregÃ£o 02/2015 Item 3: Computador  HP EliteDesk 705 G1; processador AMD A10 Pro-7800B; memÃ³ria RAM de 8 GB (2x4GB); unidade de disco rÃ­gido de 1 TB; Monitor HP EliteDisplay E231i de 23"; Windows 8.1 Pro', 'Unidade', 36498, '3116', 250, '779000', 250, '779000', 0, '0', 1740, 2015, 0),
 (5, 0, 180434, '4.4.9.0.52.35', 'EQUIPAMENTOS DE PROCESSAMENTO DE DADOS', 'Registro de PreÃ§o', '000383/2015', '23081.008979/2015-00', '05 - PregÃ£o', '0', '16/06/2015', '02/06/2016', '16/06/2015', '61797924000740', 'HEWLETT- PACKARD BRASIL LTDA', '000396/2015', '01.18.00.00.0.1', 'CENTRAL DE AQUISIÃ‡Ã•ES - DEMAPA', 'NOT00', 'Compra compartilhada com a UFRGS - 153114 do pregÃ£o 02/2015 Item 9: Notebook HP ProBook 645 G1; Tela LED de 14"; Processador AMD A10-4600M; MemÃ³ria RAM: 4 Gbytes; HD 320 Gbytes;  Windows 8.1 Pro', 'Unidade', 36498, '2999', 150, '449850', 40, '119960', 110, '329890', 1740, 2015, 0),
-(6, 305800, 180573, '3.3.9.0.33.03', 'LocaÃ§Ã£o de Meios de Transporte', 'Registro de PreÃ§o Gerado', '000388/2015', '23081.007840/2015-31', '05 - PregÃ£o', '90', '16/06/2015', '06/06/2016', '17/06/2015', '87767596000138', 'ARGENTA TURISMO E VIAGENS LTDA', '000427/2015', '01.18.00.00.0.1', 'CENTRAL DE AQUISIÃ‡Ã•ES - DEMAPA', '33903303', 'ServiÃ§os de transporte rodoviÃ¡rio para viagens internacionais da UFSM, em Ã´nibus leito turismo trucado, com capacidade mÃ­nima de 38 lugares, com calefaÃ§Ã£o, ar condicionado, frigobar, banheiro, televisor com DVD/VÃ­deo, com poltronas soft com apoio para as ', 'Kilometro', 36529, '3,6', 15000, '54000', 6970, '25092', 8030, '28908', 1740, 2015, 0),
+(6, 305800, 180573, '3.3.9.0.33.03', 'LocaÃ§Ã£o de Meios de Transporte', 'Registro de PreÃ§o Gerado', '000388/2015', '23081.007840/2015-31', '05 - PregÃ£o', '90', '16/06/2015', '06/06/2016', '17/06/2015', '87767596000138', 'ARGENTA TURISMO E VIAGENS LTDA', '000427/2015', '01.18.00.00.0.1', 'CENTRAL DE AQUISIÃ‡Ã•ES - DEMAPA', '33903303', 'ServiÃ§os de transporte rodoviÃ¡rio para viagens internacionais da UFSM, em Ã´nibus leito turismo trucado, com capacidade mÃ­nima de 38 lugares, com calefaÃ§Ã£o, ar condicionado, frigobar, banheiro, televisor com DVD/VÃ­deo, com poltronas soft com apoio para as ', 'Kilometro', 36529, '3,6', 15000, '54000', 6973, '25102.8', 8027, '28897.2', 1740, 2015, 0),
 (7, 305801, 180574, '3.3.9.0.33.03', 'LocaÃ§Ã£o de Meios de Transporte', 'Registro de PreÃ§o Gerado', '000388/2015', '23081.007840/2015-31', '05 - PregÃ£o', '90', '16/06/2015', '06/06/2016', '17/06/2015', '87767596000138', 'ARGENTA TURISMO E VIAGENS LTDA', '000427/2015', '01.18.00.00.0.1', 'CENTRAL DE AQUISIÃ‡Ã•ES - DEMAPA', '33903303', 'ServiÃ§os de transporte rodoviÃ¡rio para viagens da UFSM, em todo territÃ³rio nacional, em Ã´nibus leito turismo trucado, com capacidade mÃ­nima de 38 lugares, com calefaÃ§Ã£o, ar condicionado, frigobar, banheiro, televisor com DVD/VÃ­deo, com poltronas soft com ', 'Kilometro', 36529, '3,53', 50000, '176500', 39447, '139247.91', 10553, '37252.09', 1740, 2015, 0),
 (8, 305802, 180575, '3.3.9.0.33.03', 'LocaÃ§Ã£o de Meios de Transporte', 'Registro de PreÃ§o Gerado', '000389/2015', '23081.007840/2015-31', '05 - PregÃ£o', '90', '16/06/2015', '06/06/2016', '17/06/2015', '90323494000138', 'TRANSPORTES ARGENTA LTDA', '000428/2015', '01.18.00.00.0.1', 'CENTRAL DE AQUISIÃ‡Ã•ES - DEMAPA', '33903303', 'ServiÃ§os de transporte rodoviÃ¡rio para viagens da UFSM, em todo o territÃ³rio nacional, em Ã´nibus convencional, com capacidade mÃ­nima de 40 lugares, com calefaÃ§Ã£o, ar condicionado, frigobar, banheiro, televisor com DVD/VÃ­deo, com poltrona soft. Obs: No cas', 'Kilometro', 36530, '3,2', 50000, '160000', 49849, '159516.8', 151, '483.2', 1740, 2015, 0),
 (9, 305797, 180576, '3.3.9.0.33.03', 'LocaÃ§Ã£o de Meios de Transporte', 'Registro de PreÃ§o Gerado', '000390/2015', '23081.007840/2015-31', '05 - PregÃ£o', '90', '16/06/2015', '06/06/2016', '17/06/2015', '08328969000106', 'CASARIN E BERTAGNOLLI LTDA', '000429/2015', '01.18.00.00.0.1', 'CENTRAL DE AQUISIÃ‡Ã•ES - DEMAPA', '33903303', 'ServiÃ§o de transporte de pessoas para deslocamento dentro do municÃ­pio de Santa Maria para atendimento das necessidades da UFSM, em Ã´nibus convencional com capacidade mÃ­nima de 38 lugares. VeÃ­culo com ano de fabricaÃ§Ã£o nÃ£o inferior a 2006.', 'Kilometro', 36531, '6,96', 10000, '69600', 2064, '14365.44', 7936, '55234.56', 1740, 2015, 0),
@@ -176,8 +178,8 @@ INSERT INTO `itens` (`id`, `id_item_processo`, `id_item_contrato`, `cod_despesa`
 (84, 317168, 194982, '4.4.9.0.52.12', 'APARELHOS E UTENSILIOS DOMESTICOS', 'Registro de PreÃ§o Gerado', '000015/2016', '23081.002649/2016-83', '05 - PregÃ£o', '17', '28/03/2016', '12/10/2016', '28/03/2016', '07671564000103', 'TOP DISTRIBUIDORA E LOGÃSTICA LTDA- ME', '000031/2016', '01.18.00.00.0.1', 'CENTRAL DE AQUISIÃ‡Ã•ES - DEMAPA', 'P8476', 'Condicionador de ar, capacidade de refrigeraÃ§Ã£o de 9.000 BTU/h, ciclo reverso, tipo split hi-wall, controle remoto, unidade condensadora de descarga vertical. AlimentaÃ§Ã£o 220V, monofÃ¡sico, 60Hz. Etiqueta Nacional de ConservaÃ§Ã£o de Energia - ENCE, classe Â´', 'Unidade', 39022, '1340', 50, '67000', 0, '0', 50, '67000', 1740, 2016, 0),
 (85, 317158, 194983, '4.4.9.0.52.12', 'APARELHOS E UTENSILIOS DOMESTICOS', 'Registro de PreÃ§o Gerado', '000016/2016', '23081.002649/2016-83', '05 - PregÃ£o', '17', '28/03/2016', '12/10/2016', '28/03/2016', '14719113000156', 'FREITAS COMERCIO E SERVIÃ‡OS DE REFRIGERAÃ‡ÃƒO LTDA', '000032/2016', '01.18.00.00.0.1', 'CENTRAL DE AQUISIÃ‡Ã•ES - DEMAPA', 'P8476', 'Condicionador de ar, capacidade de refrigeraÃ§Ã£o de 30.000 BTU/h, ciclo reverso, tipo split hi-wall, controle remoto. AlimentaÃ§Ã£o 220V, monofÃ¡sico, 60Hz. Etiqueta Nacional de ConservaÃ§Ã£o de Energia - ENCE, no mÃ­nimo classe Â´C\'. Manual de instruÃ§Ãµes em port', 'Unidade', 39023, '3098', 25, '77450', 6, '18588', 19, '58862', 1740, 2016, 0),
 (86, 317156, 194984, '4.4.9.0.52.12', 'APARELHOS E UTENSILIOS DOMESTICOS', 'Registro de PreÃ§o Gerado', '000016/2016', '23081.002649/2016-83', '05 - PregÃ£o', '17', '28/03/2016', '12/10/2016', '28/03/2016', '14719113000156', 'FREITAS COMERCIO E SERVIÃ‡OS DE REFRIGERAÃ‡ÃƒO LTDA', '000032/2016', '01.18.00.00.0.1', 'CENTRAL DE AQUISIÃ‡Ã•ES - DEMAPA', 'P8476', 'Condicionador de ar, capacidade de refrigeraÃ§Ã£o de 18.000 BTU/h, ciclo reverso, tipo split hi-wall, controle remoto, controle remoto, unidade condensadora de descarga horizontal. AlimentaÃ§Ã£o 220V, monofÃ¡sico, 60Hz. Etiqueta Nacional de ConservaÃ§Ã£o de Ene', 'Unidade', 39023, '2014', 100, '201400', 9, '18126', 91, '183274', 1740, 2016, 0),
-(87, 317171, 194985, '4.4.9.0.52.12', 'APARELHOS E UTENSILIOS DOMESTICOS', 'Registro de PreÃ§o Gerado', '000017/2016', '23081.002649/2016-83', '05 - PregÃ£o', '17', '28/03/2016', '12/10/2016', '28/03/2016', '05046360000148', 'MASTER AUCTION TRANSPORTES E COMERCIO DE ELETRO ELETRON', '000033/2016', '01.18.00.00.0.1', 'CENTRAL DE AQUISIÃ‡Ã•ES - DEMAPA', '52016', 'Ventilador de teto, diÃ¢metro aproximado de 960 mm, com 3 ou mais pÃ¡s de polipropileno (cor branca) ou aÃ§o pintado na cor branca, controle de sentido de rotaÃ§Ã£o (ventilaÃ§Ã£o e exaustÃ£o), potÃªncia mÃ­nima de 130W, vazÃ£o mÃ­nima de 1,75mÂ³/s, cor branca. Aliment', 'Unidade', 39024, '103', 50, '5150', 0, '0', 50, '5150', 1740, 2016, 0),
-(88, 317167, 194986, '4.4.9.0.52.12', 'APARELHOS E UTENSILIOS DOMESTICOS', 'Registro de PreÃ§o Gerado', '000017/2016', '23081.002649/2016-83', '05 - PregÃ£o', '17', '28/03/2016', '12/10/2016', '28/03/2016', '05046360000148', 'MASTER AUCTION TRANSPORTES E COMERCIO DE ELETRO ELETRON', '000033/2016', '01.18.00.00.0.1', 'CENTRAL DE AQUISIÃ‡Ã•ES - DEMAPA', '52016', 'Ventilador de coluna, diÃ¢metro de 60 cm, altura mÃ­nima da haste de 1,5m, com 3 ou mais pÃ¡s de polipropileno, grade de proteÃ§Ã£o metÃ¡lica, controle de, no mÃ­nimo, 3 velocidades, potÃªncia mÃ­nima de 180W, vazÃ£o mÃ­nima de 220mÂ³/min, altura regulÃ¡vel, cor preta', 'Unidade', 39024, '163,98', 25, '4099.5', 5, '819.9', 20, '3279.6', 1740, 2016, 0),
+(87, 317171, 194985, '4.4.9.0.52.12', 'APARELHOS E UTENSILIOS DOMESTICOS', 'Registro de PreÃ§o Gerado', '000017/2016', '23081.002649/2016-83', '05 - PregÃ£o', '17', '28/03/2016', '12/10/2016', '28/03/2016', '05046360000148', 'MASTER AUCTION TRANSPORTES E COMERCIO DE ELETRO ELETRON', '000033/2016', '01.18.00.00.0.1', 'CENTRAL DE AQUISIÃ‡Ã•ES - DEMAPA', '52016', 'Ventilador de teto, diÃ¢metro aproximado de 960 mm, com 3 ou mais pÃ¡s de polipropileno (cor branca) ou aÃ§o pintado na cor branca, controle de sentido de rotaÃ§Ã£o (ventilaÃ§Ã£o e exaustÃ£o), potÃªncia mÃ­nima de 130W, vazÃ£o mÃ­nima de 1,75mÂ³/s, cor branca. Aliment', 'Unidade', 39024, '103', 50, '5150', 5, '515', 45, '4635', 1740, 2016, 0),
+(88, 317167, 194986, '4.4.9.0.52.12', 'APARELHOS E UTENSILIOS DOMESTICOS', 'Registro de PreÃ§o Gerado', '000017/2016', '23081.002649/2016-83', '05 - PregÃ£o', '17', '28/03/2016', '12/10/2016', '28/03/2016', '05046360000148', 'MASTER AUCTION TRANSPORTES E COMERCIO DE ELETRO ELETRON', '000033/2016', '01.18.00.00.0.1', 'CENTRAL DE AQUISIÃ‡Ã•ES - DEMAPA', '52016', 'Ventilador de coluna, diÃ¢metro de 60 cm, altura mÃ­nima da haste de 1,5m, com 3 ou mais pÃ¡s de polipropileno, grade de proteÃ§Ã£o metÃ¡lica, controle de, no mÃ­nimo, 3 velocidades, potÃªncia mÃ­nima de 180W, vazÃ£o mÃ­nima de 220mÂ³/min, altura regulÃ¡vel, cor preta', 'Unidade', 39024, '163,98', 25, '4099.5', 9, '1475.82', 16, '2623.68', 1740, 2016, 0),
 (89, 317162, 194987, '4.4.9.0.52.12', 'APARELHOS E UTENSILIOS DOMESTICOS', 'Registro de PreÃ§o Gerado', '000018/2016', '23081.002649/2016-83', '05 - PregÃ£o', '17', '28/03/2016', '12/10/2016', '28/03/2016', '09037279000152', 'ENGEPOLO AR CONDICIONADO COMERCIO E SERVIÃ‡OS LTDA- EPP', '000034/2016', '01.18.00.00.0.1', 'CENTRAL DE AQUISIÃ‡Ã•ES - DEMAPA', 'P8476', 'Condicionador de ar, capacidade de refrigeraÃ§Ã£o de 18.000 BTU/h, ciclo reverso, tipo split cassete, unidade condensadora de descarga vertical, controle remoto sem fio. AlimentaÃ§Ã£o 220V, monofÃ¡sico, 60Hz. Etiqueta Nacional de ConservaÃ§Ã£o de Energia - ENCE,', 'Unidade', 39025, '4962,74', 10, '49627.4', 0, '0', 10, '49627.4', 1740, 2016, 0),
 (90, 317150, 194988, '4.4.9.0.52.12', 'APARELHOS E UTENSILIOS DOMESTICOS', 'Registro de PreÃ§o Gerado', '000018/2016', '23081.002649/2016-83', '05 - PregÃ£o', '17', '28/03/2016', '12/10/2016', '28/03/2016', '09037279000152', 'ENGEPOLO AR CONDICIONADO COMERCIO E SERVIÃ‡OS LTDA- EPP', '000034/2016', '01.18.00.00.0.1', 'CENTRAL DE AQUISIÃ‡Ã•ES - DEMAPA', 'P8476', 'Condicionador de ar, capacidade de refrigeraÃ§Ã£o de 18.000 BTU/h, ciclo reverso, tipo janela. AlimentaÃ§Ã£o 220V, monofÃ¡sico, 60Hz. Etiqueta Nacional de ConservaÃ§Ã£o de Energia - ENCE, classe Â´AÂ´. Manual de instruÃ§Ãµes em portuguÃªs. Garantia mÃ­nima de um ano o', 'Unidade', 39025, '1899,5', 10, '18995', 0, '0', 10, '18995', 1740, 2016, 0),
 (91, 317148, 194989, '4.4.9.0.52.12', 'APARELHOS E UTENSILIOS DOMESTICOS', 'Registro de PreÃ§o Gerado', '000018/2016', '23081.002649/2016-83', '05 - PregÃ£o', '17', '28/03/2016', '12/10/2016', '28/03/2016', '09037279000152', 'ENGEPOLO AR CONDICIONADO COMERCIO E SERVIÃ‡OS LTDA- EPP', '000034/2016', '01.18.00.00.0.1', 'CENTRAL DE AQUISIÃ‡Ã•ES - DEMAPA', 'P8476', 'Condicionador de ar, capacidade de refrigeraÃ§Ã£o de 10.000 BTU/h, ciclo reverso, tipo janela. AlimentaÃ§Ã£o 220V, monofÃ¡sico, 60Hz. Etiqueta Nacional de ConservaÃ§Ã£o de Energia - ENCE, classe Â´AÂ´. Manual de instruÃ§Ãµes em portuguÃªs. Garantia mÃ­nima de um ano o', 'Unidade', 39025, '1390', 10, '13900', 0, '0', 10, '13900', 1740, 2016, 0),
@@ -4541,13 +4543,13 @@ INSERT INTO `itens` (`id`, `id_item_processo`, `id_item_contrato`, `cod_despesa`
 (4398, 314522, 195056, '3.3.9.0.30.36', 'MATERIAL HOSPITALAR', 'Registro de PreÃ§o Gerado', '002277/2015', '23541.000436/2015-71', '05 - PregÃ£o EBSERH', '153', '07/04/2016', '31/03/2017', '27/04/2016', '17605216000183', 'PONTOMED PRODUTOS PARA SAÃšDE LTDA - ME', '002883/2015', '10.00.00.00.0.0', 'HOSPITAL UNIVERSITÃRIO DE SANTA MARIA - HUSM', '4800972', 'FAIXA ELASTICA UTILIZADA EM FISIOTERAPIA - FABRICADA A PARTIR DE LÃTEX NATURAL, RESISTENTE, COM EXCELENTE ELASTICIDADE E CAPACIDADE DE RECUPERAÃ‡ÃƒO DE SUA FORMA ORIGINAL, SEM EXCESSO DE TALCO (O GRAU DE ELASTICIDADE Ã‰ DETERMINADO PELA COR OU ESPESSURA). ME', 'Unidade', 39060, '26,6', 100, '2660', 0, '0', 100, '2660', 163, 2015, 0),
 (4399, 314525, 195057, '3.3.9.0.30.36', 'MATERIAL HOSPITALAR', 'Registro de PreÃ§o Gerado', '002277/2015', '23541.000436/2015-71', '05 - PregÃ£o EBSERH', '153', '07/04/2016', '31/03/2017', '27/04/2016', '17605216000183', 'PONTOMED PRODUTOS PARA SAÃšDE LTDA - ME', '002883/2015', '10.00.00.00.0.0', 'HOSPITAL UNIVERSITÃRIO DE SANTA MARIA - HUSM', '5800257', 'FITA MÃ‰TRICA DE 150 CENTÃMETROS, COMPOSIÃ‡ÃƒO: 95% POLIÃ‰STER E 5% FIBRA DE VIDRO. ENVIAR CATÃLOGO.', 'Unidade', 39060, '8', 100, '800', 0, '0', 100, '800', 163, 2015, 0),
 (4400, 314533, 195058, '3.3.9.0.30.36', 'MATERIAL HOSPITALAR', 'Registro de PreÃ§o Gerado', '002277/2015', '23541.000436/2015-71', '05 - PregÃ£o EBSERH', '153', '07/04/2016', '31/03/2017', '27/04/2016', '17605216000183', 'PONTOMED PRODUTOS PARA SAÃšDE LTDA - ME', '002883/2015', '10.00.00.00.0.0', 'HOSPITAL UNIVERSITÃRIO DE SANTA MARIA - HUSM', '4800988', 'MULETA CANADENSE ARTICULADA EM ALUMÃNIO- MULETA CANADENSE ARTICULADA, COM DEZ NÃVEIS DE REGULAGEM DE ALTURA NA PARTE INFERIOR,MAIS QUATRO NÃVEIS DE AJUSTE AO TAMANHO DO BRAÃ‡O. APOIO DO BRAÃ‡O EM POLIPROPILENO, PONTEIRA DE BORRACHA, QUE PERMITE ADERENCIA AO', 'Unidade', 39060, '82', 10, '820', 0, '0', 10, '820', 163, 2015, 0),
-(4401, 317610, 195079, '3.3.9.0.30.09', 'Material FarmacolÃ³gico', 'Registro de PreÃ§o Gerado', '000041/2016', '23541.000033/2016-11', '05 - PregÃ£o EBSERH', '20', '12/04/2016', '02/04/2017', '20/04/2016', '01571702000198', 'HALEX ISTAR IND. FARM. LTDA', '000059/2016', '10.00.00.00.0.0', 'HOSPITAL UNIVERSITÃRIO DE SANTA MARIA - HUSM', 'TRAMA100A.', 'Tramadol, cloridrato, 100mg, soluÃ§Ã£o injetÃ¡vel, ampola com 2mL', 'Ampola', 39066, '0,68', 36000, '24480', 0, '0', 36000, '24480', 163, 2016, 0),
+(4401, 317610, 195079, '3.3.9.0.30.09', 'Material FarmacolÃ³gico', 'Registro de PreÃ§o Gerado', '000041/2016', '23541.000033/2016-11', '05 - PregÃ£o EBSERH', '20', '12/04/2016', '02/04/2017', '20/04/2016', '01571702000198', 'HALEX ISTAR IND. FARM. LTDA', '000059/2016', '10.00.00.00.0.0', 'HOSPITAL UNIVERSITÃRIO DE SANTA MARIA - HUSM', 'TRAMA100A.', 'Tramadol, cloridrato, 100mg, soluÃ§Ã£o injetÃ¡vel, ampola com 2mL', 'Ampola', 39066, '0,68', 36000, '24480', 500, '340', 35500, '24140', 163, 2016, 0),
 (4402, 317617, 195080, '3.3.9.0.30.09', 'Material FarmacolÃ³gico', 'Registro de PreÃ§o Gerado', '000041/2016', '23541.000033/2016-11', '05 - PregÃ£o EBSERH', '20', '12/04/2016', '02/04/2017', '20/04/2016', '01571702000198', 'HALEX ISTAR IND. FARM. LTDA', '000059/2016', '10.00.00.00.0.0', 'HOSPITAL UNIVERSITÃRIO DE SANTA MARIA - HUSM', 'ONDAN008A.', 'Ondansetrona, cloridrato, 8mg, soluÃ§Ã£o injetÃ¡vel, ampola com 4mL', 'Ampola', 39066, '0,85', 30000, '25500', 6000, '5100', 24000, '20400', 163, 2016, 0),
 (4403, 317526, 195083, '3.3.9.0.30.09', 'Material FarmacolÃ³gico', 'Registro de PreÃ§o Gerado', '000043/2016', '23541.000033/2016-11', '05 - PregÃ£o EBSERH', '20', '12/04/2016', '02/04/2017', '19/04/2016', '44734671000151', 'CRISTALIA PROD.QUIM.FARM.LTDA.', '000061/2016', '10.00.00.00.0.0', 'HOSPITAL UNIVERSITÃRIO DE SANTA MARIA - HUSM', 'BIPER002C.', 'Biperideno, cloridrato, 2mg, comprimido', 'Comprimido', 39068, '0,155', 6000, '930', 0, '0', 6000, '930', 163, 2016, 0),
 (4404, 317527, 195084, '3.3.9.0.30.09', 'Material FarmacolÃ³gico', 'Registro de PreÃ§o Gerado', '000043/2016', '23541.000033/2016-11', '05 - PregÃ£o EBSERH', '20', '12/04/2016', '02/04/2017', '19/04/2016', '44734671000151', 'CRISTALIA PROD.QUIM.FARM.LTDA.', '000061/2016', '10.00.00.00.0.0', 'HOSPITAL UNIVERSITÃRIO DE SANTA MARIA - HUSM', 'BIPER005A.', 'Biperideno, lactato, 5mg, soluÃ§Ã£o injetÃ¡vel, ampola com 1mL', 'Ampola', 39068, '1,53', 1500, '2295', 0, '0', 1500, '2295', 163, 2016, 0),
-(4405, 317533, 195085, '3.3.9.0.30.09', 'Material FarmacolÃ³gico', 'Registro de PreÃ§o Gerado', '000043/2016', '23541.000033/2016-11', '05 - PregÃ£o EBSERH', '20', '12/04/2016', '02/04/2017', '19/04/2016', '44734671000151', 'CRISTALIA PROD.QUIM.FARM.LTDA.', '000061/2016', '10.00.00.00.0.0', 'HOSPITAL UNIVERSITÃRIO DE SANTA MARIA - HUSM', 'CLONA0.5C.', 'Clonazepam, 0.5mg, comprimido', 'Comprimido', 39068, '0,07', 40000, '2800', 0, '0', 40000, '2800', 163, 2016, 0),
-(4406, 317534, 195086, '3.3.9.0.30.09', 'Material FarmacolÃ³gico', 'Registro de PreÃ§o Gerado', '000043/2016', '23541.000033/2016-11', '05 - PregÃ£o EBSERH', '20', '12/04/2016', '02/04/2017', '19/04/2016', '44734671000151', 'CRISTALIA PROD.QUIM.FARM.LTDA.', '000061/2016', '10.00.00.00.0.0', 'HOSPITAL UNIVERSITÃRIO DE SANTA MARIA - HUSM', 'CLONA002C.', 'Clonazepam, 2mg, comprimido', 'Comprimido', 39068, '0,05', 20000, '1000', 0, '0', 20000, '1000', 163, 2016, 0),
-(4407, 317539, 195087, '3.3.9.0.30.09', 'Material FarmacolÃ³gico', 'Registro de PreÃ§o Gerado', '000043/2016', '23541.000033/2016-11', '05 - PregÃ£o EBSERH', '20', '12/04/2016', '02/04/2017', '19/04/2016', '44734671000151', 'CRISTALIA PROD.QUIM.FARM.LTDA.', '000061/2016', '10.00.00.00.0.0', 'HOSPITAL UNIVERSITÃRIO DE SANTA MARIA - HUSM', 'DCETA100A.', 'Dextrocetamina, cloridrato, 100mg, soluÃ§Ã£o injetÃ¡vel, ampola com 2mL', 'Ampola', 39068, '10,65', 2400, '25560', 0, '0', 2400, '25560', 163, 2016, 0),
+(4405, 317533, 195085, '3.3.9.0.30.09', 'Material FarmacolÃ³gico', 'Registro de PreÃ§o Gerado', '000043/2016', '23541.000033/2016-11', '05 - PregÃ£o EBSERH', '20', '12/04/2016', '02/04/2017', '19/04/2016', '44734671000151', 'CRISTALIA PROD.QUIM.FARM.LTDA.', '000061/2016', '10.00.00.00.0.0', 'HOSPITAL UNIVERSITÃRIO DE SANTA MARIA - HUSM', 'CLONA0.5C.', 'Clonazepam, 0.5mg, comprimido', 'Comprimido', 39068, '0,07', 40000, '2800', 1000, '70', 39000, '2730', 163, 2016, 0),
+(4406, 317534, 195086, '3.3.9.0.30.09', 'Material FarmacolÃ³gico', 'Registro de PreÃ§o Gerado', '000043/2016', '23541.000033/2016-11', '05 - PregÃ£o EBSERH', '20', '12/04/2016', '02/04/2017', '19/04/2016', '44734671000151', 'CRISTALIA PROD.QUIM.FARM.LTDA.', '000061/2016', '10.00.00.00.0.0', 'HOSPITAL UNIVERSITÃRIO DE SANTA MARIA - HUSM', 'CLONA002C.', 'Clonazepam, 2mg, comprimido', 'Comprimido', 39068, '0,05', 20000, '1000', 1000, '50', 19000, '950', 163, 2016, 0),
+(4407, 317539, 195087, '3.3.9.0.30.09', 'Material FarmacolÃ³gico', 'Registro de PreÃ§o Gerado', '000043/2016', '23541.000033/2016-11', '05 - PregÃ£o EBSERH', '20', '12/04/2016', '02/04/2017', '19/04/2016', '44734671000151', 'CRISTALIA PROD.QUIM.FARM.LTDA.', '000061/2016', '10.00.00.00.0.0', 'HOSPITAL UNIVERSITÃRIO DE SANTA MARIA - HUSM', 'DCETA100A.', 'Dextrocetamina, cloridrato, 100mg, soluÃ§Ã£o injetÃ¡vel, ampola com 2mL', 'Ampola', 39068, '10,65', 2400, '25560', 10, '106.5', 2390, '25453.5', 163, 2016, 0),
 (4408, 317540, 195088, '3.3.9.0.30.09', 'Material FarmacolÃ³gico', 'Registro de PreÃ§o Gerado', '000043/2016', '23541.000033/2016-11', '05 - PregÃ£o EBSERH', '20', '12/04/2016', '02/04/2017', '19/04/2016', '44734671000151', 'CRISTALIA PROD.QUIM.FARM.LTDA.', '000061/2016', '10.00.00.00.0.0', 'HOSPITAL UNIVERSITÃRIO DE SANTA MARIA - HUSM', 'DCETA500FA', 'Dextrocetamina, cloridrato, 500mg, soluÃ§Ã£o injetÃ¡vel, frasco-ampola com 10mL', 'Frasco-Ampola', 39068, '63,7', 1200, '76440', 0, '0', 1200, '76440', 163, 2016, 0),
 (4409, 317544, 195089, '3.3.9.0.30.09', 'Material FarmacolÃ³gico', 'Registro de PreÃ§o Gerado', '000043/2016', '23541.000033/2016-11', '05 - PregÃ£o EBSERH', '20', '12/04/2016', '02/04/2017', '19/04/2016', '44734671000151', 'CRISTALIA PROD.QUIM.FARM.LTDA.', '000061/2016', '10.00.00.00.0.0', 'HOSPITAL UNIVERSITÃRIO DE SANTA MARIA - HUSM', 'DROPE002A.', 'Droperidol, 2.5mg, soluÃ§Ã£o injetÃ¡vel, ampola com 1mL', 'Ampola', 39068, '6,74', 300, '2022', 0, '0', 300, '2022', 163, 2016, 0),
 (4410, 317545, 195090, '3.3.9.0.30.09', 'Material FarmacolÃ³gico', 'Registro de PreÃ§o Gerado', '000043/2016', '23541.000033/2016-11', '05 - PregÃ£o EBSERH', '20', '12/04/2016', '02/04/2017', '19/04/2016', '44734671000151', 'CRISTALIA PROD.QUIM.FARM.LTDA.', '000061/2016', '10.00.00.00.0.0', 'HOSPITAL UNIVERSITÃRIO DE SANTA MARIA - HUSM', 'ETOMI020A.', 'Etomidato, 20mg, soluÃ§Ã£o injetÃ¡vel, ampola com 10mL', 'Ampola', 39068, '11,88', 1200, '14256', 0, '0', 1200, '14256', 163, 2016, 0),
@@ -4622,7 +4624,14 @@ CREATE TABLE `itens_pedido` (
 
 INSERT INTO `itens_pedido` (`id`, `id_pedido`, `id_item`, `qtd`, `valor`) VALUES
 (1, 1, 81, 1, '1350'),
-(2, 1, 82, 1, '1200');
+(2, 1, 82, 1, '1200'),
+(3, 2, 87, 5, '515'),
+(4, 2, 88, 4, '655.92'),
+(5, 2, 4401, 500, '340'),
+(6, 2, 4405, 1000, '70'),
+(7, 2, 4406, 1000, '50'),
+(8, 2, 4407, 10, '106.5'),
+(9, 3, 6, 3, '10.8');
 
 -- --------------------------------------------------------
 
@@ -4701,7 +4710,9 @@ CREATE TABLE `pedido` (
 --
 
 INSERT INTO `pedido` (`id`, `id_setor`, `data_pedido`, `ref_mes`, `alteracao`, `prioridade`, `status`, `valor`, `obs`) VALUES
-(1, 3, '2016-08-28', 8, 0, 1, 6, '2550.000', 'Teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste ');
+(1, 3, '2016-08-28', 8, 0, 1, 7, '2550.000', 'Teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste '),
+(2, 3, '2016-08-30', 8, 0, 1, 6, '1737.420', 'Sem observaÃ§Ãµes.'),
+(3, 3, '2016-09-04', 9, 0, 1, 2, '10.800', 'Testando');
 
 -- --------------------------------------------------------
 
@@ -4712,15 +4723,17 @@ INSERT INTO `pedido` (`id`, `id_setor`, `data_pedido`, `ref_mes`, `alteracao`, `
 CREATE TABLE `pedido_empenho` (
   `id` int(10) UNSIGNED NOT NULL,
   `id_pedido` int(10) UNSIGNED NOT NULL,
-  `empenho` varchar(30) NOT NULL
+  `empenho` varchar(30) NOT NULL,
+  `data` date NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
 -- Extraindo dados da tabela `pedido_empenho`
 --
 
-INSERT INTO `pedido_empenho` (`id`, `id_pedido`, `empenho`) VALUES
-(1, 1, '567aj');
+INSERT INTO `pedido_empenho` (`id`, `id_pedido`, `empenho`, `data`) VALUES
+(1, 1, '567aj', '2016-09-04'),
+(2, 2, 'KAKJS16', '2016-09-04');
 
 -- --------------------------------------------------------
 
@@ -4878,8 +4891,8 @@ CREATE TABLE `saldos_adiantados` (
 --
 
 INSERT INTO `saldos_adiantados` (`id`, `id_setor`, `data_solicitacao`, `data_analise`, `valor_adiantado`, `justificativa`, `status`) VALUES
-(1, 3, '2016-08-28', '2016-08-28', '500.000', 'Testando', 1),
-(2, 3, '2016-08-28', '2016-08-28', '200.000', 'Testando mais uma vez', 1);
+(1, 3, '2016-08-28', '2016-09-03', '500.000', 'Testando', 1),
+(2, 3, '2016-08-28', '2016-09-03', '200.000', 'Testando mais uma vez', 1);
 
 -- --------------------------------------------------------
 
@@ -4904,7 +4917,9 @@ INSERT INTO `saldos_lancamentos` (`id`, `id_setor`, `data`, `valor`, `categoria`
 (2, 3, '2016-08-28', '500.000', 2),
 (3, 3, '2016-08-28', '200.000', 2),
 (4, 3, '2016-08-29', '-400.000', 3),
-(5, 4, '2016-08-29', '400.000', 3);
+(5, 4, '2016-08-29', '400.000', 3),
+(6, 3, '2016-09-04', '-1737.420', 4),
+(7, 3, '2016-09-04', '-2550.000', 4);
 
 -- --------------------------------------------------------
 
@@ -4945,7 +4960,8 @@ CREATE TABLE `saldo_categoria` (
 INSERT INTO `saldo_categoria` (`id`, `nome`) VALUES
 (1, 'normal'),
 (2, 'adiantamento'),
-(3, 'transferencia');
+(3, 'transferencia'),
+(4, 'pedido');
 
 -- --------------------------------------------------------
 
@@ -4964,7 +4980,7 @@ CREATE TABLE `saldo_setor` (
 --
 
 INSERT INTO `saldo_setor` (`id`, `id_setor`, `saldo`) VALUES
-(1, 3, '1750.000'),
+(1, 3, '1.780'),
 (2, 4, '400.000'),
 (3, 11, '0.000');
 
@@ -5278,7 +5294,7 @@ ALTER TABLE `usuario_permissoes`
 -- AUTO_INCREMENT for table `comentarios`
 --
 ALTER TABLE `comentarios`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 --
 -- AUTO_INCREMENT for table `itens`
 --
@@ -5288,7 +5304,7 @@ ALTER TABLE `itens`
 -- AUTO_INCREMENT for table `itens_pedido`
 --
 ALTER TABLE `itens_pedido`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 --
 -- AUTO_INCREMENT for table `mes`
 --
@@ -5303,12 +5319,12 @@ ALTER TABLE `paginas_post`
 -- AUTO_INCREMENT for table `pedido`
 --
 ALTER TABLE `pedido`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 --
 -- AUTO_INCREMENT for table `pedido_empenho`
 --
 ALTER TABLE `pedido_empenho`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 --
 -- AUTO_INCREMENT for table `postagens`
 --
@@ -5338,7 +5354,7 @@ ALTER TABLE `saldos_adiantados`
 -- AUTO_INCREMENT for table `saldos_lancamentos`
 --
 ALTER TABLE `saldos_lancamentos`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 --
 -- AUTO_INCREMENT for table `saldos_transferidos`
 --
@@ -5348,7 +5364,7 @@ ALTER TABLE `saldos_transferidos`
 -- AUTO_INCREMENT for table `saldo_categoria`
 --
 ALTER TABLE `saldo_categoria`
-  MODIFY `id` int(1) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(1) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 --
 -- AUTO_INCREMENT for table `saldo_setor`
 --
