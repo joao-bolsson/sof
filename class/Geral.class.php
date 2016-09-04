@@ -22,6 +22,40 @@ class Geral extends Conexao {
 	}
 	// ------------------------------------------------------------------------------
 	/**
+	 *	Função para editar informações de um item
+	 *
+	 *	@access public
+	 *	@param $obj_dados Objeto com as informações para edição
+	 *	@return bool
+	 */
+	public function editItem($dados) {
+		$dados->compItem = $this->mysqli->real_escape_string($dados->compItem);
+		$this->mysqli->query("UPDATE itens SET itens.complemento_item = '{$dados->compItem}', itens.vl_unitario = '{$dados->vlUnitario}', itens.qt_contrato = {$dados->qtContrato}, itens.qt_utilizado = {$dados->qtUtilizada}, itens.vl_utilizado = '{$dados->vlUtilizado}', itens.qt_saldo = {$dados->qtSaldo}, itens.vl_saldo = '{$dados->vlSaldo}' WHERE itens.id = {$dados->idItem};");
+
+		// seleciona infos dos pedidos que contém o item editado e que não passaram da análise
+		$query = $this->mysqli->query("SELECT itens_pedido.id_pedido, itens_pedido.qtd, itens_pedido.valor AS valor_item, pedido.id_setor, pedido.valor AS valor_pedido, saldo_setor.saldo FROM itens_pedido, pedido, saldo_setor WHERE saldo_setor.id_setor = pedido.id_setor AND itens_pedido.id_item = {$dados->idItem} AND itens_pedido.id_pedido = pedido.id AND pedido.status <= 2;");
+
+		$saldo_setor = 0;
+		while ($obj = $query->fetch_object()) {
+			$valorItem = $obj->qtd * $dados->vlUnitario;
+			$this->mysqli->query("UPDATE itens_pedido SET itens_pedido.valor = '{$valorItem}' WHERE itens_pedido.id_item = {$dados->idItem} AND itens_pedido.id_pedido = {$obj->id_pedido};");
+			$saldo_setor = $obj->saldo + $obj->valor_item;
+			$saldo_setor -= $valorItem;
+			$saldo_setor = number_format($saldo_setor, 3, '.', '');
+			// alterando o saldo do setor
+			$this->mysqli->query("UPDATE saldo_setor SET saldo_setor.saldo = '{$saldo_setor}' WHERE saldo_setor.id_setor = {$obj->id_setor};");
+			$valorPedido = $obj->valor_pedido - $obj->valor_item;
+			$valorPedido += $valorItem;
+			$valorPedido = number_format($valorPedido, 3, '.', '');
+			// alterando o valor total do pedido
+			$this->mysqli->query("UPDATE pedido SET pedido.valor = '{$valorPedido}' WHERE pedido.id = {$obj->id_pedido};");
+		}
+
+		$this->mysqli->close();
+		return true;
+	}
+	// ------------------------------------------------------------------------------
+	/**
 	 *	Função para alterar somente o status do pedido
 	 *
 	 *	@access public

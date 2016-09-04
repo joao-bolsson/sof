@@ -415,22 +415,24 @@ $permissao = $obj_Busca->getPermissoes($_SESSION["id"]);
 </footer>
 <?php if ($permissao->pedidos): ?>
 <div class="modal fade" id="infoItem" role="dialog">
-  <div class="modal-dialog" style="width: 40%;">
+  <div class="modal-dialog" style="width: 50%;">
     <div class="modal-content">
       <div class="modal-heading">
         <a class="modal-close" data-dismiss="modal">×</a>
         <h2 class="modal-title content-sub-heading">Informações do Item</h2>
       </div>
-      <form action="#" method="post">
+      <form id="formEditItem" action="javascript:submitEditItem();" method="post">
+        <input id="idItem" type="hidden" name="idItem" value="0"/>
         <div class="modal-inner">
           <table width="100%;">
             <tr>
-              <td colspan="2">
+              <td colspan="3">
                 <div class="form-group form-group-label">
                   <label class="floating-label" for="compItem"><span class="icon">announcement</span>&nbsp;Complemento do Item</label>
                   <textarea class="form-control textarea-autosize" id="compItem" name="complemento" required></textarea>
                 </div>
               </td>
+              <td></td>
               <td></td>
             </tr>
             <tr>
@@ -446,26 +448,24 @@ $permissao = $obj_Busca->getPermissoes($_SESSION["id"]);
                   <input class="form-control" id="qtContrato" name="qt_contrato" type="number" required>
                 </div>
               </td>
-            </tr>
-            <tr>
               <td>
                 <div class="form-group form-group-label">
                   <label class="floating-label" for="vlContrato"><span class="icon">label</span>&nbsp;Valor Contrato</label>
-                  <input class="form-control" id="vlContrato" name="vl_contrato" type="number" required>
+                  <input class="form-control" id="vlContrato" name="vl_contrato" type="number" step="0.001" required>
                 </div>
               </td>
+            </tr>
+            <tr>
               <td>
                 <div class="form-group form-group-label">
                   <label class="floating-label" for="qtUtilizada"><span class="icon">label</span>&nbsp;Quantidade Utilizada</label>
                   <input class="form-control" id="qtUtilizada" name="qt_utilizada" type="number" required>
                 </div>
               </td>
-            </tr>
-            <tr>
               <td>
                 <div class="form-group form-group-label">
                   <label class="floating-label" for="vlUtilizado"><span class="icon">label</span>&nbsp;Valor Utilizado</label>
-                  <input class="form-control" id="vlUtilizado" name="vl_utilizado" type="number" required>
+                  <input class="form-control" id="vlUtilizado" name="vl_utilizado" type="number" step="0.001" required>
                 </div>
               </td>
               <td>
@@ -476,12 +476,13 @@ $permissao = $obj_Busca->getPermissoes($_SESSION["id"]);
               </td>
             </tr>
             <tr>
-              <td colspan="2">
+              <td colspan="3">
                 <div class="form-group form-group-label">
                   <label class="floating-label" for="vlSaldo"><span class="icon">label</span>&nbsp;Valor Saldo</label>
-                  <input class="form-control" id="vl_saldo" name="vl_saldo" type="number" required>
+                  <input class="form-control" id="vlSaldo" name="vl_saldo" type="number" step="0.001" required>
                 </div>
               </td>
+              <td></td>
               <td></td>
             </tr>
           </table>
@@ -918,6 +919,6 @@ $permissao = $obj_Busca->getPermissoes($_SESSION["id"]);
 
 <script type="text/javascript" src="../plugins/dataTables/datatables.min.js"></script>
 
-<script type="text/javascript" src="../ini.min.js"></script>
+<script type="text/javascript" src="../ini.js"></script>
 </body>
 </html>

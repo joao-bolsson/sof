@@ -37,6 +37,23 @@ if (isset($_POST["admin"]) && isset($_SESSION["id_setor"]) && $_SESSION["id_seto
 
 	switch ($form) {
 	// comment.
+	case 'editItem':
+		$fields = $_POST['fields'];
+		$dados = $_POST['dados'];
+		$array_dados = [];
+
+		for ($i = 0; $i < count($dados); $i++) {
+			$array_dados[$fields[$i]] = $dados[$i];
+		}
+
+		$obj_dados = (object) $array_dados;
+		unset($fields);
+		unset($dados);
+		unset($array_dados);
+		echo $obj_Geral->editItem($obj_dados);
+
+		break;
+	// comment.
 
 	case 'enviaEmpenho':
 		$id_pedido = $_POST['id_pedido'];

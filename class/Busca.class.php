@@ -33,8 +33,10 @@ class Busca extends Conexao {
 	public function getInfoItem($id_item) {
 		$query = $this->mysqli->query("SELECT itens.complemento_item, itens.vl_unitario, itens.qt_contrato, itens.vl_contrato, itens.qt_utilizado, itens.vl_utilizado, itens.qt_saldo, itens.vl_saldo FROM itens WHERE itens.id = {$id_item};");
 		$obj = $query->fetch_object();
+		$obj->vl_unitario = str_replace(",", ".", $obj->vl_unitario);
+		$obj->vl_contrato = str_replace(",", ".", $obj->vl_contrato);
+		$obj->vl_utilizado = str_replace(",", ".", $obj->vl_utilizado);
 		$this->mysqli->close();
-		$obj->complemento_item = utf8_encode($obj->complemento_item);
 		return json_encode($obj);
 	}
 	// ------------------------------------------------------------------------------
@@ -1421,7 +1423,7 @@ class Busca extends Conexao {
 			<td>{$qtd}</td>
 			<td>R$ {$valor}</td>
 			<td>
-				<input type=\"hidden\" name=\"id_item[]\" value=\"{$id_item}\">
+				<input class=\"classItens\" type=\"hidden\" name=\"id_item[]\" value=\"{$id_item}\">
 				<input type=\"hidden\" name=\"qtd_solicitada[]\" value=\"{$qtd}\">
 				<input type=\"hidden\" name=\"qtd_disponivel[]\" value=\"{$item->qt_saldo}\">
 				<input type=\"hidden\" name=\"qtd_contrato[]\" value=\"{$item->qt_contrato}\">

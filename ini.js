@@ -111,6 +111,7 @@ function abreModal(id_modal) {
 function avisoSnack(aviso, corpo) {
 	$(corpo).snackbar({
 		content: aviso,
+		alive: 1500,
 		show: function() {
 			snackbarText++;
 		}
@@ -587,7 +588,15 @@ function analisaAdi(id, acao) {
 
 // FUNÇÃO DISPARADA QUANDO O ITEM É CLICADO P/ ADC ---------------------------------
 function checkItemPedido(id_item, vl_unitario, qt_saldo) {
-	qtd_item = document.getElementById("qtd" + id_item).value;
+	$('a').blur();
+	var qtd_item = document.getElementById('qtd' + id_item).value;
+	var itens = document.getElementsByClassName('classItens');
+	for (var i = 0; i < itens.length; i++) {
+		if (itens[i].value) {
+			alert('Esse item já está contigo no pedido. Verifique!');
+			return;
+		}
+	}
 	if (qtd_item <= 0) {
 		document.getElementById("qtd" + id_item).style.border = "0.12em solid red";
 		document.getElementById("qtd" + id_item).focus();
@@ -599,8 +608,8 @@ function checkItemPedido(id_item, vl_unitario, qt_saldo) {
 		if (qtd_item > qt_saldo) {
 			avisoSnack('QUANTIDADE INDISPONÍVEL !', 'body');
 		} else {
-			valor = parseFloat(qtd_item * vl_unitario).toFixed(3);
-			total_pedido = document.getElementById('total_hidden').value;
+			var valor = parseFloat(qtd_item * vl_unitario).toFixed(3);
+			var total_pedido = document.getElementById('total_hidden').value;
 			total_pedido += valor;
 
 			saldo_total = parseFloat(document.getElementById("saldo_total").value);
@@ -954,6 +963,7 @@ function cancelaItem(id_item) {
 function editaItem(id_item) {
 	$('a').blur();
 	$('#infoItem').modal();
+	document.getElementById('idItem').value = id_item;
 	$.post('../php/busca.php', {
 		admin: 1,
 		form: 'infoItem',
@@ -961,9 +971,37 @@ function editaItem(id_item) {
 	}, function(retorno) {
 		var obj = jQuery.parseJSON(retorno);
 		$('#infoItem table div').addClass('control-highlight');
-		alert(obj.vl_unitario);
 		document.getElementById('compItem').value = obj.complemento_item;
-		document.getElementById('vlUnitario').value = parseFloat(obj.vl_unitario).toFixed(3);
+		document.getElementById('vlUnitario').value = obj.vl_unitario;
+		document.getElementById('qtContrato').value = obj.qt_contrato;
+		document.getElementById('vlContrato').value = obj.vl_contrato;
+		document.getElementById('qtUtilizada').value = obj.qt_utilizado;
+		document.getElementById('vlUtilizado').value = obj.vl_utilizado;
+		document.getElementById('qtSaldo').value = obj.qt_saldo;
+		document.getElementById('vlSaldo').value = obj.vl_saldo;
+	});
+}
+
+function submitEditItem() {
+	var fields = ['idItem', 'compItem', 'vlUnitario', 'qtContrato', 'vlContrato', 'qtUtilizada', 'vlUtilizado', 'qtSaldo', 'vlSaldo'];
+	var dados = [];
+	for (var i = 0; i < fields.length; i++) {
+		dados[i] = document.getElementById(fields[i]).value;
+	}
+	$.post('../php/geral.php', {
+		admin: 1,
+		form: 'editItem',
+		fields: fields,
+		dados: dados
+	}, function(resposta) {
+		if (resposta) {
+			alert('Informações salvas com sucesso!');
+			$('#infoItem').modal('hide');
+			limpaTela();
+			iniSolicitacoes();
+		} else {
+			window.location.href = 'sair.php';
+		}
 	});
 }
 //removendo um input de arquivo para adicionar notícias
