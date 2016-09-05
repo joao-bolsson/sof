@@ -592,7 +592,7 @@ function checkItemPedido(id_item, vl_unitario, qt_saldo) {
 	var qtd_item = document.getElementById('qtd' + id_item).value;
 	var itens = document.getElementsByClassName('classItens');
 	for (var i = 0; i < itens.length; i++) {
-		if (itens[i].value) {
+		if (itens[i].value == id_item) {
 			alert('Esse item já está contigo no pedido. Verifique!');
 			return;
 		}
@@ -997,12 +997,12 @@ function submitEditItem() {
 		if (resposta) {
 			alert('Informações salvas com sucesso!');
 			$('#infoItem').modal('hide');
-			limpaTela();
-			iniSolicitacoes();
 		} else {
-			window.location.href = 'sair.php';
+			alert('Ocorreu um erro no servidor. Verifique suas informações e teste novamente, ou contate o administrador.');
 		}
 	});
+	limpaTela();
+	iniSolicitacoes();
 }
 //removendo um input de arquivo para adicionar notícias
 function dropTile(id) {

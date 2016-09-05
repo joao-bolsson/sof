@@ -29,6 +29,14 @@ class Geral extends Conexao {
 	 *	@return bool
 	 */
 	public function editItem($dados) {
+		$query_qtd = $this->mysqli->query("SELECT sum(itens_pedido.qtd) AS soma FROM itens_pedido where itens_pedido.id_item = {$dados->idItem};");
+		if ($query_qtd->num_rows > 0) {
+			$obj_qtd = $query_qtd->fetch_object();
+			$soma = $obj_qtd->soma;
+			if ($dados->qtContrato < $soma || $dados->qtUtilizada < $soma) {
+				return false;
+			}
+		}
 		$dados->compItem = $this->mysqli->real_escape_string($dados->compItem);
 		$this->mysqli->query("UPDATE itens SET itens.complemento_item = '{$dados->compItem}', itens.vl_unitario = '{$dados->vlUnitario}', itens.qt_contrato = {$dados->qtContrato}, itens.qt_utilizado = {$dados->qtUtilizada}, itens.vl_utilizado = '{$dados->vlUtilizado}', itens.qt_saldo = {$dados->qtSaldo}, itens.vl_saldo = '{$dados->vlSaldo}' WHERE itens.id = {$dados->idItem};");
 
