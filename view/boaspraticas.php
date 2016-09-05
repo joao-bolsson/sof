@@ -443,6 +443,6 @@ unset($_SESSION["id_boaspraticas"]);
 <!-- js for doc -->
 <script src="../material/js/project.min.js"></script>
 
-<script type="text/javascript" src="../ini.js"></script>
+<script type="text/javascript" src="../ini.min.js"></script>
 </body>
 </html>

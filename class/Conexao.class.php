@@ -27,10 +27,9 @@ class Conexao {
 	 * Função para pegar conexao
 	 *
 	 * @access public
-	 * @param string
 	 */
 	public function getConexao() {
-		$mysqli = new mysqli($this->servidor, $this->usuario, $this->senha, $this->banco);
+		$mysqli = new MySQLi($this->servidor, $this->usuario, $this->senha, $this->banco, 0, '/var/run/mysqld/mysqld.sock');
 
 		/*
 			         * This is the "official" OO way to do it,
