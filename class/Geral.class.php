@@ -556,10 +556,10 @@ class Geral extends Conexao {
 					if ($item_cancelado[$i]) {
 						$cancelado = ', cancelado = 1';
 						$this->mysqli->query("DELETE FROM itens_pedido WHERE id_pedido = {$id_pedido} AND id_item = {$id_item[$i]};");
+						$total_pedido -= $valor_item[$i];
 					}
 					$this->mysqli->query("UPDATE itens SET qt_saldo = '{$qt_saldo[$i]}', qt_utilizado = '{$qt_utilizado[$i]}', vl_saldo = '{$vl_saldo[$i]}', vl_utilizado = '{$vl_utilizado[$i]}'{$cancelado} WHERE id = {$id_item[$i]};");
 					$saldo_setor += $valor_item[$i];
-					$total_pedido -= $valor_item[$i];
 				}
 			}
 		}
