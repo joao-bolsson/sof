@@ -57,6 +57,7 @@ function verEmpenho(id_pedido) {
 }
 
 function mostra(row, id_icon) {
+	$('a').blur();
 	var display = document.getElementById(row).style.display;
 	var icon = '';
 	if (display == 'block') {

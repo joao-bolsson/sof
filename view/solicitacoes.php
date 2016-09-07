@@ -12,7 +12,7 @@ include_once '../class/Busca.class.php';
 $obj_Busca = new Busca();
 $id_setor = $_SESSION["id_setor"];
 $saldo_total = $obj_Busca->getSaldoAtual($id_setor);
-
+$pedidos_em_analise = $obj_Busca->getPedidosAnalise($id_setor);
 ?>
 <!DOCTYPE html>
 <html lang="pt">
@@ -413,6 +413,7 @@ $saldo_total = $obj_Busca->getSaldoAtual($id_setor);
                         <td>Saldo Disponível</td>
                         <td>R$ <?=$saldo_total?></td>
                     </tr>
+                    <?=$pedidos_em_analise?>
                 </table>
                 <table id="tableListLancamentos" class="table" style="width: 100%;">
                   <thead>

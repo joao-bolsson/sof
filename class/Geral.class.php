@@ -545,18 +545,21 @@ class Geral extends Conexao {
 		$hoje = date('Y-m-d');
 		// verificando itens cancelados, somente quando passam pela análise
 		if ($fase <= 4) {
-			if (in_array(1, $item_cancelado) || in_array(true, $item_cancelado)) {
+			if (in_array(1, $item_cancelado) || in_array(true, $item_cancelado) || $fase == 3) {
+				// só percorre os itens se tiver algum item cancelado ou se o pedido for reprovado
 				for ($i = 0; $i < count($id_item); $i++) {
+					$qt_saldo[$i] += $qtd_solicitada[$i];
+					$qt_utilizado[$i] -= $qtd_solicitada[$i];
+					$vl_saldo[$i] += $valor_item[$i];
+					$vl_utilizado[$i] -= $valor_item[$i];
+					$cancelado = '';
 					if ($item_cancelado[$i]) {
-						$qt_saldo[$i] += $qt_solicitada[$i];
-						$qt_utilizado[$i] -= $qtd_solicitada[$i];
-						$vl_saldo[$i] += $valor_item[$i];
-						$vl_utilizado -= $valor_item[$i];
-						$this->mysqli->query("UPDATE itens SET qt_saldo = '{$qt_saldo[$i]}', qt_utilizado = '{$qt_utilizado[$i]}', vl_saldo = '{$vl_saldo[$i]}', vl_utilizado = '{$vl_utilizado[$i]}', cancelado = 1 WHERE id = {$id_item[$i]};");
-						$saldo_setor += $valor_item[$i];
-						$total_pedido -= $valor_item[$i];
+						$cancelado = ', cancelado = 1';
 						$this->mysqli->query("DELETE FROM itens_pedido WHERE id_pedido = {$id_pedido} AND id_item = {$id_item[$i]};");
 					}
+					$this->mysqli->query("UPDATE itens SET qt_saldo = '{$qt_saldo[$i]}', qt_utilizado = '{$qt_utilizado[$i]}', vl_saldo = '{$vl_saldo[$i]}', vl_utilizado = '{$vl_utilizado[$i]}'{$cancelado} WHERE id = {$id_item[$i]};");
+					$saldo_setor += $valor_item[$i];
+					$total_pedido -= $valor_item[$i];
 				}
 			}
 		}

@@ -24,6 +24,31 @@ class Busca extends Conexao {
 	}
 	// ------------------------------------------------------------------------------
 	/**
+	 *	Função que retorna os pedidos em análise e o total deles
+	 *
+	 *	@access public
+	 *	@return string
+	 */
+	public function getPedidosAnalise($id_setor): string{
+		$retorno = "";
+		$query = $this->mysqli->query("SELECT pedido.valor FROM pedido WHERE pedido.id_setor = {$id_setor} AND pedido.status = 2;");
+		if ($query->num_rows > 0) {
+			$soma = 0;
+			while ($obj = $query->fetch_object()) {
+				$soma += $obj->valor;
+			}
+			$retorno = "
+				<tr>
+          <td colspan=\"2\">Você tem {$query->num_rows} pedido(s) em análise no total de R$ {$soma}</td>
+          <td></td>
+        </tr>
+			";
+		}
+		$query->close();
+		return $retorno;
+	}
+	// ------------------------------------------------------------------------------
+	/**
 	 *	Função que que retorna informações de um item para possível edição
 	 *
 	 *	@access public
@@ -1092,7 +1117,7 @@ class Busca extends Conexao {
 	public function getSolicitacoesAdmin(): string{
 		//declarando retorno
 		$retorno = "";
-		$query = $this->mysqli->query("SELECT pedido.id, pedido.id_setor, setores.nome AS nome_setor, DATE_FORMAT(pedido.data_pedido, '%d/%m/%Y') AS data_pedido, mes.sigla_mes AS ref_mes, prioridade.nome AS prioridade, status.nome AS status, pedido.valor FROM pedido, setores, mes, prioridade, status WHERE status.id = pedido.status AND prioridade.id = pedido.prioridade AND mes.id = pedido.ref_mes AND pedido.alteracao = 0 AND pedido.id_setor = setores.id ORDER BY pedido.id DESC;");
+		$query = $this->mysqli->query("SELECT pedido.id, pedido.id_setor, setores.nome AS nome_setor, DATE_FORMAT(pedido.data_pedido, '%d/%m/%Y') AS data_pedido, mes.sigla_mes AS ref_mes, prioridade.nome AS prioridade, status.nome AS status, pedido.valor FROM pedido, setores, mes, prioridade, status WHERE status.id = pedido.status AND pedido.status <> 3 AND prioridade.id = pedido.prioridade AND mes.id = pedido.ref_mes AND pedido.alteracao = 0 AND pedido.id_setor = setores.id ORDER BY pedido.id DESC;");
 		while ($pedido = $query->fetch_object()) {
 			$pedido->prioridade = ucfirst($pedido->prioridade);
 			$btnAnalisar = "";
