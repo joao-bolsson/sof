@@ -1126,13 +1126,14 @@ class Busca extends Conexao {
 					$btnAnalisar = "<a class=\"modal-close\" href=\"javascript:analisarPedido({$pedido->id}, {$pedido->id_setor});\" title=\"Analisar\"><span class=\"icon\">create<span></a>";
 				} else if ($pedido->status == 'Aguarda Orcamento') {
 					$btnAnalisar = "<a class=\"modal-close\" href=\"javascript:cadEmpenho({$pedido->id});\" title=\"Cadastrar Empenho\"><span class=\"icon\">payment<span></a>";
+				} else {
+					$btnAnalisar = "<a class=\"modal-close\" href=\"javascript:getStatus({$pedido->id}, {$pedido->id_setor});\" title=\"Alterar Status\"><span class=\"icon\">build<span></a>";
 				}
 			}
 			$retorno .= "
 			<tr id=\"rowPedido{$pedido->id}\">
 				<td>
 					{$btnAnalisar}
-					<a class=\"modal-close\" href=\"javascript:getStatus({$pedido->id}, {$pedido->id_setor});\" title=\"Alterar Status\"><span class=\"icon\">build<span></a>
 					<a class=\"modal-close\" href=\"javascript:imprimir({$pedido->id});\" title=\"Imprimir\"><span class=\"icon\">print<span></a>
 				</td>
 				<td>{$pedido->id}</td>
