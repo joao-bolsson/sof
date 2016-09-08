@@ -160,6 +160,7 @@ function iniDataTable(tabela) {
 }
 
 function transfereSaldo() {
+	$('#formTransferencia .btn').blur();
 	document.getElementById('loadingTransf').style.display = 'block';
 	var ori = document.getElementById('setorOri').value;
 	var dest = document.getElementById('setorDest').value;
@@ -176,12 +177,12 @@ function transfereSaldo() {
 		if (resposta) {
 			alert('O valor de R$ ' + valor + ' foi transferido com SUCESSO! ');
 			$('#tableListLancamentos').DataTable().destroy();
+			$('#transferencia').modal('hide');
+			document.getElementById('formTransferencia').reset();
 		} else {
 			alert('Saldo insuficiente para realizar a transferência');
 		}
 	});
-	$('#transferencia').modal('hide');
-	document.getElementById('formTransferencia').reset();
 	document.getElementById('loadingTransf').style.display = 'none';
 }
 
@@ -568,6 +569,7 @@ function iniTableSolicAltPed() {
 }
 
 function analisaAdi(id, acao) {
+	$('a').blur();
 	var aprova;
 	if (acao) {
 		aprova = confirm("O setor receberá o valor adiantado e terá esse mesmo valor descontado no próximo mês, estando sujeito à ficar com saldo negativo.\n\nDeseja continuar?");
