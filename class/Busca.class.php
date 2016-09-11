@@ -95,7 +95,7 @@ class Busca extends Conexao {
 		if ($id_setor != 2) {
 			$where = "AND saldos_lancamentos.id_setor = {$id_setor}";
 		}
-		$query = $this->mysqli->query("SELECT setores.nome, DATE_FORMAT(saldos_lancamentos.data, '%d/%m/%Y') AS data, saldos_lancamentos.valor, saldo_categoria.nome AS categoria FROM setores, saldos_lancamentos, saldo_categoria WHERE setores.id = saldos_lancamentos.id_setor {$where} AND saldos_lancamentos.categoria = saldo_categoria.id ORDER BY saldos_lancamentos.data DESC;");
+		$query = $this->mysqli->query("SELECT setores.nome, DATE_FORMAT(saldos_lancamentos.data, '%d/%m/%Y') AS data, saldos_lancamentos.valor, saldo_categoria.nome AS categoria FROM setores, saldos_lancamentos, saldo_categoria WHERE setores.id = saldos_lancamentos.id_setor {$where} AND saldos_lancamentos.categoria = saldo_categoria.id ORDER BY saldos_lancamentos.id DESC;");
 		$cor = '';
 		while ($lancamento = $query->fetch_object()) {
 			if ($lancamento->valor < 0) {
@@ -618,35 +618,26 @@ class Busca extends Conexao {
 								</thead>
 								<tbody>
 									";
-		if ($busca == "") {
+		$query = $this->mysqli->query("SELECT postagens.id, postagens.tabela, postagens.titulo, DATE_FORMAT(postagens.data, '%d/%m/%Y') AS data, postagens.ativa FROM postagens WHERE postagens.titulo LIKE '%{$busca}%' AND postagens.ativa = 1 ORDER BY postagens.data DESC;");
+		if ($query->num_rows < 1) {
 			$retorno .= "
-										<tr>
-											<td colspan=\"2\">Digite algo para pesquisar...</td>
-											<td></td>
-										</tr>
-										";
-		} else {
-
-			$query = $this->mysqli->query("SELECT postagens.id, postagens.id_postagem, postagens.tabela, postagens.titulo, DATE_FORMAT(postagens.data, '%d/%m/%Y') AS data, postagens.ativa FROM postagens WHERE postagens.titulo LIKE '%{$busca}%' AND postagens.ativa = 1 ORDER BY postagens.data DESC;");
-			if ($query->num_rows == 0) {
-				$retorno .= "
 											<tr>
 												<td colspan=\"2\">Nenhum resultado para '{$busca}'</td>
 												<td></td>
 											</tr>
 											";
-			} else {
-				while ($postagem = $query->fetch_object()) {
-					$titulo = html_entity_decode($postagem->titulo);
-					$retorno .= "
+		} else {
+			while ($postagem = $query->fetch_object()) {
+				$titulo = html_entity_decode($postagem->titulo);
+				$retorno .= "
 												<tr>
-													<td>{$titulo}<button class=\"btn btn-flat btn-sm\" style=\"text-transform: lowercase !important;font-weight: bold;\" onclick=\"ver_noticia({$postagem->id_postagem}, '{$tabela}', 1);\">...ver mais</button></td>
+													<td>{$titulo}<button class=\"btn btn-flat btn-sm\" style=\"text-transform: lowercase !important;font-weight: bold;\" onclick=\"ver_noticia({$postagem->id}, '{$postagem->tabela}', 1);\">...ver mais</button></td>
 													<td><span class=\"pull-right\">{$postagem->data}</span></td>
 												</tr>
 												";
-				}
 			}
-			$retorno .= "
+		}
+		$retorno .= "
 									</tbody>
 								</table>
 							</div>
@@ -655,7 +646,6 @@ class Busca extends Conexao {
 				</div><!-- ./card-main -->
 			</div> <!-- ./card -->
 			";
-		}
 		return $retorno;
 	}
 

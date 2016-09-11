@@ -803,7 +803,12 @@ function addInputsArquivo() {
 }
 
 function pesquisar() {
+	$('button').blur();
 	busca = document.getElementById("search").value;
+	if (busca.length < 1) {
+		alert('Digite alguma coisa para pesquisar! ;)');
+		return;
+	}
 	$.post('../php/busca.php', {
 		form: 'pesquisar',
 		busca: busca
