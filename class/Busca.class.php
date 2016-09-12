@@ -24,6 +24,91 @@ class Busca extends Conexao {
 	}
 	// ------------------------------------------------------------------------------
 	/**
+	 *	Função que retonar o relatorio de pedidos
+	 *
+	 *	@access public
+	 *	@return string
+	 */
+	public function getRelatorioPedidos($id_setor, $prioridade, $status, $mes): string{
+		$retorno = "";
+		$ano = date('Y');
+		$where_status = "AND pedido.status = " . $status;
+		$where_prioridade = "AND pedido.prioridade = " . $prioridade;
+		if ($status == 0) {
+			$where_status = '';
+		}
+		if ($prioridade == 0) {
+			$where_prioridade = '';
+		}
+		$query = $this->mysqli->query("SELECT pedido.id, setores.nome AS setor, DATE_FORMAT(pedido.data_pedido, '%d/%m/%Y') AS data_pedido, mes.sigla_mes AS mes, prioridade.nome AS prioridade, status.nome AS status, pedido.valor FROM pedido, setores, mes, prioridade, status WHERE mes.id = pedido.ref_mes AND setores.id = pedido.id_setor AND prioridade.id = pedido.prioridade AND status.id = pedido.status AND pedido.id_setor = {$id_setor} {$where_prioridade} AND pedido.alteracao = 0 AND pedido.ref_mes = {$mes} AND EXTRACT(YEAR FROM pedido.data_pedido) = {$ano} {$where_status};");
+		if ($query) {
+			$where_status = "AND status.id = " . $status;
+			$where_prioridade = "AND prioridade.id = " . $prioridade;
+			if ($status == 0) {
+				$where_status = '';
+			}
+			if ($prioridade == 0) {
+				$where_prioridade = '';
+			}
+			$query_descr = $this->mysqli->query("SELECT setores.nome AS setor, prioridade.nome AS prioridade, status.nome AS status, mes.sigla_mes AS mes FROM setores, prioridade, status, mes WHERE setores.id = {$id_setor} {$where_prioridade} {$where_status} AND mes.id = {$mes};");
+			$descr = $query_descr->fetch_object();
+			if ($status == 0) {
+				$descr->status = "Todos";
+			}
+			if ($prioridade == 0) {
+				$descr->prioridade = "Todas";
+			} else {
+				$descr->prioridade = ucfirst($descr->prioridade);
+			}
+			$query_descr->close();
+			$retorno .= "
+				<fieldset class=\"preg\">
+					<h5>DESCRIÇÃO DO RELATÓRIO</h5>
+					<p><b>Setor selecionado:</b> {$descr->setor}</p>
+					<p><b>Prioridade:</b> {$descr->prioridade}</p>
+					<p><b>Status:</b> {$descr->status}</p>
+					<p><b>Mês:</b> {$descr->mes}</p>
+				</fieldset><br>
+				<fieldset class=\"preg\">
+					<table>
+						<tr>
+							<td>{$query->num_rows} resultados encontrados</td>
+						</tr>
+					</table>
+				</fieldset><br>
+				<table class=\"prod\">
+					<thead>
+						<tr>
+							<th>#</th>
+							<th>Setor</th>
+							<th>Data</th>
+							<th>Mês</th>
+							<th>Prioridade</th>
+							<th>Status</th>
+							<th>Valor</th>
+						</tr>
+					</thead>
+					<tbody>";
+			while ($pedido = $query->fetch_object()) {
+				$pedido->prioridade = ucfirst($pedido->prioridade);
+				$retorno .= "
+				<tr>
+					<td>{$pedido->id}</td>
+					<td>{$pedido->setor}</td>
+					<td>{$pedido->data_pedido}</td>
+					<td>{$pedido->mes}</td>
+					<td>{$pedido->prioridade}</td>
+					<td>{$pedido->status}</td>
+					<td>R$ {$pedido->valor}</td>
+				</tr>";
+			}
+			$query->close();
+			$retorno .= "<tbody></table>";
+		}
+		return $retorno;
+	}
+	// ------------------------------------------------------------------------------
+	/**
 	 *	Função que retorna os pedidos em análise e o total deles
 	 *
 	 *	@access public
@@ -128,6 +213,40 @@ class Busca extends Conexao {
 			$retorno .= "<option value=\"{$setor->id}\">{$setor->nome}</option>";
 		}
 		$query->close();
+		return $retorno;
+	}
+	// ------------------------------------------------------------------------------
+	/**
+	 *	Função que retornar as options com as prioridades existentes no sistemas para os pedidos
+	 *
+	 *	@access public
+	 *	@return string
+	 */
+	public function getOptionsPrioridades(): string{
+		$retorno = "";
+		$query = $this->mysqli->query("SELECT prioridade.id, prioridade.nome FROM prioridade WHERE prioridade.nome <> 'rascunho';");
+		while ($prioridade = $query->fetch_object()) {
+			$prioridade->nome = ucfirst($prioridade->nome);
+			$retorno .= "<option value=\"{$prioridade->id}\">{$prioridade->nome}</option>";
+		}
+		$query->close();
+		return $retorno;
+	}
+	// ------------------------------------------------------------------------------
+	/**
+	 *	Função que retorna as options com os status de pedidos
+	 *
+	 *	@access public
+	 *	@return string
+	 */
+	public function getOptionsStatus(): string{
+		$retorno = "";
+		$query = $this->mysqli->query("SELECT status.id, status.nome FROM status WHERE status.nome <> 'Rascunho';");
+		if ($query && $query->num_rows > 0) {
+			while ($status = $query->fetch_object()) {
+				$retorno .= "<option value=\"{$status->id}\">{$status->nome}</option>";
+			}
+		}
 		return $retorno;
 	}
 	// ------------------------------------------------------------------------------
@@ -951,27 +1070,6 @@ class Busca extends Conexao {
 		}
 		return $retorno;
 	}
-
-	//------------------------------------------------------------------------
-	/**
-	 * Função para trazer todos os usuários cadastrados no sistema
-	 * alteração de senhas
-	 *
-	 * @access public
-	 * @return string
-	 */
-	public function getUsers(): string{
-		//declarando retorno
-		$retorno = "";
-		$query = $this->mysqli->query("SELECT id, login FROM usuario;");
-		while ($user = $query->fetch_object()) {
-			$retorno .= "
-			<option value=\"{$user->id}\">{$user->login}</option>
-			";
-		}
-		return $retorno;
-	}
-
 	//--------------------------------------------------------------------------------
 	/**
 	 * Função que exibe os arquivos no modal do admin, usada diretamente no index
@@ -1289,12 +1387,15 @@ class Busca extends Conexao {
 	 * 	@return string
 	 */
 	public function getMeses(): string{
-		$retorno = "";
+		$retorno = $selected = "";
+		$mes_atual = date('n');
 		$query = $this->mysqli->query("SELECT id, sigla_mes FROM mes LIMIT 12;");
 		while ($mes = $query->fetch_object()) {
-			$retorno .= "
-			<option value=\"{$mes->id}\">{$mes->sigla_mes}</option>
-			";
+			if ($mes->id == $mes_atual) {
+				$selected = "selected";
+			}
+			$retorno .= "<option value=\"{$mes->id}\" {$selected}>{$mes->sigla_mes}</option>";
+			$selected = "";
 		}
 		$query->close();
 		return $retorno;

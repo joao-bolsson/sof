@@ -91,6 +91,16 @@ $permissao = $obj_Busca->getPermissoes($_SESSION["id"]);
             <li>
               <a class="waves-attach" href="javascript:abreModal('#importItens');"><span style="color: white;"><span class="icon">backup</span>IMPORTAR ITENS</span></a>
             </li>
+            <li>
+              <div class="dropdown dropdown-inline">
+                <a class="waves-attach" data-toggle="dropdown"><span class="text-white"><span class="icon">print</span>RELATÓRIOS</span><span class="icon margin-left-sm">keyboard_arrow_down</span></a>
+                <ul class="dropdown-menu nav">
+                  <li>
+                    <a class="waves-attach" href="javascript:abreModal('#relPedidos');">PEDIDOS</a>
+                  </li>
+                </ul>
+              </div>
+            </li>
             <?php endif;?>
             <?php if ($permissao->recepcao): ?>
             <li>
@@ -215,6 +225,53 @@ $permissao = $obj_Busca->getPermissoes($_SESSION["id"]);
 </div>
 <?php endif;?>
 <?php if ($permissao->pedidos): ?>
+<div aria-hidden="true" class="modal fade" id="relPedidos" role="dialog" tabindex="-1">
+  <div class="modal-dialog" style="width: 40%;">
+    <div class="modal-content">
+      <div class="modal-heading">
+        <a class="modal-close" data-dismiss="modal">×</a>
+        <h2 class="modal-title content-sub-heading">Relatório de Pedidos</h2>
+      </div>
+      <div class="modal-inner">
+        <form action="printRelatorio.php" method="post" target="_blank">
+          <input type="hidden" name="tipo" value="pedidos" />
+          <input type="hidden" name="relatorio" value="1" />
+          <div class="modal-inner">
+            <div class="form-group form-group-label">
+              <label class="floating-label" for="setorRelPed"><span class="icon">perm_identity</span>&nbsp;Setor</label>
+              <select id="setorRelPed" class="form-control" name="setor" required>
+                <?=$obj_Busca->getOptionsSetores();?>
+              </select>
+            </div>
+            <div class="form-group form-group-label">
+              <label class="floating-label" for="prioridadeRelPed"><span class="icon">perm_identity</span>&nbsp;Prioridade</label>
+              <select id="prioridadeRelPed" class="form-control" name="prioridade" required>
+                <option value="0">Todas</option>
+                <?=$obj_Busca->getOptionsPrioridades();?>
+              </select>
+            </div>
+            <div class="form-group form-group-label">
+              <label class="floating-label" for="stRelPed"><span class="icon">perm_identity</span>&nbsp;Status</label>
+              <select id="stRelPed" class="form-control" name="status" required>
+                <option value="0">Todos</option>
+                <?=$obj_Busca->getOptionsStatus();?>
+              </select>
+            </div>
+            <div class="form-group form-group-label">
+              <label class="floating-label" for="mesRelPed"><span class="icon">perm_identity</span>&nbsp;Mês</label>
+              <select id="mesRelPed" class="form-control" name="mes" required>
+                <?=$obj_Busca->getMeses();?>
+              </select>
+            </div>
+          </div>
+          <div class="modal-footer margin-bottom">
+            <button class="btn btn-brand waves-attach waves-light waves-effect" type="submit" style="width: 100%;"><span class="icon">autorenew</span>&nbsp;Gerar</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
   <div id="rowAltPed" class="row" style="display: none;">
    <div class="card margin-top-no">
      <div class="card-main">
