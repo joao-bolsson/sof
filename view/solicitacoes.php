@@ -389,6 +389,7 @@ $pedidos_em_analise = $obj_Busca->getPedidosAnalise($id_setor);
             <div class="modal-inner">
                 <table id="tableListRascunhos" class="table" style="width: 100%;">
                     <thead>
+                        <th>Status</th>
                         <th>RefMes</th>
                         <th>Última modificação</th>
                         <th>Valor</th>

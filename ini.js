@@ -939,7 +939,7 @@ function limpaTela() {
 	$('#tableSolicitacoes tr').css('background-color', '');
 	document.getElementById('text_saldo_total').innerHTML = 'R$ 0.000';
 	$('#divObs').removeClass('control-highlight');
-	for (var i = 1; i <= 8; i++) {
+	for (var i = 2; i <= 8; i++) {
 		document.getElementById('st' + i).disabled = false;
 	}
 	document.getElementById('formPedido').reset();

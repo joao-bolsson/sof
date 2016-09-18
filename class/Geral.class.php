@@ -565,16 +565,14 @@ class Geral extends Conexao {
 		}
 		// alterar o status do pedido
 		$alteracao = 0;
-		if ($fase == 1) {
-			$alteracao = 1;
-			$prioridade = 5;
-		} else if ($fase == 3 || $fase == 4) {
+		if ($fase == 3 || $fase == 4) {
 			// somente se o pedido for reprovado ou aprovado
 			$total_pedido = number_format($total_pedido, 3, '.', '');
 			$this->mysqli->query("UPDATE pedido SET valor = '{$total_pedido}' WHERE id = {$id_pedido};");
 			if ($fase == 3) {
 				// reprovado
-				$saldo_setor += $total_pedido;
+				$alteracao = 1;
+				$prioridade = 5;
 			} else {
 				// aprovado
 				$this->mysqli->query("INSERT INTO saldos_lancamentos VALUES(NULL, {$id_setor}, '{$hoje}', '-{$total_pedido}', 4);");

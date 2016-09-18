@@ -161,7 +161,7 @@ class Busca extends Conexao {
 		$retorno = '';
 		$query = $this->mysqli->query("SELECT empenho FROM pedido_empenho WHERE id_pedido = {$id_pedido};");
 		if ($query->num_rows < 1) {
-			return 'SEM EMPENHO CADASTRADO';
+			return 'EMPENHO SIAFI PENDENTE';
 		} else {
 			$obj = $query->fetch_object();
 			return 'Empenho: ' . $obj->empenho;
@@ -424,7 +424,7 @@ class Busca extends Conexao {
 	public function getStatus($cont): string{
 		$retorno = "<tr>";
 		$i = 0;
-		$query = $this->mysqli->query("SELECT id, nome FROM status;");
+		$query = $this->mysqli->query("SELECT status.id, status.nome FROM status WHERE status.id <> 1;");
 		while ($status = $query->fetch_object()) {
 			if ($i == $cont) {
 				$i = 0;
@@ -928,11 +928,9 @@ class Busca extends Conexao {
 		$query_ini = $this->mysqli->query("SELECT DISTINCT itens.num_licitacao, itens.num_processo, itens.dt_inicio, itens.dt_fim FROM itens_pedido, itens WHERE itens.id = itens_pedido.id_item AND itens_pedido.id_pedido = {$id_pedido};");
 		$i = 0;
 		while ($licitacao = $query_ini->fetch_object()) {
-			$valor_lic = $this->mysqli->query("SELECT sum(itens_pedido.valor) AS soma FROM itens_pedido, itens WHERE itens.id = itens_pedido.id_item AND itens_pedido.id_pedido = {$id_pedido} AND itens.num_licitacao = {$licitacao->num_licitacao};")->fetch_object();
 			if ($licitacao->dt_fim == '') {
 				$licitacao->dt_fim = "------------";
 			}
-			$valor_lic->soma = number_format($valor_lic->soma, 3, '.', '.');
 			$retorno .= "
 			<fieldset class=\"preg\">
 				<table>
@@ -941,7 +939,6 @@ class Busca extends Conexao {
 						<td>Processo: {$licitacao->num_processo}</td>
 						<td>Início: {$licitacao->dt_inicio}</td>
 						<td>Fim: {$licitacao->dt_fim}</td>
-						<td>Total do Pregão: R$ {$valor_lic->soma}</td>
 					</tr>
 				</table>
 			</fieldset><br>
@@ -1565,11 +1562,12 @@ class Busca extends Conexao {
 	public function getRascunhos($id_setor): string{
 		//declarando retorno
 		$retorno = "";
-		$query = $this->mysqli->query("SELECT pedido.id, DATE_FORMAT(pedido.data_pedido, '%d/%m/%Y') AS data_pedido, mes.sigla_mes AS ref_mes, pedido.valor FROM pedido, mes WHERE id_setor = {$id_setor} AND alteracao = 1 AND status = 1 AND mes.id = pedido.ref_mes;");
+		$query = $this->mysqli->query("SELECT pedido.id, DATE_FORMAT(pedido.data_pedido, '%d/%m/%Y') AS data_pedido, mes.sigla_mes AS ref_mes, pedido.valor, status.nome AS status FROM pedido, mes, status WHERE pedido.id_setor = {$id_setor} AND pedido.alteracao = 1 AND mes.id = pedido.ref_mes AND status.id = pedido.status ORDER BY pedido.id DESC;");
 
 		while ($rascunho = $query->fetch_object()) {
 			$retorno .= "
 			<tr>
+				<td><span class=\"label\" style=\"font-size: 11pt;\">{$rascunho->status}</span></td>
 				<td>{$rascunho->ref_mes}</td>
 				<td>{$rascunho->data_pedido}</td>
 				<td>R$ {$rascunho->valor}</td>
@@ -1656,7 +1654,7 @@ class Busca extends Conexao {
 	public function getMeusPedidos($id_setor): string{
 		//declarando retorno
 		$retorno = "";
-		$query = $this->mysqli->query("SELECT pedido.id, DATE_FORMAT(pedido.data_pedido, '%d/%m/%Y') AS data_pedido, mes.sigla_mes AS ref_mes, prioridade.nome AS prioridade, status.nome AS status, pedido.valor FROM pedido, mes, prioridade, status WHERE prioridade.id = pedido.prioridade AND status.id = pedido.status AND pedido.id_setor = 3 AND pedido.alteracao = 0 AND mes.id = pedido.ref_mes ORDER BY pedido.data_pedido DESC;");
+		$query = $this->mysqli->query("SELECT pedido.id, DATE_FORMAT(pedido.data_pedido, '%d/%m/%Y') AS data_pedido, mes.sigla_mes AS ref_mes, prioridade.nome AS prioridade, status.nome AS status, pedido.valor FROM pedido, mes, prioridade, status WHERE prioridade.id = pedido.prioridade AND status.id = pedido.status AND pedido.id_setor = {$id_setor} AND pedido.alteracao = 0 AND mes.id = pedido.ref_mes ORDER BY pedido.id DESC;");
 		while ($pedido = $query->fetch_object()) {
 			$pedido->prioridade = ucfirst($pedido->prioridade);
 			$retorno .= "
