@@ -312,6 +312,10 @@ if (isset($_POST["admin"]) && isset($_SESSION["id_setor"]) && $_SESSION["id_seto
 
 	switch ($form) {
 
+	case 'deletePedido':
+		$id_pedido = $_POST['id_pedido'];
+		echo $delete = $obj_Geral->deletePedido($id_pedido);
+		break;
 	// redefinindo informações do usuário
 	case 'infoUser':
 		$id_user = $_SESSION["id"];
