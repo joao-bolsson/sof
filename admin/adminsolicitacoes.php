@@ -421,7 +421,7 @@ $permissao = $obj_Busca->getPermissoes($_SESSION["id"]);
         </table>
         <div class="form-group form-group-label">
           <label class="floating-label" for="comentario"><span class="icon">announcement</span>&nbsp;Comentário</label>
-          <textarea class="form-control textarea-autosize" id="comentario" name="comentario" rows="1" required></textarea>
+          <textarea class="form-control textarea-autosize" id="comentario" name="comentario" rows="1"></textarea>
         </div>
       </div><!-- ./card-inner -->
       <div class="card-action">

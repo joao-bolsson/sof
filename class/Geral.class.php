@@ -80,10 +80,12 @@ class Geral extends Conexao {
 		}
 		$obj = $this->mysqli->query("SELECT pedido.prioridade, pedido.valor FROM pedido WHERE id = {$id_pedido};")->fetch_object();
 		$hoje = date('Y-m-d');
-		$comentario = $this->mysqli->real_escape_string($comentario);
-		$comment = $this->mysqli->query("INSERT INTO comentarios VALUES(NULL, {$id_pedido}, '{$hoje}', {$obj->prioridade}, {$status}, '{$obj->valor}', '{$comentario}');");
-		if (!$comment) {
-			return false;
+		if (strlen($comentario) < 1) {
+			$comentario = $this->mysqli->real_escape_string($comentario);
+			$comment = $this->mysqli->query("INSERT INTO comentarios VALUES(NULL, {$id_pedido}, '{$hoje}', {$obj->prioridade}, {$status}, '{$obj->valor}', '{$comentario}');");
+			if (!$comment) {
+				return false;
+			}
 		}
 		$this->mysqli->close();
 		return true;
@@ -583,12 +585,28 @@ class Geral extends Conexao {
 			$this->mysqli->query("UPDATE saldo_setor SET saldo = '{$saldo_setor}' WHERE id_setor = {$id_setor};");
 		}
 		$this->mysqli->query("UPDATE pedido SET status = {$fase}, prioridade = {$prioridade}, alteracao = {$alteracao} WHERE id = {$id_pedido};");
-		// inserindo comentário da análise
-		$comentario = $this->mysqli->real_escape_string($comentario);
-		$obj_tot = $this->mysqli->query("SELECT valor FROM pedido WHERE id = {$id_pedido};")->fetch_object();
-		$this->mysqli->query("INSERT INTO comentarios VALUES(NULL, {$id_pedido}, '{$hoje}', {$prioridade}, {$fase}, '{$obj_tot->valor}', '{$comentario}');");
+		if (strlen($comentario) < 1) {
+			// inserindo comentário da análise
+			$comentario = $this->mysqli->real_escape_string($comentario);
+			$obj_tot = $this->mysqli->query("SELECT valor FROM pedido WHERE id = {$id_pedido};")->fetch_object();
+			$this->mysqli->query("INSERT INTO comentarios VALUES(NULL, {$id_pedido}, '{$hoje}', {$prioridade}, {$fase}, '{$obj_tot->valor}', '{$comentario}');");
+		}
 		$this->mysqli->close();
 		return true;
+	}
+	/**
+	 *	Função para deletar um pedido (rascunhos)
+	 *
+	 *	@access public
+	 *	@return string
+	 */
+	public function deletePedido($id_pedido): string{
+		$this->mysqli->query("DELETE FROM comentarios WHERE comentarios.id_pedido = {$id_pedido};") or exit("Erro ao remover comentarios");
+		$this->mysqli->query("DELETE FROM itens_pedido WHERE itens_pedido.id_pedido = {$id_pedido};") or exit("Erro ao remover os itens do pedido");
+		$this->mysqli->query("DELETE FROM pedido_empenho WHERE pedido_empenho.id_pedido = {$id_pedido};") or exit("Erro ao remover o empenho do pedido.");
+		$this->mysqli->query("DELETE FROM solic_alt_pedido WHERE solic_alt_pedido.id_pedido = {$id_pedido};") or exit("Erro ao remover as solicitações de alteração do pedido.");
+		$this->mysqli->query("DELETE FROM pedido WHERE pedido.id = {$id_pedido};") or exit("Erro ao remover o pedido.");
+		return "true";
 	}
 }
 

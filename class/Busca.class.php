@@ -1574,6 +1574,7 @@ class Busca extends Conexao {
 				<td>
 					<button class=\"btn btn-default btn-sm\" style=\"text-transform: none !important;font-weight: bold;\" onclick=\"editaPedido({$rascunho->id});\" title=\"Editar\"><span class=\"icon\">create</span></button>
 					<button class=\"btn btn-default btn-sm\" style=\"text-transform: none !important;font-weight: bold;\" onclick=\"imprimir({$rascunho->id});\" title=\"Imprimir\"><span class=\"icon\">print</span></button>
+					<button class=\"btn btn-default btn-sm\" style=\"text-transform: none !important;font-weight: bold;\" onclick=\"deletePedido({$rascunho->id});\" title=\"Excluir\"><span class=\"icon\">delete</span></button>
 				</td>
 			</tr>
 			";
