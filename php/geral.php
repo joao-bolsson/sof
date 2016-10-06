@@ -221,7 +221,7 @@ if (isset($_POST["admin"]) && isset($_SESSION["id_setor"]) && $_SESSION["id_seto
 		$id_setor = $_POST["id_setor"];
 		$valor = $_POST["valor"];
 
-		$saldo_atual = $obj_Busca->getSaldoAtual($id_setor);
+		$saldo_atual = $obj_Busca->getSaldo($id_setor);
 
 		$libera = $obj_Geral->liberaSaldo($id_setor, $valor, $saldo_atual);
 

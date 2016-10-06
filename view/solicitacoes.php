@@ -11,7 +11,7 @@ include_once '../class/Busca.class.php';
 //instanciando classe de busca para popular o select de estados
 $obj_Busca = new Busca();
 $id_setor = $_SESSION["id_setor"];
-$saldo_total = $obj_Busca->getSaldoAtual($id_setor);
+$saldo_total = $obj_Busca->getSaldo($id_setor);
 $pedidos_em_analise = $obj_Busca->getPedidosAnalise($id_setor);
 ?>
 <!DOCTYPE html>

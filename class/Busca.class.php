@@ -963,7 +963,6 @@ class Busca extends Conexao {
 							<td style=\"text-align: left; font-weight: bold;\">{$fornecedor->nome_fornecedor}</td>
 							<td>Contrato: {$fornecedor->num_contrato}</td>
 							<td>Total do Forn.: R$ {$tot_forn->sum}</td>
-							<td style=\"text-align: right;\">Empenho SIAFI: <input type=\"text\"/></td>
 						</tr>
 					</table>
 				</fieldset>
@@ -1440,28 +1439,6 @@ class Busca extends Conexao {
 		$query->close();
 		return $retorno;
 	}
-
-	//------------------------------------------------------------------------
-	/**
-	 *	Função para retornar o saldo do mês anterior
-	 *
-	 * 	@access public
-	 *	@param $id_setor Setor que se quer pegar o saldo atual
-	 *	@return string
-	 */
-	public function getSaldoAtual($id_setor): string{
-		//executando query
-		$query = $this->mysqli->query("SELECT saldo FROM saldo_setor WHERE id_setor = {$id_setor};");
-
-		if ($query->num_rows < 1) {
-			$query->close();
-			return '0';
-		}
-		$obj_query = $query->fetch_object();
-		$query->close();
-		return $obj_query->saldo;
-	}
-
 	//---------------------------------------------------------------------------------
 	/**
 	 * Função para mostrar os itens de um processo pesquisado no menu solicitações
@@ -1582,7 +1559,24 @@ class Busca extends Conexao {
 		$query->close();
 		return $retorno;
 	}
-
+	// -------------------------------------------------------------------------------
+	/**
+	 *	Função que retorna o saldo dispónível do setor
+	 *
+	 *	@access public
+	 *	@return string
+	 */
+	public function getSaldo($id_setor): string{
+		$saldo = "0.000";
+		$query = $this->mysqli->query("SELECT saldo_setor.saldo FROM saldo_setor WHERE saldo_setor.id_setor = {$id_setor};");
+		if ($query->num_rows < 1) {
+			$this->mysqli->query("INSERT INTO saldo_setor VALUES(NULL, {$id_setor}, '0.000');");
+			return $saldo;
+		}
+		$obj = $query->fetch_object();
+		$saldo = number_format($obj->saldo, 3, '.', '');
+		return $saldo;
+	}
 	//--------------------------------------------------------------------------------
 	/**
 	 * Função para retornar o conteúdo de um pedido para edição

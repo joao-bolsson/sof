@@ -258,6 +258,9 @@ function iniAdminSolicitacoes() {
 		if (permissao.pedidos) {
 			iniSolicitacoes();
 		}
+		if (permissao.saldos) {
+			getSaldoOri();
+		}
 	});
 	avisoSnack('Carregamento concluído !', 'body');
 }
@@ -336,6 +339,19 @@ function updateProcesso() {
 	});
 }
 
+function getSaldoOri() {
+	var select = document.getElementById('setorOri');
+	var setorOri = select.options[select.selectedIndex].value;
+	$.post('../php/busca.php', {
+		admin: 1,
+		form: 'getSaldoOri',
+		setorOri: setorOri
+	}, function(resposta) {
+		document.getElementById('saldoDispOri').innerHTML = 'Saldo disponível: R$ ' + resposta;
+		$('#valorTransf').attr('max', resposta);
+	});
+}
+
 function iniSolicitacoes() {
 	$.post('../php/busca.php', {
 		admin: 1,
@@ -393,6 +409,7 @@ function liberaSaldo() {
 			document.getElementById('loadingFree').style.display = 'none';
 			$('#tableListLancamentos').DataTable().destroy();
 			$('#freeSaldos').modal('hide');
+			refreshSaldo();
 		} else {
 			alert('Ocorreu um erro no servidor. Contate o administrador.');
 			window.location.href = 'sair.php';
@@ -400,6 +417,14 @@ function liberaSaldo() {
 	});
 }
 
+function refreshSaldo() {
+	$.post('../php/busca.php', {
+		admin: 1,
+		form: 'refreshSaldo',
+	}, function(resposta) {
+		document.getElementById('labelSaldoSOF').innerHTML = 'Saldo disponível: R$ ' + resposta;
+	});
+}
 $('#listLancamentos').on('shown.bs.modal', function(event) {
 	if (!$.fn.DataTable.isDataTable('#tableListLancamentos')) {
 		iniDataTable('#tableListLancamentos');
@@ -467,6 +492,7 @@ function listProcessos(permissao) {
 			});
 		}
 	}
+	sleep(500);
 	$('#listProcessos').modal('show');
 }
 
@@ -896,6 +922,15 @@ function analisarPedido(id_pedido, id_setor) {
 		iniDataTable('#tableItensPedido');
 		avisoSnack('Busca Realizada com Sucesso !', 'body');
 	});
+}
+
+function sleep(milliseconds) {
+	var start = new Date().getTime();
+	for (var i = 0; i < 1e7; i++) {
+		if ((new Date().getTime() - start) > milliseconds) {
+			break;
+		}
+	}
 }
 
 function deletePedido(id_pedido) {

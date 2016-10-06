@@ -29,6 +29,15 @@ if (isset($_POST["admin"]) && isset($_SESSION['id_setor']) && $_SESSION['id_seto
 
 	switch ($form) {
 	// comment.
+	case 'getSaldoOri':
+		$id_setor = $_POST['setorOri'];
+		echo $obj_Busca->getSaldo($id_setor);
+		break;
+	// comment.
+	case 'refreshSaldo':
+		echo $obj_Busca->getSaldo($_SESSION['id_setor']);
+		break;
+	// comment.
 	case 'infoItem':
 		$id_item = $_POST['id_item'];
 		echo $obj_Busca->getInfoItem($id_item);

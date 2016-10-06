@@ -130,6 +130,9 @@ $permissao = $obj_Busca->getPermissoes($_SESSION["id"]);
           <a href="javascript:mostraSolicAltPed();"><span id="iconSolicAlt" class="icon">keyboard_arrow_down</span>Solicitações de Alteração de Pedidos</a>
         </td>
       <?php endif;?>
+      <?php if (true): ?>
+        <td id="labelSaldoSOF" style="font-weight: bold;">Saldo Disponível: R$ <?=$obj_Busca->getSaldo($_SESSION['id_setor']);?></td>
+      <?php endif?>
   </tr>
 </tbody>
 </table>
@@ -627,9 +630,10 @@ $permissao = $obj_Busca->getPermissoes($_SESSION["id"]);
           <div class="modal-inner">
             <div class="form-group form-group-label">
               <label class="floating-label" for="setorOri"><span class="icon">perm_identity</span>&nbsp;Setor Origem</label>
-              <select id="setorOri" class="form-control" name="setorOri" required>
+              <select id="setorOri" class="form-control" name="setorOri" required onchange="getSaldoOri();">
                 <?=$obj_Busca->getOptionsSetores();?>
               </select>
+              <p id="saldoDispOri" style="font-weight: bold;">Saldo disponível: R$ 3000.000</p>
             </div>
             <div class="form-group form-group-label">
               <label class="floating-label" for="setorDest"><span class="icon">perm_identity</span>&nbsp;Setor Destino</label>
@@ -639,7 +643,7 @@ $permissao = $obj_Busca->getPermissoes($_SESSION["id"]);
             </div>
             <div class="form-group form-group-label">
               <label class="floating-label" for="valorTransf"><span class="icon">attach_money</span>&nbsp;Valor</label>
-              <input class="form-control" id="valorTransf" name="valor" type="number" step="0.001"required min="0.000">
+              <input class="form-control" id="valorTransf" name="valor" type="number" step="0.001"required min="0.000" max="0.000">
             </div>
             <div class="form-group form-group-label">
               <label class="floating-label" for="justTransf"><span class="icon">announcement</span>&nbsp;Justificativa</label>

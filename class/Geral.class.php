@@ -337,9 +337,15 @@ class Geral extends Conexao {
 			$query = $this->mysqli->query("INSERT INTO saldo_setor VALUES(NULL, {$id_setor}, '0.000');");
 		}
 		$update = $this->mysqli->query("UPDATE saldo_setor SET saldo = '{$saldo}' WHERE id_setor = {$id_setor};");
+		if ($id_setor != 2) {
+			$saldo_sof = $this->obj_Busca->getSaldo(2) - $valor;
+			$saldo_sof = number_format($saldo_sof, 3, '.', '');
+			$this->mysqli->query("UPDATE saldo_setor SET saldo = '{$saldo_sof}' WHERE id_setor = 2;");
+		}
 		$hoje = date('Y-m-d');
 		$insert = $this->mysqli->query("INSERT INTO saldos_lancamentos VALUES(NULL, {$id_setor}, '{$hoje}', '{$valor}', 1);");
 		if ($insert) {
+			$this->mysqli->close();
 			return true;
 		}
 		return false;
