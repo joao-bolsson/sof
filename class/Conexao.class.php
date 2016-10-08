@@ -28,7 +28,7 @@ class Conexao {
 	 *
 	 * @access public
 	 */
-	public function getConexao() {
+	final public function getConexao() {
 		$mysqli = new MySQLi($this->servidor, $this->usuario, $this->senha, $this->banco, 0, '/var/run/mysqld/mysqld.sock');
 
 		/*

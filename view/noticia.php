@@ -284,7 +284,7 @@ if ($btnSair) {
               </thead>
               <tbody id="noticias">
                 <?php
-echo $obj_Busca->getPostagens($_SESSION["id_setor"], 'noticia');
+echo $obj_Busca->getPostagens('noticia');
 ?>
               </tbody>
             </table>
