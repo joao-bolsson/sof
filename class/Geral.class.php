@@ -4,7 +4,7 @@
  *  toda função de ENTRADA de dados no banco devem ficar nesta classe
  *
  *  @author João Bolsson
- *  @since Version 1.0
+ *  @since 2016, 16 Mar
  */
 ini_set('display_erros', true);
 error_reporting(E_ALL);

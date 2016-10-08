@@ -3,7 +3,7 @@
  * Classe com as funções para login de usuários
  *
  * @author João Bolsson
- * @since Version 1.0
+ * @since 2016, 16 Mar
  */
 ini_set('display_erros', true);
 error_reporting(E_ALL);

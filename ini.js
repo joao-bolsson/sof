@@ -89,15 +89,10 @@ function analisaSolicAlt(id_solic, id_pedido, acao) {
 		id_pedido: id_pedido,
 		acao: acao
 	}, function(resposta) {
-		// Quando terminada a requisição
-		// Se a resposta é um erro
 		if (resposta == false) {
-			// Exibe o erro na div
 			alert(resposta);
 			window.location.href = 'index.php';
-		}
-		// Se resposta for false, ou seja, não ocorreu nenhum erro
-		else {
+		} else {
 			iniSolicitacoes();
 			iniTableSolicAltPed();
 		}
@@ -107,7 +102,6 @@ function analisaSolicAlt(id_solic, id_pedido, acao) {
 function abreModal(id_modal) {
 	$(id_modal).modal();
 }
-
 
 function avisoSnack(aviso, corpo) {
 	$(corpo).snackbar({
@@ -702,12 +696,7 @@ function viewCompl(texto) {
 }
 // PESQUISA POR UM PROCESSO CONTENDO ITENS -----------------------------------------
 function pesquisarProcesso(busca) {
-	if (busca == 0) {
-		busca = document.getElementById("searchProcesso").value;
-	} else {
-		document.getElementById("searchProcesso").value = busca;
-		$('#listProcessos').modal('hide');
-	}
+	$('#listProcessos').modal('hide');
 	len = busca.length;
 	if (len < 20) {
 		avisoSnack('Digite um processo válido !', 'body');
@@ -718,7 +707,7 @@ function pesquisarProcesso(busca) {
 			busca: busca
 		}, function(resposta) {
 			$('#tableProcessos').DataTable().destroy();
-			document.getElementById("conteudoProcesso").innerHTML = resposta;
+			$('#conteudoProcesso').html(resposta);
 			iniDataTable('#tableProcessos');
 			avisoSnack('Busca Realizada com Sucesso !', 'body');
 		});
@@ -756,26 +745,18 @@ function editaPedido(id_pedido) {
 	});
 }
 
-// VERIFICA O LOGIN
 function login() {
-	// Colocamos os valores de cada campo em uma váriavel para facilitar a manipulação
 	var user = document.getElementById("user").value;
 	var senha = document.getElementById("senha").value;
-	// Exibe mensagem de carregamento
 	document.getElementById("loader").style.display = 'inline-block';
 	$.post('../php/login.php', {
 		login: user,
 		senha: senha
 	}, function(resposta) {
-		// Quando terminada a requisição
-		// Se a resposta é um erro
 		if (resposta == "false") {
 			document.getElementById("formLogin").reset();
 			document.getElementById("aviso").style.display = 'flex';
-		}
-		// Se resposta for false, ou seja, não ocorreu nenhum erro
-		else {
-			//se sucesso, recarrega a página
+		} else {
 			window.location.href = '../';
 		}
 		document.getElementById("loader").style.display = 'none';
@@ -806,7 +787,6 @@ function ver_noticia(id, tabela, slide) {
 		tabela: tabela,
 		slide: slide
 	}, function(resposta) {
-		// Quando terminada a requisição
 		window.location.href = 'ver_noticia.php';
 	});
 }

@@ -290,7 +290,7 @@ if ($btnSair) {
               </thead>
               <tbody id="noticias">
                 <?php
-echo $obj_Busca->getPostagens($_SESSION["id_setor"], 'tutoriais');
+echo $obj_Busca->getPostagens('tutoriais');
 unset($_SESSION["id_tutoriais"]);
 ?>
               </tbody>

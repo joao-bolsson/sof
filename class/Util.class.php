@@ -3,7 +3,7 @@
  *	Classe com funções úteis
  *
  *	@author João Bolsson
- *	@since Version 1.0
+ *	@since 2016, 05 Sep
  */
 
 ini_set('display_erros', true);

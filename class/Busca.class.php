@@ -5,7 +5,7 @@
  *  qualquer função que RETORNE dados do banco, devem ser feitas nesta classe
  *
  *  @author João Bolsson
- *  @since Version 1.0
+ *  @since 2016, 16 Mar
  */
 ini_set('display_erros', true);
 error_reporting(E_ALL);
@@ -64,15 +64,15 @@ class Busca extends Conexao {
 			$retorno .= "
 				<fieldset class=\"preg\">
 					<h5>DESCRIÇÃO DO RELATÓRIO</h5>
-					<p><b>Setor selecionado:</b> {$descr->setor}</p>
-					<p><b>Prioridade:</b> {$descr->prioridade}</p>
-					<p><b>Status:</b> {$descr->status}</p>
-					<p><b>Mês:</b> {$descr->mes}</p>
+					<p><b>Setor selecionado:</b> " . $descr->setor . "</p>
+					<p><b>Prioridade:</b> " . $descr->prioridade . "</p>
+					<p><b>Status:</b> " . $descr->status . "</p>
+					<p><b>Mês:</b> " . $descr->mes . "</p>
 				</fieldset><br>
 				<fieldset class=\"preg\">
 					<table>
 						<tr>
-							<td>{$query->num_rows} resultados encontrados</td>
+							<td>" . $query->num_rows . " resultados encontrados</td>
 						</tr>
 					</table>
 				</fieldset><br>
@@ -93,13 +93,13 @@ class Busca extends Conexao {
 				$pedido->prioridade = ucfirst($pedido->prioridade);
 				$retorno .= "
 				<tr>
-					<td>{$pedido->id}</td>
-					<td>{$pedido->setor}</td>
-					<td>{$pedido->data_pedido}</td>
-					<td>{$pedido->mes}</td>
-					<td>{$pedido->prioridade}</td>
-					<td>{$pedido->status}</td>
-					<td>R$ {$pedido->valor}</td>
+					<td>" . $pedido->id . "</td>
+					<td>" . $pedido->setor . "</td>
+					<td>" . $pedido->data_pedido . "</td>
+					<td>" . $pedido->mes . "</td>
+					<td>" . $pedido->prioridade . "</td>
+					<td>" . $pedido->status . "</td>
+					<td>R$ " . $pedido->valor . "</td>
 				</tr>";
 			}
 			$query->close();
@@ -112,6 +112,7 @@ class Busca extends Conexao {
 	 *	Função que retorna os pedidos em análise e o total deles
 	 *
 	 *	@access public
+	 *	@param $id_setor id do setor
 	 *	@return string
 	 */
 	public function getPedidosAnalise($id_setor): string{
@@ -124,7 +125,7 @@ class Busca extends Conexao {
 			}
 			$retorno = "
 				<tr>
-          <td colspan=\"2\">Você tem {$query->num_rows} pedido(s) em análise no total de R$ {$soma}</td>
+          <td colspan=\"2\">Você tem " . $query->num_rows . " pedido(s) em análise no total de R$ " . $soma . "</td>
           <td></td>
         </tr>
 			";
@@ -141,12 +142,9 @@ class Busca extends Conexao {
 	 *	@return object
 	 */
 	public function getInfoItem($id_item) {
-		$query = $this->mysqli->query("SELECT itens.complemento_item, itens.vl_unitario, itens.qt_contrato, itens.vl_contrato, itens.qt_utilizado, itens.vl_utilizado, itens.qt_saldo, itens.vl_saldo FROM itens WHERE itens.id = {$id_item};");
+		$query = $this->mysqli->query("SELECT itens.complemento_item, replace(itens.vl_unitario, ',', '.') AS vl_unitario, itens.qt_contrato, replace(itens.vl_contrato, ',', '.') AS vl_contrato, itens.qt_utilizado, replace(itens.vl_utilizado, ',', '.') AS vl_utilizado, itens.qt_saldo, replace(itens.vl_saldo, ',', '.') AS vl_saldo FROM itens WHERE itens.id = {$id_item};");
 		$obj = $query->fetch_object();
-		$obj->vl_unitario = str_replace(",", ".", $obj->vl_unitario);
-		$obj->vl_contrato = str_replace(",", ".", $obj->vl_contrato);
-		$obj->vl_utilizado = str_replace(",", ".", $obj->vl_utilizado);
-		$this->mysqli->close();
+		$query->close();
 		return json_encode($obj);
 	}
 	// ------------------------------------------------------------------------------
@@ -161,24 +159,27 @@ class Busca extends Conexao {
 		$retorno = '';
 		$query = $this->mysqli->query("SELECT empenho FROM pedido_empenho WHERE id_pedido = {$id_pedido};");
 		if ($query->num_rows < 1) {
-			return 'EMPENHO SIAFI PENDENTE';
+			$retorno = 'EMPENHO SIAFI PENDENTE';
 		} else {
 			$obj = $query->fetch_object();
-			return 'Empenho: ' . $obj->empenho;
+			$retorno = 'Empenho: ' . $obj->empenho;
 		}
+		$query->close();
+		return $retorno;
 	}
 	// ------------------------------------------------------------------------------
 	/**
 	 *	Função que retorna a tabela com os lançamentos de saldos pelo SOF
 	 *
 	 *	@access public
+	 *	@param $id_setor id do setor
 	 *	@return string
 	 */
 	public function getLancamentos($id_setor): string{
 		$retorno = "";
 		$where = "";
 		if ($id_setor != 2) {
-			$where = "AND saldos_lancamentos.id_setor = {$id_setor}";
+			$where = "AND saldos_lancamentos.id_setor = " . $id_setor;
 		}
 		$query = $this->mysqli->query("SELECT setores.nome, DATE_FORMAT(saldos_lancamentos.data, '%d/%m/%Y') AS data, saldos_lancamentos.valor, saldo_categoria.nome AS categoria FROM setores, saldos_lancamentos, saldo_categoria WHERE setores.id = saldos_lancamentos.id_setor {$where} AND saldos_lancamentos.categoria = saldo_categoria.id ORDER BY saldos_lancamentos.id DESC;");
 		$cor = '';
@@ -190,12 +191,11 @@ class Busca extends Conexao {
 			}
 			$retorno .= "
 				<tr>
-					<td>{$lancamento->nome}</td>
-					<td>{$lancamento->data}</td>
-					<td style=\"color: {$cor};\">R$ {$lancamento->valor}</td>
-					<td>{$lancamento->categoria}</td>
-				</tr>
-			";
+					<td>" . $lancamento->nome . "</td>
+					<td>" . $lancamento->data . "</td>
+					<td style=\"color: " . $cor . ";\">R$ " . $lancamento->valor . "</td>
+					<td>" . $lancamento->categoria . "</td>
+				</tr>";
 		}
 		return $retorno;
 	}
@@ -210,7 +210,7 @@ class Busca extends Conexao {
 		$retorno = "";
 		$query = $this->mysqli->query("SELECT setores.id, setores.nome FROM setores WHERE setores.id <> 1;");
 		while ($setor = $query->fetch_object()) {
-			$retorno .= "<option value=\"{$setor->id}\">{$setor->nome}</option>";
+			$retorno .= "<option value=\"" . $setor->id . "\">" . $setor->nome . "</option>";
 		}
 		$query->close();
 		return $retorno;
@@ -227,7 +227,7 @@ class Busca extends Conexao {
 		$query = $this->mysqli->query("SELECT prioridade.id, prioridade.nome FROM prioridade WHERE prioridade.nome <> 'rascunho';");
 		while ($prioridade = $query->fetch_object()) {
 			$prioridade->nome = ucfirst($prioridade->nome);
-			$retorno .= "<option value=\"{$prioridade->id}\">{$prioridade->nome}</option>";
+			$retorno .= "<option value=\"" . $prioridade->id . "\">" . $prioridade->nome . "</option>";
 		}
 		$query->close();
 		return $retorno;
@@ -244,7 +244,7 @@ class Busca extends Conexao {
 		$query = $this->mysqli->query("SELECT status.id, status.nome FROM status WHERE status.nome <> 'Rascunho';");
 		if ($query && $query->num_rows > 0) {
 			while ($status = $query->fetch_object()) {
-				$retorno .= "<option value=\"{$status->id}\">{$status->nome}</option>";
+				$retorno .= "<option value=\"" . $status->id . "\">" . $status->nome . "</option>";
 			}
 		}
 		return $retorno;
@@ -261,7 +261,7 @@ class Busca extends Conexao {
 		// tratando tipo == 0 primeiro, buscando TODOS os processos
 		$where = "";
 		if ($tipo != 0) {
-			$where = "AND processos.tipo = {$tipo}";
+			$where = "AND processos.tipo = " . $tipo;
 		}
 		if ($where == "") {
 			$query_proc = $this->mysqli->query("SELECT processos_tipo.id, processos_tipo.nome FROM processos_tipo;");
@@ -272,7 +272,7 @@ class Busca extends Conexao {
 					<fieldset class=\"preg\">
 						<table>
 							<tr>
-								<td>Tipo: {$tipo_proc->nome}</td>
+								<td>Tipo: " . $tipo_proc->nome . "</td>
 							</tr>
 						</table>
 					</fieldset><br>
@@ -295,15 +295,15 @@ class Busca extends Conexao {
 					while ($processo = $query->fetch_object()) {
 						$retorno .= "
 							<tr>
-								<td>{$processo->num_processo}</td>
-								<td>{$processo->tipo}</td>
-								<td>{$processo->estante}</td>
-								<td>{$processo->prateleira}</td>
-								<td>{$processo->entrada}</td>
-								<td>{$processo->saida}</td>
-								<td>{$processo->responsavel}</td>
-								<td>{$processo->retorno}</td>
-								<td>{$processo->obs}</td>
+								<td>" . $processo->num_processo . "</td>
+								<td>" . $processo->tipo . "</td>
+								<td>" . $processo->estante . "</td>
+								<td>" . $processo->prateleira . "</td>
+								<td>" . $processo->entrada . "</td>
+								<td>" . $processo->saida . "</td>
+								<td>" . $processo->responsavel . "</td>
+								<td>" . $processo->retorno . "</td>
+								<td>" . $processo->obs . "</td>
 							</tr>
 							";
 					}
@@ -320,7 +320,7 @@ class Busca extends Conexao {
 					<fieldset class=\"preg\">
 						<table>
 							<tr>
-								<td>Tipo: {$tipo_proc->nome}</td>
+								<td>Tipo: " . $tipo_proc->nome . "</td>
 							</tr>
 						</table>
 					</fieldset><br>
@@ -345,23 +345,21 @@ class Busca extends Conexao {
 				while ($processo = $query->fetch_object()) {
 					$retorno .= "
 					<tr>
-						<td>{$processo->num_processo}</td>
-						<td>{$processo->tipo}</td>
-						<td>{$processo->estante}</td>
-						<td>{$processo->prateleira}</td>
-						<td>{$processo->entrada}</td>
-						<td>{$processo->saida}</td>
-						<td>{$processo->responsavel}</td>
-						<td>{$processo->retorno}</td>
-						<td>{$processo->obs}</td>
-					</tr>
-					";
+						<td>" . $processo->num_processo . "</td>
+						<td>" . $processo->tipo . "</td>
+						<td>" . $processo->estante . "</td>
+						<td>" . $processo->prateleira . "</td>
+						<td>" . $processo->entrada . "</td>
+						<td>" . $processo->saida . "</td>
+						<td>" . $processo->responsavel . "</td>
+						<td>" . $processo->retorno . "</td>
+						<td>" . $processo->obs . "</td>
+					</tr>";
 				}
 			}
 			$retorno .= "
 				</tbody>
-			</table><br>
-			";
+			</table><br>";
 		}
 		return $retorno;
 	}
@@ -377,7 +375,7 @@ class Busca extends Conexao {
 		$query = $this->mysqli->query("SELECT id, nome FROM processos_tipo;");
 		while ($tipo = $query->fetch_object()) {
 			$tipo->nome = utf8_encode($tipo->nome);
-			$retorno .= "<option value=\"{$tipo->id}\">{$tipo->nome}</option>";
+			$retorno .= "<option value=\"" . $tipo->id . "\">" . $tipo->nome . "</option>";
 		}
 		$query->close();
 		return $retorno;
@@ -433,13 +431,12 @@ class Busca extends Conexao {
 			$retorno .= "
 			<td>
 				<div class=\"radiobtn radiobtn-adv\">
-					<label for=\"st{$status->id}\">
-						<input type=\"radio\" name=\"fase\" required id=\"st{$status->id}\" class=\"access-hide\" value=\"{$status->id}\">{$status->nome}
+					<label for=\"st" . $status->id . "\">
+						<input type=\"radio\" name=\"fase\" required id=\"st" . $status->id . "\" class=\"access-hide\" value=\"" . $status->id . "\">" . $status->nome . "
 						<span class=\"radiobtn-circle\"></span><span class=\"radiobtn-circle-check\"></span>
 					</label>
 				</div>
-			</td>
-			";
+			</td>";
 			$i++;
 		}
 		$retorno .= "</tr>";
@@ -462,13 +459,12 @@ class Busca extends Conexao {
 			$retorno .= "
 			<td>
 				<div class=\"radiobtn radiobtn-adv\">
-					<label for=\"st{$nome}\">
-						<input type=\"radio\" name=\"st\" id=\"st{$nome}\" class=\"access-hide\" checked=\"\" value=\"{$prioridade->id}\">{$nome}
+					<label for=\"st" . $nome . "\">
+						<input type=\"radio\" name=\"st\" id=\"st" . $nome . "\" class=\"access-hide\" checked=\"\" value=\"" . $prioridade->id . "\">" . $nome . "
 						<span class=\"radiobtn-circle\"></span><span class=\"radiobtn-circle-check\"></span>
 					</label>
 				</div>
-			</td>
-			";
+			</td>";
 		}
 		$query->close();
 		return $retorno;
@@ -514,8 +510,7 @@ class Busca extends Conexao {
 					<td>
 						<button onclick=\"viewCompl('" . $processo->obs . "');\" class=\"btn btn-flat waves-attach waves-effect\" type=\"button\" title=\"Ver Observação\">OBS</button>
 					</td>
-				</tr>
-			";
+				</tr>";
 		}
 		$query->fetch_object();
 		return $retorno;
@@ -548,7 +543,7 @@ class Busca extends Conexao {
 	public function setInputsArquivo($qtd): string{
 		$qtd++;
 		return "
-		<div id=\"file-$qtd\" class=\"tile\">
+		<div id=\"file-" . $qtd . "\" class=\"tile\">
 			<div class=\"tile-side pull-left\">
 				<div class=\"avatar avatar-sm avatar-brand\">
 					<span class=\"icon\">backup</span>
@@ -557,15 +552,14 @@ class Busca extends Conexao {
 			<div class=\"tile-action tile-action-show\">
 				<ul class=\"nav nav-list margin-no pull-right\">
 					<li>
-						<a class=\"text-black-sec waves-attach\" href=\"javascript:dropTile('file-$qtd');\"><span class=\"icon\">delete</span></a>
+						<a class=\"text-black-sec waves-attach\" href=\"javascript:dropTile('file-" . $qtd . "');\"><span class=\"icon\">delete</span></a>
 					</li>
 				</ul>
 			</div>
 			<div class=\"tile-inner\">
-				<input id=\"arq-$qtd\" class=\"btn btn-default btn-file\" type=\"file\" name=\"file-$qtd\" style=\"text-transform: none !important;\">
+				<input id=\"arq-" . $qtd . "\" class=\"btn btn-default btn-file\" type=\"file\" name=\"file-" . $qtd . "\" style=\"text-transform: none !important;\">
 			</div>
-		</div>
-		";
+		</div>";
 	}
 
 	//------------------------------------------------------------------------
@@ -623,7 +617,7 @@ class Busca extends Conexao {
 	 *        $tabela -> filtra por nome da tabela
 	 * @return string
 	 */
-	public function getPostagens($id_setor, $tabela): string{
+	public function getPostagens($tabela): string{
 		//declarando retorno
 		$retorno = "";
 		$query = $this->mysqli->query("SELECT postagens.id, postagens.titulo, DATE_FORMAT(postagens.data, '%d/%m/%Y') AS data FROM postagens, paginas_post WHERE postagens.tabela = paginas_post.id AND paginas_post.tabela = '{$tabela}' AND ativa = 1 ORDER BY data ASC;");
@@ -632,8 +626,8 @@ class Busca extends Conexao {
 			$retorno .= "<tr><td>";
 			$retorno .= html_entity_decode($postagem->titulo);
 
-			$retorno .= "<button class=\"btn btn-flat btn-sm\" style=\"text-transform: lowercase !important;font-weight: bold;\" onclick=\"ver_noticia({$postagem->id}, '{$tabela}', 0);\">...ver mais</button></td>";
-			$retorno .= "<td><span style=\"font-weight: bold;\" class=\"pull-right\">{$postagem->data}</span></td></tr>";
+			$retorno .= "<button class=\"btn btn-flat btn-sm\" style=\"text-transform: lowercase !important;font-weight: bold;\" onclick=\"ver_noticia(" . $postagem->id . ", '" . $tabela . "', 0);\">...ver mais</button></td>";
+			$retorno .= "<td><span style=\"font-weight: bold;\" class=\"pull-right\">" . $postagem->data . "</span></td></tr>";
 		}
 		return $retorno;
 	}
@@ -694,10 +688,10 @@ class Busca extends Conexao {
 				}
 			}
 			$retorno .= "
-			<li id=\"{$array_id[$aux]}\" class=\"{$array_anima[$aux]}-anima\">
+			<li id=\"" . $array_id[$aux] . "\" class=\"" . $array_anima[$aux] . "-anima\">
 				<div class=\"card-img\">
-					<img style=\"width: {$width}px; height: 275px;\" src=\"{$src}\" >
-					<a href=\"javascript:ver_noticia({$postagem->id}, '{$postagem->tabela}', 1);\" class=\"card-img-heading padding\" style=\"font-weight: bold;\">$titulo<span class=\"pull-right\">{$postagem->data}</span></a>
+					<img style=\"width: " . $width . "px; height: 275px;\" src=\"" . $src . "\" >
+					<a href=\"javascript:ver_noticia(" . $postagem->id . ", '" . $postagem->tabela . "', 1);\" class=\"card-img-heading padding\" style=\"font-weight: bold;\">" . $titulo . "<span class=\"pull-right\">" . $postagem->data . "</span></a>
 				</div>
 			</li>
 			";
@@ -739,21 +733,18 @@ class Busca extends Conexao {
 									";
 		$query = $this->mysqli->query("SELECT postagens.id, postagens.tabela, postagens.titulo, DATE_FORMAT(postagens.data, '%d/%m/%Y') AS data, postagens.ativa FROM postagens WHERE postagens.titulo LIKE '%{$busca}%' AND postagens.ativa = 1 ORDER BY postagens.data DESC;");
 		if ($query->num_rows < 1) {
-			$retorno .= "
-											<tr>
-												<td colspan=\"2\">Nenhum resultado para '{$busca}'</td>
-												<td></td>
-											</tr>
-											";
+			$retorno .= "<tr>
+										<td colspan=\"2\">Nenhum resultado para '" . $busca . "'</td>
+										<td></td>
+									</tr>";
 		} else {
 			while ($postagem = $query->fetch_object()) {
 				$titulo = html_entity_decode($postagem->titulo);
 				$retorno .= "
-												<tr>
-													<td>{$titulo}<button class=\"btn btn-flat btn-sm\" style=\"text-transform: lowercase !important;font-weight: bold;\" onclick=\"ver_noticia({$postagem->id}, '{$postagem->tabela}', 1);\">...ver mais</button></td>
-													<td><span class=\"pull-right\">{$postagem->data}</span></td>
-												</tr>
-												";
+									<tr>
+										<td>" . $titulo . "<button class=\"btn btn-flat btn-sm\" style=\"text-transform: lowercase !important;font-weight: bold;\" onclick=\"ver_noticia(" . $postagem->id . ", '" . $postagem->tabela . "', 1);\">...ver mais</button></td>
+										<td><span class=\"pull-right\">" . $postagem->data . "</span></td>
+									</tr>";
 			}
 		}
 		$retorno .= "
@@ -803,22 +794,22 @@ class Busca extends Conexao {
 			$btn_aprovar = $btn_reprovar = "";
 			if ($st == 2) {
 				//$solic->mes_subtraido = "---------------";
-				$btn_aprovar = "<a title=\"Aprovar\" href=\"javascript:analisaSolicAlt({$solic->id}, {$solic->id_pedido}, 1);\" class=\"modal-close\"><span class=\"icon\">done_all<span></span></span></a>";
-				$btn_reprovar = "<a title=\"Reprovar\" href=\"javascript:analisaSolicAlt({$solic->id}, {$solic->id_pedido}, 0);\" class=\"modal-close\"><span class=\"icon\">delete<span></span></span></a>";
+				$btn_aprovar = "<a title=\"Aprovar\" href=\"javascript:analisaSolicAlt(" . $solic->id . ", " . $solic->id_pedido . ", 1);\" class=\"modal-close\"><span class=\"icon\">done_all<span></span></span></a>";
+				$btn_reprovar = "<a title=\"Reprovar\" href=\"javascript:analisaSolicAlt(" . $solic->id . ", " . $solic->id_pedido . ", 0);\" class=\"modal-close\"><span class=\"icon\">delete<span></span></span></a>";
 			}
 			$retorno .= "
 			<tr>
 				<td>
-					{$btn_aprovar}{$btn_reprovar}
+					" . $btn_aprovar . $btn_reprovar . "
 				</td>
-				<td>{$solic->id_pedido}</td>
-				<td>{$solic->nome}</td>
-				<td>{$solic->data_solicitacao}</td>
-				<td>{$solic->data_analise}</td>
+				<td>" . $solic->id_pedido . "</td>
+				<td>" . $solic->nome . "</td>
+				<td>" . $solic->data_solicitacao . "</td>
+				<td>" . $solic->data_analise . "</td>
 				<td>
-					<button onclick=\"viewCompl('{$solic->justificativa}');\" class=\"btn btn-flat waves-attach waves-effect\" type=\"button\" title=\"Ver Justificativa\">JUSTIFICATIVA</button>
+					<button onclick=\"viewCompl('" . $solic->justificativa . "');\" class=\"btn btn-flat waves-attach waves-effect\" type=\"button\" title=\"Ver Justificativa\">JUSTIFICATIVA</button>
 				</td>
-				<td><span class=\"label {$label}\" style=\"font-size: 11pt !important; font-weight: bold;\">{$status}</span></td>
+				<td><span class=\"label " . $label . "\" style=\"font-size: 11pt !important; font-weight: bold;\">" . $status . "</span></td>
 			</tr>
 			";
 		}
@@ -862,20 +853,20 @@ class Busca extends Conexao {
 					// em análise / aberto
 					$solic->data_analise = "---------------";
 					//$solic->mes_subtraido = "---------------";
-					$btn_aprovar = "<a title=\"Aprovar\" href=\"javascript:analisaAdi({$solic->id}, 1);\" class=\"modal-close\"><span class=\"icon\">done_all<span></span></span></a>";
-					$btn_reprovar = "<a title=\"Reprovar\" href=\"javascript:analisaAdi({$solic->id}, 0);\" class=\"modal-close\"><span class=\"icon\">delete<span></span></span></a>";
+					$btn_aprovar = "<a title=\"Aprovar\" href=\"javascript:analisaAdi(" . $solic->id . ", 1);\" class=\"modal-close\"><span class=\"icon\">done_all<span></span></span></a>";
+					$btn_reprovar = "<a title=\"Reprovar\" href=\"javascript:analisaAdi(" . $solic->id . ", 0);\" class=\"modal-close\"><span class=\"icon\">delete<span></span></span></a>";
 				}
 				$retorno .= "
 				<tr>
-					<td>{$btn_reprovar}{$btn_aprovar}</td>
-					<td>{$solic->nome}</td>
-					<td>{$solic->data_solicitacao}</td>
-					<td>{$solic->data_analise}</td>
-					<td>R$ {$solic->valor_adiantado}</td>
+					<td>" . $btn_reprovar . $btn_aprovar . "</td>
+					<td>" . $solic->nome . "</td>
+					<td>" . $solic->data_solicitacao . "</td>
+					<td>" . $solic->data_analise . "</td>
+					<td>R$ " . $solic->valor_adiantado . "</td>
 					<td>
-						<button onclick=\"viewCompl('{$solic->justificativa}');\" class=\"btn btn-flat waves-attach waves-effect\" type=\"button\" title=\"Ver Justificativa\">JUSTIFICATIVA</button>
+						<button onclick=\"viewCompl('" . $solic->justificativa . "');\" class=\"btn btn-flat waves-attach waves-effect\" type=\"button\" title=\"Ver Justificativa\">JUSTIFICATIVA</button>
 					</td>
-					<td><span class=\"label {$label}\" style=\"font-size: 11pt !important; font-weight: bold;\">{$status}</span></td>
+					<td><span class=\"label " . $label . "\" style=\"font-size: 11pt !important; font-weight: bold;\">" . $status . "</span></td>
 				</tr>
 				";
 			}
@@ -892,25 +883,23 @@ class Busca extends Conexao {
 	 * @return string
 	 */
 	public function getHeader($id_pedido): string{
-		$pedido = $this->mysqli->query("SELECT pedido.id, DATE_FORMAT(pedido.data_pedido, '%d/%m/%Y') AS data_pedido, EXTRACT(YEAR FROM pedido.data_pedido) AS ano, mes.sigla_mes AS ref_mes, status.nome AS status, pedido.valor, pedido.obs FROM pedido, mes, status WHERE status.id = pedido.status AND pedido.id = {$id_pedido} AND mes.id = pedido.ref_mes;")->fetch_object();
+		$pedido = $this->mysqli->query("SELECT pedido.id, DATE_FORMAT(pedido.data_pedido, '%d/%m/%Y') AS data_pedido, EXTRACT(YEAR FROM pedido.data_pedido) AS ano, mes.sigla_mes AS ref_mes, status.nome AS status, replace(pedido.valor, '.', ',') AS valor, pedido.obs FROM pedido, mes, status WHERE status.id = pedido.status AND pedido.id = {$id_pedido} AND mes.id = pedido.ref_mes;")->fetch_object();
 		$ano = substr($pedido->data_pedido, 0, 4);
-		$pedido->valor = str_replace(".", ",", $pedido->valor);
 		$empenho = Busca::verEmpenho($id_pedido);
 		$retorno = "
 		<fieldset>
 			<p>
-				Pedido: {$id_pedido}
-				Data de Envio: {$pedido->data_pedido}&emsp;
-				Situação: {$pedido->status}&emsp;
-				Ano: {$pedido->ano}&emsp;
-				Mês: {$pedido->ref_mes}&emsp;
-				Total do Pedido: R$ {$pedido->valor}
+				Pedido: " . $id_pedido . "
+				Data de Envio: " . $pedido->data_pedido . ".&emsp;
+				Situação: " . $pedido->status . "&emsp;
+				Ano:" . $pedido->ano . "&emsp;
+				Mês: " . $pedido->ref_mes . "&emsp;
+				Total do Pedido: R$ " . $pedido->valor . "
 			</p>
-			<p>{$empenho}</p>
+			<p>" . $empenho . "</p>
 			<p>Observação: </p>
-			<p style=\"font-weight: normal !important;\">	{$pedido->obs}</p>
-		</fieldset><br>
-		";
+			<p style=\"font-weight: normal !important;\">	" . $pedido->obs . "</p>
+		</fieldset><br>";
 		return $retorno;
 	}
 
@@ -935,10 +924,10 @@ class Busca extends Conexao {
 			<fieldset class=\"preg\">
 				<table>
 					<tr>
-						<td>Licitação: {$licitacao->num_licitacao}</td>
-						<td>Processo: {$licitacao->num_processo}</td>
-						<td>Início: {$licitacao->dt_inicio}</td>
-						<td>Fim: {$licitacao->dt_fim}</td>
+						<td>Licitação: " . $licitacao->num_licitacao . "</td>
+						<td>Processo: " . $licitacao->num_processo . "</td>
+						<td>Início: " . $licitacao->dt_inicio . "</td>
+						<td>Fim: " . $licitacao->dt_fim . "</td>
 					</tr>
 				</table>
 			</fieldset><br>
@@ -960,9 +949,9 @@ class Busca extends Conexao {
 				<fieldset style=\"border-bottom: 1px solid black; padding: 5px;\">
 					<table>
 						<tr>
-							<td style=\"text-align: left; font-weight: bold;\">{$fornecedor->nome_fornecedor}</td>
-							<td>Contrato: {$fornecedor->num_contrato}</td>
-							<td>Total do Forn.: R$ {$tot_forn->sum}</td>
+							<td style=\"text-align: left; font-weight: bold;\">" . $fornecedor->nome_fornecedor . "</td>
+							<td>Contrato: " . $fornecedor->num_contrato . "</td>
+							<td>Total do Forn.: R$ " . $tot_forn->sum . "</td>
 						</tr>
 					</table>
 				</fieldset>
@@ -989,17 +978,15 @@ class Busca extends Conexao {
 					$item->complemento_item = mb_strtoupper($item->complemento_item, 'UTF-8');
 					$retorno .= "
 							<tr>
-								<td>{$item->cod_reduzido}</td>
-								<td>{$item->complemento_item}</td>
-								<td>{$item->qtd}</td>
-								<td>R$ {$item->valor}</td>
-							</tr>
-							";
+								<td>" . $item->cod_reduzido . "</td>
+								<td>" . $item->complemento_item . "</td>
+								<td>" . $item->qtd . "</td>
+								<td>R$ " . $item->valor . "</td>
+							</tr>";
 				}
 				$retorno .= "
 					</tbody>
-				</table><br>
-				";
+				</table><br>";
 			}
 		}
 		$query_ini->close();
@@ -1020,12 +1007,12 @@ class Busca extends Conexao {
 		while ($itens = $query->fetch_object()) {
 			$retorno .= "
 			<tr>
-				<td>{$itens->id}</td>
-				<td>{$itens->cod_reduzido}</td>
-				<td>{$itens->cgc_fornecedor}</td>
-				<td>{$itens->num_licitacao}</td>
-				<td>{$itens->qtd}</td>
-				<td>R$ {$itens->valor}</td>
+				<td>" . $itens->id . "</td>
+				<td>" . $itens->cod_reduzido . "</td>
+				<td>" . $itens->cgc_fornecedor . "</td>
+				<td>" . $itens->num_licitacao . "</td>
+				<td>" . $itens->qtd . "</td>
+				<td>R$ " . $itens->valor . "</td>
 			</tr>
 			";
 		}
@@ -1049,15 +1036,15 @@ class Busca extends Conexao {
 				<fieldset class=\"preg\">
 					<table>
 						<tr>
-							<td>Data: {$comentario->data_coment}</td>
-							<td>Prioridade: {$comentario->prioridade}</td>
-							<td>Status: {$comentario->status}</td>
-							<td>Valor: R$ {$comentario->valor}</td>
+							<td>Data: " . $comentario->data_coment . "</td>
+							<td>Prioridade: " . $comentario->prioridade . "</td>
+							<td>Status: " . $comentario->status . "</td>
+							<td>Valor: R$ " . $comentario->valor . "</td>
 						</tr>
 					</table>
 				</fieldset>
 				<fieldset>
-					<p style=\"font-weight: normal;\">{$comentario->comentario}</p>
+					<p style=\"font-weight: normal;\">" . $comentario->comentario . "</p>
 				</fieldset>
 				";
 			}
@@ -1091,12 +1078,11 @@ class Busca extends Conexao {
 			if ($arquivo != "." && $arquivo != ".." && $tipo != "Imagem") {
 				//mostra apenas os documentos pdf e doc
 				$retorno .= "
-		<tr>
-			<td><span class=\"{$label}\" style=\"font-size: 11pt !important; font-weight: bold;\">{$tipo}</span></td>
-			<td><a href=\"$pasta$arquivo\">$arquivo</a></td>
-			<td><button class=\"btn btn-flat waves-attach waves-effect\" onclick=\"delArquivo('$pasta$arquivo');\"><span class=\"icon\">delete</span><span style=\"font-weight:bold;\">Excluir</span></button></td>
-		</tr>
-		";
+				<tr>
+					<td><span class=\"" . $label . "\" style=\"font-size: 11pt !important; font-weight: bold;\">" . $tipo . "</span></td>
+					<td><a href=\"" . $pasta . $arquivo . "\">" . $arquivo . "</a></td>
+					<td><button class=\"btn btn-flat waves-attach waves-effect\" onclick=\"delArquivo('" . $pasta . $arquivo . "');\"><span class=\"icon\">delete</span><span style=\"font-weight:bold;\">Excluir</span></button></td>
+				</tr>";
 			}
 		}
 		$diretorio->close();
@@ -1117,13 +1103,12 @@ class Busca extends Conexao {
 			$retorno .= "
 			<td>
 				<div class=\"radiobtn radiobtn-adv\">
-				<label for=\"pag-{$pag->tabela}\">
-						<input type=\"radio\" id=\"pag-{$pag->tabela}\" name=\"pag\" class=\"access-hide\" onclick=\"carregaPostsPag({$pag->id});\">{$pag->nome}
+				<label for=\"pag-" . $pag->tabela . "\">
+						<input type=\"radio\" id=\"pag-" . $pag->tabela . "\" name=\"pag\" class=\"access-hide\" onclick=\"carregaPostsPag(" . $pag->id . ");\">" . $pag->nome . "
 						<span class=\"radiobtn-circle\"></span><span class=\"radiobtn-circle-check\"></span>
 					</label>
 				</div>
-			</td>
-			";
+			</td>";
 		}
 		$query->close();
 		return $retorno;
@@ -1142,14 +1127,13 @@ class Busca extends Conexao {
 		while ($postagem = $query->fetch_object()) {
 			$retorno .= "
 			<tr>
-				<td>{$postagem->data}</td>
-				<td>{$postagem->titulo}</td>
+				<td>" . $postagem->data . "</td>
+				<td>" . $postagem->titulo . "</td>
 				<td>
-				<button class=\"btn btn-default btn-sm\" style=\"text-transform: none !important;font-weight: bold;\" onclick=\"editaNoticia({$postagem->id}, {$postagem->tabela}, '{$postagem->data}')\" title=\"Editar\"><span class=\"icon\">create</span></button>
-					<button class=\"btn btn-default btn-sm\" style=\"text-transform: none !important;font-weight: bold;\" onclick=\"excluirNoticia({$postagem->id});\" title=\"Excluir\"><span class=\"icon\">delete</span></button>
+				<button class=\"btn btn-default btn-sm\" style=\"text-transform: none !important;font-weight: bold;\" onclick=\"editaNoticia(" . $postagem->id . ", " . $postagem->tabela . ", '" . $postagem->data . "')\" title=\"Editar\"><span class=\"icon\">create</span></button>
+					<button class=\"btn btn-default btn-sm\" style=\"text-transform: none !important;font-weight: bold;\" onclick=\"excluirNoticia(" . $postagem->id . ");\" title=\"Excluir\"><span class=\"icon\">delete</span></button>
 				</td>
-			</tr>
-			";
+			</tr>";
 		}
 		$query->close();
 		return $retorno;
@@ -1182,9 +1166,7 @@ class Busca extends Conexao {
 		$retorno = "";
 		$query = $this->mysqli->query("SELECT id, nome FROM paginas_post;");
 		while ($pagina = $query->fetch_object()) {
-			$retorno .= "
-			<option id=\"op{$pagina->id}\" value=\"{$pagina->id}\">{$pagina->nome}</option>
-			";
+			$retorno .= "<option id=\"op" . $pagina->id . "\" value=\"" . $pagina->id . "\">" . $pagina->nome . "</option>";
 		}
 		$query->close();
 		return $retorno;
@@ -1207,28 +1189,28 @@ class Busca extends Conexao {
 			$btnAnalisar = "";
 			if ($pedido->status != 'Reprovado' && $pedido->status != 'Aprovado') {
 				if ($pedido->status == 'Em Analise') {
-					$btnAnalisar = "<a class=\"modal-close\" href=\"javascript:analisarPedido({$pedido->id}, {$pedido->id_setor});\" title=\"Analisar\"><span class=\"icon\">create<span></a>";
+					$btnAnalisar = "<a class=\"modal-close\" href=\"javascript:analisarPedido(" . $pedido->id . ", " . $pedido->id_setor . ");\" title=\"Analisar\"><span class=\"icon\">create<span></a>";
 				} else if ($pedido->status == 'Aguarda Orcamento') {
-					$btnAnalisar = "<a class=\"modal-close\" href=\"javascript:cadEmpenho({$pedido->id});\" title=\"Cadastrar Empenho\"><span class=\"icon\">payment<span></a>";
+					$btnAnalisar = "<a class=\"modal-close\" href=\"javascript:cadEmpenho(" . $pedido->id . ");\" title=\"Cadastrar Empenho\"><span class=\"icon\">payment<span></a>";
 				} else {
-					$btnAnalisar = "<a class=\"modal-close\" href=\"javascript:getStatus({$pedido->id}, {$pedido->id_setor});\" title=\"Alterar Status\"><span class=\"icon\">build<span></a>";
+					$btnAnalisar = "<a class=\"modal-close\" href=\"javascript:getStatus(" . $pedido->id;", " . $pedido->id_setor . ");\" title=\"Alterar Status\"><span class=\"icon\">build<span></a>";
 				}
 			}
 			$retorno .= "
-			<tr id=\"rowPedido{$pedido->id}\">
+			<tr id=\"rowPedido" . $pedido->id . "\">
 				<td>
-					{$btnAnalisar}
-					<a class=\"modal-close\" href=\"javascript:imprimir({$pedido->id});\" title=\"Imprimir\"><span class=\"icon\">print<span></a>
+					" . $btnAnalisar . "
+					<a class=\"modal-close\" href=\"javascript:imprimir(" . $pedido->id . ");\" title=\"Imprimir\"><span class=\"icon\">print<span></a>
 				</td>
-				<td>{$pedido->id}</td>
-				<td>{$pedido->nome_setor}</td>
-				<td>{$pedido->data_pedido}</td>
-				<td>{$pedido->ref_mes}</td>
-				<td>{$pedido->prioridade}</td>
-				<td>{$pedido->status}</td>
-				<td>R$ {$pedido->valor}</td>
+				<td>" . $pedido->id . "</td>
+				<td>" . $pedido->nome_setor . "</td>
+				<td>" . $pedido->data_pedido . "</td>
+				<td>" . $pedido->ref_mes . "</td>
+				<td>" . $pedido->prioridade . "</td>
+				<td>" . $pedido->status . "</td>
+				<td>R$ " . $pedido->valor . "</td>
 				<td>
-					<button onclick=\"verEmpenho({$pedido->id});\" class=\"btn btn-flat waves-attach waves-effect\" type=\"button\" title=\"Ver Empenho\">EMPENHO</button>
+					<button onclick=\"verEmpenho(" . $pedido->id . ");\" class=\"btn btn-flat waves-attach waves-effect\" type=\"button\" title=\"Ver Empenho\">EMPENHO</button>
 				</td>
 			</tr>
 			";
@@ -1258,53 +1240,52 @@ class Busca extends Conexao {
 				$item->dt_fim = "----------";
 			}
 			$retorno .= "
-			<tr id=\"row_item{$item->id_itens}\">
+			<tr id=\"row_item" . $item->id_itens . "\">
 				<td>
-					<a class=\"modal-close\" href=\"javascript:cancelaItem({$item->id_itens});\" title=\"Item Cancelado\"><span id=\"icon-cancela-item{$item->id_itens}\" class=\"icon text-red\">cancel<span>
+					<a class=\"modal-close\" href=\"javascript:cancelaItem(" . $item->id_itens . ");\" title=\"Item Cancelado\"><span id=\"icon-cancela-item" . $item->id_itens . "\" class=\"icon text-red\">cancel<span>
 					</a>
-					<a class=\"modal-close\" href=\"javascript:editaItem({$item->id_itens});\" title=\"Editar\"><span class=\"icon\">edit<span>
+					<a class=\"modal-close\" href=\"javascript:editaItem(" . $item->id_itens . ");\" title=\"Editar\"><span class=\"icon\">edit<span>
 					</a>
 				</td>
-				<td>{$item->cod_reduzido}</td>
-				<td>{$item->cod_despesa}</td>
-				<td>{$item->descr_despesa}</td>
-				<td>{$item->num_contrato}</td>
-				<td>{$item->num_processo}</td>
-				<td>{$item->descr_mod_compra}</td>
-				<td>{$item->num_licitacao}</td>
-				<td>{$item->dt_inicio}</td>
-				<td>{$item->dt_fim}</td>
-				<td>{$item->dt_geracao}</td>
-				<td>{$item->cgc_fornecedor}</td>
-				<td>{$item->nome_fornecedor}</td>
-				<td>{$item->num_extrato}</td>
-				<td>{$item->cod_estruturado}</td>
-				<td>{$item->nome_unidade}</td>
+				<td>" . $item->cod_reduzido . "</td>
+				<td>" . $item->cod_despesa . "</td>
+				<td>" . $item->descr_despesa . "</td>
+				<td>" . $item->num_contrato . "</td>
+				<td>" . $item->num_processo . "</td>
+				<td>" . $item->descr_mod_compra . "</td>
+				<td>" . $item->num_licitacao . "</td>
+				<td>" . $item->dt_inicio . "</td>
+				<td>" . $item->dt_fim . "</td>
+				<td>" . $item->dt_geracao . "</td>
+				<td>" . $item->cgc_fornecedor . "</td>
+				<td>" . $item->nome_fornecedor . "</td>
+				<td>" . $item->num_extrato . "</td>
+				<td>" . $item->cod_estruturado . "</td>
+				<td>" . $item->nome_unidade . "</td>
 				<td>
-					<button onclick=\"viewCompl('{$item->complemento_item}');\" class=\"btn btn-flat waves-attach waves-effect\" type=\"button\" title=\"Ver Complemento do Item\">complemento_item</button>
+					<button onclick=\"viewCompl('" . $item->complemento_item . "');\" class=\"btn btn-flat waves-attach waves-effect\" type=\"button\" title=\"Ver Complemento do Item\">complemento_item</button>
 				</td>
-				<td>{$item->descricao}</td>
-				<td>R$ {$item->vl_unitario}</td>
-				<td>{$item->qt_contrato}</td>
-				<td>{$item->vl_contrato}</td>
-				<td>{$item->qt_utilizado}</td>
-				<td>{$item->vl_utilizado}</td>
-				<td>{$item->qt_saldo}</td>
-				<td>{$item->vl_saldo}</td>
-				<td>{$item->qtd_solicitada}</td>
-				<td>R$ {$item->valor}</td>
+				<td>" . $item->descricao . "</td>
+				<td>R$ " . $item->vl_unitario . "</td>
+				<td>" . $item->qt_contrato . "</td>
+				<td>" . $item->vl_contrato . "</td>
+				<td>" . $item->qt_utilizado . "</td>
+				<td>" . $item->vl_utilizado . "</td>
+				<td>" . $item->qt_saldo . "</td>
+				<td>" . $item->vl_saldo . "</td>
+				<td>" . $item->qtd_solicitada . "</td>
+				<td>R$ " . $item->valor . "</td>
 				<td>
-					<input type=\"hidden\" name=\"id_item[]\" value=\"{$item->id_itens}\">
-					<input id=\"item_cancelado{$item->id_itens}\" type=\"hidden\" name=\"item_cancelado[]\" value=\"0\">
-					<input type=\"hidden\" name=\"qtd_solicitada[]\" value=\"{$item->qtd_solicitada}\">
-					<input type=\"hidden\" name=\"qt_saldo[]\" value=\"{$item->qt_saldo}\">
-					<input type=\"hidden\" name=\"qt_utilizado[]\" value=\"{$item->qt_utilizado}\">
-					<input type=\"hidden\" name=\"vl_saldo[]\" value=\"{$item->vl_saldo}\">
-					<input type=\"hidden\" name=\"vl_utilizado[]\" value=\"{$item->vl_utilizado}\">
-					<input type=\"hidden\" name=\"valor_item[]\" value=\"{$item->valor}\">
+					<input type=\"hidden\" name=\"id_item[]\" value=\"" . $item->id_itens . "\">
+					<input id=\"item_cancelado" . $item->id_itens . "\" type=\"hidden\" name=\"item_cancelado[]\" value=\"0\">
+					<input type=\"hidden\" name=\"qtd_solicitada[]\" value=\"" . $item->qtd_solicitada . "\">
+					<input type=\"hidden\" name=\"qt_saldo[]\" value=\"" . $item->qt_saldo . "\">
+					<input type=\"hidden\" name=\"qt_utilizado[]\" value=\"" . $item->qt_utilizado . "\">
+					<input type=\"hidden\" name=\"vl_saldo[]\" value=\"" . $item->vl_saldo . "\">
+					<input type=\"hidden\" name=\"vl_utilizado[]\" value=\"" . $item->vl_utilizado . "\">
+					<input type=\"hidden\" name=\"valor_item[]\" value=\"" . $item->valor . "\">
 				</td>
-			</tr>
-			";
+			</tr>";
 		}
 		$query->close();
 
@@ -1323,7 +1304,6 @@ class Busca extends Conexao {
 	public function getInfoPedidoAnalise($id_pedido, $id_setor): string{
 		$query = $this->mysqli->query("SELECT saldo_setor.saldo, pedido.prioridade, pedido.status, pedido.valor, pedido.obs FROM saldo_setor, pedido WHERE saldo_setor.id_setor = {$id_setor} AND pedido.id = {$id_pedido};");
 		$pedido = $query->fetch_object();
-		//$pedido->status = trim($pedido->status);
 		$query->close();
 		return json_encode($pedido);
 	}
@@ -1361,15 +1341,14 @@ class Busca extends Conexao {
 			}
 			$retorno .= "
 			<tr>
-				<td>{$solic->id_pedido}</td>
-				<td>{$solic->data_solicitacao}</td>
-				<td>{$solic->data_analise}</td>
+				<td>" . $solic->id_pedido . "</td>
+				<td>" . $solic->data_solicitacao . "</td>
+				<td>" . $solic->data_analise . "</td>
 				<td>
-					<button onclick=\"viewCompl('{$solic->justificativa}');\" class=\"btn btn-flat waves-attach waves-effect\" type=\"button\" title=\"Ver Justificativa\">JUSTIFICATIVA</button>
+					<button onclick=\"viewCompl('" . $solic->justificativa . "');\" class=\"btn btn-flat waves-attach waves-effect\" type=\"button\" title=\"Ver Justificativa\">JUSTIFICATIVA</button>
 				</td>
-				<td><span class=\"label {$label}\" style=\"font-size: 11pt !important; font-weight: bold;\">{$status}</span></td>
-			</tr>
-			";
+				<td><span class=\"label " . $label . "\" style=\"font-size: 11pt !important; font-weight: bold;\">" . $status . "</span></td>
+			</tr>";
 		}
 		$query->close();
 		return $retorno;
@@ -1390,7 +1369,7 @@ class Busca extends Conexao {
 			if ($mes->id == $mes_atual) {
 				$selected = "selected";
 			}
-			$retorno .= "<option value=\"{$mes->id}\" {$selected}>{$mes->sigla_mes}</option>";
+			$retorno .= "<option value=\"" . $mes->id . "\" " . $selected . ">" . $mes->sigla_mes . "</option>";
 			$selected = "";
 		}
 		$query->close();
@@ -1426,15 +1405,14 @@ class Busca extends Conexao {
 			}
 			$retorno .= "
 			<tr>
-				<td>{$solic->data_solicitacao}</td>
-				<td>{$solic->data_analise}</td>
-				<td>R$ {$solic->valor_adiantado}</td>
+				<td>" . $solic->data_solicitacao . "</td>
+				<td>" . $solic->data_analise . "</td>
+				<td>R$ " . $solic->valor_adiantado . "</td>
 				<td>
-					<button onclick=\"viewCompl('{$solic->justificativa}');\" class=\"btn btn-flat waves-attach waves-effect\" type=\"button\" title=\"Ver Justificativa\">JUSTIFICATIVA</button>
+					<button onclick=\"viewCompl('" . $solic->justificativa . "');\" class=\"btn btn-flat waves-attach waves-effect\" type=\"button\" title=\"Ver Justificativa\">JUSTIFICATIVA</button>
 				</td>
-				<td><span class=\"label {$label}\" style=\"font-size: 11pt !important; font-weight: bold;\">{$status}</span></td>
-			</tr>
-			";
+				<td><span class=\"label " . $label . "\" style=\"font-size: 11pt !important; font-weight: bold;\">" . $status . "</span></td>
+			</tr>";
 		}
 		$query->close();
 		return $retorno;
@@ -1450,33 +1428,32 @@ class Busca extends Conexao {
 		//declarando retorno
 		$retorno = "";
 
-		$query = $this->mysqli->query("SELECT itens.id, itens.id_item_processo, itens.nome_fornecedor, itens.cod_reduzido, itens.complemento_item, itens.vl_unitario, itens.qt_contrato, itens.qt_utilizado, itens.vl_utilizado, itens.qt_saldo, itens.vl_saldo FROM itens WHERE num_processo LIKE '%{$busca}%' AND cancelado = 0;");
+		$query = $this->mysqli->query("SELECT itens.id, itens.id_item_processo, itens.nome_fornecedor, itens.cod_reduzido, itens.complemento_item, replace(itens.vl_unitario, ',', '.') AS vl_unitario, itens.qt_contrato, itens.qt_utilizado, itens.vl_utilizado, itens.qt_saldo, itens.vl_saldo FROM itens WHERE num_processo LIKE '%{$busca}%' AND cancelado = 0;");
 
 		while ($item = $query->fetch_object()) {
 			//remove as aspas do complemento_item
 			$item->complemento_item = str_replace("\"", "", $item->complemento_item);
-			$item->vl_unitario = str_replace(",", ".", $item->vl_unitario);
 			$item->nome_fornecedor = utf8_encode($item->nome_fornecedor);
 			$item->complemento_item = utf8_encode($item->complemento_item);
 
 			$retorno .= "
 			<tr>
 				<td>
-					<a class=\"modal-close\" href=\"javascript:checkItemPedido({$item->id}, '{$item->vl_unitario}', {$item->qt_saldo});\"><span class=\"icon\">add<span></a>
+					<a class=\"modal-close\" href=\"javascript:checkItemPedido(" . $item->id . ", '" . $item->vl_unitario . "', " . $item->qt_saldo . ");\"><span class=\"icon\">add<span></a>
 				</td>
-				<td>{$item->nome_fornecedor}</td>
-				<td>{$item->cod_reduzido}</td>
-				<td><input type=\"number\" id=\"qtd{$item->id}\" min=\"1\" max=\"$item->qt_saldo\"></td>
+				<td>" . $item->nome_fornecedor . "</td>
+				<td>" . $item->cod_reduzido . "</td>
+				<td><input type=\"number\" id=\"qtd" . $item->id . "\" min=\"1\" max=\"" . $item->qt_saldo . "\"></td>
 				<td>
-					<a onclick=\"viewCompl('{$item->complemento_item}');\" class=\"btn btn-flat waves-attach waves-effect\" type=\"button\" title=\"Mais Detalhes\">complemento_item</a>
+					<a onclick=\"viewCompl('" . $item->complemento_item . "');\" class=\"btn btn-flat waves-attach waves-effect\" type=\"button\" title=\"Mais Detalhes\">complemento_item</a>
 				</td>
-				<td style=\"display: none;\">{$item->complemento_item}</td>
-				<td>{$item->vl_unitario}</td>
-				<td>{$item->qt_saldo}</td>
-				<td>{$item->qt_utilizado}</td>
-				<td>{$item->vl_saldo}</td>
-				<td>{$item->vl_utilizado}</td>
-				<td>{$item->qt_contrato}</td>
+				<td style=\"display: none;\">" . $item->complemento_item . "</td>
+				<td>" . $item->vl_unitario . "</td>
+				<td>" . $item->qt_saldo . "</td>
+				<td>" . $item->qt_utilizado . "</td>
+				<td>" . $item->vl_saldo . "</td>
+				<td>" . $item->vl_utilizado . "</td>
+				<td>" . $item->qt_contrato . "</td>
 			</tr>
 			";
 		}
@@ -1493,39 +1470,37 @@ class Busca extends Conexao {
 	 */
 	public function addItemPedido($id_item, $qtd): string{
 		//executando a query
-		$query = $this->mysqli->query("SELECT id, nome_fornecedor, num_licitacao, cod_reduzido, complemento_item, vl_unitario, qt_saldo, qt_contrato, qt_utilizado, vl_saldo, vl_contrato, vl_utilizado FROM itens WHERE id = {$id_item};");
+		$query = $this->mysqli->query("SELECT itens.id, itens.nome_fornecedor, itens.num_licitacao, itens.cod_reduzido, itens.complemento_item, replace(itens.vl_unitario, ',', '.') AS vl_unitario, itens.qt_saldo, itens.qt_contrato, itens.qt_utilizado, itens.vl_saldo, itens.vl_contrato, itens.vl_utilizado FROM itens WHERE itens.id = {$id_item};");
 		$item = $query->fetch_object();
 		$query->close();
 		$item->complemento_item = str_replace("\"", "", $item->complemento_item);
 		$item->complemento_item = utf8_encode($item->complemento_item);
 		$item->nome_fornecedor = utf8_encode($item->nome_fornecedor);
-		$item->vl_unitario = str_replace(",", ".", $item->vl_unitario);
 		$valor = $qtd * $item->vl_unitario;
 		$retorno = "
-		<tr id=\"row{$id_item}\">
-			<td><a class=\"modal-close\" href=\"javascript:removeTableRow($id_item, '$valor');\"><span class=\"icon\">delete</span></a></td>
-			<td>{$item->cod_reduzido}</td>
+		<tr id=\"row" . $id_item . "\">
+			<td><a class=\"modal-close\" href=\"javascript:removeTableRow(" . $id_item . ", '" . $valor . "');\"><span class=\"icon\">delete</span></a></td>
+			<td>" . $item->cod_reduzido . "</td>
 			<td>
-				<button onclick=\"viewCompl('{$item->complemento_item}');\" class=\"btn btn-flat waves-attach waves-effect\" type=\"button\" title=\"Ver Complemento do Item\">complemento_item</button>
+				<button onclick=\"viewCompl('" . $item->complemento_item . "');\" class=\"btn btn-flat waves-attach waves-effect\" type=\"button\" title=\"Ver Complemento do Item\">complemento_item</button>
 			</td>
-			<td>R$ {$item->vl_unitario}</td>
-			<td>{$item->nome_fornecedor}</td>
-			<td>{$item->num_licitacao}</td>
-			<td>{$qtd}</td>
-			<td>R$ {$valor}</td>
+			<td>R$ " . $item->vl_unitario . "</td>
+			<td>" . $item->nome_fornecedor . "</td>
+			<td>" . $item->num_licitacao . "</td>
+			<td>" . $qtd . "</td>
+			<td>R$ " . $valor . "</td>
 			<td>
-				<input class=\"classItens\" type=\"hidden\" name=\"id_item[]\" value=\"{$id_item}\">
-				<input type=\"hidden\" name=\"qtd_solicitada[]\" value=\"{$qtd}\">
-				<input type=\"hidden\" name=\"qtd_disponivel[]\" value=\"{$item->qt_saldo}\">
-				<input type=\"hidden\" name=\"qtd_contrato[]\" value=\"{$item->qt_contrato}\">
-				<input type=\"hidden\" name=\"qtd_utilizado[]\" value=\"{$item->qt_utilizado}\">
-				<input type=\"hidden\" name=\"vl_saldo[]\" value=\"{$item->vl_saldo}\">
-				<input type=\"hidden\" name=\"vl_contrato[]\" value=\"{$item->vl_contrato}\">
-				<input type=\"hidden\" name=\"vl_utilizado[]\" value=\"{$item->vl_utilizado}\">
-				<input type=\"hidden\" name=\"valor[]\" value=\"{$valor}\">
+				<input class=\"classItens\" type=\"hidden\" name=\"id_item[]\" value=\"" . $id_item . "\">
+				<input type=\"hidden\" name=\"qtd_solicitada[]\" value=\"" . $qtd . "\">
+				<input type=\"hidden\" name=\"qtd_disponivel[]\" value=\"" . $item->qt_saldo . "\">
+				<input type=\"hidden\" name=\"qtd_contrato[]\" value=\"" . $item->qt_contrato . "\">
+				<input type=\"hidden\" name=\"qtd_utilizado[]\" value=\"" . $item->qt_utilizado . "\">
+				<input type=\"hidden\" name=\"vl_saldo[]\" value=\"" . $item->vl_saldo . "\">
+				<input type=\"hidden\" name=\"vl_contrato[]\" value=\"" . $item->vl_contrato . "\">
+				<input type=\"hidden\" name=\"vl_utilizado[]\" value=\"" . $item->vl_utilizado . "\">
+				<input type=\"hidden\" name=\"valor[]\" value=\"" . $valor . "\">
 			</td>
-		</tr>
-		";
+		</tr>";
 		return $retorno;
 	}
 
@@ -1544,17 +1519,16 @@ class Busca extends Conexao {
 		while ($rascunho = $query->fetch_object()) {
 			$retorno .= "
 			<tr>
-				<td><span class=\"label\" style=\"font-size: 11pt;\">{$rascunho->status}</span></td>
-				<td>{$rascunho->ref_mes}</td>
-				<td>{$rascunho->data_pedido}</td>
-				<td>R$ {$rascunho->valor}</td>
+				<td><span class=\"label\" style=\"font-size: 11pt;\">" . $rascunho->status . "</span></td>
+				<td>" . $rascunho->ref_mes . "</td>
+				<td>" . $rascunho->data_pedido . "</td>
+				<td>R$ " . $rascunho->valor . "</td>
 				<td>
-					<button class=\"btn btn-default btn-sm\" style=\"text-transform: none !important;font-weight: bold;\" onclick=\"editaPedido({$rascunho->id});\" title=\"Editar\"><span class=\"icon\">create</span></button>
-					<button class=\"btn btn-default btn-sm\" style=\"text-transform: none !important;font-weight: bold;\" onclick=\"imprimir({$rascunho->id});\" title=\"Imprimir\"><span class=\"icon\">print</span></button>
-					<button class=\"btn btn-default btn-sm\" style=\"text-transform: none !important;font-weight: bold;\" onclick=\"deletePedido({$rascunho->id});\" title=\"Excluir\"><span class=\"icon\">delete</span></button>
+					<button class=\"btn btn-default btn-sm\" style=\"text-transform: none !important;font-weight: bold;\" onclick=\"editaPedido(" . $rascunho->id . ");\" title=\"Editar\"><span class=\"icon\">create</span></button>
+					<button class=\"btn btn-default btn-sm\" style=\"text-transform: none !important;font-weight: bold;\" onclick=\"imprimir(" . $rascunho->id . ");\" title=\"Imprimir\"><span class=\"icon\">print</span></button>
+					<button class=\"btn btn-default btn-sm\" style=\"text-transform: none !important;font-weight: bold;\" onclick=\"deletePedido(" . $rascunho->id . ");\" title=\"Excluir\"><span class=\"icon\">delete</span></button>
 				</td>
-			</tr>
-			";
+			</tr>";
 		}
 		$query->close();
 		return $retorno;
@@ -1587,37 +1561,35 @@ class Busca extends Conexao {
 	public function getConteudoPedido($id_pedido): string{
 		//declarando retorno
 		$retorno = "";
-		$query = $this->mysqli->query("SELECT itens.qt_contrato, itens.id AS id_itens, itens_pedido.qtd AS qtd_solicitada, itens_pedido.valor, itens.nome_fornecedor, itens.num_licitacao, itens.cod_reduzido, itens.complemento_item, itens.vl_unitario, itens.qt_saldo, itens.qt_contrato, itens.qt_utilizado, itens.vl_saldo, itens.vl_contrato, itens.vl_utilizado FROM itens_pedido, itens WHERE itens_pedido.id_pedido = {$id_pedido} AND itens_pedido.id_item = itens.id");
+		$query = $this->mysqli->query("SELECT itens.qt_contrato, itens.id AS id_itens, itens_pedido.qtd AS qtd_solicitada, itens_pedido.valor, itens.nome_fornecedor, itens.num_licitacao, itens.cod_reduzido, itens.complemento_item, replace(itens.vl_unitario, ',', '.') AS vl_unitario, itens.qt_saldo, itens.qt_contrato, itens.qt_utilizado, itens.vl_saldo, itens.vl_contrato, itens.vl_utilizado FROM itens_pedido, itens WHERE itens_pedido.id_pedido = {$id_pedido} AND itens_pedido.id_item = itens.id");
 		while ($item = $query->fetch_object()) {
 			$id_item = $item->id_itens;
 			$item->complemento_item = str_replace("\"", "", $item->complemento_item);
 			$item->complemento_item = utf8_encode($item->complemento_item);
-			$item->vl_unitario = str_replace(",", ".", $item->vl_unitario);
 			$retorno .= "
-			<tr id=\"row{$id_item}\">
-				<td><a class=\"modal-close\" href=\"javascript:removeTableRow($id_item, '$item->valor');\"><span class=\"icon\">delete</span></a></td>
-				<td>{$item->cod_reduzido}</td>
+			<tr id=\"row" . $id_item . "\">
+				<td><a class=\"modal-close\" href=\"javascript:removeTableRow(" . $id_item . ", '" . $item->valor . "');\"><span class=\"icon\">delete</span></a></td>
+				<td>" . $item->cod_reduzido . "</td>
 				<td>
-					<button onclick=\"viewCompl('{$item->complemento_item}');\" class=\"btn btn-flat waves-attach waves-effect\" type=\"button\" title=\"Ver Complemento do Item\">complemento_item</button>
+					<button onclick=\"viewCompl('" . $item->complemento_item . "');\" class=\"btn btn-flat waves-attach waves-effect\" type=\"button\" title=\"Ver Complemento do Item\">complemento_item</button>
 				</td>
-				<td>R$ {$item->vl_unitario}</td>
-				<td>{$item->nome_fornecedor}</td>
-				<td>{$item->num_licitacao}</td>
-				<td>{$item->qtd_solicitada}</td>
-				<td>R$ {$item->valor}</td>
+				<td>R$ " . $item->vl_unitario . "</td>
+				<td>" . $item->nome_fornecedor . "</td>
+				<td>" . $item->num_licitacao . "</td>
+				<td>" . $item->qtd_solicitada . "</td>
+				<td>R$ " . $item->valor . "</td>
 				<td>
-					<input type=\"hidden\" name=\"id_item[]\" value=\"{$id_item}\">
-					<input type=\"hidden\" name=\"qtd_solicitada[]\" value=\"{$item->qtd_solicitada}\">
-					<input type=\"hidden\" name=\"qtd_disponivel[]\" value=\"{$item->qt_saldo}\">
-					<input type=\"hidden\" name=\"qtd_contrato[]\" value=\"{$item->qt_contrato}\">
-					<input type=\"hidden\" name=\"qtd_utilizado[]\" value=\"{$item->qt_utilizado}\">
-					<input type=\"hidden\" name=\"vl_saldo[]\" value=\"{$item->vl_saldo}\">
-					<input type=\"hidden\" name=\"vl_contrato[]\" value=\"{$item->vl_contrato}\">
-					<input type=\"hidden\" name=\"vl_utilizado[]\" value=\"{$item->vl_utilizado}\">
-					<input type=\"hidden\" name=\"valor[]\" value=\"{$item->valor}\">
+					<input type=\"hidden\" name=\"id_item[]\" value=\"" . $id_item . "\">
+					<input type=\"hidden\" name=\"qtd_solicitada[]\" value=\"" . $item->qtd_solicitada . "\">
+					<input type=\"hidden\" name=\"qtd_disponivel[]\" value=\"" . $item->qt_saldo . "\">
+					<input type=\"hidden\" name=\"qtd_contrato[]\" value=\"" . $item->qt_contrato . "\">
+					<input type=\"hidden\" name=\"qtd_utilizado[]\" value=\"" . $item->qt_utilizado . "\">
+					<input type=\"hidden\" name=\"vl_saldo[]\" value=\"" . $item->vl_saldo . "\">
+					<input type=\"hidden\" name=\"vl_contrato[]\" value=\"" . $item->vl_contrato . "\">
+					<input type=\"hidden\" name=\"vl_utilizado[]\" value=\"" . $item->vl_utilizado . "\">
+					<input type=\"hidden\" name=\"valor[]\" value=\"" . $item->valor . "\">
 				</td>
-			</tr>
-			";
+			</tr>";
 		}
 		$query->close();
 		return $retorno;
@@ -1654,17 +1626,16 @@ class Busca extends Conexao {
 			$pedido->prioridade = ucfirst($pedido->prioridade);
 			$retorno .= "
 			<tr>
-				<td>{$pedido->ref_mes}</td>
-				<td>{$pedido->data_pedido}</td>
-				<td>{$pedido->prioridade}</td>
-				<td><span class=\"label\" style=\"font-size: 11pt;\">{$pedido->status}</span></td>
-				<td>R$ {$pedido->valor}</td>
+				<td>" . $pedido->ref_mes . "</td>
+				<td>" . $pedido->data_pedido . "</td>
+				<td>" . $pedido->prioridade . "</td>
+				<td><span class=\"label\" style=\"font-size: 11pt;\">" . $pedido->status . "</span></td>
+				<td>R$ " . $pedido->valor . "</td>
 				<td>
-					<button class=\"btn btn-default btn-sm\" style=\"text-transform: none !important;font-weight: bold;\" onclick=\"solicAltPed($pedido->id);\" title=\"Solicitar Alteração\"><span class=\"icon\">build</span></button>
-					<button class=\"btn btn-default btn-sm\" style=\"text-transform: none !important;font-weight: bold;\" onclick=\"imprimir({$pedido->id});\" title=\"Imprimir\"><span class=\"icon\">print</span></button>
+					<button class=\"btn btn-default btn-sm\" style=\"text-transform: none !important;font-weight: bold;\" onclick=\"solicAltPed(" . $pedido->id . ");\" title=\"Solicitar Alteração\"><span class=\"icon\">build</span></button>
+					<button class=\"btn btn-default btn-sm\" style=\"text-transform: none !important;font-weight: bold;\" onclick=\"imprimir(" . $pedido->id . ");\" title=\"Imprimir\"><span class=\"icon\">print</span></button>
 				</td>
-			</tr>
-			";
+			</tr>";
 		}
 		$query->close();
 		return $retorno;
@@ -1678,13 +1649,12 @@ class Busca extends Conexao {
 	 */
 	public function getProcessos($tela): string{
 		$retorno = "";
-		$sql = "SELECT DISTINCT num_processo FROM itens;";
+		$sql = "SELECT DISTINCT itens.num_processo FROM itens ORDER BY itens.id DESC;";
 		$onclick = "pesquisarProcesso";
 		$title = "Pesquisar Processo";
 		$icon = "search";
 		if ($tela == "recepcao") {
-			$sql = "SELECT DISTINCT itens.num_processo FROM itens WHERE itens.num_processo NOT IN (SELECT DISTINCT processos.num_processo FROM processos);
-";
+			$sql = "SELECT DISTINCT itens.num_processo FROM itens WHERE itens.num_processo NOT IN (SELECT DISTINCT processos.num_processo FROM processos) ORDER BY itens.id DESC;";
 			$onclick = "addProcesso";
 			$title = "Adicionar Processo";
 			$icon = "add";
@@ -1693,12 +1663,11 @@ class Busca extends Conexao {
 		while ($processo = $query->fetch_object()) {
 			$retorno .= "
 					<tr>
-						<td>{$processo->num_processo}</td>
+						<td>" . $processo->num_processo . "</td>
 						<td>
-							<button title=\"{$title}\" onclick=\"{$onclick}('{$processo->num_processo}', 0)\" style=\"text-transform: none !important;font-weight: bold;\" class=\"btn btn-default btn-sm\"><span class=\"icon\">{$icon}</span></button>
+							<button title=\"" . $title . "\" onclick=\"" . $onclick . "('" . $processo->num_processo . "', 0)\" style=\"text-transform: none !important;font-weight: bold;\" class=\"btn btn-default btn-sm\"><span class=\"icon\">" . $icon . "</span></button>
 						</td>
-					</tr>
-				";
+					</tr>";
 		}
 		return $retorno;
 	}
