@@ -468,11 +468,6 @@ function listSolicAltPedidos() {
 		});
 	}
 }
-$('#listProcessos').on('shown.bs.modal', function(event) {
-	if (!$.fn.DataTable.isDataTable('#tableListProcessos')) {
-		iniDataTable('#tableListProcessos');
-	}
-});
 
 function listProcessos(permissao) {
 	if (!$.fn.DataTable.isDataTable('#tableListProcessos')) {
@@ -480,19 +475,20 @@ function listProcessos(permissao) {
 			$.post('../php/busca.php', {
 				users: 1,
 				form: 'listProcessos'
-			}, function(resposta) {
-				document.getElementById('tbodyListProcessos').innerHTML = resposta;
+			}).done(function(resposta) {
+				$('#tbodyListProcessos').html(resposta);
+				iniDataTable('#tableListProcessos');
 			});
 		} else if (permissao == 'admin') {
 			$.post('../php/busca.php', {
 				admin: 1,
 				form: 'listProcessos'
-			}, function(resposta) {
-				document.getElementById('tbodyListProcessos').innerHTML = resposta;
+			}).done(function(resposta) {
+				$('tbodyListProcessos').html(resposta);
+				iniDataTable('#tableListProcessos');
 			});
 		}
 	}
-	sleep(500);
 	$('#listProcessos').modal('show');
 }
 
