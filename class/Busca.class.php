@@ -29,7 +29,7 @@ class Busca extends Conexao {
 	 *	@access public
 	 *	@return string
 	 */
-	public function getRelatorioPedidos($id_setor, $prioridade, $status, $mes): string{
+	public function getRelatorioPedidos(int $id_setor, int $prioridade, int $status, int $mes): string{
 		$retorno = "";
 		$ano = date('Y');
 		$where_status = "AND pedido.status = " . $status;
@@ -115,7 +115,7 @@ class Busca extends Conexao {
 	 *	@param $id_setor id do setor
 	 *	@return string
 	 */
-	public function getPedidosAnalise($id_setor): string{
+	public function getPedidosAnalise(int $id_setor): string{
 		$retorno = "";
 		$query = $this->mysqli->query("SELECT pedido.valor FROM pedido WHERE pedido.id_setor = {$id_setor} AND pedido.status = 2;");
 		if ($query->num_rows > 0) {
@@ -155,7 +155,7 @@ class Busca extends Conexao {
 	 *	@param $id_pedido Id do pedido.
 	 *	@return string
 	 */
-	public function verEmpenho($id_pedido): string{
+	public function verEmpenho(int $id_pedido): string{
 		$retorno = '';
 		$query = $this->mysqli->query("SELECT empenho FROM pedido_empenho WHERE id_pedido = {$id_pedido};");
 		if ($query->num_rows < 1) {
@@ -175,7 +175,7 @@ class Busca extends Conexao {
 	 *	@param $id_setor id do setor
 	 *	@return string
 	 */
-	public function getLancamentos($id_setor): string{
+	public function getLancamentos(int $id_setor): string{
 		$retorno = "";
 		$where = "";
 		if ($id_setor != 2) {
@@ -256,7 +256,7 @@ class Busca extends Conexao {
 	 *	@access public
 	 *	@return string
 	 */
-	public function getRelatorioProcessos($tipo): string{
+	public function getRelatorioProcessos(int $tipo): string{
 		$retorno = "";
 		// tratando tipo == 0 primeiro, buscando TODOS os processos
 		$where = "";
@@ -419,7 +419,7 @@ class Busca extends Conexao {
 	 *	@param $cont Número de radioBtn por linha.
 	 *	@return string
 	 */
-	public function getStatus($cont): string{
+	public function getStatus(int $cont): string{
 		$retorno = "<tr>";
 		$i = 0;
 		$query = $this->mysqli->query("SELECT status.id, status.nome FROM status WHERE status.id <> 1;");
@@ -476,7 +476,7 @@ class Busca extends Conexao {
 	 *   @access public
 	 *   @return string
 	 */
-	public function getInfoProcesso($id_processo): string{
+	public function getInfoProcesso(int $id_processo): string{
 		$query = $this->mysqli->query("SELECT processos.num_processo, processos.tipo, processos.estante, processos.prateleira, processos.entrada, processos.saida, processos.responsavel, processos.retorno, processos.obs FROM processos WHERE processos.id = {$id_processo};");
 		$obj = $query->fetch_object();
 		$query->close();
@@ -540,7 +540,7 @@ class Busca extends Conexao {
 	 * @return string
 	 */
 
-	public function setInputsArquivo($qtd): string{
+	public function setInputsArquivo(int $qtd): string{
 		$qtd++;
 		return "
 		<div id=\"file-" . $qtd . "\" class=\"tile\">
@@ -569,7 +569,7 @@ class Busca extends Conexao {
 	 * @access public
 	 * @return string
 	 */
-	public function getInfoNoticia($id): string{
+	public function getInfoNoticia(int $id): string{
 		//declarando retorno
 		$retorno = "";
 		$query = $this->mysqli->query("SELECT postagem FROM postagens WHERE id = {$id};");
@@ -613,8 +613,7 @@ class Busca extends Conexao {
 	 * Função para mostrar uma tabela com todas as publicações de certa página
 	 *
 	 * @access public
-	 * @param $id_setor -> filtra as notícias por setor
-	 *        $tabela -> filtra por nome da tabela
+	 * @param $tabela -> filtra por nome da tabela
 	 * @return string
 	 */
 	public function getPostagens($tabela): string{
@@ -640,7 +639,7 @@ class Busca extends Conexao {
 	 * @param $slide (1 ou 2)-> o primeiro mostra as últimas notícias e o segundo aleatórias
 	 * @return string
 	 */
-	public function getSlide($slide): string{
+	public function getSlide(int $slide): string{
 		//declarando var order
 		$order = "";
 		if ($slide == 1) {
@@ -707,7 +706,7 @@ class Busca extends Conexao {
 	 * @access public
 	 * @return string
 	 */
-	public function pesquisar($busca): string{
+	public function pesquisar(string $busca): string{
 		//declarando retorno
 		$retorno = "";
 		$busca = htmlentities($busca);
@@ -1301,7 +1300,7 @@ class Busca extends Conexao {
 	 * @return string
 	 *
 	 */
-	public function getInfoPedidoAnalise($id_pedido, $id_setor): string{
+	public function getInfoPedidoAnalise(int $id_pedido, int $id_setor): string{
 		$query = $this->mysqli->query("SELECT saldo_setor.saldo, pedido.prioridade, pedido.status, pedido.valor, pedido.obs FROM saldo_setor, pedido WHERE saldo_setor.id_setor = {$id_setor} AND pedido.id = {$id_pedido};");
 		$pedido = $query->fetch_object();
 		$query->close();
@@ -1319,7 +1318,7 @@ class Busca extends Conexao {
 	 * 	@return string
 	 */
 
-	public function getSolicAltPedidos($id_setor): string{
+	public function getSolicAltPedidos(int $id_setor): string{
 		$retorno = "";
 		$query = $this->mysqli->query("SELECT solic_alt_pedido.id_pedido, DATE_FORMAT(solic_alt_pedido.data_solicitacao, '%d/%m/%Y') AS data_solicitacao, DATE_FORMAT(solic_alt_pedido.data_analise, '%d/%m/%Y') AS data_analise, solic_alt_pedido.justificativa, solic_alt_pedido.status FROM solic_alt_pedido WHERE solic_alt_pedido.id_setor = {$id_setor} ORDER BY id DESC;");
 		$status = $label = "";
@@ -1383,7 +1382,7 @@ class Busca extends Conexao {
 	 * 	@access public
 	 * 	@return string
 	 */
-	public function getSolicAdiSetor($id_setor): string{
+	public function getSolicAdiSetor(int $id_setor): string{
 		$retorno = "";
 		$query = $this->mysqli->query("SELECT saldos_adiantados.id, DATE_FORMAT(saldos_adiantados.data_solicitacao, '%d/%m/%Y') AS data_solicitacao, DATE_FORMAT(saldos_adiantados.data_analise, '%d/%m/%Y') AS data_analise, saldos_adiantados.valor_adiantado, saldos_adiantados.justificativa, saldos_adiantados.status FROM saldos_adiantados WHERE saldos_adiantados.id_setor = {$id_setor} ORDER BY saldos_adiantados.id DESC;");
 		$label = $status = "";
@@ -1424,7 +1423,7 @@ class Busca extends Conexao {
 	 * @access public
 	 * @return string
 	 */
-	public function getConteudoProcesso($busca): string{
+	public function getConteudoProcesso(string $busca): string{
 		//declarando retorno
 		$retorno = "";
 
@@ -1468,7 +1467,7 @@ class Busca extends Conexao {
 	 * @access public
 	 * @return string
 	 */
-	public function addItemPedido($id_item, $qtd): string{
+	public function addItemPedido(int $id_item, int $qtd): string{
 		//executando a query
 		$query = $this->mysqli->query("SELECT itens.id, itens.nome_fornecedor, itens.num_licitacao, itens.cod_reduzido, itens.complemento_item, replace(itens.vl_unitario, ',', '.') AS vl_unitario, itens.qt_saldo, itens.qt_contrato, itens.qt_utilizado, itens.vl_saldo, itens.vl_contrato, itens.vl_utilizado FROM itens WHERE itens.id = {$id_item};");
 		$item = $query->fetch_object();
@@ -1511,7 +1510,7 @@ class Busca extends Conexao {
 	 * @access public
 	 * @return string
 	 */
-	public function getRascunhos($id_setor): string{
+	public function getRascunhos(int $id_setor): string{
 		//declarando retorno
 		$retorno = "";
 		$query = $this->mysqli->query("SELECT pedido.id, DATE_FORMAT(pedido.data_pedido, '%d/%m/%Y') AS data_pedido, mes.sigla_mes AS ref_mes, pedido.valor, status.nome AS status FROM pedido, mes, status WHERE pedido.id_setor = {$id_setor} AND pedido.alteracao = 1 AND mes.id = pedido.ref_mes AND status.id = pedido.status ORDER BY pedido.id DESC;");
@@ -1540,7 +1539,7 @@ class Busca extends Conexao {
 	 *	@access public
 	 *	@return string
 	 */
-	public function getSaldo($id_setor): string{
+	public function getSaldo(int $id_setor): string{
 		$saldo = "0.000";
 		$query = $this->mysqli->query("SELECT saldo_setor.saldo FROM saldo_setor WHERE saldo_setor.id_setor = {$id_setor};");
 		if ($query->num_rows < 1) {
@@ -1603,7 +1602,7 @@ class Busca extends Conexao {
 	 * @return string
 	 *
 	 */
-	public function getPopulaRascunho($id_pedido, $id_setor): string{
+	public function getPopulaRascunho(int $id_pedido, int $id_setor): string{
 		$query = $this->mysqli->query("SELECT saldo_setor.saldo, pedido.valor, pedido.obs FROM saldo_setor, pedido WHERE pedido.id = {$id_pedido} AND saldo_setor.id_setor = {$id_setor};");
 		$pedido = $query->fetch_object();
 		$query->close();
@@ -1618,7 +1617,7 @@ class Busca extends Conexao {
 	 * @return string
 	 *
 	 */
-	public function getMeusPedidos($id_setor): string{
+	public function getMeusPedidos(int $id_setor): string{
 		//declarando retorno
 		$retorno = "";
 		$query = $this->mysqli->query("SELECT pedido.id, DATE_FORMAT(pedido.data_pedido, '%d/%m/%Y') AS data_pedido, mes.sigla_mes AS ref_mes, prioridade.nome AS prioridade, status.nome AS status, pedido.valor FROM pedido, mes, prioridade, status WHERE prioridade.id = pedido.prioridade AND status.id = pedido.status AND pedido.id_setor = {$id_setor} AND pedido.alteracao = 0 AND mes.id = pedido.ref_mes ORDER BY pedido.id DESC;");

@@ -46,7 +46,7 @@ class Login extends Conexao {
 	 * @return string
 	 *
 	 */
-	public function login($login, $senha, $retorno = 0): string{
+	final public function login(string $login, string $senha, $retorno = 0): string{
 		//escapando caracteres especiais para evitar SQL Injections
 		$login = $this->mysqli->real_escape_string($login);
 		//fazendo a consulta

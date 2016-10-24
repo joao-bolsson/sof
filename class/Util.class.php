@@ -39,7 +39,7 @@ class Util extends Conexao {
 	 *	@access public
 	 *	@return array
 	 */
-	public function preparaImportacao($tmp_name) {
+	final public function preparaImportacao($tmp_name) {
 		$insert = "INSERT INTO itens VALUES";
 		$values = "";
 		$row = 1;
@@ -73,12 +73,45 @@ class Util extends Conexao {
 		return $array_sql;
 	}
 	/**
+	 *	Função para retornar os fornecedores que estão no arquivo (SELECT DISTINCT)
+	 *
+	 *	@access public
+	 *	@return array
+	 */
+	public function getFornecedores($tmp_name): array{
+		$array_fornecedores = array();
+		$i = 0;
+		$colFornecedor = -1;
+		$distinct = "";
+		if (($handle = fopen($tmp_name, "r")) !== FALSE) {
+			while (($data = fgetcsv($handle, 1000, "	")) !== FALSE) {
+				if ($colFornecedor == -1) {
+					$count = count($data);
+					for ($j = 0; $j < $count; $j++) {
+						if ($data[$j] == 'NOME_FORNECEDOR') {
+							$colFornecedor = $j;
+							$j = $count;
+						}
+					}
+				} else {
+					if ($distinct != $data[$colFornecedor]) {
+						$array_fornecedores[$i] = $this->mysqli->real_escape_string($data[$colFornecedor]);
+						$distinct = $data[$colFornecedor];
+						$i++;
+					}
+				}
+			}
+			fclose($handle);
+		}
+		return $array_fornecedores;
+	}
+	/**
 	 *	Função que envia um email
 	 *
 	 *	@access public
 	 *	@return bool
 	 */
-	public function preparaEmail($from, $nome_from, $para, $nome_para, $assunto, $altBody, $body) {
+	final public function preparaEmail(string $from, string $nome_from, string $para, string $nome_para, string $assunto, string $altBody, string $body) {
 		$this->mail->setFrom($from, $nome_from);
 		$this->mail->addAddress($para, $nome_para);
 		$this->mail->addReplyTo($from, $nome_from);
@@ -92,7 +125,7 @@ class Util extends Conexao {
 	 *  @access public
 	 *  @return string
 	 */
-	public function criaSenha() {
+	final public function criaSenha(): string{
 		// declarando retorno
 		$retorno = "";
 
@@ -109,6 +142,21 @@ class Util extends Conexao {
 			$rand = mt_rand(0, count($caracteres) - 1);
 			$retorno .= $caracteres[$rand];
 		}
+		return $retorno;
+	}
+	/**
+	 *	Função para formatar uma data d/m/Y em Y-m-d
+	 *
+	 *	@access public
+	 *	@param $data Data a ser formatada
+	 *	@return The date in format Y-m-d
+	 */
+	public function dateFormat(string $data): string{
+		$array_data = explode('/', $data);
+
+		$retorno = "";
+		// Y-m-d
+		$retorno .= $array_data[2] . '-' . $array_data[1] . '-' . $array_data[0];
 		return $retorno;
 	}
 }

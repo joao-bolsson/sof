@@ -119,7 +119,7 @@ if (!isset($_SESSION["id_setor"]) || $_SESSION["id_setor"] == 0) {
                 <a class="waves-attach" href="<?php echo HREF_CONSULTAS_PE ?>">PÚBLICO EXTERNO</a>
               </li>
               <li>
-                <a class="waves-attach" href="<?php echo HREF_MODAL_CONSTRUINDO ?>">PÚBLICO INTERNO</a>
+                <a class="waves-attach" href="consultaspi.php">PÚBLICO INTERNO</a>
               </li>
             </ul>
           </li>
@@ -218,7 +218,7 @@ if (!isset($_SESSION["id_setor"]) || $_SESSION["id_setor"] == 0) {
                         <a class="waves-attach" href="<?php echo HREF_CONSULTAS_PE ?>">Público Externo</a>
                       </li>
                       <li>
-                        <a class="waves-attach" href="<?php echo HREF_MODAL_CONSTRUINDO ?>">Público Interno</a>
+                        <a class="waves-attach" href="consultaspi.php">Público Interno</a>
                       </li>
                     </ul>
                   </div>
