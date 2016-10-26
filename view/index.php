@@ -4,8 +4,6 @@ session_start();
 ini_set('display_erros', true);
 error_reporting(E_ALL);
 
-require_once '../defines.php';
-
 if (!isset($_COOKIE['slide1']) || !isset($_COOKIE['slide2'])) {
 	header("Location: ../");
 }
@@ -15,7 +13,7 @@ $btnLogin = true;
 $btnAdmin = false;
 //define se o botão sair deve ou não existir
 $btnSair = false;
-$hrefSolicitacoes = HREF_MODAL_LOGIN;
+$hrefSolicitacoes = "javascript:abreModal('#login');";
 if (!isset($_SESSION["id_setor"]) || $_SESSION["id_setor"] == 0) {
 	$_SESSION["id_setor"] = 0;
 } else {
@@ -23,7 +21,7 @@ if (!isset($_SESSION["id_setor"]) || $_SESSION["id_setor"] == 0) {
 	if ($_SESSION["id_setor"] == 2) {
 		$btnAdmin = true;
 	}
-	$hrefSolicitacoes = HREF_SOLICITACOES;
+	$hrefSolicitacoes = "solicitacoes.php";
 	$btnLogin = false;
 	$btnSair = true;
 }
@@ -58,7 +56,7 @@ if (!isset($_SESSION["id_setor"]) || $_SESSION["id_setor"] == 0) {
         </a>
       </li>
       <li>
-        <a class="btn btn-flat waves-attach waves-light" href="<?php echo HREF_MODAL_PESQUISA ?>">
+        <a class="btn btn-flat waves-attach waves-light" href="javascript:abreModal('#modalPesquisar');">
           <span class="text-white"><span class="icon icon-lg">search</span>PESQUISAR</span>
         </a>
       </li>
@@ -94,13 +92,13 @@ if (!isset($_SESSION["id_setor"]) || $_SESSION["id_setor"] == 0) {
             <a class="collaosed waves-attach" data-toggle="collapse" href="#osetor"><span class="text-black"><span class="icon">account_balance</span>O SETOR</a>
             <ul class="menu-collapse collapse" id="osetor">
               <li>
-                <a class="waves-attach" href="<?php echo HREF_SOF ?>">SOF</a>
+                <a class="waves-attach" href="sof.php">SOF</a>
               </li>
               <li>
-                <a class="waves-attach" href="<?php echo HREF_RECEPCAO ?>">Recepção</a>
+                <a class="waves-attach" href="recepcao.php">Recepção</a>
               </li>
               <li>
-                <a class="waves-attach" href="<?php echo HREF_UNIDADES ?>">Unidades</a>
+                <a class="waves-attach" href="unidades.php">Unidades</a>
               </li>
             </ul>
           </li>
@@ -108,7 +106,7 @@ if (!isset($_SESSION["id_setor"]) || $_SESSION["id_setor"] == 0) {
             <a class="collapsed waves-attach" data-toggle="collapse" href="#servicossof"><span class="text-black"><span class="icon">payment</span>SERVIÇOS DO SOF</a>
             <ul class="menu-collapse collapse" id="servicossof">
               <li>
-                <a class="waves-attach" href="<?php echo $hrefSolicitacoes ?>">SOLICITAÇÕES</a>
+                <a class="waves-attach" href="<?=$hrefSolicitacoes?>">SOLICITAÇÕES</a>
               </li>
             </ul>
           </li>
@@ -116,7 +114,7 @@ if (!isset($_SESSION["id_setor"]) || $_SESSION["id_setor"] == 0) {
             <a class="collapsed waves-attach" data-toggle="collapse" href="#mconsultas"><span class="text-black"><span class="icon">build</span>CONSULTAS</a>
             <ul class="menu-collapse collapse" id="mconsultas">
               <li>
-                <a class="waves-attach" href="<?php echo HREF_CONSULTAS_PE ?>">PÚBLICO EXTERNO</a>
+                <a class="waves-attach" href="consultaspe.php">PÚBLICO EXTERNO</a>
               </li>
               <li>
                 <a class="waves-attach" href="consultaspi.php">PÚBLICO INTERNO</a>
@@ -124,41 +122,41 @@ if (!isset($_SESSION["id_setor"]) || $_SESSION["id_setor"] == 0) {
             </ul>
           </li>
           <li>
-            <a class="waves-attach waves-light" href="<?php echo HREF_RELATORIOS ?>"><span class="text-black"><span class="icon">folder</span>RELATÓRIOS</span></a>
+            <a class="waves-attach waves-light" href="relatorios.php"><span class="text-black"><span class="icon">folder</span>RELATÓRIOS</span></a>
           </li>
           <li>
             <a class="collapsed waves-attach" data-toggle="collapse" href="#mlinks"><span class="text-black"><span class="icon">near_me</span>LINKS ÚTEIS</a>
             <ul class="menu-collapse collapse" id="mlinks">
               <li>
-                <a class="waves-attach" href="<?php echo LINKS_EXTERNOS ?>">LINKS EXTERNOS</a>
+                <a class="waves-attach" href="linksexternos.php">LINKS EXTERNOS</a>
               </li>
               <li>
-                <a class="waves-attach" href="<?php echo LINKS_INTERNOS ?>">LINKS INTERNOS</a>
+                <a class="waves-attach" href="linksinternos.php">LINKS INTERNOS</a>
               </li>
               <li>
-                <a class="waves-attach" href="<?php echo HREF_TUTORIAIS ?>">POPs E TUTORIAIS</a>
+                <a class="waves-attach" href="tutoriais.php">POPs E TUTORIAIS</a>
               </li>
             </ul>
           </li>
           <li>
-            <a class="waves-attach waves-light" href="<?php echo HREF_NOTICIAS ?>"><span class="text-black"><span class="icon">event</span>NOTÍCIAS</span></a>
+            <a class="waves-attach waves-light" href="noticias.php"><span class="text-black"><span class="icon">event</span>NOTÍCIAS</span></a>
           </li>
           <li>
             <a class="collapsed waves-attach" data-toggle="collapse" href="#mencontros"><span class="text-black"><span class="icon">place</span>ENCONTROS</a>
             <ul class="menu-collapse collapse" id="mencontros">
               <li>
-                <a class="waves-attach" href="<?php echo HREF_BOAS_PRATICAS ?>">BOAS PRÁTICAS</a>
+                <a class="waves-attach" href="boaspraticas.php">BOAS PRÁTICAS</a>
               </li>
               <li>
-                <a class="waves-attach" href="<?php echo HREF_COMEMORACOES ?>">COMEMORAÇÕES</a>
+                <a class="waves-attach" href="comemoracoes.php">COMEMORAÇÕES</a>
               </li>
               <li>
-                <a class="waves-attach" href="<?php echo HREF_DINAMICAS ?>">DINÂMICAS DE GRUPO</a>
+                <a class="waves-attach" href="dinamicas.php">DINÂMICAS DE GRUPO</a>
               </li>
             </ul>
           </li>
           <li>
-            <a class="waves-attach waves-light"  href="<?php echo HREF_FALE_CONOSCO ?>"><span class="text-black"><span class="icon">chat</span>CONTATO</span></a>
+            <a class="waves-attach waves-light"  href="faleconosco.php"><span class="text-black"><span class="icon">chat</span>CONTATO</span></a>
           </li>
         </ul>
       </div>
@@ -189,13 +187,13 @@ if (!isset($_SESSION["id_setor"]) || $_SESSION["id_setor"] == 0) {
       								<a class="waves-attach" data-toggle="dropdown"><span class="text-white"><span class="icon">store_mall_directory</span>O SETOR</span><span class="icon margin-left-sm">keyboard_arrow_down</span></a>
       								<ul class="dropdown-menu nav">
       									<li>
-      										<a class="waves-attach" href="<?php echo HREF_SOF ?>">SOF</a>
+      										<a class="waves-attach" href="sof.php">SOF</a>
       									</li>
       									<li>
-      										<a class="waves-attach" href="<?php echo HREF_RECEPCAO ?>">Recepção</a>
+      										<a class="waves-attach" href="recepcao.php">Recepção</a>
       									</li>
       									<li>
-      										<a class="waves-attach" href="<?php echo HREF_UNIDADES ?>">Unidades</a>
+      										<a class="waves-attach" href="unidades.php">Unidades</a>
       									</li>
       								</ul>
       							</div>
@@ -215,7 +213,7 @@ if (!isset($_SESSION["id_setor"]) || $_SESSION["id_setor"] == 0) {
                     <a class="waves-attach" data-toggle="dropdown"><span class="text-white"><span class="icon">build</span>CONSULTAS</span><span class="icon margin-left-sm">keyboard_arrow_down</span></a>
                     <ul class="dropdown-menu nav">
                       <li>
-                        <a class="waves-attach" href="<?php echo HREF_CONSULTAS_PE ?>">Público Externo</a>
+                        <a class="waves-attach" href="consultaspe.php">Público Externo</a>
                       </li>
                       <li>
                         <a class="waves-attach" href="consultaspi.php">Público Interno</a>
@@ -224,45 +222,45 @@ if (!isset($_SESSION["id_setor"]) || $_SESSION["id_setor"] == 0) {
                   </div>
         				</li>
                 <li>
-        					<a class="waves-attach waves-light" href="<?php echo HREF_RELATORIOS ?>"><span class="text-white"><span class="icon">folder</span>RELATÓRIOS</span></a>
+        					<a class="waves-attach waves-light" href="relatorios.php"><span class="text-white"><span class="icon">folder</span>RELATÓRIOS</span></a>
         				</li>
                 <li>
                   <div class="dropdown dropdown-inline">
                     <a class="waves-attach" data-toggle="dropdown"><span class="text-white"><span class="icon">near_me</span>LINKS ÚTEIS</span><span class="icon margin-left-sm">keyboard_arrow_down</span></a>
                     <ul class="dropdown-menu nav">
                       <li>
-                        <a class="waves-attach" href="<?php echo HREF_LINKS_EXTERNOS ?>">Links Externos</a>
+                        <a class="waves-attach" href="linksexternos.php">Links Externos</a>
                       </li>
                       <li>
-                        <a class="waves-attach" href="<?php echo HREF_LINKS_INTERNOS ?>">Links Internos</a>
+                        <a class="waves-attach" href="linksinternos.php">Links Internos</a>
                       </li>
                       <li>
-                        <a class="waves-attach" href="<?php echo HREF_TUTORIAIS ?>">POPs e Tutoriais</a>
+                        <a class="waves-attach" href="tutoriais.php">POPs e Tutoriais</a>
                       </li>
                     </ul>
                   </div>
         				</li>
                 <li>
-        					<a class="waves-attach waves-light" href="<?php echo HREF_NOTICIAS ?>"><span class="text-white"><span class="icon">event</span>NOTÍCIAS</span></a>
+        					<a class="waves-attach waves-light" href="noticias.php"><span class="text-white"><span class="icon">event</span>NOTÍCIAS</span></a>
         				</li>
                 <li>
                   <div class="dropdown dropdown-inline">
                     <a class="waves-attach" data-toggle="dropdown"><span class="text-white"><span class="icon">place</span>ENCONTROS</span><span class="icon margin-left-sm">keyboard_arrow_down</span></a>
                     <ul class="dropdown-menu nav">
                       <li>
-                        <a class="waves-attach" href="<?php echo HREF_BOAS_PRATICAS ?>">Boas Práticas</a>
+                        <a class="waves-attach" href="boaspraticas.php">Boas Práticas</a>
                       </li>
                       <li>
-                        <a class="waves-attach" href="<?php echo HREF_COMEMORACOES ?>">Comemorações</a>
+                        <a class="waves-attach" href="comemoracoes.php">Comemorações</a>
                       </li>
                       <li>
-                        <a class="waves-attach" href="<?php echo HREF_DINAMICAS ?>">Dinâmicas de grupos</a>
+                        <a class="waves-attach" href="dinamicas.php">Dinâmicas de grupos</a>
                       </li>
                     </ul>
                   </div>
         				</li>
                 <li>
-        					<a class="waves-attach waves-light"  href="<?php echo HREF_FALE_CONOSCO ?>"><span class="text-white"><span class="icon">chat</span>CONTATO</span></a>
+        					<a class="waves-attach waves-light"  href="faleconosco.php"><span class="text-white"><span class="icon">chat</span>CONTATO</span></a>
         				</li>
 							</ul>
 						</nav>

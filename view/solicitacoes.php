@@ -3,7 +3,6 @@ session_start();
 ini_set('display_erros', true);
 error_reporting(E_ALL);
 
-require_once '../defines.php';
 if (!isset($_SESSION["id"])) {
 	header("Location: ../");
 }
