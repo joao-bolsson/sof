@@ -195,7 +195,10 @@ $obj_Busca = new Busca();
         <a class="waves-attach" data-toggle="dropdown"><span class="text-white"><span class="icon">payments</span>SERVIÇOS SOF</span><span class="icon margin-left-sm">keyboard_arrow_down</span></a>
         <ul class="dropdown-menu nav">
           <li>
-            <a class="waves-attach" href="<?=$hrefSolicitacoes?>">Solicitações</a>
+            <a class="waves-attach" href="<?=$hrefSolicitacoes?>">Solicitações de Empenho</a>
+          </li>
+          <li>
+            <a class="waves-attach" href="consultaspi.php">Solicitações Gerais</a>
           </li>
         </ul>
       </div>
@@ -205,11 +208,8 @@ $obj_Busca = new Busca();
         <a class="waves-attach" data-toggle="dropdown"><span class="text-white"><span class="icon">build</span>CONSULTAS</span><span class="icon margin-left-sm">keyboard_arrow_down</span></a>
         <ul class="dropdown-menu nav">
           <li>
-            <a class="waves-attach" href="consultaspe.php">Público Externo</a>
-          </li>
-          <li>
-            <a class="waves-attach" href="consultaspi.php">Público Interno</a>
-          </li>
+                        <a class="waves-attach" href="consultaspe.php">Público Externo</a>
+                      </li>
         </ul>
       </div>
     </li>

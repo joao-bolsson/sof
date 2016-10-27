@@ -104,7 +104,10 @@ if (isset($_SESSION["id_boaspraticas"])) {
           <a class="collapsed waves-attach" data-toggle="collapse" href="#servicossof"><span class="text-black"><span class="icon">payment</span>SERVIÇOS DO SOF</a>
           <ul class="menu-collapse collapse" id="servicossof">
             <li>
-              <a class="waves-attach" href="<?=$hrefSolicitacoes?>">SOLICITAÇÕES</a>
+              <a class="waves-attach" href="<?=$hrefSolicitacoes?>">SOLICITAÇÕES DE EMPENHO</a>
+            </li>
+            <li>
+              <a class="waves-attach" href="consultaspi.php">SOLICITAÇÕES GERAIS</a>
             </li>
           </ul>
         </li>
@@ -113,9 +116,6 @@ if (isset($_SESSION["id_boaspraticas"])) {
           <ul class="menu-collapse collapse" id="mconsultas">
             <li>
               <a class="waves-attach" href="consultaspe.php">PÚBLICO EXTERNO</a>
-            </li>
-            <li>
-              <a class="waves-attach" href="consultaspi.php">PÚBLICO INTERNO</a>
             </li>
           </ul>
         </li>
@@ -201,7 +201,10 @@ if (isset($_SESSION["id_boaspraticas"])) {
         <a class="waves-attach" data-toggle="dropdown"><span class="text-white"><span class="icon">payments</span>SERVIÇOS SOF</span><span class="icon margin-left-sm">keyboard_arrow_down</span></a>
         <ul class="dropdown-menu nav">
           <li>
-            <a class="waves-attach" href="<?=$hrefSolicitacoes?>">Solicitações</a>
+            <a class="waves-attach" href="<?=$hrefSolicitacoes?>">Solicitações de Empenho</a>
+          </li>
+          <li>
+            <a class="waves-attach" href="consultaspi.php">Solicitações Gerais</a>
           </li>
         </ul>
       </div>
@@ -212,9 +215,6 @@ if (isset($_SESSION["id_boaspraticas"])) {
         <ul class="dropdown-menu nav">
           <li>
             <a class="waves-attach" href="consultaspe.php">Público Externo</a>
-          </li>
-          <li>
-            <a class="waves-attach" href="consultaspi.php">Público Interno</a>
           </li>
         </ul>
       </div>
