@@ -24,10 +24,8 @@ include_once '../class/Util.class.php';
 //instanciando classe de busca para popular o select de estados
 $obj_Busca = new Busca();
 $obj_Util = new Util();
-//definimos uma constante com o nome da pasta
-define('MPDF_PATH', '../pdf/MPDF57/');
 //incluimos o arquivo
-include MPDF_PATH . 'mpdf.php';
+include '../pdf/MPDF57/mpdf.php';
 //definimos o timezone para pegar a hora local
 date_default_timezone_set('America/Sao_Paulo');
 $html_style = "
@@ -154,5 +152,7 @@ $mpdf->SetFooter("{$data}||Pagina {PAGENO}/{nb}");
 $mpdf->WriteHTML($html);
 //fechamos nossa instancia ao pdf
 $mpdf->Output();
+
+exit();
 
 ?>

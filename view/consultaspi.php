@@ -322,7 +322,7 @@ $obj_Busca = new Busca();
    </div><!-- ./card-inner -->
    <div class="card-action">
     <div class="card-action-btn">
-     <button class="btn btn-brand waves-attach" type="submit" style="width: 100%;"><span class="icon">check</span>&nbsp;Enviar</button>
+     <button class="btn btn-brand waves-attach" type="submit" style="width: 100%;"><span class="icon">print</span>&nbsp;Imprimir</button>
    </div>
  </div>
 </form>
