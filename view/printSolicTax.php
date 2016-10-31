@@ -59,6 +59,9 @@ $html_style = "
     font-family: Times New Roman, sans-serif;
     font-size: 8pt;
   }
+  h5, h6 {
+    font-family: Arial, sans-serif;
+  }
   #data {
     margin-left: 50%;
   }
@@ -94,25 +97,25 @@ $data_prox = $date->format('d/m/Y');
 $html = "
   <fieldset>
     <h5>SOLICITANTE</h5>
-    <h6><b>NOME:</b> {$solicitante}</h6>
-    <h6><b>CPF:</b> {$cpf}</h6>
-    <h6><b>Matrícula SIAPE:</b> {$matricula}</h6>
-    <h6><b>E-mail:</b> {$email}</h6>
-    <h6><b>Telefone:</b> {$telefone}</h6>
+    <h6>NOME: {$solicitante}</h6>
+    <h6>CPF: {$cpf}</h6>
+    <h6>MATRÍCULA SIAPE: {$matricula}</h6>
+    <h6>E-MAIL: {$email}</h6>
+    <h6>TELEFONE: {$telefone}</h6>
   </fieldset>
 
   <fieldset>
     <h5>DADOS DO PAGAMENTO</h5>
-    <h6><b>BANCO: </b>{$banco}</h6>
-    <h6><b>AGÊNCIA: </b>{$agencia}</h6>
-    <h6><b>CONTA: </b>{$conta}</h6>
+    <h6>BANCO: {$banco}</h6>
+    <h6>AGÊNCIA: {$agencia}</h6>
+    <h6>CONTA: {$conta}</h6>
   </fieldset>
 
   <fieldset>
     <h5>DADOS DO EVENTO</h5>
-    <h6><b>EVENTO: </b>{$evento}</h6>
-    <h6><b>LOCAL: </b>{$local}</h6>
-    <h6><b>VALOR: </b>R$ {$valor}</h6>
+    <h6>EVENTO: {$evento}</h6>
+    <h6>LOCAL: {$local}</h6>
+    <h6>VALOR: R$ {$valor}</h6>
   </fieldset>
 
   <fieldset>
