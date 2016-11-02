@@ -76,6 +76,10 @@ $html_style = "
     margin-left: -1.6%;
     margin-right: -1.6%;
   }
+  span {
+    font-size: 6pt;
+    font-weight: normal;
+  }
 </style>
 <head>
   <title>SOFHUSM | Impressão de pedido</title>
@@ -114,6 +118,7 @@ $html = "
     <h6>EVENTO: {$evento}</h6>
     <h6>LOCAL: {$local}</h6>
     <h6>VALOR: R$ {$valor}</h6>
+    <h6><b>Período de Realização do Evento: {$dataI} A {$dataF}</b></h6>
   </fieldset>
 
   <fieldset>
@@ -124,8 +129,7 @@ $html = "
       (Decreto-lei nº 200/67, art. 93).<br>
       A Lei 8.112/90, em seu art. 46, disciplina as reposições e indenizações ao erário pela Autoridade Administrativa.
     </p>
-    <h6><b>Período de Realização: {$dataI} A {$dataF}</b></h6>
-    <h6><b>Data para prestação de contas: ATÉ {$data_prox}</b></h6>
+    <h6><b>Data para prestação de contas: ATÉ {$data_prox}</b><span> (certificado + recibo ou nota fiscal em favor do HUSM - EBSERH)<span></h6>
   </fieldset>
 
   <h4 id=\"data\" class=\"ass\">Santa Maria, ___ de ___________________ de _____.</h4>
