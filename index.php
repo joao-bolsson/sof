@@ -12,12 +12,9 @@ session_start();
 include_once 'class/Busca.class.php';
 //instanciando classe de busca para popular o select de estados
 $obj_Busca = new Busca();
-include_once 'class/Geral.class.php';
-$obj_Geral = new Geral();
 
-setcookie('slide1', $obj_Busca->getSlide(1), 0);
-setcookie('slide2', $obj_Busca->getSlide(2), 0);
-
+$_SESSION['slide1'] = $obj_Busca->getSlide(1);
+$_SESSION['slide2'] = $obj_Busca->getSlide(2);
 if (isset($_SESSION["admin"])) {
 //redireciona para a página do admin
 	header('Location: admin/');

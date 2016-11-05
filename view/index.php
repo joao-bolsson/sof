@@ -4,7 +4,7 @@ session_start();
 ini_set('display_erros', true);
 error_reporting(E_ALL);
 
-if (!isset($_COOKIE['slide1']) || !isset($_COOKIE['slide2'])) {
+if (!isset($_SESSION['slide1']) || !isset($_SESSION['slide2'])) {
 	header("Location: ../");
 }
 //define se o botão de LOGIN deve ou não existir
@@ -139,7 +139,7 @@ if (!isset($_SESSION["id_setor"]) || $_SESSION["id_setor"] == 0) {
             </ul>
           </li>
           <li>
-            <a class="waves-attach waves-light" href="noticias.php"><span class="text-black"><span class="icon">event</span>NOTÍCIAS</span></a>
+            <a class="waves-attach waves-light" href="noticia.php"><span class="text-black"><span class="icon">event</span>NOTÍCIAS</span></a>
           </li>
           <li>
             <a class="collapsed waves-attach" data-toggle="collapse" href="#mencontros"><span class="text-black"><span class="icon">place</span>ENCONTROS</a>
@@ -241,7 +241,7 @@ if (!isset($_SESSION["id_setor"]) || $_SESSION["id_setor"] == 0) {
                   </div>
         				</li>
                 <li>
-        					<a class="waves-attach waves-light" href="noticias.php"><span class="text-white"><span class="icon">event</span>NOTÍCIAS</span></a>
+        					<a class="waves-attach waves-light" href="noticia.php"><span class="text-white"><span class="icon">event</span>NOTÍCIAS</span></a>
         				</li>
                 <li>
                   <div class="dropdown dropdown-inline">
@@ -337,7 +337,7 @@ if (!isset($_SESSION["id_setor"]) || $_SESSION["id_setor"] == 0) {
                         <div class="slider">
                           <div class="mascara">
                             <ul>
-                                <?php echo $_COOKIE['slide1'] ?>
+                                <?php echo $_SESSION['slide1'] ?>
                             </ul>
                           </div>
                           <div class="barra-progresso"></div>
@@ -356,7 +356,7 @@ if (!isset($_SESSION["id_setor"]) || $_SESSION["id_setor"] == 0) {
                         <div class="slider">
                           <div class="mascara">
                             <ul>
-                                <?php echo $_COOKIE['slide2'] ?>
+                                <?php echo $_SESSION['slide2'] ?>
                             </ul>
                           </div>
                           <div class="barra-progresso"></div>

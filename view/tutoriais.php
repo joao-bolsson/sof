@@ -135,7 +135,7 @@ if (isset($_SESSION["id_tutoriais"])) {
           </ul>
         </li>
         <li>
-          <a class="waves-attach waves-light" href="noticias.php"><span class="text-black"><span class="icon">event</span>NOTÍCIAS</span></a>
+          <a class="waves-attach waves-light" href="noticia.php"><span class="text-black"><span class="icon">event</span>NOTÍCIAS</span></a>
         </li>
         <li>
           <a class="collapsed waves-attach" data-toggle="collapse" href="#mencontros"><span class="text-black"><span class="icon">place</span>ENCONTROS</a>
@@ -237,7 +237,7 @@ if (isset($_SESSION["id_tutoriais"])) {
     </div>
   </li>
   <li>
-   <a class="waves-attach waves-light" href="noticias.php"><span class="text-white"><span class="icon">event</span>NOTÍCIAS</span></a>
+   <a class="waves-attach waves-light" href="noticia.php"><span class="text-white"><span class="icon">event</span>NOTÍCIAS</span></a>
  </li>
  <li>
   <div class="dropdown dropdown-inline">
