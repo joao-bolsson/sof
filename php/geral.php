@@ -312,6 +312,15 @@ if (isset($_POST["admin"]) && isset($_SESSION["id_setor"]) && $_SESSION["id_seto
 
 	switch ($form) {
 
+	case 'problema':
+		$assunto = $_POST['assunto'];
+		$descricao = $_POST['descr'];
+		$id_setor = $_SESSION['id_setor'];
+		$pag = $_POST['pag']; // like view/solicitacoes.php
+		$obj_Geral->insereProblema($id_setor, $assunto, $descricao);
+		header('Location: ../' . $pag);
+		break;
+
 	case 'deletePedido':
 		$id_pedido = $_POST['id_pedido'];
 		echo $delete = $obj_Geral->deletePedido($id_pedido);

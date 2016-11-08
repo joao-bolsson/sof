@@ -48,6 +48,9 @@ $permissao = $obj_Busca->getPermissoes($_SESSION["id"]);
   <nav class="tab-nav pull-right hidden-xx">
     <ul class="nav nav-list">
       <li>
+        <a class="btn btn-flat waves-attach waves-light" href="javascript:abreModal('#problema');"><span class="text-white"><span class="icon">warning</span>RELATAR PROBLEMA</span></a>
+      </li>
+      <li>
         <a class="btn btn-flat waves-attach waves-light" href="sair.php"><span class="text-white"><span class="icon">exit_to_app</span>SAIR</span></a>
       </li>
     </ul>
@@ -473,6 +476,35 @@ $permissao = $obj_Busca->getPermissoes($_SESSION["id"]);
     </div>
   </div>
 </footer>
+<div class="modal fade" id="problema" role="dialog">
+    <div class="modal-dialog" style="width: 40%;">
+        <div class="modal-content">
+            <div class="modal-heading">
+                <a class="modal-close" data-dismiss="modal">×</a>
+                <h2 class="modal-title content-sub-heading">Relatar um problema</h2>
+            </div>
+            <form action="../php/geral.php" method="post">
+                <input type="hidden" name="users" value="1">
+                <input type="hidden" name="form" value="problema">
+                <input type="hidden" name="pag" value="admin/adminsolicitacoes.php">
+                <div class="modal-inner">
+                    <span class="label">Tente descrever o que aconteceu, o que aparece e o que deveria aparecer. Sinta-se a vontade ;)</span>
+                    <div class="form-group form-group-label">
+                        <label class="floating-label" for="assunto"><span class="icon">perm_identity</span>&nbsp;Assunto</label>
+                        <input class="form-control" id="assunto" name="assunto" type="text" required>
+                    </div>
+                    <div class="form-group form-group-label">
+                        <label class="floating-label" for="descr_problema"><span class="icon">announcement</span>&nbsp;Descrição</label>
+                        <textarea class="form-control textarea-autosize" id="descr_problema" name="descr" rows="1" required></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer margin-bottom">
+                    <button class="btn btn-brand waves-attach waves-light waves-effect" type="submit" style="width: 100%;"><span class="icon">send</span>&nbsp;Enviar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
 <?php if ($permissao->pedidos): ?>
 <div class="modal fade" id="infoItem" role="dialog">
   <div class="modal-dialog" style="width: 50%;">

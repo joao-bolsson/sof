@@ -22,6 +22,18 @@ class Geral extends Conexao {
 	}
 	// ------------------------------------------------------------------------------
 	/**
+	 *	Função para os usuários relatarem problemas no site
+	 *
+	 *	@access public
+	 */
+	public function insereProblema(int $id_setor, string $assunto, string $descricao) {
+		$assunto = $this->mysqli->real_escape_string($assunto);
+		$descricao = $this->mysqli->real_escape_string($descricao);
+		$sql = "INSERT INTO problemas VALUES(NULL, " . $id_setor . ", '" . $assunto . "', '" . $descricao . "');";
+		$query = $this->mysqli->query($sql);
+	}
+	// ------------------------------------------------------------------------------
+	/**
 	 *	Função para editar informações de um item
 	 *
 	 *	@access public
