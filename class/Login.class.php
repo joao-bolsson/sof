@@ -64,6 +64,7 @@ class Login extends Conexao {
 				//atribuindo valores à sessão
 				$_SESSION[$this->campoID] = $usuario->{$this->campoID};
 				$_SESSION[$this->campoNome] = $usuario->{$this->campoNome};
+				$_SESSION[$this->campoLogin] = $login;
 				$_SESSION[$this->campoEmail] = $usuario->{$this->campoEmail};
 				$_SESSION[$this->campoSetor] = $usuario->{$this->campoSetor};
 

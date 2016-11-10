@@ -47,6 +47,11 @@ $permissao = $obj_Busca->getPermissoes($_SESSION["id"]);
   </ul>
   <nav class="tab-nav pull-right hidden-xx">
     <ul class="nav nav-list">
+      <?php if ($_SESSION['login'] == 'joao'): ?>
+			  <li>
+			    <a class="btn btn-flat waves-attach waves-light" href="javascript:listProblemas();"><span class="text-white"><span class="icon">warning</span>PROBLEMAS</span></a>
+			  </li>
+			<?php endif;?>
       <li>
         <a class="btn btn-flat waves-attach waves-light" href="javascript:abreModal('#problema');"><span class="text-white"><span class="icon">warning</span>RELATAR PROBLEMA</span></a>
       </li>
@@ -476,6 +481,28 @@ $permissao = $obj_Busca->getPermissoes($_SESSION["id"]);
     </div>
   </div>
 </footer>
+<div aria-hidden="true" class="modal fade" id="listProblemas" role="dialog" tabindex="-1">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-heading">
+        <a class="modal-close" data-dismiss="modal">×</a>
+        <h2 class="modal-title content-sub-heading">Problemas Relatados</h2>
+      </div>
+      <div class="modal-inner">
+        <table id="tableListProblemas" class="table" style="width: 100%;">
+          <thead>
+            <tr>
+              <th>Setor</th>
+              <th>Assunto</th>
+              <th>Descrição</th>
+            </tr>
+          </thead>
+          <tbody id="tbodyListProblemas"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
 <div class="modal fade" id="problema" role="dialog">
     <div class="modal-dialog" style="width: 40%;">
         <div class="modal-content">
