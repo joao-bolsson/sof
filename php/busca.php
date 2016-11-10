@@ -28,6 +28,11 @@ if (isset($_POST["admin"]) && isset($_SESSION['id_setor']) && $_SESSION['id_seto
 	$form = $_POST["form"];
 
 	switch ($form) {
+	// gerencia de problemas relatados
+	case 'listProblemas':
+		echo $obj_Busca->getProblemas();
+		break;
+
 	// comment.
 	case 'getSaldoOri':
 		$id_setor = $_POST['setorOri'];

@@ -24,6 +24,30 @@ class Busca extends Conexao {
 	}
 	// ------------------------------------------------------------------------------
 	/**
+	 *	Função para retornar os problemas relatados
+	 *
+	 *	@access public
+	 *	@return string
+	 */
+	public function getProblemas(): string{
+		$query = $this->mysqli->query("SELECT setores.nome AS setor, problemas.assunto, problemas.descricao FROM setores, problemas WHERE setores.id = problemas.id_setor ORDER BY problemas.id DESC;");
+		$retorno = "";
+		while ($problema = $query->fetch_object()) {
+			$retorno .= "
+				<tr>
+					<td>" . $problema->setor . "</td>
+					<td>" . $problema->assunto . "</td>
+					<td>
+						<button onclick=\"viewCompl('" . $problema->descricao . "');\" class=\"btn btn-flat waves-attach waves-effect\" type=\"button\" title=\"Descrição\">Descrição</button>
+					</td>
+				</tr>
+			";
+		}
+		$query->close();
+		return $retorno;
+	}
+	// ------------------------------------------------------------------------------
+	/**
 	 *	Função que retonar o relatorio de pedidos
 	 *
 	 *	@access public
@@ -940,7 +964,6 @@ class Busca extends Conexao {
 				// total do fornecedor
 				$tot_forn = $this->mysqli->query("SELECT sum(itens_pedido.valor) AS sum FROM itens_pedido, itens WHERE itens_pedido.id_item = itens.id AND itens_pedido.id_pedido = {$id_pedido} AND itens.cgc_fornecedor = '{$fornecedor->cgc_fornecedor}';")->fetch_object();
 
-				$fornecedor->nome_fornecedor = utf8_encode($fornecedor->nome_fornecedor);
 				$fornecedor->nome_fornecedor = substr($fornecedor->nome_fornecedor, 0, 40);
 				$fornecedor->nome_fornecedor = strtoupper($fornecedor->nome_fornecedor);
 				$tot_forn->sum = number_format($tot_forn->sum, 3, '.', '');
@@ -973,7 +996,6 @@ class Busca extends Conexao {
 						";
 
 				while ($item = $query_itens->fetch_object()) {
-					$item->complemento_item = utf8_encode($item->complemento_item);
 					$item->complemento_item = mb_strtoupper($item->complemento_item, 'UTF-8');
 					$retorno .= "
 							<tr>
@@ -1231,10 +1253,6 @@ class Busca extends Conexao {
 		$query = $this->mysqli->query("SELECT itens.qt_contrato, itens.id AS id_itens, itens_pedido.qtd AS qtd_solicitada, itens_pedido.valor, itens.nome_fornecedor, itens.num_licitacao, itens.dt_inicio, itens.dt_fim, itens.dt_geracao, itens.cod_reduzido, itens.complemento_item, itens.vl_unitario, itens.qt_saldo, itens.cod_despesa, itens.descr_despesa, itens.num_contrato, itens.num_processo, itens.descr_mod_compra, itens.num_licitacao, itens.cgc_fornecedor, itens.num_extrato, itens.cod_estruturado, itens.nome_unidade, itens.descricao, itens.qt_contrato, itens.vl_contrato, itens.qt_utilizado, itens.vl_utilizado, itens.qt_saldo, itens.vl_saldo FROM itens_pedido, itens WHERE itens_pedido.id_pedido = {$id_pedido} AND itens_pedido.id_item = itens.id;");
 
 		while ($item = $query->fetch_object()) {
-			$item->descr_despesa = utf8_encode($item->descr_despesa);
-			$item->descr_mod_compra = utf8_encode($item->descr_mod_compra);
-			$item->nome_unidade = utf8_encode($item->nome_unidade);
-			$item->complemento_item = utf8_encode($item->complemento_item);
 			if ($item->dt_fim == '') {
 				$item->dt_fim = "----------";
 			}
@@ -1431,9 +1449,7 @@ class Busca extends Conexao {
 
 		while ($item = $query->fetch_object()) {
 			//remove as aspas do complemento_item
-			$item->complemento_item = str_replace("\"", "", $item->complemento_item);
-			$item->nome_fornecedor = utf8_encode($item->nome_fornecedor);
-			$item->complemento_item = utf8_encode($item->complemento_item);
+			$item->complemento_item = $this->mysqli->real_escape_string($item->complemento_item);
 
 			$retorno .= "
 			<tr>
@@ -1472,9 +1488,7 @@ class Busca extends Conexao {
 		$query = $this->mysqli->query("SELECT itens.id, itens.nome_fornecedor, itens.num_licitacao, itens.cod_reduzido, itens.complemento_item, replace(itens.vl_unitario, ',', '.') AS vl_unitario, itens.qt_saldo, itens.qt_contrato, itens.qt_utilizado, itens.vl_saldo, itens.vl_contrato, itens.vl_utilizado FROM itens WHERE itens.id = {$id_item};");
 		$item = $query->fetch_object();
 		$query->close();
-		$item->complemento_item = str_replace("\"", "", $item->complemento_item);
-		$item->complemento_item = utf8_encode($item->complemento_item);
-		$item->nome_fornecedor = utf8_encode($item->nome_fornecedor);
+		$item->complemento_item = $this->mysqli->real_escape_string($item->complemento_item);
 		$valor = $qtd * $item->vl_unitario;
 		$retorno = "
 		<tr id=\"row" . $id_item . "\">
@@ -1563,8 +1577,7 @@ class Busca extends Conexao {
 		$query = $this->mysqli->query("SELECT itens.qt_contrato, itens.id AS id_itens, itens_pedido.qtd AS qtd_solicitada, itens_pedido.valor, itens.nome_fornecedor, itens.num_licitacao, itens.cod_reduzido, itens.complemento_item, replace(itens.vl_unitario, ',', '.') AS vl_unitario, itens.qt_saldo, itens.qt_contrato, itens.qt_utilizado, itens.vl_saldo, itens.vl_contrato, itens.vl_utilizado FROM itens_pedido, itens WHERE itens_pedido.id_pedido = {$id_pedido} AND itens_pedido.id_item = itens.id");
 		while ($item = $query->fetch_object()) {
 			$id_item = $item->id_itens;
-			$item->complemento_item = str_replace("\"", "", $item->complemento_item);
-			$item->complemento_item = utf8_encode($item->complemento_item);
+			$item->complemento_item = $this->mysqli->real_escape_string($item->complemento_item);
 			$retorno .= "
 			<tr id=\"row" . $id_item . "\">
 				<td><a class=\"modal-close\" href=\"javascript:removeTableRow(" . $id_item . ", '" . $item->valor . "');\"><span class=\"icon\">delete</span></a></td>
