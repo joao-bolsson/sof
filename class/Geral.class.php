@@ -22,6 +22,15 @@ class Geral extends Conexao {
 	}
 	// ------------------------------------------------------------------------------
 	/**
+	 *	Função para resetar o sistema para o estado orinal
+	 *
+	 *	@access public
+	 */
+	public function resetSystem() {
+		$this->mysqli->query("DELETE FROM comentarios; ALTER table comentarios auto_increment = 1; DELETE FROM itens_pedido; ALTER table itens_pedido auto_increment=1; DELETE FROM pedido_empenho; ALTER table pedido_empenho auto_increment = 1; DELETE FROM processos; ALTER table processos auto_increment = 1; DELETE FROM saldo_setor; ALTER table saldo_setor auto_increment = 1; DELETE FROM saldos_adiantados; ALTER table saldos_adiantados auto_increment = 1; DELETE FROM saldos_lancamentos; ALTER table saldos_lancamentos auto_increment = 1; DELETE FROM saldos_transferidos; ALTER table saldos_transferidos auto_increment = 1; DELETE FROM solic_alt_pedido; ALTER table solic_alt_pedido auto_increment = 1; DELETE FROM itens; ALTER table itens auto_increment = 1; DELETE FROM pedido; ALTER table pedido auto_increment = 1;");
+	}
+	// ------------------------------------------------------------------------------
+	/**
 	 *	Função para os usuários relatarem problemas no site
 	 *
 	 *	@access public
@@ -618,7 +627,7 @@ class Geral extends Conexao {
 	 *	@access public
 	 *	@return string
 	 */
-	public function deletePedido($id_pedido): string{
+	public function DELETEPedido($id_pedido): string{
 		$this->mysqli->query("DELETE FROM comentarios WHERE comentarios.id_pedido = {$id_pedido};") or exit("Erro ao remover comentarios");
 		$this->mysqli->query("DELETE FROM itens_pedido WHERE itens_pedido.id_pedido = {$id_pedido};") or exit("Erro ao remover os itens do pedido");
 		$this->mysqli->query("DELETE FROM pedido_empenho WHERE pedido_empenho.id_pedido = {$id_pedido};") or exit("Erro ao remover o empenho do pedido.");

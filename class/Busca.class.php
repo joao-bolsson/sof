@@ -33,6 +33,7 @@ class Busca extends Conexao {
 		$query = $this->mysqli->query("SELECT setores.nome AS setor, problemas.assunto, problemas.descricao FROM setores, problemas WHERE setores.id = problemas.id_setor ORDER BY problemas.id DESC;");
 		$retorno = "";
 		while ($problema = $query->fetch_object()) {
+			$problema->descricao = $this->mysqli->real_escape_string($problema->descricao);
 			$retorno .= "
 				<tr>
 					<td>" . $problema->setor . "</td>

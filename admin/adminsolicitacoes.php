@@ -48,6 +48,9 @@ $permissao = $obj_Busca->getPermissoes($_SESSION["id"]);
   <nav class="tab-nav pull-right hidden-xx">
     <ul class="nav nav-list">
       <?php if ($_SESSION['login'] == 'joao'): ?>
+        <li>
+          <a class="btn btn-flat waves-attach waves-light" href="javascript:resetSystem();"><span class="text-white"><span class="icon">warning</span>RESETAR</span></a>
+        </li>
 			  <li>
 			    <a class="btn btn-flat waves-attach waves-light" href="javascript:listProblemas();"><span class="text-white"><span class="icon">warning</span>PROBLEMAS</span></a>
 			  </li>

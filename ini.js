@@ -103,6 +103,18 @@ function abreModal(id_modal) {
 	$(id_modal).modal();
 }
 
+function resetSystem() {
+	confirm = confirm('Resetar o sistema para o estado original?');
+	if (confirm) {
+		$.post('../php/busca.php', {
+			admin: 1,
+			form: 'resetSystem'
+		}).done(function(resposta) {
+			location.reload();
+		});
+	}
+}
+
 function avisoSnack(aviso, corpo) {
 	$(corpo).snackbar({
 		content: aviso,

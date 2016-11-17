@@ -40,7 +40,7 @@ class Util extends Conexao {
 	 *	@return array
 	 */
 	final public function preparaImportacao($tmp_name) {
-		$insert = "INSERT INTO itens VALUES";
+		$insert = "INSERT INTO itens_nova VALUES";
 		$values = "";
 		$row = 1;
 		$array_sql = array();
@@ -52,7 +52,9 @@ class Util extends Conexao {
 					for ($c = 0; $c < count($data); $c++) {
 						$data[$c] = $this->mysqli->real_escape_string($data[$c]);
 					}
-					$values .= "\n(NULL, {$data[0]}, {$data[1]}, '{$data[2]}', '{$data[3]}', '{$data[4]}', '{$data[5]}', '{$data[6]}', '{$data[7]}', '{$data[8]}', '{$data[9]}', '{$data[10]}', '{$data[11]}', '{$data[12]}', '{$data[13]}', '{$data[14]}', '{$data[15]}', '{$data[16]}', '{$data[17]}', '{$data[18]}', '{$data[19]}', '{$data[20]}', '{$data[21]}', {$data[22]}, '{$data[23]}', {$data[24]}, '{$data[25]}', {$data[26]}, '{$data[27]}', '{$data[28]}', '{$data[29]}', 0), ";
+					// chave = num_processo#cod_reduzido
+					$chave = $data[6] . '#' . $data[17];
+					$values .= "\n(NULL, {$data[0]}, {$data[1]}, '{$data[2]}', '{$data[3]}', '{$data[4]}', '{$data[5]}', '{$data[6]}', '{$data[7]}', '{$data[8]}', '{$data[9]}', '{$data[10]}', '{$data[11]}', '{$data[12]}', '{$data[13]}', '{$data[14]}', '{$data[15]}', '{$data[16]}', '{$data[17]}', '{$data[18]}', '{$data[19]}', '{$data[20]}', '{$data[21]}', {$data[22]}, '{$data[23]}', {$data[24]}, '{$data[25]}', {$data[26]}, '{$data[27]}', '{$data[28]}', '{$data[29]}', 0, '{$chave}'), ";
 					if ($row == 70) {
 						$pos = strrpos($values, ", ");
 						$values[$pos] = ";";

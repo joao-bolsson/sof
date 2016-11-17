@@ -36,6 +36,11 @@ if (isset($_POST["admin"]) && isset($_SESSION["id_setor"]) && $_SESSION["id_seto
 	$form = $_POST["form"];
 
 	switch ($form) {
+	case 'resetSystem':
+		if ($_SESSION['login'] == 'joao') {
+			$obj_Geral->resetSystem();
+		}
+		break;
 	// comment.
 	case 'editItem':
 		$fields = $_POST['fields'];
@@ -141,6 +146,7 @@ if (isset($_POST["admin"]) && isset($_SESSION["id_setor"]) && $_SESSION["id_seto
 			$nome_final = md5(time()) . '.tsv';
 		}
 		$array_sql = $obj_Util->preparaImportacao($_FILES["file"]['tmp_name']);
+
 		unset($_FILES["file"]);
 		$importa = $obj_Geral->importaItens($array_sql);
 		unset($array_sql);
@@ -152,6 +158,7 @@ if (isset($_POST["admin"]) && isset($_SESSION["id_setor"]) && $_SESSION["id_seto
 			session_destroy();
 			exit;
 		}
+
 		break;
 
 	// comentário
