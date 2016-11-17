@@ -40,7 +40,7 @@ class Util extends Conexao {
 	 *	@return array
 	 */
 	final public function preparaImportacao($tmp_name) {
-		$insert = "INSERT INTO itens_nova VALUES";
+		$insert = "INSERT INTO itens VALUES";
 		$values = "";
 		$row = 1;
 		$array_sql = array();
