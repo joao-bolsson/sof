@@ -106,7 +106,7 @@ function abreModal(id_modal) {
 function resetSystem() {
 	confirm = confirm('Resetar o sistema para o estado original?');
 	if (confirm) {
-		$.post('../php/busca.php', {
+		$.post('../php/geral.php', {
 			admin: 1,
 			form: 'resetSystem'
 		}).done(function(resposta) {

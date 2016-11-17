@@ -39,6 +39,7 @@ if (isset($_POST["admin"]) && isset($_SESSION["id_setor"]) && $_SESSION["id_seto
 	case 'resetSystem':
 		if ($_SESSION['login'] == 'joao') {
 			$obj_Geral->resetSystem();
+			echo "foi";
 		}
 		break;
 	// comment.

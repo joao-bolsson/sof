@@ -27,7 +27,33 @@ class Geral extends Conexao {
 	 *	@access public
 	 */
 	public function resetSystem() {
-		$this->mysqli->query("DELETE FROM comentarios; ALTER table comentarios auto_increment = 1; DELETE FROM itens_pedido; ALTER table itens_pedido auto_increment=1; DELETE FROM pedido_empenho; ALTER table pedido_empenho auto_increment = 1; DELETE FROM processos; ALTER table processos auto_increment = 1; DELETE FROM saldo_setor; ALTER table saldo_setor auto_increment = 1; DELETE FROM saldos_adiantados; ALTER table saldos_adiantados auto_increment = 1; DELETE FROM saldos_lancamentos; ALTER table saldos_lancamentos auto_increment = 1; DELETE FROM saldos_transferidos; ALTER table saldos_transferidos auto_increment = 1; DELETE FROM solic_alt_pedido; ALTER table solic_alt_pedido auto_increment = 1; DELETE FROM itens; ALTER table itens auto_increment = 1; DELETE FROM pedido; ALTER table pedido auto_increment = 1;");
+		// DELETE
+		$this->mysqli->query("DELETE FROM comentarios;");
+		$this->mysqli->query("DELETE FROM itens_pedido;");
+		$this->mysqli->query("DELETE FROM pedido_empenho;");
+		$this->mysqli->query("DELETE FROM processos;");
+		$this->mysqli->query("DELETE FROM saldo_setor;");
+		$this->mysqli->query("DELETE FROM saldos_adiantados;");
+		$this->mysqli->query("DELETE FROM saldos_lancamentos;");
+		$this->mysqli->query("DELETE FROM saldos_transferidos;");
+		$this->mysqli->query("DELETE FROM solic_alt_pedido;");
+		$this->mysqli->query("DELETE FROM itens;");
+		$this->mysqli->query("DELETE FROM pedido;");
+
+		// ALTER TABLE
+
+		$this->mysqli->query("alter table comentarios auto_increment = 1;");
+		$this->mysqli->query("alter table itens_pedido auto_increment=1;");
+		$this->mysqli->query("alter table pedido_empenho auto_increment = 1;");
+		$this->mysqli->query("alter table processos auto_increment = 1;");
+		$this->mysqli->query("alter table saldo_setor auto_increment = 1;");
+		$this->mysqli->query("alter table saldos_adiantados auto_increment = 1;");
+		$this->mysqli->query("alter table saldos_lancamentos auto_increment = 1;");
+		$this->mysqli->query("alter table saldos_transferidos auto_increment = 1;");
+		$this->mysqli->query("alter table solic_alt_pedido auto_increment = 1;");
+		$this->mysqli->query("alter table itens auto_increment = 1;");
+		$this->mysqli->query("alter table pedido auto_increment = 1;");
+
 	}
 	// ------------------------------------------------------------------------------
 	/**
