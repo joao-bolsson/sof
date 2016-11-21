@@ -653,7 +653,7 @@ class Geral extends Conexao {
 	 *	@access public
 	 *	@return string
 	 */
-	public function DELETEPedido($id_pedido): string{
+	public function deletePedido($id_pedido): string{
 		$this->mysqli->query("DELETE FROM comentarios WHERE comentarios.id_pedido = {$id_pedido};") or exit("Erro ao remover comentarios");
 		$this->mysqli->query("DELETE FROM itens_pedido WHERE itens_pedido.id_pedido = {$id_pedido};") or exit("Erro ao remover os itens do pedido");
 		$this->mysqli->query("DELETE FROM pedido_empenho WHERE pedido_empenho.id_pedido = {$id_pedido};") or exit("Erro ao remover o empenho do pedido.");

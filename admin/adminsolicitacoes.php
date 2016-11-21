@@ -109,6 +109,9 @@ $permissao = $obj_Busca->getPermissoes($_SESSION["id"]);
                   <li>
                     <a class="waves-attach" href="javascript:abreModal('#relPedidos');">PEDIDOS</a>
                   </li>
+                  <li>
+                    <a class="waves-attach" href="javascript:listRelatorios();">LISTA DE PEDIDOS <span class="label">Novo</span></a>
+                  </li>
                 </ul>
               </div>
             </li>
@@ -373,7 +376,7 @@ $permissao = $obj_Busca->getPermissoes($_SESSION["id"]);
   </div><!-- ./card-main -->
 </div> <!-- ./card -->
 </div> <!-- ./row -->
-<div class="row">
+<div id="rowDetPedido" class="row" style="display: none;">
   <div class="card margin-top-no">
    <div class="card-main">
      <div class="card-header card-brand">
@@ -440,7 +443,7 @@ $permissao = $obj_Busca->getPermissoes($_SESSION["id"]);
       </div><!-- ./card-inner -->
       <div class="card-action">
         <div class="card-action-btn">
-          <button id="btnLimpa" class="btn btn-default waves-attach" type="button" style="width: 49%;" onclick="limpaTela();"><span class="icon">undo</span>&nbsp;Limpar</button>
+          <button id="btnLimpa" class="btn btn-default waves-attach" type="button" style="width: 49%;" onclick="limpaTela();"><span class="icon">undo</span>&nbsp;Limpar / Esconder</button>
           <button class="btn btn-brand waves-attach" type="submit" style="width: 50%;"><span class="icon">check</span>&nbsp;Salvar Alterações</button>
         </div>
       </div>
@@ -484,6 +487,35 @@ $permissao = $obj_Busca->getPermissoes($_SESSION["id"]);
     </div>
   </div>
 </footer>
+<div aria-hidden="true" class="modal fade" id="listRelatorios" role="dialog" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-heading">
+                <a class="modal-close" data-dismiss="modal">×</a>
+                <h2 class="modal-title content-sub-heading">Relatórios</h2>
+            </div>
+            <div class="modal-inner">
+                <table class="table">
+                  <tr>
+                    <?=$obj_Busca->getRadiosStatusRel();?>
+                  </tr>
+                </table>
+                <table id="tableListRelatorios" class="table" style="width: 100%;">
+                    <thead>
+                        <th>RefMes</th>
+                        <th>Data de Envio</th>
+                        <th>Prioridade</th>
+                        <th>Status</th>
+                        <th>SIAFI</th>
+                        <th>Valor</th>
+                        <th>Opções</th>
+                    </thead>
+                    <tbody id="tbodyListRelatorios"></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
 <div aria-hidden="true" class="modal fade" id="listProblemas" role="dialog" tabindex="-1">
   <div class="modal-dialog">
     <div class="modal-content">

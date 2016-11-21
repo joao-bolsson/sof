@@ -536,6 +536,24 @@ function listAdiantamentos() {
 		});
 	}
 }
+
+function listRelatorios() {
+	$('#listRelatorios').modal('show');
+}
+
+function changeReport(radio) {
+	var st = radio.split('-');
+	$.post('../php/busca.php', {
+		admin: 1,
+		form: 'listRelatorios',
+		status: st[1]
+	}).done(function(resposta) {
+		$('#tableListRelatorios').DataTable().destroy();
+		$('#tbodyListRelatorios').html(resposta);
+		iniDataTable('#tableListRelatorios');
+	});
+}
+
 $('#listPedidos').on('shown.bs.modal', function(event) {
 	if (!$.fn.DataTable.isDataTable('#tableListPedidos')) {
 		iniDataTable('#tableListPedidos');
@@ -883,6 +901,7 @@ function analisarPedido(id_pedido, id_setor) {
 	document.getElementById('id_setor').value = id_setor;
 	$('#tableSolicitacoes tr').css('background-color', '');
 	$('#rowPedido' + id_pedido).css('background-color', '#c1df9f');
+	document.getElementById('rowDetPedido').style.display = 'block';
 	$.post('../php/busca.php', {
 		admin: 1,
 		form: 'infoPedido',
@@ -1006,6 +1025,7 @@ function limpaTela() {
 	}
 	document.getElementById('formPedido').reset();
 	$('#btnLimpa').blur();
+	document.getElementById('rowDetPedido').style.display = "none";
 	avisoSnack('Tela Limpa', 'body');
 }
 // cancelar um item

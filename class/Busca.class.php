@@ -24,6 +24,61 @@ class Busca extends Conexao {
 	}
 	// ------------------------------------------------------------------------------
 	/**
+	 *	Função para retornar uma lista de pedidos conforme o relatório
+	 *
+	 *	@access public
+	 *	@param $status Status da lista de pedidos no relatório
+	 *	@return Lista de pedidos conforme o solicitado
+	 */
+	public function getRelatorio(int $status): string{
+		$retorno = "";
+		$query = $this->mysqli->query("SELECT pedido.id, DATE_FORMAT(pedido.data_pedido, '%d/%m/%Y') AS data_pedido, mes.sigla_mes AS ref_mes, prioridade.nome AS prioridade, status.nome AS status, pedido.valor FROM pedido, mes, prioridade, status WHERE prioridade.id = pedido.prioridade AND status.id = pedido.status AND mes.id = pedido.ref_mes AND pedido.status = {$status} ORDER BY pedido.id DESC;");
+		while ($pedido = $query->fetch_object()) {
+			$empenho = Busca::verEmpenho($pedido->id);
+			$pedido->prioridade = ucfirst($pedido->prioridade);
+			$retorno .= "
+			<tr>
+				<td>" . $pedido->ref_mes . "</td>
+				<td>" . $pedido->data_pedido . "</td>
+				<td>" . $pedido->prioridade . "</td>
+				<td><span class=\"label\" style=\"font-size: 11pt;\">" . $pedido->status . "</span></td>
+				<td>" . $empenho . "</td>
+				<td>R$ " . $pedido->valor . "</td>
+				<td>
+					<button class=\"btn btn-default btn-sm\" style=\"text-transform: none !important;font-weight: bold;\" onclick=\"imprimir(" . $pedido->id . ");\" title=\"Imprimir\"><span class=\"icon\">print</span></button>
+				</td>
+			</tr>";
+		}
+		$query->close();
+		return $retorno;
+	}
+
+	// ------------------------------------------------------------------------------
+	/**
+	 *	Função para retornar os radios buttons para gerar relatórios por status
+	 *
+	 *	@access public
+	 *	@return Colunas com alguns status
+	 */
+	public function getRadiosStatusRel(): string{
+		$retorno = "";
+		$query = $this->mysqli->query("SELECT status.id, status.nome FROM status WHERE status.id = 3 OR status.id = 6 OR status.id = 7;");
+		while ($status = $query->fetch_object()) {
+			$retorno .= "
+			<td>
+                <div class=\"radiobtn radiobtn-adv\">
+                	<label for=\"relStatus{$status->id}\">
+                    	<input type=\"radio\" name=\"relatorio\" id=\"relStatus{$status->id}\" class=\"access-hide\" onchange=\"changeReport('status-{$status->id}');\">{$status->nome}
+                        <span class=\"radiobtn-circle\"></span><span class=\"radiobtn-circle-check\"></span>
+                    </label>
+                </div>
+            </td>";
+		}
+		$query->close();
+		return $retorno;
+	}
+	// ------------------------------------------------------------------------------
+	/**
 	 *	Função para retornar os problemas relatados
 	 *
 	 *	@access public
