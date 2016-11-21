@@ -910,6 +910,7 @@ class Busca extends Conexao {
 		$pedido = $this->mysqli->query("SELECT pedido.id, DATE_FORMAT(pedido.data_pedido, '%d/%m/%Y') AS data_pedido, EXTRACT(YEAR FROM pedido.data_pedido) AS ano, mes.sigla_mes AS ref_mes, status.nome AS status, replace(pedido.valor, '.', ',') AS valor, pedido.obs FROM pedido, mes, status WHERE status.id = pedido.status AND pedido.id = {$id_pedido} AND mes.id = pedido.ref_mes;")->fetch_object();
 		$ano = substr($pedido->data_pedido, 0, 4);
 		$empenho = Busca::verEmpenho($id_pedido);
+		$pedido->valor = number_format($pedido->valor, 3, ',', '.');
 		$retorno = "
 		<fieldset>
 			<p>
@@ -967,7 +968,7 @@ class Busca extends Conexao {
 
 				$fornecedor->nome_fornecedor = substr($fornecedor->nome_fornecedor, 0, 40);
 				$fornecedor->nome_fornecedor = strtoupper($fornecedor->nome_fornecedor);
-				$tot_forn->sum = number_format($tot_forn->sum, 3, '.', '');
+				$tot_forn->sum = number_format($tot_forn->sum, 3, ',', '.');
 				$retorno .= "
 				<fieldset style=\"border-bottom: 1px solid black; padding: 5px;\">
 					<table>
@@ -998,6 +999,7 @@ class Busca extends Conexao {
 
 				while ($item = $query_itens->fetch_object()) {
 					$item->complemento_item = mb_strtoupper($item->complemento_item, 'UTF-8');
+					$item->valor = number_format($item->valor, 3, ',', '.');
 					$retorno .= "
 							<tr>
 								<td>" . $item->cod_reduzido . "</td>
@@ -1636,6 +1638,7 @@ class Busca extends Conexao {
 		$retorno = "";
 		$query = $this->mysqli->query("SELECT pedido.id, DATE_FORMAT(pedido.data_pedido, '%d/%m/%Y') AS data_pedido, mes.sigla_mes AS ref_mes, prioridade.nome AS prioridade, status.nome AS status, pedido.valor FROM pedido, mes, prioridade, status WHERE prioridade.id = pedido.prioridade AND status.id = pedido.status AND pedido.id_setor = {$id_setor} AND pedido.alteracao = 0 AND mes.id = pedido.ref_mes ORDER BY pedido.id DESC;");
 		while ($pedido = $query->fetch_object()) {
+			$empenho = Busca::verEmpenho($pedido->id);
 			$pedido->prioridade = ucfirst($pedido->prioridade);
 			$retorno .= "
 			<tr>
@@ -1643,6 +1646,7 @@ class Busca extends Conexao {
 				<td>" . $pedido->data_pedido . "</td>
 				<td>" . $pedido->prioridade . "</td>
 				<td><span class=\"label\" style=\"font-size: 11pt;\">" . $pedido->status . "</span></td>
+				<td>" . $empenho . "</td>
 				<td>R$ " . $pedido->valor . "</td>
 				<td>
 					<button class=\"btn btn-default btn-sm\" style=\"text-transform: none !important;font-weight: bold;\" onclick=\"solicAltPed(" . $pedido->id . ");\" title=\"Solicitar Alteração\"><span class=\"icon\">build</span></button>
@@ -1662,12 +1666,12 @@ class Busca extends Conexao {
 	 */
 	public function getProcessos($tela): string{
 		$retorno = "";
-		$sql = "SELECT DISTINCT itens.num_processo FROM itens ORDER BY itens.id DESC;";
+		$sql = "SELECT DISTINCT itens.num_processo FROM itens;";
 		$onclick = "pesquisarProcesso";
 		$title = "Pesquisar Processo";
 		$icon = "search";
 		if ($tela == "recepcao") {
-			$sql = "SELECT DISTINCT itens.num_processo FROM itens WHERE itens.num_processo NOT IN (SELECT DISTINCT processos.num_processo FROM processos) ORDER BY itens.id DESC;";
+			$sql = "SELECT DISTINCT itens.num_processo FROM itens WHERE itens.num_processo NOT IN (SELECT DISTINCT processos.num_processo FROM processos);";
 			$onclick = "addProcesso";
 			$title = "Adicionar Processo";
 			$icon = "add";

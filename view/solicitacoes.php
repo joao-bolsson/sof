@@ -333,6 +333,7 @@ $pedidos_em_analise = $obj_Busca->getPedidosAnalise($id_setor);
                         <th>Data de Envio</th>
                         <th>Prioridade</th>
                         <th>Status</th>
+                        <th>SIAFI</th>
                         <th>Valor</th>
                         <th>Opções</th>
                     </thead>

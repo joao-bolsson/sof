@@ -214,6 +214,7 @@ if (isset($_POST["admin"]) && isset($_SESSION['id_setor']) && $_SESSION['id_seto
 		break;
 
 	default:
+		echo "<tr><td>2016</td><td>10</td></tr>";
 		break;
 	}
 } else {

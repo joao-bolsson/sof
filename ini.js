@@ -531,6 +531,7 @@ function listAdiantamentos() {
 			users: 1,
 			form: 'listAdiantamentos'
 		}, function(resposta) {
+			alert(resposta);
 			document.getElementById('tbodyListAdiantamentos').innerHTML = resposta;
 		});
 	}

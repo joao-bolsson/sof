@@ -18,24 +18,21 @@ if (isset($_SESSION["imprimirPedido"]) && $_SESSION["imprimirPedido"] && $_SESSI
 	include MPDF_PATH . 'mpdf.php';
 //definimos o timezone para pegar a hora local
 	date_default_timezone_set('America/Sao_Paulo');
-	// ============================================================================
-	//                                     STYLE
-	// ============================================================================
 	$html_style = "
   <style type=\"text/css\">
-   fieldset {
+  fieldset {
     border: 2px solid black;
     padding-left: 5px;
   }
   fieldset p{
+    margin: 5px;
     font-size: 8pt;
     font-weight: bold;
   }
-  /* ================= TÍTULO DO RELATÓRIO DE ATIVIDADES =================== */
   fieldset h5{
     text-align: center;
+    margin: 10px;
   }
-  /* ============================ TABELAS ================================== */
   table{
     border-collapse: collapse;
     border-spacing: 0;
@@ -55,13 +52,11 @@ if (isset($_SESSION["imprimirPedido"]) && $_SESSION["imprimirPedido"] && $_SESSI
   thead {
     display: table-header-group;
   }
-  /* ===================== FIELDSET COM OS PREGÕES ========================== */
   fieldset.preg table td{
     padding: 10px;
     font-weight: bold;
     font-size: 7pt;
   }
-  /* =============== TABELA COM OS ITENS DO PEDIDO ========================== */
   table.prod td, table.prod th{
     text-align: left;
     font-size: 8pt;
