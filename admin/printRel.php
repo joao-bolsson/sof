@@ -17,76 +17,19 @@ if (isset($_SESSION["relatorioProcessos"]) && $_SESSION["relatorioProcessos"] &&
 	include MPDF_PATH . 'mpdf.php';
 //definimos o timezone para pegar a hora local
 	date_default_timezone_set('America/Sao_Paulo');
-	// ============================================================================
-	//                                     STYLE
-	// ============================================================================
-	$html_style = "
-  <style type=\"text/css\">
-   fieldset {
-    border: 2px solid black;
-    padding-left: 5px;
-  }
-  fieldset p{
-    font-size: 8pt;
-    font-weight: bold;
-  }
-  /* ================= TÍTULO DO RELATÓRIO DE ATIVIDADES =================== */
-  fieldset h5{
-    text-align: center;
-  }
-  /* ============================ TABELAS ================================== */
-  table{
-    border-collapse: collapse;
-    border-spacing: 0;
-    font-size: 7pt;
-    width: 100% !important;
-    background-color: #ffffff;
-    border: 0;
-  }
-  table td, table th {
-    line-height: 20px;
-    padding: 1px;
-    vertical-align: top;
-  }
-  table td {
-    text-align: center;
-  }
-  thead {
-    display: table-header-group;
-  }
-  /* ===================== FIELDSET COM OS PREGÕES ========================== */
-  fieldset.preg table td{
-    padding: 10px;
-    font-weight: bold;
-    font-size: 7pt;
-  }
-  /* =============== TABELA COM OS ITENS DO PEDIDO ========================== */
-  table.prod td, table.prod th{
-    text-align: left;
-    font-size: 8pt;
-    padding: 3px;
-  }
-</style>
-";
-	// ===================================================================================
-	//                                         CABEÇALHO
-	// ===================================================================================
+	$html_style = "<link rel=\"stylesheet\" type=\"text/css\" href=\"../relatorios.css\"/>";
 
 	$html_header = "
 <body>
   <p style=\"text-align: center;\">
     <img src=\"../sof_files/header_setor_2.png\"/>
   </p>
-  <hr/>
-  ";
-	// ====================================================================================
-	//                                  TABELA COM OS ITENS
-	// ====================================================================================
+  <hr/>";
+
 	$html_itens = "
   <fieldset>
     <h5>RELATÓRIO DE PROCESSOS</h5>
-  </fieldset><br>
-  ";
+  </fieldset><br>";
 
 	$html_itens .= $obj_Busca->getRelatorioProcessos($tipo);
 

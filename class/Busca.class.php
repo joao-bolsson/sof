@@ -186,10 +186,14 @@ class Busca extends Conexao {
 			$retorno .= "
 				<fieldset class=\"preg\">
 					<h5>DESCRIÇÃO DO RELATÓRIO</h5>
-					<p><b>Setor selecionado:</b> " . $descr->setor . "</p>
-					<p><b>Prioridade:</b> " . $descr->prioridade . "</p>
-					<p><b>Status:</b> " . $descr->status . "</p>
-					<p><b>Mês:</b> " . $descr->mes . "</p>
+					<table class=\"prod\">
+						<tr>
+							<td><b>Setor selecionado:</b><span style=\"font-weight: normal;\"> " . $descr->setor . "</span></td>
+							<td><b>Prioridade:</b><span style=\"font-weight: normal;\"> " . $descr->prioridade . "</span></td>
+							<td><b>Status:</b><span style=\"font-weight: normal;\"> " . $descr->status . "</span></td>
+							<td><b>Mês:</b><span style=\"font-weight: normal;\"> " . $descr->mes . "</span></td>
+						</tr>
+					</table>
 				</fieldset><br>
 				<fieldset class=\"preg\">
 					<table>
@@ -197,11 +201,11 @@ class Busca extends Conexao {
 							<td>" . $query->num_rows . " resultados encontrados</td>
 						</tr>
 					</table>
-				</fieldset><br>
+				</fieldset>
 				<table class=\"prod\">
 					<thead>
 						<tr>
-							<th>#</th>
+							<th>Pedido</th>
 							<th>Setor</th>
 							<th>Data</th>
 							<th>Mês</th>
