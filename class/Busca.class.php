@@ -32,7 +32,17 @@ class Busca extends Conexao {
 	 */
 	public function getRelatorio(int $status): string{
 		$retorno = "";
-		$query = $this->mysqli->query("SELECT pedido.id, DATE_FORMAT(pedido.data_pedido, '%d/%m/%Y') AS data_pedido, mes.sigla_mes AS ref_mes, prioridade.nome AS prioridade, status.nome AS status, pedido.valor FROM pedido, mes, prioridade, status WHERE prioridade.id = pedido.prioridade AND status.id = pedido.status AND mes.id = pedido.ref_mes AND pedido.status = {$status} ORDER BY pedido.id DESC;");
+		$order = "ORDER BY pedido.id DESC";
+		$alteracao = "AND pedido.alteracao = 0";
+		if ($status == 3) {
+			// reprovado
+			$alteracao = "AND pedido.alteracao = 1";
+		} else if ($status == 5) {
+			// aguarda orçamento
+			// por nível de prioridade e por montante (pedidos urgentes que somam até R$ 100.000)
+			$order = "ORDER BY pedido.prioridade DESC, pedido.valor DESC";
+		}
+		$query = $this->mysqli->query("SELECT pedido.id, DATE_FORMAT(pedido.data_pedido, '%d/%m/%Y') AS data_pedido, mes.sigla_mes AS ref_mes, prioridade.nome AS prioridade, status.nome AS status, pedido.valor FROM pedido, mes, prioridade, status WHERE prioridade.id = pedido.prioridade AND status.id = pedido.status AND mes.id = pedido.ref_mes AND pedido.status = {$status} {$alteracao} {$order};");
 		while ($pedido = $query->fetch_object()) {
 			$empenho = Busca::verEmpenho($pedido->id);
 			$pedido->prioridade = ucfirst($pedido->prioridade);
@@ -62,7 +72,7 @@ class Busca extends Conexao {
 	 */
 	public function getRadiosStatusRel(): string{
 		$retorno = "";
-		$query = $this->mysqli->query("SELECT status.id, status.nome FROM status WHERE status.id = 3 OR status.id = 6 OR status.id = 7;");
+		$query = $this->mysqli->query("SELECT status.id, status.nome FROM status WHERE status.id = 2 OR status.id = 3 OR status.id = 5 OR status.id = 6 OR status.id = 7;");
 		while ($status = $query->fetch_object()) {
 			$retorno .= "
 			<td>
