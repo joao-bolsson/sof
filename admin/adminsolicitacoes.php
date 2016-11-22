@@ -487,6 +487,27 @@ $permissao = $obj_Busca->getPermissoes($_SESSION["id"]);
     </div>
   </div>
 </footer>
+<div aria-hidden="true" class="modal fade" id="listProcessos" role="dialog" tabindex="-1">
+  <div class="modal-dialog" style="width: 40%;">
+    <div class="modal-content">
+      <div class="modal-heading">
+        <a class="modal-close" data-dismiss="modal">×</a>
+        <h2 class="modal-title content-sub-heading">Processos do Item</h2>
+      </div>
+      <div class="modal-inner">
+        <table id="tableListProcessos" class="table" style="width: 100%;">
+          <thead>
+            <tr>
+              <th>Número do Processo</th>
+              <th>Data Fim</th>
+            </tr>
+          </thead>
+          <tbody id="tbodyListProcessos"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
 <div aria-hidden="true" class="modal fade" id="listRelatorios" role="dialog" tabindex="-1">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -1074,6 +1095,6 @@ $permissao = $obj_Busca->getPermissoes($_SESSION["id"]);
 
 <script type="text/javascript" src="../plugins/dataTables/datatables.min.js"></script>
 
-<script type="text/javascript" src="../ini.min.js"></script>
+<script type="text/javascript" src="../ini.js"></script>
 </body>
 </html>

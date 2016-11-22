@@ -554,6 +554,17 @@ function changeReport(radio) {
 	});
 }
 
+function verProcessos(pedido) {
+	$.post('../php/busca.php', {
+		admin: 1,
+		form: 'verProcessos',
+		id_pedido: pedido
+	}).done(function(resposta) {
+		$('#tbodyListProcessos').html(resposta);
+		abreModal('#listProcessos');
+	});
+}
+
 $('#listPedidos').on('shown.bs.modal', function(event) {
 	if (!$.fn.DataTable.isDataTable('#tableListPedidos')) {
 		iniDataTable('#tableListPedidos');

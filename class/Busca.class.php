@@ -40,12 +40,24 @@ class Busca extends Conexao {
 		} else if ($status == 5) {
 			// aguarda orçamento
 			// por nível de prioridade e por montante (pedidos urgentes que somam até R$ 100.000)
-			$order = "ORDER BY pedido.prioridade DESC, pedido.valor DESC";
+			$order = "ORDER BY pedido.id DESC, pedido.prioridade DESC, pedido.valor DESC";
+		} else if ($status == 2) {
+			// em análise
+			$order = "ORDER BY pedido.id DESC, pedido.prioridade DESC";
 		}
 		$query = $this->mysqli->query("SELECT pedido.id, DATE_FORMAT(pedido.data_pedido, '%d/%m/%Y') AS data_pedido, mes.sigla_mes AS ref_mes, prioridade.nome AS prioridade, status.nome AS status, pedido.valor FROM pedido, mes, prioridade, status WHERE prioridade.id = pedido.prioridade AND status.id = pedido.status AND mes.id = pedido.ref_mes AND pedido.status = {$status} {$alteracao} {$order};");
 		while ($pedido = $query->fetch_object()) {
 			$empenho = Busca::verEmpenho($pedido->id);
 			$pedido->prioridade = ucfirst($pedido->prioridade);
+			$btnVerProcesso = "";
+			if ($status == 2) {
+				// em análise
+				// por ordem descrecente do término do processo
+				// botão para os processos presentes no pedido e suas datas
+				$btnVerProcesso = "
+					<button class=\"btn btn-default btn-sm\" style=\"text-transform: none !important;font-weight: bold;\" onclick=\"verProcessos(" . $pedido->id . ");\" title=\"Ver Processos\"><span class=\"icon\">remove_red_eye</span></button>
+				";
+			}
 			$retorno .= "
 			<tr>
 				<td>" . $pedido->ref_mes . "</td>
@@ -56,13 +68,33 @@ class Busca extends Conexao {
 				<td>R$ " . $pedido->valor . "</td>
 				<td>
 					<button class=\"btn btn-default btn-sm\" style=\"text-transform: none !important;font-weight: bold;\" onclick=\"imprimir(" . $pedido->id . ");\" title=\"Imprimir\"><span class=\"icon\">print</span></button>
+					" . $btnVerProcesso . "
 				</td>
 			</tr>";
 		}
 		$query->close();
 		return $retorno;
 	}
-
+	// ------------------------------------------------------------------------------
+	/**
+	 *	Função para retornar os processos que estão nos pedidos com suas datas de vencimento
+	 *
+	 *	@access public
+	 *	@param $pedido Id do pedido
+	 *	@return Uma tabela com os processos e as informações dele
+	 */
+	public function getProcessosPedido(int $pedido): string{
+		$query = $this->mysqli->query("SELECT DISTINCT itens.num_processo, itens.dt_fim FROM itens, itens_pedido WHERE itens_pedido.id_pedido = {$pedido} AND itens_pedido.id_item = itens.id;");
+		$retorno = "";
+		while ($processo = $query->fetch_object()) {
+			$retorno .= "
+				<tr>
+					<td>" . $processo->num_processo . "</td>
+					<td>" . $processo->dt_fim . "</td>
+				</tr>";
+		}
+		return $retorno;
+	}
 	// ------------------------------------------------------------------------------
 	/**
 	 *	Função para retornar os radios buttons para gerar relatórios por status

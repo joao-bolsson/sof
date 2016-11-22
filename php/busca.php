@@ -28,6 +28,10 @@ if (isset($_POST["admin"]) && isset($_SESSION['id_setor']) && $_SESSION['id_seto
 	$form = $_POST["form"];
 
 	switch ($form) {
+	// visualiza os processos de um pedido com suas datas
+	case 'verProcessos':
+		echo $obj_Busca->getProcessosPedido($_POST['id_pedido']);
+		break;
 	// relatórios nova versão
 	case 'listRelatorios':
 		echo $obj_Busca->getRelatorio($_POST['status']);
