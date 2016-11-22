@@ -18,60 +18,17 @@ date_default_timezone_set('America/Sao_Paulo');
 $mpdf = new mPDF();
 
 $html_style = "
-  <style type=\"text/css\">
-   fieldset {
-    border: 2px solid black;
-    padding-left: 5px;
-  }
-  fieldset p{
-    font-size: 8pt;
-    font-weight: normal;
-  }
-  fieldset h5{
-    text-align: center;
-  }
-  table{
-    border-collapse: collapse;
-    border-spacing: 0;
-    font-size: 7pt;
-    width: 100% !important;
-    background-color: #ffffff;
-    border: 0;
-  }
-  table td, table th {
-    line-height: 20px;
-    padding: 1px;
-    vertical-align: top;
-  }
-  table td {
-    text-align: center;
-  }
-  thead {
-    display: table-header-group;
-  }
-  fieldset.preg table td{
-    padding: 10px;
-    font-weight: bold;
-    font-size: 7pt;
-  }
-  table.prod td, table.prod th{
-    text-align: left;
-    font-size: 8pt;
-    padding: 3px;
-  }
-</style>
+<link rel=\"stylesheet\" type=\"text/css\" href=\"../relatorios.css\"/>
 <head>
   <title>SOFHUSM | Relatório</title>
-</head>
-";
+</head>";
 
 $html_header = "
 <body>
   <p style=\"text-align: center;\">
     <img src=\"../sof_files/header_setor_2.png\"/>
   </p>
-  <hr/>
-  ";
+  <hr/>";
 if (isset($_POST["relatorio"]) && $_SESSION["id_setor"] == 2) {
 	$html = $html_style . $html_header;
 
