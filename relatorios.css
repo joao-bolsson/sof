@@ -11,6 +11,10 @@ fieldset {
     text-align: center;
     margin: 10px;
   }
+  fieldset h6{
+    text-align: center;
+    margin: 0 0 2px 0;
+  }
   table{
     border-collapse: collapse;
     border-spacing: 0;

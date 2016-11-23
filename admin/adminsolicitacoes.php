@@ -275,10 +275,12 @@ $permissao = $obj_Busca->getPermissoes($_SESSION["id"]);
               </select>
             </div>
             <div class="form-group form-group-label">
-              <label class="floating-label" for="mesRelPed"><span class="icon">perm_identity</span>&nbsp;Mês</label>
-              <select id="mesRelPed" class="form-control" name="mes" required>
-                <?=$obj_Busca->getMeses();?>
-              </select>
+              <label class="floating-label" for="dataI"><span class="icon">date_range</span>&nbsp;Data Início</label>
+              <input class="form-control date" id="dataI" name="dataI" type="text" required>
+            </div>
+            <div class="form-group form-group-label">
+              <label class="floating-label" for="dataF"><span class="icon">date_range</span>&nbsp;Data Fim</label>
+              <input class="form-control date" id="dataF" name="dataF" type="text">
             </div>
           </div>
           <div class="modal-footer margin-bottom">
@@ -1088,6 +1090,7 @@ $permissao = $obj_Busca->getPermissoes($_SESSION["id"]);
 </div>
 <!-- js -->
 <script src="../plugins/jQuery/jquery.min.js"></script>
+<script src="../plugins/jQuery/jquery.mask.min.js"></script>
 <script src="../material/js/base.min.js"></script>
 
 <!-- js for doc -->
@@ -1096,5 +1099,10 @@ $permissao = $obj_Busca->getPermissoes($_SESSION["id"]);
 <script type="text/javascript" src="../plugins/dataTables/datatables.min.js"></script>
 
 <script type="text/javascript" src="../ini.min.js"></script>
+<script>
+    $(function () {
+        $('.date').mask('00/00/0000');
+    });
+</script>
 </body>
 </html>

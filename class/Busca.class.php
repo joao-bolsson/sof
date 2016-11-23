@@ -11,16 +11,18 @@ ini_set('display_erros', true);
 error_reporting(E_ALL);
 
 include_once 'Conexao.class.php';
+include_once 'Util.class.php';
 
 class Busca extends Conexao {
 
-	private $mysqli;
+	private $mysqli, $obj_Util;
 
 	function __construct() {
 		//chama o método contrutor da classe Conexao
 		parent::__construct();
 		//atribuindo valor a variavel que realiza as consultas
 		$this->mysqli = parent::getConexao();
+		$this->obj_Util = new Util();
 	}
 	// ------------------------------------------------------------------------------
 	/**
@@ -151,9 +153,8 @@ class Busca extends Conexao {
 	 *	@access public
 	 *	@return string
 	 */
-	public function getRelatorioPedidos(int $id_setor, int $prioridade, int $status, int $mes): string{
+	public function getRelatorioPedidos(int $id_setor, int $prioridade, int $status, string $dataI, string $dataF): string{
 		$retorno = "";
-		$ano = date('Y');
 		$where_status = "AND pedido.status = " . $status;
 		$where_prioridade = "AND pedido.prioridade = " . $prioridade;
 		if ($status == 0) {
@@ -162,38 +163,15 @@ class Busca extends Conexao {
 		if ($prioridade == 0) {
 			$where_prioridade = '';
 		}
-		$query = $this->mysqli->query("SELECT pedido.id, setores.nome AS setor, DATE_FORMAT(pedido.data_pedido, '%d/%m/%Y') AS data_pedido, mes.sigla_mes AS mes, prioridade.nome AS prioridade, status.nome AS status, pedido.valor FROM pedido, setores, mes, prioridade, status WHERE mes.id = pedido.ref_mes AND setores.id = pedido.id_setor AND prioridade.id = pedido.prioridade AND status.id = pedido.status AND pedido.id_setor = {$id_setor} {$where_prioridade} AND pedido.alteracao = 0 AND pedido.ref_mes = {$mes} AND EXTRACT(YEAR FROM pedido.data_pedido) = {$ano} {$where_status};");
+		$dataIni = $this->obj_Util->dateFormat($dataI);
+		$dataFim = $this->obj_Util->dateFormat($dataF);
+		$query = $this->mysqli->query("SELECT pedido.id, setores.nome AS setor, DATE_FORMAT(pedido.data_pedido, '%d/%m/%Y') AS data_pedido, mes.sigla_mes AS mes, prioridade.nome AS prioridade, status.nome AS status, pedido.valor FROM pedido, setores, mes, prioridade, status WHERE mes.id = pedido.ref_mes AND setores.id = pedido.id_setor AND prioridade.id = pedido.prioridade AND status.id = pedido.status AND pedido.id_setor = {$id_setor} {$where_prioridade} AND pedido.alteracao = 0 {$where_status} AND pedido.data_pedido BETWEEN '{$dataIni}' AND '{$dataFim}';");
 		if ($query) {
-			$where_status = "AND status.id = " . $status;
-			$where_prioridade = "AND prioridade.id = " . $prioridade;
-			if ($status == 0) {
-				$where_status = '';
-			}
-			if ($prioridade == 0) {
-				$where_prioridade = '';
-			}
-			$query_descr = $this->mysqli->query("SELECT setores.nome AS setor, prioridade.nome AS prioridade, status.nome AS status, mes.sigla_mes AS mes FROM setores, prioridade, status, mes WHERE setores.id = {$id_setor} {$where_prioridade} {$where_status} AND mes.id = {$mes};");
-			$descr = $query_descr->fetch_object();
-			if ($status == 0) {
-				$descr->status = "Todos";
-			}
-			if ($prioridade == 0) {
-				$descr->prioridade = "Todas";
-			} else {
-				$descr->prioridade = ucfirst($descr->prioridade);
-			}
-			$query_descr->close();
 			$retorno .= "
 				<fieldset class=\"preg\">
 					<h5>DESCRIÇÃO DO RELATÓRIO</h5>
-					<table class=\"prod\">
-						<tr>
-							<td><b>Setor selecionado:</b><span style=\"font-weight: normal;\"> " . $descr->setor . "</span></td>
-							<td><b>Prioridade:</b><span style=\"font-weight: normal;\"> " . $descr->prioridade . "</span></td>
-							<td><b>Status:</b><span style=\"font-weight: normal;\"> " . $descr->status . "</span></td>
-							<td><b>Mês:</b><span style=\"font-weight: normal;\"> " . $descr->mes . "</span></td>
-						</tr>
-					</table>
+					<h6>Relatório de Pedidos por Setor e nível de Prioridade</h6>
+					<h6>Período: {$dataI} à {$dataF}</h6>
 				</fieldset><br>
 				<fieldset class=\"preg\">
 					<table>

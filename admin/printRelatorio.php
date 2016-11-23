@@ -38,8 +38,7 @@ if (isset($_POST["relatorio"]) && $_SESSION["id_setor"] == 2) {
 		$id_setor = $_POST['setor'];
 		$prioridade = $_POST['prioridade'];
 		$status = $_POST['status'];
-		$mes = $_POST['mes'];
-		$html .= $obj_Busca->getRelatorioPedidos($id_setor, $prioridade, $status, $mes);
+		$html .= $obj_Busca->getRelatorioPedidos($id_setor, $prioridade, $status, $_POST['dataI'], $_POST['dataF']);
 		break;
 
 	default:
