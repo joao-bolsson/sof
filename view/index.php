@@ -290,7 +290,7 @@ if (!isset($_SESSION["id_setor"]) || $_SESSION["id_setor"] == 0) {
                     <div class="card-inner" style="padding-left: 30px; padding-right: 30px;">
                       <p style="text-align: justify; text-indent: 2em;">
                         Realizar a gestão orçamentária e financeira do HUSM, executando com responsabilidade, economicidade, celeridade, qualidade
-                          e resolutividade os três estágios da despesa pública -<b>empenho, liquidação e pagamento</b>- em atendimento às necesssidades da
+                          e resolutividade os três estágios da despesa pública -<b>empenho, liquidação e pagamento</b>- em atendimento às necessidades da
                           instituição. </p>
                     </div>
                   </div>

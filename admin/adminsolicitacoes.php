@@ -606,7 +606,7 @@ $permissao = $obj_Busca->getPermissoes($_SESSION["id"]);
               <td colspan="3">
                 <div class="form-group form-group-label">
                   <label class="floating-label" for="compItem"><span class="icon">announcement</span>&nbsp;Complemento do Item</label>
-                  <textarea class="form-control textarea-autosize" id="compItem" name="complemento" required></textarea>
+                  <textarea class="form-control textarea-autosize" id="compItem" name="complemento" required rows="5"></textarea>
                 </div>
               </td>
               <td></td>
