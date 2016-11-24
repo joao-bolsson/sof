@@ -56,21 +56,38 @@ function verEmpenho(id_pedido) {
 	});
 }
 
+function hideDivs() {
+	var divs = ['rowPedidos', 'rowDetPedido', 'rowSolicAdi', 'rowAltPed'];
+	for (i = 0; i < divs.length; i++) {
+		document.getElementById(divs[i]).style.display = 'none';
+	}
+}
+
 function mostra(row, id_icon) {
 	$('a').blur();
+	hideDivs();
 	var display = document.getElementById(row).style.display;
 	var icon = '';
+	var display_ped;
 	if (display == 'block') {
 		display = 'none';
+		display_ped = 'block';
 		icon = 'keyboard_arrow_down';
 	} else {
 		display = 'block';
+		display_ped = 'none';
 		icon = 'keyboard_arrow_up';
 	}
 	document.getElementById(row).style.display = display;
 	document.getElementById(id_icon).innerHTML = icon;
 }
 
+function mostraPed() {
+	$('a').blur();
+	hideDivs();
+	document.getElementById('rowPedidos').style.display = 'block';
+	iniSolicitacoes();
+}
 function mostraSolicAdiant() {
 	mostra('rowSolicAdi', 'iconSolicAdi');
 	iniTableSolicAdiant();

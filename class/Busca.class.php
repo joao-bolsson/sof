@@ -133,6 +133,7 @@ class Busca extends Conexao {
 		$retorno = "";
 		while ($problema = $query->fetch_object()) {
 			$problema->descricao = $this->mysqli->real_escape_string($problema->descricao);
+			$problema->descricao = str_replace("\"", "'", $problema->descricao);
 			$retorno .= "
 				<tr>
 					<td>" . $problema->setor . "</td>
@@ -170,7 +171,7 @@ class Busca extends Conexao {
 			$retorno .= "
 				<fieldset class=\"preg\">
 					<h5>DESCRIÇÃO DO RELATÓRIO</h5>
-					<h6>Relatório de Pedidos por Setor e nível de Prioridade</h6>
+					<h6>Relatório de Pedidos por Setor e Nível de Prioridade</h6>
 					<h6>Período: {$dataI} à {$dataF}</h6>
 				</fieldset><br>
 				<fieldset class=\"preg\">
@@ -598,6 +599,8 @@ class Busca extends Conexao {
 		$query = $this->mysqli->query("SELECT processos.id, processos.num_processo, processos_tipo.nome as tipo, processos.estante, processos.prateleira, processos.entrada, processos.saida, processos.responsavel, processos.retorno, processos.obs FROM processos, processos_tipo WHERE processos.tipo = processos_tipo.id ORDER BY id ASC;");
 
 		while ($processo = $query->fetch_object()) {
+			$processo->obs = $this->mysqli->real_escape_string($processo->obs);
+			$processo->obs = str_replace("\"", "'", $processo->obs);
 			$retorno .= "
 				<tr>
 					<td>
@@ -900,6 +903,8 @@ class Busca extends Conexao {
 				$btn_aprovar = "<a title=\"Aprovar\" href=\"javascript:analisaSolicAlt(" . $solic->id . ", " . $solic->id_pedido . ", 1);\" class=\"modal-close\"><span class=\"icon\">done_all<span></span></span></a>";
 				$btn_reprovar = "<a title=\"Reprovar\" href=\"javascript:analisaSolicAlt(" . $solic->id . ", " . $solic->id_pedido . ", 0);\" class=\"modal-close\"><span class=\"icon\">delete<span></span></span></a>";
 			}
+			$solic->justificativa = $this->mysqli->real_escape_string($solic->justificativa);
+			$solic->justificativa = str_replace("\"", "'", $solic->justificativa);
 			$retorno .= "
 			<tr>
 				<td>
@@ -959,6 +964,8 @@ class Busca extends Conexao {
 					$btn_aprovar = "<a title=\"Aprovar\" href=\"javascript:analisaAdi(" . $solic->id . ", 1);\" class=\"modal-close\"><span class=\"icon\">done_all<span></span></span></a>";
 					$btn_reprovar = "<a title=\"Reprovar\" href=\"javascript:analisaAdi(" . $solic->id . ", 0);\" class=\"modal-close\"><span class=\"icon\">delete<span></span></span></a>";
 				}
+				$solic->justificativa = $this->mysqli->real_escape_string($solic->justificativa);
+				$solic->justificativa = str_replace("\"", "'", $solic->justificativa);
 				$retorno .= "
 				<tr>
 					<td>" . $btn_reprovar . $btn_aprovar . "</td>
@@ -1338,6 +1345,8 @@ class Busca extends Conexao {
 			if ($item->dt_fim == '') {
 				$item->dt_fim = "----------";
 			}
+			$item->complemento_item = $this->mysqli->real_escape_string($item->complemento_item);
+			$item->complemento_item = str_replace("\"", "'", $item->complemento_item);
 			$retorno .= "
 			<tr id=\"row_item" . $item->id_itens . "\">
 				<td>
@@ -1438,6 +1447,8 @@ class Busca extends Conexao {
 				$solic->data_analise = "--------------";
 				break;
 			}
+			$solic->justificativa = $this->mysqli->real_escape_string($solic->justificativa);
+			$solic->justificativa = str_replace("\"", "'", $solic->justificativa);
 			$retorno .= "
 			<tr>
 				<td>" . $solic->id_pedido . "</td>
@@ -1502,6 +1513,8 @@ class Busca extends Conexao {
 				$solic->data_analise = "--------------";
 				break;
 			}
+			$solic->justificativa = $this->mysqli->real_escape_string($solic->justificativa);
+			$solic->justificativa = str_replace("\"", "'", $solic->justificativa);
 			$retorno .= "
 			<tr>
 				<td>" . $solic->data_solicitacao . "</td>
@@ -1532,7 +1545,7 @@ class Busca extends Conexao {
 		while ($item = $query->fetch_object()) {
 			//remove as aspas do complemento_item
 			$item->complemento_item = $this->mysqli->real_escape_string($item->complemento_item);
-
+			$item->complemento_item = str_replace("\"", "'", $item->complemento_item);
 			$retorno .= "
 			<tr>
 				<td>
@@ -1571,6 +1584,7 @@ class Busca extends Conexao {
 		$item = $query->fetch_object();
 		$query->close();
 		$item->complemento_item = $this->mysqli->real_escape_string($item->complemento_item);
+		$item->complemento_item = str_replace("\"", "'", $item->complemento_item);
 		$valor = $qtd * $item->vl_unitario;
 		$retorno = "
 		<tr id=\"row" . $id_item . "\">
@@ -1660,6 +1674,7 @@ class Busca extends Conexao {
 		while ($item = $query->fetch_object()) {
 			$id_item = $item->id_itens;
 			$item->complemento_item = $this->mysqli->real_escape_string($item->complemento_item);
+			$item->complemento_item = str_replace("\"", "'", $item->complemento_item);
 			$retorno .= "
 			<tr id=\"row" . $id_item . "\">
 				<td><a class=\"modal-close\" href=\"javascript:removeTableRow(" . $id_item . ", '" . $item->valor . "');\"><span class=\"icon\">delete</span></a></td>

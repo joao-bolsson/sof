@@ -143,6 +143,9 @@ $permissao = $obj_Busca->getPermissoes($_SESSION["id"]);
         <td>
           <a href="javascript:mostraSolicAltPed();"><span id="iconSolicAlt" class="icon">keyboard_arrow_down</span>Solicitações de Alteração de Pedidos</a>
         </td>
+        <td>
+          <a href="javascript:mostraPed();"><span id="iconPed" class="icon">keyboard_arrow_down</span>Pedidos</a>
+        </td>
       <?php endif;?>
       <?php if (true): ?>
         <td id="labelSaldoSOF" style="font-weight: bold;">Saldo Disponível: R$ <?=$obj_Busca->getSaldo($_SESSION['id_setor']);?></td>
@@ -331,7 +334,7 @@ $permissao = $obj_Busca->getPermissoes($_SESSION["id"]);
         <table id="tableSolicAltPedido" class="table" style="width: 100%;">
           <thead>
             <th></th>
-            <th>#PEDIDO</th>
+            <th>NUM_PEDIDO</th>
             <th>SETOR</th>
             <th>DATA_SOLICITACAO</th>
             <th>DATA_ANALISE</th>
@@ -349,7 +352,7 @@ $permissao = $obj_Busca->getPermissoes($_SESSION["id"]);
 
 <!-- TABELA COM OS PEDIDOS ENVIADOS AO SOF -->
 
-<div class="row">
+<div id="rowPedidos" class="row">
  <div id="card" class="card margin-top-no">
    <div class="card-main">
      <div class="card-header card-brand">
@@ -494,7 +497,7 @@ $permissao = $obj_Busca->getPermissoes($_SESSION["id"]);
     <div class="modal-content">
       <div class="modal-heading">
         <a class="modal-close" data-dismiss="modal">×</a>
-        <h2 class="modal-title content-sub-heading">Processos do Item</h2>
+        <h2 class="modal-title content-sub-heading">Processos do Pedido</h2>
       </div>
       <div class="modal-inner">
         <table id="tableListProcessos" class="table" style="width: 100%;">
