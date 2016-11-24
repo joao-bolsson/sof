@@ -158,15 +158,19 @@ class Busca extends Conexao {
 		$retorno = "";
 		$where_status = "AND pedido.status = " . $status;
 		$where_prioridade = "AND pedido.prioridade = " . $prioridade;
+		$where_setor = "AND pedido.id_setor = " . $id_setor;
 		if ($status == 0) {
 			$where_status = '';
 		}
 		if ($prioridade == 0) {
 			$where_prioridade = '';
 		}
+		if ($id_setor == 0) {
+			$where_setor = '';
+		}
 		$dataIni = $this->obj_Util->dateFormat($dataI);
 		$dataFim = $this->obj_Util->dateFormat($dataF);
-		$query = $this->mysqli->query("SELECT pedido.id, setores.nome AS setor, DATE_FORMAT(pedido.data_pedido, '%d/%m/%Y') AS data_pedido, mes.sigla_mes AS mes, prioridade.nome AS prioridade, status.nome AS status, pedido.valor FROM pedido, setores, mes, prioridade, status WHERE mes.id = pedido.ref_mes AND setores.id = pedido.id_setor AND prioridade.id = pedido.prioridade AND status.id = pedido.status AND pedido.id_setor = {$id_setor} {$where_prioridade} AND pedido.alteracao = 0 {$where_status} AND pedido.data_pedido BETWEEN '{$dataIni}' AND '{$dataFim}';");
+		$query = $this->mysqli->query("SELECT pedido.id, setores.nome AS setor, DATE_FORMAT(pedido.data_pedido, '%d/%m/%Y') AS data_pedido, mes.sigla_mes AS mes, prioridade.nome AS prioridade, status.nome AS status, pedido.valor FROM pedido, setores, mes, prioridade, status WHERE mes.id = pedido.ref_mes AND setores.id = pedido.id_setor AND prioridade.id = pedido.prioridade AND status.id = pedido.status {$where_setor} {$where_prioridade} AND pedido.alteracao = 0 {$where_status} AND pedido.data_pedido BETWEEN '{$dataIni}' AND '{$dataFim}';");
 		if ($query) {
 			$retorno .= "
 				<fieldset class=\"preg\">

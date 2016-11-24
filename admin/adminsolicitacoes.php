@@ -260,6 +260,7 @@ $permissao = $obj_Busca->getPermissoes($_SESSION["id"]);
             <div class="form-group form-group-label">
               <label class="floating-label" for="setorRelPed"><span class="icon">perm_identity</span>&nbsp;Setor</label>
               <select id="setorRelPed" class="form-control" name="setor" required>
+                <option value="0">Todos</option>
                 <?=$obj_Busca->getOptionsSetores();?>
               </select>
             </div>
