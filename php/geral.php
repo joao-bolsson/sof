@@ -36,6 +36,18 @@ if (isset($_POST["admin"]) && isset($_SESSION["id_setor"]) && $_SESSION["id_seto
 	$form = $_POST["form"];
 
 	switch ($form) {
+
+	case 'enviaOrdenador':
+		$id_pedido = $_POST['id_pedido'];
+		echo $obj_Geral->enviaOrdenador($id_pedido);
+		break;
+	case 'enviaFontes':
+		$id_pedido = $_POST['id_pedido'];
+		$fonte = $_POST['fonte'];
+		$ptres = $_POST['ptres'];
+		$plano = $_POST['plano'];
+		echo $obj_Geral->cadastraFontes($id_pedido, $fonte, $ptres, $plano);
+		break;
 	case 'resetSystem':
 		if ($_SESSION['login'] == 'joao') {
 			$obj_Geral->resetSystem();

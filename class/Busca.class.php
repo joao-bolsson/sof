@@ -170,13 +170,34 @@ class Busca extends Conexao {
 		}
 		$dataIni = $this->obj_Util->dateFormat($dataI);
 		$dataFim = $this->obj_Util->dateFormat($dataF);
-		$query = $this->mysqli->query("SELECT pedido.id, setores.nome AS setor, DATE_FORMAT(pedido.data_pedido, '%d/%m/%Y') AS data_pedido, mes.sigla_mes AS mes, prioridade.nome AS prioridade, status.nome AS status, pedido.valor FROM pedido, setores, mes, prioridade, status WHERE mes.id = pedido.ref_mes AND setores.id = pedido.id_setor AND prioridade.id = pedido.prioridade AND status.id = pedido.status {$where_setor} {$where_prioridade} AND pedido.alteracao = 0 {$where_status} AND pedido.data_pedido BETWEEN '{$dataIni}' AND '{$dataFim}';");
+		$where_empenho = "";
+		$tb_empenho = "";
+		$empenho = "";
+		if ($status == 8) {
+			$where_empenho = "AND pedido_empenho.id_pedido = pedido.id";
+			$tb_empenho = "pedido_empenho, ";
+			$empenho = ", pedido_empenho.empenho";
+		}
+		$query = $this->mysqli->query("SELECT pedido.id, setores.nome AS setor, DATE_FORMAT(pedido.data_pedido, '%d/%m/%Y') AS data_pedido, mes.sigla_mes AS mes, prioridade.nome AS prioridade, status.nome AS status, pedido.valor {$empenho} FROM {$tb_empenho} pedido, setores, mes, prioridade, status WHERE mes.id = pedido.ref_mes AND setores.id = pedido.id_setor AND prioridade.id = pedido.prioridade AND status.id = pedido.status {$where_setor} {$where_prioridade} {$where_empenho} AND pedido.alteracao = 0 {$where_status} AND pedido.data_pedido BETWEEN '{$dataIni}' AND '{$dataFim}';");
+		$titulo = "Relatório de Pedidos por Setor e Nível de Prioridade";
 		if ($query) {
+			$thead = "
+			<th>Data</th>
+			<th>Mês</th>
+			<th>Prioridade</th>
+			<th>Status</th>
+			<th>Valor</th>";
+			if ($status == 8) {
+				$titulo = "Relatório de Empenhos Enviados ao Ordenador";
+				$thead = "
+				<th>Prioridade</th>
+				<th>SIAFI</th>";
+			}
 			$retorno .= "
 				<fieldset class=\"preg\">
 					<h5>DESCRIÇÃO DO RELATÓRIO</h5>
-					<h6>Relatório de Pedidos por Setor e Nível de Prioridade</h6>
-					<h6>Período: {$dataI} à {$dataF}</h6>
+					<h6>" . $titulo . "</h6>
+					<h6>Período de Emissão: {$dataI} à {$dataF}</h6>
 				</fieldset><br>
 				<fieldset class=\"preg\">
 					<table>
@@ -190,29 +211,50 @@ class Busca extends Conexao {
 						<tr>
 							<th>Pedido</th>
 							<th>Setor</th>
-							<th>Data</th>
-							<th>Mês</th>
-							<th>Prioridade</th>
-							<th>Status</th>
-							<th>Valor</th>
+							" . $thead . "
 						</tr>
 					</thead>
 					<tbody>";
 			while ($pedido = $query->fetch_object()) {
 				$pedido->prioridade = ucfirst($pedido->prioridade);
+				$tbody = "";
+				if ($status == 8) {
+					$tbody = "
+						<td>" . $pedido->prioridade . "</td>
+						<td>" . $pedido->empenho . "</td>
+					";
+				} else {
+					$tbody = "
+						<td>" . $pedido->data_pedido . "</td>
+						<td>" . $pedido->mes . "</td>
+						<td>" . $pedido->prioridade . "</td>
+						<td>" . $pedido->status . "</td>
+						<td>R$ " . $pedido->valor . "</td>
+					";
+				}
 				$retorno .= "
 				<tr>
 					<td>" . $pedido->id . "</td>
 					<td>" . $pedido->setor . "</td>
-					<td>" . $pedido->data_pedido . "</td>
-					<td>" . $pedido->mes . "</td>
-					<td>" . $pedido->prioridade . "</td>
-					<td>" . $pedido->status . "</td>
-					<td>R$ " . $pedido->valor . "</td>
+					" . $tbody . "
 				</tr>";
 			}
 			$query->close();
 			$retorno .= "<tbody></table>";
+		}
+		if ($status == 8) {
+			$retorno .= "
+			<br><br><br>
+			<h5 class=\"ass\" style=\"margin-right: 50%; margin-bottom: 0;\">
+  _______________________________________________<br>
+  RESPONSÁVEL PELA INFORMAÇÃO
+  </h5>
+  			<h5 class=\"ass\" style=\"margin-left: 51%; margin-top: -32px;\">
+  _______________________________________________<br>
+  RESPONSÁVEL PELO RECEBIMENTO
+  </h5><br><br>
+			<h4 style=\"text-align: center\" class=\"ass\">Santa Maria, ___ de ___________________ de _____.</h4>
+			";
 		}
 		return $retorno;
 	}
@@ -1305,7 +1347,11 @@ class Busca extends Conexao {
 				if ($pedido->status == 'Em Analise') {
 					$btnAnalisar = "<a class=\"modal-close\" href=\"javascript:analisarPedido(" . $pedido->id . ", " . $pedido->id_setor . ");\" title=\"Analisar\"><span class=\"icon\">create<span></a>";
 				} else if ($pedido->status == 'Aguarda Orcamento') {
+					$btnAnalisar = "<a class=\"modal-close\" href=\"javascript:cadFontes(" . $pedido->id . ");\" title=\"Cadastrar Fontes\"><span class=\"icon\">mode_comment<span></a>";
+				} else if ($pedido->status == 'Aguarda SIAFI') {
 					$btnAnalisar = "<a class=\"modal-close\" href=\"javascript:cadEmpenho(" . $pedido->id . ");\" title=\"Cadastrar Empenho\"><span class=\"icon\">payment<span></a>";
+				} else if ($pedido->status == 'Empenhado') {
+					$btnAnalisar = "<a class=\"modal-close\" href=\"javascript:enviaOrdenador(" . $pedido->id . ");\" title=\"Enviar ao Ordenador\"><span class=\"icon\">send<span></a>";
 				} else {
 					$btnAnalisar = "<a class=\"modal-close\" href=\"javascript:getStatus(" . $pedido->id;", " . $pedido->id_setor . ");\" title=\"Alterar Status\"><span class=\"icon\">build<span></a>";
 				}

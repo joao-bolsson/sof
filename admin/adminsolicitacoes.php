@@ -700,6 +700,39 @@ $permissao = $obj_Busca->getPermissoes($_SESSION["id"]);
     </div>
   </div>
 </div>
+<div aria-hidden="true" class="modal fade" id="cadFontes" role="dialog" tabindex="-1">
+  <div class="modal-dialog" style="width: 40%;">
+    <div class="modal-content">
+      <div class="modal-heading">
+        <a class="modal-close" data-dismiss="modal">×</a>
+        <h2 class="modal-title content-sub-heading">Cadastrar Fontes</h2>
+      </div>
+      <form action="javascript:enviaFontes();" method="POST">
+        <div class="modal-inner">
+          <div id="div-lbl-high" class="form-group form-group-label">
+            <label class="floating-label" for="id_pedido_fonte"><span class="icon">label</span>&nbsp;Pedido</label>
+            <input class="form-control" id="id_pedido_fonte" name="id_pedido_fonte" type="number" required disabled>
+          </div>
+          <div class="form-group form-group-label">
+            <label class="floating-label" for="fonte"><span class="icon">label</span>&nbsp;Fonte de Recurso</label>
+            <input class="form-control" id="fonte" name="fonte" required />
+          </div>
+          <div class="form-group form-group-label">
+            <label class="floating-label" for="ptres"><span class="icon">label</span>&nbsp;PTRES</label>
+            <input class="form-control" id="ptres" name="ptres" required />
+          </div>
+          <div class="form-group form-group-label">
+            <label class="floating-label" for="plano"><span class="icon">label</span>&nbsp;Plano Interno</label>
+            <input class="form-control" id="plano" name="plano" required />
+          </div>
+        </div>
+        <div class="modal-footer margin-bottom">
+          <button class="btn btn-brand waves-attach waves-light waves-effect" type="submit" style="width: 100%;"><span class="icon">send</span>&nbsp;Cadastrar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
 <div class="modal fade" id="importItens" role="dialog">
   <div class="modal-dialog" style="width: 40%;">
     <div class="modal-content">

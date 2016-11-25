@@ -22,6 +22,47 @@ class Geral extends Conexao {
 	}
 	// ------------------------------------------------------------------------------
 	/**
+	 *	Função para enviar um pedido ao ordenador.
+	 *
+	 *	@access public
+	 *	@return if success - true, else false.
+	 */
+	public function enviaOrdenador(int $id_pedido): bool{
+		$query = $this->mysqli->query("UPDATE pedido SET status = '8' WHERE id = {$id_pedido};");
+		if ($query) {
+			return true;
+		}
+		return false;
+	}
+	// ------------------------------------------------------------------------------
+	/**
+	 *	Função para cadastrar fontes do pedido (status == Aguarda Orçamento)
+	 *
+	 *	@access public
+	 *	@return If inserts all datas - true, else false.
+	 */
+	public function cadastraFontes(int $id_pedido, string $fonte, string $ptres, string $plano): bool{
+		$fonte = $this->mysqli->real_escape_string($fonte);
+		$ptres = $this->mysqli->real_escape_string($ptres);
+		$plano = $this->mysqli->real_escape_string($plano);
+
+		$fonte = str_replace("\"", "'", $fonte);
+		$ptres = str_replace("\"", "'", $ptres);
+		$plano = str_replace("\"", "'", $plano);
+		$query = $this->mysqli->query("INSERT INTO pedido_fonte VALUES(NULL, {$id_pedido}, \"{$fonte}\", \"{$ptres}\", \"{$plano}\");");
+
+		if ($query) {
+			// muda o status do pedido -> Aguarda SIAFI
+			$query_st = $this->mysqli->query("UPDATE pedido SET status = '6' WHERE id = {$id_pedido};");
+			if ($query_st) {
+				return true;
+			}
+			return false;
+		}
+		return false;
+	}
+	// ------------------------------------------------------------------------------
+	/**
 	 *	Função para resetar o sistema para o estado orinal
 	 *
 	 *	@access public
@@ -164,7 +205,7 @@ class Geral extends Conexao {
 			return false;
 		}
 		// mudando status do pedido
-		$query = $this->mysqli->query("UPDATE pedido SET status = 6 WHERE id = {$id_pedido};");
+		$query = $this->mysqli->query("UPDATE pedido SET status = 7 WHERE id = {$id_pedido};");
 		if (!$query) {
 			return false;
 		}

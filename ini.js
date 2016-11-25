@@ -27,6 +27,12 @@ function cadEmpenho(id_pedido) {
 	document.getElementById('id_pedido_emp').value = id_pedido;
 }
 
+function cadFontes(id_pedido) {
+	$('#cadFontes').modal();
+	$('#div-lbl-high').addClass('control-highlight');
+	document.getElementById('id_pedido_fonte').value = id_pedido;
+}
+
 function enviaEmpenho() {
 	var id_pedido = document.getElementById('id_pedido_emp').value;
 	var empenho = document.getElementById('empenho').value;
@@ -38,6 +44,47 @@ function enviaEmpenho() {
 	}, function(resposta) {
 		if (resposta) {
 			$('#cadEmpenho').modal('hide');
+			iniSolicitacoes();
+			limpaTela();
+		} else {
+			alert('Ocorreu um erro no servidor. Contate o administrador.');
+		}
+	});
+}
+
+function enviaOrdenador(id_pedido) {
+	confirm = confirm("Mudar o status do pedido para \"Enviado ao Ordenador\"?");
+	if (confirm) {
+		$.post('../php/geral.php', {
+			admin: 1,
+			form: 'enviaOrdenador',
+			id_pedido: id_pedido
+		}, function(resposta) {
+			if (resposta) {
+				iniSolicitacoes();
+				limpaTela();
+			} else {
+				alert('Ocorreu um erro no servidor. Contate o administrador.');
+			}
+		});
+	}
+}
+
+function enviaFontes() {
+	var id_pedido = document.getElementById('id_pedido_fonte').value;
+	var fonte = document.getElementById('fonte').value;
+	var ptres = document.getElementById('ptres').value;
+	var plano = document.getElementById('plano').value;
+	$.post('../php/geral.php', {
+		admin: 1,
+		form: 'enviaFontes',
+		id_pedido: id_pedido,
+		fonte: fonte,
+		ptres: ptres,
+		plano: plano
+	}, function(resposta) {
+		if (resposta) {
+			$('#cadFontes').modal('hide');
 			iniSolicitacoes();
 			limpaTela();
 		} else {

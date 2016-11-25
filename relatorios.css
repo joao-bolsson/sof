@@ -44,3 +44,11 @@ fieldset {
     font-size: 8pt;
     padding: 3px;
   }
+h5, h6 {
+    font-family: Arial, sans-serif;
+  }
+  .ass {
+    font-weight: normal;
+    display: inline;
+    text-align: center;
+  }
