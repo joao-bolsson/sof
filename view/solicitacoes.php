@@ -43,9 +43,11 @@ $pedidos_em_analise = $obj_Busca->getPedidosAnalise($id_setor);
         </nav>
         <nav class="tab-nav pull-right hidden-xx">
             <ul class="nav nav-list">
+            <?php if ($_SESSION['id_setor'] == 2): ?>
                 <li>
                     <a class="btn btn-flat waves-attach waves-light" href="javascript:abreModal('#problema');"><span class="text-white"><span class="icon">warning</span>RELATAR PROBLEMA</span></a>
                 </li>
+            <?php endif;?>
                 <li>
                     <a class="btn btn-flat waves-attach waves-light" href="../admin/sair.php"><span class="text-white"><span class="icon">exit_to_app</span>SAIR</span></a>
                 </li>
@@ -222,6 +224,7 @@ $pedidos_em_analise = $obj_Busca->getPedidosAnalise($id_setor);
         </div>
     </div>
 </footer>
+<?php if ($_SESSION['id_setor'] == 2): ?>
 <div class="modal fade" id="problema" role="dialog">
     <div class="modal-dialog" style="width: 40%;">
         <div class="modal-content">
@@ -251,6 +254,7 @@ $pedidos_em_analise = $obj_Busca->getPedidosAnalise($id_setor);
         </div>
     </div>
 </div>
+<?php endif;?>
 <div class="modal fade" id="myInfos" role="dialog">
     <div class="modal-dialog" style="width: 40%;">
         <div class="modal-content">

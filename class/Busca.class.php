@@ -1057,6 +1057,49 @@ class Busca extends Conexao {
 			<p>Observação: </p>
 			<p style=\"font-weight: normal !important;\">	" . $pedido->obs . "</p>
 		</fieldset><br>";
+		$retorno .= Busca::getTableFontes($id_pedido);
+		return $retorno;
+	}
+	// ---------------------------------------------------------------------------------------------
+	/**
+	 *	Função para retornar as fontes de recurso de um pedido (impressão).
+	 *
+	 *	@access public
+	 *	@param $id_pedido Id do pedido.
+	 *	@return Fontes de recurso.
+	 */
+	public function getTableFontes($id_pedido): string{
+		$retorno = "";
+		$query = $this->mysqli->query("SELECT pedido_fonte.fonte_recurso, pedido_fonte.ptres, pedido_fonte.plano_interno FROM pedido_fonte WHERE pedido_fonte.id_pedido = {$id_pedido};");
+
+		if ($query->num_rows > 0) {
+			$fonte = $query->fetch_object();
+			$retorno = "
+				<fieldset class=\"preg\">
+					<table>
+						<thead>
+							<tr>
+								<th>Fonte de Recurso</th>
+								<th>PTRES</th>
+								<th>Plano Interno</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td>" . $fonte->fonte_recurso . "</td>
+								<td>" . $fonte->ptres . "</td>
+								<td>" . $fonte->plano_interno . "</td>
+							</tr>
+						</tbody>
+					</table>
+				</fieldset><br>";
+		} else {
+			$retorno = "
+			<fieldset>
+		    	<h5>PEDIDO SEM FONTES</h5>
+		  	</fieldset><br>";
+		}
+
 		return $retorno;
 	}
 
@@ -1184,7 +1227,7 @@ class Busca extends Conexao {
 	 */
 	public function getComentarios($id_pedido): string{
 		$retorno = "";
-		$query = $this->mysqli->query("SELECT DATE_FORMAT(comentarios.data_coment, '%d/%m/%Y') AS data_coment, prioridade.nome AS prioridade, status.nome AS status, comentarios.valor, comentarios.comentario FROM comentarios, prioridade, status WHERE prioridade.id = comentarios.prioridade AND status.id = comentarios.status AND comentarios.id_pedido = {$id_pedido};");
+		$query = $this->mysqli->query("SELECT DATE_FORMAT(comentarios.data_coment, '%d/%m/%Y') AS data_coment, prioridade.nome AS prioridade, comentarios.valor, comentarios.comentario FROM comentarios, prioridade WHERE prioridade.id = comentarios.prioridade AND comentarios.id_pedido = {$id_pedido};");
 		if ($query->num_rows > 0) {
 			while ($comentario = $query->fetch_object()) {
 				$comentario->prioridade = ucfirst($comentario->prioridade);
@@ -1194,7 +1237,6 @@ class Busca extends Conexao {
 						<tr>
 							<td>Data: " . $comentario->data_coment . "</td>
 							<td>Prioridade: " . $comentario->prioridade . "</td>
-							<td>Status: " . $comentario->status . "</td>
 							<td>Valor: R$ " . $comentario->valor . "</td>
 						</tr>
 					</table>
