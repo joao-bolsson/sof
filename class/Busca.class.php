@@ -1353,7 +1353,7 @@ class Busca extends Conexao {
 				} else if ($pedido->status == 'Empenhado') {
 					$btnAnalisar = "<a class=\"modal-close\" href=\"javascript:enviaOrdenador(" . $pedido->id . ");\" title=\"Enviar ao Ordenador\"><span class=\"icon\">send<span></a>";
 				} else {
-					$btnAnalisar = "<a class=\"modal-close\" href=\"javascript:getStatus(" . $pedido->id;", " . $pedido->id_setor . ");\" title=\"Alterar Status\"><span class=\"icon\">build<span></a>";
+					$btnAnalisar = "<a class=\"modal-close\" href=\"javascript:getStatus(" . $pedido->id . ", " . $pedido->id_setor . ");\" title=\"Alterar Status\"><span class=\"icon\">build<span></a>";
 				}
 			}
 			$retorno .= "

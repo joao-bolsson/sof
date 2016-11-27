@@ -1056,6 +1056,7 @@ function deletePedido(id_pedido) {
 
 function getStatus(id_pedido, id_setor) {
 	limpaTela();
+	document.getElementById('rowDetPedido').style.display = 'block';
 	$('#rowPedido' + id_pedido).css('background-color', '#c1df9f');
 	document.getElementById('form').value = 'altStatus';
 	document.getElementById('id_setor').value = id_setor;

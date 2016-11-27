@@ -168,7 +168,7 @@ class Geral extends Conexao {
 		}
 		$obj = $this->mysqli->query("SELECT pedido.prioridade, pedido.valor FROM pedido WHERE id = {$id_pedido};")->fetch_object();
 		$hoje = date('Y-m-d');
-		if (strlen($comentario) < 1) {
+		if (strlen($comentario) > 0) {
 			$comentario = $this->mysqli->real_escape_string($comentario);
 			$comment = $this->mysqli->query("INSERT INTO comentarios VALUES(NULL, {$id_pedido}, '{$hoje}', {$obj->prioridade}, {$status}, '{$obj->valor}', '{$comentario}');");
 			if (!$comment) {
@@ -679,7 +679,7 @@ class Geral extends Conexao {
 			$this->mysqli->query("UPDATE saldo_setor SET saldo = '{$saldo_setor}' WHERE id_setor = {$id_setor};");
 		}
 		$this->mysqli->query("UPDATE pedido SET status = {$fase}, prioridade = {$prioridade}, alteracao = {$alteracao} WHERE id = {$id_pedido};");
-		if (strlen($comentario) < 1) {
+		if (strlen($comentario) > 0) {
 			// inserindo comentário da análise
 			$comentario = $this->mysqli->real_escape_string($comentario);
 			$obj_tot = $this->mysqli->query("SELECT valor FROM pedido WHERE id = {$id_pedido};")->fetch_object();
