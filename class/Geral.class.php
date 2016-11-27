@@ -197,18 +197,17 @@ class Geral extends Conexao {
 	 *	@param $empenho Empenho a ser cadastrado
 	 *	@return bool
 	 */
-	public function cadastraEmpenho($id_pedido, $empenho): bool{
+	public function cadastraEmpenho($id_pedido, $empenho, $data): bool{
 		$empenho = $this->mysqli->real_escape_string($empenho);
-		$hoje = date('Y-m-d');
 		// verifica se o pedido ja não possui empenho
 		$query_check = $this->mysqli->query("SELECT pedido_empenho.id FROM pedido_empenho WHERE pedido_empenho.id = {$id_pedido};");
 		$sql = "";
 		if ($query_check->num_rows < 1) {
 			// cadastrando empenho
-			$sql = "INSERT INTO pedido_empenho VALUES(NULL, {$id_pedido}, '{$empenho}', '{$hoje}');";
+			$sql = "INSERT INTO pedido_empenho VALUES(NULL, {$id_pedido}, '{$empenho}', '{$data}');";
 		} else {
 			// alterando empenho
-			$sql = "UPDATE pedido_empenho SET pedido_empenho.empenho = '{$empenho}', pedido_empenho.data = '{$hoje}' WHERE pedido_empenho.id_pedido = {$id_pedido};";
+			$sql = "UPDATE pedido_empenho SET pedido_empenho.empenho = '{$empenho}', pedido_empenho.data = '{$data}' WHERE pedido_empenho.id_pedido = {$id_pedido};";
 		}
 		$query_cad = $this->mysqli->query($sql);
 		if (!$query_cad) {

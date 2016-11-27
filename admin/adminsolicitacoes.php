@@ -692,6 +692,10 @@ $permissao = $obj_Busca->getPermissoes($_SESSION["id"]);
             <label class="floating-label" for="empenho"><span class="icon">announcement</span>&nbsp;Empenho</label>
             <input class="form-control" id="empenho" name="empenho" required />
           </div>
+          <div class="form-group form-group-label">
+            <label class="floating-label" for="dataEmp"><span class="icon">date_range</span>&nbsp;Data</label>
+            <input class="form-control date" id="dataEmp" name="dataEmp" required />
+          </div>
         </div>
         <div class="modal-footer margin-bottom">
           <button class="btn btn-brand waves-attach waves-light waves-effect" type="submit" style="width: 100%;"><span class="icon">send</span>&nbsp;Cadastrar</button>

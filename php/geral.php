@@ -81,7 +81,8 @@ if (isset($_POST["admin"]) && isset($_SESSION["id_setor"]) && ($_SESSION["id_set
 	case 'enviaEmpenho':
 		$id_pedido = $_POST['id_pedido'];
 		$empenho = $_POST['empenho'];
-		echo $cadastra = $obj_Geral->cadastraEmpenho($id_pedido, $empenho);
+		$data = $obj_Util->dateFormat($_POST['data']);
+		echo $cadastra = $obj_Geral->cadastraEmpenho($id_pedido, $empenho, $data);
 		break;
 	// comentário
 	case 'transfereSaldo':

@@ -36,11 +36,13 @@ function cadFontes(id_pedido) {
 function enviaEmpenho() {
 	var id_pedido = document.getElementById('id_pedido_emp').value;
 	var empenho = document.getElementById('empenho').value;
+	var data = document.getElementById('dataEmp').value;
 	$.post('../php/geral.php', {
 		admin: 1,
 		form: 'enviaEmpenho',
 		id_pedido: id_pedido,
-		empenho: empenho
+		empenho: empenho,
+		data: data
 	}, function(resposta) {
 		if (resposta) {
 			$('#cadEmpenho').modal('hide');
