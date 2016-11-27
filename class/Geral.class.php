@@ -22,6 +22,16 @@ class Geral extends Conexao {
 	}
 	// ------------------------------------------------------------------------------
 	/**
+	 *	Funçao para mudar o status do pedido para 'Enviado ao Fornecedor' (UA)
+	 *
+	 *	@access public
+	 *	@param $id_pedido Id do pedido.
+	 */
+	public function enviaFornecedor($id_pedido) {
+		$this->mysqli->query("UPDATE pedido SET status = 9 WHERE id = {$id_pedido};");
+	}
+	// ------------------------------------------------------------------------------
+	/**
 	 *	Função para enviar um pedido ao ordenador.
 	 *
 	 *	@access public

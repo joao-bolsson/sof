@@ -433,6 +433,23 @@ function iniSolicitacoes() {
 	});
 }
 
+function enviaForn(id_pedido) {
+	$('a').blur();
+	confirm = confirm("O status do pedido " + id_pedido + " será alterado para 'Enviado ao Fornecedor'. \n\nDeseja Continuar?");
+	if (!confirm) {
+		return;
+	}
+	$.post('../php/geral.php', {
+		admin: 1,
+		form: 'enviaForn',
+		id_pedido: id_pedido
+	}, function(resposta) {
+		iniSolicitacoes();
+		limpaTela();
+		avisoSnack('Pedido enviado ao Fornecedor', 'body');
+	});
+}
+
 function formEnvia() {
 	var id_pedido = document.getElementById("id_pedido_alt").value;
 	var justificativa = document.getElementById("justificativa_alt_ped").value;

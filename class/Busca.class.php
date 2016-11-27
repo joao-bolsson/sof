@@ -1386,7 +1386,9 @@ class Busca extends Conexao {
 			$pedido->prioridade = ucfirst($pedido->prioridade);
 			$btnAnalisar = "";
 			if ($pedido->status != 'Reprovado' && $pedido->status != 'Aprovado') {
-				if ($pedido->status == 'Em Analise') {
+				if ($_SESSION['id_setor'] == 12) {
+					$btnAnalisar = "<a class=\"modal-close\" href=\"javascript:enviaForn(" . $pedido->id . ");\" title=\"Enviar ao Fornecedor\"><span class=\"icon\">send<span></a>";
+				} else if ($pedido->status == 'Em Analise') {
 					$btnAnalisar = "<a class=\"modal-close\" href=\"javascript:analisarPedido(" . $pedido->id . ", " . $pedido->id_setor . ");\" title=\"Analisar\"><span class=\"icon\">create<span></a>";
 				} else if ($pedido->status == 'Aguarda Orcamento') {
 					$btnAnalisar = "<a class=\"modal-close\" href=\"javascript:cadFontes(" . $pedido->id . ");\" title=\"Cadastrar Fontes\"><span class=\"icon\">mode_comment<span></a>";
@@ -1398,24 +1400,45 @@ class Busca extends Conexao {
 					$btnAnalisar = "<a class=\"modal-close\" href=\"javascript:getStatus(" . $pedido->id . ", " . $pedido->id_setor . ");\" title=\"Alterar Status\"><span class=\"icon\">build<span></a>";
 				}
 			}
-			$retorno .= "
-			<tr id=\"rowPedido" . $pedido->id . "\">
-				<td>
-					" . $btnAnalisar . "
-					<a class=\"modal-close\" href=\"javascript:imprimir(" . $pedido->id . ");\" title=\"Imprimir\"><span class=\"icon\">print<span></a>
-				</td>
-				<td>" . $pedido->id . "</td>
-				<td>" . $pedido->nome_setor . "</td>
-				<td>" . $pedido->data_pedido . "</td>
-				<td>" . $pedido->ref_mes . "</td>
-				<td>" . $pedido->prioridade . "</td>
-				<td>" . $pedido->status . "</td>
-				<td>R$ " . $pedido->valor . "</td>
-				<td>
-					<button onclick=\"verEmpenho(" . $pedido->id . ");\" class=\"btn btn-flat waves-attach waves-effect\" type=\"button\" title=\"Ver Empenho\">EMPENHO</button>
-				</td>
-			</tr>
-			";
+			if ($_SESSION['id_setor'] == 12) {
+				if ($pedido->status == 'Enviado ao Ordenador') {
+					$retorno .= "
+					<tr id=\"rowPedido" . $pedido->id . "\">
+						<td>
+							" . $btnAnalisar . "
+							<a class=\"modal-close\" href=\"javascript:imprimir(" . $pedido->id . ");\" title=\"Imprimir\"><span class=\"icon\">print<span></a>
+						</td>
+						<td>" . $pedido->id . "</td>
+						<td>" . $pedido->nome_setor . "</td>
+						<td>" . $pedido->data_pedido . "</td>
+						<td>" . $pedido->ref_mes . "</td>
+						<td>" . $pedido->prioridade . "</td>
+						<td>" . $pedido->status . "</td>
+						<td>R$ " . $pedido->valor . "</td>
+						<td>
+							<button onclick=\"verEmpenho(" . $pedido->id . ");\" class=\"btn btn-flat waves-attach waves-effect\" type=\"button\" title=\"Ver Empenho\">EMPENHO</button>
+						</td>
+					</tr>";
+				}
+			} else {
+				$retorno .= "
+				<tr id=\"rowPedido" . $pedido->id . "\">
+					<td>
+						" . $btnAnalisar . "
+						<a class=\"modal-close\" href=\"javascript:imprimir(" . $pedido->id . ");\" title=\"Imprimir\"><span class=\"icon\">print<span></a>
+					</td>
+					<td>" . $pedido->id . "</td>
+					<td>" . $pedido->nome_setor . "</td>
+					<td>" . $pedido->data_pedido . "</td>
+					<td>" . $pedido->ref_mes . "</td>
+					<td>" . $pedido->prioridade . "</td>
+					<td>" . $pedido->status . "</td>
+					<td>R$ " . $pedido->valor . "</td>
+					<td>
+						<button onclick=\"verEmpenho(" . $pedido->id . ");\" class=\"btn btn-flat waves-attach waves-effect\" type=\"button\" title=\"Ver Empenho\">EMPENHO</button>
+					</td>
+				</tr>";
+			}
 		}
 		$query->close();
 		return $retorno;

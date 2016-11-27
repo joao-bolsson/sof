@@ -31,11 +31,16 @@ $obj_Busca = new Busca();
 //instanciando a classe Busca
 $obj_Util = new Util();
 
-if (isset($_POST["admin"]) && isset($_SESSION["id_setor"]) && $_SESSION["id_setor"] == 2) {
+if (isset($_POST["admin"]) && isset($_SESSION["id_setor"]) && ($_SESSION["id_setor"] == 2
+	|| $_SESSION["id_setor"] == 12)) {
 	// variável que controla o que deve ser feito quando geral.php for chamado
 	$form = $_POST["form"];
 
 	switch ($form) {
+
+	case 'enviaForn':
+		$obj_Geral->enviaFornecedor($_POST['id_pedido']);
+		break;
 
 	case 'enviaOrdenador':
 		$id_pedido = $_POST['id_pedido'];

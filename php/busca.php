@@ -24,7 +24,8 @@ include_once '../class/Busca.class.php';
 //instanciando classe de busca
 $obj_Busca = new Busca();
 
-if (isset($_POST["admin"]) && isset($_SESSION['id_setor']) && $_SESSION['id_setor'] == 2) {
+if (isset($_POST["admin"]) && isset($_SESSION['id_setor']) && ($_SESSION['id_setor'] == 2
+	|| $_SESSION['id_setor'] == 12)) {
 	$form = $_POST["form"];
 
 	switch ($form) {
