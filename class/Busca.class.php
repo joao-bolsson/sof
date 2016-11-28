@@ -1381,7 +1381,7 @@ class Busca extends Conexao {
 	public function getSolicitacoesAdmin(): string{
 		//declarando retorno
 		$retorno = "";
-		$query = $this->mysqli->query("SELECT pedido.id, pedido.id_setor, setores.nome AS nome_setor, DATE_FORMAT(pedido.data_pedido, '%d/%m/%Y') AS data_pedido, mes.sigla_mes AS ref_mes, prioridade.nome AS prioridade, status.nome AS status, pedido.valor FROM pedido, setores, mes, prioridade, status WHERE status.id = pedido.status AND pedido.status <> 3 AND prioridade.id = pedido.prioridade AND mes.id = pedido.ref_mes AND pedido.alteracao = 0 AND pedido.id_setor = setores.id ORDER BY pedido.id DESC;");
+		$query = $this->mysqli->query("SELECT pedido.id, pedido.id_setor, setores.nome AS nome_setor, DATE_FORMAT(pedido.data_pedido, '%d/%m/%Y') AS data_pedido, mes.sigla_mes AS ref_mes, prioridade.nome AS prioridade, status.nome AS status, status.id AS id_status, pedido.valor FROM pedido, setores, mes, prioridade, status WHERE status.id = pedido.status AND pedido.status <> 3 AND prioridade.id = pedido.prioridade AND mes.id = pedido.ref_mes AND pedido.alteracao = 0 AND pedido.id_setor = setores.id ORDER BY pedido.id DESC LIMIT 100;");
 		while ($pedido = $query->fetch_object()) {
 			$pedido->prioridade = ucfirst($pedido->prioridade);
 			$btnAnalisar = "";
@@ -1400,6 +1400,10 @@ class Busca extends Conexao {
 					$btnAnalisar = "<a class=\"modal-close\" href=\"javascript:getStatus(" . $pedido->id . ", " . $pedido->id_setor . ");\" title=\"Alterar Status\"><span class=\"icon\">build<span></a>";
 				}
 			}
+			$btnVerEmpenho = "";
+			if ($pedido->id_status > 6) {
+				$btnVerEmpenho = "<button onclick=\"verEmpenho(" . $pedido->id . ");\" class=\"btn btn-flat waves-attach waves-effect\" type=\"button\" title=\"Ver Empenho\">EMPENHO</button>";
+			}
 			if ($_SESSION['id_setor'] == 12) {
 				if ($pedido->status == 'Enviado ao Ordenador') {
 					$retorno .= "
@@ -1416,7 +1420,7 @@ class Busca extends Conexao {
 						<td>" . $pedido->status . "</td>
 						<td>R$ " . $pedido->valor . "</td>
 						<td>
-							<button onclick=\"verEmpenho(" . $pedido->id . ");\" class=\"btn btn-flat waves-attach waves-effect\" type=\"button\" title=\"Ver Empenho\">EMPENHO</button>
+							" . $btnVerEmpenho . "
 						</td>
 					</tr>";
 				}
@@ -1435,7 +1439,7 @@ class Busca extends Conexao {
 					<td>" . $pedido->status . "</td>
 					<td>R$ " . $pedido->valor . "</td>
 					<td>
-						<button onclick=\"verEmpenho(" . $pedido->id . ");\" class=\"btn btn-flat waves-attach waves-effect\" type=\"button\" title=\"Ver Empenho\">EMPENHO</button>
+						" . $btnVerEmpenho . "
 					</td>
 				</tr>";
 			}
