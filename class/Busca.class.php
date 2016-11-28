@@ -1400,9 +1400,9 @@ class Busca extends Conexao {
 					$btnAnalisar = "<a class=\"modal-close\" href=\"javascript:getStatus(" . $pedido->id . ", " . $pedido->id_setor . ");\" title=\"Alterar Status\"><span class=\"icon\">build<span></a>";
 				}
 			}
-			$btnVerEmpenho = "";
-			if ($pedido->id_status > 6) {
-				$btnVerEmpenho = Busca::verEmpenho($pedido->id);
+			$btnVerEmpenho = Busca::verEmpenho($pedido->id);
+			if ($btnVerEmpenho == 'EMPENHO SIAFI PENDENTE') {
+				$btnVerEmpenho = '';
 			}
 			if ($_SESSION['id_setor'] == 12) {
 				if ($pedido->status == 'Enviado ao Ordenador') {
@@ -1852,6 +1852,9 @@ class Busca extends Conexao {
 		$query = $this->mysqli->query("SELECT pedido.id, DATE_FORMAT(pedido.data_pedido, '%d/%m/%Y') AS data_pedido, mes.sigla_mes AS ref_mes, prioridade.nome AS prioridade, status.nome AS status, pedido.valor FROM pedido, mes, prioridade, status WHERE prioridade.id = pedido.prioridade AND status.id = pedido.status AND pedido.id_setor = {$id_setor} AND pedido.alteracao = 0 AND mes.id = pedido.ref_mes ORDER BY pedido.id DESC;");
 		while ($pedido = $query->fetch_object()) {
 			$empenho = Busca::verEmpenho($pedido->id);
+			if ($empenho == 'EMPENHO SIAFI PENDENTE') {
+				$empenho = '';
+			}
 			$pedido->prioridade = ucfirst($pedido->prioridade);
 			$retorno .= "
 			<tr>
