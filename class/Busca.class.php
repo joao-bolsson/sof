@@ -313,7 +313,7 @@ class Busca extends Conexao {
 			$retorno = 'EMPENHO SIAFI PENDENTE';
 		} else {
 			$obj = $query->fetch_object();
-			$retorno = 'Empenho: ' . $obj->empenho;
+			$retorno = $obj->empenho;
 		}
 		$query->close();
 		return $retorno;
@@ -1041,7 +1041,7 @@ class Busca extends Conexao {
 	public function getHeader($id_pedido): string{
 		$pedido = $this->mysqli->query("SELECT pedido.id, DATE_FORMAT(pedido.data_pedido, '%d/%m/%Y') AS data_pedido, EXTRACT(YEAR FROM pedido.data_pedido) AS ano, mes.sigla_mes AS ref_mes, status.nome AS status, replace(pedido.valor, '.', ',') AS valor, pedido.obs FROM pedido, mes, status WHERE status.id = pedido.status AND pedido.id = {$id_pedido} AND mes.id = pedido.ref_mes;")->fetch_object();
 		$ano = substr($pedido->data_pedido, 0, 4);
-		$empenho = Busca::verEmpenho($id_pedido);
+		$empenho = "Empenho: " . Busca::verEmpenho($id_pedido);
 		$pedido->valor = number_format($pedido->valor, 3, ',', '.');
 		$retorno = "
 		<fieldset>
@@ -1096,7 +1096,7 @@ class Busca extends Conexao {
 		} else {
 			$retorno = "
 			<fieldset>
-		    	<h5>PEDIDO SEM FONTES</h5>
+		    	<h5>PEDIDO AGUARDA FONTE DE RECURSO</h5>
 		  	</fieldset><br>";
 		}
 
@@ -1402,7 +1402,7 @@ class Busca extends Conexao {
 			}
 			$btnVerEmpenho = "";
 			if ($pedido->id_status > 6) {
-				$btnVerEmpenho = "<button onclick=\"verEmpenho(" . $pedido->id . ");\" class=\"btn btn-flat waves-attach waves-effect\" type=\"button\" title=\"Ver Empenho\">EMPENHO</button>";
+				$btnVerEmpenho = Busca::verEmpenho($pedido->id);
 			}
 			if ($_SESSION['id_setor'] == 12) {
 				if ($pedido->status == 'Enviado ao Ordenador') {

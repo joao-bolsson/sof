@@ -65,9 +65,6 @@ $obj_Busca = new Busca();
             <li>
               <a class="waves-attach" href="index.php"><span style="color: white;"><span class="icon">home</span>INÍCIO</span></a>
             </li>
-            <li class="active">
-              <a class="waves-attach" href="solicitacoes.php"><span style="color: white;"><span class="icon">payment</span>SOLICITAÇÕES DE EMPENHO</span></a>
-            </li>
           </ul>
         </nav>
  </div><!-- ./row -->

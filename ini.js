@@ -101,7 +101,11 @@ function verEmpenho(id_pedido) {
 		form: 'verEmpenho',
 		id_pedido: id_pedido,
 	}, function(resposta) {
-		viewCompl(resposta);
+		if (resposta === 'EMPENHO SIAFI PENDENTE') {
+			viewCompl(resposta);
+		} else {
+			viewCompl('Empenho: ' +resposta);
+		}
 	});
 }
 
