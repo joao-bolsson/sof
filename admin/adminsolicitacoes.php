@@ -752,7 +752,7 @@ $permissao = $obj_Busca->getPermissoes($_SESSION["id"]);
             <label class="floating-label" for="file"><span class="icon">insert_drive_file</span>&nbsp;Arquivo</label>
             <input id="file" class="form-control" type="file" style="text-transform: none !important;" name="file">
           </div>
-          <p class="help-block">Tamanho máximo: 5 MB</p>
+          <p class="help-block">Tamanho máximo: 3 MB</p>
           <div id="loaderImport" class="progress-circular" style="margin-left: 45%; display: none;">
             <div class="progress-circular-wrapper">
               <div class="progress-circular-inner">
