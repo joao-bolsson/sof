@@ -212,7 +212,7 @@ if (!$permissao->noticias) {
                     <th>Opções</th>
                 </thead>
                 <tbody>
-                    <?=$obj_Busca->getArquivos("");?>
+                    <?=$obj_Busca->getArquivos();?>
                 </tbody>
             </table>
         </div>

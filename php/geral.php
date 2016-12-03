@@ -164,8 +164,10 @@ if (isset($_POST["admin"]) && isset($_SESSION["id_setor"]) && ($_SESSION["id_set
                 // Cria um nome baseado no UNIX TIMESTAMP atual e com extensão .tsv
                 $nome_final = md5(time()) . '.tsv';
             }
+            $dados = $obj_Util->readFile($_FILES["file"]['tmp_name']);
+            unset($_FILES["file"]);
 //            // atualiza seq item processo dos itens que já estão na tabela (update) 
-//            $array_update = $obj_Util->atualizaSeqItem($_FILES["file"]['tmp_name']);
+//            $array_update = $obj_Util->atualizaSeqItem($dados);
 //            $update = $obj_Geral->importaItens($array_update);
 //            unset($array_update);
 //            if (!$update) {
@@ -173,8 +175,8 @@ if (isset($_POST["admin"]) && isset($_SESSION["id_setor"]) && ($_SESSION["id_set
 //                exit;
 //            }
             // prepara a importação dos itens (insert)
-            $array_sql = $obj_Util->preparaImportacao($_FILES["file"]['tmp_name']);
-            unset($_FILES["file"]);
+            $array_sql = $obj_Util->prepareImport($dados);
+            unset($dados);
             $insert = $obj_Geral->importaItens($array_sql);
             unset($array_sql);
             if ($insert) {

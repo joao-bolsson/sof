@@ -24,7 +24,6 @@ class Geral extends Conexao {
         $this->obj_Busca = new Busca();
     }
 
-    // ------------------------------------------------------------------------------
     /**
      * 	Funçao para mudar o status do pedido para 'Enviado ao Fornecedor' (UA)
      *
@@ -35,7 +34,6 @@ class Geral extends Conexao {
         $this->mysqli->query("UPDATE pedido SET status = 9 WHERE id = {$id_pedido};");
     }
 
-    // ------------------------------------------------------------------------------
     /**
      * 	Função para enviar um pedido ao ordenador.
      *
@@ -50,7 +48,6 @@ class Geral extends Conexao {
         return false;
     }
 
-    // ------------------------------------------------------------------------------
     /**
      * 	Função para cadastrar fontes do pedido (status == Aguarda Orçamento)
      *
@@ -78,7 +75,6 @@ class Geral extends Conexao {
         return false;
     }
 
-    // ------------------------------------------------------------------------------
     /**
      * 	Função para resetar o sistema para o estado orinal
      *
@@ -115,7 +111,6 @@ class Geral extends Conexao {
         $this->mysqli->query("alter table pedido auto_increment = 1;");
     }
 
-    // ------------------------------------------------------------------------------
     /**
      * 	Função para os usuários relatarem problemas no site
      *
@@ -128,7 +123,6 @@ class Geral extends Conexao {
         $query = $this->mysqli->query($sql);
     }
 
-    // ------------------------------------------------------------------------------
     /**
      * 	Função para editar informações de um item
      *
@@ -171,7 +165,6 @@ class Geral extends Conexao {
         return true;
     }
 
-    // ------------------------------------------------------------------------------
     /**
      * 	Função para alterar somente o status do pedido
      *
@@ -200,7 +193,6 @@ class Geral extends Conexao {
         return true;
     }
 
-    // ------------------------------------------------------------------------------
     /**
      * 	Função que cadastra o empenho de um pedido
      *
@@ -233,7 +225,6 @@ class Geral extends Conexao {
         return true;
     }
 
-    // ------------------------------------------------------------------------------
     /**
      * 	Função que transfere um valor do saldo de um setor para outro
      *
@@ -287,7 +278,6 @@ class Geral extends Conexao {
         return true;
     }
 
-    // ------------------------------------------------------------------------------
     /**
      * 	Função para cadastrar novo tipo de processo.
      *
@@ -303,7 +293,6 @@ class Geral extends Conexao {
         return false;
     }
 
-    // ------------------------------------------------------------------------------
     /**
      * 	Função para cadastrar/editar um processo
      *
@@ -337,23 +326,22 @@ class Geral extends Conexao {
         }
     }
 
-    // ------------------------------------------------------------------------------
     /**
      * 	Função que importa itens por SQL
      *
      * 	@access public
      * 	@return bool
      */
-    public function importaItens($array_sql): bool {
-        for ($i = 0; $i < count($array_sql); $i++) {
-            echo $query = $array_sql[$i];
-            //$this->mysqli->query($query);
+    public function importaItens(array $array_sql): bool {
+        $len = count($array_sql);
+        for ($i = 0; $i < $len; $i++) {
+            $query = $array_sql[$i];
+            $this->mysqli->query($query);
         }
         $this->mysqli->close();
         return true;
     }
 
-    // ------------------------------------------------------------------------------
     /**
      *  Função para dar update numa senha de acordo com o email
      *
@@ -378,7 +366,6 @@ class Geral extends Conexao {
         return false;
     }
 
-    // -------------------------------------------------------------------------
     /**
      * 	Função usada para o usuário alterar a sua senha
      *
@@ -404,7 +391,6 @@ class Geral extends Conexao {
         }
     }
 
-    // -------------------------------------------------------------------------
     /**
      * 	Função que analisa as solicitações de alteração de pedido
      *
@@ -420,7 +406,6 @@ class Geral extends Conexao {
         return true;
     }
 
-    // -------------------------------------------------------------------------
     /**
      * 	Função que envia uma solicitação de alteração de pedido ao SOF.
      *
@@ -437,7 +422,6 @@ class Geral extends Conexao {
         return false;
     }
 
-    // -------------------------------------------------------------------------
     /**
      * 	Função para liberação de saldo de um setor
      *
@@ -469,7 +453,6 @@ class Geral extends Conexao {
         return false;
     }
 
-    // -------------------------------------------------------------------------
     /**
      * 	Função para aprovar uma solicitação de adiantamento
      *
@@ -495,7 +478,6 @@ class Geral extends Conexao {
         return true;
     }
 
-    // -------------------------------------------------------------------------
     /**
      * 	Função para enviar um pedido de adiantamento de saldo para o SOF
      *
@@ -515,7 +497,6 @@ class Geral extends Conexao {
         return false;
     }
 
-    //--------------------------------------------------------------------------
     /**
      *   Função para alterar a senha de um usuário
      *
@@ -530,7 +511,6 @@ class Geral extends Conexao {
         return false;
     }
 
-    //--------------------------------------------------------------------------
     /**
      * Função para inserir postagem
      *
@@ -555,7 +535,6 @@ class Geral extends Conexao {
         return true;
     }
 
-    //----------------------------------------------------------------------------
     /**
      *   Função para editar uma postagem
      *
@@ -576,7 +555,7 @@ class Geral extends Conexao {
         return true;
     }
 
-    //-----------------------------------------------------------------------------------
+    
     /**
      *   Função para excluir uma publicação
      *       a publicação não é totalmente excluída, apenas o sistema passará a não mostrá-la
@@ -596,7 +575,7 @@ class Geral extends Conexao {
         return false;
     }
 
-    //----------------------------------------------------------------------------------
+    
     /**
      *   Função para enviar um pedido ao SOF
      *
@@ -661,7 +640,6 @@ class Geral extends Conexao {
         return $retorno;
     }
 
-    //------------------------------------------------------------------------------------------
     /**
      * 	Função para analisar um pedido, enviar comentários, alterar status, desativar itens
      * 	cancelados, retornar para o setor

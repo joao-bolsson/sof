@@ -66,46 +66,55 @@ class Util extends Conexao {
         $this->mail->Password = "joaovictor201610816@[]";
     }
 
-    // ---------------------------------------------------------------------------
-    /**
-     * 	Função utilizada para auxiliar a importação dos itens
-     *
-     * 	@access public
-     * 	@return array
-     */
-    public function preparaImportacao($tmp_name): array {
-        $insert = "INSERT IGNORE INTO itens VALUES";
-        $values = "";
-        $row = 1;
-        $array_sql = array();
-        $i = $pos = 0;
+    public function readFile(string $tmp_name): array {
+        $array = array();
+        $i = 0;
         if (($handle = fopen($tmp_name, "r")) !== FALSE) {
             while (($data = fgetcsv($handle, 1000, "	")) !== FALSE) {
                 if ($data[$this->id_item_processo] != "ID_ITEM_PROCESSO") {
-                    $row++;
                     for ($c = 0; $c < count($data); $c++) {
                         $data[$c] = str_replace("\"", "'", $data[$c]);
                         $data[$c] = $this->mysqli->real_escape_string($data[$c]);
                     }
-                    // chave = num_processo#cod_reduzido
-                    $chave = $data[$this->num_processo] . '#' . $data[$this->cod_reduzido];
-                    $values .= "\n(NULL, " . $data[$this->id_item_processo] . ", " . $data[$this->id_item_contrato] . ", \"" . $data[$this->cod_despesa] . "\", \"" . $data[$this->descr_despesa] . "\", \"" . $data[$this->descr_tipo_doc] . "\", \"" . $data[$this->num_contrato] . "\", \"" . $data[$this->num_processo] . "\", \"" . $data[$this->descr_mod_compra] . "\", \"" . $data[$this->num_licitacao] . "\", \"" . $data[$this->dt_inicio] . "\", \"" . $data[$this->dt_fim] . "\", \"" . $data[$this->dt_geracao] . "\", \"" . $data[$this->cgc_fornecedor] . "\", \"" . $data[$this->nome_fornecedor] . "\", \"" . $data[$this->num_extrato] . "\", \"" . $data[$this->cod_estruturado] . "\", \"" . $data[$this->nome_unidade] . "\", \"" . $data[$this->cod_reduzido] . "\", \"" . $data[$this->complemento_item] . "\", \"" . $data[$this->descricao] . "\", \"" . $data[$this->id_extrato_contr] . "\", \"" . $data[$this->vl_unitario] . "\", " . $data[$this->qt_contrato] . ", \"" . $data[$this->vl_contrato] . "\", " . $data[$this->qt_utilizado] . ", \"" . $data[$this->vl_utilizado] . "\", " . $data[$this->qt_saldo] . ", \"" . $data[$this->vl_saldo] . "\", \"" . $data[$this->id_unidade] . "\", \"" . $data[$this->ano_orcamento] . "\", 0, \"" . $chave . "\", \"" . $data[$this->seq_item_processo] . "\"), ";
-                    if ($row == 70) {
-                        $pos = strrpos($values, ", ");
-                        $values[$pos] = ";";
-                        $array_sql[$i] = $insert . $values;
-                        $values = "";
-                        $i++;
-                        $row = 1;
-                    }
+                    $array[$i] = $data;
+                    $i++;
                 }
             }
             fclose($handle);
-            if ($row < 70) {
+        }
+
+        return $array;
+    }
+
+    /**
+     * Function that prepare data to import to table itens.
+     * @param array $data Array with data to import.
+     */
+    public function prepareImport(array $data): array {
+        $array_sql = array();
+        $insert = "INSERT IGNORE INTO itens VALUES";
+        $values = "";
+        $row = 1;
+        $i = $pos = 0;
+        $len = count($data);
+        for ($a = 0; $a < $len; $a++) {
+            $row++;
+            // chave = num_processo#cod_reduzido
+            $chave = $data[$a][$this->num_processo] . '#' . $data[$a][$this->cod_reduzido];
+            $values .= "\n(NULL, " . $data[$a][$this->id_item_processo] . ", " . $data[$a][$this->id_item_contrato] . ", \"" . $data[$a][$this->cod_despesa] . "\", \"" . $data[$a][$this->descr_despesa] . "\", \"" . $data[$a][$this->descr_tipo_doc] . "\", \"" . $data[$a][$this->num_contrato] . "\", \"" . $data[$a][$this->num_processo] . "\", \"" . $data[$a][$this->descr_mod_compra] . "\", \"" . $data[$a][$this->num_licitacao] . "\", \"" . $data[$a][$this->dt_inicio] . "\", \"" . $data[$a][$this->dt_fim] . "\", \"" . $data[$a][$this->dt_geracao] . "\", \"" . $data[$a][$this->cgc_fornecedor] . "\", \"" . $data[$a][$this->nome_fornecedor] . "\", \"" . $data[$a][$this->num_extrato] . "\", \"" . $data[$a][$this->cod_estruturado] . "\", \"" . $data[$a][$this->nome_unidade] . "\", \"" . $data[$a][$this->cod_reduzido] . "\", \"" . $data[$a][$this->complemento_item] . "\", \"" . $data[$a][$this->descricao] . "\", \"" . $data[$a][$this->id_extrato_contr] . "\", \"" . $data[$a][$this->vl_unitario] . "\", " . $data[$a][$this->qt_contrato] . ", \"" . $data[$a][$this->vl_contrato] . "\", " . $data[$a][$this->qt_utilizado] . ", \"" . $data[$a][$this->vl_utilizado] . "\", " . $data[$a][$this->qt_saldo] . ", \"" . $data[$a][$this->vl_saldo] . "\", \"" . $data[$a][$this->id_unidade] . "\", \"" . $data[$a][$this->ano_orcamento] . "\", 0, \"" . $chave . "\", \"" . $data[$a][$this->seq_item_processo] . "\"), ";
+            if ($row == 70) {
                 $pos = strrpos($values, ", ");
                 $values[$pos] = ";";
                 $array_sql[$i] = $insert . $values;
+                $values = "";
+                $i++;
+                $row = 1;
             }
+        }
+        if ($row < 70) {
+            $pos = strrpos($values, ", ");
+            $values[$pos] = ";";
+            $array_sql[$i] = $insert . $values;
         }
         return $array_sql;
     }
@@ -117,19 +126,13 @@ class Util extends Conexao {
      * 	@access public
      * 	@return array
      */
-    public function atualizaSeqItem($tmp_name): array {
+    public function atualizaSeqItem(array $data): array {
         $array_sql = array();
-        $i = 0;
-        if (($handle = fopen($tmp_name, "r")) !== FALSE) {
-            while (($data = fgetcsv($handle, 1000, "	")) !== FALSE) {
-                if ($data[$this->id_item_processo] != "ID_ITEM_PROCESSO") {
-                    // chave = num_processo#cod_reduzido
-                    $chave = $data[$this->num_processo] . '#' . $data[$this->cod_reduzido];
-                    $array_sql[$i] = "UPDATE itens SET seq_item_processo = '" . $data[$this->seq_item_processo] . "' WHERE chave = '" . $chave . "';";
-                    $i++;
-                }
-            }
-            fclose($handle);
+        $count = count($data);
+        for ($a = 0; $a < $count; $a++) {
+            // chave = num_processo#cod_reduzido
+            $chave = $data[$a][$this->num_processo] . '#' . $data[$a][$this->cod_reduzido];
+            $array_sql[$a] = "UPDATE itens SET seq_item_processo = \"" . $data[$a][$this->seq_item_processo] . "\" WHERE chave = \"" . $chave . "\";";
         }
         return $array_sql;
     }
