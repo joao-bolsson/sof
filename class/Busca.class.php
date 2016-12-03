@@ -24,6 +24,7 @@ class Busca extends Conexao {
         $this->mysqli = parent::getConexao();
         $this->obj_Util = new Util();
     }
+
     // ------------------------------------------------------------------------------
     /**
      * 	Função para retornar uma lista de pedidos conforme o relatório
@@ -1072,7 +1073,7 @@ class Busca extends Conexao {
 				Total do Pedido: R$ " . $pedido->valor . "
 			</p>
 			<p>" . $empenho . "</p>
-			<p>Observação: </p>
+			<p>Observação da Unidade Solicitante: </p>
 			<p style=\"font-weight: normal !important;\">	" . $pedido->obs . "</p>
 		</fieldset><br>";
         $retorno .= Busca::getTableFontes($id_pedido);
@@ -1183,7 +1184,7 @@ class Busca extends Conexao {
 					<thead>
 						<tr>
 							<th>Código</th>
-							<th>Descrição</th>
+							<th>Item</th>
 							<th>Quantidade</th>
 							<th>Valor</th>
 						</tr>
@@ -1224,15 +1225,14 @@ class Busca extends Conexao {
         $query = $this->mysqli->query("SELECT itens.id, itens.cod_reduzido, itens.cgc_fornecedor, itens.num_licitacao, itens_pedido.qtd, itens_pedido.valor FROM itens, itens_pedido WHERE itens.id = itens_pedido.id AND itens_pedido.id_pedido = {$id_pedido};");
         while ($itens = $query->fetch_object()) {
             $retorno .= "
-			<tr>
-				<td>" . $itens->id . "</td>
-				<td>" . $itens->cod_reduzido . "</td>
-				<td>" . $itens->cgc_fornecedor . "</td>
-				<td>" . $itens->num_licitacao . "</td>
-				<td>" . $itens->qtd . "</td>
-				<td>R$ " . $itens->valor . "</td>
-			</tr>
-			";
+                <tr>
+                    <td>" . $itens->id . "</td>
+                    <td>" . $itens->cod_reduzido . "</td>
+                    <td>" . $itens->cgc_fornecedor . "</td>
+                    <td>" . $itens->num_licitacao . "</td>
+                    <td>" . $itens->qtd . "</td>
+                    <td>R$ " . $itens->valor . "</td>
+                </tr>";
         }
         return $retorno;
     }
@@ -1254,7 +1254,7 @@ class Busca extends Conexao {
 				<fieldset class=\"preg\">
 					<table>
 						<tr>
-							<td>Data: " . $comentario->data_coment . "</td>
+							<td>Data do Comentário: " . $comentario->data_coment . "</td>
 							<td>Prioridade: " . $comentario->prioridade . "</td>
 							<td>Valor: R$ " . $comentario->valor . "</td>
 						</tr>
@@ -1880,18 +1880,19 @@ class Busca extends Conexao {
             }
             $pedido->prioridade = ucfirst($pedido->prioridade);
             $retorno .= "
-			<tr>
-				<td>" . $pedido->ref_mes . "</td>
-				<td>" . $pedido->data_pedido . "</td>
-				<td>" . $pedido->prioridade . "</td>
-				<td><span class=\"label\" style=\"font-size: 11pt;\">" . $pedido->status . "</span></td>
-				<td>" . $empenho . "</td>
-				<td>R$ " . $pedido->valor . "</td>
-				<td>
-					<button class=\"btn btn-default btn-sm\" style=\"text-transform: none !important;font-weight: bold;\" onclick=\"solicAltPed(" . $pedido->id . ");\" title=\"Solicitar Alteração\"><span class=\"icon\">build</span></button>
-					<button class=\"btn btn-default btn-sm\" style=\"text-transform: none !important;font-weight: bold;\" onclick=\"imprimir(" . $pedido->id . ");\" title=\"Imprimir\"><span class=\"icon\">print</span></button>
-				</td>
-			</tr>";
+                <tr>
+                    <td>" . $pedido->id . "</td>
+                    <td>" . $pedido->ref_mes . "</td>
+                    <td>" . $pedido->data_pedido . "</td>
+                    <td>" . $pedido->prioridade . "</td>
+                    <td><span class=\"label\" style=\"font-size: 11pt;\">" . $pedido->status . "</span></td>
+                    <td>" . $empenho . "</td>
+                    <td>R$ " . $pedido->valor . "</td>
+                    <td>
+                            <button class=\"btn btn-default btn-sm\" style=\"text-transform: none !important;font-weight: bold;\" onclick=\"solicAltPed(" . $pedido->id . ");\" title=\"Solicitar Alteração\"><span class=\"icon\">build</span></button>
+                            <button class=\"btn btn-default btn-sm\" style=\"text-transform: none !important;font-weight: bold;\" onclick=\"imprimir(" . $pedido->id . ");\" title=\"Imprimir\"><span class=\"icon\">print</span></button>
+                    </td>
+                </tr>";
         }
         $query->close();
         return $retorno;

@@ -333,6 +333,7 @@ $pedidos_em_analise = $obj_Busca->getPedidosAnalise($id_setor);
             <div class="modal-inner">
                 <table id="tableListPedidos" class="table" style="width: 100%;">
                     <thead>
+                        <th>NUM_PEDIDO</th>
                         <th>RefMes</th>
                         <th>Data de Envio</th>
                         <th>Prioridade</th>
