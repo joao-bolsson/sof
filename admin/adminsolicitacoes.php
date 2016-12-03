@@ -415,8 +415,6 @@ $permissao = $obj_Busca->getPermissoes($_SESSION["id"]);
             <th>CGC_FORNECEDOR</th>
             <th>NOME_FORNECEDOR</th>
             <th>NUM_EXTRATO</th>
-            <th>COD_ESTRUTURADO</th>
-            <th>NOME_UNIDADE</th>
             <th>COMPLEMENTO_ITEM</th>
             <th>DESCRICAO</th>
             <th>VL_UNITARIO</th>

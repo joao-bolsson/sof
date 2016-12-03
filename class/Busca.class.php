@@ -1478,7 +1478,7 @@ class Busca extends Conexao {
     public function getItensPedidoAnalise($id_pedido): string {
         //declarando retorno
         $retorno = "";
-        $query = $this->mysqli->query("SELECT itens.qt_contrato, itens.id AS id_itens, itens_pedido.qtd AS qtd_solicitada, itens_pedido.valor, itens.nome_fornecedor, itens.num_licitacao, itens.dt_inicio, itens.dt_fim, itens.dt_geracao, itens.cod_reduzido, itens.complemento_item, itens.vl_unitario, itens.qt_saldo, itens.cod_despesa, itens.descr_despesa, itens.num_contrato, itens.num_processo, itens.descr_mod_compra, itens.num_licitacao, itens.cgc_fornecedor, itens.num_extrato, itens.cod_estruturado, itens.nome_unidade, itens.descricao, itens.qt_contrato, itens.vl_contrato, itens.qt_utilizado, itens.vl_utilizado, itens.qt_saldo, itens.vl_saldo FROM itens_pedido, itens WHERE itens_pedido.id_pedido = {$id_pedido} AND itens_pedido.id_item = itens.id;");
+        $query = $this->mysqli->query("SELECT itens.qt_contrato, itens.id AS id_itens, itens_pedido.qtd AS qtd_solicitada, itens_pedido.valor, itens.nome_fornecedor, itens.num_licitacao, itens.dt_inicio, itens.dt_fim, itens.dt_geracao, itens.cod_reduzido, itens.complemento_item, itens.vl_unitario, itens.qt_saldo, itens.cod_despesa, itens.descr_despesa, itens.num_contrato, itens.num_processo, itens.descr_mod_compra, itens.num_licitacao, itens.cgc_fornecedor, itens.num_extrato, itens.descricao, itens.qt_contrato, itens.vl_contrato, itens.qt_utilizado, itens.vl_utilizado, itens.qt_saldo, itens.vl_saldo FROM itens_pedido, itens WHERE itens_pedido.id_pedido = {$id_pedido} AND itens_pedido.id_item = itens.id;");
 
         while ($item = $query->fetch_object()) {
             if ($item->dt_fim == '') {
@@ -1507,8 +1507,6 @@ class Busca extends Conexao {
 				<td>" . $item->cgc_fornecedor . "</td>
 				<td>" . $item->nome_fornecedor . "</td>
 				<td>" . $item->num_extrato . "</td>
-				<td>" . $item->cod_estruturado . "</td>
-				<td>" . $item->nome_unidade . "</td>
 				<td>
 					<button onclick=\"viewCompl('" . $item->complemento_item . "');\" class=\"btn btn-flat waves-attach waves-effect\" type=\"button\" title=\"Ver Complemento do Item\">complemento_item</button>
 				</td>
