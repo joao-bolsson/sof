@@ -1415,6 +1415,7 @@ class Busca extends Conexao {
                         </a>
                         <a class=\"modal-close\" href=\"javascript:editaItem(" . $item->id_itens . ");\" title=\"Editar\"><span class=\"icon\">edit<span>
                         </a>
+                        <a class=\"modal-close\" href=\"javascript:viewCompl('" . $item->complemento_item . "');\"  title=\"Ver Complemento do Item\"><span class=\"icon\">assignment<span></a>
                     </td>
                     <td>" . $item->cod_reduzido . "</td>
                     <td>" . $item->cod_despesa . "</td>
@@ -1429,9 +1430,6 @@ class Busca extends Conexao {
                     <td>" . $item->cgc_fornecedor . "</td>
                     <td>" . $item->nome_fornecedor . "</td>
                     <td>" . $item->num_extrato . "</td>
-                    <td>
-                        <button onclick=\"viewCompl('" . $item->complemento_item . "');\" class=\"btn btn-flat waves-attach waves-effect\" type=\"button\" title=\"Ver Complemento do Item\">complemento_item</button>
-                    </td>
                     <td>" . $item->descricao . "</td>
                     <td>R$ " . $item->vl_unitario . "</td>
                     <td>" . $item->qt_contrato . "</td>

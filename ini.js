@@ -445,8 +445,7 @@ function iniSolicitacoes() {
 
 function enviaForn(id_pedido) {
     $('a').blur();
-    confirm = confirm("O status do pedido " + id_pedido + " será alterado para 'Enviado ao Fornecedor'. \n\nDeseja Continuar?");
-    if (!confirm) {
+    if (!confirm("O status do pedido " + id_pedido + " será alterado para 'Enviado ao Fornecedor'. \n\nDeseja Continuar?")) {
         return;
     }
     $.post('../php/geral.php', {
@@ -455,7 +454,6 @@ function enviaForn(id_pedido) {
         id_pedido: id_pedido
     }, function (resposta) {
         iniSolicitacoes();
-        limpaTela();
         avisoSnack('Pedido enviado ao Fornecedor', 'body');
     });
 }
@@ -1048,7 +1046,6 @@ function analisarPedido(id_pedido, id_setor) {
         form: 'analisaPedido',
         id_pedido: id_pedido
     }, function (resposta) {
-        document.getElementById('tableItensPedido').style.display = 'block';
         $('#tableItensPedido').DataTable().destroy();
         document.getElementById("conteudoPedido").innerHTML = resposta;
         iniDataTable('#tableItensPedido');
@@ -1121,7 +1118,6 @@ function getStatus(id_pedido, id_setor) {
 function limpaTela() {
     $('a').blur();
     $('#tableItensPedido').DataTable().destroy();
-    document.getElementById('tableItensPedido').style.display = 'none';
     document.getElementById('conteudoPedido').innerHTML = '';
     $('#tableSolicitacoes tr').css('background-color', '');
     document.getElementById('text_saldo_total').innerHTML = 'R$ 0.000';

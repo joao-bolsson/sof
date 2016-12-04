@@ -346,9 +346,9 @@ $permissao = $obj_Busca->getPermissoes($_SESSION["id"]);
                                     <input id="id_pedido" type="hidden" name="id_pedido" value="0"></input>
                                     <input id="id_setor" type="hidden" name="id_setor" value="0"></input>
                                     <div class="card-inner">
-                                        <table class="table stripe" id="tableItensPedido" style="display: none;">
+                                        <table class="table stripe" id="tableItensPedido">
                                             <thead>
-                                            <th></th>
+                                            <th>Ferramentas</th>
                                             <th>COD_REDUZIDO</th>
                                             <th>COD_DESPESA</th>
                                             <th>DESCRICAO_DESPESA</th>
@@ -362,7 +362,6 @@ $permissao = $obj_Busca->getPermissoes($_SESSION["id"]);
                                             <th>CGC_FORNECEDOR</th>
                                             <th>NOME_FORNECEDOR</th>
                                             <th>NUM_EXTRATO</th>
-                                            <th>COMPLEMENTO_ITEM</th>
                                             <th>DESCRICAO</th>
                                             <th>VL_UNITARIO</th>
                                             <th>QT_CONTRATO</th>
