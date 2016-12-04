@@ -110,10 +110,16 @@ class Busca extends Conexao {
      * 	@access public
      * 	@return Colunas com alguns status
      */
-    public function getRadiosStatusRel(): string {
-        $retorno = "";
-        $query = $this->mysqli->query("SELECT status.id, status.nome FROM status WHERE status.id = 2 OR status.id = 3 OR status.id = 5 OR status.id = 6 OR status.id = 7;");
+    public function getRadiosStatusRel(): string {        
+        $retorno = "<tr>";
+        $i = 0;
+        $cont = 5;
+        $query = $this->mysqli->query("SELECT status.id, status.nome FROM status WHERE status.id <> 1;");
         while ($status = $query->fetch_object()) {
+            if ($i == $cont) {
+                $i = 0;
+                $retorno .= "</tr><tr>";
+            }
             $retorno .= "
             <td>
                 <div class=\"radiobtn radiobtn-adv\">
@@ -123,7 +129,9 @@ class Busca extends Conexao {
                     </label>
                 </div>
             </td>";
+            $i++;
         }
+        $retorno .= "</tr>";
         $query->close();
         return $retorno;
     }

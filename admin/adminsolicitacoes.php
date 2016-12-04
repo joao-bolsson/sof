@@ -457,7 +457,7 @@ $permissao = $obj_Busca->getPermissoes($_SESSION["id"]);
             </div>
         </div>
         <div aria-hidden="true" class="modal fade" id="listRelatorios" role="dialog" tabindex="-1">
-            <div class="modal-dialog">
+            <div class="modal-dialog" style="width: 90%;">
                 <div class="modal-content">
                     <div class="modal-heading">
                         <a class="modal-close" data-dismiss="modal">×</a>
@@ -465,9 +465,7 @@ $permissao = $obj_Busca->getPermissoes($_SESSION["id"]);
                     </div>
                     <div class="modal-inner">
                         <table class="table">
-                            <tr>
-                                <?= $obj_Busca->getRadiosStatusRel(); ?>
-                            </tr>
+                            <?= $obj_Busca->getRadiosStatusRel(); ?>
                             <tr id="relTotRow" style="display: none;">
                                 <td id="tdTotRow"></td>
                             </tr>
@@ -1133,6 +1131,6 @@ $permissao = $obj_Busca->getPermissoes($_SESSION["id"]);
 
         <script type="text/javascript" src="../plugins/dataTables/datatables.min.js"></script>
 
-        <script type="text/javascript" src="../ini.js"></script>
+        <script type="text/javascript" src="../ini.min.js"></script>
     </body>
 </html>

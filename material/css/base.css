@@ -5560,7 +5560,6 @@ input[type="checkbox"]:checked + .switch-toggle-red:active:after, input[type="ra
     line-height: 20px;
     padding: 13px 16px 14px;
     vertical-align: top;
-    text-align: center;
 }
 .table td.nowrap,
 .table th.nowrap {
