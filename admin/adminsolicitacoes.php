@@ -457,19 +457,17 @@ $permissao = $obj_Busca->getPermissoes($_SESSION["id"]);
             </div>
         </div>
         <div aria-hidden="true" class="modal fade" id="listRelatorios" role="dialog" tabindex="-1">
-            <div class="modal-dialog" style="width: 90%;">
+            <div class="modal-dialog" style="width: 80%;">
                 <div class="modal-content">
                     <div class="modal-heading">
                         <a class="modal-close" data-dismiss="modal">×</a>
                         <h2 class="modal-title content-sub-heading">Relatórios</h2>
                     </div>
                     <div class="modal-inner">
-                        <table class="table">
+                        <table style="width: 100%;">
                             <?= $obj_Busca->getRadiosStatusRel(); ?>
-                            <tr id="relTotRow" style="display: none;">
-                                <td id="tdTotRow"></td>
-                            </tr>
                         </table>
+                        <p id="relTotRow" style="display: none;"></p>
                         <table id="tableListRelatorios" class="table" style="width: 100%;">
                             <thead>
                             <th>Pedido</th>

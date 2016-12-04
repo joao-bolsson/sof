@@ -642,7 +642,7 @@ function refreshTot(status) {
         form: 'refreshTot',
         status: status
     }).done(function (resposta) {
-        $('#tdTotRow').html(resposta);
+        $('#relTotRow').html(resposta);
         document.getElementById('relTotRow').style.display = 'block';
     });
 }
