@@ -421,6 +421,16 @@ function updateProcesso() {
     });
 }
 
+function putNumberFormat(value) {
+    $.post('../php/busca.php', {
+        users: 1,
+        form: 'number_format',
+        value: value
+    }).done(function (resposta) {
+        document.getElementById('saldoDispOri').innerHTML = 'Saldo disponível: R$ ' + resposta;
+    });
+}
+
 function getSaldoOri() {
     var select = document.getElementById('setorOri');
     var setorOri = select.options[select.selectedIndex].value;
@@ -429,7 +439,7 @@ function getSaldoOri() {
         form: 'getSaldoOri',
         setorOri: setorOri
     }, function (resposta) {
-        document.getElementById('saldoDispOri').innerHTML = 'Saldo disponível: R$ ' + resposta;
+        putNumberFormat(resposta);
         $('#valorTransf').attr('max', resposta);
     });
 }
@@ -805,7 +815,13 @@ function addItemPedido(id_item, qtd, vl_unitario) {
     total = parseFloat(t) + parseFloat(valor);
     document.getElementById('total_hidden').value = parseFloat(total).toFixed(3);
     var tot_str = parseFloat(total).toFixed(3);
-    document.getElementById('total').value = "R$ " + tot_str;
+    $.post('../php/busca.php', {
+        users: 1,
+        form: 'number_format',
+        value: tot_str
+    }).done(function (resposta) {
+        document.getElementById('total').value = "R$ " + resposta;
+    });
 
     //saldo
     s = document.getElementById('saldo_total').value;

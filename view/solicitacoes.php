@@ -133,7 +133,7 @@ $pedidos_em_analise = $obj_Busca->getPedidosAnalise($id_setor);
                                     <p class="card-heading">Pedido</p>
                                 </div>
                                 <div class="card-header-side pull-right" style="margin-left: 70%;">
-                                    <p class="card-heading">SALDO <span id="text_saldo_total">R$ <?= $saldo_total ?></span></p>
+                                    <p class="card-heading">SALDO <span id="text_saldo_total">R$ <?= number_format($saldo_total, 3, ',', '.'); ?></span></p>
                                 </div>
                             </div><!--  ./card-header -->
                             <form action="../php/geral.php" method="POST">
@@ -152,9 +152,7 @@ $pedidos_em_analise = $obj_Busca->getPedidosAnalise($id_setor);
                                         <th>QT_SOLICITADA</th>
                                         <th>VALOR</th>
                                         </thead>
-                                        <tbody id="conteudoPedido">
-
-                                        </tbody>
+                                        <tbody id="conteudoPedido"></tbody>
                                     </table>
                                     <table class="table">
                                         <tr>

@@ -405,7 +405,6 @@ if (isset($_POST["admin"]) && isset($_SESSION["id_setor"]) && ($_SESSION["id_set
             $pedido = $_POST["pedido"];
 
             $insertPedido = $obj_Geral->insertPedido($id_setor, $id_item, $qtd_solicitada, $qtd_disponivel, $qtd_contrato, $qtd_utilizado, $vl_saldo, $vl_contrato, $vl_utilizado, $valor, $total_pedido, $saldo_total, $prioridade, $obs, $pedido);
-
             if ($insertPedido) {
                 header("Location: ../view/solicitacoes.php");
             } else {

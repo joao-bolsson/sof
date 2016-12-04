@@ -149,7 +149,7 @@ $permissao = $obj_Busca->getPermissoes($_SESSION["id"]);
                                     </td>
                                 <?php endif; ?>
                                 <?php if (true): ?>
-                                    <td id="labelSaldoSOF" style="font-weight: bold;">Saldo Disponível: R$ <?= $obj_Busca->getSaldo($_SESSION['id_setor']); ?></td>
+                                    <td id="labelSaldoSOF" style="font-weight: bold;">Saldo Disponível: R$ <?= number_format($obj_Busca->getSaldo($_SESSION['id_setor']), 3, ',', '.'); ?></td>
                                 <?php endif ?>
                             </tr>
                         </tbody>
@@ -336,8 +336,8 @@ $permissao = $obj_Busca->getPermissoes($_SESSION["id"]);
                                     <div class="card-header-side pull-left">
                                         <p class="card-heading">Detalhes do Pedido</p>
                                     </div>
-                                    <div class="card-header-side pull-right" style="margin-left: 70%;">
-                                        <p class="card-heading">SALDO <span id="text_saldo_total">R$ 0.000</span></p>
+                                    <div class="card-header-side pull-right" style="margin-left: 55%; display: none;">
+                                        <p class="card-heading">SALDO DO SOLICITANTE <span id="text_saldo_total">R$ 0.000</span></p>
                                     </div>
                                 </div><!--  ./card-header -->
                                 <form id="formPedido" action="../php/geral.php" method="POST">
@@ -783,7 +783,7 @@ $permissao = $obj_Busca->getPermissoes($_SESSION["id"]);
                                         <select id="setorOri" class="form-control" name="setorOri" required onchange="getSaldoOri();">
                                             <?= $obj_Busca->getOptionsSetores(); ?>
                                         </select>
-                                        <p id="saldoDispOri" style="font-weight: bold;">Saldo disponível: R$ 3000.000</p>
+                                        <p id="saldoDispOri" style="font-weight: bold;"></p>
                                     </div>
                                     <div class="form-group form-group-label">
                                         <label class="floating-label" for="setorDest"><span class="icon">perm_identity</span>&nbsp;Setor Destino</label>

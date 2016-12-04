@@ -149,6 +149,11 @@ if (isset($_POST["admin"]) && isset($_SESSION['id_setor']) && ($_SESSION['id_set
 	$form = $_POST["form"];
 
 	switch ($form) {
+        // return the number format as 1.000,000 (mil)
+        case 'number_format' :
+            $valor = number_format($_POST['value'], 3, ',', '.');
+            echo $valor;
+            break;
 	// comment.
 	case 'verEmpenho':
 		$id_pedido = $_POST['id_pedido'];

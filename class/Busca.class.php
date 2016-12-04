@@ -290,6 +290,7 @@ class Busca extends Conexao {
             while ($obj = $query->fetch_object()) {
                 $soma += $obj->valor;
             }
+            $soma = number_format($soma, 3, ',', '.');
             $retorno = "
             <tr>
                 <td colspan=\"2\">Você tem " . $query->num_rows . " pedido(s) em análise no total de R$ " . $soma . "</td>
@@ -355,6 +356,7 @@ class Busca extends Conexao {
             } else {
                 $cor = 'green';
             }
+            $lancamento->valor = number_format($lancamento->valor, 3, ',', '.');
             $retorno .= "
                 <tr>
                     <td>" . $lancamento->nome . "</td>
@@ -365,7 +367,7 @@ class Busca extends Conexao {
         }
         return $retorno;
     }
-
+    
     /**
      * 	Função que retorna as options com os setores cadastrados no sistema
      *
@@ -998,6 +1000,7 @@ class Busca extends Conexao {
                 }
                 $solic->justificativa = $this->mysqli->real_escape_string($solic->justificativa);
                 $solic->justificativa = str_replace("\"", "'", $solic->justificativa);
+                $solic->valor_adiantado = number_format($solic->valor_adiantado, 3, ',', '.');
                 $retorno .= "
                     <tr>
                         <td>" . $btn_reprovar . $btn_aprovar . "</td>
@@ -1572,6 +1575,7 @@ class Busca extends Conexao {
             }
             $solic->justificativa = $this->mysqli->real_escape_string($solic->justificativa);
             $solic->justificativa = str_replace("\"", "'", $solic->justificativa);
+            $solic->valor_adiantado = number_format($solic->valor_adiantado, 3, ',', '.');
             $retorno .= "
                 <tr>
                     <td>" . $solic->data_solicitacao . "</td>
@@ -1680,6 +1684,7 @@ class Busca extends Conexao {
         $query = $this->mysqli->query("SELECT pedido.id, DATE_FORMAT(pedido.data_pedido, '%d/%m/%Y') AS data_pedido, mes.sigla_mes AS ref_mes, pedido.valor, status.nome AS status FROM pedido, mes, status WHERE pedido.id_setor = {$id_setor} AND pedido.alteracao = 1 AND mes.id = pedido.ref_mes AND status.id = pedido.status ORDER BY pedido.id DESC;");
 
         while ($rascunho = $query->fetch_object()) {
+            $rascunho->valor = number_format($rascunho->valor, 3, ',', '.');
             $retorno .= "
                 <tr>
                     <td>" . $rascunho->id . "</td>
@@ -1786,6 +1791,7 @@ class Busca extends Conexao {
             if ($empenho == 'EMPENHO SIAFI PENDENTE') {
                 $empenho = '';
             }
+            $pedido->valor = number_format($pedido->valor, 3, ',', '.');
             $retorno .= "
                 <tr>
                     <td>" . $pedido->id . "</td>
