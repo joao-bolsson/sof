@@ -99,9 +99,11 @@ $permissao = $obj_Busca->getPermissoes($_SESSION["id"]);
                                     </li>
                                 <?php endif; ?>
                                 <?php if ($permissao->pedidos): ?>
+                                    <!--
                                     <li>
                                         <a class="waves-attach" href="javascript:abreModal('#importItens');"><span style="color: white;"><span class="icon">backup</span>IMPORTAR ITENS</span></a>
                                     </li>
+                                    -->
                                     <li>
                                         <div class="dropdown dropdown-inline">
                                             <a class="waves-attach" data-toggle="dropdown"><span class="text-white"><span class="icon">print</span>RELATÓRIOS</span><span class="icon margin-left-sm">keyboard_arrow_down</span></a>

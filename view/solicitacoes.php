@@ -522,6 +522,6 @@ $pedidos_em_analise = $obj_Busca->getPedidosAnalise($id_setor);
 
     <script type="text/javascript" src="../plugins/dataTables/datatables.min.js"></script>
 
-    <script type="text/javascript" src="../ini.js"></script>
+    <script type="text/javascript" src="../ini.min.js"></script>
 </body>
 </html>
