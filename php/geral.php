@@ -166,14 +166,9 @@ if (isset($_POST["admin"]) && isset($_SESSION["id_setor"]) && ($_SESSION["id_set
             }
             $dados = $obj_Util->readFile($_FILES["file"]['tmp_name']);
             unset($_FILES["file"]);
-//            // atualiza seq item processo dos itens que já estão na tabela (update) 
-//            $array_update = $obj_Util->atualizaSeqItem($dados);
-//            $update = $obj_Geral->importaItens($array_update);
-//            unset($array_update);
-//            if (!$update) {
-//                echo "Ocorreu um erro ao atualizar o seq_item_processo. Contate o administrador";
-//                exit;
-//            }
+            if (count($dados) < 1) {
+                exit;
+            }
             // prepara a importação dos itens (insert)
             $array_sql = $obj_Util->prepareImport($dados);
             unset($dados);

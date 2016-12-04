@@ -78,6 +78,9 @@ class Util extends Conexao {
                     }
                     $array[$i] = $data;
                     $i++;
+                } else if ($data[$this->seq_item_processo] != "SEQ_ITEM_PROCESSO") {
+                    echo "Arquivo inválido. Não contém a coluna SEQ_ITEM_PROCESSO no lugar correto.";
+                    return $array;
                 }
             }
             fclose($handle);
@@ -115,24 +118,6 @@ class Util extends Conexao {
             $pos = strrpos($values, ", ");
             $values[$pos] = ";";
             $array_sql[$i] = $insert . $values;
-        }
-        return $array_sql;
-    }
-
-    /**
-     * 	Função vai retornar um array com a chave do item e o seq_item_processo para atualizar.
-     * 	função temporária.
-     *
-     * 	@access public
-     * 	@return array
-     */
-    public function atualizaSeqItem(array $data): array {
-        $array_sql = array();
-        $count = count($data);
-        for ($a = 0; $a < $count; $a++) {
-            // chave = num_processo#cod_reduzido
-            $chave = $data[$a][$this->num_processo] . '#' . $data[$a][$this->cod_reduzido];
-            $array_sql[$a] = "UPDATE itens SET seq_item_processo = \"" . $data[$a][$this->seq_item_processo] . "\" WHERE chave = \"" . $chave . "\";";
         }
         return $array_sql;
     }

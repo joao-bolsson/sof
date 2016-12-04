@@ -25,6 +25,12 @@ class Busca extends Conexao {
         $this->obj_Util = new Util();
     }
 
+    public function getTotalByStatus(int $status):string {
+        $query = $this->mysqli->query("SELECT sum(pedido.valor) AS total FROM pedido WHERE pedido.status = {$status};");
+        $tot = $query->fetch_object();
+        $tot->total = number_format($tot->total, 3, ',', '.');
+        return "Totalizando R$ " . $tot->total;
+    }
     /**
      * 	Função para retornar uma lista de pedidos conforme o relatório
      *
@@ -50,7 +56,6 @@ class Busca extends Conexao {
         $query = $this->mysqli->query("SELECT pedido.id, DATE_FORMAT(pedido.data_pedido, '%d/%m/%Y') AS data_pedido, mes.sigla_mes AS ref_mes, prioridade.nome AS prioridade, status.nome AS status, pedido.valor FROM pedido, mes, prioridade, status WHERE prioridade.id = pedido.prioridade AND status.id = pedido.status AND mes.id = pedido.ref_mes AND pedido.status = {$status} {$alteracao} {$order};");
         while ($pedido = $query->fetch_object()) {
             $empenho = Busca::verEmpenho($pedido->id);
-            $pedido->prioridade = ucfirst($pedido->prioridade);
             $btnVerProcesso = "";
             if ($status == 2) {
                 // em análise
@@ -59,8 +64,10 @@ class Busca extends Conexao {
                 $btnVerProcesso = "
                     <button class=\"btn btn-default btn-sm\" style=\"text-transform: none !important;font-weight: bold;\" onclick=\"verProcessos(" . $pedido->id . ");\" title=\"Ver Processos\"><span class=\"icon\">remove_red_eye</span></button>";
             }
+            $pedido->valor = number_format($pedido->valor, 3, ',', '.');
             $retorno .= "
                 <tr>
+                    <td>" . $pedido->id . "</td>
                     <td>" . $pedido->ref_mes . "</td>
                     <td>" . $pedido->data_pedido . "</td>
                     <td>" . $pedido->prioridade . "</td>
@@ -191,6 +198,12 @@ class Busca extends Conexao {
                     <th>Prioridade</th>
                     <th>SIAFI</th>";
             }
+            $query_tot = $this->mysqli->query("SELECT sum(pedido.valor) AS total FROM pedido WHERE 1>0 {$where_setor} {$where_prioridade} {$where_empenho} AND pedido.alteracao = 0 {$where_status} AND pedido.data_pedido BETWEEN '{$dataIni}' AND '{$dataFim}';");
+            $total = '';
+            if ($query_tot) {
+                $tot = $query_tot->fetch_object();
+                $total = "R$ " . $tot->total;
+            }
             $retorno .= "
                 <fieldset class=\"preg\">
                     <h5>DESCRIÇÃO DO RELATÓRIO</h5>
@@ -201,6 +214,7 @@ class Busca extends Conexao {
                     <table>
                         <tr>
                             <td>" . $query->num_rows . " resultados encontrados</td>
+                            <td>Totalizando " . $total . "</td>
                         </tr>
                     </table>
                 </fieldset>
@@ -214,7 +228,6 @@ class Busca extends Conexao {
                     </thead>
                     <tbody>";
             while ($pedido = $query->fetch_object()) {
-                $pedido->prioridade = ucfirst($pedido->prioridade);
                 $tbody = "";
                 if ($status == 8) {
                     $tbody = "
@@ -371,7 +384,6 @@ class Busca extends Conexao {
         $retorno = "";
         $query = $this->mysqli->query("SELECT prioridade.id, prioridade.nome FROM prioridade WHERE prioridade.nome <> 'rascunho';");
         while ($prioridade = $query->fetch_object()) {
-            $prioridade->nome = ucfirst($prioridade->nome);
             $retorno .= "<option value=\"" . $prioridade->id . "\">" . $prioridade->nome . "</option>";
         }
         $query->close();
@@ -595,12 +607,11 @@ class Busca extends Conexao {
         $retorno = "";
         $query = $this->mysqli->query("SELECT id, nome FROM prioridade;");
         while ($prioridade = $query->fetch_object()) {
-            $nome = ucfirst($prioridade->nome);
             $retorno .= "
                 <td>
                     <div class=\"radiobtn radiobtn-adv\">
-                        <label for=\"st" . $nome . "\">
-                            <input type=\"radio\" name=\"st\" id=\"st" . $nome . "\" class=\"access-hide\" checked=\"\" value=\"" . $prioridade->id . "\">" . $nome . "
+                        <label for=\"st" . $prioridade->nome . "\">
+                            <input type=\"radio\" name=\"st\" id=\"st" . $prioridade->nome . "\" class=\"access-hide\" checked=\"\" value=\"" . $prioridade->id . "\">" . $prioridade->nome . "
                             <span class=\"radiobtn-circle\"></span><span class=\"radiobtn-circle-check\"></span>
                         </label>
                     </div>
@@ -1004,8 +1015,7 @@ class Busca extends Conexao {
      * @return string
      */
     public function getHeader(int $id_pedido): string {
-        $pedido = $this->mysqli->query("SELECT pedido.id, DATE_FORMAT(pedido.data_pedido, '%d/%m/%Y') AS data_pedido, EXTRACT(YEAR FROM pedido.data_pedido) AS ano, mes.sigla_mes AS ref_mes, status.nome AS status, replace(pedido.valor, '.', ',') AS valor, pedido.obs FROM pedido, mes, status WHERE status.id = pedido.status AND pedido.id = {$id_pedido} AND mes.id = pedido.ref_mes;")->fetch_object();
-        $ano = substr($pedido->data_pedido, 0, 4);
+        $pedido = $this->mysqli->query("SELECT pedido.id, DATE_FORMAT(pedido.data_pedido, '%d/%m/%Y') AS data_pedido, EXTRACT(YEAR FROM pedido.data_pedido) AS ano, mes.sigla_mes AS ref_mes, status.nome AS status, replace(pedido.valor, '.', ',') AS valor, pedido.obs, prioridade.nome AS prioridade FROM prioridade, pedido, mes, status WHERE pedido.prioridade = prioridade.id AND status.id = pedido.status AND pedido.id = {$id_pedido} AND mes.id = pedido.ref_mes;")->fetch_object();
         $empenho = "Empenho: " . Busca::verEmpenho($id_pedido);
         $pedido->valor = number_format($pedido->valor, 3, ',', '.');
         $retorno = "
@@ -1014,8 +1024,7 @@ class Busca extends Conexao {
                     Pedido: " . $id_pedido . "
                     Data de Envio: " . $pedido->data_pedido . ".&emsp;
                     Situação: " . $pedido->status . "&emsp;
-                    Ano:" . $pedido->ano . "&emsp;
-                    Mês: " . $pedido->ref_mes . "&emsp;
+                    Prioridade: " . $pedido->prioridade . "&emsp;
                     Total do Pedido: R$ " . $pedido->valor . "
                 </p>
                 <p>" . $empenho . "</p>
@@ -1188,7 +1197,6 @@ class Busca extends Conexao {
         $query = $this->mysqli->query("SELECT DATE_FORMAT(comentarios.data_coment, '%d/%m/%Y') AS data_coment, prioridade.nome AS prioridade, comentarios.valor, comentarios.comentario FROM comentarios, prioridade WHERE prioridade.id = comentarios.prioridade AND comentarios.id_pedido = {$id_pedido};");
         if ($query->num_rows > 0) {
             while ($comentario = $query->fetch_object()) {
-                $comentario->prioridade = ucfirst($comentario->prioridade);
                 $retorno .= "
                     <fieldset class=\"preg\">
                         <table>
@@ -1333,7 +1341,6 @@ class Busca extends Conexao {
         $retorno = "";
         $query = $this->mysqli->query("SELECT pedido.id, pedido.id_setor, setores.nome AS nome_setor, DATE_FORMAT(pedido.data_pedido, '%d/%m/%Y') AS data_pedido, mes.sigla_mes AS ref_mes, prioridade.nome AS prioridade, status.nome AS status, status.id AS id_status, pedido.valor FROM pedido, setores, mes, prioridade, status WHERE status.id = pedido.status AND pedido.status <> 3 AND prioridade.id = pedido.prioridade AND mes.id = pedido.ref_mes AND pedido.alteracao = 0 AND pedido.id_setor = setores.id ORDER BY pedido.id DESC LIMIT 100;");
         while ($pedido = $query->fetch_object()) {
-            $pedido->prioridade = ucfirst($pedido->prioridade);
             $btnAnalisar = "";
             if ($pedido->status != 'Reprovado' && $pedido->status != 'Aprovado') {
                 if ($_SESSION['id_setor'] == 12) {
@@ -1354,6 +1361,7 @@ class Busca extends Conexao {
             if ($btnVerEmpenho == 'EMPENHO SIAFI PENDENTE') {
                 $btnVerEmpenho = '';
             }
+            $pedido->valor = number_format($pedido->valor, 3, ',', '.');
             $linha = "
                 <tr id=\"rowPedido" . $pedido->id . "\">
                     <td>
@@ -1668,6 +1676,7 @@ class Busca extends Conexao {
         while ($rascunho = $query->fetch_object()) {
             $retorno .= "
                 <tr>
+                    <td>" . $rascunho->id . "</td>
                     <td><span class=\"label\" style=\"font-size: 11pt;\">" . $rascunho->status . "</span></td>
                     <td>" . $rascunho->ref_mes . "</td>
                     <td>" . $rascunho->data_pedido . "</td>
@@ -1771,7 +1780,6 @@ class Busca extends Conexao {
             if ($empenho == 'EMPENHO SIAFI PENDENTE') {
                 $empenho = '';
             }
-            $pedido->prioridade = ucfirst($pedido->prioridade);
             $retorno .= "
                 <tr>
                     <td>" . $pedido->id . "</td>

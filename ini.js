@@ -470,17 +470,8 @@ function formEnvia() {
         justificativa: justificativa
     }, function (resposta) {
         // Quando terminada a requisição
-        // Se a resposta é um erro
-        if (resposta == false) {
-            // Exibe o erro na div
-            alert(resposta);
-            window.location.href = 'index.php';
-        }
-        // Se resposta for false, ou seja, não ocorreu nenhum erro
-        else {
-            alert("Sua solicitação será análisada. Caso seja aprovada, seu pedido estará na sessão 'Rascunhos'");
-            $('#alt_pedido').modal('hide');
-        }
+        alert(resposta);
+        $('#alt_pedido').modal('hide');
     });
 }
 
@@ -641,6 +632,18 @@ function changeReport(radio) {
         $('#tableListRelatorios').DataTable().destroy();
         $('#tbodyListRelatorios').html(resposta);
         iniDataTable('#tableListRelatorios');
+    });
+    refreshTot(st[1]);
+}
+
+function refreshTot(status) {
+    $.post('../php/busca.php', {
+        admin: 1,
+        form: 'refreshTot',
+        status: status
+    }).done(function (resposta) {
+        $('#tdTotRow').html(resposta);
+        document.getElementById('relTotRow').style.display = 'block';
     });
 }
 

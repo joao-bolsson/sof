@@ -29,6 +29,11 @@ if (isset($_POST["admin"]) && isset($_SESSION['id_setor']) && ($_SESSION['id_set
 	$form = $_POST["form"];
 
 	switch ($form) {
+            
+        // retorna o total dos pedidos pelo status selecionado
+        case 'refreshTot':
+            echo $obj_Busca->getTotalByStatus($_POST['status']);
+            break;
 	// visualiza os processos de um pedido com suas datas
 	case 'verProcessos':
 		echo $obj_Busca->getProcessosPedido($_POST['id_pedido']);

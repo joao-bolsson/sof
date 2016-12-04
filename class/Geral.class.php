@@ -397,12 +397,13 @@ class Geral extends Conexao {
      * 	@access public
      * 	@return bool
      */
-    public function analisaSolicAlt($id_solic, $id_pedido, $acao): bool {
+    public function analisaSolicAlt(int $id_solic, int $id_pedido, int $acao): bool {
         $hoje = date('Y-m-d');
-        $update = $this->mysqli->query("UPDATE solic_alt_pedido SET data_analise = '{$hoje}', status = {$acao} WHERE id = {$id_solic};");
+        $this->mysqli->query("UPDATE solic_alt_pedido SET data_analise = '{$hoje}', status = {$acao} WHERE id = {$id_solic};");
         if ($acao) {
-            $update_alteracao = $this->mysqli->query("UPDATE pedido SET alteracao = {$acao}, prioridade = 'rascunho', status = 'Rascunho' WHERE id = {$id_pedido};");
+            $this->mysqli->query("UPDATE pedido SET alteracao = {$acao}, prioridade = 5, status = 1 WHERE id = {$id_pedido};");
         }
+        $this->mysqli->close();
         return true;
     }
 
@@ -410,16 +411,16 @@ class Geral extends Conexao {
      * 	Função que envia uma solicitação de alteração de pedido ao SOF.
      *
      * 	@access public
-     * 	@return bool
+     * 	@return Uma mesagem expressando o resultado da solicitação.
      */
-    public function solicAltPedido($id_pedido, $id_setor, $justificativa): bool {
+    public function solicAltPedido(int $id_pedido, int $id_setor, string $justificativa): string {
         $hoje = date('Y-m-d');
         $justificativa = $this->mysqli->real_escape_string($justificativa);
-        $solicita = $this->mysqli->query("INSERT INTO solic_alt_pedido VALUES(NULL, {$id_pedido}, {$id_setor}, '{$hoje}', '0000-00-00', '{$justificativa}', 2);");
+        $solicita = $this->mysqli->query("INSERT INTO solic_alt_pedido VALUES(NULL, {$id_pedido}, {$id_setor}, '{$hoje}', NULL, '{$justificativa}', 2);");
         if ($solicita) {
-            return true;
+            return "Sua solicitação será análisada. Caso seja aprovada, seu pedido estará na sessão 'Rascunhos'";
         }
-        return false;
+        return "Não foi possível fazer essa solicitação. Contate o administrador.";
     }
 
     /**
@@ -460,11 +461,10 @@ class Geral extends Conexao {
      * 	@param $acao 0 -> reprovado | 1 -> aprovado
      * 	@return bool
      */
-    public function analisaAdi($id, $acao): bool {
-
+    public function analisaAdi(int $id, int $acao): bool {
         $hoje = date('Y-m-d');
 
-        $update = $this->mysqli->query("UPDATE saldos_adiantados SET data_analise = '{$hoje}', status = {$acao} WHERE id = {$id};");
+        $this->mysqli->query("UPDATE saldos_adiantados SET data_analise = '{$hoje}', status = {$acao} WHERE id = {$id};");
         if (!$acao) {
             // se reprovado retorna
             return true;
@@ -484,12 +484,12 @@ class Geral extends Conexao {
      * 	@access public
      * 	@return bool
      */
-    public function solicitaAdiantamento($id_setor, $valor, $justificativa): bool {
+    public function solicitaAdiantamento(int $id_setor, string $valor, string $justificativa): bool {
         $valor = $this->mysqli->real_escape_string($valor);
         $justificativa = $this->mysqli->real_escape_string($justificativa);
         $hoje = date('Y-m-d');
         $valor = number_format($valor, 3, '.', '');
-        $insere = $this->mysqli->query("INSERT INTO saldos_adiantados VALUES(NULL, {$id_setor}, '{$hoje}', '0000-00-00', '{$valor}', '{$justificativa}', 2);");
+        $insere = $this->mysqli->query("INSERT INTO saldos_adiantados VALUES(NULL, {$id_setor}, '{$hoje}', NULL, '{$valor}', '{$justificativa}', 2);");
 
         if ($insere) {
             return true;

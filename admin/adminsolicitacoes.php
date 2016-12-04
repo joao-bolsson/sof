@@ -293,9 +293,7 @@ $permissao = $obj_Busca->getPermissoes($_SESSION["id"]);
                                         <th>JUSTIFICATIVA</th>
                                         <th>STATUS</th>
                                         </thead>
-                                        <tbody id="contSolicAltPedido">
-
-                                        </tbody>
+                                        <tbody id="contSolicAltPedido"></tbody>
                                     </table>
                                 </div><!-- ./card-inner -->
                             </div><!-- ./card-main -->
@@ -325,9 +323,7 @@ $permissao = $obj_Busca->getPermissoes($_SESSION["id"]);
                                         <th>VALOR</th>
                                         <th>EMPENHO</th>
                                         </thead>
-                                        <tbody id="conteudoSolicitacoes">
-
-                                        </tbody>
+                                        <tbody id="conteudoSolicitacoes"></tbody>
                                     </table>
                                 </div><!-- ./card-inner -->
                             </div><!-- ./card-main -->
@@ -473,9 +469,13 @@ $permissao = $obj_Busca->getPermissoes($_SESSION["id"]);
                             <tr>
                                 <?= $obj_Busca->getRadiosStatusRel(); ?>
                             </tr>
+                            <tr id="relTotRow" style="display: none;">
+                                <td id="tdTotRow"></td>
+                            </tr>
                         </table>
                         <table id="tableListRelatorios" class="table" style="width: 100%;">
                             <thead>
+                            <th>Pedido</th>
                             <th>RefMes</th>
                             <th>Data de Envio</th>
                             <th>Prioridade</th>
