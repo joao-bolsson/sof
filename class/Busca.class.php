@@ -25,12 +25,13 @@ class Busca extends Conexao {
         $this->obj_Util = new Util();
     }
 
-    public function getTotalByStatus(int $status):string {
+    public function getTotalByStatus(int $status): string {
         $query = $this->mysqli->query("SELECT sum(pedido.valor) AS total FROM pedido WHERE pedido.status = {$status};");
         $tot = $query->fetch_object();
         $tot->total = number_format($tot->total, 3, ',', '.');
         return "Totalizando R$ " . $tot->total;
     }
+
     /**
      * 	Função para retornar uma lista de pedidos conforme o relatório
      *
@@ -110,7 +111,7 @@ class Busca extends Conexao {
      * 	@access public
      * 	@return Colunas com alguns status
      */
-    public function getRadiosStatusRel(): string {        
+    public function getRadiosStatusRel(): string {
         $retorno = "<tr>";
         $i = 0;
         $cont = 5;
@@ -367,7 +368,7 @@ class Busca extends Conexao {
         }
         return $retorno;
     }
-    
+
     /**
      * 	Função que retorna as options com os setores cadastrados no sistema
      *
@@ -1411,7 +1412,7 @@ class Busca extends Conexao {
     public function getItensPedidoAnalise(int $id_pedido): string {
         //declarando retorno
         $retorno = "";
-        $query = $this->mysqli->query("SELECT itens.qt_contrato, itens.id AS id_itens, itens_pedido.qtd AS qtd_solicitada, itens_pedido.valor, itens.nome_fornecedor, itens.num_licitacao, itens.dt_inicio, itens.dt_fim, itens.dt_geracao, itens.cod_reduzido, itens.complemento_item, itens.vl_unitario, itens.qt_saldo, itens.cod_despesa, itens.descr_despesa, itens.num_contrato, itens.num_processo, itens.descr_mod_compra, itens.num_licitacao, itens.cgc_fornecedor, itens.num_extrato, itens.descricao, itens.qt_contrato, itens.vl_contrato, itens.qt_utilizado, itens.vl_utilizado, itens.qt_saldo, itens.vl_saldo FROM itens_pedido, itens WHERE itens_pedido.id_pedido = {$id_pedido} AND itens_pedido.id_item = itens.id;");
+        $query = $this->mysqli->query("SELECT itens.qt_contrato, itens.id AS id_itens, itens_pedido.qtd AS qtd_solicitada, itens_pedido.valor, itens.nome_fornecedor, itens.num_licitacao, itens.dt_inicio, itens.dt_fim, itens.dt_geracao, itens.cod_reduzido, itens.complemento_item, itens.vl_unitario, itens.qt_saldo, itens.cod_despesa, itens.descr_despesa, itens.num_contrato, itens.num_processo, itens.descr_mod_compra, itens.num_licitacao, itens.cgc_fornecedor, itens.num_extrato, itens.descricao, itens.qt_contrato, itens.vl_contrato, itens.qt_utilizado, itens.vl_utilizado, itens.qt_saldo, itens.vl_saldo, itens.seq_item_processo FROM itens_pedido, itens WHERE itens_pedido.id_pedido = {$id_pedido} AND itens_pedido.id_item = itens.id;");
 
         while ($item = $query->fetch_object()) {
             if ($item->dt_fim == '') {
@@ -1450,6 +1451,7 @@ class Busca extends Conexao {
                     <td>" . $item->qt_saldo . "</td>
                     <td>" . $item->vl_saldo . "</td>
                     <td>" . $item->qtd_solicitada . "</td>
+                    <td>" . $item->seq_item_processo . "</td>
                     <td>R$ " . $item->valor . "</td>
                     <td>
                         <input type=\"hidden\" name=\"id_item[]\" value=\"" . $item->id_itens . "\">
