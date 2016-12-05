@@ -117,9 +117,7 @@ $pedidos_em_analise = $obj_Busca->getPedidosAnalise($id_setor);
                                     <th>VL_UTILIZADO</th>
                                     <th>QT_CONTRATO</th>
                                     </thead>
-                                    <tbody id="conteudoProcesso">
-
-                                    </tbody>
+                                    <tbody id="conteudoProcesso"></tbody>
                                 </table>
                             </div><!-- ./card-inner -->
                         </div><!-- ./card-main -->

@@ -99,11 +99,9 @@ $permissao = $obj_Busca->getPermissoes($_SESSION["id"]);
                                     </li>
                                 <?php endif; ?>
                                 <?php if ($permissao->pedidos): ?>
-                                    <!--
                                     <li>
                                         <a class="waves-attach" href="javascript:abreModal('#importItens');"><span style="color: white;"><span class="icon">backup</span>IMPORTAR ITENS</span></a>
                                     </li>
-                                    -->
                                     <li>
                                         <div class="dropdown dropdown-inline">
                                             <a class="waves-attach" data-toggle="dropdown"><span class="text-white"><span class="icon">print</span>RELATÓRIOS</span><span class="icon margin-left-sm">keyboard_arrow_down</span></a>
@@ -181,9 +179,7 @@ $permissao = $obj_Busca->getPermissoes($_SESSION["id"]);
                                         <th>RETORNO EM</th>
                                         <th>OBS</th>
                                         </thead>
-                                        <tbody id="conteudoRecepcao">
-
-                                        </tbody>
+                                        <tbody id="conteudoRecepcao"></tbody>
                                     </table>
                                 </div><!-- ./card-inner -->
                             </div><!-- ./card-main -->
@@ -238,9 +234,7 @@ $permissao = $obj_Busca->getPermissoes($_SESSION["id"]);
                                         <th>JUSTIFICATIVA</th>
                                         <th>STATUS</th>
                                         </thead>
-                                        <tbody id="conteudoSolicitacoesAdiantamento">
-
-                                        </tbody>
+                                        <tbody id="conteudoSolicitacoesAdiantamento"></tbody>
                                     </table>
                                 </div><!-- ./card-inner -->
                             </div><!-- ./card-main -->
@@ -301,9 +295,6 @@ $permissao = $obj_Busca->getPermissoes($_SESSION["id"]);
                             </div><!-- ./card-main -->
                         </div> <!-- ./card -->
                     </div> <!-- ./row -->
-
-                    <!-- TABELA COM OS PEDIDOS ENVIADOS AO SOF -->
-
                     <div id="rowPedidos" class="row">
                         <div id="card" class="card margin-top-no">
                             <div class="card-main">
