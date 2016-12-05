@@ -18,16 +18,13 @@ $permissao = $obj_Busca->getPermissoes($_SESSION["id"]);
         <meta content="IE=edge" http-equiv="X-UA-Compatible">
         <meta content="initial-scale=1.0, maximum-scale=1.0, user-scalable=no, width=device-width" name="viewport">
         <title>Setor de Orçamento e Finanças – HUSM</title>
-        <!-- css -->
         <link href="../material/css/base.min.css" rel="stylesheet">
 
-        <!-- css for doc -->
         <link href="../material/css/project.css" rel="stylesheet">
         <link href="../sof_files/estilo.min.css" rel="stylesheet">
 
         <link rel="stylesheet" type="text/css" href="../plugins/dataTables/datatables.min.css"/>
 
-        <!-- favicon -->
         <link rel="icon" href="../favicon.ico">
     </head>
 
