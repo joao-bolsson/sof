@@ -59,8 +59,7 @@ function enviaEmpenho() {
 }
 
 function enviaOrdenador(id_pedido) {
-    confirm = confirm("Mudar o status do pedido para \"Enviado ao Ordenador\"?");
-    if (confirm) {
+    if (confirm("Mudar o status do pedido para \"Enviado ao Ordenador\"?")) {
         $.post('../php/geral.php', {
             admin: 1,
             form: 'enviaOrdenador',
@@ -68,7 +67,6 @@ function enviaOrdenador(id_pedido) {
         }, function (resposta) {
             if (resposta) {
                 iniSolicitacoes();
-                limpaTela();
             } else {
                 alert('Ocorreu um erro no servidor. Contate o administrador.');
             }
