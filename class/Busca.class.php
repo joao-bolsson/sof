@@ -1432,6 +1432,7 @@ class Busca extends Conexao {
                         <a class=\"modal-close\" href=\"javascript:viewCompl('" . $item->complemento_item . "');\"  title=\"Ver Complemento do Item\"><span class=\"icon\">assignment<span></a>
                     </td>
                     <td>" . $item->cod_reduzido . "</td>
+                    <td>" . $item->seq_item_processo . "</td>
                     <td>" . $item->cod_despesa . "</td>
                     <td>" . $item->descr_despesa . "</td>
                     <td>" . $item->num_contrato . "</td>
@@ -1453,7 +1454,6 @@ class Busca extends Conexao {
                     <td>" . $item->qt_saldo . "</td>
                     <td>" . $item->vl_saldo . "</td>
                     <td>" . $item->qtd_solicitada . "</td>
-                    <td>" . $item->seq_item_processo . "</td>
                     <td>R$ " . $item->valor . "</td>
                     <td>
                         <input type=\"hidden\" name=\"id_item[]\" value=\"" . $item->id_itens . "\">

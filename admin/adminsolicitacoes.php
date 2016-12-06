@@ -340,6 +340,7 @@ $permissao = $obj_Busca->getPermissoes($_SESSION["id"]);
                                             <thead>
                                             <th>Ferramentas</th>
                                             <th>COD_REDUZIDO</th>
+                                            <th>SEQ_ITEM_PROCESSO</th>
                                             <th>COD_DESPESA</th>
                                             <th>DESCRICAO_DESPESA</th>
                                             <th>NUM_CONTRATO</th>
@@ -361,7 +362,6 @@ $permissao = $obj_Busca->getPermissoes($_SESSION["id"]);
                                             <th>QT_SALDO</th>
                                             <th>VL_SALDO</th>
                                             <th>QT_SOLICITADA</th>
-                                            <th>SEQ_ITEM_PROCESSO</th>
                                             <th>VALOR</th>
                                             <th></th>
                                             </thead>
