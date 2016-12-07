@@ -66,10 +66,6 @@ if (isset($_POST["admin"]) && isset($_SESSION['id_setor']) && ($_SESSION['id_set
 		echo json_encode($obj_Busca->getPermissoes($_SESSION["id"]));
 		break;
 	// comment.
-	case 'listLancamentos':
-		echo $obj_Busca->getLancamentos($_SESSION['id_setor']);
-		break;
-	// comment.
 
 	case 'relatorioProcessos':
 		$_SESSION["relatorioProcessos"] = 1;
@@ -149,6 +145,10 @@ if (isset($_POST["admin"]) && isset($_SESSION['id_setor']) && ($_SESSION['id_set
 	$form = $_POST["form"];
 
 	switch ($form) {
+        // atualiza os valores de entradas e saídas do setor selecionado
+        case 'refreshTotSaldos':
+            echo $obj_Busca->getTotalInOutSaldos($_POST['id_setor']);
+            break;
         // return the number format as 1.000,000 (mil)
         case 'number_format' :
             $valor = number_format($_POST['value'], 3, ',', '.');
@@ -161,7 +161,7 @@ if (isset($_POST["admin"]) && isset($_SESSION['id_setor']) && ($_SESSION['id_set
 		break;
 	// comment.
 	case 'listLancamentos':
-		echo $obj_Busca->getLancamentos($_SESSION['id_setor']);
+		echo $obj_Busca->getLancamentos($_POST['id_setor']);
 		break;
 
 	// comment.
