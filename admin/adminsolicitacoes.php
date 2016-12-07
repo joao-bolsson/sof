@@ -89,7 +89,7 @@ $permissao = $obj_Busca->getPermissoes($_SESSION["id"]);
                                         <a class="waves-attach" href="javascript:abreModal('#freeSaldos');"><span style="color: white;"><span class="icon">near_me</span>LIBERAR SALDOS</span></a>
                                     </li>
                                     <li>
-                                        <a class="waves-attach" href="javascript:listLancamentos(0);"><span style="color: white;"><span class="icon">attach_money</span>LANÇAMENTOS DE SALDOS</span></a>
+                                        <a class="waves-attach" href="javascript:listLancamentos();"><span style="color: white;"><span class="icon">attach_money</span>LANÇAMENTOS DE SALDOS</span></a>
                                     </li>
                                     <li>
                                         <a class="waves-attach" href="javascript:abreModal('#transferencia');"><span style="color: white;"><span class="icon">swap_horiz</span>TRANSFERÊNCIAS</span></a>
@@ -862,6 +862,14 @@ $permissao = $obj_Busca->getPermissoes($_SESSION["id"]);
                             <h2 class="modal-title content-sub-heading">Lançamentos de Saldos</h2>
                         </div>
                         <div class="modal-inner">
+                            <div class="form-group form-group-label">
+                                <label class="floating-label" for="selectSetor"><span class="icon">perm_identity</span>&nbsp;Setor</label>
+                                <select id="selectSetor" class="form-control" onchange="changeSetor();" required>
+                                    <option value="-1">Nenhum</option>
+                                    <option value="0">Todos</option>
+                                    <?= $obj_Busca->getOptionsSetores(); ?>
+                                </select>
+                            </div>
                             <table id="tableListLancamentos" class="table" style="width: 100%;">
                                 <thead>
                                     <tr>
