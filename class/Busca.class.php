@@ -369,6 +369,28 @@ class Busca extends Conexao {
         return $retorno;
     }
 
+    function getTotalInOutSaldos(int $id_setor): string {
+        $entrada = $saida = 0;
+        $where = "";
+        if ($id_setor != 0) {
+            $where = "AND saldos_lancamentos.id_setor = " . $id_setor;
+        }
+        $query = $this->mysqli->query("SELECT saldos_lancamentos.valor FROM setores, saldos_lancamentos WHERE setores.id = saldos_lancamentos.id_setor {$where};");
+        while ($lancamento = $query->fetch_object()) {
+            if ($lancamento->valor < 0) {
+                $saida -= $lancamento->valor;
+            } else {
+                $entrada += $lancamento->valor;
+            }
+        }
+        $entrada = number_format($entrada, 3, ',', '.');
+        $saida = number_format($saida, 3, ',', '.');
+        $array = array('entrada' => "Total de Entradas: R$ " . $entrada,
+            'saida' => "Total de Saídas: R$ " . $saida);
+
+        return json_encode($array);
+    }
+
     /**
      * 	Função que retorna as options com os setores cadastrados no sistema
      *

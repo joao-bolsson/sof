@@ -89,7 +89,7 @@ $permissao = $obj_Busca->getPermissoes($_SESSION["id"]);
                                         <a class="waves-attach" href="javascript:abreModal('#freeSaldos');"><span style="color: white;"><span class="icon">near_me</span>LIBERAR SALDOS</span></a>
                                     </li>
                                     <li>
-                                        <a class="waves-attach" href="javascript:listLancamentos();"><span style="color: white;"><span class="icon">attach_money</span>LANÇAMENTOS DE SALDOS</span></a>
+                                        <a class="waves-attach" href="javascript:listLancamentos();"><span style="color: white;"><span class="icon">attach_money</span>LIBERAÇÕES ORÇAMENTÁRIAS</span></a>
                                     </li>
                                     <li>
                                         <a class="waves-attach" href="javascript:abreModal('#transferencia');"><span style="color: white;"><span class="icon">swap_horiz</span>TRANSFERÊNCIAS</span></a>
@@ -859,7 +859,7 @@ $permissao = $obj_Busca->getPermissoes($_SESSION["id"]);
                     <div class="modal-content">
                         <div class="modal-heading">
                             <a class="modal-close" data-dismiss="modal">×</a>
-                            <h2 class="modal-title content-sub-heading">Lançamentos de Saldos</h2>
+                            <h2 class="modal-title content-sub-heading">Liberações Orçamentárias</h2>
                         </div>
                         <div class="modal-inner">
                             <div class="form-group form-group-label">
@@ -869,6 +869,15 @@ $permissao = $obj_Busca->getPermissoes($_SESSION["id"]);
                                     <option value="0">Todos</option>
                                     <?= $obj_Busca->getOptionsSetores(); ?>
                                 </select>
+                                <table style="width: 100%;">
+                                    <tbody id="rowDataSaldo">
+                                        <tr>
+                                            <td>Dados do setor selecionado</td>
+                                            <td id="totOut">Total de Saídas: R$ 0.000</td>
+                                            <td id="totIn">Total de Entradas: R$ 0.000</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
                             </div>
                             <table id="tableListLancamentos" class="table" style="width: 100%;">
                                 <thead>

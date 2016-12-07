@@ -559,6 +559,21 @@ function changeSetor(id_setor) {
             iniDataTable('#tableListLancamentos');
         }
     });
+    if (id_setor == null) {
+        refreshDataSaldo(setor);
+    }
+}
+
+function refreshDataSaldo(id_setor) {
+    $.post('../php/busca.php', {
+        users: 1,
+        form: 'refreshTotSaldos',
+        id_setor: id_setor
+    }).done(function (resposta) {
+        var obj = jQuery.parseJSON(resposta);
+        $('#totIn').html(obj.entrada);
+        $('#totOut').html(obj.saida);
+    });
 }
 
 $('#listSolicAltPedidos').on('shown.bs.modal', function (event) {

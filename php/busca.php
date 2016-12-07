@@ -145,6 +145,10 @@ if (isset($_POST["admin"]) && isset($_SESSION['id_setor']) && ($_SESSION['id_set
 	$form = $_POST["form"];
 
 	switch ($form) {
+        // atualiza os valores de entradas e saídas do setor selecionado
+        case 'refreshTotSaldos':
+            echo $obj_Busca->getTotalInOutSaldos($_POST['id_setor']);
+            break;
         // return the number format as 1.000,000 (mil)
         case 'number_format' :
             $valor = number_format($_POST['value'], 3, ',', '.');
