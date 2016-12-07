@@ -346,7 +346,7 @@ class Busca extends Conexao {
     public function getLancamentos(int $id_setor): string {
         $retorno = "";
         $where = "";
-        if ($id_setor != 2) {
+        if ($id_setor != 0) {
             $where = "AND saldos_lancamentos.id_setor = " . $id_setor;
         }
         $query = $this->mysqli->query("SELECT setores.nome, DATE_FORMAT(saldos_lancamentos.data, '%d/%m/%Y') AS data, saldos_lancamentos.valor, saldo_categoria.nome AS categoria FROM setores, saldos_lancamentos, saldo_categoria WHERE setores.id = saldos_lancamentos.id_setor {$where} AND saldos_lancamentos.categoria = saldo_categoria.id ORDER BY saldos_lancamentos.id DESC;");

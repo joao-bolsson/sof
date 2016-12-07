@@ -530,21 +530,13 @@ $('#listLancamentos').on('shown.bs.modal', function (event) {
 function listLancamentos(id_setor) {
     $('#listLancamentos').modal();
     if (!$.fn.DataTable.isDataTable('#tableListLancamentos')) {
-        if (id_setor === 0) {
-            $.post('../php/busca.php', {
-                admin: 1,
-                form: 'listLancamentos',
-            }, function (resposta) {
-                document.getElementById('tbodyListLancamentos').innerHTML = resposta;
-            });
-        } else {
-            $.post('../php/busca.php', {
-                users: 1,
-                form: 'listLancamentos',
-            }, function (resposta) {
-                document.getElementById('tbodyListLancamentos').innerHTML = resposta;
-            });
-        }
+        $.post('../php/busca.php', {
+            users: 1,
+            form: 'listLancamentos',
+            id_setor: id_setor
+        }, function (resposta) {
+            document.getElementById('tbodyListLancamentos').innerHTML = resposta;
+        });
     }
 }
 $('#listSolicAltPedidos').on('shown.bs.modal', function (event) {
