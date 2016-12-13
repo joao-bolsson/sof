@@ -484,7 +484,7 @@ $pedidos_em_analise = $obj_Busca->getPedidosAnalise($id_setor);
                     <div class="modal-inner">
                         <div class="form-group form-group-label">
                             <label class="floating-label" for="valor_adiantamento"><span class="icon">attach_money</span>&nbsp;Valor</label>
-                            <input class="form-control" id="valor_adiantamento" name="valor_adiantamento" type="number" step="0.001" min="0.001" max="2000.000" required>
+                            <input class="form-control" id="valor_adiantamento" name="valor_adiantamento" type="number" step="0.001" min="0.001" required>
                         </div>
                         <div class="form-group form-group-label">
                             <label class="floating-label" for="justificativa"><span class="icon">announcement</span>&nbsp;Justificativa</label>
