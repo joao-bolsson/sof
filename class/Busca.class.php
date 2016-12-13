@@ -1163,13 +1163,14 @@ class Busca extends Conexao {
                 // ----------------------------------------------------------------------
                 //                  ITENS REFERENTES AOS FORNECEDORES
                 // ----------------------------------------------------------------------
-                $query_itens = $this->mysqli->query("SELECT itens.cod_reduzido, itens.seq_item_processo, itens.complemento_item, itens_pedido.qtd, itens_pedido.valor FROM itens, itens_pedido WHERE itens.id = itens_pedido.id_item AND itens_pedido.id_pedido = {$id_pedido} AND itens.cgc_fornecedor = '{$fornecedor->cgc_fornecedor}'");
+                $query_itens = $this->mysqli->query("SELECT itens.cod_reduzido, itens.cod_despesa, itens.seq_item_processo, itens.complemento_item, itens_pedido.qtd, itens_pedido.valor FROM itens, itens_pedido WHERE itens.id = itens_pedido.id_item AND itens_pedido.id_pedido = {$id_pedido} AND itens.cgc_fornecedor = '{$fornecedor->cgc_fornecedor}'");
                 $retorno .= "
                     <table class=\"prod\">
                         <thead>
                             <tr>
                                 <th>Código</th>
                                 <th>Item</th>
+                                <th>Natureza</th>
                                 <th>Descrição</th>
                                 <th>Quantidade</th>
                                 <th>Valor</th>
@@ -1184,6 +1185,7 @@ class Busca extends Conexao {
                             <tr>
                                 <td>" . $item->cod_reduzido . "</td>
                                 <td>" . $item->seq_item_processo . "</td>
+                                <td>" . $item->cod_despesa . "</td>
                                 <td>" . $item->complemento_item . "</td>
                                 <td>" . $item->qtd . "</td>
                                 <td>R$ " . $item->valor . "</td>
