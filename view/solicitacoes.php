@@ -99,6 +99,9 @@ $pedidos_em_analise = $obj_Busca->getPedidosAnalise($id_setor);
                                 <div class="card-header-side pull-left">
                                     <p class="card-heading">Itens</p>
                                 </div>
+                                <div class="card-header-side" style="margin-left: 70%;">
+                                    <p id="numProc" class="card-heading">Processo: --------------------</p>
+                                </div>
                             </div><!--  ./card-header -->
                             <input id="searchProcesso" type="hidden">
                             <div class="card-inner">

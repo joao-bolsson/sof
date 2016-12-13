@@ -907,6 +907,7 @@ function pesquisarProcesso(busca) {
             $('#tableProcessos').DataTable().destroy();
             $('#conteudoProcesso').html(resposta);
             iniDataTable('#tableProcessos');
+            document.getElementById('numProc').innerHTML = "Processo: " + busca;
             avisoSnack('Busca Realizada com Sucesso !', 'body');
         });
     }
