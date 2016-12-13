@@ -1163,7 +1163,7 @@ class Busca extends Conexao {
                 // ----------------------------------------------------------------------
                 //                  ITENS REFERENTES AOS FORNECEDORES
                 // ----------------------------------------------------------------------
-                $query_itens = $this->mysqli->query("SELECT itens.cod_reduzido, itens.cod_despesa, itens.seq_item_processo, itens.complemento_item, itens_pedido.qtd, itens_pedido.valor FROM itens, itens_pedido WHERE itens.id = itens_pedido.id_item AND itens_pedido.id_pedido = {$id_pedido} AND itens.cgc_fornecedor = '{$fornecedor->cgc_fornecedor}'");
+                $query_itens = $this->mysqli->query("SELECT itens.cod_reduzido, itens.cod_despesa, itens.seq_item_processo, itens.complemento_item, itens.vl_unitario, itens_pedido.qtd, itens_pedido.valor FROM itens, itens_pedido WHERE itens.id = itens_pedido.id_item AND itens_pedido.id_pedido = {$id_pedido} AND itens.cgc_fornecedor = '{$fornecedor->cgc_fornecedor}'");
                 $retorno .= "
                     <table class=\"prod\">
                         <thead>
@@ -1173,7 +1173,8 @@ class Busca extends Conexao {
                                 <th>Natureza</th>
                                 <th>Descrição</th>
                                 <th>Quantidade</th>
-                                <th>Valor</th>
+                                <th>Valor Unitário</th>
+                                <th>Valor Total</th>
                             </tr>
                         </thead>
                         <tbody>";
@@ -1181,6 +1182,7 @@ class Busca extends Conexao {
                 while ($item = $query_itens->fetch_object()) {
                     $item->complemento_item = mb_strtoupper($item->complemento_item, 'UTF-8');
                     $item->valor = number_format($item->valor, 3, ',', '.');
+                    $item->vl_unitario = number_format($item->vl_unitario, 3, ',', '.');
                     $retorno .= "
                             <tr>
                                 <td>" . $item->cod_reduzido . "</td>
@@ -1188,6 +1190,7 @@ class Busca extends Conexao {
                                 <td>" . $item->cod_despesa . "</td>
                                 <td>" . $item->complemento_item . "</td>
                                 <td>" . $item->qtd . "</td>
+                                <td>R$ " . $item->vl_unitario . "</td>
                                 <td>R$ " . $item->valor . "</td>
                             </tr>";
                 }
