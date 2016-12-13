@@ -1169,8 +1169,8 @@ class Busca extends Conexao {
                         <thead>
                             <tr>
                                 <th>Código</th>
-                                <th>Seq_Item_Processo</th>
                                 <th>Item</th>
+                                <th>Descrição</th>
                                 <th>Quantidade</th>
                                 <th>Valor</th>
                             </tr>
