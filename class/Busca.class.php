@@ -1820,6 +1820,10 @@ class Busca extends Conexao {
                 $empenho = '';
             }
             $pedido->valor = number_format($pedido->valor, 3, ',', '.');
+            $btnSolicAlt = "";
+            if ($pedido->status == 'Em Analise' || $pedido->status == 'Aguarda Orcamento') {
+                $btnSolicAlt = "<button class=\"btn btn-default btn-sm\" style=\"text-transform: none !important;font-weight: bold;\" onclick=\"solicAltPed(" . $pedido->id . ");\" title=\"Solicitar Alteração\"><span class=\"icon\">build</span></button>";
+            }
             $retorno .= "
                 <tr>
                     <td>" . $pedido->id . "</td>
@@ -1830,7 +1834,7 @@ class Busca extends Conexao {
                     <td>" . $empenho . "</td>
                     <td>R$ " . $pedido->valor . "</td>
                     <td>
-                        <button class=\"btn btn-default btn-sm\" style=\"text-transform: none !important;font-weight: bold;\" onclick=\"solicAltPed(" . $pedido->id . ");\" title=\"Solicitar Alteração\"><span class=\"icon\">build</span></button>
+                        " . $btnSolicAlt . "
                         <button class=\"btn btn-default btn-sm\" style=\"text-transform: none !important;font-weight: bold;\" onclick=\"imprimir(" . $pedido->id . ");\" title=\"Imprimir\"><span class=\"icon\">print</span></button>
                     </td>
                 </tr>";
