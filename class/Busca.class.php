@@ -1144,19 +1144,14 @@ class Busca extends Conexao {
             //                FORNECEDORES REFERENTES À LICITAÇÃO
             // -------------------------------------------------------------------------
             while ($fornecedor = $query_forn->fetch_object()) {
-                // total do fornecedor
-                $tot_forn = $this->mysqli->query("SELECT sum(itens_pedido.valor) AS sum FROM itens_pedido, itens WHERE itens_pedido.id_item = itens.id AND itens_pedido.id_pedido = {$id_pedido} AND itens.cgc_fornecedor = '{$fornecedor->cgc_fornecedor}';")->fetch_object();
-
                 $fornecedor->nome_fornecedor = substr($fornecedor->nome_fornecedor, 0, 40);
                 $fornecedor->nome_fornecedor = strtoupper($fornecedor->nome_fornecedor);
-                $tot_forn->sum = number_format($tot_forn->sum, 3, ',', '.');
                 $retorno .= "
                     <fieldset style=\"border-bottom: 1px solid black; padding: 5px;\">
                         <table>
                             <tr>
                                 <td style=\"text-align: left; font-weight: bold;\">" . $fornecedor->nome_fornecedor . "</td>
                                 <td>Contrato: " . $fornecedor->num_contrato . "</td>
-                                <td>Total do Forn.: R$ " . $tot_forn->sum . "</td>
                             </tr>
                         </table>
                     </fieldset>";
