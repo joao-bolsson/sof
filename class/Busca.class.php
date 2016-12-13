@@ -408,6 +408,17 @@ class Busca extends Conexao {
     }
 
     /**
+     * Retorna o nome do setor.
+     * @param int $id_setor id do setor.
+     */
+    public function getSetorNome(int $id_setor): string {
+        $query = $this->mysqli->query("SELECT setores.nome FROM setores WHERE setores.id = " . $id_setor . ";");
+        $obj = $query->fetch_object();
+        $query->close();
+        return $obj->nome;
+    }
+
+    /**
      * 	Função que retornar as options com as prioridades existentes no sistemas para os pedidos
      *
      * 	@access public
