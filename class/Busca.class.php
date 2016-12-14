@@ -1061,7 +1061,6 @@ class Busca extends Conexao {
      */
     public function getHeader(int $id_pedido): string {
         $pedido = $this->mysqli->query("SELECT pedido.id, DATE_FORMAT(pedido.data_pedido, '%d/%m/%Y') AS data_pedido, EXTRACT(YEAR FROM pedido.data_pedido) AS ano, mes.sigla_mes AS ref_mes, status.nome AS status, replace(pedido.valor, '.', ',') AS valor, pedido.obs, prioridade.nome AS prioridade FROM prioridade, pedido, mes, status WHERE pedido.prioridade = prioridade.id AND status.id = pedido.status AND pedido.id = {$id_pedido} AND mes.id = pedido.ref_mes;")->fetch_object();
-        $empenho = "Empenho: " . Busca::verEmpenho($id_pedido);
         $pedido->valor = number_format($pedido->valor, 3, ',', '.');
         $retorno = "
             <fieldset>
@@ -1072,7 +1071,6 @@ class Busca extends Conexao {
                     Prioridade: " . $pedido->prioridade . "&emsp;
                     Total do Pedido: R$ " . $pedido->valor . "
                 </p>
-                <p>" . $empenho . "</p>
                 <p>Observação da Unidade Solicitante: </p>
                 <p style=\"font-weight: normal !important;\">	" . $pedido->obs . "</p>
             </fieldset><br>";
@@ -1241,6 +1239,32 @@ class Busca extends Conexao {
      */
     public function getComentarios(int $id_pedido): string {
         $retorno = "";
+        
+        $query_emp = $this->mysqli->query("SELECT pedido_empenho.empenho, DATE_FORMAT(pedido_empenho.data, '%d/%m/%Y') AS data FROM pedido_empenho WHERE pedido_empenho.id_pedido = {$id_pedido};");
+        
+        if ($query_emp->num_rows > 0) {
+            $empenho = $query_emp->fetch_object();
+            $retorno = "
+                <fieldset class=\"preg\">
+                    <table>
+                        <tr>
+                            <td>Data Empenho: " . $empenho->data . "</td>
+                            <td>Empenho: " . $empenho->empenho. "</td>
+                        </tr>
+                    </table>
+                </fieldset>";
+        } else {
+            $retorno = "
+                <fieldset class=\"preg\">
+                    <table>
+                        <tr>
+                            <td>Empenho: EMPENHO SIAFI PENDENTE </td>;
+                        </tr>
+                    </table>
+                </fieldset>";
+        }
+        $query_emp->close();
+        
         $query = $this->mysqli->query("SELECT DATE_FORMAT(comentarios.data_coment, '%d/%m/%Y') AS data_coment, prioridade.nome AS prioridade, comentarios.valor, comentarios.comentario FROM comentarios, prioridade WHERE prioridade.id = comentarios.prioridade AND comentarios.id_pedido = {$id_pedido};");
         if ($query->num_rows > 0) {
             while ($comentario = $query->fetch_object()) {
@@ -1259,8 +1283,9 @@ class Busca extends Conexao {
                     </fieldset>";
             }
         } else {
-            $retorno = "Sem comentários";
+            $retorno .= "Sem comentários";
         }
+        $query->close();
         return $retorno;
     }
 
