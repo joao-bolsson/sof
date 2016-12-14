@@ -178,6 +178,23 @@ $pedidos_em_analise = $obj_Busca->getPedidosAnalise($id_setor);
                                         <label class="floating-label" for="obs"><span class="icon">announcement</span>&nbsp;Observações</label>
                                         <textarea class="form-control textarea-autosize" id="obs" name="obs" rows="1" required></textarea>
                                     </div>
+                                    <h2 class="content-sub-heading">Licitação</h2>
+                                    <table style="width: 100%;">
+                                        <tr>
+                                            <td>
+                                                <div class="form-group form-group-label">
+                                                    <label class="floating-label padding-left" for="dispLic"><span class="icon">attach_money</span>&nbsp;Dispensa de Licitação</label>
+                                                    <input class="form-control padding-left" id="dispLic" name="dispLic" type="text">
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div class="form-group form-group-label">
+                                                    <label class="floating-label padding-left" for="inexLic"><span class="icon">attach_money</span>&nbsp;Inexibilidade de Licitação</label>
+                                                    <input class="form-control padding-left" id="inexLic" name="inexLic" type="text">
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    </table>
                                 </div><!-- ./card-inner -->
                                 <div class="card-action">
                                     <div class="card-action-btn">
