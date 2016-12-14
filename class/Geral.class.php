@@ -555,7 +555,6 @@ class Geral extends Conexao {
         return true;
     }
 
-    
     /**
      *   Função para excluir uma publicação
      *       a publicação não é totalmente excluída, apenas o sistema passará a não mostrá-la
@@ -575,7 +574,6 @@ class Geral extends Conexao {
         return false;
     }
 
-    
     /**
      *   Função para enviar um pedido ao SOF
      *
@@ -586,10 +584,9 @@ class Geral extends Conexao {
      *   @param $pedido Id do pedido. Se 0, pedido novo, senão editando rascunho ou enviando ao SOF.
      *   @return bool
      */
-    public function insertPedido($id_setor, $id_item, $qtd_solicitada, $qtd_disponivel, $qtd_contrato, $qtd_utilizado, $vl_saldo, $vl_contrato, $vl_utilizado, $valor, $total_pedido, $saldo_total, $prioridade, $obs, $pedido) {
+    public function insertPedido($id_user, $id_setor, $id_item, $qtd_solicitada, $qtd_disponivel, $qtd_contrato, $qtd_utilizado, $vl_saldo, $vl_contrato, $vl_utilizado, $valor, $total_pedido, $saldo_total, $prioridade, $obs, $pedido) {
 
         $obs = $this->mysqli->real_escape_string($obs);
-        $retorno = false;
         $hoje = date('Y-m-d');
         $mes = date("n");
 
@@ -597,7 +594,7 @@ class Geral extends Conexao {
             if ($pedido == 0) {
                 // NOVO
                 //inserindo os dados iniciais do pedido
-                $query_pedido = $this->mysqli->query("INSERT INTO pedido VALUES(NULL, {$id_setor}, '{$hoje}', '{$mes}', 1, {$prioridade}, 1, '{$total_pedido}', '{$obs}');");
+                $query_pedido = $this->mysqli->query("INSERT INTO pedido VALUES(NULL, {$id_setor}, {$id_user}, '{$hoje}', '{$mes}', 1, {$prioridade}, 1, '{$total_pedido}', '{$obs}');");
                 $pedido = $this->mysqli->insert_id;
             } else {
                 //remover resgistros antigos do rascunho
@@ -614,7 +611,7 @@ class Geral extends Conexao {
             // enviado ao sof
             if ($pedido == 0) {
                 //inserindo os dados iniciais do pedido
-                $query_pedido = $this->mysqli->query("INSERT INTO pedido VALUES(NULL, {$id_setor}, '{$hoje}', '{$mes}', 0, {$prioridade}, 2, '{$total_pedido}', '{$obs}');");
+                $query_pedido = $this->mysqli->query("INSERT INTO pedido VALUES(NULL, {$id_setor}, {$id_user}, '{$hoje}', '{$mes}', 0, {$prioridade}, 2, '{$total_pedido}', '{$obs}');");
                 $pedido = $this->mysqli->insert_id;
             } else {
                 // atualizando pedido
@@ -636,8 +633,7 @@ class Geral extends Conexao {
                 $this->mysqli->query("UPDATE itens SET qt_saldo = {$qtd_disponivel[$i]}, qt_utilizado = {$qtd_utilizado[$i]}, vl_saldo = '{$vl_saldo[$i]}', vl_utilizado = '{$vl_utilizado[$i]}' WHERE id = {$id_item[$i]};");
             }
         }
-        $retorno = true;
-        return $retorno;
+        return true;
     }
 
     /**
