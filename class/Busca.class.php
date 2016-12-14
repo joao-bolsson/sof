@@ -1160,6 +1160,7 @@ class Busca extends Conexao {
                         <table>
                             <tr>
                                 <td style=\"text-align: left; font-weight: bold;\">" . $fornecedor->nome_fornecedor . "</td>
+                                <td>CNPJ: ".$fornecedor->cgc_fornecedor."</td>
                                 <td>Contrato: " . $fornecedor->num_contrato . "</td>
                             </tr>
                         </table>
