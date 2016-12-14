@@ -1187,7 +1187,6 @@ class Busca extends Conexao {
                 while ($item = $query_itens->fetch_object()) {
                     $item->complemento_item = mb_strtoupper($item->complemento_item, 'UTF-8');
                     $item->valor = number_format($item->valor, 3, ',', '.');
-                    $item->vl_unitario = number_format($item->vl_unitario, 3, ',', '.');
                     $retorno .= "
                             <tr>
                                 <td>" . $item->cod_reduzido . "</td>
