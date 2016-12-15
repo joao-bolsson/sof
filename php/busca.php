@@ -145,6 +145,11 @@ if (isset($_POST["admin"]) && isset($_SESSION['id_setor']) && ($_SESSION['id_set
 	$form = $_POST["form"];
 
 	switch ($form) {
+            
+        // retornar o nome do setor
+        case 'getNomeSetor':
+            echo $obj_Busca->getSetorNome($_POST['id_setor']);
+            break;
         // atualiza os valores de entradas e saídas do setor selecionado
         case 'refreshTotSaldos':
             echo $obj_Busca->getTotalInOutSaldos($_POST['id_setor']);

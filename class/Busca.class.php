@@ -408,6 +408,17 @@ class Busca extends Conexao {
     }
 
     /**
+     * Retorna o nome do setor.
+     * @param int $id_setor id do setor.
+     */
+    public function getSetorNome(int $id_setor): string {
+        $query = $this->mysqli->query("SELECT setores.nome FROM setores WHERE setores.id = " . $id_setor . ";");
+        $obj = $query->fetch_object();
+        $query->close();
+        return $obj->nome;
+    }
+
+    /**
      * 	Função que retornar as options com as prioridades existentes no sistemas para os pedidos
      *
      * 	@access public
@@ -1050,7 +1061,6 @@ class Busca extends Conexao {
      */
     public function getHeader(int $id_pedido): string {
         $pedido = $this->mysqli->query("SELECT pedido.id, DATE_FORMAT(pedido.data_pedido, '%d/%m/%Y') AS data_pedido, EXTRACT(YEAR FROM pedido.data_pedido) AS ano, mes.sigla_mes AS ref_mes, status.nome AS status, replace(pedido.valor, '.', ',') AS valor, pedido.obs, prioridade.nome AS prioridade FROM prioridade, pedido, mes, status WHERE pedido.prioridade = prioridade.id AND status.id = pedido.status AND pedido.id = {$id_pedido} AND mes.id = pedido.ref_mes;")->fetch_object();
-        $empenho = "Empenho: " . Busca::verEmpenho($id_pedido);
         $pedido->valor = number_format($pedido->valor, 3, ',', '.');
         $retorno = "
             <fieldset>
@@ -1061,7 +1071,6 @@ class Busca extends Conexao {
                     Prioridade: " . $pedido->prioridade . "&emsp;
                     Total do Pedido: R$ " . $pedido->valor . "
                 </p>
-                <p>" . $empenho . "</p>
                 <p>Observação da Unidade Solicitante: </p>
                 <p style=\"font-weight: normal !important;\">	" . $pedido->obs . "</p>
             </fieldset><br>";
@@ -1144,34 +1153,33 @@ class Busca extends Conexao {
             //                FORNECEDORES REFERENTES À LICITAÇÃO
             // -------------------------------------------------------------------------
             while ($fornecedor = $query_forn->fetch_object()) {
-                // total do fornecedor
-                $tot_forn = $this->mysqli->query("SELECT sum(itens_pedido.valor) AS sum FROM itens_pedido, itens WHERE itens_pedido.id_item = itens.id AND itens_pedido.id_pedido = {$id_pedido} AND itens.cgc_fornecedor = '{$fornecedor->cgc_fornecedor}';")->fetch_object();
-
                 $fornecedor->nome_fornecedor = substr($fornecedor->nome_fornecedor, 0, 40);
                 $fornecedor->nome_fornecedor = strtoupper($fornecedor->nome_fornecedor);
-                $tot_forn->sum = number_format($tot_forn->sum, 3, ',', '.');
                 $retorno .= "
                     <fieldset style=\"border-bottom: 1px solid black; padding: 5px;\">
                         <table>
                             <tr>
                                 <td style=\"text-align: left; font-weight: bold;\">" . $fornecedor->nome_fornecedor . "</td>
+                                <td>CNPJ: ".$fornecedor->cgc_fornecedor."</td>
                                 <td>Contrato: " . $fornecedor->num_contrato . "</td>
-                                <td>Total do Forn.: R$ " . $tot_forn->sum . "</td>
                             </tr>
                         </table>
                     </fieldset>";
                 // ----------------------------------------------------------------------
                 //                  ITENS REFERENTES AOS FORNECEDORES
                 // ----------------------------------------------------------------------
-                $query_itens = $this->mysqli->query("SELECT itens.cod_reduzido, itens.complemento_item, itens_pedido.qtd, itens_pedido.valor FROM itens, itens_pedido WHERE itens.id = itens_pedido.id_item AND itens_pedido.id_pedido = {$id_pedido} AND itens.cgc_fornecedor = '{$fornecedor->cgc_fornecedor}'");
+                $query_itens = $this->mysqli->query("SELECT itens.cod_reduzido, itens.cod_despesa, itens.seq_item_processo, itens.complemento_item, itens.vl_unitario, itens_pedido.qtd, itens_pedido.valor FROM itens, itens_pedido WHERE itens.id = itens_pedido.id_item AND itens_pedido.id_pedido = {$id_pedido} AND itens.cgc_fornecedor = '{$fornecedor->cgc_fornecedor}'");
                 $retorno .= "
                     <table class=\"prod\">
                         <thead>
                             <tr>
                                 <th>Código</th>
                                 <th>Item</th>
+                                <th>Natureza</th>
+                                <th>Descrição</th>
                                 <th>Quantidade</th>
-                                <th>Valor</th>
+                                <th>Valor Unitário</th>
+                                <th>Valor Total</th>
                             </tr>
                         </thead>
                         <tbody>";
@@ -1182,8 +1190,11 @@ class Busca extends Conexao {
                     $retorno .= "
                             <tr>
                                 <td>" . $item->cod_reduzido . "</td>
+                                <td>" . $item->seq_item_processo . "</td>
+                                <td>" . $item->cod_despesa . "</td>
                                 <td>" . $item->complemento_item . "</td>
                                 <td>" . $item->qtd . "</td>
+                                <td>R$ " . $item->vl_unitario . "</td>
                                 <td>R$ " . $item->valor . "</td>
                             </tr>";
                 }
@@ -1228,6 +1239,32 @@ class Busca extends Conexao {
      */
     public function getComentarios(int $id_pedido): string {
         $retorno = "";
+        
+        $query_emp = $this->mysqli->query("SELECT pedido_empenho.empenho, DATE_FORMAT(pedido_empenho.data, '%d/%m/%Y') AS data FROM pedido_empenho WHERE pedido_empenho.id_pedido = {$id_pedido};");
+        
+        if ($query_emp->num_rows > 0) {
+            $empenho = $query_emp->fetch_object();
+            $retorno = "
+                <fieldset class=\"preg\">
+                    <table>
+                        <tr>
+                            <td>Data Empenho: " . $empenho->data . "</td>
+                            <td>Empenho: " . $empenho->empenho. "</td>
+                        </tr>
+                    </table>
+                </fieldset>";
+        } else {
+            $retorno = "
+                <fieldset class=\"preg\">
+                    <table>
+                        <tr>
+                            <td>Empenho: EMPENHO SIAFI PENDENTE </td>;
+                        </tr>
+                    </table>
+                </fieldset>";
+        }
+        $query_emp->close();
+        
         $query = $this->mysqli->query("SELECT DATE_FORMAT(comentarios.data_coment, '%d/%m/%Y') AS data_coment, prioridade.nome AS prioridade, comentarios.valor, comentarios.comentario FROM comentarios, prioridade WHERE prioridade.id = comentarios.prioridade AND comentarios.id_pedido = {$id_pedido};");
         if ($query->num_rows > 0) {
             while ($comentario = $query->fetch_object()) {
@@ -1246,8 +1283,9 @@ class Busca extends Conexao {
                     </fieldset>";
             }
         } else {
-            $retorno = "Sem comentários";
+            $retorno .= "Sem comentários";
         }
+        $query->close();
         return $retorno;
     }
 
@@ -1436,7 +1474,7 @@ class Busca extends Conexao {
     public function getItensPedidoAnalise(int $id_pedido): string {
         //declarando retorno
         $retorno = "";
-        $query = $this->mysqli->query("SELECT itens.qt_contrato, itens.id AS id_itens, itens_pedido.qtd AS qtd_solicitada, itens_pedido.valor, itens.nome_fornecedor, itens.num_licitacao, itens.dt_inicio, itens.dt_fim, itens.dt_geracao, itens.cod_reduzido, itens.complemento_item, itens.vl_unitario, itens.qt_saldo, itens.cod_despesa, itens.descr_despesa, itens.num_contrato, itens.num_processo, itens.descr_mod_compra, itens.num_licitacao, itens.cgc_fornecedor, itens.num_extrato, itens.descricao, itens.qt_contrato, itens.vl_contrato, itens.qt_utilizado, itens.vl_utilizado, itens.qt_saldo, itens.vl_saldo, itens.seq_item_processo FROM itens_pedido, itens WHERE itens_pedido.id_pedido = {$id_pedido} AND itens_pedido.id_item = itens.id;");
+        $query = $this->mysqli->query("SELECT itens.qt_contrato, itens.id AS id_itens, itens_pedido.qtd AS qtd_solicitada, itens_pedido.valor, itens.nome_fornecedor, itens.num_licitacao, itens.dt_inicio, itens.dt_fim, itens.dt_geracao, itens.cod_reduzido, itens.complemento_item, itens.vl_unitario, itens.qt_saldo, itens.cod_despesa, itens.descr_despesa, itens.num_contrato, itens.num_processo, itens.descr_mod_compra, itens.num_licitacao, itens.cgc_fornecedor, itens.num_extrato, itens.descricao, itens.qt_contrato, itens.vl_contrato, itens.qt_utilizado, itens.vl_utilizado, itens.qt_saldo, itens.vl_saldo, itens.seq_item_processo FROM itens_pedido, itens WHERE itens_pedido.id_pedido = {$id_pedido} AND itens_pedido.id_item = itens.id ORDER BY itens.seq_item_processo ASC;");
 
         while ($item = $query->fetch_object()) {
             if ($item->dt_fim == '') {
@@ -1818,6 +1856,10 @@ class Busca extends Conexao {
                 $empenho = '';
             }
             $pedido->valor = number_format($pedido->valor, 3, ',', '.');
+            $btnSolicAlt = "";
+            if ($pedido->status == 'Em Analise' || $pedido->status == 'Aguarda Orcamento') {
+                $btnSolicAlt = "<button class=\"btn btn-default btn-sm\" style=\"text-transform: none !important;font-weight: bold;\" onclick=\"solicAltPed(" . $pedido->id . ");\" title=\"Solicitar Alteração\"><span class=\"icon\">build</span></button>";
+            }
             $retorno .= "
                 <tr>
                     <td>" . $pedido->id . "</td>
@@ -1828,7 +1870,7 @@ class Busca extends Conexao {
                     <td>" . $empenho . "</td>
                     <td>R$ " . $pedido->valor . "</td>
                     <td>
-                        <button class=\"btn btn-default btn-sm\" style=\"text-transform: none !important;font-weight: bold;\" onclick=\"solicAltPed(" . $pedido->id . ");\" title=\"Solicitar Alteração\"><span class=\"icon\">build</span></button>
+                        " . $btnSolicAlt . "
                         <button class=\"btn btn-default btn-sm\" style=\"text-transform: none !important;font-weight: bold;\" onclick=\"imprimir(" . $pedido->id . ");\" title=\"Imprimir\"><span class=\"icon\">print</span></button>
                     </td>
                 </tr>";

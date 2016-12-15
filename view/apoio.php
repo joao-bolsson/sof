@@ -79,7 +79,7 @@ $obj_Busca = new Busca();
      <div class="card-inner">
       <table class="table stripe" id="tableSolicitacoes" style="width: 100%;">
         <thead>
-          <th></th>
+          <th>Opções</th>
           <th>#PEDIDO</th>
           <th>SETOR</th>
           <th>DATA_PEDIDO</th>

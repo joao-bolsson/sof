@@ -907,6 +907,7 @@ function pesquisarProcesso(busca) {
             $('#tableProcessos').DataTable().destroy();
             $('#conteudoProcesso').html(resposta);
             iniDataTable('#tableProcessos');
+            document.getElementById('numProc').innerHTML = "Processo: " + busca;
             avisoSnack('Busca Realizada com Sucesso !', 'body');
         });
     }
@@ -1085,7 +1086,9 @@ function analisarPedido(id_pedido, id_setor) {
     });
 
     document.getElementById("id_pedido").value = id_pedido;
-
+    
+    document.getElementById("detPedId").innerHTML = id_pedido;
+    getNomeSetor(id_setor);
     $.post('../php/busca.php', {
         admin: 1,
         form: 'analisaPedido',
@@ -1095,6 +1098,16 @@ function analisarPedido(id_pedido, id_setor) {
         document.getElementById("conteudoPedido").innerHTML = resposta;
         iniDataTable('#tableItensPedido');
         avisoSnack('Busca Realizada com Sucesso !', 'body');
+    });
+}
+
+function getNomeSetor(id_setor) {
+    $.post('../php/busca.php', {
+        users: 1,
+        form: 'getNomeSetor',
+        id_setor: id_setor
+    }, function (resposta) {
+        document.getElementById("nomeSetorDet").innerHTML = resposta;
     });
 }
 

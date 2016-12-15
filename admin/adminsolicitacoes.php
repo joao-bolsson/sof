@@ -324,7 +324,10 @@ $permissao = $obj_Busca->getPermissoes($_SESSION["id"]);
                             <div class="card-main">
                                 <div class="card-header card-brand">
                                     <div class="card-header-side pull-left">
-                                        <p class="card-heading">Detalhes do Pedido</p>
+                                        <p class="card-heading">Detalhes do Pedido: <span id="detPedId"></span></p>
+                                    </div>
+                                    <div class="card-header-side" style="margin-left: 55%;">
+                                        <p class="card-heading">SETOR: <span id="nomeSetorDet"></span></p>
                                     </div>
                                     <div class="card-header-side pull-right" style="margin-left: 55%; display: none;">
                                         <p class="card-heading">SALDO DO SOLICITANTE <span id="text_saldo_total">R$ 0.000</span></p>

@@ -387,6 +387,7 @@ if (isset($_POST["admin"]) && isset($_SESSION["id_setor"]) && ($_SESSION["id_set
             }
             break;
         case 'pedido':
+            $id_user = $_SESSION['id'];
             $id_setor = $_SESSION["id_setor"];
             $id_item = $_POST["id_item"];
             $qtd_solicitada = $_POST["qtd_solicitada"];
@@ -404,7 +405,7 @@ if (isset($_POST["admin"]) && isset($_SESSION["id_setor"]) && ($_SESSION["id_set
 
             $pedido = $_POST["pedido"];
 
-            $insertPedido = $obj_Geral->insertPedido($id_setor, $id_item, $qtd_solicitada, $qtd_disponivel, $qtd_contrato, $qtd_utilizado, $vl_saldo, $vl_contrato, $vl_utilizado, $valor, $total_pedido, $saldo_total, $prioridade, $obs, $pedido);
+            $insertPedido = $obj_Geral->insertPedido($id_user, $id_setor, $id_item, $qtd_solicitada, $qtd_disponivel, $qtd_contrato, $qtd_utilizado, $vl_saldo, $vl_contrato, $vl_utilizado, $valor, $total_pedido, $saldo_total, $prioridade, $obs, $pedido);
             if ($insertPedido) {
                 header("Location: ../view/solicitacoes.php");
             } else {
