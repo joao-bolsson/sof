@@ -193,6 +193,62 @@ $pedidos_em_analise = $obj_Busca->getPedidosAnalise($id_setor);
                                                     <input class="form-control padding-left" id="inexLic" name="inexLic" type="text">
                                                 </div>
                                             </td>
+                                            <td>
+                                                <div class="radiobtn radiobtn-adv">
+                                                    <label for="tipoLicA">
+                                                        <input id="tipoLicA" type="radio" name="tipoLic" class="access-hide" value="Adesao" />Adesão
+                                                        <span class="radiobtn-circle"></span><span class="radiobtn-circle-check"></span>
+                                                    </label>
+                                                </div>
+                                                <div class="radiobtn radiobtn-adv">
+                                                    <label for="tipoLicB">
+                                                        <input id="tipoLicB" type="radio" name="tipoLic" class="access-hide" value="Adesao" />Compra Compartilhada
+                                                        <span class="radiobtn-circle"></span><span class="radiobtn-circle-check"></span>
+                                                    </label>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <div class="form-group form-group-label">
+                                                    <label class="floating-label padding-left" for="preg"><span class="icon">attach_money</span>&nbsp;Número do Pregão</label>
+                                                    <input class="form-control padding-left" id="preg" name="preg" type="text">
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div class="form-group form-group-label">
+                                                    <label class="floating-label padding-left" for="uasg"><span class="icon">attach_money</span>&nbsp;Número da UASG</label>
+                                                    <input class="form-control padding-left" id="uasg" name="uasg" type="text">
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div class="form-group form-group-label">
+                                                    <label class="floating-label padding-left" for="procOri"><span class="icon">attach_money</span>&nbsp;Número do Processo Original</label>
+                                                    <input class="form-control padding-left" id="procOri" name="procOri" type="text">
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="2">
+                                                <div class="form-group form-group-label">
+                                                    <label class="floating-label padding-left" for="conc"><span class="icon">attach_money</span>&nbsp;Concorrência Pública</label>
+                                                    <input class="form-control padding-left" id="conc" name="conc" type="text">
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div class="radiobtn radiobtn-adv">
+                                                    <label for="sim">
+                                                        <input id="sim" type="radio" name="geraCont" class="access-hide" value="1" />Gera Contrato
+                                                        <span class="radiobtn-circle"></span><span class="radiobtn-circle-check"></span>
+                                                    </label>
+                                                </div>
+                                                <div class="radiobtn radiobtn-adv">
+                                                    <label for="nao">
+                                                        <input id="nao" type="radio" name="geraCont" class="access-hide" value="0" />Não Gera Contrato
+                                                        <span class="radiobtn-circle"></span><span class="radiobtn-circle-check"></span>
+                                                    </label>
+                                                </div>
+                                            </td>
                                         </tr>
                                     </table>
                                 </div><!-- ./card-inner -->
