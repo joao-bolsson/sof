@@ -32,7 +32,7 @@ class Busca extends Conexao {
             $retorno .= "
                 <div class=\"radiobtn radiobtn-adv\">
                     <label for=\"tipoLic" . $obj->id . "\">
-                        <input id=\"tipoLic" . $obj->id . "\" type=\"radio\" name=\"tipoLic\" class=\"access-hide\" value=\"" . $obj->id . "\">" . $obj->nome . "
+                        <input id=\"tipoLic" . $obj->id . "\" type=\"radio\" name=\"tipoLic\" required class=\"access-hide\" value=\"" . $obj->id . "\">" . $obj->nome . "
                         <span class=\"radiobtn-circle\"></span><span class=\"radiobtn-circle-check\"></span>
                     </label>
                 </div>";
