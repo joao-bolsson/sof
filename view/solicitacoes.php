@@ -179,8 +179,47 @@ $pedidos_em_analise = $obj_Busca->getPedidosAnalise($id_setor);
                                         <textarea class="form-control textarea-autosize" id="obs" name="obs" rows="1" required></textarea>
                                     </div>
                                     <h2 class="content-sub-heading">Licitação</h2>
+                                    <table class="table">
+                                        <?= $obj_Busca->getOptionsLicitacao(4); ?>
+                                    </table>
                                     <table style="width: 100%;">
-
+                                        <tr>
+                                            <td>
+                                                <div class="form-group form-group-label">
+                                                    <label class="floating-label" for="infoLic"><span class="icon">add_shopping_cart</span>Número</label>
+                                                    <input class="form-control" id="infoLic" name="infoLic" required/>
+                                                </div>
+                                            </td>
+                                            <!-- 
+terá que ter número do pregão, número da UASG, número do processo original e poderá ou não gerar contrato.
+                                            -->
+                                            <td>
+                                                <div class="form-group form-group-label">
+                                                    <label class="floating-label" for="uasg"><span class="icon">announcement</span>UASG</label>
+                                                    <input class="form-control" id="uasg" name="uasg" disabled/>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div class="form-group form-group-label">
+                                                    <label class="floating-label" for="procOri"><span class="icon">announcement</span>Processo Original</label>
+                                                    <input class="form-control" id="procOri" name="procOri" disabled/>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div class="radiobtn radiobtn-adv">
+                                                    <label for="gera">
+                                                        <input type="radio" name="geraContrato" id="gera" class="access-hide" value="1" disabled>Gera Contrato
+                                                        <span class="radiobtn-circle"></span><span class="radiobtn-circle-check"></span>
+                                                    </label>
+                                                </div>
+                                                <div class="radiobtn radiobtn-adv">
+                                                    <label for="ngera">
+                                                        <input type="radio" name="geraContrato" id="ngera" class="access-hide" value="0" disabled>Não Gera Contrato
+                                                        <span class="radiobtn-circle"></span><span class="radiobtn-circle-check"></span>
+                                                    </label>
+                                                </div>
+                                            </td>
+                                        </tr>
                                     </table>
                                 </div><!-- ./card-inner -->
                                 <div class="card-action">

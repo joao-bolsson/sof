@@ -25,6 +25,31 @@ class Busca extends Conexao {
         $this->obj_Util = new Util();
     }
 
+    public function getOptionsLicitacao(int $cont): string {
+        $query = $this->mysqli->query("SELECT id, nome FROM licitacao_tipo;") or die("Ocorreu um erro na construção das opções de licitação. Contate o administrador.");
+        $retorno = "<tr>";
+        $i = 0;
+        while ($obj = $query->fetch_object()) {
+            if ($i == $cont) {
+                $i = 0;
+                $retorno .= "</tr><tr>";
+            }
+            $retorno .= "
+                <td>
+                    <div class=\"radiobtn radiobtn-adv\">
+                        <label for=\"tipoLic" . $obj->id . "\">
+                            <input type=\"radio\" name=\"tipoLic\" id=\"tipoLic" . $obj->id . "\" class=\"access-hide\" value=\"" . $obj->id . "\" required>" . $obj->nome . "
+                            <span class=\"radiobtn-circle\"></span><span class=\"radiobtn-circle-check\"></span>
+                        </label>
+                    </div>
+                </td>";
+            $i++;
+        }
+
+        $query->close();
+        return $retorno;
+    }
+
     public function getTotalByStatus(int $status): string {
         $query = $this->mysqli->query("SELECT sum(pedido.valor) AS total FROM pedido WHERE pedido.status = {$status};");
         $tot = $query->fetch_object();
