@@ -574,6 +574,15 @@ class Geral extends Conexao {
         return false;
     }
 
+    public function insertLicitacao(int $pedido, int $tipoLic, string $dispensa, string $inex, string $pregao, string $uasg, string $procOri, string $conc): bool {
+        if ($pedido < 1) {
+            return false;
+        }
+        $this->mysqli->query("INSERT INTO licitacao VALUES(NULL, {$pedido}, {$tipoLic}, '{$dispensa}', '{$inex}', '{$pregao}', '{$uasg}', '{$procOri}', '{$conc}');") or exit("Ocorreu algum erro no cadastro da licitação. Contate o administrador.");
+        $this->mysqli->close();
+        return true;
+    }
+
     /**
      *   Função para enviar um pedido ao SOF
      *
@@ -584,7 +593,7 @@ class Geral extends Conexao {
      *   @param $pedido Id do pedido. Se 0, pedido novo, senão editando rascunho ou enviando ao SOF.
      *   @return bool
      */
-    public function insertPedido($id_user, $id_setor, $id_item, $qtd_solicitada, $qtd_disponivel, $qtd_contrato, $qtd_utilizado, $vl_saldo, $vl_contrato, $vl_utilizado, $valor, $total_pedido, $saldo_total, $prioridade, $obs, $pedido) {
+    public function insertPedido($id_user, $id_setor, $id_item, $qtd_solicitada, $qtd_disponivel, $qtd_contrato, $qtd_utilizado, $vl_saldo, $vl_contrato, $vl_utilizado, $valor, $total_pedido, $saldo_total, $prioridade, $obs, &$pedido) {
 
         $obs = $this->mysqli->real_escape_string($obs);
         $hoje = date('Y-m-d');

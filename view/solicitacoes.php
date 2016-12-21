@@ -138,9 +138,9 @@ $pedidos_em_analise = $obj_Busca->getPedidosAnalise($id_setor);
                                 </div>
                             </div><!--  ./card-header -->
                             <form action="../php/geral.php" method="POST">
-                                <input type="hidden" name="users" value="1"></input>
-                                <input type="hidden" name="form" value="pedido"></input>
-                                <input id="pedido" type="hidden" name="pedido" value="0"></input>
+                                <input type="hidden" name="users" value="1">
+                                <input type="hidden" name="form" value="pedido">
+                                <input id="pedido" type="hidden" name="pedido" value="0">
                                 <div class="card-inner">
                                     <table class="table">
                                         <thead>
@@ -194,18 +194,7 @@ $pedidos_em_analise = $obj_Busca->getPedidosAnalise($id_setor);
                                                 </div>
                                             </td>
                                             <td>
-                                                <div class="radiobtn radiobtn-adv">
-                                                    <label for="tipoLicA">
-                                                        <input id="tipoLicA" type="radio" name="tipoLic" class="access-hide" value="Adesao" />Adesão
-                                                        <span class="radiobtn-circle"></span><span class="radiobtn-circle-check"></span>
-                                                    </label>
-                                                </div>
-                                                <div class="radiobtn radiobtn-adv">
-                                                    <label for="tipoLicB">
-                                                        <input id="tipoLicB" type="radio" name="tipoLic" class="access-hide" value="Adesao" />Compra Compartilhada
-                                                        <span class="radiobtn-circle"></span><span class="radiobtn-circle-check"></span>
-                                                    </label>
-                                                </div>
+                                                <?= $obj_Busca->getOptionsLicitacao(); ?>
                                             </td>
                                         </tr>
                                         <tr>
