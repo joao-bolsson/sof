@@ -575,6 +575,24 @@ class Geral extends Conexao {
     }
 
     /**
+     * Função para cadastrar uma licitação.
+     * 
+     * UASG e procOri podem ser NULL.
+     * 
+     * @param string $numero Número informado no formulário.
+     * @param string $uasg Uasg, se o tipo for adesao ou compra compartilhada.
+     * @param string $procOri Processo Original, se o tipo for adesao ou compra compartilhada.
+     * @param int $tipo Tipo de licitação.
+     * @param int $pedido Id do pedido.
+     * @return bool
+     */
+    public function insertLicitacao(string $numero, $uasg, $procOri, int $tipo, int $pedido): bool {
+        $this->mysqli->query("INSERT INTO licitacao VALUES(NULL, {$pedido}, {$tipo}, '{$numero}', '{$uasg}', '{$procOri}');") or exit("Ocorreu um erro no cadastro da licitação. Contate o administrador.");
+        $this->mysqli->close();
+        return true;
+    }
+
+    /**
      *   Função para enviar um pedido ao SOF
      *
      *   @access public
