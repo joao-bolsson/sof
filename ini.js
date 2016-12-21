@@ -661,7 +661,7 @@ function listRelatorios() {
 
 function changeTipoLic(tipo) {
     var selected = document.getElementById('tipoLic' + tipo).value;
-    if (selected == 3) { // Adesao
+    if (selected == 3 || selected == 4) { // Adesao ou Compra Compartilhada
         maybeDisableFields(false);
     } else {
         maybeDisableFields(true);
