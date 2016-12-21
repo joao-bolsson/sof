@@ -25,22 +25,6 @@ class Busca extends Conexao {
         $this->obj_Util = new Util();
     }
 
-    public function getOptionsLicitacao(): string {
-        $retorno = "";
-        $query = $this->mysqli->query("SELECT id, nome FROM licitacao_tipo;");
-        while ($obj = $query->fetch_object()) {
-            $retorno .= "
-                <div class=\"radiobtn radiobtn-adv\">
-                    <label for=\"tipoLic" . $obj->id . "\">
-                        <input id=\"tipoLic" . $obj->id . "\" type=\"radio\" name=\"tipoLic\" required class=\"access-hide\" value=\"" . $obj->id . "\">" . $obj->nome . "
-                        <span class=\"radiobtn-circle\"></span><span class=\"radiobtn-circle-check\"></span>
-                    </label>
-                </div>";
-        }
-        $query->close();
-        return $retorno;
-    }
-
     public function getTotalByStatus(int $status): string {
         $query = $this->mysqli->query("SELECT sum(pedido.valor) AS total FROM pedido WHERE pedido.status = {$status};");
         $tot = $query->fetch_object();

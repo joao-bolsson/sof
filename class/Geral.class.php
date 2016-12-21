@@ -574,15 +574,6 @@ class Geral extends Conexao {
         return false;
     }
 
-    public function insertLicitacao(int $pedido, int $tipoLic, string $dispensa, string $inex, string $pregao, string $uasg, string $procOri, string $conc): bool {
-        if ($pedido < 1) {
-            return false;
-        }
-        $this->mysqli->query("INSERT INTO licitacao VALUES(NULL, {$pedido}, {$tipoLic}, '{$dispensa}', '{$inex}', '{$pregao}', '{$uasg}', '{$procOri}', '{$conc}');") or exit("Ocorreu algum erro no cadastro da licitação. Contate o administrador.");
-        $this->mysqli->close();
-        return true;
-    }
-
     /**
      *   Função para enviar um pedido ao SOF
      *

@@ -180,65 +180,7 @@ $pedidos_em_analise = $obj_Busca->getPedidosAnalise($id_setor);
                                     </div>
                                     <h2 class="content-sub-heading">Licitação</h2>
                                     <table style="width: 100%;">
-                                        <tr>
-                                            <td>
-                                                <div class="form-group form-group-label">
-                                                    <label class="floating-label padding-left" for="dispLic"><span class="icon">attach_money</span>&nbsp;Dispensa de Licitação</label>
-                                                    <input class="form-control padding-left" id="dispLic" name="dispLic" type="text" required>
-                                                </div>
-                                            </td>
-                                            <td>
-                                                <div class="form-group form-group-label">
-                                                    <label class="floating-label padding-left" for="inexLic"><span class="icon">attach_money</span>&nbsp;Inexibilidade de Licitação</label>
-                                                    <input class="form-control padding-left" id="inexLic" name="inexLic" type="text" required>
-                                                </div>
-                                            </td>
-                                            <td>
-                                                <?= $obj_Busca->getOptionsLicitacao(); ?>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>
-                                                <div class="form-group form-group-label">
-                                                    <label class="floating-label padding-left" for="preg"><span class="icon">attach_money</span>&nbsp;Número do Pregão</label>
-                                                    <input class="form-control padding-left" id="preg" name="preg" type="text" required>
-                                                </div>
-                                            </td>
-                                            <td>
-                                                <div class="form-group form-group-label">
-                                                    <label class="floating-label padding-left" for="uasg"><span class="icon">attach_money</span>&nbsp;Número da UASG</label>
-                                                    <input class="form-control padding-left" id="uasg" name="uasg" type="text" required>
-                                                </div>
-                                            </td>
-                                            <td>
-                                                <div class="form-group form-group-label">
-                                                    <label class="floating-label padding-left" for="procOri"><span class="icon">attach_money</span>&nbsp;Número do Processo Original</label>
-                                                    <input class="form-control padding-left" id="procOri" name="procOri" type="text" required/>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td colspan="2">
-                                                <div class="form-group form-group-label">
-                                                    <label class="floating-label padding-left" for="conc"><span class="icon">attach_money</span>&nbsp;Concorrência Pública</label>
-                                                    <input class="form-control padding-left" id="conc" name="conc" type="text" required/>
-                                                </div>
-                                            </td>
-                                            <td>
-                                                <div class="radiobtn radiobtn-adv">
-                                                    <label for="sim">
-                                                        <input id="sim" type="radio" name="geraCont" class="access-hide" value="1" disabled required/>Gera Contrato
-                                                        <span class="radiobtn-circle"></span><span class="radiobtn-circle-check"></span>
-                                                    </label>
-                                                </div>
-                                                <div class="radiobtn radiobtn-adv">
-                                                    <label for="nao">
-                                                        <input id="nao" type="radio" name="geraCont" class="access-hide" value="0" required/>Não Gera Contrato
-                                                        <span class="radiobtn-circle"></span><span class="radiobtn-circle-check"></span>
-                                                    </label>
-                                                </div>
-                                            </td>
-                                        </tr>
+
                                     </table>
                                 </div><!-- ./card-inner -->
                                 <div class="card-action">
