@@ -38,7 +38,7 @@ class Busca extends Conexao {
                 <td>
                     <div class=\"radiobtn radiobtn-adv\">
                         <label for=\"tipoLic" . $obj->id . "\">
-                            <input type=\"radio\" name=\"tipoLic\" id=\"tipoLic" . $obj->id . "\" class=\"access-hide\" value=\"" . $obj->id . "\" required>" . $obj->nome . "
+                            <input type=\"radio\" name=\"tipoLic\" id=\"tipoLic" . $obj->id . "\" class=\"access-hide\" value=\"" . $obj->id . "\" required onchange=\"changeTipoLic(" . $obj->id . ");\">" . $obj->nome . "
                             <span class=\"radiobtn-circle\"></span><span class=\"radiobtn-circle-check\"></span>
                         </label>
                     </div>

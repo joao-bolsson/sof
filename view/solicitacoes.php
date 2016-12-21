@@ -190,9 +190,6 @@ $pedidos_em_analise = $obj_Busca->getPedidosAnalise($id_setor);
                                                     <input class="form-control" id="infoLic" name="infoLic" required/>
                                                 </div>
                                             </td>
-                                            <!-- 
-terá que ter número do pregão, número da UASG, número do processo original e poderá ou não gerar contrato.
-                                            -->
                                             <td>
                                                 <div class="form-group form-group-label">
                                                     <label class="floating-label" for="uasg"><span class="icon">announcement</span>UASG</label>

@@ -659,6 +659,29 @@ function listRelatorios() {
     $('#listRelatorios').modal('show');
 }
 
+function changeTipoLic(tipo) {
+    var selected = document.getElementById('tipoLic' + tipo).value;
+    if (selected == 3) { // Adesao
+        maybeDisableFields(false);
+    } else {
+        maybeDisableFields(true);
+    }
+}
+
+function maybeDisableFields(flag) {
+    document.getElementById('uasg').disabled = flag;
+    document.getElementById('procOri').disabled = flag;
+    document.getElementById('gera').disabled = flag;
+    document.getElementById('ngera').disabled = flag;
+    
+    // required
+    
+    document.getElementById('uasg').required = !flag;
+    document.getElementById('procOri').required = !flag;
+    document.getElementById('gera').required = !flag;
+    document.getElementById('ngera').required = !flag;
+}
+
 function changeReport(radio) {
     var st = radio.split('-');
     $.post('../php/busca.php', {
@@ -1086,7 +1109,7 @@ function analisarPedido(id_pedido, id_setor) {
     });
 
     document.getElementById("id_pedido").value = id_pedido;
-    
+
     document.getElementById("detPedId").innerHTML = id_pedido;
     getNomeSetor(id_setor);
     $.post('../php/busca.php', {
