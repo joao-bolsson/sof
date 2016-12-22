@@ -600,10 +600,10 @@ class Busca extends Conexao {
      * 	@return bool
      */
     public function getRequestDraft(int $id_pedido): bool {
-        $query = $this->mysqli->query("SELECT prioridade.nome FROM pedido, prioridade WHERE pedido.id = 3 AND pedido.prioridade = prioridade.id;");
+        $query = $this->mysqli->query("SELECT prioridade.nome FROM pedido, prioridade WHERE pedido.id = {$id_pedido} AND pedido.prioridade = prioridade.id;");
         $obj = $query->fetch_object();
         $query->close();
-        if ($obj->nome == 'rascunho') {
+        if ($obj->nome == 'Rascunho') {
             return true;
         }
         return false;
