@@ -408,12 +408,13 @@ if (isset($_POST["admin"]) && isset($_SESSION["id_setor"]) && ($_SESSION["id_set
             $obj_Geral->insertPedido($id_user, $id_setor, $id_item, $qtd_solicitada, $qtd_disponivel, $qtd_contrato, $qtd_utilizado, $vl_saldo, $vl_contrato, $vl_utilizado, $valor, $total_pedido, $saldo_total, $prioridade, $obs, $pedido) or exit("Ocorreu um erro no servidor. Contate o administradr.");
 
             // licitação
+            $idLic = $_POST['idLic'];
             $numero = $_POST['infoLic'];
             $uasg = $_POST['uasg'];
             $procOri = $_POST['procOri'];
             $tipo = $_POST['tipoLic'];
 
-            $obj_Geral->insertLicitacao($numero, $uasg, $procOri, $tipo, $pedido) or exit("Ocorreu um erro no cadastro da licitação. Contate o administrador.");
+            $obj_Geral->insertLicitacao($numero, $uasg, $procOri, $tipo, $pedido, $idLic) or exit("Ocorreu um erro no cadastro da licitação. Contate o administrador.");
 
             $geraContrato = $_POST['geraContrato']; // não faz nada, ainda
 

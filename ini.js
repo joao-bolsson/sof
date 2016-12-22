@@ -935,7 +935,7 @@ function pesquisarProcesso(busca) {
         });
     }
 }
-// AO CLICAR NO BOTÃO DE EDITAR RASCUNHO SALVO
+
 function editaPedido(id_pedido) {
     $.post('../php/busca.php', {
         users: 1,
@@ -964,6 +964,30 @@ function editaPedido(id_pedido) {
         id_pedido: id_pedido
     }, function (resposta) {
         document.getElementById("conteudoPedido").innerHTML = resposta;
+    });
+    populaLicitacao(id_pedido);
+}
+
+function populaLicitacao(id_pedido) {
+    $.post('../php/busca.php', {
+        users: 1,
+        form: 'populaLicitacao',
+        id_pedido: id_pedido
+    }, function (resposta) {
+        if (resposta) {
+            var obj = jQuery.parseJSON(resposta);
+            document.getElementById('idLic').value = obj.id;
+            $('#divNum').addClass('control-highlight');
+            document.getElementById('infoLic').value = obj.numero;
+            document.getElementById('tipoLic' + obj.tipo).checked = true;
+            maybeDisableFields(false);
+            if (obj.tipo == 3 || obj.tipo == 4) {
+                $('#divUasg').addClass('control-highlight');
+                $('#divProcOri').addClass('control-highlight');
+            }
+            document.getElementById('uasg').value = obj.uasg;
+            document.getElementById('procOri').value = obj.processo_original;
+        }
     });
 }
 
@@ -1144,7 +1168,7 @@ function sleep(milliseconds) {
 }
 
 function deletePedido(id_pedido) {
-    var confirma = confirm('Todos os registros referentes à esse pedido serão excluído do sistema para economizar espaço ;) <br> Deseja prosseguir?');
+    var confirma = confirm('Todos os registros referentes à esse pedido serão excluído do sistema para economizar espaço ;) Deseja prosseguir?');
     if (!confirma)
         return;
     $.post('../php/geral.php', {

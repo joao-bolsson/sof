@@ -1905,10 +1905,10 @@ class Busca extends Conexao {
     }
 
     /**
-     * 	Colocar documentação aqui
-     *
-     * 	@access public
-     * 	@return string
+     * Retorna todos os processos existes no banco.
+     * 
+     * @param string $tela Se "recepcao" os processos são usadas para uma coisa se não, são usados para construir um pedido.
+     * @return string LInhas com os processos para colocar numa tabela.
      */
     public function getProcessos(string $tela): string {
         $retorno = "";
@@ -1932,6 +1932,18 @@ class Busca extends Conexao {
                     </td>
                 </tr>";
         }
+        return $retorno;
+    }
+
+    public function getLicitacao(int $id_pedido) {
+        $query = $this->mysqli->query("SELECT licitacao.id, licitacao.tipo, licitacao.numero, licitacao.uasg, licitacao.processo_original FROM licitacao WHERE licitacao.id_pedido = {$id_pedido};");
+        $retorno = false;
+        if ($query->num_rows > 0) {
+            $obj = $query->fetch_object();
+            $retorno = json_encode($obj);
+        }
+
+        $query->close();
         return $retorno;
     }
 
