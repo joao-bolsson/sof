@@ -1160,7 +1160,7 @@ class Busca extends Conexao {
                         <table>
                             <tr>
                                 <td style=\"text-align: left; font-weight: bold;\">" . $fornecedor->nome_fornecedor . "</td>
-                                <td>CNPJ: ".$fornecedor->cgc_fornecedor."</td>
+                                <td>CNPJ: " . $fornecedor->cgc_fornecedor . "</td>
                                 <td>Contrato: " . $fornecedor->num_contrato . "</td>
                             </tr>
                         </table>
@@ -1239,9 +1239,9 @@ class Busca extends Conexao {
      */
     public function getComentarios(int $id_pedido): string {
         $retorno = "";
-        
+
         $query_emp = $this->mysqli->query("SELECT pedido_empenho.empenho, DATE_FORMAT(pedido_empenho.data, '%d/%m/%Y') AS data FROM pedido_empenho WHERE pedido_empenho.id_pedido = {$id_pedido};");
-        
+
         if ($query_emp->num_rows > 0) {
             $empenho = $query_emp->fetch_object();
             $retorno = "
@@ -1249,7 +1249,7 @@ class Busca extends Conexao {
                     <table>
                         <tr>
                             <td>Data Empenho: " . $empenho->data . "</td>
-                            <td>Empenho: " . $empenho->empenho. "</td>
+                            <td>Empenho: " . $empenho->empenho . "</td>
                         </tr>
                     </table>
                 </fieldset>";
@@ -1264,22 +1264,13 @@ class Busca extends Conexao {
                 </fieldset>";
         }
         $query_emp->close();
-        
-        $query = $this->mysqli->query("SELECT DATE_FORMAT(comentarios.data_coment, '%d/%m/%Y') AS data_coment, prioridade.nome AS prioridade, comentarios.valor, comentarios.comentario FROM comentarios, prioridade WHERE prioridade.id = comentarios.prioridade AND comentarios.id_pedido = {$id_pedido};");
+
+        $query = $this->mysqli->query("SELECT DATE_FORMAT(comentarios.data_coment, '%d/%m/%Y') AS data_coment, comentarios.comentario FROM comentarios, prioridade WHERE prioridade.id = comentarios.prioridade AND comentarios.id_pedido = {$id_pedido};");
         if ($query->num_rows > 0) {
             while ($comentario = $query->fetch_object()) {
                 $retorno .= "
-                    <fieldset class=\"preg\">
-                        <table>
-                            <tr>
-                                <td>Data do Comentário: " . $comentario->data_coment . "</td>
-                                <td>Prioridade: " . $comentario->prioridade . "</td>
-                                <td>Valor: R$ " . $comentario->valor . "</td>
-                            </tr>
-                        </table>
-                    </fieldset>
                     <fieldset>
-                        <p style=\"font-weight: normal;\">" . $comentario->comentario . "</p>
+                        <p style=\"font-weight: normal;\"> <b>Comentário [" . $comentario->data_coment . "]:</b> " . $comentario->comentario . "</p>
                     </fieldset>";
             }
         } else {
