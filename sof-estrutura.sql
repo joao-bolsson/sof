@@ -62,6 +62,20 @@ CREATE TABLE `itens_pedido` (
   `valor` varchar(50) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
+CREATE TABLE `licitacao` (
+  `id` int(10) UNSIGNED NOT NULL,
+  `id_pedido` int(10) UNSIGNED NOT NULL,
+  `tipo` tinyint(3) UNSIGNED NOT NULL,
+  `numero` varchar(30) NOT NULL,
+  `uasg` varchar(30) DEFAULT NULL,
+  `processo_original` varchar(30) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+CREATE TABLE `licitacao_tipo` (
+  `id` tinyint(3) UNSIGNED NOT NULL,
+  `nome` varchar(50) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
 CREATE TABLE `mes` (
   `id` int(2) UNSIGNED NOT NULL,
   `sigla_mes` varchar(3) NOT NULL
@@ -231,6 +245,14 @@ ALTER TABLE `itens_pedido`
   ADD KEY `id_pedido` (`id_pedido`),
   ADD KEY `id_item` (`id_item`);
 
+ALTER TABLE `licitacao`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `id_pedido` (`id_pedido`),
+  ADD KEY `tipo` (`tipo`);
+
+ALTER TABLE `licitacao_tipo`
+  ADD PRIMARY KEY (`id`);
+
 ALTER TABLE `mes`
   ADD PRIMARY KEY (`id`);
 
@@ -317,13 +339,17 @@ ALTER TABLE `comentarios`
 ALTER TABLE `itens`
   MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5042;
 ALTER TABLE `itens_pedido`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=425;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=436;
+ALTER TABLE `licitacao`
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
+ALTER TABLE `licitacao_tipo`
+  MODIFY `id` tinyint(3) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 ALTER TABLE `mes`
   MODIFY `id` int(2) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
 ALTER TABLE `paginas_post`
   MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 ALTER TABLE `pedido`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=148;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=157;
 ALTER TABLE `pedido_empenho`
   MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 ALTER TABLE `pedido_fonte`
@@ -347,7 +373,7 @@ ALTER TABLE `saldos_transferidos`
 ALTER TABLE `saldo_categoria`
   MODIFY `id` int(1) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 ALTER TABLE `saldo_setor`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 ALTER TABLE `setores`
   MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
 ALTER TABLE `solic_alt_pedido`
@@ -367,6 +393,10 @@ ALTER TABLE `comentarios`
 ALTER TABLE `itens_pedido`
   ADD CONSTRAINT `itens_pedido_ibfk_1` FOREIGN KEY (`id_pedido`) REFERENCES `pedido` (`id`),
   ADD CONSTRAINT `itens_pedido_ibfk_2` FOREIGN KEY (`id_item`) REFERENCES `itens` (`id`);
+
+ALTER TABLE `licitacao`
+  ADD CONSTRAINT `licitacao_ibfk_1` FOREIGN KEY (`id_pedido`) REFERENCES `pedido` (`id`),
+  ADD CONSTRAINT `licitacao_ibfk_2` FOREIGN KEY (`tipo`) REFERENCES `licitacao_tipo` (`id`);
 
 ALTER TABLE `pedido`
   ADD CONSTRAINT `pedido_ibfk_1` FOREIGN KEY (`id_setor`) REFERENCES `setores` (`id`),

@@ -25,6 +25,31 @@ class Busca extends Conexao {
         $this->obj_Util = new Util();
     }
 
+    public function getOptionsLicitacao(int $cont): string {
+        $query = $this->mysqli->query("SELECT id, nome FROM licitacao_tipo;") or die("Ocorreu um erro na construção das opções de licitação. Contate o administrador.");
+        $retorno = "<tr>";
+        $i = 0;
+        while ($obj = $query->fetch_object()) {
+            if ($i == $cont) {
+                $i = 0;
+                $retorno .= "</tr><tr>";
+            }
+            $retorno .= "
+                <td>
+                    <div class=\"radiobtn radiobtn-adv\">
+                        <label for=\"tipoLic" . $obj->id . "\">
+                            <input type=\"radio\" name=\"tipoLic\" id=\"tipoLic" . $obj->id . "\" class=\"access-hide\" value=\"" . $obj->id . "\" required onchange=\"changeTipoLic(" . $obj->id . ");\">" . $obj->nome . "
+                            <span class=\"radiobtn-circle\"></span><span class=\"radiobtn-circle-check\"></span>
+                        </label>
+                    </div>
+                </td>";
+            $i++;
+        }
+
+        $query->close();
+        return $retorno;
+    }
+
     public function getTotalByStatus(int $status): string {
         $query = $this->mysqli->query("SELECT sum(pedido.valor) AS total FROM pedido WHERE pedido.status = {$status};");
         $tot = $query->fetch_object();
@@ -600,10 +625,10 @@ class Busca extends Conexao {
      * 	@return bool
      */
     public function getRequestDraft(int $id_pedido): bool {
-        $query = $this->mysqli->query("SELECT prioridade.nome FROM pedido, prioridade WHERE pedido.id = 3 AND pedido.prioridade = prioridade.id;");
+        $query = $this->mysqli->query("SELECT prioridade.nome FROM pedido, prioridade WHERE pedido.id = {$id_pedido} AND pedido.prioridade = prioridade.id;");
         $obj = $query->fetch_object();
         $query->close();
-        if ($obj->nome == 'rascunho') {
+        if ($obj->nome == 'Rascunho') {
             return true;
         }
         return false;
@@ -1075,6 +1100,48 @@ class Busca extends Conexao {
                 <p style=\"font-weight: normal !important;\">	" . $pedido->obs . "</p>
             </fieldset><br>";
         $retorno .= Busca::getTableFontes($id_pedido);
+        $retorno .= Busca::getTableLicitacao($id_pedido);
+        return $retorno;
+    }
+
+    public function getTableLicitacao(int $id_pedido): string {
+        $retorno = "PEDIDO SEM LICITAÇÃO";
+
+        $query = $this->mysqli->query("SELECT licitacao.tipo AS id_tipo, licitacao_tipo.nome AS tipo, licitacao.numero, licitacao.uasg, licitacao.processo_original FROM licitacao, licitacao_tipo WHERE licitacao_tipo.id = licitacao.tipo AND licitacao.id_pedido = {$id_pedido};");
+        if ($query->num_rows == 1) {
+            $obj = $query->fetch_object();
+            $thead = "";
+            $tbody = "";
+            if ($obj->id_tipo == 3 || $obj->id_tipo == 4) {
+                $thead = "
+                    <th>UASG</th>
+                    <th>Processo Original</th>";
+                $tbody = "
+                    <td>" . $obj->uasg . "</td>
+                    <td>" . $obj->processo_original . "</td>";
+            }
+            $retorno = "
+                <fieldset class=\"preg\">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Tipo de Licitação</th>
+                                <th>Número</th>
+                                " . $thead . "
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>" . $obj->tipo . "</td>
+                                <td>" . $obj->numero . "</td>
+                                " . $tbody . "
+                            </tr>
+                        </tbody>
+                    </table>
+                </fieldset><br>";
+        }
+        $query->close();
+
         return $retorno;
     }
 
@@ -1087,12 +1154,15 @@ class Busca extends Conexao {
      */
     public function getTableFontes(int $id_pedido): string {
         $retorno = "";
-        $query = $this->mysqli->query("SELECT pedido_fonte.fonte_recurso, pedido_fonte.ptres, pedido_fonte.plano_interno FROM pedido_fonte WHERE pedido_fonte.id_pedido = {$id_pedido};");
+        $query = $this->mysqli->query("SELECT pedido_fonte.fonte_recurso, pedido_fonte.ptres, pedido_fonte.plano_interno FROM pedido_fonte WHERE pedido_fonte.id_pedido = {
+                $id_pedido
+            };
+            ");
 
         if ($query->num_rows > 0) {
             $fonte = $query->fetch_object();
             $retorno = "
-                <fieldset class=\"preg\">
+            <fieldset class = \"preg\">
                     <table>
                         <thead>
                             <tr>
@@ -1160,7 +1230,7 @@ class Busca extends Conexao {
                         <table>
                             <tr>
                                 <td style=\"text-align: left; font-weight: bold;\">" . $fornecedor->nome_fornecedor . "</td>
-                                <td>CNPJ: ".$fornecedor->cgc_fornecedor."</td>
+                                <td>CNPJ: " . $fornecedor->cgc_fornecedor . "</td>
                                 <td>Contrato: " . $fornecedor->num_contrato . "</td>
                             </tr>
                         </table>
@@ -1239,9 +1309,9 @@ class Busca extends Conexao {
      */
     public function getComentarios(int $id_pedido): string {
         $retorno = "";
-        
+
         $query_emp = $this->mysqli->query("SELECT pedido_empenho.empenho, DATE_FORMAT(pedido_empenho.data, '%d/%m/%Y') AS data FROM pedido_empenho WHERE pedido_empenho.id_pedido = {$id_pedido};");
-        
+
         if ($query_emp->num_rows > 0) {
             $empenho = $query_emp->fetch_object();
             $retorno = "
@@ -1249,7 +1319,7 @@ class Busca extends Conexao {
                     <table>
                         <tr>
                             <td>Data Empenho: " . $empenho->data . "</td>
-                            <td>Empenho: " . $empenho->empenho. "</td>
+                            <td>Empenho: " . $empenho->empenho . "</td>
                         </tr>
                     </table>
                 </fieldset>";
@@ -1264,7 +1334,7 @@ class Busca extends Conexao {
                 </fieldset>";
         }
         $query_emp->close();
-        
+
         $query = $this->mysqli->query("SELECT DATE_FORMAT(comentarios.data_coment, '%d/%m/%Y') AS data_coment, prioridade.nome AS prioridade, comentarios.valor, comentarios.comentario FROM comentarios, prioridade WHERE prioridade.id = comentarios.prioridade AND comentarios.id_pedido = {$id_pedido};");
         if ($query->num_rows > 0) {
             while ($comentario = $query->fetch_object()) {
@@ -1880,10 +1950,10 @@ class Busca extends Conexao {
     }
 
     /**
-     * 	Colocar documentação aqui
-     *
-     * 	@access public
-     * 	@return string
+     * Retorna todos os processos existes no banco.
+     * 
+     * @param string $tela Se "recepcao" os processos são usadas para uma coisa se não, são usados para construir um pedido.
+     * @return string LInhas com os processos para colocar numa tabela.
      */
     public function getProcessos(string $tela): string {
         $retorno = "";
@@ -1907,6 +1977,18 @@ class Busca extends Conexao {
                     </td>
                 </tr>";
         }
+        return $retorno;
+    }
+
+    public function getLicitacao(int $id_pedido) {
+        $query = $this->mysqli->query("SELECT licitacao.id, licitacao.tipo, licitacao.numero, licitacao.uasg, licitacao.processo_original FROM licitacao WHERE licitacao.id_pedido = {$id_pedido};");
+        $retorno = false;
+        if ($query->num_rows > 0) {
+            $obj = $query->fetch_object();
+            $retorno = json_encode($obj);
+        }
+
+        $query->close();
         return $retorno;
     }
 
