@@ -659,6 +659,29 @@ function listRelatorios() {
     $('#listRelatorios').modal('show');
 }
 
+function changeTipoLic(tipo) {
+    var selected = document.getElementById('tipoLic' + tipo).value;
+    if (selected == 3 || selected == 4) { // Adesao ou Compra Compartilhada
+        maybeDisableFields(false);
+    } else {
+        maybeDisableFields(true);
+    }
+}
+
+function maybeDisableFields(flag) {
+    document.getElementById('uasg').disabled = flag;
+    document.getElementById('procOri').disabled = flag;
+    document.getElementById('gera').disabled = flag;
+    document.getElementById('ngera').disabled = flag;
+    
+    // required
+    
+    document.getElementById('uasg').required = !flag;
+    document.getElementById('procOri').required = !flag;
+    document.getElementById('gera').required = !flag;
+    document.getElementById('ngera').required = !flag;
+}
+
 function changeReport(radio) {
     var st = radio.split('-');
     $.post('../php/busca.php', {
@@ -912,7 +935,7 @@ function pesquisarProcesso(busca) {
         });
     }
 }
-// AO CLICAR NO BOTÃO DE EDITAR RASCUNHO SALVO
+
 function editaPedido(id_pedido) {
     $.post('../php/busca.php', {
         users: 1,
@@ -941,6 +964,30 @@ function editaPedido(id_pedido) {
         id_pedido: id_pedido
     }, function (resposta) {
         document.getElementById("conteudoPedido").innerHTML = resposta;
+    });
+    populaLicitacao(id_pedido);
+}
+
+function populaLicitacao(id_pedido) {
+    $.post('../php/busca.php', {
+        users: 1,
+        form: 'populaLicitacao',
+        id_pedido: id_pedido
+    }, function (resposta) {
+        if (resposta) {
+            var obj = jQuery.parseJSON(resposta);
+            document.getElementById('idLic').value = obj.id;
+            $('#divNum').addClass('control-highlight');
+            document.getElementById('infoLic').value = obj.numero;
+            document.getElementById('tipoLic' + obj.tipo).checked = true;
+            maybeDisableFields(false);
+            if (obj.tipo == 3 || obj.tipo == 4) {
+                $('#divUasg').addClass('control-highlight');
+                $('#divProcOri').addClass('control-highlight');
+            }
+            document.getElementById('uasg').value = obj.uasg;
+            document.getElementById('procOri').value = obj.processo_original;
+        }
     });
 }
 
@@ -1086,7 +1133,7 @@ function analisarPedido(id_pedido, id_setor) {
     });
 
     document.getElementById("id_pedido").value = id_pedido;
-    
+
     document.getElementById("detPedId").innerHTML = id_pedido;
     getNomeSetor(id_setor);
     $.post('../php/busca.php', {
@@ -1121,7 +1168,7 @@ function sleep(milliseconds) {
 }
 
 function deletePedido(id_pedido) {
-    var confirma = confirm('Todos os registros referentes à esse pedido serão excluído do sistema para economizar espaço ;) <br> Deseja prosseguir?');
+    var confirma = confirm('Todos os registros referentes à esse pedido serão excluído do sistema para economizar espaço ;) Deseja prosseguir?');
     if (!confirma)
         return;
     $.post('../php/geral.php', {

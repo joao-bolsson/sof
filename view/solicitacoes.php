@@ -138,9 +138,9 @@ $pedidos_em_analise = $obj_Busca->getPedidosAnalise($id_setor);
                                 </div>
                             </div><!--  ./card-header -->
                             <form action="../php/geral.php" method="POST">
-                                <input type="hidden" name="users" value="1"></input>
-                                <input type="hidden" name="form" value="pedido"></input>
-                                <input id="pedido" type="hidden" name="pedido" value="0"></input>
+                                <input type="hidden" name="users" value="1">
+                                <input type="hidden" name="form" value="pedido">
+                                <input id="pedido" type="hidden" name="pedido" value="0">
                                 <div class="card-inner">
                                     <table class="table">
                                         <thead>
@@ -178,6 +178,47 @@ $pedidos_em_analise = $obj_Busca->getPedidosAnalise($id_setor);
                                         <label class="floating-label" for="obs"><span class="icon">announcement</span>&nbsp;Observações</label>
                                         <textarea class="form-control textarea-autosize" id="obs" name="obs" rows="1" required></textarea>
                                     </div>
+                                    <h2 class="content-sub-heading">Licitação</h2>
+                                    <table class="table">
+                                        <?= $obj_Busca->getOptionsLicitacao(4); ?>
+                                    </table>
+                                    <table style="width: 100%;">
+                                        <input id="idLic" type="hidden" name="idLic" value="0">
+                                        <tr>
+                                            <td>
+                                                <div id="divNum" class="form-group form-group-label">
+                                                    <label class="floating-label" for="infoLic"><span class="icon">add_shopping_cart</span>Número</label>
+                                                    <input class="form-control" id="infoLic" name="infoLic" required/>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div id="divUasg" class="form-group form-group-label">
+                                                    <label class="floating-label" for="uasg"><span class="icon">announcement</span>UASG</label>
+                                                    <input class="form-control" id="uasg" name="uasg" disabled/>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div id="divProcOri" class="form-group form-group-label">
+                                                    <label class="floating-label" for="procOri"><span class="icon">announcement</span>Processo Original</label>
+                                                    <input class="form-control" id="procOri" name="procOri" disabled/>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div class="radiobtn radiobtn-adv">
+                                                    <label for="gera">
+                                                        <input type="radio" name="geraContrato" id="gera" class="access-hide" value="1" disabled>Gera Contrato
+                                                        <span class="radiobtn-circle"></span><span class="radiobtn-circle-check"></span>
+                                                    </label>
+                                                </div>
+                                                <div class="radiobtn radiobtn-adv">
+                                                    <label for="ngera">
+                                                        <input type="radio" name="geraContrato" id="ngera" class="access-hide" value="0" disabled>Não Gera Contrato
+                                                        <span class="radiobtn-circle"></span><span class="radiobtn-circle-check"></span>
+                                                    </label>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    </table>
                                 </div><!-- ./card-inner -->
                                 <div class="card-action">
                                     <div class="card-action-btn">

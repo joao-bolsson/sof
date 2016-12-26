@@ -93,6 +93,7 @@ class Geral extends Conexao {
         $this->mysqli->query("DELETE FROM saldos_transferidos;");
         $this->mysqli->query("DELETE FROM solic_alt_pedido;");
         $this->mysqli->query("DELETE FROM itens;");
+        $this->mysqli->query("DELETE FROM licitacao;");
         $this->mysqli->query("DELETE FROM pedido;");
 
         // ALTER TABLE
@@ -108,6 +109,7 @@ class Geral extends Conexao {
         $this->mysqli->query("alter table saldos_transferidos auto_increment = 1;");
         $this->mysqli->query("alter table solic_alt_pedido auto_increment = 1;");
         $this->mysqli->query("alter table itens auto_increment = 1;");
+        $this->mysqli->query("alter table licitacao auto_increment = 1;");
         $this->mysqli->query("alter table pedido auto_increment = 1;");
     }
 
@@ -575,6 +577,38 @@ class Geral extends Conexao {
     }
 
     /**
+     * Função para cadastrar uma licitação.
+     * 
+     * UASG e procOri podem ser NULL.
+     * 
+     * @param string $numero Número informado no formulário.
+     * @param string $uasg Uasg, se o tipo for adesao ou compra compartilhada.
+     * @param string $procOri Processo Original, se o tipo for adesao ou compra compartilhada.
+     * @param int $tipo Tipo de licitação.
+     * @param int $pedido Id do pedido.
+     * @param int $idLic id da licitação.
+     * @return bool
+     */
+    public function insertLicitacao(string $numero, $uasg, $procOri, int $tipo, int $pedido, int $idLic): bool {
+        if ($tipo != 3 && $tipo != 4) { // Adesão ou Compra Compartilhada
+            $uasg = "";
+            $procOri = "";
+        }
+        
+        $query = "";
+        if ($idLic == 0) {
+            $query = "INSERT INTO licitacao VALUES(NULL, {$pedido}, {$tipo}, '{$numero}', '{$uasg}', '{$procOri}');";
+        } else {
+            //  id | id_pedido | tipo | numero   | uasg     | processo_original
+            $query = "UPDATE licitacao SET tipo = {$tipo}, numero = '{$numero}', uasg = '{$uasg}', processo_original = '{$procOri}' WHERE id = {$idLic};";
+        }
+        
+        $this->mysqli->query($query) or exit("Ocorreu um erro no cadastro da licitação. Contate o administrador.");
+        $this->mysqli->close();
+        return true;
+    }
+
+    /**
      *   Função para enviar um pedido ao SOF
      *
      *   @access public
@@ -584,7 +618,7 @@ class Geral extends Conexao {
      *   @param $pedido Id do pedido. Se 0, pedido novo, senão editando rascunho ou enviando ao SOF.
      *   @return bool
      */
-    public function insertPedido($id_user, $id_setor, $id_item, $qtd_solicitada, $qtd_disponivel, $qtd_contrato, $qtd_utilizado, $vl_saldo, $vl_contrato, $vl_utilizado, $valor, $total_pedido, $saldo_total, $prioridade, $obs, $pedido) {
+    public function insertPedido($id_user, $id_setor, $id_item, $qtd_solicitada, $qtd_disponivel, $qtd_contrato, $qtd_utilizado, $vl_saldo, $vl_contrato, $vl_utilizado, $valor, $total_pedido, $saldo_total, $prioridade, $obs, &$pedido) {
 
         $obs = $this->mysqli->real_escape_string($obs);
         $hoje = date('Y-m-d');

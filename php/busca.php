@@ -145,6 +145,11 @@ if (isset($_POST["admin"]) && isset($_SESSION['id_setor']) && ($_SESSION['id_set
 	$form = $_POST["form"];
 
 	switch ($form) {
+        // retorna um objeto com as informações da licitação do pedido
+        case 'populaLicitacao':
+            $pedido = $_POST['id_pedido'];
+            echo $obj_Busca->getLicitacao($pedido);
+            break;
             
         // retornar o nome do setor
         case 'getNomeSetor':
