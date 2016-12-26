@@ -1535,7 +1535,7 @@ class Busca extends Conexao {
     public function getItensPedidoAnalise(int $id_pedido): string {
         //declarando retorno
         $retorno = "";
-        $query = $this->mysqli->query("SELECT itens.qt_contrato, itens.id AS id_itens, itens_pedido.qtd AS qtd_solicitada, itens_pedido.valor, itens.nome_fornecedor, itens.num_licitacao, itens.dt_inicio, itens.dt_fim, itens.dt_geracao, itens.cod_reduzido, itens.complemento_item, itens.vl_unitario, itens.qt_saldo, itens.cod_despesa, itens.descr_despesa, itens.num_contrato, itens.num_processo, itens.descr_mod_compra, itens.num_licitacao, itens.cgc_fornecedor, itens.num_extrato, itens.descricao, itens.qt_contrato, itens.vl_contrato, itens.qt_utilizado, itens.vl_utilizado, itens.qt_saldo, itens.vl_saldo, itens.seq_item_processo FROM itens_pedido, itens WHERE itens_pedido.id_pedido = {$id_pedido} AND itens_pedido.id_item = itens.id ORDER BY itens.seq_item_processo ASC;");
+        $query = $this->mysqli->query("SELECT itens.qt_contrato, itens.id AS id_itens, itens_pedido.qtd AS qtd_solicitada, itens_pedido.valor, itens.nome_fornecedor, itens.num_licitacao, itens.dt_inicio, itens.dt_fim, itens.cod_reduzido, itens.complemento_item, itens.vl_unitario, itens.qt_saldo, itens.cod_despesa, itens.descr_despesa, itens.num_contrato, itens.num_processo, itens.descr_mod_compra, itens.num_licitacao, itens.cgc_fornecedor, itens.num_extrato, itens.descricao, itens.qt_contrato, itens.vl_contrato, itens.qt_utilizado, itens.vl_utilizado, itens.qt_saldo, itens.vl_saldo, itens.seq_item_processo FROM itens_pedido, itens WHERE itens_pedido.id_pedido = {$id_pedido} AND itens_pedido.id_item = itens.id ORDER BY itens.seq_item_processo ASC;");
 
         while ($item = $query->fetch_object()) {
             if ($item->dt_fim == '') {
@@ -1552,20 +1552,19 @@ class Busca extends Conexao {
                         </a>
                         <a class=\"modal-close\" href=\"javascript:viewCompl('" . $item->complemento_item . "');\"  title=\"Ver Complemento do Item\"><span class=\"icon\">assignment<span></a>
                     </td>
-                    <td>" . $item->cod_reduzido . "</td>
-                    <td>" . $item->seq_item_processo . "</td>
                     <td>" . $item->cod_despesa . "</td>
                     <td>" . $item->descr_despesa . "</td>
+                    <td>" . $item->num_extrato . "</td>
                     <td>" . $item->num_contrato . "</td>
                     <td>" . $item->num_processo . "</td>
                     <td>" . $item->descr_mod_compra . "</td>
                     <td>" . $item->num_licitacao . "</td>
                     <td>" . $item->dt_inicio . "</td>
                     <td>" . $item->dt_fim . "</td>
-                    <td>" . $item->dt_geracao . "</td>
                     <td>" . $item->cgc_fornecedor . "</td>
                     <td>" . $item->nome_fornecedor . "</td>
-                    <td>" . $item->num_extrato . "</td>
+                    <td>" . $item->cod_reduzido . "</td>
+                    <td>" . $item->seq_item_processo . "</td>
                     <td>" . $item->descricao . "</td>
                     <td>R$ " . $item->vl_unitario . "</td>
                     <td>" . $item->qt_contrato . "</td>

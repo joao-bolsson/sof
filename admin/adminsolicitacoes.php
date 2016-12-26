@@ -342,20 +342,19 @@ $permissao = $obj_Busca->getPermissoes($_SESSION["id"]);
                                         <table class="table stripe" id="tableItensPedido">
                                             <thead>
                                             <th>Ferramentas</th>
-                                            <th>COD_REDUZIDO</th>
-                                            <th>SEQ_ITEM_PROCESSO</th>
                                             <th>COD_DESPESA</th>
                                             <th>DESCRICAO_DESPESA</th>
+                                            <th>NUM_EXTRATO</th>
                                             <th>NUM_CONTRATO</th>
                                             <th>NUM_PROCESSO</th>
                                             <th>DESCR_MOD_COMPRA</th>
                                             <th>NUM_LICITACAO</th>
                                             <th>DT_INICIO</th>
                                             <th>DT_FIM</th>
-                                            <th>DT_GERACAO</th>
                                             <th>CGC_FORNECEDOR</th>
                                             <th>NOME_FORNECEDOR</th>
-                                            <th>NUM_EXTRATO</th>
+                                            <th>COD_REDUZIDO</th>
+                                            <th>SEQ_ITEM_PROCESSO</th>
                                             <th>DESCRICAO</th>
                                             <th>VL_UNITARIO</th>
                                             <th>QT_CONTRATO</th>
