@@ -24,6 +24,20 @@ class Busca extends Conexao {
         $this->mysqli = parent::getConexao();
         $this->obj_Util = new Util();
     }
+    
+    public function getOptionsGrupos(int $id_setor):string {
+        $query = $this->mysqli->query("SELECT setores_grupos.id, setores_grupos.nome FROM setores_grupos WHERE setores_grupos.id_setor = {$id_setor};");
+        if ($query->num_rows < 1) {
+            return "";
+        } else {
+            $retorno = "";
+            while ($obj = $query->fetch_object()) {
+                $obj->nome = utf8_encode($obj->nome);
+                $retorno .= "<option value=\"" . $obj->id . "\">" . $obj->nome . "</option>";
+            }
+            return $retorno;
+        }
+    }
 
     public function getOptionsLicitacao(int $cont): string {
         $query = $this->mysqli->query("SELECT id, nome FROM licitacao_tipo;") or die("Ocorreu um erro na construção das opções de licitação. Contate o administrador.");
