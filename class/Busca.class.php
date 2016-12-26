@@ -1090,13 +1090,13 @@ class Busca extends Conexao {
         $retorno = "
             <fieldset>
                 <p>
-                    Pedido: " . $id_pedido . "
-                    Data de Envio: " . $pedido->data_pedido . ".&emsp;
-                    Situação: " . $pedido->status . "&emsp;
-                    Prioridade: " . $pedido->prioridade . "&emsp;
-                    Total do Pedido: R$ " . $pedido->valor . "
+                    <b>Pedido:</b> " . $id_pedido . "
+                    <b>Data de Envio:</b> " . $pedido->data_pedido . ".&emsp;
+                    <b>Situação:</b> " . $pedido->status . "&emsp;
+                    <b>Prioridade:</b> " . $pedido->prioridade . "&emsp;
+                    <b>Total do Pedido:</b> R$ " . $pedido->valor . "
                 </p>
-                <p>Observação da Unidade Solicitante: </p>
+                <p><b>Observação da Unidade Solicitante: </b></p>
                 <p style=\"font-weight: normal !important;\">	" . $pedido->obs . "</p>
             </fieldset><br>";
         $retorno .= Busca::getTableFontes($id_pedido);
@@ -1105,7 +1105,9 @@ class Busca extends Conexao {
     }
 
     public function getTableLicitacao(int $id_pedido): string {
-        $retorno = "PEDIDO SEM LICITAÇÃO";
+        $retorno = "<fieldset>
+                <h5>PEDIDO SEM LICITAÇÃO</h5>
+                </fieldset><br>";
 
         $query = $this->mysqli->query("SELECT licitacao.tipo AS id_tipo, licitacao_tipo.nome AS tipo, licitacao.numero, licitacao.uasg, licitacao.processo_original FROM licitacao, licitacao_tipo WHERE licitacao_tipo.id = licitacao.tipo AND licitacao.id_pedido = {$id_pedido};");
         if ($query->num_rows == 1) {
