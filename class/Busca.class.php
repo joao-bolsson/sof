@@ -1335,21 +1335,12 @@ class Busca extends Conexao {
         }
         $query_emp->close();
 
-        $query = $this->mysqli->query("SELECT DATE_FORMAT(comentarios.data_coment, '%d/%m/%Y') AS data_coment, prioridade.nome AS prioridade, comentarios.valor, comentarios.comentario FROM comentarios, prioridade WHERE prioridade.id = comentarios.prioridade AND comentarios.id_pedido = {$id_pedido};");
+        $query = $this->mysqli->query("SELECT DATE_FORMAT(comentarios.data_coment, '%d/%m/%Y') AS data_coment, comentarios.comentario FROM comentarios, prioridade WHERE prioridade.id = comentarios.prioridade AND comentarios.id_pedido = {$id_pedido};");
         if ($query->num_rows > 0) {
             while ($comentario = $query->fetch_object()) {
                 $retorno .= "
-                    <fieldset class=\"preg\">
-                        <table>
-                            <tr>
-                                <td>Data do Comentário: " . $comentario->data_coment . "</td>
-                                <td>Prioridade: " . $comentario->prioridade . "</td>
-                                <td>Valor: R$ " . $comentario->valor . "</td>
-                            </tr>
-                        </table>
-                    </fieldset>
                     <fieldset>
-                        <p style=\"font-weight: normal;\">" . $comentario->comentario . "</p>
+                        <p style=\"font-weight: normal;\"> <b>Comentário [" . $comentario->data_coment . "]:</b> " . $comentario->comentario . "</p>
                     </fieldset>";
             }
         } else {
