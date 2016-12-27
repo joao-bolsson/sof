@@ -30,6 +30,7 @@ class Geral extends Conexao {
      * @param int $grupo id do grupo para inserir ao pedido.
      */
     public function insertGrupoPedido(int $pedido, int $grupo) {
+        $this->mysqli = parent::getConexao();
         $this->mysqli->query("INSERT INTO pedido_grupo VALUES({$pedido}, {$grupo});") or exit("Ocorreu um erro ao cadastrar o grupo do pedido. Contate o administrador.");
         $this->mysqli->close();
     }
@@ -41,6 +42,7 @@ class Geral extends Conexao {
      * 	@param $id_pedido Id do pedido.
      */
     public function enviaFornecedor(int $id_pedido) {
+        $this->mysqli = parent::getConexao();
         $this->mysqli->query("UPDATE pedido SET status = 9 WHERE id = {$id_pedido};");
         $this->mysqli->close();
     }
