@@ -417,7 +417,10 @@ if (isset($_POST["admin"]) && isset($_SESSION["id_setor"]) && ($_SESSION["id_set
             $obj_Geral->insertLicitacao($numero, $uasg, $procOri, $tipo, $pedido, $idLic) or exit("Ocorreu um erro no cadastro da licitação. Contate o administrador.");
 
             $geraContrato = $_POST['geraContrato']; // não faz nada, ainda
-
+            
+            if (isset($_POST['grupo'])) {
+                $obj_Geral->insertGrupoPedido($pedido, $_POST['grupo']);
+            }
             header("Location: ../view/solicitacoes.php");
             break;
         default:

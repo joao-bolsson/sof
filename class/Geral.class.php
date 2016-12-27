@@ -25,13 +25,24 @@ class Geral extends Conexao {
     }
 
     /**
+     * Insere um grupo ao pedido.
+     * @param int $pedido Id do pedido.
+     * @param int $grupo id do grupo para inserir ao pedido.
+     */
+    public function insertGrupoPedido(int $pedido, int $grupo) {
+        $this->mysqli->query("INSERT INTO pedido_grupo VALUES({$pedido}, {$grupo});") or exit("Ocorreu um erro ao cadastrar o grupo do pedido. Contate o administrador.");
+        $this->mysqli->close();
+    }
+
+    /**
      * 	Funçao para mudar o status do pedido para 'Enviado ao Fornecedor' (UA)
      *
      * 	@access public
      * 	@param $id_pedido Id do pedido.
      */
-    public function enviaFornecedor($id_pedido) {
+    public function enviaFornecedor(int $id_pedido) {
         $this->mysqli->query("UPDATE pedido SET status = 9 WHERE id = {$id_pedido};");
+        $this->mysqli->close();
     }
 
     /**
@@ -594,7 +605,7 @@ class Geral extends Conexao {
             $uasg = "";
             $procOri = "";
         }
-        
+
         $query = "";
         if ($idLic == 0) {
             $query = "INSERT INTO licitacao VALUES(NULL, {$pedido}, {$tipo}, '{$numero}', '{$uasg}', '{$procOri}');";
@@ -602,7 +613,7 @@ class Geral extends Conexao {
             //  id | id_pedido | tipo | numero   | uasg     | processo_original
             $query = "UPDATE licitacao SET tipo = {$tipo}, numero = '{$numero}', uasg = '{$uasg}', processo_original = '{$procOri}' WHERE id = {$idLic};";
         }
-        
+
         $this->mysqli->query($query) or exit("Ocorreu um erro no cadastro da licitação. Contate o administrador.");
         $this->mysqli->close();
         return true;
