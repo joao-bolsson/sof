@@ -24,8 +24,8 @@ class Busca extends Conexao {
         $this->mysqli = parent::getConexao();
         $this->obj_Util = new Util();
     }
-    
-    public function getOptionsGrupos(int $id_setor):string {
+
+    public function getOptionsGrupos(int $id_setor): string {
         $query = $this->mysqli->query("SELECT setores_grupos.id, setores_grupos.nome FROM setores_grupos WHERE setores_grupos.id_setor = {$id_setor};");
         if ($query->num_rows < 1) {
             return "";
@@ -1092,6 +1092,18 @@ class Busca extends Conexao {
         return $retorno;
     }
 
+    private function getGrupoPedido(int $id_pedido): string {
+        $query = $this->mysqli->query("SELECT setores_grupos.nome, pedido_grupo.id_pedido FROM setores_grupos, pedido_grupo WHERE pedido_grupo.id_grupo = setores_grupos.id AND pedido_grupo.id_pedido = {$id_pedido};");
+        $retorno = "";
+        if ($query->num_rows > 0) {
+            $obj = $query->fetch_object();
+            $obj->nome = utf8_encode($obj->nome);
+            $retorno = "<p><b>Grupo:</b> " . $obj->nome . "</p>";
+        }
+        $query->close();
+        return $retorno;
+    }
+
     /**
      * Função para retornar o cabeçalho do pdf do pedido
      *
@@ -1110,6 +1122,7 @@ class Busca extends Conexao {
                     <b>Prioridade:</b> " . $pedido->prioridade . "&emsp;
                     <b>Total do Pedido:</b> R$ " . $pedido->valor . "
                 </p>
+                " . Busca::getGrupoPedido($id_pedido) . "
                 <p><b>Observação da Unidade Solicitante: </b></p>
                 <p style=\"font-weight: normal !important;\">	" . $pedido->obs . "</p>
             </fieldset><br>";
