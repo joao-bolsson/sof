@@ -12,6 +12,7 @@ $obj_Busca = new Busca();
 $id_setor = $_SESSION["id_setor"];
 $saldo_total = $obj_Busca->getSaldo($id_setor);
 $pedidos_em_analise = $obj_Busca->getPedidosAnalise($id_setor);
+$select_grupo = $obj_Busca->getOptionsGrupos($id_setor);
 ?>
 <!DOCTYPE html>
 <html lang="pt">
@@ -29,6 +30,7 @@ $pedidos_em_analise = $obj_Busca->getPedidosAnalise($id_setor);
 
         <link rel="stylesheet" type="text/css" href="../plugins/dataTables/datatables.min.css"/>
 
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/css/select2.min.css" rel="stylesheet" />
         <!-- favicon -->
         <link rel="icon" href="../favicon.ico">
     </head>
@@ -219,6 +221,15 @@ $pedidos_em_analise = $obj_Busca->getPedidosAnalise($id_setor);
                                             </td>
                                         </tr>
                                     </table>
+                                    <?php if (strlen($select_grupo) > 0): ?>
+                                    <h2 class="content-sub-heading">Grupo</h2>
+                                    <div class="form-group form-group-label">
+                                        <label class="floating-label" for="grupo"><span class="icon">perm_identity</span>&nbsp;Selecione o grupo</label>
+                                        <select id="grupo" class="form-control select2" name="grupo" required>
+                                            <?= $select_grupo ?>
+                                        </select>
+                                    </div>
+                                    <?php endif ?>
                                 </div><!-- ./card-inner -->
                                 <div class="card-action">
                                     <div class="card-action-btn">
@@ -561,8 +572,10 @@ $pedidos_em_analise = $obj_Busca->getPedidosAnalise($id_setor);
 
     <!-- js for doc -->
     <script src="../material/js/project.min.js"></script>
-
+    <!-- datatables -->
     <script type="text/javascript" src="../plugins/dataTables/datatables.min.js"></script>
+    <!--  select2 -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/js/select2.min.js"></script>
 
     <script type="text/javascript" src="../ini.min.js"></script>
 </body>

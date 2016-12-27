@@ -68,7 +68,8 @@ CREATE TABLE `licitacao` (
   `tipo` tinyint(3) UNSIGNED NOT NULL,
   `numero` varchar(30) NOT NULL,
   `uasg` varchar(30) DEFAULT NULL,
-  `processo_original` varchar(30) DEFAULT NULL
+  `processo_original` varchar(30) DEFAULT NULL,
+  `gera_contrato` tinyint(1) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 CREATE TABLE `licitacao_tipo` (
@@ -113,6 +114,11 @@ CREATE TABLE `pedido_fonte` (
   `fonte_recurso` varchar(100) DEFAULT NULL,
   `ptres` varchar(50) DEFAULT NULL,
   `plano_interno` varchar(100) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+CREATE TABLE `pedido_grupo` (
+  `id_pedido` int(10) UNSIGNED NOT NULL,
+  `id_grupo` int(10) UNSIGNED NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 CREATE TABLE `postagens` (
@@ -196,6 +202,13 @@ CREATE TABLE `setores` (
   `nome` varchar(45) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
+CREATE TABLE `setores_grupos` (
+  `id` int(10) UNSIGNED NOT NULL,
+  `id_setor` int(10) UNSIGNED NOT NULL,
+  `cod` smallint(5) UNSIGNED DEFAULT NULL,
+  `nome` varchar(100) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
 CREATE TABLE `solic_alt_pedido` (
   `id` int(10) UNSIGNED NOT NULL,
   `id_pedido` int(10) UNSIGNED NOT NULL,
@@ -275,6 +288,10 @@ ALTER TABLE `pedido_fonte`
   ADD PRIMARY KEY (`id`),
   ADD KEY `id_pedido` (`id_pedido`);
 
+ALTER TABLE `pedido_grupo`
+  ADD KEY `id_pedido` (`id_pedido`),
+  ADD KEY `id_grupo` (`id_grupo`);
+
 ALTER TABLE `postagens`
   ADD PRIMARY KEY (`id`),
   ADD KEY `tabela` (`tabela`);
@@ -317,6 +334,10 @@ ALTER TABLE `saldo_setor`
 ALTER TABLE `setores`
   ADD PRIMARY KEY (`id`);
 
+ALTER TABLE `setores_grupos`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `id_setor` (`id_setor`);
+
 ALTER TABLE `solic_alt_pedido`
   ADD PRIMARY KEY (`id`),
   ADD KEY `id_pedido` (`id_pedido`),
@@ -335,13 +356,13 @@ ALTER TABLE `usuario_permissoes`
 
 
 ALTER TABLE `comentarios`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
 ALTER TABLE `itens`
   MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5042;
 ALTER TABLE `itens_pedido`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=436;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=487;
 ALTER TABLE `licitacao`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=41;
 ALTER TABLE `licitacao_tipo`
   MODIFY `id` tinyint(3) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 ALTER TABLE `mes`
@@ -349,9 +370,9 @@ ALTER TABLE `mes`
 ALTER TABLE `paginas_post`
   MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 ALTER TABLE `pedido`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=157;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=198;
 ALTER TABLE `pedido_empenho`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
 ALTER TABLE `pedido_fonte`
   MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=48;
 ALTER TABLE `postagens`
@@ -367,7 +388,7 @@ ALTER TABLE `processos_tipo`
 ALTER TABLE `saldos_adiantados`
   MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
 ALTER TABLE `saldos_lancamentos`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=67;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=68;
 ALTER TABLE `saldos_transferidos`
   MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 ALTER TABLE `saldo_categoria`
@@ -376,6 +397,8 @@ ALTER TABLE `saldo_setor`
   MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 ALTER TABLE `setores`
   MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
+ALTER TABLE `setores_grupos`
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=63;
 ALTER TABLE `solic_alt_pedido`
   MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 ALTER TABLE `status`
@@ -411,6 +434,10 @@ ALTER TABLE `pedido_empenho`
 ALTER TABLE `pedido_fonte`
   ADD CONSTRAINT `pedido_fonte_ibfk_1` FOREIGN KEY (`id_pedido`) REFERENCES `pedido` (`id`);
 
+ALTER TABLE `pedido_grupo`
+  ADD CONSTRAINT `pedido_grupo_ibfk_1` FOREIGN KEY (`id_pedido`) REFERENCES `pedido` (`id`),
+  ADD CONSTRAINT `pedido_grupo_ibfk_2` FOREIGN KEY (`id_grupo`) REFERENCES `setores_grupos` (`id`);
+
 ALTER TABLE `postagens`
   ADD CONSTRAINT `postagens_ibfk_1` FOREIGN KEY (`tabela`) REFERENCES `paginas_post` (`id`);
 
@@ -433,6 +460,9 @@ ALTER TABLE `saldos_transferidos`
 
 ALTER TABLE `saldo_setor`
   ADD CONSTRAINT `saldo_setor_ibfk_1` FOREIGN KEY (`id_setor`) REFERENCES `setores` (`id`);
+
+ALTER TABLE `setores_grupos`
+  ADD CONSTRAINT `setores_grupos_ibfk_1` FOREIGN KEY (`id_setor`) REFERENCES `setores` (`id`);
 
 ALTER TABLE `solic_alt_pedido`
   ADD CONSTRAINT `solic_alt_pedido_ibfk_1` FOREIGN KEY (`id_pedido`) REFERENCES `pedido` (`id`),

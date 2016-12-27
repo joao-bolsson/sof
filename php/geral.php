@@ -410,14 +410,23 @@ if (isset($_POST["admin"]) && isset($_SESSION["id_setor"]) && ($_SESSION["id_set
             // licitação
             $idLic = $_POST['idLic'];
             $numero = $_POST['infoLic'];
-            $uasg = $_POST['uasg'];
-            $procOri = $_POST['procOri'];
+            $uasg = "";
+            $procOri = "";
+            if (isset($_POST['uasg']) && isset($_POST['procOri'])) {
+                $uasg = $_POST['uasg'];
+                $procOri = $_POST['procOri'];
+            }
             $tipo = $_POST['tipoLic'];
+            $geraContrato = 0;
+            if (isset($_POST['geraContrato'])) {
+                $geraContrato = $_POST['geraContrato'];
+            }
 
-            $obj_Geral->insertLicitacao($numero, $uasg, $procOri, $tipo, $pedido, $idLic) or exit("Ocorreu um erro no cadastro da licitação. Contate o administrador.");
+            $obj_Geral->insertLicitacao($numero, $uasg, $procOri, $tipo, $pedido, $idLic, $geraContrato) or exit("Ocorreu um erro no cadastro da licitação. Contate o administrador.");
 
-            $geraContrato = $_POST['geraContrato']; // não faz nada, ainda
-
+            if (isset($_POST['grupo'])) {
+                $obj_Geral->insertGrupoPedido($pedido, $_POST['grupo']);
+            }
             header("Location: ../view/solicitacoes.php");
             break;
         default:

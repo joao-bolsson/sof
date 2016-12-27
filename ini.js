@@ -1,4 +1,8 @@
 $(function () {
+    var str = location.pathname;
+    if (str.endsWith("solicitacoes.php")) {
+        $(".select2").select2();
+    }
     $('.date').mask('00/00/0000');
 });
 
@@ -661,7 +665,7 @@ function listRelatorios() {
 
 function changeTipoLic(tipo) {
     var selected = document.getElementById('tipoLic' + tipo).value;
-    if (selected == 3 || selected == 4) { // Adesao ou Compra Compartilhada
+    if (selected == 3 || selected == 4 || selected == 2) { // Adesao, Compra Compartilhada ou Inexibilidade
         maybeDisableFields(false);
     } else {
         maybeDisableFields(true);

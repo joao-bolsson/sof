@@ -25,13 +25,26 @@ class Geral extends Conexao {
     }
 
     /**
+     * Insere um grupo ao pedido.
+     * @param int $pedido Id do pedido.
+     * @param int $grupo id do grupo para inserir ao pedido.
+     */
+    public function insertGrupoPedido(int $pedido, int $grupo) {
+        $this->mysqli = parent::getConexao();
+        $this->mysqli->query("INSERT INTO pedido_grupo VALUES({$pedido}, {$grupo});") or exit("Ocorreu um erro ao cadastrar o grupo do pedido. Contate o administrador.");
+        $this->mysqli->close();
+    }
+
+    /**
      * 	Funçao para mudar o status do pedido para 'Enviado ao Fornecedor' (UA)
      *
      * 	@access public
      * 	@param $id_pedido Id do pedido.
      */
-    public function enviaFornecedor($id_pedido) {
+    public function enviaFornecedor(int $id_pedido) {
+        $this->mysqli = parent::getConexao();
         $this->mysqli->query("UPDATE pedido SET status = 9 WHERE id = {$id_pedido};");
+        $this->mysqli->close();
     }
 
     /**
@@ -587,22 +600,23 @@ class Geral extends Conexao {
      * @param int $tipo Tipo de licitação.
      * @param int $pedido Id do pedido.
      * @param int $idLic id da licitação.
+     * @param int $geraContrato flag que determina se gera ou nao contrato - apenas mostra na impressao.
      * @return bool
      */
-    public function insertLicitacao(string $numero, $uasg, $procOri, int $tipo, int $pedido, int $idLic): bool {
-        if ($tipo != 3 && $tipo != 4) { // Adesão ou Compra Compartilhada
+    public function insertLicitacao(string $numero, $uasg, $procOri, int $tipo, int $pedido, int $idLic, int $geraContrato): bool {
+        if ($tipo != 3 && $tipo != 4 && $tipo != 2) { // Adesão, Compra Compartilhada ou Inexibilidade
             $uasg = "";
             $procOri = "";
+            $geraContrato = 0;
         }
-        
+
         $query = "";
         if ($idLic == 0) {
-            $query = "INSERT INTO licitacao VALUES(NULL, {$pedido}, {$tipo}, '{$numero}', '{$uasg}', '{$procOri}');";
+            $query = "INSERT INTO licitacao VALUES(NULL, {$pedido}, {$tipo}, '{$numero}', '{$uasg}', '{$procOri}', {$geraContrato});";
         } else {
-            //  id | id_pedido | tipo | numero   | uasg     | processo_original
-            $query = "UPDATE licitacao SET tipo = {$tipo}, numero = '{$numero}', uasg = '{$uasg}', processo_original = '{$procOri}' WHERE id = {$idLic};";
+            $query = "UPDATE licitacao SET tipo = {$tipo}, numero = '{$numero}', uasg = '{$uasg}', processo_original = '{$procOri}', gera_contrato = {$geraContrato} WHERE id = {$idLic};";
         }
-        
+
         $this->mysqli->query($query) or exit("Ocorreu um erro no cadastro da licitação. Contate o administrador.");
         $this->mysqli->close();
         return true;

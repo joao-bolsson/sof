@@ -25,6 +25,20 @@ class Busca extends Conexao {
         $this->obj_Util = new Util();
     }
 
+    public function getOptionsGrupos(int $id_setor): string {
+        $query = $this->mysqli->query("SELECT setores_grupos.id, setores_grupos.nome FROM setores_grupos WHERE setores_grupos.id_setor = {$id_setor};");
+        if ($query->num_rows < 1) {
+            return "";
+        } else {
+            $retorno = "";
+            while ($obj = $query->fetch_object()) {
+                $obj->nome = utf8_encode($obj->nome);
+                $retorno .= "<option value=\"" . $obj->id . "\">" . $obj->nome . "</option>";
+            }
+            return $retorno;
+        }
+    }
+
     public function getOptionsLicitacao(int $cont): string {
         $query = $this->mysqli->query("SELECT id, nome FROM licitacao_tipo;") or die("Ocorreu um erro na construção das opções de licitação. Contate o administrador.");
         $retorno = "<tr>";
@@ -1078,6 +1092,18 @@ class Busca extends Conexao {
         return $retorno;
     }
 
+    private function getGrupoPedido(int $id_pedido): string {
+        $query = $this->mysqli->query("SELECT setores_grupos.nome, pedido_grupo.id_pedido FROM setores_grupos, pedido_grupo WHERE pedido_grupo.id_grupo = setores_grupos.id AND pedido_grupo.id_pedido = {$id_pedido};");
+        $retorno = "";
+        if ($query->num_rows > 0) {
+            $obj = $query->fetch_object();
+            $obj->nome = utf8_encode($obj->nome);
+            $retorno = "<p><b>Grupo:</b> " . $obj->nome . "</p>";
+        }
+        $query->close();
+        return $retorno;
+    }
+
     /**
      * Função para retornar o cabeçalho do pdf do pedido
      *
@@ -1096,6 +1122,7 @@ class Busca extends Conexao {
                     <b>Prioridade:</b> " . $pedido->prioridade . "&emsp;
                     <b>Total do Pedido:</b> R$ " . $pedido->valor . "
                 </p>
+                " . Busca::getGrupoPedido($id_pedido) . "
                 <p><b>Observação da Unidade Solicitante: </b></p>
                 <p style=\"font-weight: normal !important;\">	" . $pedido->obs . "</p>
             </fieldset><br>";
@@ -1109,18 +1136,24 @@ class Busca extends Conexao {
                 <h5>PEDIDO SEM LICITAÇÃO</h5>
                 </fieldset><br>";
 
-        $query = $this->mysqli->query("SELECT licitacao.tipo AS id_tipo, licitacao_tipo.nome AS tipo, licitacao.numero, licitacao.uasg, licitacao.processo_original FROM licitacao, licitacao_tipo WHERE licitacao_tipo.id = licitacao.tipo AND licitacao.id_pedido = {$id_pedido};");
+        $query = $this->mysqli->query("SELECT licitacao.tipo AS id_tipo, licitacao_tipo.nome AS tipo, licitacao.numero, licitacao.uasg, licitacao.processo_original, licitacao.gera_contrato FROM licitacao, licitacao_tipo WHERE licitacao_tipo.id = licitacao.tipo AND licitacao.id_pedido = {$id_pedido};");
         if ($query->num_rows == 1) {
             $obj = $query->fetch_object();
             $thead = "";
             $tbody = "";
-            if ($obj->id_tipo == 3 || $obj->id_tipo == 4) {
+            if ($obj->id_tipo == 3 || $obj->id_tipo == 4 || $obj->id_tipo == 2) {
+                $gera = "Gera Contrato";
+                if ($obj->gera_contrato == 0) {
+                    $gera = "Não Gera Contrato";
+                }
                 $thead = "
                     <th>UASG</th>
-                    <th>Processo Original</th>";
+                    <th>Processo Original</th>
+                    <th>Contrato</th>";
                 $tbody = "
                     <td>" . $obj->uasg . "</td>
-                    <td>" . $obj->processo_original . "</td>";
+                    <td>" . $obj->processo_original . "</td>
+                    <td>" . $gera . "</td>";
             }
             $retorno = "
                 <fieldset class=\"preg\">
