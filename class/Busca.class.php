@@ -1136,18 +1136,24 @@ class Busca extends Conexao {
                 <h5>PEDIDO SEM LICITAÇÃO</h5>
                 </fieldset><br>";
 
-        $query = $this->mysqli->query("SELECT licitacao.tipo AS id_tipo, licitacao_tipo.nome AS tipo, licitacao.numero, licitacao.uasg, licitacao.processo_original FROM licitacao, licitacao_tipo WHERE licitacao_tipo.id = licitacao.tipo AND licitacao.id_pedido = {$id_pedido};");
+        $query = $this->mysqli->query("SELECT licitacao.tipo AS id_tipo, licitacao_tipo.nome AS tipo, licitacao.numero, licitacao.uasg, licitacao.processo_original, licitacao.gera_contrato FROM licitacao, licitacao_tipo WHERE licitacao_tipo.id = licitacao.tipo AND licitacao.id_pedido = {$id_pedido};");
         if ($query->num_rows == 1) {
             $obj = $query->fetch_object();
             $thead = "";
             $tbody = "";
-            if ($obj->id_tipo == 3 || $obj->id_tipo == 4) {
+            if ($obj->id_tipo == 3 || $obj->id_tipo == 4 || $obj->id_tipo == 2) {
+                $gera = "Gera Contrato";
+                if ($obj->gera_contrato == 0) {
+                    $gera = "Não Gera Contrato";
+                }
                 $thead = "
                     <th>UASG</th>
-                    <th>Processo Original</th>";
+                    <th>Processo Original</th>
+                    <th>Contrato</th>";
                 $tbody = "
                     <td>" . $obj->uasg . "</td>
-                    <td>" . $obj->processo_original . "</td>";
+                    <td>" . $obj->processo_original . "</td>
+                    <td>" . $gera . "</td>";
             }
             $retorno = "
                 <fieldset class=\"preg\">

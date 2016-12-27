@@ -413,10 +413,9 @@ if (isset($_POST["admin"]) && isset($_SESSION["id_setor"]) && ($_SESSION["id_set
             $uasg = $_POST['uasg'];
             $procOri = $_POST['procOri'];
             $tipo = $_POST['tipoLic'];
+            $geraContrato = $_POST['geraContrato'];
 
-            $obj_Geral->insertLicitacao($numero, $uasg, $procOri, $tipo, $pedido, $idLic) or exit("Ocorreu um erro no cadastro da licitação. Contate o administrador.");
-
-            $geraContrato = $_POST['geraContrato']; // não faz nada, ainda
+            $obj_Geral->insertLicitacao($numero, $uasg, $procOri, $tipo, $pedido, $idLic, $geraContrato) or exit("Ocorreu um erro no cadastro da licitação. Contate o administrador.");
             
             if (isset($_POST['grupo'])) {
                 $obj_Geral->insertGrupoPedido($pedido, $_POST['grupo']);

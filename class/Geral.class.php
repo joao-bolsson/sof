@@ -600,20 +600,21 @@ class Geral extends Conexao {
      * @param int $tipo Tipo de licitação.
      * @param int $pedido Id do pedido.
      * @param int $idLic id da licitação.
+     * @param int $geraContrato flag que determina se gera ou nao contrato - apenas mostra na impressao.
      * @return bool
      */
-    public function insertLicitacao(string $numero, $uasg, $procOri, int $tipo, int $pedido, int $idLic): bool {
-        if ($tipo != 3 && $tipo != 4) { // Adesão ou Compra Compartilhada
+    public function insertLicitacao(string $numero, $uasg, $procOri, int $tipo, int $pedido, int $idLic, int $geraContrato): bool {
+        if ($tipo != 3 && $tipo != 4 && $tipo != 2) { // Adesão, Compra Compartilhada ou Inexibilidade
             $uasg = "";
             $procOri = "";
+            $geraContrato = 0;
         }
 
         $query = "";
         if ($idLic == 0) {
-            $query = "INSERT INTO licitacao VALUES(NULL, {$pedido}, {$tipo}, '{$numero}', '{$uasg}', '{$procOri}');";
+            $query = "INSERT INTO licitacao VALUES(NULL, {$pedido}, {$tipo}, '{$numero}', '{$uasg}', '{$procOri}', {$geraContrato});";
         } else {
-            //  id | id_pedido | tipo | numero   | uasg     | processo_original
-            $query = "UPDATE licitacao SET tipo = {$tipo}, numero = '{$numero}', uasg = '{$uasg}', processo_original = '{$procOri}' WHERE id = {$idLic};";
+            $query = "UPDATE licitacao SET tipo = {$tipo}, numero = '{$numero}', uasg = '{$uasg}', processo_original = '{$procOri}', gera_contrato = {$geraContrato} WHERE id = {$idLic};";
         }
 
         $this->mysqli->query($query) or exit("Ocorreu um erro no cadastro da licitação. Contate o administrador.");
