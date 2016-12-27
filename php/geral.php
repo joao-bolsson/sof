@@ -410,8 +410,12 @@ if (isset($_POST["admin"]) && isset($_SESSION["id_setor"]) && ($_SESSION["id_set
             // licitação
             $idLic = $_POST['idLic'];
             $numero = $_POST['infoLic'];
-            $uasg = $_POST['uasg'];
-            $procOri = $_POST['procOri'];
+            $uasg = "";
+            $procOri = "";
+            if (isset($_POST['uasg']) && isset($_POST['procOri'])) {
+                $uasg = $_POST['uasg'];
+                $procOri = $_POST['procOri'];
+            }
             $tipo = $_POST['tipoLic'];
             $geraContrato = 0;
             if (isset($_POST['geraContrato'])) {
