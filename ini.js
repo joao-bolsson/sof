@@ -677,9 +677,9 @@ function maybeDisableFields(flag) {
     document.getElementById('procOri').disabled = flag;
     document.getElementById('gera').disabled = flag;
     document.getElementById('ngera').disabled = flag;
-    
+
     // required
-    
+
     document.getElementById('uasg').required = !flag;
     document.getElementById('procOri').required = !flag;
     document.getElementById('gera').required = !flag;
@@ -1006,6 +1006,8 @@ function login() {
         if (resposta == "false") {
             document.getElementById("formLogin").reset();
             document.getElementById("aviso").style.display = 'flex';
+        } else if (resposta == "desativado") {
+            alert("Estamos realizando uma manutenção no momento. Tente fazer o login novamente dentro de 10min ;)");
         } else {
             window.location.href = '../';
         }

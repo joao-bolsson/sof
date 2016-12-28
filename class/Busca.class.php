@@ -24,6 +24,13 @@ class Busca extends Conexao {
         $this->mysqli = parent::getConexao();
         $this->obj_Util = new Util();
     }
+    
+    public function isActive():bool {
+        $query = $this->mysqli->query("SELECT ativo FROM sistema LIMIT 1;") or exit("Ocorreu um erro ao tentar verificar a disponibilidade do sistema. Contate o administrador.");
+        $obj = $query->fetch_object();
+        $this->mysqli->close();
+        return $obj->ativo;
+    }
 
     public function atualizaChave() {
         $query = $this->mysqli->query("SELECT id, num_processo, cod_reduzido, seq_item_processo FROM itens;") or exit("Erro ao atualizar a chave.");
