@@ -25,6 +25,17 @@ class Busca extends Conexao {
         $this->obj_Util = new Util();
     }
 
+    public function atualizaChave() {
+        $query = $this->mysqli->query("SELECT id, num_processo, cod_reduzido, seq_item_processo FROM itens;") or exit("Erro ao atualizar a chave.");
+        $this->mysqli->close();
+        while ($obj = $query->fetch_object()) {
+            $chave = $obj->num_processo . "#" . $obj->cod_reduzido . "#" . $obj->seq_item_processo;
+            $this->mysqli = parent::getConexao();
+            $this->mysqli->query("UPDATE itens SET chave = '{$chave}' WHERE id = {$obj->id};") or exit("Erro ao atualizar a chave do item " . $obj->id);
+            $this->mysqli->close();
+        }
+    }
+
     public function getOptionsGrupos(int $id_setor): string {
         $query = $this->mysqli->query("SELECT setores_grupos.id, setores_grupos.nome FROM setores_grupos WHERE setores_grupos.id_setor = {$id_setor};");
         if ($query->num_rows < 1) {

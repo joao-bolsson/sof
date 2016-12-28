@@ -102,8 +102,8 @@ class Util extends Conexao {
         $len = count($data);
         for ($a = 0; $a < $len; $a++) {
             $row++;
-            // chave = num_processo#cod_reduzido
-            $chave = $data[$a][$this->num_processo] . '#' . $data[$a][$this->cod_reduzido];
+            // chave = num_processo#cod_reduzido#seq_item_processo
+            $chave = $data[$a][$this->num_processo] . '#' . $data[$a][$this->cod_reduzido] . '#' . $data[$a][$this->seq_item_processo];
             $values .= "\n(NULL, " . $data[$a][$this->id_item_processo] . ", " . $data[$a][$this->id_item_contrato] . ", \"" . $data[$a][$this->cod_despesa] . "\", \"" . $data[$a][$this->descr_despesa] . "\", \"" . $data[$a][$this->descr_tipo_doc] . "\", \"" . $data[$a][$this->num_contrato] . "\", \"" . $data[$a][$this->num_processo] . "\", \"" . $data[$a][$this->descr_mod_compra] . "\", \"" . $data[$a][$this->num_licitacao] . "\", \"" . $data[$a][$this->dt_inicio] . "\", \"" . $data[$a][$this->dt_fim] . "\", \"" . $data[$a][$this->dt_geracao] . "\", \"" . $data[$a][$this->cgc_fornecedor] . "\", \"" . $data[$a][$this->nome_fornecedor] . "\", \"" . $data[$a][$this->num_extrato] . "\", \"" . $data[$a][$this->cod_estruturado] . "\", \"" . $data[$a][$this->nome_unidade] . "\", \"" . $data[$a][$this->cod_reduzido] . "\", \"" . $data[$a][$this->complemento_item] . "\", \"" . $data[$a][$this->descricao] . "\", \"" . $data[$a][$this->id_extrato_contr] . "\", \"" . $data[$a][$this->vl_unitario] . "\", " . $data[$a][$this->qt_contrato] . ", \"" . $data[$a][$this->vl_contrato] . "\", " . $data[$a][$this->qt_utilizado] . ", \"" . $data[$a][$this->vl_utilizado] . "\", " . $data[$a][$this->qt_saldo] . ", \"" . $data[$a][$this->vl_saldo] . "\", \"" . $data[$a][$this->id_unidade] . "\", \"" . $data[$a][$this->ano_orcamento] . "\", 0, \"" . $chave . "\", \"" . $data[$a][$this->seq_item_processo] . "\"), ";
             if ($row == 70) {
                 $pos = strrpos($values, ", ");
