@@ -25,14 +25,13 @@ session_start();
 include_once '../class/Geral.class.php';
 include_once '../class/Busca.class.php';
 include_once '../class/Util.class.php';
-//instanciando a classe Geral
-$obj_Geral = new Geral();
-//instanciando a classe Busca
+
 $obj_Busca = new Busca();
-//instanciando a classe Busca
-$obj_Util = new Util();
 
 if ($obj_Busca->isActive()) {
+    
+    $obj_Geral = new Geral();
+    $obj_Util = new Util();
 
     if (isset($_POST["admin"]) && isset($_SESSION["id_setor"]) && ($_SESSION["id_setor"] == 2 || $_SESSION["id_setor"] == 12)) {
         // variável que controla o que deve ser feito quando geral.php for chamado
