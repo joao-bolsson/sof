@@ -407,7 +407,7 @@ if ($obj_Busca->isActive()) {
 
                 $pedido = $_POST["pedido"];
 
-                $obj_Geral->insertPedido($id_user, $id_setor, $id_item, $qtd_solicitada, $qtd_disponivel, $qtd_contrato, $qtd_utilizado, $vl_saldo, $vl_contrato, $vl_utilizado, $valor, $total_pedido, $saldo_total, $prioridade, $obs, $pedido) or exit("Ocorreu um erro no servidor. Contate o administradr.");
+                $obj_Geral->insertPedido($id_user, $id_setor, $id_item, $qtd_solicitada, $qtd_disponivel, $qtd_contrato, $qtd_utilizado, $vl_saldo, $vl_contrato, $vl_utilizado, $valor, $total_pedido, $saldo_total, $prioridade, $obs, $pedido);
 
                 // licitação
                 $idLic = $_POST['idLic'];
@@ -424,7 +424,7 @@ if ($obj_Busca->isActive()) {
                     $geraContrato = $_POST['geraContrato'];
                 }
 
-                $obj_Geral->insertLicitacao($numero, $uasg, $procOri, $tipo, $pedido, $idLic, $geraContrato) or exit("Ocorreu um erro no cadastro da licitação. Contate o administrador.");
+                $obj_Geral->insertLicitacao($numero, $uasg, $procOri, $tipo, $pedido, $idLic, $geraContrato);
 
                 if (isset($_POST['grupo'])) {
                     $obj_Geral->insertGrupoPedido($pedido, $_POST['grupo']);

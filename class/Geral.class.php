@@ -642,34 +642,34 @@ class Geral extends Conexao {
             if ($pedido == 0) {
                 // NOVO
                 //inserindo os dados iniciais do pedido
-                $query_pedido = $this->mysqli->query("INSERT INTO pedido VALUES(NULL, {$id_setor}, {$id_user}, '{$hoje}', '{$mes}', 1, {$prioridade}, 1, '{$total_pedido}', '{$obs}');");
+                $query_pedido = $this->mysqli->query("INSERT INTO pedido VALUES(NULL, {$id_setor}, {$id_user}, '{$hoje}', '{$mes}', 1, {$prioridade}, 1, '{$total_pedido}', '{$obs}');") or exit("Ocorreu um erro ao inserir o pedido.");
                 $pedido = $this->mysqli->insert_id;
             } else {
                 //remover resgistros antigos do rascunho
-                $this->mysqli->query("DELETE FROM itens_pedido WHERE id_pedido = {$pedido};");
-                $this->mysqli->query("UPDATE pedido SET data_pedido = '{$hoje}', ref_mes = {$mes}, prioridade = {$prioridade}, valor = '{$total_pedido}', obs = '{$obs}' WHERE id = {$pedido};");
+                $this->mysqli->query("DELETE FROM itens_pedido WHERE id_pedido = {$pedido};") or exit("Ocorreu um erro ao remover os registros antigos do pedido.");
+                $this->mysqli->query("UPDATE pedido SET data_pedido = '{$hoje}', ref_mes = {$mes}, prioridade = {$prioridade}, valor = '{$total_pedido}', obs = '{$obs}' WHERE id = {$pedido};") or exit("Ocorreu um erro ao atualizar o pedido.");
             }
             //inserindo os itens do pedido
             for ($i = 0; $i < count($id_item); $i++) {
-                $this->mysqli->query("INSERT INTO itens_pedido VALUES(NULL, {$pedido}, {$id_item[$i]}, {$qtd_solicitada[$i]}, '{$valor[$i]}');");
+                $this->mysqli->query("INSERT INTO itens_pedido VALUES(NULL, {$pedido}, {$id_item[$i]}, {$qtd_solicitada[$i]}, '{$valor[$i]}');") or exit("Ocorreu um erro ao inserir um item no pedido.");
             }
         } else {
             // atualiza saldo
-            $this->mysqli->query("UPDATE saldo_setor SET saldo = '{$saldo_total}' WHERE id_setor = {$id_setor};");
+            $this->mysqli->query("UPDATE saldo_setor SET saldo = '{$saldo_total}' WHERE id_setor = {$id_setor};") or exit("Ocorreu um erro ao atualizar o saldo do setor.");
             // enviado ao sof
             if ($pedido == 0) {
                 //inserindo os dados iniciais do pedido
-                $query_pedido = $this->mysqli->query("INSERT INTO pedido VALUES(NULL, {$id_setor}, {$id_user}, '{$hoje}', '{$mes}', 0, {$prioridade}, 2, '{$total_pedido}', '{$obs}');");
+                $query_pedido = $this->mysqli->query("INSERT INTO pedido VALUES(NULL, {$id_setor}, {$id_user}, '{$hoje}', '{$mes}', 0, {$prioridade}, 2, '{$total_pedido}', '{$obs}');") or exit("Ocorreu um erro ao inserir os dados iniciais do pedido.");
                 $pedido = $this->mysqli->insert_id;
             } else {
                 // atualizando pedido
-                $this->mysqli->query("UPDATE pedido SET data_pedido = '{$hoje}', ref_mes = {$mes}, alteracao = 0, prioridade = {$prioridade}, status = 2, valor = '{$total_pedido}', obs = '{$obs}' WHERE id = {$pedido};");
+                $this->mysqli->query("UPDATE pedido SET data_pedido = '{$hoje}', ref_mes = {$mes}, alteracao = 0, prioridade = {$prioridade}, status = 2, valor = '{$total_pedido}', obs = '{$obs}' WHERE id = {$pedido};") or exit("Ocorreu um erro ao atualizar o pedido existente.");
             }
             //remover resgistros antigos do pedido
-            $this->mysqli->query("DELETE FROM itens_pedido WHERE id_pedido = {$pedido};");
+            $this->mysqli->query("DELETE FROM itens_pedido WHERE id_pedido = {$pedido};") or exit("Ocorreu um erro ao remover os itens antigos do pedido existente.");
             // alterando infos dos itens solicitados
             for ($i = 0; $i < count($id_item); $i++) {
-                $this->mysqli->query("INSERT INTO itens_pedido VALUES(NULL, {$pedido}, {$id_item[$i]}, {$qtd_solicitada[$i]}, '{$valor[$i]}');");
+                $this->mysqli->query("INSERT INTO itens_pedido VALUES(NULL, {$pedido}, {$id_item[$i]}, {$qtd_solicitada[$i]}, '{$valor[$i]}');") or exit("Ocorreu um erro ao inserir um item ao pedido existente.");
                 // qtd_disponivel == qt_saldo
                 $qtd_disponivel[$i] -= $qtd_solicitada[$i];
                 $qtd_utilizado[$i] += $qtd_solicitada[$i];
@@ -678,7 +678,7 @@ class Geral extends Conexao {
                 }
                 $vl_saldo[$i] -= $valor[$i];
                 $vl_utilizado[$i] += $valor[$i];
-                $this->mysqli->query("UPDATE itens SET qt_saldo = {$qtd_disponivel[$i]}, qt_utilizado = {$qtd_utilizado[$i]}, vl_saldo = '{$vl_saldo[$i]}', vl_utilizado = '{$vl_utilizado[$i]}' WHERE id = {$id_item[$i]};");
+                $this->mysqli->query("UPDATE itens SET qt_saldo = {$qtd_disponivel[$i]}, qt_utilizado = {$qtd_utilizado[$i]}, vl_saldo = '{$vl_saldo[$i]}', vl_utilizado = '{$vl_utilizado[$i]}' WHERE id = {$id_item[$i]};") or exit("Ocorreu um erro ao atualizar as informação de um item do pedido.");
             }
         }
         return true;
