@@ -227,7 +227,7 @@ class Busca extends Conexao {
      */
     public function getRelatorioPedidos(int $id_setor, int $prioridade, int $status, string $dataI, string $dataF): string {
         $retorno = "";
-        $where_status = "AND pedido.status = " . $status;
+        $where_status = "AND pedido_log_status.id_status = " . $status;
         $where_prioridade = "AND pedido.prioridade = " . $prioridade;
         $where_setor = "AND pedido.id_setor = " . $id_setor;
         if ($status == 0) {
