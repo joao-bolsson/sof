@@ -662,6 +662,8 @@ class Geral extends Conexao {
                 //inserindo os dados iniciais do pedido
                 $query_pedido = $this->mysqli->query("INSERT INTO pedido VALUES(NULL, {$id_setor}, {$id_user}, '{$hoje}', '{$mes}', 1, {$prioridade}, 1, '{$total_pedido}', '{$obs}');") or exit("Ocorreu um erro ao inserir o pedido.");
                 $pedido = $this->mysqli->insert_id;
+                // registra log
+                $this->mysqli->query("INSERT INTO pedido_log_status VALUES({$pedido}, 1, '{$hoje}');");
             } else {
                 //remover resgistros antigos do rascunho
                 $this->mysqli->query("DELETE FROM itens_pedido WHERE id_pedido = {$pedido};") or exit("Ocorreu um erro ao remover os registros antigos do pedido.");
@@ -679,9 +681,13 @@ class Geral extends Conexao {
                 //inserindo os dados iniciais do pedido
                 $query_pedido = $this->mysqli->query("INSERT INTO pedido VALUES(NULL, {$id_setor}, {$id_user}, '{$hoje}', '{$mes}', 0, {$prioridade}, 2, '{$total_pedido}', '{$obs}');") or exit("Ocorreu um erro ao inserir os dados iniciais do pedido.");
                 $pedido = $this->mysqli->insert_id;
+                // registra log
+                $this->mysqli->query("INSERT INTO pedido_log_status VALUES({$pedido}, 2, '{$hoje}');");
             } else {
                 // atualizando pedido
                 $this->mysqli->query("UPDATE pedido SET data_pedido = '{$hoje}', ref_mes = {$mes}, alteracao = 0, prioridade = {$prioridade}, status = 2, valor = '{$total_pedido}', obs = '{$obs}' WHERE id = {$pedido};") or exit("Ocorreu um erro ao atualizar o pedido existente.");
+                // registra log
+                $this->mysqli->query("INSERT INTO pedido_log_status VALUES({$pedido}, 2, '{$hoje}');");
             }
             //remover resgistros antigos do pedido
             $this->mysqli->query("DELETE FROM itens_pedido WHERE id_pedido = {$pedido};") or exit("Ocorreu um erro ao remover os itens antigos do pedido existente.");
@@ -756,6 +762,8 @@ class Geral extends Conexao {
             $this->mysqli->query("UPDATE saldo_setor SET saldo = '{$saldo_setor}' WHERE id_setor = {$id_setor};");
         }
         $this->mysqli->query("UPDATE pedido SET status = {$fase}, prioridade = {$prioridade}, alteracao = {$alteracao} WHERE id = {$id_pedido};");
+        // registra log
+        $this->mysqli->query("INSERT INTO pedido_log_status VALUES({$id_pedido}, {$fase}, '{$hoje}');");
         if (strlen($comentario) > 0) {
             // inserindo comentário da análise
             $comentario = $this->mysqli->real_escape_string($comentario);
@@ -778,6 +786,7 @@ class Geral extends Conexao {
         $this->mysqli->query("DELETE FROM pedido_empenho WHERE pedido_empenho.id_pedido = {$id_pedido};") or exit("Erro ao remover o empenho do pedido.");
         $this->mysqli->query("DELETE FROM pedido_fonte WHERE pedido_fonte.id_pedido = {$id_pedido};") or exit("Erro ao remover as fontes do pedido.");
         $this->mysqli->query("DELETE FROM solic_alt_pedido WHERE solic_alt_pedido.id_pedido = {$id_pedido};") or exit("Erro ao remover as solicitações de alteração do pedido.");
+        $this->mysqli->query("DELETE FROM pedido_log_status WHERE pedido_log_status.id_pedido = {$id_pedido};") or exit("Erro ao remover os logs do pedido.");
         $this->mysqli->query("DELETE FROM pedido WHERE pedido.id = {$id_pedido};") or exit("Erro ao remover o pedido.");
         return "true";
     }
