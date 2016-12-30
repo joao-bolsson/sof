@@ -429,16 +429,12 @@ class Geral extends Conexao {
      * 	@return bool
      */
     public function analisaSolicAlt(int $id_solic, int $id_pedido, int $acao): bool {
-        // TODO: revisar log
         $hoje = date('Y-m-d');
         $this->mysqli->query("UPDATE solic_alt_pedido SET data_analise = '{$hoje}', status = {$acao} WHERE id = {$id_solic};");
         if ($acao) {
             $this->mysqli->query("UPDATE pedido SET alteracao = {$acao}, prioridade = 5, status = 1 WHERE id = {$id_pedido};");
             // registra log
             $this->mysqli->query("INSERT INTO pedido_log_status VALUES({$id_pedido}, 1, '{$hoje}');");
-        } else {
-            // registra log
-            $this->mysqli->query("INSERT INTO pedido_log_status VALUES({$id_pedido}, {$status}, '{$hoje}');");
         }
         $this->mysqli->close();
         return true;
