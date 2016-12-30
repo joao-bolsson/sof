@@ -121,6 +121,12 @@ CREATE TABLE `pedido_grupo` (
   `id_grupo` int(10) UNSIGNED NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
+CREATE TABLE `pedido_log_status` (
+  `id_pedido` int(10) UNSIGNED NOT NULL,
+  `id_status` int(1) UNSIGNED NOT NULL,
+  `data` date NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
 CREATE TABLE `postagens` (
   `id` int(10) UNSIGNED NOT NULL,
   `tabela` int(10) UNSIGNED NOT NULL,
@@ -296,6 +302,10 @@ ALTER TABLE `pedido_grupo`
   ADD KEY `id_pedido` (`id_pedido`),
   ADD KEY `id_grupo` (`id_grupo`);
 
+ALTER TABLE `pedido_log_status`
+  ADD KEY `id_pedido` (`id_pedido`),
+  ADD KEY `id_status` (`id_status`);
+
 ALTER TABLE `postagens`
   ADD PRIMARY KEY (`id`),
   ADD KEY `tabela` (`tabela`);
@@ -364,9 +374,9 @@ ALTER TABLE `comentarios`
 ALTER TABLE `itens`
   MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5042;
 ALTER TABLE `itens_pedido`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=498;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=502;
 ALTER TABLE `licitacao`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=44;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=49;
 ALTER TABLE `licitacao_tipo`
   MODIFY `id` tinyint(3) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 ALTER TABLE `mes`
@@ -374,7 +384,7 @@ ALTER TABLE `mes`
 ALTER TABLE `paginas_post`
   MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 ALTER TABLE `pedido`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=207;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=212;
 ALTER TABLE `pedido_empenho`
   MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
 ALTER TABLE `pedido_fonte`
@@ -441,6 +451,10 @@ ALTER TABLE `pedido_fonte`
 ALTER TABLE `pedido_grupo`
   ADD CONSTRAINT `pedido_grupo_ibfk_1` FOREIGN KEY (`id_pedido`) REFERENCES `pedido` (`id`),
   ADD CONSTRAINT `pedido_grupo_ibfk_2` FOREIGN KEY (`id_grupo`) REFERENCES `setores_grupos` (`id`);
+
+ALTER TABLE `pedido_log_status`
+  ADD CONSTRAINT `pedido_log_status_ibfk_1` FOREIGN KEY (`id_pedido`) REFERENCES `pedido` (`id`),
+  ADD CONSTRAINT `pedido_log_status_ibfk_2` FOREIGN KEY (`id_status`) REFERENCES `status` (`id`);
 
 ALTER TABLE `postagens`
   ADD CONSTRAINT `postagens_ibfk_1` FOREIGN KEY (`tabela`) REFERENCES `paginas_post` (`id`);
