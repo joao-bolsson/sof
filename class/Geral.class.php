@@ -44,6 +44,9 @@ class Geral extends Conexao {
     public function enviaFornecedor(int $id_pedido) {
         $this->mysqli = parent::getConexao();
         $this->mysqli->query("UPDATE pedido SET status = 9 WHERE id = {$id_pedido};");
+        // registra log
+        $hoje = date('Y-m-d');
+        $this->mysqli->query("INSERT INTO pedido_log_status VALUES({$id_pedido}, 9, '{$hoje}');");
         $this->mysqli->close();
     }
 
@@ -56,6 +59,9 @@ class Geral extends Conexao {
     public function enviaOrdenador(int $id_pedido): bool {
         $query = $this->mysqli->query("UPDATE pedido SET status = '8' WHERE id = {$id_pedido};");
         if ($query) {
+            // registra log
+            $hoje = date('Y-m-d');
+            $this->mysqli->query("INSERT INTO pedido_log_status VALUES({$id_pedido}, 8, '{$hoje}');");
             return true;
         }
         return false;
@@ -81,6 +87,9 @@ class Geral extends Conexao {
             // muda o status do pedido -> Aguarda SIAFI
             $query_st = $this->mysqli->query("UPDATE pedido SET status = '6' WHERE id = {$id_pedido};");
             if ($query_st) {
+                // registra log
+                $hoje = date('Y-m-d');
+                $this->mysqli->query("INSERT INTO pedido_log_status VALUES({$id_pedido}, 6, '{$hoje}');");
                 return true;
             }
             return false;
@@ -107,6 +116,7 @@ class Geral extends Conexao {
         $this->mysqli->query("DELETE FROM solic_alt_pedido;");
         $this->mysqli->query("DELETE FROM itens;");
         $this->mysqli->query("DELETE FROM licitacao;");
+        $this->mysqli->query("DELETE FROM pedido_log_status;");
         $this->mysqli->query("DELETE FROM pedido;");
 
         // ALTER TABLE
@@ -123,6 +133,7 @@ class Geral extends Conexao {
         $this->mysqli->query("alter table solic_alt_pedido auto_increment = 1;");
         $this->mysqli->query("alter table itens auto_increment = 1;");
         $this->mysqli->query("alter table licitacao auto_increment = 1;");
+        $this->mysqli->query("alter table pedido_log_status auto_increment = 1;");
         $this->mysqli->query("alter table pedido auto_increment = 1;");
     }
 
@@ -197,6 +208,8 @@ class Geral extends Conexao {
         }
         $obj = $this->mysqli->query("SELECT pedido.prioridade, pedido.valor FROM pedido WHERE id = {$id_pedido};")->fetch_object();
         $hoje = date('Y-m-d');
+        // registra log
+        $this->mysqli->query("INSERT INTO pedido_log_status VALUES({$id_pedido}, {$status}, '{$hoje}');");
         if (strlen($comentario) > 0) {
             $comentario = $this->mysqli->real_escape_string($comentario);
             $comment = $this->mysqli->query("INSERT INTO comentarios VALUES(NULL, {$id_pedido}, '{$hoje}', {$obj->prioridade}, {$status}, '{$obj->valor}', '{$comentario}');");
@@ -235,6 +248,9 @@ class Geral extends Conexao {
         // mudando status do pedido
         $query = $this->mysqli->query("UPDATE pedido SET status = 7 WHERE id = {$id_pedido};");
         if (!$query) {
+            // registra log
+            $hoje = date('Y-m-d');
+            $this->mysqli->query("INSERT INTO pedido_log_status VALUES({$id_pedido}, 7, '{$hoje}');");
             return false;
         }
         return true;
@@ -413,10 +429,16 @@ class Geral extends Conexao {
      * 	@return bool
      */
     public function analisaSolicAlt(int $id_solic, int $id_pedido, int $acao): bool {
+        // TODO: revisar log
         $hoje = date('Y-m-d');
         $this->mysqli->query("UPDATE solic_alt_pedido SET data_analise = '{$hoje}', status = {$acao} WHERE id = {$id_solic};");
         if ($acao) {
             $this->mysqli->query("UPDATE pedido SET alteracao = {$acao}, prioridade = 5, status = 1 WHERE id = {$id_pedido};");
+            // registra log
+            $this->mysqli->query("INSERT INTO pedido_log_status VALUES({$id_pedido}, 1, '{$hoje}');");
+        } else {
+            // registra log
+            $this->mysqli->query("INSERT INTO pedido_log_status VALUES({$id_pedido}, {$status}, '{$hoje}');");
         }
         $this->mysqli->close();
         return true;
