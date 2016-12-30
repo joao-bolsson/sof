@@ -26,6 +26,9 @@ class Busca extends Conexao {
     }
 
     public function isActive(): bool {
+        if (!$this->mysqli->thread_id) {
+            $this->mysqli = parent::getConexao();
+        }
         $query = $this->mysqli->query("SELECT ativo FROM sistema LIMIT 1;") or exit("Ocorreu um erro ao tentar verificar a disponibilidade do sistema. Contate o administrador.");
         $obj = $query->fetch_object();
         $this->mysqli->close();
@@ -33,6 +36,9 @@ class Busca extends Conexao {
     }
 
     public function atualizaChave() {
+        if (!$this->mysqli->thread_id) {
+            $this->mysqli = parent::getConexao();
+        }
         $query = $this->mysqli->query("SELECT id, num_processo, cod_reduzido, seq_item_processo FROM itens;") or exit("Erro ao atualizar a chave.");
         $this->mysqli->close();
         while ($obj = $query->fetch_object()) {
@@ -44,7 +50,11 @@ class Busca extends Conexao {
     }
 
     public function getOptionsGrupos(int $id_setor): string {
+        if (!$this->mysqli->thread_id) {
+            $this->mysqli = parent::getConexao();
+        }
         $query = $this->mysqli->query("SELECT setores_grupos.id, setores_grupos.nome FROM setores_grupos WHERE setores_grupos.id_setor = {$id_setor};");
+        // TODO: fechar conexão
         if ($query->num_rows < 1) {
             return "";
         } else {
@@ -58,7 +68,11 @@ class Busca extends Conexao {
     }
 
     public function getOptionsLicitacao(int $cont): string {
+        if (!$this->mysqli->thread_id) {
+            $this->mysqli = parent::getConexao();
+        }
         $query = $this->mysqli->query("SELECT id, nome FROM licitacao_tipo;") or die("Ocorreu um erro na construção das opções de licitação. Contate o administrador.");
+        $this->mysqli->close();
         $retorno = "<tr>";
         $i = 0;
         while ($obj = $query->fetch_object()) {
@@ -78,12 +92,15 @@ class Busca extends Conexao {
             $i++;
         }
 
-        $query->close();
         return $retorno;
     }
 
     public function getTotalByStatus(int $status): string {
+        if (!$this->mysqli->thread_id) {
+            $this->mysqli = parent::getConexao();
+        }
         $query = $this->mysqli->query("SELECT sum(pedido.valor) AS total FROM pedido WHERE pedido.status = {$status};");
+        $this->mysqli->close();
         $tot = $query->fetch_object();
         $tot->total = number_format($tot->total, 3, ',', '.');
         return "Totalizando R$ " . $tot->total;
@@ -111,7 +128,11 @@ class Busca extends Conexao {
             // em análise
             $order = "ORDER BY pedido.id DESC, pedido.prioridade DESC";
         }
-        $query = $this->mysqli->query("SELECT pedido.id, DATE_FORMAT(pedido.data_pedido, '%d/%m/%Y') AS data_pedido, mes.sigla_mes AS ref_mes, prioridade.nome AS prioridade, status.nome AS status, pedido.valor FROM pedido, mes, prioridade, status WHERE prioridade.id = pedido.prioridade AND status.id = pedido.status AND mes.id = pedido.ref_mes AND pedido.status = {$status} {$alteracao} {$order};");
+        if (!$this->mysqli->thread_id) {
+            $this->mysqli = parent::getConexao();
+        }
+        $query = $this->mysqli->query("SELECT pedido.id, DATE_FORMAT(pedido.data_pedido, '%d/%m/%Y') AS data_pedido, mes.sigla_mes AS ref_mes, prioridade.nome AS prioridade, status.nome AS status, pedido.valor FROM pedido, mes, prioridade, status WHERE prioridade.id = pedido.prioridade AND status.id = pedido.status AND mes.id = pedido.ref_mes AND pedido.status = {$status} {$alteracao} {$order};") or exit("Erro ao gerar relatório.");
+        $this->mysqli->close();
         while ($pedido = $query->fetch_object()) {
             $empenho = Busca::verEmpenho($pedido->id);
             $btnVerProcesso = "";
@@ -138,7 +159,6 @@ class Busca extends Conexao {
                     </td>
                 </tr>";
         }
-        $query->close();
         return $retorno;
     }
 
@@ -150,7 +170,11 @@ class Busca extends Conexao {
      * 	@return Uma tabela com os processos e as informações dele
      */
     public function getProcessosPedido(int $pedido): string {
+        if (!$this->mysqli->thread_id) {
+            $this->mysqli = parent::getConexao();
+        }
         $query = $this->mysqli->query("SELECT DISTINCT itens.num_processo, itens.dt_fim FROM itens, itens_pedido WHERE itens_pedido.id_pedido = {$pedido} AND itens_pedido.id_item = itens.id;");
+        $this->mysqli->close();
         $retorno = "";
         while ($processo = $query->fetch_object()) {
             $retorno .= "
@@ -172,7 +196,11 @@ class Busca extends Conexao {
         $retorno = "<tr>";
         $i = 0;
         $cont = 5;
+        if (!$this->mysqli->thread_id) {
+            $this->mysqli = parent::getConexao();
+        }
         $query = $this->mysqli->query("SELECT status.id, status.nome FROM status WHERE status.id <> 1;");
+        // TODO: fechar conexão
         while ($status = $query->fetch_object()) {
             if ($i == $cont) {
                 $i = 0;
@@ -190,7 +218,6 @@ class Busca extends Conexao {
             $i++;
         }
         $retorno .= "</tr>";
-        $query->close();
         return $retorno;
     }
 
@@ -201,7 +228,11 @@ class Busca extends Conexao {
      * 	@return string
      */
     public function getProblemas(): string {
+        if (!$this->mysqli->thread_id) {
+            $this->mysqli = parent::getConexao();
+        }
         $query = $this->mysqli->query("SELECT setores.nome AS setor, problemas.assunto, problemas.descricao FROM setores, problemas WHERE setores.id = problemas.id_setor ORDER BY problemas.id DESC;");
+        // TODO: fechar conexão
         $retorno = "";
         while ($problema = $query->fetch_object()) {
             $problema->descricao = $this->mysqli->real_escape_string($problema->descricao);
@@ -249,6 +280,9 @@ class Busca extends Conexao {
             $tb_empenho = "pedido_empenho, ";
             $empenho = ", pedido_empenho.empenho";
         }
+        if (!$this->mysqli->thread_id) {
+            $this->mysqli = parent::getConexao();
+        }
         $query = $this->mysqli->query("SELECT pedido_log_status.id_pedido AS id, setores.nome AS setor, DATE_FORMAT(pedido_log_status.data, '%d/%m/%Y') AS data_pedido, prioridade.nome AS prioridade, status.nome AS status, pedido.valor {$empenho} FROM {$tb_empenho} pedido_log_status, setores, pedido, prioridade, status WHERE status.id = pedido.status {$where_setor} {$where_prioridade} {$where_empenho} AND prioridade.id = pedido.prioridade AND pedido.id = pedido_log_status.id_pedido AND pedido.id_setor = setores.id {$where_status} AND pedido_log_status.data BETWEEN '{$dataIni}' AND '{$dataFim}' ORDER BY pedido_log_status.id_pedido ASC;") or exit("Erro ao buscar os pedidos com as especificações do usuário.");
         $titulo = "Relatório de Pedidos por Setor e Nível de Prioridade";
         if ($query) {
@@ -262,6 +296,9 @@ class Busca extends Conexao {
                 $thead = "
                     <th>Prioridade</th>
                     <th>SIAFI</th>";
+            }
+            if (!$this->mysqli->thread_id) {
+                $this->mysqli = parent::getConexao();
             }
             $query_tot = $this->mysqli->query("SELECT sum(pedido.valor) AS total FROM {$tb_empenho} pedido, pedido_log_status WHERE pedido_log_status.id_pedido = pedido.id {$where_setor} {$where_prioridade} {$where_empenho} AND pedido.alteracao = 0 {$where_status} AND pedido_log_status.data BETWEEN '{$dataIni}' AND '{$dataFim}';") or exit("Erro ao somar os pedidos.");
             $total = "R$ 0";
@@ -312,7 +349,6 @@ class Busca extends Conexao {
                             " . $tbody . "
                         </tr>";
             }
-            $query->close();
             $retorno .= "<tbody></table>";
         }
         if ($status == 8) {
@@ -340,7 +376,11 @@ class Busca extends Conexao {
      */
     public function getPedidosAnalise(int $id_setor): string {
         $retorno = "";
-        $query = $this->mysqli->query("SELECT pedido.valor FROM pedido WHERE pedido.id_setor = {$id_setor} AND pedido.status = 2;");
+        if (!$this->mysqli->thread_id) {
+            $this->mysqli = parent::getConexao();
+        }
+        $query = $this->mysqli->query("SELECT pedido.valor FROM pedido WHERE pedido.id_setor = {$id_setor} AND pedido.status = 2;") or exit("Erro ao buscar informações dos pedidos em análise.");
+        $this->mysqli->close();
         if ($query->num_rows > 0) {
             $soma = 0;
             while ($obj = $query->fetch_object()) {
@@ -353,7 +393,6 @@ class Busca extends Conexao {
                 <td></td>
             </tr>";
         }
-        $query->close();
         return $retorno;
     }
 
@@ -365,9 +404,13 @@ class Busca extends Conexao {
      * 	@return object
      */
     public function getInfoItem($id_item) {
-        $query = $this->mysqli->query("SELECT itens.complemento_item, replace(itens.vl_unitario, ',', '.') AS vl_unitario, itens.qt_contrato, replace(itens.vl_contrato, ',', '.') AS vl_contrato, itens.qt_utilizado, replace(itens.vl_utilizado, ',', '.') AS vl_utilizado, itens.qt_saldo, replace(itens.vl_saldo, ',', '.') AS vl_saldo FROM itens WHERE itens.id = {$id_item};");
+        if (!$this->mysqli->thread_id) {
+            $this->mysqli = parent::getConexao();
+        }
+        // TODO: não mostra na query erro quando ocorre
+        $query = $this->mysqli->query("SELECT itens.complemento_item, replace(itens.vl_unitario, ',', '.') AS vl_unitario, itens.qt_contrato, replace(itens.vl_contrato, ',', '.') AS vl_contrato, itens.qt_utilizado, replace(itens.vl_utilizado, ',', '.') AS vl_utilizado, itens.qt_saldo, replace(itens.vl_saldo, ',', '.') AS vl_saldo FROM itens WHERE itens.id = {$id_item};") or exit("Erro ao buscar informações do item.");
+        $this->mysqli->close();
         $obj = $query->fetch_object();
-        $query->close();
         return json_encode($obj);
     }
 
@@ -380,14 +423,17 @@ class Busca extends Conexao {
      */
     public function verEmpenho(int $id_pedido): string {
         $retorno = '';
+        if (!$this->mysqli->thread_id) {
+            $this->mysqli = parent::getConexao();
+        }
         $query = $this->mysqli->query("SELECT empenho FROM pedido_empenho WHERE id_pedido = {$id_pedido};");
+        $this->mysqli->close();
         if ($query->num_rows < 1) {
             $retorno = 'EMPENHO SIAFI PENDENTE';
         } else {
             $obj = $query->fetch_object();
             $retorno = $obj->empenho;
         }
-        $query->close();
         return $retorno;
     }
 
@@ -404,7 +450,11 @@ class Busca extends Conexao {
         if ($id_setor != 0) {
             $where = "AND saldos_lancamentos.id_setor = " . $id_setor;
         }
-        $query = $this->mysqli->query("SELECT setores.nome, DATE_FORMAT(saldos_lancamentos.data, '%d/%m/%Y') AS data, saldos_lancamentos.valor, saldo_categoria.nome AS categoria FROM setores, saldos_lancamentos, saldo_categoria WHERE setores.id = saldos_lancamentos.id_setor {$where} AND saldos_lancamentos.categoria = saldo_categoria.id ORDER BY saldos_lancamentos.id DESC;");
+        if (!$this->mysqli->thread_id) {
+            $this->mysqli = parent::getConexao();
+        }
+        $query = $this->mysqli->query("SELECT setores.nome, DATE_FORMAT(saldos_lancamentos.data, '%d/%m/%Y') AS data, saldos_lancamentos.valor, saldo_categoria.nome AS categoria FROM setores, saldos_lancamentos, saldo_categoria WHERE setores.id = saldos_lancamentos.id_setor {$where} AND saldos_lancamentos.categoria = saldo_categoria.id ORDER BY saldos_lancamentos.id DESC;") or exit("Erro ao buscar informações dos lançamentos.");
+        $this->mysqli->close();
         $cor = '';
         while ($lancamento = $query->fetch_object()) {
             if ($lancamento->valor < 0) {
@@ -424,13 +474,18 @@ class Busca extends Conexao {
         return $retorno;
     }
 
-    function getTotalInOutSaldos(int $id_setor): string {
+    public function getTotalInOutSaldos(int $id_setor): string {
         $entrada = $saida = 0;
         $where = "";
         if ($id_setor != 0) {
             $where = "AND saldos_lancamentos.id_setor = " . $id_setor;
         }
-        $query = $this->mysqli->query("SELECT saldos_lancamentos.valor FROM setores, saldos_lancamentos WHERE setores.id = saldos_lancamentos.id_setor {$where};");
+        if (!$this->mysqli->thread_id) {
+            $this->mysqli = parent::getConexao();
+        }
+        // TODO: não está mostrando na query erro quando ocorre
+        $query = $this->mysqli->query("SELECT saldos_lancamentos.valor FROM setores, saldos_lancamentos WHERE setores.id = saldos_lancamentos.id_setor {$where};") or exit("Erro ao buscar informações dos totais de entrada e saída do setor.");
+        $this->mysqli->close();
         while ($lancamento = $query->fetch_object()) {
             if ($lancamento->valor < 0) {
                 $saida -= $lancamento->valor;
@@ -454,7 +509,11 @@ class Busca extends Conexao {
      */
     public function getOptionsSetores(): string {
         $retorno = "";
-        $query = $this->mysqli->query("SELECT setores.id, setores.nome FROM setores WHERE setores.id <> 1;");
+        if (!$this->mysqli->thread_id) {
+            $this->mysqli = parent::getConexao();
+        }
+        $query = $this->mysqli->query("SELECT setores.id, setores.nome FROM setores WHERE setores.id <> 1;") or exit("Erro ao buscar os setores cadastrados no sistema.");
+        // TODO: fechar conexão, não mostra erro na query quando ocorre.
         while ($setor = $query->fetch_object()) {
             $retorno .= "<option value=\"" . $setor->id . "\">" . $setor->nome . "</option>";
         }
@@ -467,9 +526,12 @@ class Busca extends Conexao {
      * @param int $id_setor id do setor.
      */
     public function getSetorNome(int $id_setor): string {
-        $query = $this->mysqli->query("SELECT setores.nome FROM setores WHERE setores.id = " . $id_setor . ";");
+        if (!$this->mysqli->thread_id) {
+            $this->mysqli = parent::getConexao();
+        }
+        $query = $this->mysqli->query("SELECT setores.nome FROM setores WHERE setores.id = " . $id_setor . ";") or exit("Erro ao buscar o nome do setor.");
+        $this->mysqli->close();
         $obj = $query->fetch_object();
-        $query->close();
         return $obj->nome;
     }
 
@@ -481,11 +543,15 @@ class Busca extends Conexao {
      */
     public function getOptionsPrioridades(): string {
         $retorno = "";
-        $query = $this->mysqli->query("SELECT prioridade.id, prioridade.nome FROM prioridade WHERE prioridade.nome <> 'rascunho';");
+        if (!$this->mysqli->thread_id) {
+            $this->mysqli = parent::getConexao();
+        }
+        // TODO: não mostra erro na query quando ocorre.
+        $query = $this->mysqli->query("SELECT prioridade.id, prioridade.nome FROM prioridade WHERE prioridade.nome <> 'rascunho';") or exit("Erro ao buscar as prioridades");
+        $this->mysqli->close();
         while ($prioridade = $query->fetch_object()) {
             $retorno .= "<option value=\"" . $prioridade->id . "\">" . $prioridade->nome . "</option>";
         }
-        $query->close();
         return $retorno;
     }
 
@@ -497,7 +563,12 @@ class Busca extends Conexao {
      */
     public function getOptionsStatus(): string {
         $retorno = "";
-        $query = $this->mysqli->query("SELECT status.id, status.nome FROM status WHERE status.nome <> 'Rascunho';");
+        if (!$this->mysqli->thread_id) {
+            $this->mysqli = parent::getConexao();
+        }
+        // TODO: não mostra erro na query quando ocorre.
+        $query = $this->mysqli->query("SELECT status.id, status.nome FROM status WHERE status.nome <> 'Rascunho';") or exit("Erro ao buscar as opções de status.");
+        $this->mysqli->close();
         if ($query && $query->num_rows > 0) {
             while ($status = $query->fetch_object()) {
                 $retorno .= "<option value=\"" . $status->id . "\">" . $status->nome . "</option>";
