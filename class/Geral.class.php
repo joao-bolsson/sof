@@ -102,37 +102,37 @@ class Geral extends Conexao {
             $this->mysqli = parent::getConexao();
         }
         // DELETE
-        $this->mysqli->query("DELETE FROM comentarios;");
-        $this->mysqli->query("DELETE FROM itens_pedido;");
-        $this->mysqli->query("DELETE FROM pedido_empenho;");
-        $this->mysqli->query("DELETE FROM pedido_fonte;");
-        $this->mysqli->query("DELETE FROM processos;");
-        $this->mysqli->query("DELETE FROM saldo_setor;");
-        $this->mysqli->query("DELETE FROM saldos_adiantados;");
-        $this->mysqli->query("DELETE FROM saldos_lancamentos;");
-        $this->mysqli->query("DELETE FROM saldos_transferidos;");
-        $this->mysqli->query("DELETE FROM solic_alt_pedido;");
-        $this->mysqli->query("DELETE FROM itens;");
-        $this->mysqli->query("DELETE FROM licitacao;");
-        $this->mysqli->query("DELETE FROM pedido_log_status;");
-        $this->mysqli->query("DELETE FROM pedido;");
+        $this->mysqli->query("DELETE FROM comentarios;") or exit("Erro ao remover os comentários");
+        $this->mysqli->query("DELETE FROM itens_pedido;") or exit("Erro ao remover os itens dos pedidos");
+        $this->mysqli->query("DELETE FROM pedido_empenho;") or exit("Erro ao remover os empenhos dos pedidos.");
+        $this->mysqli->query("DELETE FROM pedido_fonte;") or exit("Erro ao remover as fontes dos pedidos.");
+        $this->mysqli->query("DELETE FROM processos;") or exit("Erro ao remover os processos");
+        $this->mysqli->query("DELETE FROM saldo_setor;") or exit("Erro ao remover os saldos dos setores");
+        $this->mysqli->query("DELETE FROM saldos_adiantados;") or exit("Erro ao remover os saldos adiantados.");
+        $this->mysqli->query("DELETE FROM saldos_lancamentos;") or exit("Erro ao remover os lançamentos de saldos.");
+        $this->mysqli->query("DELETE FROM saldos_transferidos;") or exit("Erro ao remover as transferencias de saldos.");
+        $this->mysqli->query("DELETE FROM solic_alt_pedido;") or exit("Erro ao remover as solicitações de alteração de pedidos.");
+        $this->mysqli->query("DELETE FROM itens;") or exit("Erro ao remover os itens.");
+        $this->mysqli->query("DELETE FROM licitacao;") or exit("Erro ao remover as licitações.");
+        $this->mysqli->query("DELETE FROM pedido_log_status;") or exit("Erro ao remover os logs dos status dos pedidos.");
+        $this->mysqli->query("DELETE FROM pedido;") or exit("Erro ao remover os pedidos.");
 
         // ALTER TABLE
 
-        $this->mysqli->query("alter table comentarios auto_increment = 1;");
-        $this->mysqli->query("alter table itens_pedido auto_increment=1;");
-        $this->mysqli->query("alter table pedido_empenho auto_increment = 1;");
-        $this->mysqli->query("alter table pedido_fonte auto_increment = 1;");
-        $this->mysqli->query("alter table processos auto_increment = 1;");
-        $this->mysqli->query("alter table saldo_setor auto_increment = 1;");
-        $this->mysqli->query("alter table saldos_adiantados auto_increment = 1;");
-        $this->mysqli->query("alter table saldos_lancamentos auto_increment = 1;");
-        $this->mysqli->query("alter table saldos_transferidos auto_increment = 1;");
-        $this->mysqli->query("alter table solic_alt_pedido auto_increment = 1;");
-        $this->mysqli->query("alter table itens auto_increment = 1;");
-        $this->mysqli->query("alter table licitacao auto_increment = 1;");
-        $this->mysqli->query("alter table pedido_log_status auto_increment = 1;");
-        $this->mysqli->query("alter table pedido auto_increment = 1;");
+        $this->mysqli->query("alter table comentarios auto_increment = 1;") or exit("Erro alter table comentarios");
+        $this->mysqli->query("alter table itens_pedido auto_increment=1;") or exit("Erro alter table itens_pedido");
+        $this->mysqli->query("alter table pedido_empenho auto_increment = 1;") or exit("Erro alter table pedido_empenho");
+        $this->mysqli->query("alter table pedido_fonte auto_increment = 1;") or exit("Erro alter table pedido_fonte");
+        $this->mysqli->query("alter table processos auto_increment = 1;") or exit("Erro alter table processos");
+        $this->mysqli->query("alter table saldo_setor auto_increment = 1;") or exit("Erro alter table saldo_setor");
+        $this->mysqli->query("alter table saldos_adiantados auto_increment = 1;") or exit("Erro alter table saldos_adiantados");
+        $this->mysqli->query("alter table saldos_lancamentos auto_increment = 1;") or exit("Erro alter table saldos_lancamentos");
+        $this->mysqli->query("alter table saldos_transferidos auto_increment = 1;") or exit("Erro alter table saldos_transferidos");
+        $this->mysqli->query("alter table solic_alt_pedido auto_increment = 1;") or exit("Erro alter table solic_alt_pedido");
+        $this->mysqli->query("alter table itens auto_increment = 1;") or exit("Erro alter table itens");
+        $this->mysqli->query("alter table licitacao auto_increment = 1;") or exit("Erro alter table licitacao");
+        $this->mysqli->query("alter table pedido_log_status auto_increment = 1;") or exit("Erro alter table pedido_log_status");
+        $this->mysqli->query("alter table pedido auto_increment = 1;") or exit("Erro alter table pedido");
 
         $this->mysqli->close();
     }
@@ -591,6 +591,7 @@ class Geral extends Conexao {
 
         $this->mysqli->query("UPDATE postagens SET ativa = 0 WHERE id = {$id};") or exit("Erro ao atualizar postagem");
         $query = $this->mysqli->query("SELECT postagens.tabela FROM postagens WHERE postagens.id = {$id};") or exit("Erro ao buscar tabela da postagem.");
+        $this->mysqli->close();
         $obj = $query->fetch_object();
         return $obj->tabela;
     }
