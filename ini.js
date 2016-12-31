@@ -1141,6 +1141,7 @@ function analisarPedido(id_pedido, id_setor) {
     document.getElementById("id_pedido").value = id_pedido;
 
     document.getElementById("detPedId").innerHTML = id_pedido;
+    document.getElementById('tableItensPedido').style.display = 'block';
     getNomeSetor(id_setor);
     $.post('../php/busca.php', {
         admin: 1,
@@ -1194,6 +1195,7 @@ function deletePedido(id_pedido) {
 
 function getStatus(id_pedido, id_setor) {
     limpaTela();
+    document.getElementById('tableItensPedido').style.display = 'none';
     document.getElementById('rowDetPedido').style.display = 'block';
     $('#rowPedido' + id_pedido).css('background-color', '#c1df9f');
     document.getElementById('form').value = 'altStatus';
@@ -1223,6 +1225,8 @@ function getStatus(id_pedido, id_setor) {
             }
         }
     });
+    document.getElementById("detPedId").innerHTML = id_pedido;
+    getNomeSetor(id_setor);
     avisoSnack('Carregamento concluído!', 'body');
 }
 
