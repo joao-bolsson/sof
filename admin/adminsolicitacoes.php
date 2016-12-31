@@ -433,14 +433,14 @@ $permissao = $obj_Busca->getPermissoes($_SESSION["id"]);
                 <div class="modal-content">
                     <div class="modal-heading">
                         <a class="modal-close" data-dismiss="modal">×</a>
-                        <h2 class="modal-title content-sub-heading">Processos do Pedido</h2>
+                        <h2 class="modal-title content-sub-heading">Processos</h2>
                     </div>
                     <div class="modal-inner">
                         <table id="tableListProcessos" class="table" style="width: 100%;">
                             <thead>
                                 <tr>
                                     <th>Número do Processo</th>
-                                    <th>Data Fim</th>
+                                    <th></th>
                                 </tr>
                             </thead>
                             <tbody id="tbodyListProcessos"></tbody>

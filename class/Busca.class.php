@@ -1145,8 +1145,9 @@ class Busca extends Conexao {
         if (!$this->mysqli->thread_id) {
             $this->mysqli = parent::getConexao();
         }
-        $pedido = $this->mysqli->query("SELECT pedido.id, DATE_FORMAT(pedido.data_pedido, '%d/%m/%Y') AS data_pedido, EXTRACT(YEAR FROM pedido.data_pedido) AS ano, mes.sigla_mes AS ref_mes, status.nome AS status, replace(pedido.valor, '.', ',') AS valor, pedido.obs, prioridade.nome AS prioridade FROM prioridade, pedido, mes, status WHERE pedido.prioridade = prioridade.id AND status.id = pedido.status AND pedido.id = {$id_pedido} AND mes.id = pedido.ref_mes;")->fetch_object();
+        $query = $this->mysqli->query("SELECT pedido.id, DATE_FORMAT(pedido.data_pedido, '%d/%m/%Y') AS data_pedido, EXTRACT(YEAR FROM pedido.data_pedido) AS ano, mes.sigla_mes AS ref_mes, status.nome AS status, replace(pedido.valor, '.', ',') AS valor, pedido.obs, prioridade.nome AS prioridade FROM prioridade, pedido, mes, status WHERE pedido.prioridade = prioridade.id AND status.id = pedido.status AND pedido.id = {$id_pedido} AND mes.id = pedido.ref_mes;") or exit("Erro ao formar o cabeçalho do pedido.");
         $this->mysqli->close();
+        $pedido = $query->fetch_object();
         $pedido->valor = number_format($pedido->valor, 3, ',', '.');
         $retorno = "
             <fieldset>
@@ -1460,8 +1461,9 @@ class Busca extends Conexao {
         if (!$this->mysqli->thread_id) {
             $this->mysqli = parent::getConexao();
         }
-        $publicacao = $this->mysqli->query("SELECT postagens.postagem FROM postagens WHERE id={$id};")->fetch_object();
+        $query = $this->mysqli->query("SELECT postagens.postagem FROM postagens WHERE id={$id};") or exit("Erro ao buscar postagem.");
         $this->mysqli->close();
+        $publicacao = $query->fetch_object();
         return $publicacao->postagem;
     }
 

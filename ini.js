@@ -634,7 +634,7 @@ function listProcessos(permissao) {
                 admin: 1,
                 form: 'listProcessos'
             }).done(function (resposta) {
-                $('tbodyListProcessos').html(resposta);
+                $('#tbodyListProcessos').html(resposta);
             });
         }
     }
