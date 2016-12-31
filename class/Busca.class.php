@@ -4,8 +4,8 @@
  *  Classe com as funções de busca utilizadas principalmente pelo arquivo php/busca.php
  *  qualquer função que RETORNE dados do banco, devem ser feitas nesta classe
  *
- *  @author João Bolsson
- *  @since 2016, 16 Mar
+ *  @author João Bolsson (joaovictorbolsson@gmail.com).
+ *  @since 2016, 16 Mar.
  */
 ini_set('display_erros', true);
 error_reporting(E_ALL);
@@ -23,6 +23,9 @@ class Busca extends Conexao {
         $this->obj_Util = new Util();
     }
 
+    /**
+     * @return bool Se o sistema está ativo - true, senão - false.
+     */
     public function isActive(): bool {
         if (!$this->mysqli->thread_id) {
             $this->mysqli = parent::getConexao();
@@ -33,41 +36,38 @@ class Busca extends Conexao {
         return $obj->ativo;
     }
 
-    public function atualizaChave() {
-        if (!$this->mysqli->thread_id) {
-            $this->mysqli = parent::getConexao();
-        }
-        $query = $this->mysqli->query("SELECT id, num_processo, cod_reduzido, seq_item_processo FROM itens;") or exit("Erro ao atualizar a chave.");
-        while ($obj = $query->fetch_object()) {
-            $chave = $obj->num_processo . "#" . $obj->cod_reduzido . "#" . $obj->seq_item_processo;
-            $this->mysqli->query("UPDATE itens SET chave = '{$chave}' WHERE id = {$obj->id};") or exit("Erro ao atualizar a chave do item " . $obj->id);
-        }
-        $this->mysqli->close();
-    }
-
+    /**
+     * 
+     * @param int $id_setor Id do setor para retornar os grupos.
+     * @return string Options dentro de um <select> com os grupos de um setor.
+     */
     public function getOptionsGrupos(int $id_setor): string {
         if (!$this->mysqli->thread_id) {
             $this->mysqli = parent::getConexao();
         }
-        $query = $this->mysqli->query("SELECT setores_grupos.id, setores_grupos.nome FROM setores_grupos WHERE setores_grupos.id_setor = {$id_setor};");
+        $query = $this->mysqli->query("SELECT setores_grupos.id, setores_grupos.nome FROM setores_grupos WHERE setores_grupos.id_setor = {$id_setor};") or exit("Erro ao buscar grupos.");
         $this->mysqli->close();
-        if ($query->num_rows < 1) {
-            return "";
-        } else {
+        $retorno = "";
+        if ($query->num_rows >= 1) {
             $retorno = "";
             while ($obj = $query->fetch_object()) {
                 $obj->nome = utf8_encode($obj->nome);
                 $retorno .= "<option value=\"" . $obj->id . "\">" . $obj->nome . "</option>";
             }
-            return $retorno;
         }
+        return $retorno;
     }
 
+    /**
+     * Função para construir as linhas de uma tabela com as opções de licitação para fazer um pedido.
+     * @param int $cont Número de radios que devem aparecer em cada linha.
+     * @return string Radios buttons com opções de licitação para um pedido.
+     */
     public function getOptionsLicitacao(int $cont): string {
         if (!$this->mysqli->thread_id) {
             $this->mysqli = parent::getConexao();
         }
-        $query = $this->mysqli->query("SELECT id, nome FROM licitacao_tipo;") or die("Ocorreu um erro na construção das opções de licitação. Contate o administrador.");
+        $query = $this->mysqli->query("SELECT id, nome FROM licitacao_tipo;") or exit("Erro ao buscar opções de licitação.");
         $this->mysqli->close();
         $retorno = "<tr>";
         $i = 0;
@@ -91,11 +91,16 @@ class Busca extends Conexao {
         return $retorno;
     }
 
+    /**
+     * Função para retornar uma string para mostrar o total dos pedidos com determinado status.
+     * @param int $status status dos pedidos para somar.
+     * @return string String "Totalizando R$ x".
+     */
     public function getTotalByStatus(int $status): string {
         if (!$this->mysqli->thread_id) {
             $this->mysqli = parent::getConexao();
         }
-        $query = $this->mysqli->query("SELECT sum(pedido.valor) AS total FROM pedido WHERE pedido.status = {$status};");
+        $query = $this->mysqli->query("SELECT sum(pedido.valor) AS total FROM pedido WHERE pedido.status = {$status};") or exit("Erro ao buscar o total pelo status.");
         $this->mysqli->close();
         $tot = $query->fetch_object();
         $tot->total = number_format($tot->total, 3, ',', '.');
@@ -103,11 +108,10 @@ class Busca extends Conexao {
     }
 
     /**
-     * 	Função para retornar uma lista de pedidos conforme o relatório
+     * 	Função para retornar uma lista de pedidos conforme o relatório.
      *
-     * 	@access public
-     * 	@param $status Status da lista de pedidos no relatório
-     * 	@return Lista de pedidos conforme o solicitado
+     * 	@param $status Status da lista de pedidos no relatório.
+     * 	@return Lista de pedidos conforme o solicitado.
      */
     public function getRelatorio(int $status): string {
         $retorno = "";
@@ -161,15 +165,14 @@ class Busca extends Conexao {
     /**
      * 	Função para retornar os processos que estão nos pedidos com suas datas de vencimento
      *
-     * 	@access public
-     * 	@param $pedido Id do pedido
-     * 	@return Uma tabela com os processos e as informações dele
+     * 	@param $pedido Id do pedido.
+     * 	@return Uma tabela com os processos e as informações dele.
      */
     public function getProcessosPedido(int $pedido): string {
         if (!$this->mysqli->thread_id) {
             $this->mysqli = parent::getConexao();
         }
-        $query = $this->mysqli->query("SELECT DISTINCT itens.num_processo, itens.dt_fim FROM itens, itens_pedido WHERE itens_pedido.id_pedido = {$pedido} AND itens_pedido.id_item = itens.id;");
+        $query = $this->mysqli->query("SELECT DISTINCT itens.num_processo, itens.dt_fim FROM itens, itens_pedido WHERE itens_pedido.id_pedido = {$pedido} AND itens_pedido.id_item = itens.id;") or exit("Erro ao buscar os processos do pedido.");
         $this->mysqli->close();
         $retorno = "";
         while ($processo = $query->fetch_object()) {
@@ -183,10 +186,9 @@ class Busca extends Conexao {
     }
 
     /**
-     * 	Função para retornar os radios buttons para gerar relatórios por status
+     * 	Função para retornar os radios buttons para gerar relatórios por status.
      *
-     * 	@access public
-     * 	@return Colunas com alguns status
+     * 	@return Colunas com alguns status.
      */
     public function getRadiosStatusRel(): string {
         $retorno = "<tr>";
@@ -195,7 +197,7 @@ class Busca extends Conexao {
         if (!$this->mysqli->thread_id) {
             $this->mysqli = parent::getConexao();
         }
-        $query = $this->mysqli->query("SELECT status.id, status.nome FROM status WHERE status.id <> 1;");
+        $query = $this->mysqli->query("SELECT status.id, status.nome FROM status WHERE status.id <> 1;") or exit("Erro ao buscar as opções de status.");
         $this->mysqli->close();
         while ($status = $query->fetch_object()) {
             if ($i == $cont) {
@@ -220,14 +222,13 @@ class Busca extends Conexao {
     /**
      * 	Função para retornar os problemas relatados
      *
-     * 	@access public
-     * 	@return string
+     * 	@return string Linhas para uma tabela mostrar os problemas.
      */
     public function getProblemas(): string {
         if (!$this->mysqli->thread_id) {
             $this->mysqli = parent::getConexao();
         }
-        $query = $this->mysqli->query("SELECT setores.nome AS setor, problemas.assunto, problemas.descricao FROM setores, problemas WHERE setores.id = problemas.id_setor ORDER BY problemas.id DESC;");
+        $query = $this->mysqli->query("SELECT setores.nome AS setor, problemas.assunto, problemas.descricao FROM setores, problemas WHERE setores.id = problemas.id_setor ORDER BY problemas.id DESC;") or exit("Erro ao buscar os problemas.");
         $retorno = "";
         while ($problema = $query->fetch_object()) {
             $problema->descricao = $this->mysqli->real_escape_string($problema->descricao);
@@ -246,10 +247,9 @@ class Busca extends Conexao {
     }
 
     /**
-     * 	Função que retonar o relatorio de pedidos
+     * 	Função que retonar o relatorio de pedidos.
      *
-     * 	@access public
-     * 	@return string
+     * 	@return string Retorna a interface de um documento pdf.
      */
     public function getRelatorioPedidos(int $id_setor, int $prioridade, int $status, string $dataI, string $dataF): string {
         $retorno = "";
@@ -363,7 +363,6 @@ class Busca extends Conexao {
     /**
      * 	Função que retorna os pedidos em análise e o total deles
      *
-     * 	@access public
      * 	@param $id_setor id do setor
      * 	@return string
      */
@@ -389,7 +388,6 @@ class Busca extends Conexao {
     /**
      * 	Função que que retorna informações de um item para possível edição
      *
-     * 	@access public
      * 	@param Id do item da tbela itens
      * 	@return object
      */
@@ -397,7 +395,6 @@ class Busca extends Conexao {
         if (!$this->mysqli->thread_id) {
             $this->mysqli = parent::getConexao();
         }
-        // TODO: não mostra na query erro quando ocorre
         $query = $this->mysqli->query("SELECT itens.complemento_item, replace(itens.vl_unitario, ',', '.') AS vl_unitario, itens.qt_contrato, replace(itens.vl_contrato, ',', '.') AS vl_contrato, itens.qt_utilizado, replace(itens.vl_utilizado, ',', '.') AS vl_utilizado, itens.qt_saldo, replace(itens.vl_saldo, ',', '.') AS vl_saldo FROM itens WHERE itens.id = {$id_item};") or exit("Erro ao buscar informações do item.");
         $this->mysqli->close();
         $obj = $query->fetch_object();
@@ -407,7 +404,6 @@ class Busca extends Conexao {
     /**
      * 	Função que retornar o empenho de um pedido
      *
-     * 	@access public
      * 	@param $id_pedido Id do pedido.
      * 	@return string
      */
@@ -416,7 +412,7 @@ class Busca extends Conexao {
         if (!$this->mysqli->thread_id) {
             $this->mysqli = parent::getConexao();
         }
-        $query = $this->mysqli->query("SELECT empenho FROM pedido_empenho WHERE id_pedido = {$id_pedido};");
+        $query = $this->mysqli->query("SELECT empenho FROM pedido_empenho WHERE id_pedido = {$id_pedido};") or exit("Erro so ver empenho.");
         $this->mysqli->close();
         if ($query->num_rows < 1) {
             $retorno = 'EMPENHO SIAFI PENDENTE';
@@ -430,7 +426,6 @@ class Busca extends Conexao {
     /**
      * 	Função que retorna a tabela com os lançamentos de saldos pelo SOF
      *
-     * 	@access public
      * 	@param $id_setor id do setor
      * 	@return string
      */
@@ -473,7 +468,6 @@ class Busca extends Conexao {
         if (!$this->mysqli->thread_id) {
             $this->mysqli = parent::getConexao();
         }
-        // TODO: não está mostrando na query erro quando ocorre
         $query = $this->mysqli->query("SELECT saldos_lancamentos.valor FROM setores, saldos_lancamentos WHERE setores.id = saldos_lancamentos.id_setor {$where};") or exit("Erro ao buscar informações dos totais de entrada e saída do setor.");
         $this->mysqli->close();
         while ($lancamento = $query->fetch_object()) {
@@ -494,7 +488,6 @@ class Busca extends Conexao {
     /**
      * 	Função que retorna as options com os setores cadastrados no sistema
      *
-     * 	@access public
      * 	@return string
      */
     public function getOptionsSetores(): string {
@@ -503,7 +496,6 @@ class Busca extends Conexao {
             $this->mysqli = parent::getConexao();
         }
         $query = $this->mysqli->query("SELECT setores.id, setores.nome FROM setores WHERE setores.id <> 1;") or exit("Erro ao buscar os setores cadastrados no sistema.");
-        // TODO: não mostra erro na query quando ocorre.
         $this->mysqli->close();
         while ($setor = $query->fetch_object()) {
             $retorno .= "<option value=\"" . $setor->id . "\">" . $setor->nome . "</option>";
@@ -528,7 +520,6 @@ class Busca extends Conexao {
     /**
      * 	Função que retornar as options com as prioridades existentes no sistemas para os pedidos
      *
-     * 	@access public
      * 	@return string
      */
     public function getOptionsPrioridades(): string {
@@ -536,7 +527,6 @@ class Busca extends Conexao {
         if (!$this->mysqli->thread_id) {
             $this->mysqli = parent::getConexao();
         }
-        // TODO: não mostra erro na query quando ocorre.
         $query = $this->mysqli->query("SELECT prioridade.id, prioridade.nome FROM prioridade WHERE prioridade.nome <> 'rascunho';") or exit("Erro ao buscar as prioridades");
         $this->mysqli->close();
         while ($prioridade = $query->fetch_object()) {
@@ -548,7 +538,6 @@ class Busca extends Conexao {
     /**
      * 	Função que retorna as options com os status de pedidos
      *
-     * 	@access public
      * 	@return string
      */
     public function getOptionsStatus(): string {
@@ -556,7 +545,6 @@ class Busca extends Conexao {
         if (!$this->mysqli->thread_id) {
             $this->mysqli = parent::getConexao();
         }
-        // TODO: não mostra erro na query quando ocorre.
         $query = $this->mysqli->query("SELECT status.id, status.nome FROM status WHERE status.nome <> 'Rascunho';") or exit("Erro ao buscar as opções de status.");
         $this->mysqli->close();
         if ($query && $query->num_rows > 0) {
@@ -570,7 +558,6 @@ class Busca extends Conexao {
     /**
      * 	Função que retorna um relatório para a recepção dos processos (ajustar)
      *
-     * 	@access public
      * 	@return string
      */
     public function getRelatorioProcessos(int $tipo): string {
@@ -584,15 +571,15 @@ class Busca extends Conexao {
             $this->mysqli = parent::getConexao();
         }
         if ($where == "") {
-            $query_proc = $this->mysqli->query("SELECT processos_tipo.id, processos_tipo.nome FROM processos_tipo;");
+            $query_proc = $this->mysqli->query("SELECT processos_tipo.id, processos_tipo.nome FROM processos_tipo;") or exit("Erro ao buscar os tipos de processo.");
             while ($tipo_proc = $query_proc->fetch_object()) {
-                $query = $this->mysqli->query("SELECT processos.num_processo, processos_tipo.nome AS tipo, processos_tipo.id AS id_tipo, processos.estante, processos.prateleira, processos.entrada, processos.saida, processos.responsavel, processos.retorno, processos.obs FROM processos, processos_tipo WHERE processos.tipo = processos_tipo.id AND processos.tipo = {$tipo_proc->id} ORDER BY processos.tipo ASC;");
+                $query = $this->mysqli->query("SELECT processos.num_processo, processos_tipo.nome AS tipo, processos_tipo.id AS id_tipo, processos.estante, processos.prateleira, processos.entrada, processos.saida, processos.responsavel, processos.retorno, processos.obs FROM processos, processos_tipo WHERE processos.tipo = processos_tipo.id AND processos.tipo = {$tipo_proc->id} ORDER BY processos.tipo ASC;") or exit("Erro ao buscar os processos.");
                 if ($query->num_rows > 0) {
                     $retorno .= "
                         <fieldset class=\"preg\">
                                 <table>
                                         <tr>
-                                                <td>Tipo: " . $tipo_proc->nome . "</td>
+                                            <td>Tipo: " . $tipo_proc->nome . "</td>
                                         </tr>
                                 </table>
                         </fieldset><br>
@@ -631,7 +618,7 @@ class Busca extends Conexao {
                 }
             }
         } else {
-            $query_proc = $this->mysqli->query("SELECT processos_tipo.nome FROM processos_tipo WHERE processos_tipo.id = {$tipo};");
+            $query_proc = $this->mysqli->query("SELECT processos_tipo.nome FROM processos_tipo WHERE processos_tipo.id = {$tipo};") or exit("Erro ao buscar os tipos de processo.");
             $tipo_proc = $query_proc->fetch_object();
             $retorno .= "
                 <fieldset class=\"preg\">
@@ -656,7 +643,7 @@ class Busca extends Conexao {
                         </tr>
                     </thead>
                     <tbody>";
-            $query = $this->mysqli->query("SELECT processos.num_processo, processos_tipo.nome AS tipo, processos_tipo.id AS id_tipo, processos.estante, processos.prateleira, processos.entrada, processos.saida, processos.responsavel, processos.retorno, processos.obs FROM processos, processos_tipo WHERE processos.tipo = processos_tipo.id {$where} ORDER BY processos.tipo ASC;");
+            $query = $this->mysqli->query("SELECT processos.num_processo, processos_tipo.nome AS tipo, processos_tipo.id AS id_tipo, processos.estante, processos.prateleira, processos.entrada, processos.saida, processos.responsavel, processos.retorno, processos.obs FROM processos, processos_tipo WHERE processos.tipo = processos_tipo.id {$where} ORDER BY processos.tipo ASC;") or exit("Erro ao buscar os processos.");
             if ($query->num_rows > 0) {
                 while ($processo = $query->fetch_object()) {
                     $retorno .= "
@@ -684,7 +671,6 @@ class Busca extends Conexao {
     /**
      * 	Função que retorna as options para tipo de processos para o cadastro de novos processos.
      *
-     * 	@access public
      * 	@return string
      */
     public function getTiposProcessos(): string {
@@ -692,7 +678,7 @@ class Busca extends Conexao {
         if (!$this->mysqli->thread_id) {
             $this->mysqli = parent::getConexao();
         }
-        $query = $this->mysqli->query("SELECT id, nome FROM processos_tipo;");
+        $query = $this->mysqli->query("SELECT id, nome FROM processos_tipo;") or exit("Erro ao buscar os tipos de processo.");
         $this->mysqli->close();
         while ($tipo = $query->fetch_object()) {
             $tipo->nome = utf8_encode($tipo->nome);
@@ -702,46 +688,40 @@ class Busca extends Conexao {
     }
 
     /**
-     * 	Função que retornar o id do setor do pedido
+     * 	Função que retornar o id do setor do pedido.
      *
-     * 	@access public
      * 	@param $id_pedido Id do pedido.
-     * 	@return int.
+     * 	@return Id do setor que fez o pedido.
      */
     public function getSetorPedido(int $id_pedido): int {
         if (!$this->mysqli->thread_id) {
             $this->mysqli = parent::getConexao();
         }
-        $query = $this->mysqli->query("SELECT id_setor FROM pedido WHERE id = {$id_pedido};");
+        $query = $this->mysqli->query("SELECT id_setor FROM pedido WHERE id = {$id_pedido};") or exit("Erro ao buscar o id do setor do pedido.");
         $this->mysqli->close();
         $obj = $query->fetch_object();
         return $obj->id_setor;
     }
 
     /**
-     * 	Função que retornar se um pedido é ou não rascunho
+     * 	Função que retornar se um pedido é ou não rascunho.
      *
-     * 	@access public
-     * 	@param $id_pedido id do pedido
-     * 	@return bool
+     * 	@param $id_pedido id do pedido.
+     * 	@return Se o pedido é um rascunho - true, senão false.
      */
     public function getRequestDraft(int $id_pedido): bool {
         if (!$this->mysqli->thread_id) {
             $this->mysqli = parent::getConexao();
         }
-        $query = $this->mysqli->query("SELECT prioridade.nome FROM pedido, prioridade WHERE pedido.id = {$id_pedido} AND pedido.prioridade = prioridade.id;");
+        $query = $this->mysqli->query("SELECT prioridade.nome FROM pedido, prioridade WHERE pedido.id = {$id_pedido} AND pedido.prioridade = prioridade.id;") or exit("Erro ao buscar prioridade do pedido.");
         $this->mysqli->close();
         $obj = $query->fetch_object();
-        if ($obj->nome == 'Rascunho') {
-            return true;
-        }
-        return false;
+        return $obj->nome == 'Rascunho';
     }
 
     /**
      * 	Função que constroi os radioBtn da análise dos pedidos.
      *
-     * 	@access public
      * 	@param $cont Número de radioBtn por linha.
      * 	@return string
      */
@@ -751,7 +731,7 @@ class Busca extends Conexao {
         if (!$this->mysqli->thread_id) {
             $this->mysqli = parent::getConexao();
         }
-        $query = $this->mysqli->query("SELECT status.id, status.nome FROM status WHERE status.id <> 1;");
+        $query = $this->mysqli->query("SELECT status.id, status.nome FROM status WHERE status.id <> 1;") or exit("Erro ao buscar as opções de status.");
         $this->mysqli->close();
         while ($status = $query->fetch_object()) {
             if ($i == $cont) {
@@ -776,15 +756,14 @@ class Busca extends Conexao {
     /**
      * 	Função que retornar os radioBtn das prioridades dos pedidos.
      *
-     * 	@access public
-     * 	@return string
+     * 	@return Opções de prioridades para os pedidos.
      */
     public function getPrioridades(): string {
         $retorno = "";
         if (!$this->mysqli->thread_id) {
             $this->mysqli = parent::getConexao();
         }
-        $query = $this->mysqli->query("SELECT id, nome FROM prioridade;");
+        $query = $this->mysqli->query("SELECT id, nome FROM prioridade;") or exit("Erro ao buscar prioridades.");
         $this->mysqli->close();
         while ($prioridade = $query->fetch_object()) {
             $retorno .= "
@@ -801,25 +780,23 @@ class Busca extends Conexao {
     }
 
     /**
-     *   Função utilizada para retornar as informações de um processo clicado da tabela da recepção
+     *   Função utilizada para retornar as informações de um processo clicado da tabela da recepção.
      *
-     *   @access public
-     *   @return string
+     *   @return Informações do processo.
      */
     public function getInfoProcesso(int $id_processo): string {
         if (!$this->mysqli->thread_id) {
             $this->mysqli = parent::getConexao();
         }
-        $query = $this->mysqli->query("SELECT processos.num_processo, processos.tipo, processos.estante, processos.prateleira, processos.entrada, processos.saida, processos.responsavel, processos.retorno, processos.obs FROM processos WHERE processos.id = {$id_processo};");
+        $query = $this->mysqli->query("SELECT processos.num_processo, processos.tipo, processos.estante, processos.prateleira, processos.entrada, processos.saida, processos.responsavel, processos.retorno, processos.obs FROM processos WHERE processos.id = {$id_processo};") or exit("Erro ao buscar informações dos processos.");
         $this->mysqli->close();
         $obj = $query->fetch_object();
         return json_encode($obj);
     }
 
     /**
-     *   Função utilizada para retornar a tabela dos processos da recepção
+     *   Função utilizada para retornar a tabela dos processos da recepção.
      *
-     *   @access public
      *   @return string
      */
     public function getTabelaRecepcao(): string {
@@ -827,7 +804,7 @@ class Busca extends Conexao {
         if (!$this->mysqli->thread_id) {
             $this->mysqli = parent::getConexao();
         }
-        $query = $this->mysqli->query("SELECT processos.id, processos.num_processo, processos_tipo.nome as tipo, processos.estante, processos.prateleira, processos.entrada, processos.saida, processos.responsavel, processos.retorno, processos.obs FROM processos, processos_tipo WHERE processos.tipo = processos_tipo.id ORDER BY id ASC;");
+        $query = $this->mysqli->query("SELECT processos.id, processos.num_processo, processos_tipo.nome as tipo, processos.estante, processos.prateleira, processos.entrada, processos.saida, processos.responsavel, processos.retorno, processos.obs FROM processos, processos_tipo WHERE processos.tipo = processos_tipo.id ORDER BY id ASC;") or exit("Erro ao formar a tabela da recepção.");
         while ($processo = $query->fetch_object()) {
             $processo->obs = $this->mysqli->real_escape_string($processo->obs);
             $processo->obs = str_replace("\"", "'", $processo->obs);
@@ -854,32 +831,30 @@ class Busca extends Conexao {
     }
 
     /**
-     * 	Função que retorna as permissões do usuario
+     * 	Função que retorna as permissões do usuário.
      *
-     * 	@access public
-     * 	@return object
+     * 	@return JSON com as permissões do usuário no sistema.
      */
     public function getPermissoes(int $id_user) {
         if (!$this->mysqli->thread_id) {
             $this->mysqli = parent::getConexao();
         }
-        $query = $this->mysqli->query("SELECT usuario_permissoes.noticias, usuario_permissoes.saldos, usuario_permissoes.pedidos, usuario_permissoes.recepcao FROM usuario_permissoes WHERE usuario_permissoes.id_usuario = {$id_user};");
+        $query = $this->mysqli->query("SELECT usuario_permissoes.noticias, usuario_permissoes.saldos, usuario_permissoes.pedidos, usuario_permissoes.recepcao FROM usuario_permissoes WHERE usuario_permissoes.id_usuario = {$id_user};") or exit("Erro ao buscar permissões do usuário.");
         $this->mysqli->close();
         $obj_permissoes = $query->fetch_object();
         return $obj_permissoes;
     }
 
     /**
-     * Função que busca os detalhes de uma notícia completa
+     * Função que busca os detalhes de uma notícia completa.
      *
-     * @access public
-     * @return string
+     * @return Informação da postagem.
      */
     public function getInfoNoticia(int $id): string {
         if (!$this->mysqli->thread_id) {
             $this->mysqli = parent::getConexao();
         }
-        $query = $this->mysqli->query("SELECT postagem FROM postagens WHERE id = {$id};");
+        $query = $this->mysqli->query("SELECT postagem FROM postagens WHERE id = {$id};") or exit("Erro ao buscar informações da notícia.");
         $this->mysqli->close();
         $noticia = $query->fetch_object();
         return html_entity_decode($noticia->postagem);
@@ -888,7 +863,6 @@ class Busca extends Conexao {
     /**
      * Função para mostrar uma tabela com todas as publicações de certa página
      *
-     * @access public
      * @param $tabela -> filtra por nome da tabela
      * @return string
      */
@@ -898,7 +872,7 @@ class Busca extends Conexao {
         if (!$this->mysqli->thread_id) {
             $this->mysqli = parent::getConexao();
         }
-        $query = $this->mysqli->query("SELECT postagens.id, postagens.titulo, DATE_FORMAT(postagens.data, '%d/%m/%Y') AS data FROM postagens, paginas_post WHERE postagens.tabela = paginas_post.id AND paginas_post.tabela = '{$tabela}' AND ativa = 1 ORDER BY data ASC;");
+        $query = $this->mysqli->query("SELECT postagens.id, postagens.titulo, DATE_FORMAT(postagens.data, '%d/%m/%Y') AS data FROM postagens, paginas_post WHERE postagens.tabela = paginas_post.id AND paginas_post.tabela = '{$tabela}' AND ativa = 1 ORDER BY data ASC;") or exit("Erro ao buscar postagens.");
         $this->mysqli->close();
         while ($postagem = $query->fetch_object()) {
             $retorno .= "<tr><td>";
@@ -913,19 +887,16 @@ class Busca extends Conexao {
     /**
      * Função para popular os slides na página inicial
      *
-     * @access public
      * @param $slide (1 ou 2)-> o primeiro mostra as últimas notícias e o segundo aleatórias
      * @return string
      */
     public function getSlide(int $slide): string {
-        //declarando var order
         $order = "";
         if ($slide == 1) {
             $order = "postagens.data DESC";
         } else {
             $order = "rand()";
         }
-        //declarando retorno
         $retorno = "";
         $array_anima = array("primeira", "segunda", "terceira", "quarta", "quinta");
         $array_id = array("primeiro", "segundo", "terceiro", "quarto", "quinto");
@@ -934,7 +905,6 @@ class Busca extends Conexao {
         }
         $query_postagem = $this->mysqli->query("SELECT postagens.id, postagens.postagem, DATE_FORMAT(postagens.data, '%d/%m/%Y') AS data, paginas_post.tabela, postagens.titulo FROM postagens, paginas_post WHERE postagens.tabela = paginas_post.id AND postagens.ativa = 1 ORDER BY {$order} LIMIT 5;") or exit("Erro ao buscar notícias dos slides.");
         $this->mysqli->close();
-        //variável para contar
         $aux = 0;
         while ($postagem = $query_postagem->fetch_object()) {
             $array_post = str_split($postagem->titulo);
@@ -981,13 +951,11 @@ class Busca extends Conexao {
     }
 
     /**
-     * Função para pesquisar alguma publicação
+     * Função para pesquisar alguma publicação.
      *
-     * @access public
-     * @return string
+     * @return Publicações com o título parecido com $busca.
      */
     public function pesquisar(string $busca): string {
-        //declarando retorno
         $retorno = "";
         $busca = htmlentities($busca);
         //escapando string especiais para evitar SQL Injections
@@ -1012,7 +980,7 @@ class Busca extends Conexao {
                                         <th class=\"pull-right\">Data de Publicação</th>
                                     </thead>
                                     <tbody>";
-        $query = $this->mysqli->query("SELECT postagens.id, postagens.tabela, postagens.titulo, DATE_FORMAT(postagens.data, '%d/%m/%Y') AS data, postagens.ativa FROM postagens WHERE postagens.titulo LIKE '%{$busca}%' AND postagens.ativa = 1 ORDER BY postagens.data DESC;");
+        $query = $this->mysqli->query("SELECT postagens.id, postagens.tabela, postagens.titulo, DATE_FORMAT(postagens.data, '%d/%m/%Y') AS data, postagens.ativa FROM postagens WHERE postagens.titulo LIKE '%{$busca}%' AND postagens.ativa = 1 ORDER BY postagens.data DESC;") or exit("Erro ao pesquisar notícias.");
         $this->mysqli->close();
         if ($query->num_rows < 1) {
             $retorno .= "
@@ -1042,10 +1010,8 @@ class Busca extends Conexao {
     }
 
     /**
-     * 	Função que retorna a tabela com as solicitações de alteração de pedidos
-     * 	para o SOF analisar
+     * 	Função que retorna a tabela com as solicitações de alteração de pedidos	para o SOF analisar
      *
-     * 	@access public
      * 	@return string
      */
     public function getAdminSolicAltPedidos(int $st): string {
@@ -1053,7 +1019,7 @@ class Busca extends Conexao {
         if (!$this->mysqli->thread_id) {
             $this->mysqli = parent::getConexao();
         }
-        $query = $this->mysqli->query("SELECT solic_alt_pedido.id, solic_alt_pedido.id_pedido, setores.nome, DATE_FORMAT(solic_alt_pedido.data_solicitacao, '%d/%m/%Y') AS data_solicitacao, DATE_FORMAT(solic_alt_pedido.data_analise, '%d/%m/%Y') AS data_analise, solic_alt_pedido.justificativa, solic_alt_pedido.status FROM solic_alt_pedido, setores WHERE solic_alt_pedido.id_setor = setores.id AND solic_alt_pedido.status = {$st} ORDER BY solic_alt_pedido.id DESC;");
+        $query = $this->mysqli->query("SELECT solic_alt_pedido.id, solic_alt_pedido.id_pedido, setores.nome, DATE_FORMAT(solic_alt_pedido.data_solicitacao, '%d/%m/%Y') AS data_solicitacao, DATE_FORMAT(solic_alt_pedido.data_analise, '%d/%m/%Y') AS data_analise, solic_alt_pedido.justificativa, solic_alt_pedido.status FROM solic_alt_pedido, setores WHERE solic_alt_pedido.id_setor = setores.id AND solic_alt_pedido.status = {$st} ORDER BY solic_alt_pedido.id DESC;") or exit("Erro ao buscar as solicitações de alteração de pedidos enviados ao SOF.");
         $status = $label = "";
         while ($solic = $query->fetch_object()) {
             switch ($solic->status) {
@@ -1096,9 +1062,8 @@ class Busca extends Conexao {
     }
 
     /**
-     * 	Função que retorna as solicitações de adiantamentos de saldos enviadas ao SOF para análise
+     * 	Função que retorna as solicitações de adiantamentos de saldos enviadas ao SOF para análise.
      *
-     * 	@access public
      * 	@param $st Status
      * 	@return string
      */
@@ -1106,8 +1071,7 @@ class Busca extends Conexao {
         if (!$this->mysqli->thread_id) {
             $this->mysqli = parent::getConexao();
         }
-        $query = $this->mysqli->query("SELECT saldos_adiantados.id, setores.nome, DATE_FORMAT(saldos_adiantados.data_solicitacao, '%d/%m/%Y') AS data_solicitacao, DATE_FORMAT(saldos_adiantados.data_analise, '%d/%m/%Y') AS data_analise, saldos_adiantados.valor_adiantado, saldos_adiantados.justificativa FROM saldos_adiantados, setores WHERE saldos_adiantados.id_setor = setores.id AND saldos_adiantados.status = {$st} ORDER BY saldos_adiantados.data_solicitacao DESC;");
-        // declarando retorno
+        $query = $this->mysqli->query("SELECT saldos_adiantados.id, setores.nome, DATE_FORMAT(saldos_adiantados.data_solicitacao, '%d/%m/%Y') AS data_solicitacao, DATE_FORMAT(saldos_adiantados.data_analise, '%d/%m/%Y') AS data_analise, saldos_adiantados.valor_adiantado, saldos_adiantados.justificativa FROM saldos_adiantados, setores WHERE saldos_adiantados.id_setor = setores.id AND saldos_adiantados.status = {$st} ORDER BY saldos_adiantados.data_solicitacao DESC;") or exit("Erro ao buscar solicitações de adiantamento.");
         $retorno = "";
         $status = $label = "";
         switch ($st) {
@@ -1161,7 +1125,7 @@ class Busca extends Conexao {
         if (!$this->mysqli->thread_id) {
             $this->mysqli = parent::getConexao();
         }
-        $query = $this->mysqli->query("SELECT setores_grupos.nome, pedido_grupo.id_pedido FROM setores_grupos, pedido_grupo WHERE pedido_grupo.id_grupo = setores_grupos.id AND pedido_grupo.id_pedido = {$id_pedido};");
+        $query = $this->mysqli->query("SELECT setores_grupos.nome, pedido_grupo.id_pedido FROM setores_grupos, pedido_grupo WHERE pedido_grupo.id_grupo = setores_grupos.id AND pedido_grupo.id_pedido = {$id_pedido};") or exit("Erro ao buscar grupo do pedido.");
         $this->mysqli->close();
         $retorno = "";
         if ($query->num_rows > 0) {
@@ -1173,9 +1137,8 @@ class Busca extends Conexao {
     }
 
     /**
-     * Função para retornar o cabeçalho do pdf do pedido
+     * Função para retornar o cabeçalho do pdf do pedido.
      *
-     * @access public
      * @return string
      */
     public function getHeader(int $id_pedido): string {
@@ -1211,7 +1174,7 @@ class Busca extends Conexao {
         if (!$this->mysqli->thread_id) {
             $this->mysqli = parent::getConexao();
         }
-        $query = $this->mysqli->query("SELECT licitacao.tipo AS id_tipo, licitacao_tipo.nome AS tipo, licitacao.numero, licitacao.uasg, licitacao.processo_original, licitacao.gera_contrato FROM licitacao, licitacao_tipo WHERE licitacao_tipo.id = licitacao.tipo AND licitacao.id_pedido = {$id_pedido};");
+        $query = $this->mysqli->query("SELECT licitacao.tipo AS id_tipo, licitacao_tipo.nome AS tipo, licitacao.numero, licitacao.uasg, licitacao.processo_original, licitacao.gera_contrato FROM licitacao, licitacao_tipo WHERE licitacao_tipo.id = licitacao.tipo AND licitacao.id_pedido = {$id_pedido};") or exit("Erro ao buscar licitação do pedido.");
         $this->mysqli->close();
         if ($query->num_rows == 1) {
             $obj = $query->fetch_object();
@@ -1258,7 +1221,6 @@ class Busca extends Conexao {
     /**
      * 	Função para retornar as fontes de recurso de um pedido (impressão).
      *
-     * 	@access public
      * 	@param $id_pedido Id do pedido.
      * 	@return Fontes de recurso.
      */
@@ -1267,7 +1229,7 @@ class Busca extends Conexao {
         if (!$this->mysqli->thread_id) {
             $this->mysqli = parent::getConexao();
         }
-        $query = $this->mysqli->query("SELECT pedido_fonte.fonte_recurso, pedido_fonte.ptres, pedido_fonte.plano_interno FROM pedido_fonte WHERE pedido_fonte.id_pedido = {$id_pedido};");
+        $query = $this->mysqli->query("SELECT pedido_fonte.fonte_recurso, pedido_fonte.ptres, pedido_fonte.plano_interno FROM pedido_fonte WHERE pedido_fonte.id_pedido = {$id_pedido};") or exit("Erro ao buscar fontes do pedido.");
         $this->mysqli->close();
         if ($query->num_rows > 0) {
             $fonte = $query->fetch_object();
@@ -1303,17 +1265,15 @@ class Busca extends Conexao {
     /**
      * Função para retornar o pedido para um relátório separando-o por licitação e fornecedor
      *
-     * @access public
      * @return string
      */
     public function getContentPedido(int $id_pedido): string {
-        // declarando retorno
         $retorno = "";
         // PRIMEIRO FAZEMOS O CABEÇALHO REFERENTE AO NUM_LICITACAO
         if (!$this->mysqli->thread_id) {
             $this->mysqli = parent::getConexao();
         }
-        $query_ini = $this->mysqli->query("SELECT DISTINCT itens.num_licitacao, itens.num_processo, itens.dt_inicio, itens.dt_fim FROM itens_pedido, itens WHERE itens.id = itens_pedido.id_item AND itens_pedido.id_pedido = {$id_pedido};");
+        $query_ini = $this->mysqli->query("SELECT DISTINCT itens.num_licitacao, itens.num_processo, itens.dt_inicio, itens.dt_fim FROM itens_pedido, itens WHERE itens.id = itens_pedido.id_item AND itens_pedido.id_pedido = {$id_pedido};") or exit("Erro ao buscar itens do pedido.");
         $i = 0;
         while ($licitacao = $query_ini->fetch_object()) {
             if ($licitacao->dt_fim == '') {
@@ -1330,7 +1290,7 @@ class Busca extends Conexao {
                         </tr>
                     </table>
                 </fieldset><br>";
-            $query_forn = $this->mysqli->query("SELECT DISTINCT itens.cgc_fornecedor, itens.nome_fornecedor, itens.num_contrato FROM itens, itens_pedido WHERE itens.id = itens_pedido.id_item AND itens_pedido.id_pedido = {$id_pedido} AND itens.num_licitacao = {$licitacao->num_licitacao};");
+            $query_forn = $this->mysqli->query("SELECT DISTINCT itens.cgc_fornecedor, itens.nome_fornecedor, itens.num_contrato FROM itens, itens_pedido WHERE itens.id = itens_pedido.id_item AND itens_pedido.id_pedido = {$id_pedido} AND itens.num_licitacao = {$licitacao->num_licitacao};") or exit("Erro ao buscar fornecedores do pedido.");
 
             // -------------------------------------------------------------------------
             //                FORNECEDORES REFERENTES À LICITAÇÃO
@@ -1351,7 +1311,7 @@ class Busca extends Conexao {
                 // ----------------------------------------------------------------------
                 //                  ITENS REFERENTES AOS FORNECEDORES
                 // ----------------------------------------------------------------------
-                $query_itens = $this->mysqli->query("SELECT itens.cod_reduzido, itens.cod_despesa, itens.seq_item_processo, itens.complemento_item, itens.vl_unitario, itens_pedido.qtd, itens_pedido.valor FROM itens, itens_pedido WHERE itens.id = itens_pedido.id_item AND itens_pedido.id_pedido = {$id_pedido} AND itens.cgc_fornecedor = '{$fornecedor->cgc_fornecedor}'");
+                $query_itens = $this->mysqli->query("SELECT itens.cod_reduzido, itens.cod_despesa, itens.seq_item_processo, itens.complemento_item, itens.vl_unitario, itens_pedido.qtd, itens_pedido.valor FROM itens, itens_pedido WHERE itens.id = itens_pedido.id_item AND itens_pedido.id_pedido = {$id_pedido} AND itens.cgc_fornecedor = '{$fornecedor->cgc_fornecedor}'") or exit("Erro ao buscar os itens dos fornecedores do pedido.");
                 $retorno .= "
                     <table class=\"prod\">
                         <thead>
@@ -1392,44 +1352,16 @@ class Busca extends Conexao {
     }
 
     /**
-     * Função que retorna a tabela com os itens de um pedido para pdf
+     * 	Função para retornar os comentários de um pedido.
      *
-     * @access public
-     * @return string
-     */
-    public function getTabelaPDF(int $id_pedido): string {
-        $retorno = "";
-        if (!$this->mysqli->thread_id) {
-            $this->mysqli = parent::getConexao();
-        }
-        $query = $this->mysqli->query("SELECT itens.id, itens.cod_reduzido, itens.cgc_fornecedor, itens.num_licitacao, itens_pedido.qtd, itens_pedido.valor FROM itens, itens_pedido WHERE itens.id = itens_pedido.id AND itens_pedido.id_pedido = {$id_pedido};");
-        $this->mysqli->close();
-        while ($itens = $query->fetch_object()) {
-            $retorno .= "
-                <tr>
-                    <td>" . $itens->id . "</td>
-                    <td>" . $itens->cod_reduzido . "</td>
-                    <td>" . $itens->cgc_fornecedor . "</td>
-                    <td>" . $itens->num_licitacao . "</td>
-                    <td>" . $itens->qtd . "</td>
-                    <td>R$ " . $itens->valor . "</td>
-                </tr>";
-        }
-        return $retorno;
-    }
-
-    /**
-     * 	Função para retornar os comentários de um pedido
-     *
-     * 	@access public
-     * 	@return string
+     * 	@return Comentários do SOF em um pedido (Print).
      */
     public function getComentarios(int $id_pedido): string {
         $retorno = "";
         if (!$this->mysqli->thread_id) {
             $this->mysqli = parent::getConexao();
         }
-        $query_emp = $this->mysqli->query("SELECT pedido_empenho.empenho, DATE_FORMAT(pedido_empenho.data, '%d/%m/%Y') AS data FROM pedido_empenho WHERE pedido_empenho.id_pedido = {$id_pedido};");
+        $query_emp = $this->mysqli->query("SELECT pedido_empenho.empenho, DATE_FORMAT(pedido_empenho.data, '%d/%m/%Y') AS data FROM pedido_empenho WHERE pedido_empenho.id_pedido = {$id_pedido};") or exit("Erro ao mostrar o empenho do pedido nos comentários.");
         if ($query_emp->num_rows > 0) {
             $empenho = $query_emp->fetch_object();
             $retorno = "
@@ -1452,7 +1384,7 @@ class Busca extends Conexao {
                 </fieldset>";
         }
 
-        $query = $this->mysqli->query("SELECT DATE_FORMAT(comentarios.data_coment, '%d/%m/%Y') AS data_coment, comentarios.comentario FROM comentarios, prioridade WHERE prioridade.id = comentarios.prioridade AND comentarios.id_pedido = {$id_pedido};");
+        $query = $this->mysqli->query("SELECT DATE_FORMAT(comentarios.data_coment, '%d/%m/%Y') AS data_coment, comentarios.comentario FROM comentarios, prioridade WHERE prioridade.id = comentarios.prioridade AND comentarios.id_pedido = {$id_pedido};") or exit("Erro ao buscar os comentários do pedido.");
         $this->mysqli->close();
         if ($query->num_rows > 0) {
             while ($comentario = $query->fetch_object()) {
@@ -1468,9 +1400,8 @@ class Busca extends Conexao {
     }
 
     /**
-     * 	Função que retorna as 'tabs' com as ṕáginas das notícias para editar
+     * 	Função que retorna as 'tabs' com as ṕáginas das notícias para editar.
      *
-     * 	@access public
      * 	@return string
      */
     public function getTabsNoticias(): string {
@@ -1478,7 +1409,7 @@ class Busca extends Conexao {
         if (!$this->mysqli->thread_id) {
             $this->mysqli = parent::getConexao();
         }
-        $query = $this->mysqli->query("SELECT paginas_post.id, paginas_post.tabela, paginas_post.nome FROM paginas_post;");
+        $query = $this->mysqli->query("SELECT paginas_post.id, paginas_post.tabela, paginas_post.nome FROM paginas_post;") or exit("Erro ao buscar as abas de notícias para edição.");
         $this->mysqli->close();
         while ($pag = $query->fetch_object()) {
             $retorno .= "
@@ -1497,7 +1428,6 @@ class Busca extends Conexao {
     /**
      * 	Função para retornar a tabela de notícias de uma página para edição
      *
-     * 	@access public
      * 	@return string
      */
     public function getNoticiasEditar(int $tabela): string {
@@ -1505,7 +1435,7 @@ class Busca extends Conexao {
         if (!$this->mysqli->thread_id) {
             $this->mysqli = parent::getConexao();
         }
-        $query = $this->mysqli->query("SELECT postagens.id, postagens.tabela, postagens.titulo, DATE_FORMAT(postagens.data, '%d/%m/%Y') AS data FROM postagens WHERE postagens.ativa = 1 AND postagens.tabela = {$tabela} ORDER BY postagens.data ASC;");
+        $query = $this->mysqli->query("SELECT postagens.id, postagens.tabela, postagens.titulo, DATE_FORMAT(postagens.data, '%d/%m/%Y') AS data FROM postagens WHERE postagens.ativa = 1 AND postagens.tabela = {$tabela} ORDER BY postagens.data ASC;") or exit("Erro ao buscar as notícias para editar.");
         $this->mysqli->close();
         while ($postagem = $query->fetch_object()) {
             $retorno .= "
@@ -1522,9 +1452,8 @@ class Busca extends Conexao {
     }
 
     /**
-     * Função para buscar conteúdo de uma publicação para edição
+     * Função para buscar conteúdo de uma publicação para edição.
      *
-     * @access public
      * @return string
      */
     public function getPublicacaoEditar(int $id): string {
@@ -1539,17 +1468,14 @@ class Busca extends Conexao {
     /**
      * Função para escrever as opções para "Postar em " do painel administrativo
      *
-     *
-     * @access public
      * @return string
      */
     public function getPostarEm(): string {
-        //declarando retorno
         $retorno = "";
         if (!$this->mysqli->thread_id) {
             $this->mysqli = parent::getConexao();
         }
-        $query = $this->mysqli->query("SELECT id, nome FROM paginas_post;");
+        $query = $this->mysqli->query("SELECT id, nome FROM paginas_post;") or exit("Erro ao buscar as páginas para postagem.");
         $this->mysqli->close();
         while ($pagina = $query->fetch_object()) {
             $retorno .= "<option id=\"op" . $pagina->id . "\" value=\"" . $pagina->id . "\">" . $pagina->nome . "</option>";
@@ -1558,19 +1484,17 @@ class Busca extends Conexao {
     }
 
     /**
-     * Função para retornar as solicitações para o SOF
+     * Função para retornar as solicitações para o SOF.
      *
-     * @access public
      * @return string
      *
      */
     public function getSolicitacoesAdmin(): string {
-        //declarando retorno
         $retorno = "";
         if (!$this->mysqli->thread_id) {
             $this->mysqli = parent::getConexao();
         }
-        $query = $this->mysqli->query("SELECT pedido.id, pedido.id_setor, setores.nome AS nome_setor, DATE_FORMAT(pedido.data_pedido, '%d/%m/%Y') AS data_pedido, mes.sigla_mes AS ref_mes, prioridade.nome AS prioridade, status.nome AS status, status.id AS id_status, pedido.valor FROM pedido, setores, mes, prioridade, status WHERE status.id = pedido.status AND pedido.status <> 3 AND prioridade.id = pedido.prioridade AND mes.id = pedido.ref_mes AND pedido.alteracao = 0 AND pedido.id_setor = setores.id ORDER BY pedido.id DESC LIMIT 100;");
+        $query = $this->mysqli->query("SELECT pedido.id, pedido.id_setor, setores.nome AS nome_setor, DATE_FORMAT(pedido.data_pedido, '%d/%m/%Y') AS data_pedido, mes.sigla_mes AS ref_mes, prioridade.nome AS prioridade, status.nome AS status, status.id AS id_status, pedido.valor FROM pedido, setores, mes, prioridade, status WHERE status.id = pedido.status AND pedido.status <> 3 AND prioridade.id = pedido.prioridade AND mes.id = pedido.ref_mes AND pedido.alteracao = 0 AND pedido.id_setor = setores.id ORDER BY pedido.id DESC LIMIT 100;") or exit("Erro ao buscar os pedidos que foram mandados ao SOF.");
         $this->mysqli->close();
         while ($pedido = $query->fetch_object()) {
             $btnAnalisar = "";
@@ -1625,18 +1549,16 @@ class Busca extends Conexao {
     }
 
     /**
-     * Função para trazer as informações de um pedido a ser analisado
+     * Função para trazer as informações de um pedido a ser analisado.
      *
-     * @access public
      * @return string
      */
     public function getItensPedidoAnalise(int $id_pedido): string {
-        //declarando retorno
         $retorno = "";
         if (!$this->mysqli->thread_id) {
             $this->mysqli = parent::getConexao();
         }
-        $query = $this->mysqli->query("SELECT itens.qt_contrato, itens.id AS id_itens, itens_pedido.qtd AS qtd_solicitada, itens_pedido.valor, itens.nome_fornecedor, itens.num_licitacao, itens.dt_inicio, itens.dt_fim, itens.cod_reduzido, itens.complemento_item, itens.vl_unitario, itens.qt_saldo, itens.cod_despesa, itens.descr_despesa, itens.num_contrato, itens.num_processo, itens.descr_mod_compra, itens.num_licitacao, itens.cgc_fornecedor, itens.num_extrato, itens.descricao, itens.qt_contrato, itens.vl_contrato, itens.qt_utilizado, itens.vl_utilizado, itens.qt_saldo, itens.vl_saldo, itens.seq_item_processo FROM itens_pedido, itens WHERE itens_pedido.id_pedido = {$id_pedido} AND itens_pedido.id_item = itens.id ORDER BY itens.seq_item_processo ASC;");
+        $query = $this->mysqli->query("SELECT itens.qt_contrato, itens.id AS id_itens, itens_pedido.qtd AS qtd_solicitada, itens_pedido.valor, itens.nome_fornecedor, itens.num_licitacao, itens.dt_inicio, itens.dt_fim, itens.cod_reduzido, itens.complemento_item, itens.vl_unitario, itens.qt_saldo, itens.cod_despesa, itens.descr_despesa, itens.num_contrato, itens.num_processo, itens.descr_mod_compra, itens.num_licitacao, itens.cgc_fornecedor, itens.num_extrato, itens.descricao, itens.qt_contrato, itens.vl_contrato, itens.qt_utilizado, itens.vl_utilizado, itens.qt_saldo, itens.vl_saldo, itens.seq_item_processo FROM itens_pedido, itens WHERE itens_pedido.id_pedido = {$id_pedido} AND itens_pedido.id_item = itens.id ORDER BY itens.seq_item_processo ASC;") or exit("Erro ao buscar os itens do pedido para análise.");
         while ($item = $query->fetch_object()) {
             if ($item->dt_fim == '') {
                 $item->dt_fim = "----------";
@@ -1694,16 +1616,14 @@ class Busca extends Conexao {
     /**
      * Função para trazer o restante das informações para analisar o pedido:
      *               saldo, total, prioridade, fase, etc.
-     *
-     * @access public
+     *   
      * @return string
-     *
      */
     public function getInfoPedidoAnalise(int $id_pedido, int $id_setor): string {
         if (!$this->mysqli->thread_id) {
             $this->mysqli = parent::getConexao();
         }
-        $query = $this->mysqli->query("SELECT saldo_setor.saldo, pedido.prioridade, pedido.status, pedido.valor, pedido.obs FROM saldo_setor, pedido WHERE saldo_setor.id_setor = {$id_setor} AND pedido.id = {$id_pedido};");
+        $query = $this->mysqli->query("SELECT saldo_setor.saldo, pedido.prioridade, pedido.status, pedido.valor, pedido.obs FROM saldo_setor, pedido WHERE saldo_setor.id_setor = {$id_setor} AND pedido.id = {$id_pedido};") or exit("Erro ao buscar as informações do pedido para análise.");
         $this->mysqli->close();
         $pedido = $query->fetch_object();
         return json_encode($pedido);
@@ -1712,7 +1632,6 @@ class Busca extends Conexao {
     /**
      * 	Função que retorna uma tabela com as solicitações de alteração de pedidos
      *
-     * 	@access public
      * 	@return string
      */
     public function getSolicAltPedidos(int $id_setor): string {
@@ -1720,7 +1639,7 @@ class Busca extends Conexao {
         if (!$this->mysqli->thread_id) {
             $this->mysqli = parent::getConexao();
         }
-        $query = $this->mysqli->query("SELECT solic_alt_pedido.id_pedido, DATE_FORMAT(solic_alt_pedido.data_solicitacao, '%d/%m/%Y') AS data_solicitacao, DATE_FORMAT(solic_alt_pedido.data_analise, '%d/%m/%Y') AS data_analise, solic_alt_pedido.justificativa, solic_alt_pedido.status FROM solic_alt_pedido WHERE solic_alt_pedido.id_setor = {$id_setor} ORDER BY id DESC;");
+        $query = $this->mysqli->query("SELECT solic_alt_pedido.id_pedido, DATE_FORMAT(solic_alt_pedido.data_solicitacao, '%d/%m/%Y') AS data_solicitacao, DATE_FORMAT(solic_alt_pedido.data_analise, '%d/%m/%Y') AS data_analise, solic_alt_pedido.justificativa, solic_alt_pedido.status FROM solic_alt_pedido WHERE solic_alt_pedido.id_setor = {$id_setor} ORDER BY id DESC;") or exit("Erro ao buscar solicitações de alteração de pedidos.");
         $status = $label = "";
         while ($solic = $query->fetch_object()) {
             switch ($solic->status) {
@@ -1756,33 +1675,8 @@ class Busca extends Conexao {
     }
 
     /**
-     * 	Função para retornar os meses em php/solicitacoes.php RefMes
-     *
-     * 	@access public
-     * 	@return string
-     */
-    public function getMeses(): string {
-        $retorno = $selected = "";
-        $mes_atual = date('n');
-        if (!$this->mysqli->thread_id) {
-            $this->mysqli = parent::getConexao();
-        }
-        $query = $this->mysqli->query("SELECT id, sigla_mes FROM mes LIMIT 12;");
-        $this->mysqli->close();
-        while ($mes = $query->fetch_object()) {
-            if ($mes->id == $mes_atual) {
-                $selected = "selected";
-            }
-            $retorno .= "<option value=\"" . $mes->id . "\" " . $selected . ">" . $mes->sigla_mes . "</option>";
-            $selected = "";
-        }
-        return $retorno;
-    }
-
-    /**
      * 	Função que retorna as solicitações de adiantamento de saldos do setor
      *
-     * 	@access public
      * 	@return string
      */
     public function getSolicAdiSetor(int $id_setor): string {
@@ -1790,7 +1684,7 @@ class Busca extends Conexao {
         if (!$this->mysqli->thread_id) {
             $this->mysqli = parent::getConexao();
         }
-        $query = $this->mysqli->query("SELECT saldos_adiantados.id, DATE_FORMAT(saldos_adiantados.data_solicitacao, '%d/%m/%Y') AS data_solicitacao, DATE_FORMAT(saldos_adiantados.data_analise, '%d/%m/%Y') AS data_analise, saldos_adiantados.valor_adiantado, saldos_adiantados.justificativa, saldos_adiantados.status FROM saldos_adiantados WHERE saldos_adiantados.id_setor = {$id_setor} ORDER BY saldos_adiantados.id DESC;");
+        $query = $this->mysqli->query("SELECT saldos_adiantados.id, DATE_FORMAT(saldos_adiantados.data_solicitacao, '%d/%m/%Y') AS data_solicitacao, DATE_FORMAT(saldos_adiantados.data_analise, '%d/%m/%Y') AS data_analise, saldos_adiantados.valor_adiantado, saldos_adiantados.justificativa, saldos_adiantados.status FROM saldos_adiantados WHERE saldos_adiantados.id_setor = {$id_setor} ORDER BY saldos_adiantados.id DESC;") or exit("Erro ao buscar solicitações de adiantamento.");
         $label = $status = "";
         while ($solic = $query->fetch_object()) {
             switch ($solic->status) {
@@ -1827,19 +1721,17 @@ class Busca extends Conexao {
     }
 
     /**
-     * Função para mostrar os itens de um processo pesquisado no menu solicitações
+     * Função para mostrar os itens de um processo pesquisado no menu solicitações.
      *
-     * @access public
      * @return string
      */
     public function getConteudoProcesso(string $busca): string {
-        //declarando retorno
         $retorno = "";
 
         if (!$this->mysqli->thread_id) {
             $this->mysqli = parent::getConexao();
         }
-        $query = $this->mysqli->query("SELECT itens.id, itens.id_item_processo, itens.nome_fornecedor, itens.cod_reduzido, itens.complemento_item, replace(itens.vl_unitario, ',', '.') AS vl_unitario, itens.qt_contrato, itens.qt_utilizado, itens.vl_utilizado, itens.qt_saldo, itens.vl_saldo FROM itens WHERE num_processo LIKE '%{$busca}%' AND cancelado = 0;");
+        $query = $this->mysqli->query("SELECT itens.id, itens.id_item_processo, itens.nome_fornecedor, itens.cod_reduzido, itens.complemento_item, replace(itens.vl_unitario, ',', '.') AS vl_unitario, itens.qt_contrato, itens.qt_utilizado, itens.vl_utilizado, itens.qt_saldo, itens.vl_saldo FROM itens WHERE num_processo LIKE '%{$busca}%' AND cancelado = 0;") or exit("Erro ao buscar o conteúdo dos processos.");
 
         while ($item = $query->fetch_object()) {
             //remove as aspas do complemento_item
@@ -1872,15 +1764,13 @@ class Busca extends Conexao {
     /**
      * Função para trazer a linha do item anexado ao pedido
      *
-     * @access public
      * @return string
      */
     public function addItemPedido(int $id_item, int $qtd): string {
-        //executando a query
         if (!$this->mysqli->thread_id) {
             $this->mysqli = parent::getConexao();
         }
-        $query = $this->mysqli->query("SELECT itens.id, itens.nome_fornecedor, itens.num_licitacao, itens.cod_reduzido, itens.complemento_item, replace(itens.vl_unitario, ',', '.') AS vl_unitario, itens.qt_saldo, itens.qt_contrato, itens.qt_utilizado, itens.vl_saldo, itens.vl_contrato, itens.vl_utilizado FROM itens WHERE itens.id = {$id_item};");
+        $query = $this->mysqli->query("SELECT itens.id, itens.nome_fornecedor, itens.num_licitacao, itens.cod_reduzido, itens.complemento_item, replace(itens.vl_unitario, ',', '.') AS vl_unitario, itens.qt_saldo, itens.qt_contrato, itens.qt_utilizado, itens.vl_saldo, itens.vl_contrato, itens.vl_utilizado FROM itens WHERE itens.id = {$id_item};") or exit("Erro ao buscar ");
         $item = $query->fetch_object();
         $item->complemento_item = $this->mysqli->real_escape_string($item->complemento_item);
         $item->complemento_item = str_replace("\"", "'", $item->complemento_item);
@@ -1914,18 +1804,16 @@ class Busca extends Conexao {
     }
 
     /**
-     * Função para retornar os rascunhos para continuar editando
+     * Função para retornar os rascunhos para continuar editando.
      *
-     * @access public
      * @return string
      */
     public function getRascunhos(int $id_setor): string {
-        //declarando retorno
         $retorno = "";
         if (!$this->mysqli->thread_id) {
             $this->mysqli = parent::getConexao();
         }
-        $query = $this->mysqli->query("SELECT pedido.id, DATE_FORMAT(pedido.data_pedido, '%d/%m/%Y') AS data_pedido, mes.sigla_mes AS ref_mes, pedido.valor, status.nome AS status FROM pedido, mes, status WHERE pedido.id_setor = {$id_setor} AND pedido.alteracao = 1 AND mes.id = pedido.ref_mes AND status.id = pedido.status ORDER BY pedido.id DESC;");
+        $query = $this->mysqli->query("SELECT pedido.id, DATE_FORMAT(pedido.data_pedido, '%d/%m/%Y') AS data_pedido, mes.sigla_mes AS ref_mes, pedido.valor, status.nome AS status FROM pedido, mes, status WHERE pedido.id_setor = {$id_setor} AND pedido.alteracao = 1 AND mes.id = pedido.ref_mes AND status.id = pedido.status ORDER BY pedido.id DESC;") or exit("Erro ao buscar rascunhos do setor.");
         $this->mysqli->close();
 
         while ($rascunho = $query->fetch_object()) {
@@ -1948,18 +1836,17 @@ class Busca extends Conexao {
     }
 
     /**
-     * 	Função que retorna o saldo dispónível do setor
+     * 	Função que retorna o saldo dispónível do setor.
      *
-     * 	@access public
      * 	@return string
      */
     public function getSaldo(int $id_setor): string {
         if (!$this->mysqli->thread_id) {
             $this->mysqli = parent::getConexao();
         }
-        $query = $this->mysqli->query("SELECT saldo_setor.saldo FROM saldo_setor WHERE saldo_setor.id_setor = {$id_setor};");
+        $query = $this->mysqli->query("SELECT saldo_setor.saldo FROM saldo_setor WHERE saldo_setor.id_setor = {$id_setor};") or exit("Erro ao buscar o saldo do setor.");
         if ($query->num_rows < 1) {
-            $this->mysqli->query("INSERT INTO saldo_setor VALUES(NULL, {$id_setor}, '0.000');");
+            $this->mysqli->query("INSERT INTO saldo_setor VALUES(NULL, {$id_setor}, '0.000');") or exit("Erro ao inserir o saldo do setor.");
             $this->mysqli->close();
             return '0.000';
         }
@@ -1980,7 +1867,7 @@ class Busca extends Conexao {
         if (!$this->mysqli->thread_id) {
             $this->mysqli = parent::getConexao();
         }
-        $query = $this->mysqli->query("SELECT itens.qt_contrato, itens.id AS id_itens, itens_pedido.qtd AS qtd_solicitada, itens_pedido.valor, itens.nome_fornecedor, itens.num_licitacao, itens.cod_reduzido, itens.complemento_item, replace(itens.vl_unitario, ',', '.') AS vl_unitario, itens.qt_saldo, itens.qt_contrato, itens.qt_utilizado, itens.vl_saldo, itens.vl_contrato, itens.vl_utilizado FROM itens_pedido, itens WHERE itens_pedido.id_pedido = {$id_pedido} AND itens_pedido.id_item = itens.id");
+        $query = $this->mysqli->query("SELECT itens.qt_contrato, itens.id AS id_itens, itens_pedido.qtd AS qtd_solicitada, itens_pedido.valor, itens.nome_fornecedor, itens.num_licitacao, itens.cod_reduzido, itens.complemento_item, replace(itens.vl_unitario, ',', '.') AS vl_unitario, itens.qt_saldo, itens.qt_contrato, itens.qt_utilizado, itens.vl_saldo, itens.vl_contrato, itens.vl_utilizado FROM itens_pedido, itens WHERE itens_pedido.id_pedido = {$id_pedido} AND itens_pedido.id_item = itens.id") or exit("Erro ao buscar o conteúdo do pedido.");
         while ($item = $query->fetch_object()) {
             $id_item = $item->id_itens;
             $item->complemento_item = $this->mysqli->real_escape_string($item->complemento_item);
@@ -2015,36 +1902,31 @@ class Busca extends Conexao {
     }
 
     /**
-     * Função dispara logo após clicar em editar rascunho de pedido
+     * Função dispara logo após clicar em editar rascunho de pedido.
      *
-     * @access public
      * @return string
-     *
      */
     public function getPopulaRascunho(int $id_pedido, int $id_setor): string {
         if (!$this->mysqli->thread_id) {
             $this->mysqli = parent::getConexao();
         }
-        $query = $this->mysqli->query("SELECT saldo_setor.saldo, pedido.valor, pedido.obs FROM saldo_setor, pedido WHERE pedido.id = {$id_pedido} AND saldo_setor.id_setor = {$id_setor};");
+        $query = $this->mysqli->query("SELECT saldo_setor.saldo, pedido.valor, pedido.obs FROM saldo_setor, pedido WHERE pedido.id = {$id_pedido} AND saldo_setor.id_setor = {$id_setor};") or exit("Erro ao buscar informações do rascunho.");
         $this->mysqli->close();
         $pedido = $query->fetch_object();
         return json_encode($pedido);
     }
 
     /**
-     * Função para o setor acompanhar o andamento do seu pedido
+     * Função para o setor acompanhar o andamento do seu pedido.
      *
-     * @access public
      * @return string
-     *
      */
     public function getMeusPedidos(int $id_setor): string {
-        //declarando retorno
         $retorno = "";
         if (!$this->mysqli->thread_id) {
             $this->mysqli = parent::getConexao();
         }
-        $query = $this->mysqli->query("SELECT pedido.id, DATE_FORMAT(pedido.data_pedido, '%d/%m/%Y') AS data_pedido, mes.sigla_mes AS ref_mes, prioridade.nome AS prioridade, status.nome AS status, pedido.valor FROM pedido, mes, prioridade, status WHERE prioridade.id = pedido.prioridade AND status.id = pedido.status AND pedido.id_setor = {$id_setor} AND pedido.alteracao = 0 AND mes.id = pedido.ref_mes ORDER BY pedido.id DESC;");
+        $query = $this->mysqli->query("SELECT pedido.id, DATE_FORMAT(pedido.data_pedido, '%d/%m/%Y') AS data_pedido, mes.sigla_mes AS ref_mes, prioridade.nome AS prioridade, status.nome AS status, pedido.valor FROM pedido, mes, prioridade, status WHERE prioridade.id = pedido.prioridade AND status.id = pedido.status AND pedido.id_setor = {$id_setor} AND pedido.alteracao = 0 AND mes.id = pedido.ref_mes ORDER BY pedido.id DESC;") or exit("Erro ao buscar os pedidos do setor.");
         $this->mysqli->close();
         while ($pedido = $query->fetch_object()) {
             $empenho = Busca::verEmpenho($pedido->id);
@@ -2095,7 +1977,7 @@ class Busca extends Conexao {
         if (!$this->mysqli->thread_id) {
             $this->mysqli = parent::getConexao();
         }
-        $query = $this->mysqli->query($sql);
+        $query = $this->mysqli->query($sql) or exit("Erro ao buscar os processos.");
         $this->mysqli->close();
         while ($processo = $query->fetch_object()) {
             $retorno .= "
@@ -2113,7 +1995,7 @@ class Busca extends Conexao {
         if (!$this->mysqli->thread_id) {
             $this->mysqli = parent::getConexao();
         }
-        $query = $this->mysqli->query("SELECT licitacao.id, licitacao.tipo, licitacao.numero, licitacao.uasg, licitacao.processo_original FROM licitacao WHERE licitacao.id_pedido = {$id_pedido};");
+        $query = $this->mysqli->query("SELECT licitacao.id, licitacao.tipo, licitacao.numero, licitacao.uasg, licitacao.processo_original FROM licitacao WHERE licitacao.id_pedido = {$id_pedido};") or exit("Erro ao buscar as licitações do pedido.");
         $this->mysqli->close();
         $retorno = false;
         if ($query->num_rows > 0) {
