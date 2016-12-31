@@ -38,15 +38,11 @@ class Busca extends Conexao {
             $this->mysqli = parent::getConexao();
         }
         $query = $this->mysqli->query("SELECT id, num_processo, cod_reduzido, seq_item_processo FROM itens;") or exit("Erro ao atualizar a chave.");
-        $this->mysqli->close();
         while ($obj = $query->fetch_object()) {
             $chave = $obj->num_processo . "#" . $obj->cod_reduzido . "#" . $obj->seq_item_processo;
-            if (!$this->mysqli->thread_id) {
-                $this->mysqli = parent::getConexao();
-            }
             $this->mysqli->query("UPDATE itens SET chave = '{$chave}' WHERE id = {$obj->id};") or exit("Erro ao atualizar a chave do item " . $obj->id);
-            $this->mysqli->close();
         }
+        $this->mysqli->close();
     }
 
     public function getOptionsGrupos(int $id_setor): string {
@@ -232,14 +228,9 @@ class Busca extends Conexao {
             $this->mysqli = parent::getConexao();
         }
         $query = $this->mysqli->query("SELECT setores.nome AS setor, problemas.assunto, problemas.descricao FROM setores, problemas WHERE setores.id = problemas.id_setor ORDER BY problemas.id DESC;");
-        $this->mysqli->close();
         $retorno = "";
         while ($problema = $query->fetch_object()) {
-            if (!$this->mysqli->thread_id) {
-                $this->mysqli = parent::getConexao();
-            }
             $problema->descricao = $this->mysqli->real_escape_string($problema->descricao);
-            $this->mysqli->close();
             $problema->descricao = str_replace("\"", "'", $problema->descricao);
             $retorno .= "
                 <tr>
@@ -250,6 +241,7 @@ class Busca extends Conexao {
                     </td>
                 </tr>";
         }
+        $this->mysqli->close();
         return $retorno;
     }
 
@@ -287,7 +279,6 @@ class Busca extends Conexao {
             $this->mysqli = parent::getConexao();
         }
         $query = $this->mysqli->query("SELECT pedido_log_status.id_pedido AS id, setores.nome AS setor, DATE_FORMAT(pedido_log_status.data, '%d/%m/%Y') AS data_pedido, prioridade.nome AS prioridade, status.nome AS status, pedido.valor {$empenho} FROM {$tb_empenho} pedido_log_status, setores, pedido, prioridade, status WHERE status.id = pedido.status {$where_setor} {$where_prioridade} {$where_empenho} AND prioridade.id = pedido.prioridade AND pedido.id = pedido_log_status.id_pedido AND pedido.id_setor = setores.id {$where_status} AND pedido_log_status.data BETWEEN '{$dataIni}' AND '{$dataFim}' ORDER BY pedido_log_status.id_pedido ASC;") or exit("Erro ao buscar os pedidos com as especificações do usuário.");
-        $this->mysqli->close();
         $titulo = "Relatório de Pedidos por Setor e Nível de Prioridade";
         if ($query) {
             $thead = "
@@ -301,11 +292,7 @@ class Busca extends Conexao {
                     <th>Prioridade</th>
                     <th>SIAFI</th>";
             }
-            if (!$this->mysqli->thread_id) {
-                $this->mysqli = parent::getConexao();
-            }
             $query_tot = $this->mysqli->query("SELECT sum(pedido.valor) AS total FROM {$tb_empenho} pedido, pedido_log_status WHERE pedido_log_status.id_pedido = pedido.id {$where_setor} {$where_prioridade} {$where_empenho} AND pedido.alteracao = 0 {$where_status} AND pedido_log_status.data BETWEEN '{$dataIni}' AND '{$dataFim}';") or exit("Erro ao somar os pedidos.");
-            $this->mysqli->close();
             $total = "R$ 0";
             $tot = $query_tot->fetch_object();
             if ($tot->total > 0) {
@@ -369,6 +356,7 @@ class Busca extends Conexao {
                 </h5><br><br>
                 <h4 style=\"text-align: center\" class=\"ass\">Santa Maria, ___ de ___________________ de _____.</h4>";
         }
+        $this->mysqli->close();
         return $retorno;
     }
 
@@ -596,17 +584,9 @@ class Busca extends Conexao {
             $this->mysqli = parent::getConexao();
         }
         if ($where == "") {
-            if (!$this->mysqli->thread_id) {
-                $this->mysqli = parent::getConexao();
-            }
             $query_proc = $this->mysqli->query("SELECT processos_tipo.id, processos_tipo.nome FROM processos_tipo;");
-            $this->mysqli->close();
             while ($tipo_proc = $query_proc->fetch_object()) {
-                if (!$this->mysqli->thread_id) {
-                    $this->mysqli = parent::getConexao();
-                }
                 $query = $this->mysqli->query("SELECT processos.num_processo, processos_tipo.nome AS tipo, processos_tipo.id AS id_tipo, processos.estante, processos.prateleira, processos.entrada, processos.saida, processos.responsavel, processos.retorno, processos.obs FROM processos, processos_tipo WHERE processos.tipo = processos_tipo.id AND processos.tipo = {$tipo_proc->id} ORDER BY processos.tipo ASC;");
-                $this->mysqli->close();
                 if ($query->num_rows > 0) {
                     $retorno .= "
                         <fieldset class=\"preg\">
@@ -652,7 +632,6 @@ class Busca extends Conexao {
             }
         } else {
             $query_proc = $this->mysqli->query("SELECT processos_tipo.nome FROM processos_tipo WHERE processos_tipo.id = {$tipo};");
-            $this->mysqli->close();
             $tipo_proc = $query_proc->fetch_object();
             $retorno .= "
                 <fieldset class=\"preg\">
@@ -677,11 +656,7 @@ class Busca extends Conexao {
                         </tr>
                     </thead>
                     <tbody>";
-            if (!$this->mysqli->thread_id) {
-                $this->mysqli = parent::getConexao();
-            }
             $query = $this->mysqli->query("SELECT processos.num_processo, processos_tipo.nome AS tipo, processos_tipo.id AS id_tipo, processos.estante, processos.prateleira, processos.entrada, processos.saida, processos.responsavel, processos.retorno, processos.obs FROM processos, processos_tipo WHERE processos.tipo = processos_tipo.id {$where} ORDER BY processos.tipo ASC;");
-            $this->mysqli->close();
             if ($query->num_rows > 0) {
                 while ($processo = $query->fetch_object()) {
                     $retorno .= "
@@ -702,6 +677,7 @@ class Busca extends Conexao {
                     </tbody>
             </table><br>";
         }
+        $this->mysqli->close();
         return $retorno;
     }
 
@@ -852,13 +828,8 @@ class Busca extends Conexao {
             $this->mysqli = parent::getConexao();
         }
         $query = $this->mysqli->query("SELECT processos.id, processos.num_processo, processos_tipo.nome as tipo, processos.estante, processos.prateleira, processos.entrada, processos.saida, processos.responsavel, processos.retorno, processos.obs FROM processos, processos_tipo WHERE processos.tipo = processos_tipo.id ORDER BY id ASC;");
-        $this->mysqli->close();
         while ($processo = $query->fetch_object()) {
-            if (!$this->mysqli->thread_id) {
-                $this->mysqli = parent::getConexao();
-            }
             $processo->obs = $this->mysqli->real_escape_string($processo->obs);
-            $this->mysqli->close();
             $processo->obs = str_replace("\"", "'", $processo->obs);
             $retorno .= "
                 <tr>
@@ -878,6 +849,7 @@ class Busca extends Conexao {
                     </td>
                 </tr>";
         }
+        $this->mysqli->close();
         return $retorno;
     }
 
@@ -1051,7 +1023,6 @@ class Busca extends Conexao {
             $this->mysqli = parent::getConexao();
         }
         $busca = $this->mysqli->real_escape_string($busca);
-        $this->mysqli->close();
         $retorno = "
             <div class=\"card\">
                 <div class=\"card-main\">
@@ -1069,9 +1040,6 @@ class Busca extends Conexao {
                                         <th class=\"pull-right\">Data de Publicação</th>
                                     </thead>
                                     <tbody>";
-        if (!$this->mysqli->thread_id) {
-            $this->mysqli = parent::getConexao();
-        }
         $query = $this->mysqli->query("SELECT postagens.id, postagens.tabela, postagens.titulo, DATE_FORMAT(postagens.data, '%d/%m/%Y') AS data, postagens.ativa FROM postagens WHERE postagens.titulo LIKE '%{$busca}%' AND postagens.ativa = 1 ORDER BY postagens.data DESC;");
         $this->mysqli->close();
         if ($query->num_rows < 1) {
@@ -1113,8 +1081,7 @@ class Busca extends Conexao {
         if (!$this->mysqli->thread_id) {
             $this->mysqli = parent::getConexao();
         }
-        $query = $this->mysqli->query("SELECT solic_alt_pedido.id, solic_alt_pedido.id_pedido, setores.nome, DATE_FORMAT(solic_alt_pedido.data_solicitacao, '%d/%m/%Y') AS data_solicitacao, DATE_FORMAT(solic_alt_pedido.data_analise, '%d/%m/%Y') AS data_analise, solic_alt_pedido.justificativa, solic_alt_pedido.status FROM solic_alt_pedido, setores WHERE solic_alt_pedido.id_setor = setores.id AND solic_alt_pedido.status = {$st};");
-        $this->mysqli->close();
+        $query = $this->mysqli->query("SELECT solic_alt_pedido.id, solic_alt_pedido.id_pedido, setores.nome, DATE_FORMAT(solic_alt_pedido.data_solicitacao, '%d/%m/%Y') AS data_solicitacao, DATE_FORMAT(solic_alt_pedido.data_analise, '%d/%m/%Y') AS data_analise, solic_alt_pedido.justificativa, solic_alt_pedido.status FROM solic_alt_pedido, setores WHERE solic_alt_pedido.id_setor = setores.id AND solic_alt_pedido.status = {$st} ORDER BY solic_alt_pedido.id DESC;");
         $status = $label = "";
         while ($solic = $query->fetch_object()) {
             switch ($solic->status) {
@@ -1137,11 +1104,7 @@ class Busca extends Conexao {
                 $btn_aprovar = "<a title=\"Aprovar\" href=\"javascript:analisaSolicAlt(" . $solic->id . ", " . $solic->id_pedido . ", 1);\" class=\"modal-close\"><span class=\"icon\">done_all<span></span></span></a>";
                 $btn_reprovar = "<a title=\"Reprovar\" href=\"javascript:analisaSolicAlt(" . $solic->id . ", " . $solic->id_pedido . ", 0);\" class=\"modal-close\"><span class=\"icon\">delete<span></span></span></a>";
             }
-            if (!$this->mysqli->thread_id) {
-                $this->mysqli = parent::getConexao();
-            }
             $solic->justificativa = $this->mysqli->real_escape_string($solic->justificativa);
-            $this->mysqli->close();
             $solic->justificativa = str_replace("\"", "'", $solic->justificativa);
             $retorno .= "
                 <tr>
@@ -1156,6 +1119,7 @@ class Busca extends Conexao {
                     <td><span class=\"label " . $label . "\" style=\"font-size: 11pt !important; font-weight: bold;\">" . $status . "</span></td>
                 </tr>";
         }
+        $this->mysqli->close();
         return $retorno;
     }
 
@@ -1171,7 +1135,6 @@ class Busca extends Conexao {
             $this->mysqli = parent::getConexao();
         }
         $query = $this->mysqli->query("SELECT saldos_adiantados.id, setores.nome, DATE_FORMAT(saldos_adiantados.data_solicitacao, '%d/%m/%Y') AS data_solicitacao, DATE_FORMAT(saldos_adiantados.data_analise, '%d/%m/%Y') AS data_analise, saldos_adiantados.valor_adiantado, saldos_adiantados.justificativa FROM saldos_adiantados, setores WHERE saldos_adiantados.id_setor = setores.id AND saldos_adiantados.status = {$st} ORDER BY saldos_adiantados.data_solicitacao DESC;");
-        $this->mysqli->close();
         // declarando retorno
         $retorno = "";
         $status = $label = "";
@@ -1201,11 +1164,7 @@ class Busca extends Conexao {
                     $btn_aprovar = "<a title=\"Aprovar\" href=\"javascript:analisaAdi(" . $solic->id . ", 1);\" class=\"modal-close\"><span class=\"icon\">done_all<span></span></span></a>";
                     $btn_reprovar = "<a title=\"Reprovar\" href=\"javascript:analisaAdi(" . $solic->id . ", 0);\" class=\"modal-close\"><span class=\"icon\">delete<span></span></span></a>";
                 }
-                if (!$this->mysqli->thread_id) {
-                    $this->mysqli = parent::getConexao();
-                }
                 $solic->justificativa = $this->mysqli->real_escape_string($solic->justificativa);
-                $this->mysqli->close();
                 $solic->justificativa = str_replace("\"", "'", $solic->justificativa);
                 $solic->valor_adiantado = number_format($solic->valor_adiantado, 3, ',', '.');
                 $retorno .= "
@@ -1222,6 +1181,7 @@ class Busca extends Conexao {
                     </tr>";
             }
         }
+        $this->mysqli->close();
         return $retorno;
     }
 
@@ -1382,7 +1342,6 @@ class Busca extends Conexao {
             $this->mysqli = parent::getConexao();
         }
         $query_ini = $this->mysqli->query("SELECT DISTINCT itens.num_licitacao, itens.num_processo, itens.dt_inicio, itens.dt_fim FROM itens_pedido, itens WHERE itens.id = itens_pedido.id_item AND itens_pedido.id_pedido = {$id_pedido};");
-        $this->mysqli->close();
         $i = 0;
         while ($licitacao = $query_ini->fetch_object()) {
             if ($licitacao->dt_fim == '') {
@@ -1399,11 +1358,7 @@ class Busca extends Conexao {
                         </tr>
                     </table>
                 </fieldset><br>";
-            if (!$this->mysqli->thread_id) {
-                $this->mysqli = parent::getConexao();
-            }
             $query_forn = $this->mysqli->query("SELECT DISTINCT itens.cgc_fornecedor, itens.nome_fornecedor, itens.num_contrato FROM itens, itens_pedido WHERE itens.id = itens_pedido.id_item AND itens_pedido.id_pedido = {$id_pedido} AND itens.num_licitacao = {$licitacao->num_licitacao};");
-            $this->mysqli->close();
 
             // -------------------------------------------------------------------------
             //                FORNECEDORES REFERENTES À LICITAÇÃO
@@ -1424,11 +1379,7 @@ class Busca extends Conexao {
                 // ----------------------------------------------------------------------
                 //                  ITENS REFERENTES AOS FORNECEDORES
                 // ----------------------------------------------------------------------
-                if (!$this->mysqli->thread_id) {
-                    $this->mysqli = parent::getConexao();
-                }
                 $query_itens = $this->mysqli->query("SELECT itens.cod_reduzido, itens.cod_despesa, itens.seq_item_processo, itens.complemento_item, itens.vl_unitario, itens_pedido.qtd, itens_pedido.valor FROM itens, itens_pedido WHERE itens.id = itens_pedido.id_item AND itens_pedido.id_pedido = {$id_pedido} AND itens.cgc_fornecedor = '{$fornecedor->cgc_fornecedor}'");
-                $this->mysqli->close();
                 $retorno .= "
                     <table class=\"prod\">
                         <thead>
@@ -1463,6 +1414,7 @@ class Busca extends Conexao {
                 </table><br>";
             }
         }
+        $this->mysqli->close();
 
         return $retorno;
     }
@@ -1506,7 +1458,6 @@ class Busca extends Conexao {
             $this->mysqli = parent::getConexao();
         }
         $query_emp = $this->mysqli->query("SELECT pedido_empenho.empenho, DATE_FORMAT(pedido_empenho.data, '%d/%m/%Y') AS data FROM pedido_empenho WHERE pedido_empenho.id_pedido = {$id_pedido};");
-        $this->mysqli->close();
         if ($query_emp->num_rows > 0) {
             $empenho = $query_emp->fetch_object();
             $retorno = "
@@ -1529,9 +1480,6 @@ class Busca extends Conexao {
                 </fieldset>";
         }
 
-        if (!$this->mysqli->thread_id) {
-            $this->mysqli = parent::getConexao();
-        }
         $query = $this->mysqli->query("SELECT DATE_FORMAT(comentarios.data_coment, '%d/%m/%Y') AS data_coment, comentarios.comentario FROM comentarios, prioridade WHERE prioridade.id = comentarios.prioridade AND comentarios.id_pedido = {$id_pedido};");
         $this->mysqli->close();
         if ($query->num_rows > 0) {
@@ -1752,16 +1700,11 @@ class Busca extends Conexao {
             $this->mysqli = parent::getConexao();
         }
         $query = $this->mysqli->query("SELECT itens.qt_contrato, itens.id AS id_itens, itens_pedido.qtd AS qtd_solicitada, itens_pedido.valor, itens.nome_fornecedor, itens.num_licitacao, itens.dt_inicio, itens.dt_fim, itens.cod_reduzido, itens.complemento_item, itens.vl_unitario, itens.qt_saldo, itens.cod_despesa, itens.descr_despesa, itens.num_contrato, itens.num_processo, itens.descr_mod_compra, itens.num_licitacao, itens.cgc_fornecedor, itens.num_extrato, itens.descricao, itens.qt_contrato, itens.vl_contrato, itens.qt_utilizado, itens.vl_utilizado, itens.qt_saldo, itens.vl_saldo, itens.seq_item_processo FROM itens_pedido, itens WHERE itens_pedido.id_pedido = {$id_pedido} AND itens_pedido.id_item = itens.id ORDER BY itens.seq_item_processo ASC;");
-        $this->mysqli->close();
         while ($item = $query->fetch_object()) {
             if ($item->dt_fim == '') {
                 $item->dt_fim = "----------";
             }
-            if (!$this->mysqli->thread_id) {
-                $this->mysqli = parent::getConexao();
-            }
             $item->complemento_item = $this->mysqli->real_escape_string($item->complemento_item);
-            $this->mysqli->close();
             $item->complemento_item = str_replace("\"", "'", $item->complemento_item);
             $retorno .= "
                 <tr id=\"row_item" . $item->id_itens . "\">
@@ -1807,7 +1750,7 @@ class Busca extends Conexao {
                     </td>
                 </tr>";
         }
-
+        $this->mysqli->close();
         return $retorno;
     }
 
@@ -1841,7 +1784,6 @@ class Busca extends Conexao {
             $this->mysqli = parent::getConexao();
         }
         $query = $this->mysqli->query("SELECT solic_alt_pedido.id_pedido, DATE_FORMAT(solic_alt_pedido.data_solicitacao, '%d/%m/%Y') AS data_solicitacao, DATE_FORMAT(solic_alt_pedido.data_analise, '%d/%m/%Y') AS data_analise, solic_alt_pedido.justificativa, solic_alt_pedido.status FROM solic_alt_pedido WHERE solic_alt_pedido.id_setor = {$id_setor} ORDER BY id DESC;");
-        $this->mysqli->close();
         $status = $label = "";
         while ($solic = $query->fetch_object()) {
             switch ($solic->status) {
@@ -1859,11 +1801,7 @@ class Busca extends Conexao {
                     $solic->data_analise = "--------------";
                     break;
             }
-            if (!$this->mysqli->thread_id) {
-                $this->mysqli = parent::getConexao();
-            }
             $solic->justificativa = $this->mysqli->real_escape_string($solic->justificativa);
-            $this->mysqli->close();
             $solic->justificativa = str_replace("\"", "'", $solic->justificativa);
             $retorno .= "
                 <tr>
@@ -1876,6 +1814,7 @@ class Busca extends Conexao {
                     <td><span class=\"label " . $label . "\" style=\"font-size: 11pt !important; font-weight: bold;\">" . $status . "</span></td>
                 </tr>";
         }
+        $this->mysqli->close();
         return $retorno;
     }
 
@@ -1915,7 +1854,6 @@ class Busca extends Conexao {
             $this->mysqli = parent::getConexao();
         }
         $query = $this->mysqli->query("SELECT saldos_adiantados.id, DATE_FORMAT(saldos_adiantados.data_solicitacao, '%d/%m/%Y') AS data_solicitacao, DATE_FORMAT(saldos_adiantados.data_analise, '%d/%m/%Y') AS data_analise, saldos_adiantados.valor_adiantado, saldos_adiantados.justificativa, saldos_adiantados.status FROM saldos_adiantados WHERE saldos_adiantados.id_setor = {$id_setor} ORDER BY saldos_adiantados.id DESC;");
-        $this->mysqli->close();
         $label = $status = "";
         while ($solic = $query->fetch_object()) {
             switch ($solic->status) {
@@ -1933,11 +1871,7 @@ class Busca extends Conexao {
                     $solic->data_analise = "--------------";
                     break;
             }
-            if (!$this->mysqli->thread_id) {
-                $this->mysqli = parent::getConexao();
-            }
             $solic->justificativa = $this->mysqli->real_escape_string($solic->justificativa);
-            $this->mysqli->close();
             $solic->justificativa = str_replace("\"", "'", $solic->justificativa);
             $solic->valor_adiantado = number_format($solic->valor_adiantado, 3, ',', '.');
             $retorno .= "
@@ -1951,6 +1885,7 @@ class Busca extends Conexao {
                     <td><span class=\"label " . $label . "\" style=\"font-size: 11pt !important; font-weight: bold;\">" . $status . "</span></td>
                 </tr>";
         }
+        $this->mysqli->close();
         return $retorno;
     }
 
@@ -1969,14 +1904,9 @@ class Busca extends Conexao {
         }
         $query = $this->mysqli->query("SELECT itens.id, itens.id_item_processo, itens.nome_fornecedor, itens.cod_reduzido, itens.complemento_item, replace(itens.vl_unitario, ',', '.') AS vl_unitario, itens.qt_contrato, itens.qt_utilizado, itens.vl_utilizado, itens.qt_saldo, itens.vl_saldo FROM itens WHERE num_processo LIKE '%{$busca}%' AND cancelado = 0;");
 
-        $this->mysqli->close();
         while ($item = $query->fetch_object()) {
-            if (!$this->mysqli->thread_id) {
-                $this->mysqli = parent::getConexao();
-            }
             //remove as aspas do complemento_item
             $item->complemento_item = $this->mysqli->real_escape_string($item->complemento_item);
-            $this->mysqli->close();
             $item->complemento_item = str_replace("\"", "'", $item->complemento_item);
             $retorno .= "
                 <tr>
@@ -1998,6 +1928,7 @@ class Busca extends Conexao {
                     <td>" . $item->qt_contrato . "</td>
                 </tr>";
         }
+        $this->mysqli->close();
         return $retorno;
     }
 
@@ -2013,13 +1944,8 @@ class Busca extends Conexao {
             $this->mysqli = parent::getConexao();
         }
         $query = $this->mysqli->query("SELECT itens.id, itens.nome_fornecedor, itens.num_licitacao, itens.cod_reduzido, itens.complemento_item, replace(itens.vl_unitario, ',', '.') AS vl_unitario, itens.qt_saldo, itens.qt_contrato, itens.qt_utilizado, itens.vl_saldo, itens.vl_contrato, itens.vl_utilizado FROM itens WHERE itens.id = {$id_item};");
-        $this->mysqli->close();
         $item = $query->fetch_object();
-        if (!$this->mysqli->thread_id) {
-            $this->mysqli = parent::getConexao();
-        }
         $item->complemento_item = $this->mysqli->real_escape_string($item->complemento_item);
-        $this->mysqli->close();
         $item->complemento_item = str_replace("\"", "'", $item->complemento_item);
         $valor = $qtd * $item->vl_unitario;
         $retorno = "
@@ -2046,6 +1972,7 @@ class Busca extends Conexao {
                     <input type=\"hidden\" name=\"valor[]\" value=\"" . $valor . "\">
                 </td>
             </tr>";
+        $this->mysqli->close();
         return $retorno;
     }
 
@@ -2094,15 +2021,12 @@ class Busca extends Conexao {
             $this->mysqli = parent::getConexao();
         }
         $query = $this->mysqli->query("SELECT saldo_setor.saldo FROM saldo_setor WHERE saldo_setor.id_setor = {$id_setor};");
-        $this->mysqli->close();
         if ($query->num_rows < 1) {
-            if (!$this->mysqli->thread_id) {
-                $this->mysqli = parent::getConexao();
-            }
             $this->mysqli->query("INSERT INTO saldo_setor VALUES(NULL, {$id_setor}, '0.000');");
             $this->mysqli->close();
             return '0.000';
         }
+        $this->mysqli->close();
         $obj = $query->fetch_object();
         $saldo = number_format($obj->saldo, 3, '.', '');
         return $saldo;
@@ -2120,14 +2044,9 @@ class Busca extends Conexao {
             $this->mysqli = parent::getConexao();
         }
         $query = $this->mysqli->query("SELECT itens.qt_contrato, itens.id AS id_itens, itens_pedido.qtd AS qtd_solicitada, itens_pedido.valor, itens.nome_fornecedor, itens.num_licitacao, itens.cod_reduzido, itens.complemento_item, replace(itens.vl_unitario, ',', '.') AS vl_unitario, itens.qt_saldo, itens.qt_contrato, itens.qt_utilizado, itens.vl_saldo, itens.vl_contrato, itens.vl_utilizado FROM itens_pedido, itens WHERE itens_pedido.id_pedido = {$id_pedido} AND itens_pedido.id_item = itens.id");
-        $this->mysqli->close();
         while ($item = $query->fetch_object()) {
             $id_item = $item->id_itens;
-            if (!$this->mysqli->thread_id) {
-                $this->mysqli = parent::getConexao();
-            }
             $item->complemento_item = $this->mysqli->real_escape_string($item->complemento_item);
-            $this->mysqli->close();
             $item->complemento_item = str_replace("\"", "'", $item->complemento_item);
             $retorno .= "
                 <tr id=\"row" . $id_item . "\">
@@ -2154,6 +2073,7 @@ class Busca extends Conexao {
                     </td>
                 </tr>";
         }
+        $this->mysqli->close();
         return $retorno;
     }
 
