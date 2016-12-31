@@ -870,34 +870,6 @@ class Busca extends Conexao {
     }
 
     /**
-     * Função para adicionar novos inputs para adicionar arquivos
-     *
-     * @access public
-     * @return string
-     */
-    public function setInputsArquivo(int $qtd): string {
-        $qtd++;
-        return "
-            <div id=\"file-" . $qtd . "\" class=\"tile\">
-                <div class=\"tile-side pull-left\">
-                    <div class=\"avatar avatar-sm avatar-brand\">
-                            <span class=\"icon\">backup</span>
-                    </div>
-                </div>
-                <div class=\"tile-action tile-action-show\">
-                    <ul class=\"nav nav-list margin-no pull-right\">
-                        <li>
-                            <a class=\"text-black-sec waves-attach\" href=\"javascript:dropTile('file-" . $qtd . "');\"><span class=\"icon\">delete</span></a>
-                        </li>
-                    </ul>
-                </div>
-                <div class=\"tile-inner\">
-                    <input id=\"arq-" . $qtd . "\" class=\"btn btn-default btn-file\" type=\"file\" name=\"file-" . $qtd . "\" style=\"text-transform: none !important;\">
-                </div>
-            </div>";
-    }
-
-    /**
      * Função que busca os detalhes de uma notícia completa
      *
      * @access public
@@ -1492,41 +1464,6 @@ class Busca extends Conexao {
         } else {
             $retorno .= "Sem comentários";
         }
-        return $retorno;
-    }
-
-    /**
-     * Função que exibe os arquivos no modal do admin, usada diretamente no index
-     *
-     * @access public
-     * @return string
-     */
-    public function getArquivos(): string {
-        //declarando retorno
-        $retorno = "";
-        $pasta = '../uploads/';
-        $diretorio = dir($pasta);
-
-        while ($arquivo = $diretorio->read()) {
-            $tipo = pathinfo($pasta . $arquivo);
-            $label = "label";
-            if ($tipo["extension"] == "jpg" || $tipo["extension"] == "png" || $tipo["extension"] == "jpeg") {
-                $tipo = "Imagem";
-                $label .= " label-brand";
-            } else {
-                $tipo = "Documento";
-            }
-            if ($arquivo != "." && $arquivo != ".." && $tipo != "Imagem") {
-                //mostra apenas os documentos pdf e doc
-                $retorno .= "
-                    <tr>
-                        <td><span class=\"" . $label . "\" style=\"font-size: 11pt !important; font-weight: bold;\">" . $tipo . "</span></td>
-                        <td><a href=\"" . $pasta . $arquivo . "\">" . $arquivo . "</a></td>
-                        <td><button class=\"btn btn-flat waves-attach waves-effect\" onclick=\"delArquivo('" . $pasta . $arquivo . "');\"><span class=\"icon\">delete</span><span style=\"font-weight:bold;\">Excluir</span></button></td>
-                    </tr>";
-            }
-        }
-        $diretorio->close();
         return $retorno;
     }
 

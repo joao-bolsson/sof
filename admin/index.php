@@ -7,8 +7,10 @@ if (!isset($_SESSION["id_setor"]) || $_SESSION["id_setor"] != 2) {
     header("Location: ../");
 }
 include_once '../class/Busca.class.php';
+include_once '../class/Util.class.php';
 //instanciando classe de busca para popular o select de estados
 $obj_Busca = new Busca();
+$obj_Util = new Util();
 
 $permissao = $obj_Busca->getPermissoes($_SESSION["id"]);
 if (!$permissao->noticias) {
@@ -212,7 +214,7 @@ if (!$permissao->noticias) {
                     <th>Opções</th>
                     </thead>
                     <tbody>
-                        <?= $obj_Busca->getArquivos(); ?>
+                        <?= $obj_Util->getArquivos(); ?>
                     </tbody>
                 </table>
             </div>
