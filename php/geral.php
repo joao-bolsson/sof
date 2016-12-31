@@ -405,6 +405,8 @@ if ($obj_Busca->isActive()) {
                 $obs = $_POST['obs'];
 
                 $pedido = $_POST["pedido"];
+                
+                $pedido_existe = ($pedido != 0);
 
                 $obj_Geral->insertPedido($id_user, $id_setor, $id_item, $qtd_solicitada, $qtd_disponivel, $qtd_contrato, $qtd_utilizado, $vl_saldo, $vl_contrato, $vl_utilizado, $valor, $total_pedido, $saldo_total, $prioridade, $obs, $pedido);
 
@@ -426,7 +428,7 @@ if ($obj_Busca->isActive()) {
                 $obj_Geral->insertLicitacao($numero, $uasg, $procOri, $tipo, $pedido, $idLic, $geraContrato);
 
                 if (isset($_POST['grupo'])) {
-                    $obj_Geral->insertGrupoPedido($pedido, $_POST['grupo']);
+                    $obj_Geral->insertGrupoPedido($pedido, $_POST['grupo'], $pedido_existe);
                 }
                 header("Location: ../view/solicitacoes.php");
                 break;

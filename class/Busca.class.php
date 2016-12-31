@@ -23,6 +23,19 @@ class Busca extends Conexao {
         $this->obj_Util = new Util();
     }
 
+    public function getGrupo(int $id_pedido) {
+        if (!$this->mysqli->thread_id) {
+            $this->mysqli = parent::getConexao();
+        }
+        $query = $this->mysqli->query("SELECT pedido_grupo.id_grupo FROM pedido_grupo WHERE pedido_grupo.id_pedido = {$id_pedido};");
+        $this->mysqli->close();
+        if ($query->num_rows < 1) {
+            return false;
+        }
+        $obj = $query->fetch_object();
+        return $obj->id_grupo;
+    }
+
     /**
      * @return bool Se o sistema está ativo - true, senão - false.
      */

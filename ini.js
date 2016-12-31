@@ -970,6 +970,19 @@ function editaPedido(id_pedido) {
         document.getElementById("conteudoPedido").innerHTML = resposta;
     });
     populaLicitacao(id_pedido);
+    populaGrupo(id_pedido);
+}
+
+function populaGrupo(id_pedido) {
+    $.post('../php/busca.php', {
+        users: 1,
+        form: 'populaGrupo',
+        id_pedido: id_pedido
+    }, function (resposta) {
+        if (resposta) {
+            $("#grupo").val(resposta).trigger("change");
+        }
+    });
 }
 
 function populaLicitacao(id_pedido) {
@@ -984,13 +997,13 @@ function populaLicitacao(id_pedido) {
             $('#divNum').addClass('control-highlight');
             document.getElementById('infoLic').value = obj.numero;
             document.getElementById('tipoLic' + obj.tipo).checked = true;
-            maybeDisableFields(false);
-            if (obj.tipo == 3 || obj.tipo == 4) {
+            if (obj.tipo == 3 || obj.tipo == 4 || obj.tipo == 2) {
                 $('#divUasg').addClass('control-highlight');
                 $('#divProcOri').addClass('control-highlight');
+                document.getElementById('uasg').value = obj.uasg;
+                document.getElementById('procOri').value = obj.processo_original;
             }
-            document.getElementById('uasg').value = obj.uasg;
-            document.getElementById('procOri').value = obj.processo_original;
+            maybeDisableFields(!(obj.tipo == 3 || obj.tipo == 4 || obj.tipo == 2));
         }
     });
 }

@@ -29,11 +29,15 @@ class Geral extends Conexao {
      * @param int $pedido Id do pedido.
      * @param int $grupo id do grupo para inserir ao pedido.
      */
-    public function insertGrupoPedido(int $pedido, int $grupo) {
+    public function insertGrupoPedido(int $pedido, int $grupo, bool $existe) {
         if (!$this->mysqli->thread_id) {
             $this->mysqli = parent::getConexao();
         }
-        $this->mysqli->query("INSERT INTO pedido_grupo VALUES({$pedido}, {$grupo});") or exit("Erro ao cadastrar o grupo do pedido.");
+        $sql = "INSERT INTO pedido_grupo VALUES({$pedido}, {$grupo});";
+        if ($existe) {
+            $sql = "UPDATE pedido_grupo SET id_grupo = {$grupo} WHERE id_pedido = {$pedido} LIMIT 1;";
+        }
+        $this->mysqli->query($sql) or exit("Erro ao cadastrar o grupo do pedido.");
         $this->mysqli->close();
     }
 
