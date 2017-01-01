@@ -117,6 +117,7 @@ class Geral extends Conexao {
         $this->mysqli->query("DELETE FROM solic_alt_pedido;") or exit("Erro ao remover as solicitações de alteração de pedidos.");
         $this->mysqli->query("DELETE FROM itens;") or exit("Erro ao remover os itens.");
         $this->mysqli->query("DELETE FROM licitacao;") or exit("Erro ao remover as licitações.");
+        $this->mysqli->query("DELETE FROM pedido_grupo;") or exit("Erro ao remover os grupos dos pedidos.");
         $this->mysqli->query("DELETE FROM pedido_log_status;") or exit("Erro ao remover os logs dos status dos pedidos.");
         $this->mysqli->query("DELETE FROM pedido;") or exit("Erro ao remover os pedidos.");
 
@@ -134,6 +135,7 @@ class Geral extends Conexao {
         $this->mysqli->query("alter table solic_alt_pedido auto_increment = 1;") or exit("Erro alter table solic_alt_pedido");
         $this->mysqli->query("alter table itens auto_increment = 1;") or exit("Erro alter table itens");
         $this->mysqli->query("alter table licitacao auto_increment = 1;") or exit("Erro alter table licitacao");
+        $this->mysqli->query("alter table pedido_grupo auto_increment = 1;") or exit("Erro alter table pedido_grupo.");
         $this->mysqli->query("alter table pedido_log_status auto_increment = 1;") or exit("Erro alter table pedido_log_status");
         $this->mysqli->query("alter table pedido auto_increment = 1;") or exit("Erro alter table pedido");
 
