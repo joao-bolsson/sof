@@ -634,7 +634,7 @@ function listProcessos(permissao) {
                 admin: 1,
                 form: 'listProcessos'
             }).done(function (resposta) {
-                $('tbodyListProcessos').html(resposta);
+                $('#tbodyListProcessos').html(resposta);
             });
         }
     }
@@ -970,6 +970,19 @@ function editaPedido(id_pedido) {
         document.getElementById("conteudoPedido").innerHTML = resposta;
     });
     populaLicitacao(id_pedido);
+    populaGrupo(id_pedido);
+}
+
+function populaGrupo(id_pedido) {
+    $.post('../php/busca.php', {
+        users: 1,
+        form: 'populaGrupo',
+        id_pedido: id_pedido
+    }, function (resposta) {
+        if (resposta) {
+            $("#grupo").val(resposta).trigger("change");
+        }
+    });
 }
 
 function populaLicitacao(id_pedido) {
@@ -984,13 +997,13 @@ function populaLicitacao(id_pedido) {
             $('#divNum').addClass('control-highlight');
             document.getElementById('infoLic').value = obj.numero;
             document.getElementById('tipoLic' + obj.tipo).checked = true;
-            maybeDisableFields(false);
-            if (obj.tipo == 3 || obj.tipo == 4) {
+            if (obj.tipo == 3 || obj.tipo == 4 || obj.tipo == 2) {
                 $('#divUasg').addClass('control-highlight');
                 $('#divProcOri').addClass('control-highlight');
+                document.getElementById('uasg').value = obj.uasg;
+                document.getElementById('procOri').value = obj.processo_original;
             }
-            document.getElementById('uasg').value = obj.uasg;
-            document.getElementById('procOri').value = obj.processo_original;
+            maybeDisableFields(!(obj.tipo == 3 || obj.tipo == 4 || obj.tipo == 2));
         }
     });
 }
@@ -1141,6 +1154,7 @@ function analisarPedido(id_pedido, id_setor) {
     document.getElementById("id_pedido").value = id_pedido;
 
     document.getElementById("detPedId").innerHTML = id_pedido;
+    document.getElementById('tableItensPedido').style.display = 'block';
     getNomeSetor(id_setor);
     $.post('../php/busca.php', {
         admin: 1,
@@ -1194,6 +1208,7 @@ function deletePedido(id_pedido) {
 
 function getStatus(id_pedido, id_setor) {
     limpaTela();
+    document.getElementById('tableItensPedido').style.display = 'none';
     document.getElementById('rowDetPedido').style.display = 'block';
     $('#rowPedido' + id_pedido).css('background-color', '#c1df9f');
     document.getElementById('form').value = 'altStatus';
@@ -1223,6 +1238,8 @@ function getStatus(id_pedido, id_setor) {
             }
         }
     });
+    document.getElementById("detPedId").innerHTML = id_pedido;
+    getNomeSetor(id_setor);
     avisoSnack('Carregamento concluído!', 'body');
 }
 

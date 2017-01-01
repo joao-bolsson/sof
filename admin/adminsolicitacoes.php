@@ -433,14 +433,14 @@ $permissao = $obj_Busca->getPermissoes($_SESSION["id"]);
                 <div class="modal-content">
                     <div class="modal-heading">
                         <a class="modal-close" data-dismiss="modal">×</a>
-                        <h2 class="modal-title content-sub-heading">Processos do Pedido</h2>
+                        <h2 class="modal-title content-sub-heading">Processos</h2>
                     </div>
                     <div class="modal-inner">
                         <table id="tableListProcessos" class="table" style="width: 100%;">
                             <thead>
                                 <tr>
                                     <th>Número do Processo</th>
-                                    <th>Data Fim</th>
+                                    <th></th>
                                 </tr>
                             </thead>
                             <tbody id="tbodyListProcessos"></tbody>
@@ -786,7 +786,7 @@ $permissao = $obj_Busca->getPermissoes($_SESSION["id"]);
                                     </div>
                                     <div class="form-group form-group-label">
                                         <label class="floating-label" for="valorTransf"><span class="icon">attach_money</span>&nbsp;Valor</label>
-                                        <input class="form-control" id="valorTransf" name="valor" type="number" step="0.001"required min="0.000" max="0.000">
+                                        <input class="form-control" id="valorTransf" name="valor" type="number" step="0.001" required min="0.001">
                                     </div>
                                     <div class="form-group form-group-label">
                                         <label class="floating-label" for="justTransf"><span class="icon">announcement</span>&nbsp;Justificativa</label>

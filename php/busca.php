@@ -21,6 +21,7 @@ error_reporting(E_ALL);
 
 session_start();
 include_once '../class/Busca.class.php';
+include_once '../class/Util.class.php';
 //instanciando classe de busca
 $obj_Busca = new Busca();
 
@@ -145,6 +146,10 @@ if (isset($_POST["admin"]) && isset($_SESSION['id_setor']) && ($_SESSION['id_set
 	$form = $_POST["form"];
 
 	switch ($form) {
+            
+        case 'populaGrupo':
+            echo $obj_Busca->getGrupo($_POST['id_pedido']);
+            break;
         // retorna um objeto com as informações da licitação do pedido
         case 'populaLicitacao':
             $pedido = $_POST['id_pedido'];
@@ -270,7 +275,8 @@ if (isset($_POST["admin"]) && isset($_SESSION['id_setor']) && ($_SESSION['id_set
 
 	case 'addInputsArquivo':
 		$qtd = $_POST["qtd"];
-		echo $obj_Busca->setInputsArquivo($qtd);
+                $obj_Util = new Util();
+                echo $obj_Util->setInputsArquivo($qtd);
 		break;
 	default:
 		// remove all session variables
