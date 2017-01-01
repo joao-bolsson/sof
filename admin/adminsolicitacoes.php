@@ -786,7 +786,7 @@ $permissao = $obj_Busca->getPermissoes($_SESSION["id"]);
                                     </div>
                                     <div class="form-group form-group-label">
                                         <label class="floating-label" for="valorTransf"><span class="icon">attach_money</span>&nbsp;Valor</label>
-                                        <input class="form-control" id="valorTransf" name="valor" type="number" step="0.001"required min="0.000" max="0.000">
+                                        <input class="form-control" id="valorTransf" name="valor" type="number" step="0.001" required min="0.001">
                                     </div>
                                     <div class="form-group form-group-label">
                                         <label class="floating-label" for="justTransf"><span class="icon">announcement</span>&nbsp;Justificativa</label>

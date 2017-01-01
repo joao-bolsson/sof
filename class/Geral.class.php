@@ -23,6 +23,19 @@ class Geral extends Conexao {
         $this->obj_Busca = new Busca();
     }
 
+    private function registraLog(int $id_pedido, int $status) {
+        if (!$this->mysqli->thread_id) {
+            $this->mysqli = parent::getConexao();
+        }
+        $hoje = date('Y-m-d');
+        // não deixa ter vários logs com o mesmo status na mesma data
+        $query = $this->mysqli->query("SELECT pedido_log_status.id_status FROM pedido_log_status WHERE data = '{$hoje}' AND pedido_log_status.id_status = {$status};") or exit("Erro ao verificar log de status.");
+        if ($query->num_rows < 1) {
+            $this->mysqli->query("INSERT INTO pedido_log_status VALUES({$id_pedido}, {$status}, '{$hoje}');") or exit("Erro ao registrar log de mudança de status.");
+        }
+        // NÃO FECHA CONEXÃO AQUI
+    }
+
     /**
      * Insere um grupo ao pedido.
      * @param int $pedido Id do pedido.
@@ -50,9 +63,7 @@ class Geral extends Conexao {
             $this->mysqli = parent::getConexao();
         }
         $this->mysqli->query("UPDATE pedido SET status = 9 WHERE id = {$id_pedido};") or exit("Erro ao atualizar o status do pedido.");
-        // registra log
-        $hoje = date('Y-m-d');
-        $this->mysqli->query("INSERT INTO pedido_log_status VALUES({$id_pedido}, 9, '{$hoje}');") or exit("Erro ao registrar log de mudança de status.");
+        $this->registraLog($id_pedido, 9);
         $this->mysqli->close();
     }
 
@@ -66,8 +77,7 @@ class Geral extends Conexao {
             $this->mysqli = parent::getConexao();
         }
         $this->mysqli->query("UPDATE pedido SET status = '8' WHERE id = {$id_pedido};") or exit("Erro ao atualizar o status do pedido.");
-        $hoje = date('Y-m-d');
-        $this->mysqli->query("INSERT INTO pedido_log_status VALUES({$id_pedido}, 8, '{$hoje}');") or exit("Erro ao registrar log de mudança de status;=.");
+        $this->registraLog($id_pedido, 8);
         $this->mysqli->close();
         return true;
     }
@@ -91,9 +101,7 @@ class Geral extends Conexao {
         $this->mysqli->query("INSERT INTO pedido_fonte VALUES(NULL, {$id_pedido}, \"{$fonte}\", \"{$ptres}\", \"{$plano}\");") or exit("Erro ao cadastrar fontes do pedido.");
 
         $this->mysqli->query("UPDATE pedido SET status = '6' WHERE id = {$id_pedido};") or exit("Erro ao atualizar o status do pedido.");
-        // registra log
-        $hoje = date('Y-m-d');
-        $this->mysqli->query("INSERT INTO pedido_log_status VALUES({$id_pedido}, 6, '{$hoje}');") or exit("Erro ao registrar log de mudança de status.");
+        $this->registraLog($id_pedido, 6);
         return true;
     }
 
@@ -217,9 +225,8 @@ class Geral extends Conexao {
         $this->mysqli->query("UPDATE pedido SET status = {$status} WHERE id = {$id_pedido};") or exit("Erro ao atualizar o pedido.");
         $query = $this->mysqli->query("SELECT pedido.prioridade, pedido.valor FROM pedido WHERE id = {$id_pedido};") or exit("Erro ao buscar as informações do pedido.");
         $obj = $query->fetch_object();
+        $this->registraLog($id_pedido, $status);
         $hoje = date('Y-m-d');
-        // registra log
-        $this->mysqli->query("INSERT INTO pedido_log_status VALUES({$id_pedido}, {$status}, '{$hoje}');") or exit("Erro ao registrar log de mudança de status.");
         if (strlen($comentario) > 0) {
             $comentario = $this->mysqli->real_escape_string($comentario);
             $this->mysqli->query("INSERT INTO comentarios VALUES(NULL, {$id_pedido}, '{$hoje}', {$obj->prioridade}, {$status}, '{$obj->valor}', '{$comentario}');") or exit("Erro ao inserir comentário.");
@@ -253,9 +260,7 @@ class Geral extends Conexao {
         $this->mysqli->query($sql) or exit("Erro ao inserir / atualizar empenho.");
         // mudando status do pedido
         $this->mysqli->query("UPDATE pedido SET status = 7 WHERE id = {$id_pedido};") or exit("Erro ao atualizar o status do pedido.");
-        // registra log
-        $hoje = date('Y-m-d');
-        $this->mysqli->query("INSERT INTO pedido_log_status VALUES({$id_pedido}, 7, '{$hoje}');") or exit("Erro ao registrar log de mudança de status.");
+        $this->registraLog($id_pedido, 7);
         $this->mysqli->close();
         return true;
     }
@@ -435,8 +440,7 @@ class Geral extends Conexao {
         $this->mysqli->query("UPDATE solic_alt_pedido SET data_analise = '{$hoje}', status = {$acao} WHERE id = {$id_solic};") or exit("Erro ao atualizar as informações da solicitação de alteração de pedido.");
         if ($acao) {
             $this->mysqli->query("UPDATE pedido SET alteracao = {$acao}, prioridade = 5, status = 1 WHERE id = {$id_pedido};") or exit("Erro ao atualizar o status do pedido.");
-            // registra log
-            $this->mysqli->query("INSERT INTO pedido_log_status VALUES({$id_pedido}, 1, '{$hoje}');") or exit("Erro ao registrar log de mudança de status do pedido.");
+            $this->registraLog($id_pedido, 1);
         }
         $this->mysqli->close();
         return true;
@@ -663,8 +667,7 @@ class Geral extends Conexao {
                 //inserindo os dados iniciais do pedido
                 $query_pedido = $this->mysqli->query("INSERT INTO pedido VALUES(NULL, {$id_setor}, {$id_user}, '{$hoje}', '{$mes}', 1, {$prioridade}, 1, '{$total_pedido}', '{$obs}');") or exit("Ocorreu um erro ao inserir o pedido.");
                 $pedido = $this->mysqli->insert_id;
-                // registra log
-                $this->mysqli->query("INSERT INTO pedido_log_status VALUES({$pedido}, 1, '{$hoje}');") or exit("Erro ao registrar log de status do pedido.");
+                $this->registraLog($pedido, 1);
             } else {
                 //remover resgistros antigos do rascunho
                 $this->mysqli->query("DELETE FROM itens_pedido WHERE id_pedido = {$pedido};") or exit("Ocorreu um erro ao remover os registros antigos do pedido.") or exit("Erro ao remover registros antigos do rascunho.");
@@ -682,13 +685,11 @@ class Geral extends Conexao {
                 //inserindo os dados iniciais do pedido
                 $query_pedido = $this->mysqli->query("INSERT INTO pedido VALUES(NULL, {$id_setor}, {$id_user}, '{$hoje}', '{$mes}', 0, {$prioridade}, 2, '{$total_pedido}', '{$obs}');") or exit("Ocorreu um erro ao inserir os dados iniciais do pedido.");
                 $pedido = $this->mysqli->insert_id;
-                // registra log
-                $this->mysqli->query("INSERT INTO pedido_log_status VALUES({$pedido}, 2, '{$hoje}');") or exit("Erro ao registrar log de mudança de status do pedido.");
+                $this->registraLog($pedido, 2);
             } else {
                 // atualizando pedido
                 $this->mysqli->query("UPDATE pedido SET data_pedido = '{$hoje}', ref_mes = {$mes}, alteracao = 0, prioridade = {$prioridade}, status = 2, valor = '{$total_pedido}', obs = '{$obs}' WHERE id = {$pedido};") or exit("Ocorreu um erro ao atualizar o pedido existente.");
-                // registra log
-                $this->mysqli->query("INSERT INTO pedido_log_status VALUES({$pedido}, 2, '{$hoje}');") or exit("Erro ao registrar log de mudança de status.");
+                $this->registraLog($pedido, 2);
             }
             //remover resgistros antigos do pedido
             $this->mysqli->query("DELETE FROM itens_pedido WHERE id_pedido = {$pedido};") or exit("Ocorreu um erro ao remover os itens antigos do pedido existente.");
@@ -767,8 +768,7 @@ class Geral extends Conexao {
             $this->mysqli->query("UPDATE saldo_setor SET saldo = '{$saldo_setor}' WHERE id_setor = {$id_setor};") or exit("Erro ao atualizar o saldo do setor.");
         }
         $this->mysqli->query("UPDATE pedido SET status = {$fase}, prioridade = {$prioridade}, alteracao = {$alteracao} WHERE id = {$id_pedido};") or exit("Erro ao atualizar informações do pedido.");
-        // registra log
-        $this->mysqli->query("INSERT INTO pedido_log_status VALUES({$id_pedido}, {$fase}, '{$hoje}');") or exit("Erro ao registrar log de mudança de status.");
+        $this->registraLog($pedido, $fase);
         if (strlen($comentario) > 0) {
             // inserindo comentário da análise
             $comentario = $this->mysqli->real_escape_string($comentario);
