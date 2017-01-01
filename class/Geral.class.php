@@ -20,7 +20,6 @@ class Geral extends Conexao {
     function __construct() {
         //chama o método contrutor da classe Conexao
         parent::__construct();
-        $this->mysqli = parent::getConexao();
         $this->obj_Busca = new Busca();
     }
 
@@ -221,7 +220,7 @@ class Geral extends Conexao {
         $this->mysqli->query("INSERT INTO pedido_log_status VALUES({$id_pedido}, {$status}, '{$hoje}');") or exit("Erro ao registrar log de mudança de status.");
         if (strlen($comentario) > 0) {
             $comentario = $this->mysqli->real_escape_string($comentario);
-            $comment = $this->mysqli->query("INSERT INTO comentarios VALUES(NULL, {$id_pedido}, '{$hoje}', {$obj->prioridade}, {$status}, '{$obj->valor}', '{$comentario}');") or exit("Erro ao inserir comentário.");
+            $this->mysqli->query("INSERT INTO comentarios VALUES(NULL, {$id_pedido}, '{$hoje}', {$obj->prioridade}, {$status}, '{$obj->valor}', '{$comentario}');") or exit("Erro ao inserir comentário.");
         }
         $this->mysqli->close();
         return true;
@@ -255,6 +254,7 @@ class Geral extends Conexao {
         // registra log
         $hoje = date('Y-m-d');
         $this->mysqli->query("INSERT INTO pedido_log_status VALUES({$id_pedido}, 7, '{$hoje}');") or exit("Erro ao registrar log de mudança de status.");
+        $this->mysqli->close();
         return true;
     }
 
@@ -472,14 +472,14 @@ class Geral extends Conexao {
         if ($verifica->num_rows < 1) {
             $this->mysqli->query("INSERT INTO saldo_setor VALUES(NULL, {$id_setor}, '0.000');") or exit("Erro ao inserir o saldo do setor.");
         }
-        $update = $this->mysqli->query("UPDATE saldo_setor SET saldo = '{$saldo}' WHERE id_setor = {$id_setor};") or exit("Erro ao atualizar o saldo do setor.");
+        $this->mysqli->query("UPDATE saldo_setor SET saldo = '{$saldo}' WHERE id_setor = {$id_setor};") or exit("Erro ao atualizar o saldo do setor.");
         if ($id_setor != 2) {
             $saldo_sof = $this->obj_Busca->getSaldo(2) - $valor;
             $saldo_sof = number_format($saldo_sof, 3, '.', '');
             $this->mysqli->query("UPDATE saldo_setor SET saldo = '{$saldo_sof}' WHERE id_setor = 2;") or exit("Erro ao atualizar o saldo do SOF.");
         }
         $hoje = date('Y-m-d');
-        $insert = $this->mysqli->query("INSERT INTO saldos_lancamentos VALUES(NULL, {$id_setor}, '{$hoje}', '{$valor}', 1);") or exit("Erro ao inserir um lançamento de saldo.");
+        $this->mysqli->query("INSERT INTO saldos_lancamentos VALUES(NULL, {$id_setor}, '{$hoje}', '{$valor}', 1);") or exit("Erro ao inserir um lançamento de saldo.");
         $this->mysqli->close();
         return true;
     }
