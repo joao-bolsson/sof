@@ -389,11 +389,13 @@ class Busca extends Conexao {
         if ($query->num_rows > 0) {
             $obj = $query->fetch_object();
             $soma = number_format($obj->soma, 3, ',', '.');
-            $retorno = "
-            <tr>
-                <td colspan=\"2\">Você tem " . $query->num_rows . " pedido(s) em análise no total de R$ " . $soma . "</td>
-                <td></td>
-            </tr>";
+            if ($soma > 0) {
+                $retorno = "
+                <tr>
+                    <td colspan=\"2\">Você tem " . $query->num_rows . " pedido(s) em análise no total de R$ " . $soma . "</td>
+                    <td></td>
+                </tr>";
+            }
         }
         return $retorno;
     }

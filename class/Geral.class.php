@@ -768,7 +768,7 @@ class Geral extends Conexao {
             $this->mysqli->query("UPDATE saldo_setor SET saldo = '{$saldo_setor}' WHERE id_setor = {$id_setor};") or exit("Erro ao atualizar o saldo do setor.");
         }
         $this->mysqli->query("UPDATE pedido SET status = {$fase}, prioridade = {$prioridade}, alteracao = {$alteracao} WHERE id = {$id_pedido};") or exit("Erro ao atualizar informações do pedido.");
-        $this->registraLog($pedido, $fase);
+        $this->registraLog($id_pedido, $fase);
         if (strlen($comentario) > 0) {
             // inserindo comentário da análise
             $comentario = $this->mysqli->real_escape_string($comentario);
