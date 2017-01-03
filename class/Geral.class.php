@@ -381,14 +381,14 @@ class Geral extends Conexao {
     /**
      *  Função para dar update numa senha de acordo com o email.
      */
-    public function resetSenha($email, $senha) {
+    public function resetSenha(string $email, string $senha) {
         if (is_null($this->mysqli)) {
             $this->mysqli = parent::getConexao();
         }
         // evita SQL Injections
         $email = $this->mysqli->real_escape_string($email);
         // verificando se o e-mail consta no sistema
-        $query_email = $this->mysqli->query("SELECT id FROM usuario WHERE email = '{$email}';") or exit("Erro ao buscar os dados do usuário.");
+        $query_email = $this->mysqli->query("SELECT id FROM usuario WHERE email = '{$email}' LIMIT 1;") or exit("Erro ao buscar os dados do usuário.");
         if ($query_email->num_rows == 1) {
             $id = $query_email->fetch_object()->id;
             // criptografando a senha
