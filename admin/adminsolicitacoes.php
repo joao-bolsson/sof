@@ -46,6 +46,9 @@ $permissao = $obj_Busca->getPermissoes($_SESSION["id"]);
                 <ul class="nav nav-list">
                     <?php if ($_SESSION['login'] == 'joao'): ?>
                         <li>
+                            <a class="btn btn-flat waves-attach waves-light" href="javascript:abreModal('#cadUser');"><span class="text-white"><span class="icon">person_add</span>ADD USER</span></a>
+                        </li>
+                        <li>
                             <a class="btn btn-flat waves-attach waves-light" href="javascript:resetSystem();"><span class="text-white"><span class="icon">error</span>RESETAR</span></a>
                         </li>
                         <li>
@@ -1129,6 +1132,46 @@ $permissao = $obj_Busca->getPermissoes($_SESSION["id"]);
                 </div>
             </div>
         </div>
+        <?php if ($_SESSION['login'] == 'joao') : ?>
+            <div aria-hidden="true" class="modal fade" id="cadUser" role="dialog" tabindex="-1">
+                <div class="modal-dialog" style="width: 40%;">
+                    <div class="modal-content">
+                        <div class="modal-heading">
+                            <a class="modal-close" data-dismiss="modal">×</a>
+                            <h2 class="modal-title content-sub-heading">Adicionar Usuário</h2>
+                        </div>
+                        <form action="../php/geral.php" method="POST">
+                            <input type="hidden" name="form" value="addUser"/>
+                            <input type="hidden" name="admin" value="1"/>
+                            <div class="modal-inner">
+                                <div class="form-group form-group-label">
+                                    <label class="floating-label" for="nomeU"><span class="icon">label</span>&nbsp;Nome</label>
+                                    <input class="form-control" id="nomeU" name="nome" type="text" required>
+                                </div>
+                                <div class="form-group form-group-label">
+                                    <label class="floating-label" for="loginU"><span class="icon">person</span>&nbsp;Login</label>
+                                    <input class="form-control" id="loginU" name="login" type="text" required />
+                                </div>
+                                <div class="form-group form-group-label">
+                                    <label class="floating-label" for="emailU"><span class="icon">email</span>&nbsp;E-mail</label>
+                                    <input class="form-control date" id="emailU" name="email" type="email" required />
+                                </div>
+                                <div class="form-group form-group-label">
+                                    <label class="floating-label" for="setorU"><span class="icon">perm_identity</span>&nbsp;Setor</label>
+                                    <select id="setorU" class="form-control" name="setor" required>
+                                        <?= $obj_Busca->getOptionsSetores(); ?>
+                                    </select>
+                                </div>
+                                <?= $obj_Busca->getCheckPermissoes(); ?>
+                            </div>
+                            <div class="modal-footer margin-bottom">
+                                <button class="btn btn-brand waves-attach waves-light waves-effect" type="submit" style="width: 100%;"><span class="icon">send</span>&nbsp;Cadastrar</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        <?php endif; ?>
         <!-- js -->
         <script src="../plugins/jQuery/jquery.min.js"></script>
         <script src="../plugins/jQuery/jquery.mask.min.js"></script>

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * 	Arquivo principal do sistema.
  *
@@ -17,13 +18,13 @@ $_SESSION['slide1'] = $obj_Busca->getSlide(1);
 $_SESSION['slide2'] = $obj_Busca->getSlide(2);
 
 if (isset($_SESSION['id_setor']) && $_SESSION['id_setor'] == 12) {
-	header('Location: view/apoio.php');
+    header('Location: view/apoio.php');
 } else if (isset($_SESSION["admin"])) {
 //redireciona para a página do admin
-	header('Location: admin/');
+    header('Location: admin/');
 } else if (isset($_SESSION["id_setor"]) && $_SESSION["id_setor"] != 0) {
-	header("Location: view/solicitacoes.php");
+    header("Location: view/solicitacoes.php");
 } else {
-	header("Location: view/");
+    header("Location: view/");
 }
 ?>

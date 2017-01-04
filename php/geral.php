@@ -29,7 +29,7 @@ include_once '../class/Util.class.php';
 $obj_Busca = new Busca();
 
 if ($obj_Busca->isActive()) {
-    
+
     $obj_Geral = new Geral();
     $obj_Util = new Util();
 
@@ -38,6 +38,51 @@ if ($obj_Busca->isActive()) {
         $form = $_POST["form"];
 
         switch ($form) {
+
+            case 'addUser':
+                $nome = $_POST['nome'];
+                $login = $_POST['login'];
+                $email = $_POST['email'];
+                $setor = $_POST['setor'];
+
+                if (is_null($obj_Util)) {
+                    $obj_Util = new Util();
+                }
+                $senha = $obj_Util->criaSenha();
+
+                $id_user = $obj_Geral->cadUser($nome, $login, $email, $setor, $senha);
+
+                $noticias = isset($_POST['noticias']);
+                $saldos = isset($_POST['saldos']);
+                $pedidos = isset($_POST['pedidos']);
+                $recepcao = isset($_POST['recepcao']);
+
+                $obj_Geral->cadPermissao($id_user, $noticias, $saldos, $pedidos, $recepcao);
+
+                $from = $obj_Util->mail->Username;
+                $nome_from = utf8_decode("Setor de Orçamento e Finanças do HUSM");
+                $assunto = "Cadastro SOFHUSM";
+                $altBody = "Olá! Você foi cadastrado(a) no sistema do SOFHUSM.";
+                $body = "Sua senha: <strong>" . $senha . "</strong> (negrito)";
+                $body .= utf8_decode("
+			<br>
+			<br> Não responda à esse e-mail.
+			<br>
+			<br>Caso tenha problemas, contate orcamentofinancashusm@gmail.com
+			<br>
+			<br>Atenciosamente,
+			<br>equipe do SOF.");
+
+                $obj_Util->preparaEmail($from, $nome_from, $email, "Usuário", $assunto, $altBody, $body);
+
+                //send the message, check for errors
+                if ($obj_Util->mail->send()) {
+                    header("Location: ../admin/adminsolicitacoes.php");
+                } else {
+                    echo "Usuário e permissões cadastradas. Erro ao enviar o e-mail com a senha : " . $senha;
+                }
+
+                break;
 
             case 'enviaForn':
                 $obj_Geral->enviaFornecedor($_POST['id_pedido']);
@@ -405,7 +450,7 @@ if ($obj_Busca->isActive()) {
                 $obs = $_POST['obs'];
 
                 $pedido = $_POST["pedido"];
-                
+
                 $pedido_existe = ($pedido != 0);
 
                 $obj_Geral->insertPedido($id_user, $id_setor, $id_item, $qtd_solicitada, $qtd_disponivel, $qtd_contrato, $qtd_utilizado, $vl_saldo, $vl_contrato, $vl_utilizado, $valor, $total_pedido, $saldo_total, $prioridade, $obs, $pedido);

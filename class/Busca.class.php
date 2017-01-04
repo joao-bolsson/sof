@@ -846,6 +846,31 @@ class Busca extends Conexao {
     }
 
     /**
+     * Retorna as permissões para cadastro de usuários.
+     */
+    public function getCheckPermissoes(): string {
+        if (is_null($this->mysqli)) {
+            $this->mysqli = parent::getConexao();
+        }
+        $query = $this->mysqli->query("SELECT column_name AS nome FROM information_schema.columns WHERE table_name = 'usuario_permissoes' AND column_name <> 'id_usuario';") or exit("Erro ao buscar permissões.");
+        $this->mysqli = NULL;
+        $retorno = "";
+        $i = 1;
+        while ($obj = $query->fetch_object()) {
+            $nome = ucfirst($obj->nome);
+            $retorno .= "
+                <div class=\"checkbox checkbox-adv\" style=\"display: inline-block\">
+                    <label for=\"perm{$i}\">
+                        <input class=\"access-hide\" id=\"perm{$i}\" name=\"" . $obj->nome . "\" type=\"checkbox\">" . $nome . "
+                        <span class=\"checkbox-circle\"></span><span class=\"checkbox-circle-check\"></span><span class=\"checkbox-circle-icon icon\">done</span>
+                    </label>
+                </div>";
+            $i++;
+        }
+        return $retorno;
+    }
+
+    /**
      * 	Função que retorna as permissões do usuário.
      *
      * 	@return JSON com as permissões do usuário no sistema.
