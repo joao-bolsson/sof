@@ -63,7 +63,8 @@ if ($obj_Busca->isActive()) {
                 $nome_from = utf8_decode("Setor de Orçamento e Finanças do HUSM");
                 $assunto = "Cadastro SOFHUSM";
                 $altBody = "Olá! Você foi cadastrado(a) no sistema do SOFHUSM.";
-                $body = "Sua senha: <strong>" . $senha . "</strong> (negrito)";
+                $body = "Seu login: " . $login . "
+                        <br>Sua senha: <strong>" . $senha . "</strong> (negrito)";
                 $body .= utf8_decode("
 			<br>
 			<br> Não responda à esse e-mail.
