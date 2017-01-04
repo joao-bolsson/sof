@@ -8,7 +8,7 @@
  */
 ini_set('display_erros', true);
 error_reporting(E_ALL);
-require 'phpmailer/PHPMailerAutoload.php';
+require_once 'phpmailer/PHPMailerAutoload.php';
 include_once 'Conexao.class.php';
 
 class Util extends Conexao {
@@ -52,18 +52,27 @@ class Util extends Conexao {
         parent::__construct();
         $this->mysqli = parent::getConexao();
 
-        $this->mail = new PHPMailer;
+        $this->mail = new PHPMailer();
         $this->mail->isSMTP();
         $this->mail->SMTPDebug = 0;
         $this->mail->Host = 'smtp.gmail.com';
-        $this->mail->Port = 587;
+        $this->mail->Port = '587';
         //Set the encryption system to use - ssl (deprecated) or tls
         $this->mail->SMTPSecure = 'tls';
         //Whether to use SMTP authentication
         $this->mail->SMTPAuth = true;
+//        $this->mail->Charset = 'utf8_decode()';
         $this->mail->Username = "sofhusm@gmail.com";
         //Password to use for SMTP authentication
         $this->mail->Password = "joaovictor201610816@[]";
+        $this->mail->IsHTML(true);
+        $this->mail->SMTPOptions = array(
+            'ssl' => array(
+                'verify_peer' => false,
+                'verify_peer_name' => false,
+                'allow_self_signed' => true
+            )
+        );
     }
 
     public function readFile(string $tmp_name): array {
