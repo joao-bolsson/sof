@@ -23,6 +23,34 @@ class Geral extends Conexao {
         $this->obj_Busca = new Busca();
     }
 
+    /**
+     * Cadastra um usuário.
+     * @param string $nome Nome do usuário.
+     * @param string $login Login.
+     * @param string $email E-mail para contato e perda de senha. 
+     * @param int $setor Id do setor do usuário.
+     * @return string Senha do usuário feita pelo sistema.
+     */
+    public function cadUser(string $nome, string $login, string $email, int $setor, string $senha): int {
+        $senha_crp = crypt($senha);
+        if (is_null($this->mysqli)) {
+            $this->mysqli = parent::getConexao();
+        }
+        $this->mysqli->query("INSERT INTO usuario VALUES(NULL, '{$nome}', '{$login}', '{$senha_crp}', {$setor}, '{$email}');") or exit("Erro ao inserir o usuário no banco.");
+        $id = $this->mysqli->insert_id;
+        $this->mysqli = NULL;
+
+        return $id;
+    }
+
+    public function cadPermissao(int $usuario, int $noticias, int $saldos, int $pedidos, int $recepcao) {
+        if (is_null($this->mysqli)) {
+            $this->mysqli = parent::getConexao();
+        }
+        $this->mysqli->query("INSERT INTO usuario_permissoes VALUES({$usuario}, {$noticias}, {$saldos}, {$pedidos}, {$recepcao});") or exit("Erro ao cadastrar permissões do usuário.");
+        $this->mysqli = NULL;
+    }
+
     private function registraLog(int $id_pedido, int $status) {
         if (is_null($this->mysqli)) {
             $this->mysqli = parent::getConexao();
