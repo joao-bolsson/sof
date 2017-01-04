@@ -44,6 +44,11 @@ $permissao = $obj_Busca->getPermissoes($_SESSION["id"]);
             </ul>
             <nav class="tab-nav pull-right hidden-xx">
                 <ul class="nav nav-list">
+                    <?php if ($_SESSION['login'] == 'joao' || $_SESSION['login'] == 'iara'): ?>
+                        <li>
+                            <a class="btn btn-flat waves-attach waves-light" href="javascript:abreModal('#altUser');"><span class="text-white"><span class="icon">person</span>ALTERAR USUÁRIO</span></a>
+                        </li>
+                    <?php endif; ?>
                     <?php if ($_SESSION['login'] == 'joao'): ?>
                         <li>
                             <a class="btn btn-flat waves-attach waves-light" href="javascript:abreModal('#cadUser');"><span class="text-white"><span class="icon">person_add</span>ADD USER</span></a>
@@ -1163,6 +1168,33 @@ $permissao = $obj_Busca->getPermissoes($_SESSION["id"]);
                                     </select>
                                 </div>
                                 <?= $obj_Busca->getCheckPermissoes(); ?>
+                            </div>
+                            <div class="modal-footer margin-bottom">
+                                <button class="btn btn-brand waves-attach waves-light waves-effect" type="submit" style="width: 100%;"><span class="icon">send</span>&nbsp;Cadastrar</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        <?php endif; ?>
+        <?php if ($_SESSION['login'] == 'joao' || $_SESSION['login'] == 'iara'): ?>
+            <div aria-hidden="true" class="modal fade" id="altUser" role="dialog" tabindex="-1">
+                <div class="modal-dialog" style="width: 40%;">
+                    <div class="modal-content">
+                        <div class="modal-heading">
+                            <a class="modal-close" data-dismiss="modal">×</a>
+                            <h2 class="modal-title content-sub-heading">Alterar Usuário</h2>
+                        </div>
+                        <form action="../php/geral.php" method="POST">
+                            <input type="hidden" name="form" value="altUser"/>
+                            <input type="hidden" name="admin" value="1"/>
+                            <div class="modal-inner">
+                                <div class="form-group form-group-label">
+                                    <label class="floating-label" for="userA"><span class="icon">perm_identity</span>&nbsp;Usuário</label>
+                                    <select id="userA" class="form-control" name="user" required>
+                                        <?= $obj_Busca->getUsers(); ?>
+                                    </select>
+                                </div>
                             </div>
                             <div class="modal-footer margin-bottom">
                                 <button class="btn btn-brand waves-attach waves-light waves-effect" type="submit" style="width: 100%;"><span class="icon">send</span>&nbsp;Cadastrar</button>
