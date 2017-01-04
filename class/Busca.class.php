@@ -23,6 +23,23 @@ class Busca extends Conexao {
         $this->obj_Util = new Util();
     }
 
+    /**
+     * @return string Lista de usuários cadastrados.
+     */
+    public function getUsers(): string {
+        if (is_null($this->mysqli)) {
+            $this->mysqli = parent::getConexao();
+        }
+        $query = $this->mysqli->query("SELECT usuario.id, usuario.nome FROM usuario;") or exit("Erro ao buscar usuários.");
+        $this->mysqli = NULL;
+
+        $retorno = "";
+        while ($user = $query->fetch_object()) {
+            $retorno .= "<option value=\"" . $user->id . "\">" . $user->nome . "</option>";
+        }
+        return $retorno;
+    }
+
     public function getGrupo(int $id_pedido) {
         if (is_null($this->mysqli)) {
             $this->mysqli = parent::getConexao();
