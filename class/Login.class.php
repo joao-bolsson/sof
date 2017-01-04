@@ -102,6 +102,9 @@ class Login extends Conexao {
             $_SESSION[$this->campoLogin] = $usuario->{$this->campoLogin};
             $_SESSION[$this->campoEmail] = $usuario->{$this->campoEmail};
             $_SESSION[$this->campoSetor] = $usuario->{$this->campoSetor};
+            if ($usuario->{$this->campoSetor} == 2) {
+                $_SESSION["admin"] = true;
+            }
         }
     }
 
