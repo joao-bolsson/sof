@@ -14,8 +14,13 @@ include_once 'class/Busca.class.php';
 //instanciando classe de busca para popular o select de estados
 $obj_Busca = new Busca();
 
-$_SESSION['slide1'] = $obj_Busca->getSlide(1);
-$_SESSION['slide2'] = $obj_Busca->getSlide(2);
+if (!isset($_SESSION['slide1'])) {
+    $_SESSION['slide1'] = $obj_Busca->getSlide(1);
+}
+
+if (!isset($_SESSION['slide2'])) {
+    $_SESSION['slide2'] = $obj_Busca->getSlide(2);
+}
 
 if (isset($_SESSION['id_setor']) && $_SESSION['id_setor'] == 12) {
     header('Location: view/apoio.php');

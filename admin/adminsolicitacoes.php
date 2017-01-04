@@ -1197,7 +1197,7 @@ $permissao = $obj_Busca->getPermissoes($_SESSION["id"]);
                                 </div>
                             </div>
                             <div class="modal-footer margin-bottom">
-                                <button class="btn btn-brand waves-attach waves-light waves-effect" type="submit" style="width: 100%;"><span class="icon">send</span>&nbsp;Cadastrar</button>
+                                <button class="btn btn-brand waves-attach waves-light waves-effect" type="submit" style="width: 100%;"><span class="icon">cached</span>&nbsp;Trocar</button>
                             </div>
                         </form>
                     </div>
