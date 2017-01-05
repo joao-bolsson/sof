@@ -49,10 +49,12 @@ $permissao = $obj_Busca->getPermissoes($_SESSION["id"]);
                             <a class="btn btn-flat waves-attach waves-light" href="javascript:abreModal('#altUser');"><span class="text-white"><span class="icon">person</span>ALTERAR USUÁRIO</span></a>
                         </li>
                     <?php endif; ?>
-                    <?php if ($_SESSION['login'] == 'joao'): ?>
+                    <?php if ($_SESSION['login'] == 'joao' || $_SESSION['login'] == 'iara'): ?>
                         <li>
                             <a class="btn btn-flat waves-attach waves-light" href="javascript:abreModal('#cadUser');"><span class="text-white"><span class="icon">person_add</span>ADD USER</span></a>
                         </li>
+                    <?php endif; ?>
+                    <?php if ($_SESSION['login'] == 'joao'): ?>
                         <li>
                             <a class="btn btn-flat waves-attach waves-light" href="javascript:resetSystem();"><span class="text-white"><span class="icon">error</span>RESETAR</span></a>
                         </li>
@@ -1137,7 +1139,7 @@ $permissao = $obj_Busca->getPermissoes($_SESSION["id"]);
                 </div>
             </div>
         </div>
-        <?php if ($_SESSION['login'] == 'joao') : ?>
+        <?php if ($_SESSION['login'] == 'joao' || $_SESSION['login'] == 'iara') : ?>
             <div aria-hidden="true" class="modal fade" id="cadUser" role="dialog" tabindex="-1">
                 <div class="modal-dialog" style="width: 40%;">
                     <div class="modal-content">
