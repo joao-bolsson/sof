@@ -670,6 +670,11 @@ function changeTipoLic(tipo) {
     } else {
         maybeDisableFields(true);
     }
+    if (selected == 6) { // RP
+        document.getElementById('infoLic').required = false;
+    } else {
+        document.getElementById('infoLic').required = true;
+    }
 }
 
 function maybeDisableFields(flag) {

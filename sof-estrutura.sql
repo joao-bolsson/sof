@@ -66,7 +66,7 @@ CREATE TABLE `licitacao` (
   `id` int(10) UNSIGNED NOT NULL,
   `id_pedido` int(10) UNSIGNED NOT NULL,
   `tipo` tinyint(3) UNSIGNED NOT NULL,
-  `numero` varchar(30) NOT NULL,
+  `numero` varchar(30) DEFAULT NULL,
   `uasg` varchar(30) DEFAULT NULL,
   `processo_original` varchar(30) DEFAULT NULL,
   `gera_contrato` tinyint(1) NOT NULL
@@ -211,7 +211,7 @@ CREATE TABLE `setores` (
 CREATE TABLE `setores_grupos` (
   `id` int(10) UNSIGNED NOT NULL,
   `id_setor` int(10) UNSIGNED NOT NULL,
-  `cod` smallint(5) UNSIGNED DEFAULT NULL,
+  `cod` varchar(10) DEFAULT NULL,
   `nome` varchar(100) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
@@ -240,7 +240,7 @@ CREATE TABLE `usuario` (
   `login` varchar(15) NOT NULL,
   `senha` varchar(34) NOT NULL,
   `id_setor` int(10) UNSIGNED NOT NULL,
-  `email` varchar(30) NOT NULL
+  `email` varchar(40) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 CREATE TABLE `usuario_permissoes` (
@@ -378,7 +378,7 @@ ALTER TABLE `itens_pedido`
 ALTER TABLE `licitacao`
   MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
 ALTER TABLE `licitacao_tipo`
-  MODIFY `id` tinyint(3) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id` tinyint(3) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 ALTER TABLE `mes`
   MODIFY `id` int(2) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
 ALTER TABLE `paginas_post`
@@ -412,13 +412,13 @@ ALTER TABLE `saldo_setor`
 ALTER TABLE `setores`
   MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
 ALTER TABLE `setores_grupos`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=63;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=89;
 ALTER TABLE `solic_alt_pedido`
   MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
 ALTER TABLE `status`
   MODIFY `id` int(1) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 ALTER TABLE `usuario`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 ALTER TABLE `comentarios`
   ADD CONSTRAINT `comentarios_ibfk_1` FOREIGN KEY (`id_pedido`) REFERENCES `pedido` (`id`),
