@@ -1576,13 +1576,11 @@ class Busca extends Conexao {
             if ($btnVerEmpenho == 'EMPENHO SIAFI PENDENTE') {
                 $btnVerEmpenho = '';
             }
-            $btnVerProcesso = "
-                    <a class=\"modal-close\" href=\"javascript:verProcessos(" . $pedido->id . ");\" title=\"Ver Processos\"><span class=\"icon\">remove_red_eye</span></a>";
             $pedido->valor = number_format($pedido->valor, 3, ',', '.');
             $linha = "
                 <tr id=\"rowPedido" . $pedido->id . "\">
                     <td>
-                        " . $btnVerProcesso . $btnAnalisar . "
+                        " . $btnAnalisar . "
                         <a class=\"modal-close\" href=\"javascript:imprimir(" . $pedido->id . ");\" title=\"Imprimir\"><span class=\"icon\">print<span></a>
                     </td>
                     <td>" . $pedido->id . "</td>
