@@ -44,6 +44,9 @@ $permissao = $obj_Busca->getPermissoes($_SESSION["id"]);
             </ul>
             <nav class="tab-nav pull-right hidden-xx">
                 <ul class="nav nav-list">
+                    <li>
+                        <a class="btn btn-flat waves-attach waves-light" href="javascript:abreModal('#cadContrato');"><span class="text-white"><span class="icon">announcement</span>CADASTRO DE CONTRATO</span></a>
+                    </li>
                     <?php if ($_SESSION['login'] == 'joao' || $_SESSION['login'] == 'iara'): ?>
                         <li>
                             <a class="btn btn-flat waves-attach waves-light" href="javascript:abreModal('#altUser');"><span class="text-white"><span class="icon">person</span>ALTERAR USUÁRIO</span></a>
@@ -587,6 +590,235 @@ $permissao = $obj_Busca->getPermissoes($_SESSION["id"]);
                                 </div>
                             </form>
                         </div>
+                    </div>
+                </div>
+            </div>
+        <div class="modal fade" id="cadContrato" role="dialog">
+                <div class="modal-dialog" style="width: 50%;">
+                    <div class="modal-content">
+                        <div class="modal-heading">
+                            <a class="modal-close" data-dismiss="modal">×</a>
+                            <h2 class="modal-title content-sub-heading">Cadastro de Contrato</h2>
+                        </div>
+                        <form id="formCadContrato" action="#" method="post">
+                            <div class="modal-inner">
+                                <table width="100%;">
+                                    <tr>
+                                        <td colspan="3">
+                                            <div class="form-group form-group-label">
+                                                <label class="floating-label" for="compItemContr"><span class="icon">announcement</span>&nbsp;Complemento do Item</label>
+                                                <textarea class="form-control textarea-autosize" id="compItemContr" name="complemento" rows="2"></textarea>
+                                            </div>
+                                        </td>
+                                        <td></td>
+                                        <td></td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <div class="form-group form-group-label">
+                                                <label class="floating-label" for="idItemProcessoContr"><span class="icon">label</span>&nbsp;Id item processo</label>
+                                                <input class="form-control" id="idItemProcessoContr" name="id_item_processo" type="number" step="1">
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div class="form-group form-group-label">
+                                                <label class="floating-label" for="idItemContratoContr"><span class="icon">label</span>&nbsp;Id item contrato</label>
+                                                <input class="form-control" id="idItemContratoContr" name="id_item_contrato" type="number" step="1">
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div class="form-group form-group-label">
+                                                <label class="floating-label" for="codDespesaContr"><span class="icon">label</span>&nbsp;Código Despesa</label>
+                                                <input class="form-control" id="codDespesaContr" name="cod_despesa" type="text">
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <div class="form-group form-group-label">
+                                                <label class="floating-label" for="descrDespesaContr"><span class="icon">label</span>&nbsp;Descrição despesa</label>
+                                                <input class="form-control" id="descrDespesaContr" name="descrDespesa" type="text">
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div class="form-group form-group-label">
+                                                <label class="floating-label" for="descrTipoDocContr"><span class="icon">label</span>&nbsp;Descrição tipo DOC</label>
+                                                <input class="form-control" id="descrTipoDocContr" name="descrTipoDoc" type="text">
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div class="form-group form-group-label">
+                                                <label class="floating-label" for="numContratoContr"><span class="icon">label</span>&nbsp;Número do contrato</label>
+                                                <input class="form-control" id="numContratoContr" name="num_contrato" type="text">
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <div class="form-group form-group-label">
+                                                <label class="floating-label" for="numProcessoContr"><span class="icon">label</span>&nbsp;NUM_PROCESSO</label>
+                                                <input class="form-control" id="numProcessoContr" name="num_processo" type="text">
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div class="form-group form-group-label">
+                                                <label class="floating-label" for="descrModCompraContr"><span class="icon">label</span>&nbsp;DESCR_MOD_COMPRA</label>
+                                                <input class="form-control" id="descrModCompraContr" name="descr_mod_compra" type="text">
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div class="form-group form-group-label">
+                                                <label class="floating-label" for="numLicitacaoContr"><span class="icon">label</span>&nbsp;NUM_LICITACAO</label>
+                                                <input class="form-control" id="numLicitacaoContr" name="num_licitacao" type="text">
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <div class="form-group form-group-label">
+                                                <label class="floating-label" for="dataInicioContr"><span class="icon">label</span>&nbsp;DT_INICIO</label>
+                                                <input class="form-control" id="dataInicioContr" name="dt_inicio" type="text">
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div class="form-group form-group-label">
+                                                <label class="floating-label" for="dataFimContr"><span class="icon">label</span>&nbsp;DT_FIM</label>
+                                                <input class="form-control" id="dataFimContr" name="dt_fim" type="text">
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div class="form-group form-group-label">
+                                                <label class="floating-label" for="dataGeracaoContr"><span class="icon">label</span>&nbsp;DT_GERACAO</label>
+                                                <input class="form-control" id="dataGeracaoContr" name="dt_geracao" type="text">
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <div class="form-group form-group-label">
+                                                <label class="floating-label" for="cgcFornecedorContr"><span class="icon">label</span>&nbsp;CGC_FORNECEDOR</label>
+                                                <input class="form-control" id="cgcFornecedorContr" name="cgc_fornecedor" type="text">
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div class="form-group form-group-label">
+                                                <label class="floating-label" for="nomeFornecedorContr"><span class="icon">label</span>&nbsp;NOME_FORNECEDOR</label>
+                                                <input class="form-control" id="nomeFornecedorContr" name="nome_fornecedor" type="text">
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div class="form-group form-group-label">
+                                                <label class="floating-label" for="numExtratoContr"><span class="icon">label</span>&nbsp;NUM_EXTRATO</label>
+                                                <input class="form-control" id="numExtratoContr" name="num_extrato" type="text">
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <div class="form-group form-group-label">
+                                                <label class="floating-label" for="codEstruturadoContr"><span class="icon">label</span>&nbsp;COD_ESTRUTURADO</label>
+                                                <input class="form-control" id="codEstruturadoContr" name="cod_estruturado" type="text">
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div class="form-group form-group-label">
+                                                <label class="floating-label" for="nomeUnidadeContr"><span class="icon">label</span>&nbsp;NOME_UNIDADE</label>
+                                                <input class="form-control" id="nomeUnidadeContr" name="nome_unidade" type="text">
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div class="form-group form-group-label">
+                                                <label class="floating-label" for="codReduzidoContr"><span class="icon">label</span>&nbsp;COD_REDUZIDO</label>
+                                                <input class="form-control" id="codReduzidoContr" name="cod_reduzido" type="text">
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <div class="form-group form-group-label">
+                                                <label class="floating-label" for="descricaoContr"><span class="icon">label</span>&nbsp;DESCRICAO</label>
+                                                <input class="form-control" id="descricaoContr" name="descricao" type="text">
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div class="form-group form-group-label">
+                                                <label class="floating-label" for="idExtratoContrContr"><span class="icon">label</span>&nbsp;ID_EXTRATO_CONTR</label>
+                                                <input class="form-control" id="idExtratoContrContr" name="id_extrato_contr" type="text">
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div class="form-group form-group-label">
+                                                <label class="floating-label" for="idUnidadeContr"><span class="icon">label</span>&nbsp;ID_UNIDADE</label>
+                                                <input class="form-control" id="idUnidadeContr" name="id_unidade" type="text">
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <div class="form-group form-group-label">
+                                                <label class="floating-label" for="vlUnitarioContr"><span class="icon">label</span>&nbsp;Valor Unitário</label>
+                                                <input class="form-control" id="vlUnitarioContr" name="vl_unitario" type="number" step="0.001">
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div class="form-group form-group-label">
+                                                <label class="floating-label" for="qtContratoContr"><span class="icon">label</span>&nbsp;Quantidade Contrato</label>
+                                                <input class="form-control" id="qtContratoContr" name="qt_contrato" type="number">
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div class="form-group form-group-label">
+                                                <label class="floating-label" for="vlContratoContr"><span class="icon">label</span>&nbsp;Valor Contrato</label>
+                                                <input class="form-control" id="vlContratoContr" name="vl_contrato" type="number" step="0.001">
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <div class="form-group form-group-label">
+                                                <label class="floating-label" for="qtUtilizadaContr"><span class="icon">label</span>&nbsp;Quantidade Utilizada</label>
+                                                <input class="form-control" id="qtUtilizadaContr" name="qt_utilizada" type="number">
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div class="form-group form-group-label">
+                                                <label class="floating-label" for="vlUtilizadoContr"><span class="icon">label</span>&nbsp;Valor Utilizado</label>
+                                                <input class="form-control" id="vlUtilizadoContr" name="vl_utilizado" type="number" step="0.001">
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div class="form-group form-group-label">
+                                                <label class="floating-label" for="qtSaldoContr"><span class="icon">label</span>&nbsp;Quantidade Saldo</label>
+                                                <input class="form-control" id="qtSaldoContr" name="qt_saldo" type="number">
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <div class="form-group form-group-label">
+                                                <label class="floating-label" for="vlSaldoContr"><span class="icon">label</span>&nbsp;Valor Saldo</label>
+                                                <input class="form-control" id="vlSaldoContr" name="vl_saldo" type="number" step="0.001">
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div class="form-group form-group-label">
+                                                <label class="floating-label" for="anoOrcamentoContr"><span class="icon">label</span>&nbsp;ANO_ORCAMENTO</label>
+                                                <input class="form-control" id="anoOrcamentoContr" name="ano_orcamento" type="text">
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div class="form-group form-group-label">
+                                                <label class="floating-label" for="seqItemProcessoContr"><span class="icon">label</span>&nbsp;ID_EXTRATO_CONTR</label>
+                                                <input class="form-control" id="seqItemProcessoContr" name="seq_item_processo" type="text">
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>
+                            <div class="modal-footer margin-bottom">
+                                <button class="btn btn-brand waves-attach waves-light waves-effect" type="submit" style="width: 100%;"><span class="icon">autorenew</span>&nbsp;Atualizar</button>
+                            </div>
+                        </form>
                     </div>
                 </div>
             </div>
