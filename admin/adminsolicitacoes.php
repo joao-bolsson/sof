@@ -600,14 +600,16 @@ $permissao = $obj_Busca->getPermissoes($_SESSION["id"]);
                             <a class="modal-close" data-dismiss="modal">×</a>
                             <h2 class="modal-title content-sub-heading">Cadastro de Contrato</h2>
                         </div>
-                        <form id="formCadContrato" action="#" method="post">
+                        <form id="formCadContrato" action="../php/geral.php" method="post">
+                            <input type="hidden" name="form" value="cadContrato"/>
+                            <input type="hidden" name="admin" value="1"/>
                             <div class="modal-inner">
                                 <table width="100%;">
                                     <tr>
                                         <td colspan="3">
                                             <div class="form-group form-group-label">
-                                                <label class="floating-label" for="compItemContr"><span class="icon">announcement</span>&nbsp;Complemento do Item</label>
-                                                <textarea class="form-control textarea-autosize" id="compItemContr" name="complemento" rows="2"></textarea>
+                                                <label class="floating-label" for="compItemContr"><span class="icon">announcement</span>&nbsp;COMPLEMENTO_ITEM</label>
+                                                <textarea class="form-control textarea-autosize" id="compItemContr" name="complemento_item" rows="2"></textarea>
                                             </div>
                                         </td>
                                         <td></td>
@@ -616,19 +618,19 @@ $permissao = $obj_Busca->getPermissoes($_SESSION["id"]);
                                     <tr>
                                         <td>
                                             <div class="form-group form-group-label">
-                                                <label class="floating-label" for="idItemProcessoContr"><span class="icon">label</span>&nbsp;Id item processo</label>
+                                                <label class="floating-label" for="idItemProcessoContr"><span class="icon">label</span>&nbsp;ID_ITEM_PROCESSO</label>
                                                 <input class="form-control" id="idItemProcessoContr" name="id_item_processo" type="number" step="1">
                                             </div>
                                         </td>
                                         <td>
                                             <div class="form-group form-group-label">
-                                                <label class="floating-label" for="idItemContratoContr"><span class="icon">label</span>&nbsp;Id item contrato</label>
+                                                <label class="floating-label" for="idItemContratoContr"><span class="icon">label</span>&nbsp;ID_ITEM_CONTRATO</label>
                                                 <input class="form-control" id="idItemContratoContr" name="id_item_contrato" type="number" step="1">
                                             </div>
                                         </td>
                                         <td>
                                             <div class="form-group form-group-label">
-                                                <label class="floating-label" for="codDespesaContr"><span class="icon">label</span>&nbsp;Código Despesa</label>
+                                                <label class="floating-label" for="codDespesaContr"><span class="icon">label</span>&nbsp;COD_DESPESA</label>
                                                 <input class="form-control" id="codDespesaContr" name="cod_despesa" type="text">
                                             </div>
                                         </td>
@@ -636,19 +638,19 @@ $permissao = $obj_Busca->getPermissoes($_SESSION["id"]);
                                     <tr>
                                         <td>
                                             <div class="form-group form-group-label">
-                                                <label class="floating-label" for="descrDespesaContr"><span class="icon">label</span>&nbsp;Descrição despesa</label>
+                                                <label class="floating-label" for="descrDespesaContr"><span class="icon">label</span>&nbsp;DESCR_DESPESA</label>
                                                 <input class="form-control" id="descrDespesaContr" name="descrDespesa" type="text">
                                             </div>
                                         </td>
                                         <td>
                                             <div class="form-group form-group-label">
-                                                <label class="floating-label" for="descrTipoDocContr"><span class="icon">label</span>&nbsp;Descrição tipo DOC</label>
+                                                <label class="floating-label" for="descrTipoDocContr"><span class="icon">label</span>&nbsp;DESCR_TIPO_DOC</label>
                                                 <input class="form-control" id="descrTipoDocContr" name="descrTipoDoc" type="text">
                                             </div>
                                         </td>
                                         <td>
                                             <div class="form-group form-group-label">
-                                                <label class="floating-label" for="numContratoContr"><span class="icon">label</span>&nbsp;Número do contrato</label>
+                                                <label class="floating-label" for="numContratoContr"><span class="icon">label</span>&nbsp;NUM_CONTRATO</label>
                                                 <input class="form-control" id="numContratoContr" name="num_contrato" type="text">
                                             </div>
                                         </td>
@@ -743,32 +745,32 @@ $permissao = $obj_Busca->getPermissoes($_SESSION["id"]);
                                         <td>
                                             <div class="form-group form-group-label">
                                                 <label class="floating-label" for="idExtratoContrContr"><span class="icon">label</span>&nbsp;ID_EXTRATO_CONTR</label>
-                                                <input class="form-control" id="idExtratoContrContr" name="id_extrato_contr" type="text">
+                                                <input class="form-control" id="idExtratoContrContr" name="id_extrato_contr" type="number" step="1">
                                             </div>
                                         </td>
                                         <td>
                                             <div class="form-group form-group-label">
                                                 <label class="floating-label" for="idUnidadeContr"><span class="icon">label</span>&nbsp;ID_UNIDADE</label>
-                                                <input class="form-control" id="idUnidadeContr" name="id_unidade" type="text">
+                                                <input class="form-control" id="idUnidadeContr" name="id_unidade" type="number" step="1">
                                             </div>
                                         </td>
                                     </tr>
                                     <tr>
                                         <td>
                                             <div class="form-group form-group-label">
-                                                <label class="floating-label" for="vlUnitarioContr"><span class="icon">label</span>&nbsp;Valor Unitário</label>
+                                                <label class="floating-label" for="vlUnitarioContr"><span class="icon">label</span>&nbsp;VL_UNITARIO</label>
                                                 <input class="form-control" id="vlUnitarioContr" name="vl_unitario" type="number" step="0.001">
                                             </div>
                                         </td>
                                         <td>
                                             <div class="form-group form-group-label">
-                                                <label class="floating-label" for="qtContratoContr"><span class="icon">label</span>&nbsp;Quantidade Contrato</label>
-                                                <input class="form-control" id="qtContratoContr" name="qt_contrato" type="number">
+                                                <label class="floating-label" for="qtContratoContr"><span class="icon">label</span>&nbsp;QT_CONTRATO</label>
+                                                <input class="form-control" id="qtContratoContr" name="qt_contrato" type="number" step="1">
                                             </div>
                                         </td>
                                         <td>
                                             <div class="form-group form-group-label">
-                                                <label class="floating-label" for="vlContratoContr"><span class="icon">label</span>&nbsp;Valor Contrato</label>
+                                                <label class="floating-label" for="vlContratoContr"><span class="icon">label</span>&nbsp;VL_CONTRATO</label>
                                                 <input class="form-control" id="vlContratoContr" name="vl_contrato" type="number" step="0.001">
                                             </div>
                                         </td>
@@ -776,40 +778,40 @@ $permissao = $obj_Busca->getPermissoes($_SESSION["id"]);
                                     <tr>
                                         <td>
                                             <div class="form-group form-group-label">
-                                                <label class="floating-label" for="qtUtilizadaContr"><span class="icon">label</span>&nbsp;Quantidade Utilizada</label>
-                                                <input class="form-control" id="qtUtilizadaContr" name="qt_utilizada" type="number">
+                                                <label class="floating-label" for="qtUtilizadaContr"><span class="icon">label</span>&nbsp;QT_UTILIZADA</label>
+                                                <input class="form-control" id="qtUtilizadaContr" name="qt_utilizada" type="number" step="1">
                                             </div>
                                         </td>
                                         <td>
                                             <div class="form-group form-group-label">
-                                                <label class="floating-label" for="vlUtilizadoContr"><span class="icon">label</span>&nbsp;Valor Utilizado</label>
+                                                <label class="floating-label" for="vlUtilizadoContr"><span class="icon">label</span>&nbsp;VL_UTILIZADO</label>
                                                 <input class="form-control" id="vlUtilizadoContr" name="vl_utilizado" type="number" step="0.001">
                                             </div>
                                         </td>
                                         <td>
                                             <div class="form-group form-group-label">
-                                                <label class="floating-label" for="qtSaldoContr"><span class="icon">label</span>&nbsp;Quantidade Saldo</label>
-                                                <input class="form-control" id="qtSaldoContr" name="qt_saldo" type="number">
+                                                <label class="floating-label" for="qtSaldoContr"><span class="icon">label</span>&nbsp;QT_SALDO</label>
+                                                <input class="form-control" id="qtSaldoContr" name="qt_saldo" type="number" step="1">
                                             </div>
                                         </td>
                                     </tr>
                                     <tr>
                                         <td>
                                             <div class="form-group form-group-label">
-                                                <label class="floating-label" for="vlSaldoContr"><span class="icon">label</span>&nbsp;Valor Saldo</label>
+                                                <label class="floating-label" for="vlSaldoContr"><span class="icon">label</span>&nbsp;VL_SALDO</label>
                                                 <input class="form-control" id="vlSaldoContr" name="vl_saldo" type="number" step="0.001">
                                             </div>
                                         </td>
                                         <td>
                                             <div class="form-group form-group-label">
                                                 <label class="floating-label" for="anoOrcamentoContr"><span class="icon">label</span>&nbsp;ANO_ORCAMENTO</label>
-                                                <input class="form-control" id="anoOrcamentoContr" name="ano_orcamento" type="text">
+                                                <input class="form-control" id="anoOrcamentoContr" name="ano_orcamento" type="number" step="1">
                                             </div>
                                         </td>
                                         <td>
                                             <div class="form-group form-group-label">
-                                                <label class="floating-label" for="seqItemProcessoContr"><span class="icon">label</span>&nbsp;ID_EXTRATO_CONTR</label>
-                                                <input class="form-control" id="seqItemProcessoContr" name="seq_item_processo" type="text">
+                                                <label class="floating-label" for="seqItemProcessoContr"><span class="icon">label</span>&nbsp;SEQ_ITEM_PROCESSO</label>
+                                                <input class="form-control" id="seqItemProcessoContr" name="seq_item_processo" type="number" step="1">
                                             </div>
                                         </td>
                                     </tr>
