@@ -35,9 +35,16 @@ if ($obj_Busca->isActive()) {
     $obj_Util = new Util();
     $obj_Login = new Login();
 
-    if (isset($_POST["admin"]) && isset($_SESSION["id_setor"]) && ($_SESSION["id_setor"] == 2 || $_SESSION["id_setor"] == 12)) {
+    $admin = filter_input(INPUT_POST, "admin");
+    $users = filter_input(INPUT_POST, "users");
+
+    if (!is_null($admin) && isset($_SESSION["id_setor"]) && ($_SESSION["id_setor"] == 2 || $_SESSION["id_setor"] == 12)) {
         // variável que controla o que deve ser feito quando geral.php for chamado
-        $form = $_POST["form"];
+        $form = "";
+        $filter = filter_input(INPUT_POST, "form");
+        if (!is_null($filter)) {
+            $form = $filter;
+        }
 
         switch ($form) {
 
@@ -81,7 +88,7 @@ if ($obj_Busca->isActive()) {
                 for ($i = 0; $i < $len; $i++) {
                     $filter_input = filter_input(INPUT_POST, $array[$i]);
                     if ($filter_input !== NULL && $filter_input !== FALSE) {
-                        ${$array[$i]} =  str_replace("\"", "'", $filter_input);;
+                        ${$array[$i]} = str_replace("\"", "'", $filter_input);
                     }
                 }
                 $obj_Geral->cadContrato($complemento_item, $id_item_processo, $id_item_contrato, $cod_despesa, $descrDespesa, $descrTipoDoc, $num_contrato, $num_processo, $descr_mod_compra, $num_licitacao, $dt_inicio, $dt_fim, $dt_geracao, $cgc_fornecedor, $nome_fornecedor, $num_extrato, $cod_estruturado, $nome_unidade, $cod_reduzido, $descricao, $id_extrato_contr, $id_unidade, $vl_unitario, $qt_contrato, $vl_contrato, $qt_utilizada, $vl_utilizado, $qt_saldo, $vl_saldo, $ano_orcamento, $seq_item_processo);
@@ -89,8 +96,10 @@ if ($obj_Busca->isActive()) {
                 break;
 
             case 'altUser':
-                $user = $_POST['user'];
-                $obj_Login->changeUser($user);
+                $user = filter_input(INPUT_POST, 'user');
+                if (!is_null($user)) {
+                    $obj_Login->changeUser($user);
+                }
                 header("Location: ../");
                 break;
 
@@ -332,7 +341,6 @@ if ($obj_Busca->isActive()) {
                     $prioridade = $fase;
                     $fase = 'Rascunho';
                 }
-                $total_pedido = $_POST["total_hidden"];
 
                 $comentario = $_POST["comentario"];
 
@@ -436,8 +444,12 @@ if ($obj_Busca->isActive()) {
             default:
                 break;
         }
-    } else if (isset($_POST["users"]) && isset($_SESSION["id_setor"]) && $_SESSION["id_setor"] != 0) {
-        $form = $_POST["form"];
+    } else if ($users !== NULL && isset($_SESSION["id_setor"]) && $_SESSION["id_setor"] != 0) {
+        $form = "";
+        $filter = filter_input(INPUT_POST, "form");
+        if (!is_null($filter)) {
+            $form = $filter;
+        }
 
         switch ($form) {
 

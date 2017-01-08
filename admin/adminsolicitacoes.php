@@ -347,10 +347,10 @@ $permissao = $obj_Busca->getPermissoes($_SESSION["id"]);
                                     </div>
                                 </div><!--  ./card-header -->
                                 <form id="formPedido" action="../php/geral.php" method="POST">
-                                    <input type="hidden" name="admin" value="1"></input>
-                                    <input id="form" type="hidden" name="form" value="" required></input>
-                                    <input id="id_pedido" type="hidden" name="id_pedido" value="0"></input>
-                                    <input id="id_setor" type="hidden" name="id_setor" value="0"></input>
+                                    <input type="hidden" name="admin" value="1"/>
+                                    <input id="form" type="hidden" name="form" value="" required/>
+                                    <input id="id_pedido" type="hidden" name="id_pedido" value="0"/>
+                                    <input id="id_setor" type="hidden" name="id_setor" value="0"/>
                                     <div class="card-inner">
                                         <table class="table stripe" id="tableItensPedido">
                                             <thead>
@@ -1171,7 +1171,7 @@ $permissao = $obj_Busca->getPermissoes($_SESSION["id"]);
                             <h2 class="modal-title content-sub-heading">Processo</h2>
                         </div>
                         <form id="formProcesso" action="javascript:updateProcesso();" method="post">
-                            <input id="id_processo" type="hidden" value="0"></input>
+                            <input id="id_processo" type="hidden" value="0"/>
                             <div class="modal-inner">
                                 <table style="width: 100%;">
                                     <tbody>
@@ -1273,8 +1273,8 @@ $permissao = $obj_Busca->getPermissoes($_SESSION["id"]);
                             <h2 class="modal-title content-sub-heading">Novo Tipo de Processo</h2>
                         </div>
                         <form action="../php/geral.php" method="post">
-                            <input type="hidden" name="admin" value="1"></input>
-                            <input type="hidden" name="form" value="newTypeProcess"></input>
+                            <input type="hidden" name="admin" value="1"/>
+                            <input type="hidden" name="form" value="newTypeProcess"/>
                             <div class="modal-inner">
                                 <div class="form-group form-group-label">
                                     <label class="floating-label" for="newType"><span class="icon">perm_identity</span>&nbsp;Nome</label>
