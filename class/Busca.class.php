@@ -35,7 +35,7 @@ class Busca extends Conexao {
                 <td>
                     <div class=\"radiobtn radiobtn-adv\">
                         <label for=\"tipoCont" . $obj->id . "\">
-                            <input type=\"radio\" name=\"tipoCont\" id=\"tipoCont" . $obj->id . "\" class=\"access-hide\" value=\"" . $obj->id . "\">" . $obj->nome . "
+                            <input type=\"radio\" name=\"tipoCont\" id=\"tipoCont" . $obj->id . "\" class=\"access-hide\" value=\"" . $obj->id . "\" onchange=\"changeTipoContr(this);\">" . $obj->nome . "
                             <span class=\"radiobtn-circle\"></span><span class=\"radiobtn-circle-check\"></span>
                         </label>
                     </div>
@@ -132,7 +132,7 @@ class Busca extends Conexao {
                 <td>
                     <div class=\"radiobtn radiobtn-adv\">
                         <label for=\"tipoLic" . $obj->id . "\">
-                            <input type=\"radio\" name=\"tipoLic\" id=\"tipoLic" . $obj->id . "\" class=\"access-hide\" value=\"" . $obj->id . "\" required onchange=\"changeTipoLic(" . $obj->id . ");\">" . $obj->nome . "
+                            <input type=\"radio\" name=\"tipoLic\" id=\"tipoLic" . $obj->id . "\" class=\"access-hide\" value=\"" . $obj->id . "\" required onchange=\"changeTipoLic(this);\">" . $obj->nome . "
                             <span class=\"radiobtn-circle\"></span><span class=\"radiobtn-circle-check\"></span>
                         </label>
                     </div>

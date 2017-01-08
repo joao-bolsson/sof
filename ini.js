@@ -1,9 +1,11 @@
 $(function () {
     var str = location.pathname;
-    if (str.startsWith("solicitacoes.php")) {
+    if (str.endsWith("view/solicitacoes.php")) {
         $(".select2").select2();
     }
-    $('.date').mask('00/00/0000');
+    if (str.endsWith("adminsolicitacoes.php")) {
+        $('.date').mask('00/00/0000');
+    }
 });
 
 $('.modal').on('hidden.bs.modal', function (event) {
@@ -242,6 +244,28 @@ function iniDataTable(tabela) {
         "scrollX": true
     });
 }
+function changeTipoContr(element) {
+    var val = element.value;
+    document.getElementById('siafi').required = (val == 2 || val == 3);
+}
+
+function maybeRequiredTipoContr(flag) {
+    var x = document.getElementsByName("tipoCont");
+    for (var i = 0; i < x.length; i++) {
+        if (x[i].type === "radio") {
+            x[i].required = flag;
+        }
+    }
+}
+
+function checkPedContr(element) {
+    // se for um pedido de contrato, deve escolher uma opcao
+    maybeRequiredTipoContr(element.checked);
+}
+
+document.getElementById("checkPedContr").onclick = function () {
+    checkPedContr(this);
+};
 
 function transfereSaldo() {
     $('#formTransferencia .btn').blur();
@@ -660,8 +684,8 @@ function listRelatorios() {
     $('#listRelatorios').modal('show');
 }
 
-function changeTipoLic(tipo) {
-    var selected = document.getElementById('tipoLic' + tipo).value;
+function changeTipoLic(element) {
+    var selected = element.value;
     if (selected == 3 || selected == 4 || selected == 2) { // Adesao, Compra Compartilhada ou Inexibilidade
         maybeDisableFields(false);
     } else {
@@ -672,6 +696,7 @@ function changeTipoLic(tipo) {
     } else {
         document.getElementById('infoLic').required = true;
     }
+    maybeRequiredTipoContr(selected == 6);
 }
 
 function maybeDisableFields(flag) {
