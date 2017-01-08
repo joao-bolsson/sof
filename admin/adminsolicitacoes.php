@@ -45,7 +45,7 @@ $permissao = $obj_Busca->getPermissoes($_SESSION["id"]);
             <nav class="tab-nav pull-right hidden-xx">
                 <ul class="nav nav-list">
                     <li>
-                        <a class="btn btn-flat waves-attach waves-light" href="javascript:abreModal('#cadContrato');"><span class="text-white"><span class="icon">announcement</span>CADASTRO DE CONTRATO</span></a>
+                        <a class="btn btn-flat waves-attach waves-light" href="javascript:abreModal('#cadContrato');"><span class="text-white"><span class="icon">folder</span>CADASTRO DE CONTRATO</span></a>
                     </li>
                     <?php if ($_SESSION['login'] == 'joao' || $_SESSION['login'] == 'iara'): ?>
                         <li>
@@ -679,19 +679,19 @@ $permissao = $obj_Busca->getPermissoes($_SESSION["id"]);
                                         <td>
                                             <div class="form-group form-group-label">
                                                 <label class="floating-label" for="dataInicioContr"><span class="icon">label</span>&nbsp;DT_INICIO</label>
-                                                <input class="form-control" id="dataInicioContr" name="dt_inicio" type="text">
+                                                <input class="form-control date" id="dataInicioContr" name="dt_inicio" type="text">
                                             </div>
                                         </td>
                                         <td>
                                             <div class="form-group form-group-label">
                                                 <label class="floating-label" for="dataFimContr"><span class="icon">label</span>&nbsp;DT_FIM</label>
-                                                <input class="form-control" id="dataFimContr" name="dt_fim" type="text">
+                                                <input class="form-control date" id="dataFimContr" name="dt_fim" type="text">
                                             </div>
                                         </td>
                                         <td>
                                             <div class="form-group form-group-label">
                                                 <label class="floating-label" for="dataGeracaoContr"><span class="icon">label</span>&nbsp;DT_GERACAO</label>
-                                                <input class="form-control" id="dataGeracaoContr" name="dt_geracao" type="text">
+                                                <input class="form-control date" id="dataGeracaoContr" name="dt_geracao" type="text">
                                             </div>
                                         </td>
                                     </tr>
@@ -1395,7 +1395,7 @@ $permissao = $obj_Busca->getPermissoes($_SESSION["id"]);
                                 </div>
                                 <div class="form-group form-group-label">
                                     <label class="floating-label" for="emailU"><span class="icon">email</span>&nbsp;E-mail</label>
-                                    <input class="form-control date" id="emailU" name="email" type="email" required />
+                                    <input class="form-control" id="emailU" name="email" type="email" required />
                                 </div>
                                 <div class="form-group form-group-label">
                                     <label class="floating-label" for="setorU"><span class="icon">perm_identity</span>&nbsp;Setor</label>

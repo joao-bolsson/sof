@@ -1,6 +1,6 @@
 $(function () {
     var str = location.pathname;
-    if (str.endsWith("solicitacoes.php")) {
+    if (str.startsWith("solicitacoes.php")) {
         $(".select2").select2();
     }
     $('.date').mask('00/00/0000');
