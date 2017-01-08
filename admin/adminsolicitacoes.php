@@ -818,7 +818,7 @@ $permissao = $obj_Busca->getPermissoes($_SESSION["id"]);
                                 </table>
                             </div>
                             <div class="modal-footer margin-bottom">
-                                <button class="btn btn-brand waves-attach waves-light waves-effect" type="submit" style="width: 100%;"><span class="icon">autorenew</span>&nbsp;Atualizar</button>
+                                <button class="btn btn-brand waves-attach waves-light waves-effect" type="submit" style="width: 100%;"><span class="icon">autorenew</span>&nbsp;Cadastrar</button>
                             </div>
                         </form>
                     </div>

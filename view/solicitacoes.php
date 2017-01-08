@@ -222,14 +222,25 @@ $select_grupo = $obj_Busca->getOptionsGrupos($id_setor);
                                         </tr>
                                     </table>
                                     <?php if (strlen($select_grupo) > 0): ?>
-                                    <h2 class="content-sub-heading">Grupo</h2>
-                                    <div class="form-group form-group-label">
-                                        <label class="floating-label" for="grupo"><span class="icon">perm_identity</span>&nbsp;Selecione o grupo</label>
-                                        <select id="grupo" class="form-control select2" name="grupo" required>
-                                            <?= $select_grupo ?>
-                                        </select>
-                                    </div>
+                                        <h2 class="content-sub-heading">Grupo</h2>
+                                        <div class="form-group form-group-label">
+                                            <label class="floating-label" for="grupo"><span class="icon">perm_identity</span>&nbsp;Selecione o grupo</label>
+                                            <select id="grupo" class="form-control select2" name="grupo" required>
+                                                <?= $select_grupo ?>
+                                            </select>
+                                        </div>
                                     <?php endif ?>
+                                    <div class="checkbox checkbox-adv">
+                                        <label for="checkPedContr">
+                                            <input class="access-hide" id="checkPedContr" name="pedidoContrato" type="checkbox">Pedido de Contrato
+                                            <span class="checkbox-circle"></span><span class="checkbox-circle-check"></span><span class="checkbox-circle-icon icon">done</span>
+                                        </label>
+                                    </div>
+                                    <table class="table">
+                                        <tr>
+                                            <?= $obj_Busca->getOptionsContrato(); ?>
+                                        </tr>
+                                    </table>
                                 </div><!-- ./card-inner -->
                                 <div class="card-action">
                                     <div class="card-action-btn">

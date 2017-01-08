@@ -22,6 +22,28 @@ class Busca extends Conexao {
         parent::__construct();
         $this->obj_Util = new Util();
     }
+    
+    public function getOptionsContrato() {
+        if (is_null($this->mysqli)) {
+            $this->mysqli = parent::getConexao();
+        }
+        $query = $this->mysqli->query("SELECT contrato_tipo.id, contrato_tipo.nome FROM contrato_tipo;") or exit("Erro ao buscar opções de contrato.");
+        $this->mysqli = NULL;
+        $retorno = "";
+        while ($obj = $query->fetch_object()) {
+            $retorno .= "
+                <td>
+                    <div class=\"radiobtn radiobtn-adv\">
+                        <label for=\"tipoCont" . $obj->id . "\">
+                            <input type=\"radio\" name=\"tipoCont\" id=\"tipoCont" . $obj->id . "\" class=\"access-hide\" value=\"" . $obj->id . "\">" . $obj->nome . "
+                            <span class=\"radiobtn-circle\"></span><span class=\"radiobtn-circle-check\"></span>
+                        </label>
+                    </div>
+                </td>";
+        }
+
+        return $retorno;
+    }
 
     /**
      * @return string Lista de usuários cadastrados.
