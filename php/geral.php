@@ -87,7 +87,7 @@ if ($obj_Busca->isActive()) {
                 $len = count($array);
                 for ($i = 0; $i < $len; $i++) {
                     $filter_input = filter_input(INPUT_POST, $array[$i]);
-                    if ($filter_input !== NULL && $filter_input !== FALSE) {
+                    if (!is_null($filter_input) && $filter_input !== FALSE) {
                         ${$array[$i]} = str_replace("\"", "'", $filter_input);
                     }
                 }
@@ -104,10 +104,15 @@ if ($obj_Busca->isActive()) {
                 break;
 
             case 'addUser':
-                $nome = $_POST['nome'];
-                $login = $_POST['login'];
-                $email = $_POST['email'];
-                $setor = $_POST['setor'];
+                $nome = filter_input(INPUT_POST, 'nome');
+                $login = filter_input(INPUT_POST, 'login');
+                $email = filter_input(INPUT_POST, 'email');
+                $setor = filter_input(INPUT_POST, 'setor');
+                // teste para variavel indefinida
+                if (empty($nome) || empty($login) || empty($email) || empty($setor)) {
+                    echo "Erro: variáveis indefinidas ou vazias.";
+                    break;
+                }
 
                 if (is_null($obj_Util)) {
                     $obj_Util = new Util();
@@ -116,10 +121,10 @@ if ($obj_Busca->isActive()) {
 
                 $id_user = $obj_Geral->cadUser($nome, $login, $email, $setor, $senha);
 
-                $noticias = isset($_POST['noticias']);
-                $saldos = isset($_POST['saldos']);
-                $pedidos = isset($_POST['pedidos']);
-                $recepcao = isset($_POST['recepcao']);
+                $noticias = !is_null(filter_input(INPUT_POST, 'noticias'));
+                $saldos = !is_null(filter_input(INPUT_POST, 'saldos'));
+                $pedidos = !is_null(filter_input(INPUT_POST, 'pedidos'));
+                $recepcao = !is_null(filter_input(INPUT_POST, 'recepcao'));
 
                 $obj_Geral->cadPermissao($id_user, $noticias, $saldos, $pedidos, $recepcao);
 
@@ -146,15 +151,22 @@ if ($obj_Busca->isActive()) {
                 } else {
                     echo "Usuário e permissões cadastradas. Erro ao enviar o e-mail com a senha : " . $senha;
                 }
-
+                
                 break;
 
             case 'enviaForn':
-                $obj_Geral->enviaFornecedor($_POST['id_pedido']);
+                $id = filter_input(INPUT_POST, 'id_pedido');
+                if (empty($id)) {
+                    break;
+                }
+                $obj_Geral->enviaFornecedor($id);
                 break;
 
             case 'enviaOrdenador':
-                $id_pedido = $_POST['id_pedido'];
+                $id_pedido = filter_input(INPUT_POST, 'id_pedido');
+                if (empty($id_pedido)) {
+                    break;
+                }
                 echo $obj_Geral->enviaOrdenador($id_pedido);
                 break;
             case 'enviaFontes':
@@ -167,7 +179,6 @@ if ($obj_Busca->isActive()) {
             case 'resetSystem':
                 if ($_SESSION['login'] == 'joao') {
                     $obj_Geral->resetSystem();
-                    echo "foi";
                 }
                 break;
             // comment.
@@ -207,7 +218,11 @@ if ($obj_Busca->isActive()) {
             // comentário
 
             case 'newTypeProcess':
-                $tipo = $_POST["newType"];
+                $tipo = filter_input(INPUT_POST, 'newType');
+                if (empty($tipo)) {
+                    header("Location: ../admin/adminsolicitacoes.php");
+                    break;
+                }
                 $cadastra = $obj_Geral->newTypeProcess($tipo);
                 if (!$cadastra) {
                     // remove all session variables

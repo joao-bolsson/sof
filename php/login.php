@@ -15,19 +15,22 @@ if (!$obj_Busca->isActive()) {
     //instanciando objeto de login
     $obj_Login = new Login();
 
-    $login = $_POST["login"];
-    $senha = $_POST["senha"];
+    $login = filter_input(INPUT_POST, 'login');
+    $senha = filter_input(INPUT_POST, 'senha');
 
-    $logar = $obj_Login->login($login, $senha, $retorno = false);
-    //se o retorno for true então vai redirecionar para o painel de administração do sistema
-
-    if ($logar == 2) {
-        $_SESSION["admin"] = true;
-    }
-    if ($logar != 0) {
-        echo "true";
-    } else {
+    if (is_null($login) || is_null($senha)) {
         echo "false";
+    } else {
+        $logar = $obj_Login->login($login, $senha, $retorno = false);
+
+        if ($logar == 2) {
+            $_SESSION["admin"] = true;
+        }
+        if ($logar != 0) {
+            echo "true";
+        } else {
+            echo "false";
+        }
     }
 }
 ?>
