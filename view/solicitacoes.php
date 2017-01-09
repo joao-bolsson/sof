@@ -241,7 +241,7 @@ $select_grupo = $obj_Busca->getOptionsGrupos($id_setor);
                                             <?= $obj_Busca->getOptionsContrato(); ?>
                                         </tr>
                                     </table>
-                                    <div class="form-group form-group-label">
+                                    <div id="divSiafi" class="form-group form-group-label">
                                         <label class="floating-label" for="siafi"><span class="icon">grade</span>&nbsp;SIAFI</label>
                                         <input class="form-control" id="siafi" name="siafi" type="text">
                                     </div>

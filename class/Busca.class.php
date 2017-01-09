@@ -22,6 +22,19 @@ class Busca extends Conexao {
         parent::__construct();
         $this->obj_Util = new Util();
     }
+    
+    public function getInfoContrato(int $id_pedido) {
+        if (is_null($this->mysqli)) {
+            $this->mysqli = parent::getConexao();
+        }
+        $query = $this->mysqli->query("SELECT pedido.pedido_contrato, pedido_contrato.id_tipo, pedido_contrato.siafi FROM pedido, pedido_contrato WHERE pedido.id = pedido_contrato.id_pedido AND pedido.id = {$id_pedido};") or exit("Erro ao buscar informações do contrato.");
+        $this->mysqli = NULL;
+        if ($query->num_rows < 1) {
+            return false;
+        }
+        $obj = $query->fetch_object();
+        return json_encode($obj);
+    }
 
     public function getOptionsContrato() {
         if (is_null($this->mysqli)) {

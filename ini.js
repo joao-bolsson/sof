@@ -998,6 +998,27 @@ function editaPedido(id_pedido) {
     });
     populaLicitacao(id_pedido);
     populaGrupo(id_pedido);
+    populaContrato(id_pedido);
+}
+
+function populaContrato(id_pedido) {
+    $.post('../php/busca.php', {
+        users: 1,
+        form: 'populaContrato',
+        id_pedido: id_pedido
+    }, function (resposta) {
+        if (resposta !== false) {
+            var obj = jQuery.parseJSON(resposta);
+            $('#divSiafi').addClass('control-highlight');
+            document.getElementById('siafi').value = obj.siafi;
+            if (obj.id_tipo > 0) {
+                document.getElementById('tipoCont'+obj.id_tipo).checked = true;
+            }
+            if (obj.pedido_contrato) {
+                document.getElementById('checkPedContr').checked = true;
+            }
+        }
+    });
 }
 
 function populaGrupo(id_pedido) {
