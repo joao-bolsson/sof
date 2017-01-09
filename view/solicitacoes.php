@@ -236,6 +236,7 @@ $select_grupo = $obj_Busca->getOptionsGrupos($id_setor);
                                             <span class="checkbox-circle"></span><span class="checkbox-circle-check"></span><span class="checkbox-circle-icon icon">done</span>
                                         </label>
                                     </div>
+                                    <span class="label">Se você não escolheu RP ou não marcou como "Pedido de Contrato", a seção a seguir será ignorada</span>
                                     <table class="table">
                                         <tr>
                                             <?= $obj_Busca->getOptionsContrato(); ?>
