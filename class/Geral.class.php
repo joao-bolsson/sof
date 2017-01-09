@@ -23,18 +23,6 @@ class Geral extends Conexao {
         $this->obj_Busca = new Busca();
     }
 
-    /**
-     * O pedido não é de contrato e nem possui licitação como RP: deleta as informações de contrato. 
-     * @param int $id_pedido Id do pedido.
-     */
-    public function deletePedContr(int $id_pedido) {
-        if (is_null($this->mysqli)) {
-            $this->mysqli = parent::getConexao();
-        }
-        $this->mysqli->query("DELETE FROM pedido_contrato WHERE id_pedido = {$id_pedido};") or exit("Erro ao deletar contrato do pedido.");
-        $this->mysqli = NULL;
-    }
-
     public function insertPedContr(int $id_pedido, int $id_tipo, string $siafi) {
         if (is_null($this->mysqli)) {
             $this->mysqli = parent::getConexao();

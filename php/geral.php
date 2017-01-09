@@ -580,25 +580,19 @@ if ($obj_Busca->isActive()) {
                 }
 
                 // pedido de contrato
-                if ($pedido_contrato || $tipo == 6) {
-                    // as 3 opções devem ser escolhidas se o pedido for marcado como pedido de contrato
-                    // ou se a licitação for uma RP
-                    $tipo_cont = filter_input(INPUT_POST, 'tipoCont');
-                    if (empty($tipo_cont)) {
-                        exit("Pedido inserido. Erro ao registrar uma das 3 opções.");
-                    }
-                    $siafi = "";
-                    if ($tipo_cont == 2 || $tipo_cont == 3) {
-                        // se for reforço ou anulação, precisa ter o SIAFI
-                        $siafi = filter_input(INPUT_POST, 'siafi');
-                        if (empty($siafi)) {
-                            exit("Pedido inserido. Erro ao ler o SIAFI.");
-                        }
-                    }
-                    $obj_Geral->insertPedContr($pedido, $tipo_cont, $siafi);
-                } else {
-                    $obj_Geral->deletePedContr($pedido);
+                $tipo_cont = filter_input(INPUT_POST, 'tipoCont');
+                if (empty($tipo_cont)) {
+                    exit("Pedido inserido. Erro ao registrar uma das 3 opções.");
                 }
+                $siafi = "";
+                if ($tipo_cont == 2 || $tipo_cont == 3) {
+                    // se for reforço ou anulação, precisa ter o SIAFI
+                    $siafi = filter_input(INPUT_POST, 'siafi');
+                    if (empty($siafi)) {
+                        exit("Pedido inserido. Erro ao ler o SIAFI.");
+                    }
+                }
+                $obj_Geral->insertPedContr($pedido, $tipo_cont, $siafi);
 
                 header("Location: ../view/solicitacoes.php");
                 break;

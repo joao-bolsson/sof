@@ -696,7 +696,7 @@ function changeTipoLic(element) {
     } else {
         document.getElementById('infoLic').required = true;
     }
-    maybeRequiredTipoContr(selected == 6);
+    maybeRequiredTipoContr(true);
 }
 
 function maybeDisableFields(flag) {
