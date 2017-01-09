@@ -528,7 +528,7 @@ if ($obj_Busca->isActive()) {
                 $vl_contrato = filter_input(INPUT_POST, 'vl_contrato', FILTER_DEFAULT, FILTER_FORCE_ARRAY);
                 $vl_utilizado = filter_input(INPUT_POST, 'vl_utilizado', FILTER_DEFAULT, FILTER_FORCE_ARRAY);
                 $valor = filter_input(INPUT_POST, 'valor', FILTER_DEFAULT, FILTER_FORCE_ARRAY);
-                
+
                 if (empty($id_item)) {
                     exit("Erro ao ler os itens do pedido.");
                 }
@@ -589,15 +589,17 @@ if ($obj_Busca->isActive()) {
                     }
                     $siafi = "";
                     if ($tipo_cont == 2 || $tipo_cont == 3) {
-                       // se for reforço ou anulação, precisa ter o SIAFI
+                        // se for reforço ou anulação, precisa ter o SIAFI
                         $siafi = filter_input(INPUT_POST, 'siafi');
                         if (empty($siafi)) {
                             exit("Pedido inserido. Erro ao ler o SIAFI.");
                         }
                     }
-                    $obj_Geral->insertPedContr($pedido, $tipo_cont, $siafi, $pedido_existe);
+                    $obj_Geral->insertPedContr($pedido, $tipo_cont, $siafi);
+                } else {
+                    $obj_Geral->deletePedContr($pedido);
                 }
-                
+
                 header("Location: ../view/solicitacoes.php");
                 break;
             default:

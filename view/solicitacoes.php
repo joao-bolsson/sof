@@ -248,7 +248,8 @@ $select_grupo = $obj_Busca->getOptionsGrupos($id_setor);
                                 </div><!-- ./card-inner -->
                                 <div class="card-action">
                                     <div class="card-action-btn">
-                                        <button class="btn btn-brand waves-attach" type="submit" style="width: 100%;"><span class="icon">check</span>&nbsp;Enviar Pedido / Salvar Rascunho</button>
+                                        <button id="btnLimpa" class="btn btn-default waves-attach" type="button" style="width: 49%;" onclick="limpaTelaSolic();"><span class="icon">clear</span>&nbsp;Limpar</button>
+                                        <button class="btn btn-brand waves-attach" type="submit" style="width: 50%;"><span class="icon">check</span>&nbsp;Enviar Pedido / Salvar Rascunho</button>
                                     </div>
                                 </div>
                             </form>

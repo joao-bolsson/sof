@@ -147,6 +147,14 @@ if (isset($_POST["admin"]) && isset($_SESSION['id_setor']) && ($_SESSION['id_set
 
     switch ($form) {
 
+        case 'fillSaldo':
+            echo number_format($obj_Busca->getSaldo($_SESSION['id_setor']), 3, ',', '.');
+            break;
+        
+        case 'getSaldo':
+            echo $obj_Busca->getSaldo($_SESSION['id_setor']);
+            break;
+
         case 'populaContrato':
             $id_pedido = filter_input(INPUT_POST, 'id_pedido');
             if (empty($id_pedido)) {

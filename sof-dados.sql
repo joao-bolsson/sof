@@ -3675,10 +3675,14 @@ INSERT INTO `itens` (`id`, `id_item_processo`, `id_item_contrato`, `cod_despesa`
 (3615, 9090, 80, 'cod_despesa', 'descr_despesa', 'descr_tipo_doc', 'num_contrato', '23541.000516/2016-16', 'descr_mod_compra', 'num_licitacao', '08/01/2017', '08/01/2017', '08/01/2017', 'cgc_fornecedor', 'nome_fornecedor', 'num_extrato', '19216801', 'nome_unidade', 'cod_reduzido', 'item cadastrado pelo sof', 'descricao', 8, '10', 100, '1000', 0, '0', 100, '1000', 17, 2017, 0, '23541.000516/2016-16#cod_reduzido#9099', '9099');
 
 INSERT INTO `itens_pedido` (`id`, `id_pedido`, `id_item`, `qtd`, `valor`) VALUES
-(3, 1, 3615, 1, '10');
+(24, 2, 89, 1, '4.5'),
+(26, 1, 3615, 1, '10'),
+(27, 3, 89, 2, '9');
 
 INSERT INTO `licitacao` (`id`, `id_pedido`, `tipo`, `numero`, `uasg`, `processo_original`, `gera_contrato`) VALUES
-(1, 1, 6, '990', '', '', 0);
+(1, 1, 6, '990', '', '', 0),
+(2, 2, 6, '567', '', '', 0),
+(3, 3, 1, '123', '', '', 0);
 
 INSERT INTO `licitacao_tipo` (`id`, `nome`) VALUES
 (1, 'Dispensa de Licitacao'),
@@ -3712,13 +3716,18 @@ INSERT INTO `paginas_post` (`id`, `tabela`, `nome`) VALUES
 (6, 'tutoriais', 'POPs e Tutoriais');
 
 INSERT INTO `pedido` (`id`, `id_setor`, `id_usuario`, `data_pedido`, `ref_mes`, `alteracao`, `prioridade`, `status`, `valor`, `obs`, `pedido_contrato`) VALUES
-(1, 3, 2, '2017-01-09', 1, 1, 5, 1, '10.000', 'teste 1', 1);
+(1, 3, 2, '2017-01-09', 1, 1, 5, 1, '10.000', 'teste 1', 0),
+(2, 3, 2, '2017-01-09', 1, 1, 5, 1, '4.500', 'ola mundo 2', 1),
+(3, 3, 2, '2017-01-09', 1, 1, 5, 1, '9.000', 'teste limpa', 1);
 
 INSERT INTO `pedido_contrato` (`id_pedido`, `id_tipo`, `siafi`) VALUES
-(1, 2, '123456');
+(2, 2, '123456'),
+(3, 2, '123456');
 
 INSERT INTO `pedido_grupo` (`id_pedido`, `id_grupo`) VALUES
-(1, 27);
+(1, 28),
+(2, 29),
+(3, 27);
 
 INSERT INTO `pedido_log_status` (`id_pedido`, `id_status`, `data`) VALUES
 (1, 1, '2017-01-09');

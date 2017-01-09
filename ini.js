@@ -541,7 +541,7 @@ function liberaSaldo() {
 function refreshSaldo() {
     $.post('../php/busca.php', {
         admin: 1,
-        form: 'refreshSaldo',
+        form: 'refreshSaldo'
     }, function (resposta) {
         document.getElementById('labelSaldoSOF').innerHTML = 'Saldo disponível: R$ ' + resposta;
     });
@@ -967,7 +967,64 @@ function pesquisarProcesso(busca) {
     }
 }
 
+function fillSaldo() {
+    $.post('../php/busca.php', {
+        users: 1,
+        form: 'fillSaldo'
+    }, function (resposta) {
+        document.getElementById('text_saldo_total').innerHTML = 'R$ ' + resposta;
+    });
+    $.post('../php/busca.php', {
+        users: 1,
+        form: 'getSaldo'
+    }, function (resposta) {
+        document.getElementById('saldo_total').value = resposta;
+    });
+}
+
+function limpaTelaSolic() {
+    fillSaldo();
+    document.getElementById('pedido').value = 0;
+    document.getElementById('conteudoPedido').innerHTML = '';
+    document.getElementById('total').value = 'R$ 0';
+    document.getElementById('total_hidden').value = 0;
+    document.getElementById('stRascunho').checked = true;
+    $('#divObs').removeClass('control-highlight');
+    document.getElementById('obs').value = '';
+
+    // licitação
+    for (var i = 1; i <= 6; i++) {
+        document.getElementById('tipoLic' + i).checked = false;
+    }
+    $('#divNum').removeClass('control-highlight');
+    document.getElementById('infoLic').value = '';
+    document.getElementById('infoLic').required = true;
+    $('#divProcOri').removeClass('control-highlight');
+    document.getElementById('procOri').value = '';
+    document.getElementById('procOri').required = false;
+    document.getElementById('procOri').disabled = true;
+
+    document.getElementById('gera').checked = false;
+    document.getElementById('gera').required = false;
+    document.getElementById('gera').disabled = true;
+    
+    document.getElementById('ngera').checked = false;
+    document.getElementById('ngera').required = false;
+    document.getElementById('ngera').disabled = true;
+    
+    document.getElementById('checkPedContr').checked = false;
+    
+    // opções de contrato
+    for (var i = 1; i <= 3; i++) {
+        document.getElementById('tipoCont'+i).required = false;
+        document.getElementById('tipoCont'+i).checked = false;
+    }
+    $('#divSiafi').removeClass('control-highlight');
+    document.getElementById('siafi').value = '';
+}
+
 function editaPedido(id_pedido) {
+    limpaTelaSolic();
     $.post('../php/busca.php', {
         users: 1,
         form: 'populaRascunho',
@@ -1012,9 +1069,9 @@ function populaContrato(id_pedido) {
             $('#divSiafi').addClass('control-highlight');
             document.getElementById('siafi').value = obj.siafi;
             if (obj.id_tipo > 0) {
-                document.getElementById('tipoCont'+obj.id_tipo).checked = true;
+                document.getElementById('tipoCont' + obj.id_tipo).checked = true;
             }
-            if (obj.pedido_contrato) {
+            if (obj.pedido_contrato == 1) {
                 document.getElementById('checkPedContr').checked = true;
             }
         }
@@ -1052,6 +1109,8 @@ function populaLicitacao(id_pedido) {
                 document.getElementById('procOri').value = obj.processo_original;
             }
             maybeDisableFields(!(obj.tipo == 3 || obj.tipo == 4 || obj.tipo == 2));
+            var element = document.getElementById('tipoLic' + obj.tipo);
+            changeTipoLic(element);
         }
     });
 }
