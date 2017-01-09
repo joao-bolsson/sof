@@ -24,6 +24,44 @@ class Geral extends Conexao {
     }
 
     /**
+     * O pedido não é de contrato e nem possui licitação como RP: deleta as informações de contrato. 
+     * @param int $id_pedido Id do pedido.
+     */
+    public function deletePedContr(int $id_pedido) {
+        if (is_null($this->mysqli)) {
+            $this->mysqli = parent::getConexao();
+        }
+        $this->mysqli->query("DELETE FROM pedido_contrato WHERE id_pedido = {$id_pedido};") or exit("Erro ao deletar contrato do pedido.");
+        $this->mysqli = NULL;
+    }
+
+    public function insertPedContr(int $id_pedido, int $id_tipo, string $siafi) {
+        if (is_null($this->mysqli)) {
+            $this->mysqli = parent::getConexao();
+        }
+        $query = $this->mysqli->query("SELECT id_tipo FROM pedido_contrato WHERE id_pedido = {$id_pedido};") or exit("Erro ao definir se o pedido existe ou não.");
+        $sql = "INSERT INTO pedido_contrato VALUES({$id_pedido}, {$id_tipo}, '{$siafi}');";
+        if ($query->num_rows > 0) {
+            $sql = "UPDATE pedido_contrato SET id_tipo = $id_tipo, siafi = '{$siafi}' WHERE id_pedido = {$id_pedido};";
+        }
+        $this->mysqli->query($sql) or exit("Erro ao inserir dados do contrato.");
+        $this->mysqli = NULL;
+    }
+
+    public function cadContrato(string $complemento_item, int $id_item_processo, int $id_item_contrato, string $cod_despesa, string $descrDespesa, string $descrTipoDoc, string $num_contrato, string $num_processo, string $descr_mod_compra, string $num_licitacao, string $dt_inicio, string $dt_fim, string $dt_geracao, string $cgc_fornecedor, string $nome_fornecedor, string $num_extrato, string $cod_estruturado, string $nome_unidade, string $cod_reduzido, string $descricao, int $id_extrato_contr, int $id_unidade, string $vl_unitario, int $qt_contrato, string $vl_contrato, int $qt_utilizada, string $vl_utilizado, int $qt_saldo, string $vl_saldo, int $ano_orcamento, string $seq_item_processo) {
+
+        $chave = $num_processo . '#' . $cod_reduzido . '#' . $seq_item_processo;
+        $sql = "INSERT INTO itens VALUES (NULL, " . $id_item_processo . ", " . $id_item_contrato . ", \"" . $cod_despesa . "\", \"" . $descrDespesa . "\", \"" . $descrTipoDoc . "\", \"" . $num_contrato . "\", \"" . $num_processo . "\", \"" . $descr_mod_compra . "\", \"" . $num_licitacao . "\", \"" . $dt_inicio . "\", \"" . $dt_fim . "\", \"" . $dt_geracao . "\", \"" . $cgc_fornecedor . "\", \"" . $nome_fornecedor . "\", \"" . $num_extrato . "\", \"" . $cod_estruturado . "\", \"" . $nome_unidade . "\", \"" . $cod_reduzido . "\", \"" . $complemento_item . "\", \"" . $descricao . "\", \"" . $id_extrato_contr . "\", \"" . $vl_unitario . "\", " . $qt_contrato . ", \"" . $vl_contrato . "\", " . $qt_utilizada . ", \"" . $vl_utilizado . "\", " . $qt_saldo . ", \"" . $vl_saldo . "\", \"" . $id_unidade . "\", \"" . $ano_orcamento . "\", 0, \"" . $chave . "\", \"" . $seq_item_processo . "\");";
+
+        if (is_null($this->mysqli)) {
+            $this->mysqli = parent::getConexao();
+        }
+
+        $this->mysqli->query($sql) or exit("Erro um erro ao inserir os dados no banco.");
+        $this->mysqli = NULL;
+    }
+
+    /**
      * Cadastra um usuário.
      * @param string $nome Nome do usuário.
      * @param string $login Login.
@@ -155,6 +193,7 @@ class Geral extends Conexao {
         $this->mysqli->query("DELETE FROM licitacao;") or exit("Erro ao remover as licitações.");
         $this->mysqli->query("DELETE FROM pedido_grupo;") or exit("Erro ao remover os grupos dos pedidos.");
         $this->mysqli->query("DELETE FROM pedido_log_status;") or exit("Erro ao remover os logs dos status dos pedidos.");
+        $this->mysqli->query("DELETE FROM pedido_contrato;") or exit("Erro ao remover os contratos do pedido.");
         $this->mysqli->query("DELETE FROM pedido;") or exit("Erro ao remover os pedidos.");
 
         // ALTER TABLE
@@ -173,6 +212,7 @@ class Geral extends Conexao {
         $this->mysqli->query("alter table licitacao auto_increment = 1;") or exit("Erro alter table licitacao");
         $this->mysqli->query("alter table pedido_grupo auto_increment = 1;") or exit("Erro alter table pedido_grupo.");
         $this->mysqli->query("alter table pedido_log_status auto_increment = 1;") or exit("Erro alter table pedido_log_status");
+        $this->mysqli->query("alter table pedido_contrato auto_increment = 1;") or exit("Erro alter table pedido_contrato");
         $this->mysqli->query("alter table pedido auto_increment = 1;") or exit("Erro alter table pedido");
 
         $this->mysqli = NULL;
@@ -680,7 +720,7 @@ class Geral extends Conexao {
      *   @param $pedido Id do pedido. Se 0, pedido novo, senão editando rascunho ou enviando ao SOF.
      *   @return bool
      */
-    public function insertPedido($id_user, $id_setor, $id_item, $qtd_solicitada, $qtd_disponivel, $qtd_contrato, $qtd_utilizado, $vl_saldo, $vl_contrato, $vl_utilizado, $valor, $total_pedido, $saldo_total, $prioridade, $obs, &$pedido) {
+    public function insertPedido($id_user, $id_setor, $id_item, $qtd_solicitada, $qtd_disponivel, $qtd_contrato, $qtd_utilizado, $vl_saldo, $vl_contrato, $vl_utilizado, $valor, $total_pedido, $saldo_total, $prioridade, $obs, &$pedido, $pedido_contrato) {
 
         if (is_null($this->mysqli)) {
             $this->mysqli = parent::getConexao();
@@ -693,17 +733,17 @@ class Geral extends Conexao {
             if ($pedido == 0) {
                 // NOVO
                 //inserindo os dados iniciais do pedido
-                $query_pedido = $this->mysqli->query("INSERT INTO pedido VALUES(NULL, {$id_setor}, {$id_user}, '{$hoje}', '{$mes}', 1, {$prioridade}, 1, '{$total_pedido}', '{$obs}');") or exit("Ocorreu um erro ao inserir o pedido.");
+                $query_pedido = $this->mysqli->query("INSERT INTO pedido VALUES(NULL, {$id_setor}, {$id_user}, '{$hoje}', '{$mes}', 1, {$prioridade}, 1, '{$total_pedido}', '{$obs}', {$pedido_contrato});") or exit("Ocorreu um erro ao inserir o pedido.");
                 $pedido = $this->mysqli->insert_id;
                 $this->registraLog($pedido, 1);
             } else {
                 //remover resgistros antigos do rascunho
                 $this->mysqli->query("DELETE FROM itens_pedido WHERE id_pedido = {$pedido};") or exit("Ocorreu um erro ao remover os registros antigos do pedido.") or exit("Erro ao remover registros antigos do rascunho.");
-                $this->mysqli->query("UPDATE pedido SET data_pedido = '{$hoje}', ref_mes = {$mes}, prioridade = {$prioridade}, valor = '{$total_pedido}', obs = '{$obs}' WHERE id = {$pedido};") or exit("Ocorreu um erro ao atualizar o pedido.");
+                $this->mysqli->query("UPDATE pedido SET data_pedido = '{$hoje}', ref_mes = {$mes}, prioridade = {$prioridade}, valor = '{$total_pedido}', obs = '{$obs}', pedido_contrato = {$pedido_contrato} WHERE id = {$pedido};") or exit("Ocorreu um erro ao atualizar o pedido.UPDATE pedido SET data_pedido = '{$hoje}', ref_mes = {$mes}, prioridade = {$prioridade}, valor = '{$total_pedido}', obs = '{$obs}', pedido_contrato = {$pedido_contrato} WHERE id = {$pedido};");
             }
             //inserindo os itens do pedido
             for ($i = 0; $i < count($id_item); $i++) {
-                $this->mysqli->query("INSERT INTO itens_pedido VALUES(NULL, {$pedido}, {$id_item[$i]}, {$qtd_solicitada[$i]}, '{$valor[$i]}');") or exit("Ocorreu um erro ao inserir um item no pedido.");
+                $this->mysqli->query("INSERT INTO itens_pedido VALUES(NULL, {$pedido}, {$id_item[$i]}, {$qtd_solicitada[$i]}, '{$valor[$i]}');") or exit("Ocorreu um erro ao inserir um item no pedido.INSERT INTO itens_pedido VALUES(NULL, {$pedido}, {$id_item[$i]}, {$qtd_solicitada[$i]}, '{$valor[$i]}');");
             }
         } else {
             // atualiza saldo
@@ -711,12 +751,12 @@ class Geral extends Conexao {
             // enviado ao sof
             if ($pedido == 0) {
                 //inserindo os dados iniciais do pedido
-                $query_pedido = $this->mysqli->query("INSERT INTO pedido VALUES(NULL, {$id_setor}, {$id_user}, '{$hoje}', '{$mes}', 0, {$prioridade}, 2, '{$total_pedido}', '{$obs}');") or exit("Ocorreu um erro ao inserir os dados iniciais do pedido.");
+                $query_pedido = $this->mysqli->query("INSERT INTO pedido VALUES(NULL, {$id_setor}, {$id_user}, '{$hoje}', '{$mes}', 0, {$prioridade}, 2, '{$total_pedido}', '{$obs}', {$pedido_contrato});") or exit("Ocorreu um erro ao inserir os dados iniciais do pedido.");
                 $pedido = $this->mysqli->insert_id;
                 $this->registraLog($pedido, 2);
             } else {
                 // atualizando pedido
-                $this->mysqli->query("UPDATE pedido SET data_pedido = '{$hoje}', ref_mes = {$mes}, alteracao = 0, prioridade = {$prioridade}, status = 2, valor = '{$total_pedido}', obs = '{$obs}' WHERE id = {$pedido};") or exit("Ocorreu um erro ao atualizar o pedido existente.");
+                $this->mysqli->query("UPDATE pedido SET data_pedido = '{$hoje}', ref_mes = {$mes}, alteracao = 0, prioridade = {$prioridade}, status = 2, valor = '{$total_pedido}', obs = '{$obs}', pedido_contrato = {$pedido_contrato} WHERE id = {$pedido};") or exit("Ocorreu um erro ao atualizar o pedido existente.");
                 $this->registraLog($pedido, 2);
             }
             //remover resgistros antigos do pedido

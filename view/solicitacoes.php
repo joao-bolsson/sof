@@ -222,18 +222,35 @@ $select_grupo = $obj_Busca->getOptionsGrupos($id_setor);
                                         </tr>
                                     </table>
                                     <?php if (strlen($select_grupo) > 0): ?>
-                                    <h2 class="content-sub-heading">Grupo</h2>
-                                    <div class="form-group form-group-label">
-                                        <label class="floating-label" for="grupo"><span class="icon">perm_identity</span>&nbsp;Selecione o grupo</label>
-                                        <select id="grupo" class="form-control select2" name="grupo" required>
-                                            <?= $select_grupo ?>
-                                        </select>
-                                    </div>
+                                        <h2 class="content-sub-heading">Grupo</h2>
+                                        <div class="form-group form-group-label">
+                                            <label class="floating-label" for="grupo"><span class="icon">perm_identity</span>&nbsp;Selecione o grupo</label>
+                                            <select id="grupo" class="form-control select2" name="grupo" required>
+                                                <?= $select_grupo ?>
+                                            </select>
+                                        </div>
                                     <?php endif ?>
+                                    <div class="checkbox checkbox-adv">
+                                        <label for="checkPedContr">
+                                            <input class="access-hide" id="checkPedContr" name="pedidoContrato" type="checkbox">Pedido de Contrato
+                                            <span class="checkbox-circle"></span><span class="checkbox-circle-check"></span><span class="checkbox-circle-icon icon">done</span>
+                                        </label>
+                                    </div>
+                                    <span class="label">Se você não escolheu RP ou não marcou como "Pedido de Contrato", a seção a seguir será ignorada</span>
+                                    <table class="table">
+                                        <tr>
+                                            <?= $obj_Busca->getOptionsContrato(); ?>
+                                        </tr>
+                                    </table>
+                                    <div id="divSiafi" class="form-group form-group-label">
+                                        <label class="floating-label" for="siafi"><span class="icon">grade</span>&nbsp;SIAFI</label>
+                                        <input class="form-control" id="siafi" name="siafi" type="text">
+                                    </div>
                                 </div><!-- ./card-inner -->
                                 <div class="card-action">
                                     <div class="card-action-btn">
-                                        <button class="btn btn-brand waves-attach" type="submit" style="width: 100%;"><span class="icon">check</span>&nbsp;Enviar Pedido / Salvar Rascunho</button>
+                                        <button id="btnLimpa" class="btn btn-default waves-attach" type="button" style="width: 49%;" onclick="limpaTelaSolic();"><span class="icon">clear</span>&nbsp;Limpar</button>
+                                        <button class="btn btn-brand waves-attach" type="submit" style="width: 50%;"><span class="icon">check</span>&nbsp;Enviar Pedido / Salvar Rascunho</button>
                                     </div>
                                 </div>
                             </form>

@@ -35,23 +35,84 @@ if ($obj_Busca->isActive()) {
     $obj_Util = new Util();
     $obj_Login = new Login();
 
-    if (isset($_POST["admin"]) && isset($_SESSION["id_setor"]) && ($_SESSION["id_setor"] == 2 || $_SESSION["id_setor"] == 12)) {
+    $admin = filter_input(INPUT_POST, "admin");
+    $users = filter_input(INPUT_POST, "users");
+
+    if (!is_null($admin) && isset($_SESSION["id_setor"]) && ($_SESSION["id_setor"] == 2 || $_SESSION["id_setor"] == 12)) {
         // variável que controla o que deve ser feito quando geral.php for chamado
-        $form = $_POST["form"];
+        $form = "";
+        $filter = filter_input(INPUT_POST, "form");
+        if (!is_null($filter)) {
+            $form = $filter;
+        }
 
         switch ($form) {
 
+            case 'cadContrato':
+                $complemento_item = "";
+                $id_item_processo = "";
+                $id_item_contrato = "";
+                $cod_despesa = "";
+                $descrDespesa = "";
+                $descrTipoDoc = "";
+                $num_contrato = "";
+                $num_processo = "";
+                $descr_mod_compra = "";
+                $num_licitacao = "";
+                $dt_inicio = "";
+                $dt_fim = "";
+                $dt_geracao = "";
+                $cgc_fornecedor = "";
+                $nome_fornecedor = "";
+                $num_extrato = "";
+                $cod_estruturado = "";
+                $nome_unidade = "";
+                $cod_reduzido = "";
+                $descricao = "";
+                $id_extrato_contr = "";
+                $id_unidade = "";
+                $vl_unitario = "0";
+                $qt_contrato = 0;
+                $vl_contrato = "0";
+                $qt_utilizada = 0;
+                $vl_utilizado = "0";
+                $qt_saldo = 0;
+                $vl_saldo = "0";
+                $ano_orcamento = "";
+                $seq_item_processo = "";
+
+                // array com os nomes das variaveis POST
+                $array = array('complemento_item', 'id_item_processo', 'id_item_contrato', 'cod_despesa', 'descrDespesa', 'descrTipoDoc', 'num_contrato', 'num_processo', 'descr_mod_compra', 'num_licitacao', 'dt_inicio', 'dt_fim', 'dt_geracao', 'cgc_fornecedor', 'nome_fornecedor', 'num_extrato', 'cod_estruturado', 'nome_unidade', 'cod_reduzido', 'descricao', 'id_extrato_contr', 'id_unidade', 'vl_unitario', 'qt_contrato', 'vl_contrato', 'qt_utilizada', 'vl_utilizado', 'qt_saldo', 'vl_saldo', 'ano_orcamento', 'seq_item_processo');
+                // lê as variaveis
+                $len = count($array);
+                for ($i = 0; $i < $len; $i++) {
+                    $filter_input = filter_input(INPUT_POST, $array[$i]);
+                    if (!is_null($filter_input) && $filter_input !== FALSE) {
+                        ${$array[$i]} = str_replace("\"", "'", $filter_input);
+                    }
+                }
+                $obj_Geral->cadContrato($complemento_item, $id_item_processo, $id_item_contrato, $cod_despesa, $descrDespesa, $descrTipoDoc, $num_contrato, $num_processo, $descr_mod_compra, $num_licitacao, $dt_inicio, $dt_fim, $dt_geracao, $cgc_fornecedor, $nome_fornecedor, $num_extrato, $cod_estruturado, $nome_unidade, $cod_reduzido, $descricao, $id_extrato_contr, $id_unidade, $vl_unitario, $qt_contrato, $vl_contrato, $qt_utilizada, $vl_utilizado, $qt_saldo, $vl_saldo, $ano_orcamento, $seq_item_processo);
+                header("Location: ../admin/adminsolicitacoes.php");
+                break;
+
             case 'altUser':
-                $user = $_POST['user'];
-                $obj_Login->changeUser($user);
+                $user = filter_input(INPUT_POST, 'user');
+                if (!is_null($user)) {
+                    $obj_Login->changeUser($user);
+                }
                 header("Location: ../");
                 break;
 
             case 'addUser':
-                $nome = $_POST['nome'];
-                $login = $_POST['login'];
-                $email = $_POST['email'];
-                $setor = $_POST['setor'];
+                $nome = filter_input(INPUT_POST, 'nome');
+                $login = filter_input(INPUT_POST, 'login');
+                $email = filter_input(INPUT_POST, 'email');
+                $setor = filter_input(INPUT_POST, 'setor');
+                // teste para variavel indefinida
+                if (empty($nome) || empty($login) || empty($email) || empty($setor)) {
+                    echo "Erro: variáveis indefinidas ou vazias.";
+                    break;
+                }
 
                 if (is_null($obj_Util)) {
                     $obj_Util = new Util();
@@ -60,10 +121,10 @@ if ($obj_Busca->isActive()) {
 
                 $id_user = $obj_Geral->cadUser($nome, $login, $email, $setor, $senha);
 
-                $noticias = isset($_POST['noticias']);
-                $saldos = isset($_POST['saldos']);
-                $pedidos = isset($_POST['pedidos']);
-                $recepcao = isset($_POST['recepcao']);
+                $noticias = !is_null(filter_input(INPUT_POST, 'noticias'));
+                $saldos = !is_null(filter_input(INPUT_POST, 'saldos'));
+                $pedidos = !is_null(filter_input(INPUT_POST, 'pedidos'));
+                $recepcao = !is_null(filter_input(INPUT_POST, 'recepcao'));
 
                 $obj_Geral->cadPermissao($id_user, $noticias, $saldos, $pedidos, $recepcao);
 
@@ -94,11 +155,18 @@ if ($obj_Busca->isActive()) {
                 break;
 
             case 'enviaForn':
-                $obj_Geral->enviaFornecedor($_POST['id_pedido']);
+                $id = filter_input(INPUT_POST, 'id_pedido');
+                if (empty($id)) {
+                    break;
+                }
+                $obj_Geral->enviaFornecedor($id);
                 break;
 
             case 'enviaOrdenador':
-                $id_pedido = $_POST['id_pedido'];
+                $id_pedido = filter_input(INPUT_POST, 'id_pedido');
+                if (empty($id_pedido)) {
+                    break;
+                }
                 echo $obj_Geral->enviaOrdenador($id_pedido);
                 break;
             case 'enviaFontes':
@@ -111,7 +179,6 @@ if ($obj_Busca->isActive()) {
             case 'resetSystem':
                 if ($_SESSION['login'] == 'joao') {
                     $obj_Geral->resetSystem();
-                    echo "foi";
                 }
                 break;
             // comment.
@@ -151,7 +218,11 @@ if ($obj_Busca->isActive()) {
             // comentário
 
             case 'newTypeProcess':
-                $tipo = $_POST["newType"];
+                $tipo = filter_input(INPUT_POST, 'newType');
+                if (empty($tipo)) {
+                    header("Location: ../admin/adminsolicitacoes.php");
+                    break;
+                }
                 $cadastra = $obj_Geral->newTypeProcess($tipo);
                 if (!$cadastra) {
                     // remove all session variables
@@ -204,7 +275,7 @@ if ($obj_Busca->isActive()) {
                 $file_extension = end($tmp);
                 $extensao = strtolower($file_extension);
                 if (array_search($extensao, $_UP['extensoes']) === false) {
-                    echo "Por favor, envie arquivos com as seguintes extensões: .tsv";
+                    echo "Por favor, envie arquivos com as segues extensões: .tsv";
                     exit;
                 }
                 // Faz a verificação do tamanho do arquivo
@@ -285,7 +356,6 @@ if ($obj_Busca->isActive()) {
                     $prioridade = $fase;
                     $fase = 'Rascunho';
                 }
-                $total_pedido = $_POST["total_hidden"];
 
                 $comentario = $_POST["comentario"];
 
@@ -389,8 +459,12 @@ if ($obj_Busca->isActive()) {
             default:
                 break;
         }
-    } else if (isset($_POST["users"]) && isset($_SESSION["id_setor"]) && $_SESSION["id_setor"] != 0) {
-        $form = $_POST["form"];
+    } else if ($users !== NULL && isset($_SESSION["id_setor"]) && $_SESSION["id_setor"] != 0) {
+        $form = "";
+        $filter = filter_input(INPUT_POST, "form");
+        if (!is_null($filter)) {
+            $form = $filter;
+        }
 
         switch ($form) {
 
@@ -444,46 +518,88 @@ if ($obj_Busca->isActive()) {
             case 'pedido':
                 $id_user = $_SESSION['id'];
                 $id_setor = $_SESSION["id_setor"];
-                $id_item = $_POST["id_item"];
-                $qtd_solicitada = $_POST["qtd_solicitada"];
-                $qtd_disponivel = $_POST["qtd_disponivel"];
-                $qtd_contrato = $_POST["qtd_contrato"];
-                $qtd_utilizado = $_POST["qtd_utilizado"];
-                $vl_saldo = $_POST["vl_saldo"];
-                $vl_contrato = $_POST["vl_contrato"];
-                $vl_utilizado = $_POST["vl_utilizado"];
-                $valor = $_POST["valor"];
-                $total_pedido = $_POST["total_hidden"];
-                $saldo_total = $_POST["saldo_total"];
-                $prioridade = $_POST["st"];
-                $obs = $_POST['obs'];
+                // dados do formulário
+                $id_item = filter_input(INPUT_POST, 'id_item', FILTER_DEFAULT, FILTER_FORCE_ARRAY);
+                $qtd_solicitada = filter_input(INPUT_POST, 'qtd_solicitada', FILTER_DEFAULT, FILTER_FORCE_ARRAY);
+                $qtd_disponivel = filter_input(INPUT_POST, 'qtd_disponivel', FILTER_DEFAULT, FILTER_FORCE_ARRAY);
+                $qtd_contrato = filter_input(INPUT_POST, 'qtd_contrato', FILTER_DEFAULT, FILTER_FORCE_ARRAY);
+                $qtd_utilizado = filter_input(INPUT_POST, 'qtd_utilizado', FILTER_DEFAULT, FILTER_FORCE_ARRAY);
+                $vl_saldo = filter_input(INPUT_POST, 'vl_saldo', FILTER_DEFAULT, FILTER_FORCE_ARRAY);
+                $vl_contrato = filter_input(INPUT_POST, 'vl_contrato', FILTER_DEFAULT, FILTER_FORCE_ARRAY);
+                $vl_utilizado = filter_input(INPUT_POST, 'vl_utilizado', FILTER_DEFAULT, FILTER_FORCE_ARRAY);
+                $valor = filter_input(INPUT_POST, 'valor', FILTER_DEFAULT, FILTER_FORCE_ARRAY);
 
-                $pedido = $_POST["pedido"];
+                if (empty($id_item)) {
+                    exit("Erro ao ler os itens do pedido.");
+                }
+                $total_pedido = filter_input(INPUT_POST, 'total_hidden');
+                // evita pedido zerado
+                if (empty($total_pedido)) {
+                    exit("Pedido zerado. Esse pedido não será inserido no sistema. Volte e recarregue a página.");
+                }
+                $saldo_total = filter_input(INPUT_POST, 'saldo_total');
+                $prioridade = filter_input(INPUT_POST, 'st');
+                $obs = filter_input(INPUT_POST, 'obs');
+
+                $pedido = filter_input(INPUT_POST, 'pedido');
+                if (is_null($pedido)) {
+                    exit("Erro ao enviar o pedido. ID NULL.");
+                }
 
                 $pedido_existe = ($pedido != 0);
 
-                $obj_Geral->insertPedido($id_user, $id_setor, $id_item, $qtd_solicitada, $qtd_disponivel, $qtd_contrato, $qtd_utilizado, $vl_saldo, $vl_contrato, $vl_utilizado, $valor, $total_pedido, $saldo_total, $prioridade, $obs, $pedido);
+                $pedido_contrato = filter_input(INPUT_POST, 'pedidoContrato');
+                if (empty($pedido_contrato)) {
+                    $pedido_contrato = 0;
+                } else {
+                    $pedido_contrato = 1;
+                }
+
+                $obj_Geral->insertPedido($id_user, $id_setor, $id_item, $qtd_solicitada, $qtd_disponivel, $qtd_contrato, $qtd_utilizado, $vl_saldo, $vl_contrato, $vl_utilizado, $valor, $total_pedido, $saldo_total, $prioridade, $obs, $pedido, $pedido_contrato);
 
                 // licitação
-                $idLic = $_POST['idLic'];
-                $numero = $_POST['infoLic'];
-                $uasg = "";
-                $procOri = "";
-                if (isset($_POST['uasg']) && isset($_POST['procOri'])) {
-                    $uasg = $_POST['uasg'];
-                    $procOri = $_POST['procOri'];
+                $idLic = filter_input(INPUT_POST, 'idLic');
+                $numero = filter_input(INPUT_POST, 'infoLic');
+                $uasg = filter_input(INPUT_POST, 'uasg');
+                $procOri = filter_input(INPUT_POST, 'procOri');
+
+                if (empty($uasg) && empty($procOri)) {
+                    $uasg = $procOri = "";
                 }
-                $tipo = $_POST['tipoLic'];
-                $geraContrato = 0;
-                if (isset($_POST['geraContrato'])) {
-                    $geraContrato = $_POST['geraContrato'];
+                $tipo = filter_input(INPUT_POST, 'tipoLic');
+                $geraContrato = filter_input(INPUT_POST, 'geraContrato');
+                if (is_null($geraContrato)) {
+                    $geraContrato = 0;
                 }
 
                 $obj_Geral->insertLicitacao($numero, $uasg, $procOri, $tipo, $pedido, $idLic, $geraContrato);
 
-                if (isset($_POST['grupo'])) {
-                    $obj_Geral->insertGrupoPedido($pedido, $_POST['grupo'], $pedido_existe);
+                $grupo = filter_input(INPUT_POST, 'grupo');
+                if (!empty($grupo)) {
+                    $obj_Geral->insertGrupoPedido($pedido, $grupo, $pedido_existe);
                 }
+
+                // pedido de contrato
+                if ($pedido_contrato || $tipo == 6) {
+                    // as 3 opções devem ser escolhidas se o pedido for marcado como pedido de contrato
+                    // ou se a licitação for uma RP
+                    $tipo_cont = filter_input(INPUT_POST, 'tipoCont');
+                    if (empty($tipo_cont)) {
+                        exit("Pedido inserido. Erro ao registrar uma das 3 opções.");
+                    }
+                    $siafi = "";
+                    if ($tipo_cont == 2 || $tipo_cont == 3) {
+                        // se for reforço ou anulação, precisa ter o SIAFI
+                        $siafi = filter_input(INPUT_POST, 'siafi');
+                        if (empty($siafi)) {
+                            exit("Pedido inserido. Erro ao ler o SIAFI.");
+                        }
+                    }
+                    $obj_Geral->insertPedContr($pedido, $tipo_cont, $siafi);
+                } else {
+                    $obj_Geral->deletePedContr($pedido);
+                }
+
                 header("Location: ../view/solicitacoes.php");
                 break;
             default:
@@ -572,7 +688,7 @@ if ($obj_Busca->isActive()) {
                         // Faz a verificação da extensão do arquivo
                         $extensao = strtolower(end(explode('.', $_FILES["file-$i"]['name'])));
                         if (array_search($extensao, $_UP['extensoes']) === false) {
-                            echo "Por favor, envie arquivos com as seguintes extensões: pdf, docx ou odt";
+                            echo "Por favor, envie arquivos com as segues extensões: pdf, docx ou odt";
                             exit;
                         }
                         // Faz a verificação do tamanho do arquivo
@@ -608,5 +724,11 @@ if ($obj_Busca->isActive()) {
                 break;
         }
     }
+} else {
+    // remove all session variables
+    session_unset();
+    // destroy the session
+    session_destroy();
+    echo "Estamos realizando uma manutenção no momento. Tente fazer o login novamente dentro de 10min ;)";
 }
 ?>

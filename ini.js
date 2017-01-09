@@ -1,9 +1,11 @@
 $(function () {
     var str = location.pathname;
-    if (str.endsWith("solicitacoes.php")) {
+    if (str.endsWith("view/solicitacoes.php")) {
         $(".select2").select2();
     }
-    $('.date').mask('00/00/0000');
+    if (str.endsWith("adminsolicitacoes.php")) {
+        $('.date').mask('00/00/0000');
+    }
 });
 
 $('.modal').on('hidden.bs.modal', function (event) {
@@ -242,6 +244,28 @@ function iniDataTable(tabela) {
         "scrollX": true
     });
 }
+function changeTipoContr(element) {
+    var val = element.value;
+    document.getElementById('siafi').required = (val == 2 || val == 3);
+}
+
+function maybeRequiredTipoContr(flag) {
+    var x = document.getElementsByName("tipoCont");
+    for (var i = 0; i < x.length; i++) {
+        if (x[i].type === "radio") {
+            x[i].required = flag;
+        }
+    }
+}
+
+function checkPedContr(element) {
+    // se for um pedido de contrato, deve escolher uma opcao
+    maybeRequiredTipoContr(element.checked);
+}
+
+document.getElementById("checkPedContr").onclick = function () {
+    checkPedContr(this);
+};
 
 function transfereSaldo() {
     $('#formTransferencia .btn').blur();
@@ -506,10 +530,7 @@ function liberaSaldo() {
     }, function (resposta) {
         if (resposta) {
             alert('O valor de R$ ' + valor + ' foi acrescentado ao saldo do setor com SUCESSO.');
-            document.getElementById('loadingFree').style.display = 'none';
-            $('#tableListLancamentos').DataTable().destroy();
-            $('#freeSaldos').modal('hide');
-            refreshSaldo();
+            location.reload();
         } else {
             alert('Ocorreu um erro no servidor. Contate o administrador.');
             window.location.href = 'sair.php';
@@ -520,7 +541,7 @@ function liberaSaldo() {
 function refreshSaldo() {
     $.post('../php/busca.php', {
         admin: 1,
-        form: 'refreshSaldo',
+        form: 'refreshSaldo'
     }, function (resposta) {
         document.getElementById('labelSaldoSOF').innerHTML = 'Saldo disponível: R$ ' + resposta;
     });
@@ -663,8 +684,8 @@ function listRelatorios() {
     $('#listRelatorios').modal('show');
 }
 
-function changeTipoLic(tipo) {
-    var selected = document.getElementById('tipoLic' + tipo).value;
+function changeTipoLic(element) {
+    var selected = element.value;
     if (selected == 3 || selected == 4 || selected == 2) { // Adesao, Compra Compartilhada ou Inexibilidade
         maybeDisableFields(false);
     } else {
@@ -675,6 +696,7 @@ function changeTipoLic(tipo) {
     } else {
         document.getElementById('infoLic').required = true;
     }
+    maybeRequiredTipoContr(selected == 6);
 }
 
 function maybeDisableFields(flag) {
@@ -945,7 +967,64 @@ function pesquisarProcesso(busca) {
     }
 }
 
+function fillSaldo() {
+    $.post('../php/busca.php', {
+        users: 1,
+        form: 'fillSaldo'
+    }, function (resposta) {
+        document.getElementById('text_saldo_total').innerHTML = 'R$ ' + resposta;
+    });
+    $.post('../php/busca.php', {
+        users: 1,
+        form: 'getSaldo'
+    }, function (resposta) {
+        document.getElementById('saldo_total').value = resposta;
+    });
+}
+
+function limpaTelaSolic() {
+    fillSaldo();
+    document.getElementById('pedido').value = 0;
+    document.getElementById('conteudoPedido').innerHTML = '';
+    document.getElementById('total').value = 'R$ 0';
+    document.getElementById('total_hidden').value = 0;
+    document.getElementById('stRascunho').checked = true;
+    $('#divObs').removeClass('control-highlight');
+    document.getElementById('obs').value = '';
+
+    // licitação
+    for (var i = 1; i <= 6; i++) {
+        document.getElementById('tipoLic' + i).checked = false;
+    }
+    $('#divNum').removeClass('control-highlight');
+    document.getElementById('infoLic').value = '';
+    document.getElementById('infoLic').required = true;
+    $('#divProcOri').removeClass('control-highlight');
+    document.getElementById('procOri').value = '';
+    document.getElementById('procOri').required = false;
+    document.getElementById('procOri').disabled = true;
+
+    document.getElementById('gera').checked = false;
+    document.getElementById('gera').required = false;
+    document.getElementById('gera').disabled = true;
+    
+    document.getElementById('ngera').checked = false;
+    document.getElementById('ngera').required = false;
+    document.getElementById('ngera').disabled = true;
+    
+    document.getElementById('checkPedContr').checked = false;
+    
+    // opções de contrato
+    for (var i = 1; i <= 3; i++) {
+        document.getElementById('tipoCont'+i).required = false;
+        document.getElementById('tipoCont'+i).checked = false;
+    }
+    $('#divSiafi').removeClass('control-highlight');
+    document.getElementById('siafi').value = '';
+}
+
 function editaPedido(id_pedido) {
+    limpaTelaSolic();
     $.post('../php/busca.php', {
         users: 1,
         form: 'populaRascunho',
@@ -976,6 +1055,27 @@ function editaPedido(id_pedido) {
     });
     populaLicitacao(id_pedido);
     populaGrupo(id_pedido);
+    populaContrato(id_pedido);
+}
+
+function populaContrato(id_pedido) {
+    $.post('../php/busca.php', {
+        users: 1,
+        form: 'populaContrato',
+        id_pedido: id_pedido
+    }, function (resposta) {
+        if (resposta !== false) {
+            var obj = jQuery.parseJSON(resposta);
+            $('#divSiafi').addClass('control-highlight');
+            document.getElementById('siafi').value = obj.siafi;
+            if (obj.id_tipo > 0) {
+                document.getElementById('tipoCont' + obj.id_tipo).checked = true;
+            }
+            if (obj.pedido_contrato == 1) {
+                document.getElementById('checkPedContr').checked = true;
+            }
+        }
+    });
 }
 
 function populaGrupo(id_pedido) {
@@ -1009,6 +1109,8 @@ function populaLicitacao(id_pedido) {
                 document.getElementById('procOri').value = obj.processo_original;
             }
             maybeDisableFields(!(obj.tipo == 3 || obj.tipo == 4 || obj.tipo == 2));
+            var element = document.getElementById('tipoLic' + obj.tipo);
+            changeTipoLic(element);
         }
     });
 }
