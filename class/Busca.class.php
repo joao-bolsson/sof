@@ -22,7 +22,7 @@ class Busca extends Conexao {
         parent::__construct();
         $this->obj_Util = new Util();
     }
-    
+
     public function getOptionsContrato() {
         if (is_null($this->mysqli)) {
             $this->mysqli = parent::getConexao();
@@ -1210,7 +1210,22 @@ class Busca extends Conexao {
         if ($query->num_rows > 0) {
             $obj = $query->fetch_object();
             $obj->nome = utf8_encode($obj->nome);
-            $retorno = "<p><b>Grupo:</b> " . $obj->nome . "</p>";
+            $retorno = "<b>Grupo:</b> " . $obj->nome;
+        }
+        return $retorno;
+    }
+
+    private function getEmpenho(int $id_pedido): string {
+        if (is_null($this->mysqli)) {
+            $this->mysqli = parent::getConexao();
+        }
+
+        $query = $this->mysqli->query("SELECT contrato_tipo.nome, pedido_contrato.siafi FROM contrato_tipo, pedido_contrato WHERE pedido_contrato.id_tipo = contrato_tipo.id AND pedido_contrato.id_pedido = {$id_pedido};") or exit("Erro ao buscar o contrato do pedido.");
+        $this->mysqli = NULL;
+        $retorno = "";
+        if ($query->num_rows > 0) {
+            $obj = $query->fetch_object();
+            $retorno = "<b>Tipo de Empenho:</b> " . $obj->nome . " <input type=\"text\" value=\"" . $obj->siafi . "\"/>";
         }
         return $retorno;
     }
@@ -1224,20 +1239,24 @@ class Busca extends Conexao {
         if (is_null($this->mysqli)) {
             $this->mysqli = parent::getConexao();
         }
-        $query = $this->mysqli->query("SELECT pedido.id, DATE_FORMAT(pedido.data_pedido, '%d/%m/%Y') AS data_pedido, EXTRACT(YEAR FROM pedido.data_pedido) AS ano, mes.sigla_mes AS ref_mes, status.nome AS status, replace(pedido.valor, '.', ',') AS valor, pedido.obs, prioridade.nome AS prioridade FROM prioridade, pedido, mes, status WHERE pedido.prioridade = prioridade.id AND status.id = pedido.status AND pedido.id = {$id_pedido} AND mes.id = pedido.ref_mes;") or exit("Erro ao formar o cabeçalho do pedido.");
+        $query = $this->mysqli->query("SELECT pedido.id, DATE_FORMAT(pedido.data_pedido, '%d/%m/%Y') AS data_pedido, EXTRACT(YEAR FROM pedido.data_pedido) AS ano, mes.sigla_mes AS ref_mes, status.nome AS status, replace(pedido.valor, '.', ',') AS valor, pedido.obs, pedido.pedido_contrato, prioridade.nome AS prioridade FROM prioridade, pedido, mes, status WHERE pedido.prioridade = prioridade.id AND status.id = pedido.status AND pedido.id = {$id_pedido} AND mes.id = pedido.ref_mes;") or exit("Erro ao formar o cabeçalho do pedido.");
         $this->mysqli = NULL;
         $pedido = $query->fetch_object();
         $pedido->valor = number_format($pedido->valor, 3, ',', '.');
+        $lblPedido = "Pedido";
+        if ($pedido->pedido_contrato) {
+            $lblPedido = "Pedido de Contrato";
+        }
         $retorno = "
             <fieldset>
                 <p>
-                    <b>Pedido:</b> " . $id_pedido . "
+                    <b>" . $lblPedido . ":</b> " . $id_pedido . "
                     <b>Data de Envio:</b> " . $pedido->data_pedido . ".&emsp;
                     <b>Situação:</b> " . $pedido->status . "&emsp;
                     <b>Prioridade:</b> " . $pedido->prioridade . "&emsp;
                     <b>Total do Pedido:</b> R$ " . $pedido->valor . "
                 </p>
-                " . Busca::getGrupoPedido($id_pedido) . "
+                <p>" . Busca::getGrupoPedido($id_pedido) . "&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;" . Busca::getEmpenho($id_pedido) . "</p>
                 <p><b>Observação da Unidade Solicitante: </b></p>
                 <p style=\"font-weight: normal !important;\">	" . $pedido->obs . "</p>
             </fieldset><br>";
@@ -1246,7 +1265,7 @@ class Busca extends Conexao {
         return $retorno;
     }
 
-    public function getTableLicitacao(int $id_pedido): string {
+    private function getTableLicitacao(int $id_pedido): string {
         $retorno = "<fieldset>
                 <h5>PEDIDO SEM LICITAÇÃO</h5>
                 </fieldset><br>";

@@ -151,7 +151,7 @@ if ($obj_Busca->isActive()) {
                 } else {
                     echo "Usuário e permissões cadastradas. Erro ao enviar o e-mail com a senha : " . $senha;
                 }
-                
+
                 break;
 
             case 'enviaForn':
@@ -518,46 +518,86 @@ if ($obj_Busca->isActive()) {
             case 'pedido':
                 $id_user = $_SESSION['id'];
                 $id_setor = $_SESSION["id_setor"];
-                $id_item = $_POST["id_item"];
-                $qtd_solicitada = $_POST["qtd_solicitada"];
-                $qtd_disponivel = $_POST["qtd_disponivel"];
-                $qtd_contrato = $_POST["qtd_contrato"];
-                $qtd_utilizado = $_POST["qtd_utilizado"];
-                $vl_saldo = $_POST["vl_saldo"];
-                $vl_contrato = $_POST["vl_contrato"];
-                $vl_utilizado = $_POST["vl_utilizado"];
-                $valor = $_POST["valor"];
-                $total_pedido = $_POST["total_hidden"];
-                $saldo_total = $_POST["saldo_total"];
-                $prioridade = $_POST["st"];
-                $obs = $_POST['obs'];
+                // dados do formulário
+                $id_item = filter_input(INPUT_POST, 'id_item', FILTER_DEFAULT, FILTER_FORCE_ARRAY);
+                $qtd_solicitada = filter_input(INPUT_POST, 'qtd_solicitada', FILTER_DEFAULT, FILTER_FORCE_ARRAY);
+                $qtd_disponivel = filter_input(INPUT_POST, 'qtd_disponivel', FILTER_DEFAULT, FILTER_FORCE_ARRAY);
+                $qtd_contrato = filter_input(INPUT_POST, 'qtd_contrato', FILTER_DEFAULT, FILTER_FORCE_ARRAY);
+                $qtd_utilizado = filter_input(INPUT_POST, 'qtd_utilizado', FILTER_DEFAULT, FILTER_FORCE_ARRAY);
+                $vl_saldo = filter_input(INPUT_POST, 'vl_saldo', FILTER_DEFAULT, FILTER_FORCE_ARRAY);
+                $vl_contrato = filter_input(INPUT_POST, 'vl_contrato', FILTER_DEFAULT, FILTER_FORCE_ARRAY);
+                $vl_utilizado = filter_input(INPUT_POST, 'vl_utilizado', FILTER_DEFAULT, FILTER_FORCE_ARRAY);
+                $valor = filter_input(INPUT_POST, 'valor', FILTER_DEFAULT, FILTER_FORCE_ARRAY);
+                
+                if (empty($id_item)) {
+                    exit("Erro ao ler os itens do pedido.");
+                }
+                $total_pedido = filter_input(INPUT_POST, 'total_hidden');
+                // evita pedido zerado
+                if (empty($total_pedido)) {
+                    exit("Pedido zerado. Esse pedido não será inserido no sistema. Volte e recarregue a página.");
+                }
+                $saldo_total = filter_input(INPUT_POST, 'saldo_total');
+                $prioridade = filter_input(INPUT_POST, 'st');
+                $obs = filter_input(INPUT_POST, 'obs');
 
-                $pedido = $_POST["pedido"];
+                $pedido = filter_input(INPUT_POST, 'pedido');
+                if (is_null($pedido)) {
+                    exit("Erro ao enviar o pedido. ID NULL.");
+                }
 
                 $pedido_existe = ($pedido != 0);
 
-                $obj_Geral->insertPedido($id_user, $id_setor, $id_item, $qtd_solicitada, $qtd_disponivel, $qtd_contrato, $qtd_utilizado, $vl_saldo, $vl_contrato, $vl_utilizado, $valor, $total_pedido, $saldo_total, $prioridade, $obs, $pedido);
+                $pedido_contrato = filter_input(INPUT_POST, 'pedidoContrato');
+                if (empty($pedido_contrato)) {
+                    $pedido_contrato = 0;
+                } else {
+                    $pedido_contrato = 1;
+                }
+
+                $obj_Geral->insertPedido($id_user, $id_setor, $id_item, $qtd_solicitada, $qtd_disponivel, $qtd_contrato, $qtd_utilizado, $vl_saldo, $vl_contrato, $vl_utilizado, $valor, $total_pedido, $saldo_total, $prioridade, $obs, $pedido, $pedido_contrato);
 
                 // licitação
-                $idLic = $_POST['idLic'];
-                $numero = $_POST['infoLic'];
-                $uasg = "";
-                $procOri = "";
-                if (isset($_POST['uasg']) && isset($_POST['procOri'])) {
-                    $uasg = $_POST['uasg'];
-                    $procOri = $_POST['procOri'];
+                $idLic = filter_input(INPUT_POST, 'idLic');
+                $numero = filter_input(INPUT_POST, 'infoLic');
+                $uasg = filter_input(INPUT_POST, 'uasg');
+                $procOri = filter_input(INPUT_POST, 'procOri');
+
+                if (empty($uasg) && empty($procOri)) {
+                    $uasg = $procOri = "";
                 }
-                $tipo = $_POST['tipoLic'];
-                $geraContrato = 0;
-                if (isset($_POST['geraContrato'])) {
-                    $geraContrato = $_POST['geraContrato'];
+                $tipo = filter_input(INPUT_POST, 'tipoLic');
+                $geraContrato = filter_input(INPUT_POST, 'geraContrato');
+                if (is_null($geraContrato)) {
+                    $geraContrato = 0;
                 }
 
                 $obj_Geral->insertLicitacao($numero, $uasg, $procOri, $tipo, $pedido, $idLic, $geraContrato);
 
-                if (isset($_POST['grupo'])) {
-                    $obj_Geral->insertGrupoPedido($pedido, $_POST['grupo'], $pedido_existe);
+                $grupo = filter_input(INPUT_POST, 'grupo');
+                if (!empty($grupo)) {
+                    $obj_Geral->insertGrupoPedido($pedido, $grupo, $pedido_existe);
                 }
+
+                // pedido de contrato
+                if ($pedido_contrato || $tipo == 6) {
+                    // as 3 opções devem ser escolhidas se o pedido for marcado como pedido de contrato
+                    // ou se a licitação for uma RP
+                    $tipo_cont = filter_input(INPUT_POST, 'tipoCont');
+                    if (empty($tipo_cont)) {
+                        exit("Pedido inserido. Erro ao registrar uma das 3 opções.");
+                    }
+                    $siafi = "";
+                    if ($tipo_cont == 2 || $tipo_cont == 3) {
+                       // se for reforço ou anulação, precisa ter o SIAFI
+                        $siafi = filter_input(INPUT_POST, 'siafi');
+                        if (empty($siafi)) {
+                            exit("Pedido inserido. Erro ao ler o SIAFI.");
+                        }
+                    }
+                    $obj_Geral->insertPedContr($pedido, $tipo_cont, $siafi, $pedido_existe);
+                }
+                
                 header("Location: ../view/solicitacoes.php");
                 break;
             default:
