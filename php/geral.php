@@ -170,10 +170,10 @@ if ($obj_Busca->isActive()) {
                 echo $obj_Geral->enviaOrdenador($id_pedido);
                 break;
             case 'enviaFontes':
-                $id_pedido = $_POST['id_pedido'];
-                $fonte = $_POST['fonte'];
-                $ptres = $_POST['ptres'];
-                $plano = $_POST['plano'];
+                $id_pedido = filter_input(INPUT_POST, 'id_pedido');
+                $fonte = filter_input(INPUT_POST, 'fonte');
+                $ptres = filter_input(INPUT_POST, 'ptres');
+                $plano = filter_input(INPUT_POST, 'plano');
                 echo $obj_Geral->cadastraFontes($id_pedido, $fonte, $ptres, $plano);
                 break;
             case 'resetSystem':
@@ -201,17 +201,17 @@ if ($obj_Busca->isActive()) {
             // comment.
 
             case 'enviaEmpenho':
-                $id_pedido = $_POST['id_pedido'];
-                $empenho = $_POST['empenho'];
-                $data = $obj_Util->dateFormat($_POST['data']);
+                $id_pedido = filter_input(INPUT_POST, 'id_pedido');
+                $empenho = filter_input(INPUT_POST, 'empenho');
+                $data = $obj_Util->dateFormat(filter_input(INPUT_POST, 'data'));
                 echo $cadastra = $obj_Geral->cadastraEmpenho($id_pedido, $empenho, $data);
                 break;
             // comentário
             case 'transfereSaldo':
-                $ori = $_POST['ori'];
-                $dest = $_POST['dest'];
-                $valor = $_POST['valor'];
-                $just = $_POST['just'];
+                $ori = filter_input(INPUT_POST, 'ori');
+                $dest = filter_input(INPUT_POST, 'dest');
+                $valor = filter_input(INPUT_POST, 'valor');
+                $just = filter_input(INPUT_POST, 'just');
                 echo $transfere = $obj_Geral->transfereSaldo($ori, $dest, $valor, $just);
 
                 break;
@@ -311,9 +311,9 @@ if ($obj_Busca->isActive()) {
             // comentário
 
             case 'analisaSolicAlt':
-                $id_solic = $_POST["id_solic"];
-                $id_pedido = $_POST["id_pedido"];
-                $acao = $_POST["acao"];
+                $id_solic = filter_input(INPUT_POST, 'id_solic');
+                $id_pedido = filter_input(INPUT_POST, 'id_pedido');
+                $acao = filter_input(INPUT_POST, 'acao');
 
                 $analisa = $obj_Geral->analisaSolicAlt($id_solic, $id_pedido, $acao);
                 echo $analisa;
@@ -321,10 +321,10 @@ if ($obj_Busca->isActive()) {
             // comment.
 
             case 'altStatus':
-                $id_pedido = $_POST['id_pedido'];
-                $id_setor = $_POST['id_setor'];
-                $comentario = $_POST['comentario'];
-                $status = $_POST['fase'];
+                $id_pedido = filter_input(INPUT_POST, 'id_pedido');
+                $id_setor = filter_input(INPUT_POST, 'id_setor');
+                $comentario = filter_input(INPUT_POST, 'comentario');
+                $status = filter_input(INPUT_POST, 'fase');
                 $analisado = $obj_Geral->altStatus($id_pedido, $id_setor, $comentario, $status);
                 if ($analisado) {
                     header("Location: ../admin/adminsolicitacoes.php");
@@ -371,8 +371,8 @@ if ($obj_Busca->isActive()) {
             // comentário
 
             case 'liberaSaldo':
-                $id_setor = $_POST["id_setor"];
-                $valor = $_POST["valor"];
+                $id_setor = filter_input(INPUT_POST, 'id_setor');
+                $valor = filter_input(INPUT_POST, 'valor');
 
                 $saldo_atual = $obj_Busca->getSaldo($id_setor);
 
@@ -389,8 +389,8 @@ if ($obj_Busca->isActive()) {
             // comentário
 
             case 'aprovaAdi':
-                $id = $_POST['id'];
-                $acao = $_POST['acao'];
+                $id = filter_input(INPUT_POST, 'id');
+                $acao = filter_input(INPUT_POST, 'acao');
                 $aprova = $obj_Geral->analisaAdi($id, $acao);
                 if (!$aprova) {
                     echo "Ocorreu um erro no servidor. Contate o administrador";
@@ -400,10 +400,10 @@ if ($obj_Busca->isActive()) {
             // comentário
 
             case 'alterSenha':
-                $id_user = $_POST["id_user"];
-                $senha = $_POST["senha"];
+                $id_user = filter_input(INPUT_POST, 'id_user');
+                $input_senha = filter_input(INPUT_POST, 'senha');
                 //encritpando a senha
-                $senha = crypt($senha);
+                $senha = crypt($input_senha);
                 //alterando no banco
                 $update = $obj_Geral->updateSenha($id_user, $senha);
                 if ($update) {
@@ -416,12 +416,13 @@ if ($obj_Busca->isActive()) {
             // comentário
 
             case 'novanoticia':
-                $data = $_POST["data"];
-                $postagem = $_POST["postagem"];
-                $pag = $_POST["pag"];
+                $data = filter_input(INPUT_POST, 'data');;
+                $postagem = filter_input(INPUT_POST, 'postagem');
+                $pag = filter_input(INPUT_POST, 'pag');
+                $funcao = filter_input(INPUT_POST, 'funcao');
 
                 //verificando se o usuário está publicando ou editando notícia
-                if ($_POST["funcao"] == "novanoticia") {
+                if ($funcao == "novanoticia") {
                     $id_noticia = $obj_Geral->setPost($data, $postagem, $pag);
 
                     if ($id_noticia != 0) {
@@ -430,7 +431,7 @@ if ($obj_Busca->isActive()) {
                         echo "Ocorreu um erro no servidor. Contate o administrador.";
                     }
                 } else {
-                    $id = $_POST["id_noticia"];
+                    $id = filter_input(INPUT_POST, 'id_noticia');
 
                     $editar = $obj_Geral->editPost($data, $id, $postagem, $pag);
                     if ($editar) {
@@ -444,7 +445,7 @@ if ($obj_Busca->isActive()) {
             // comentário
 
             case 'delArquivo':
-                $file = $_POST["caminhoDel"];
+                $file = filter_input(INPUT_POST, 'caminhoDel');
                 unlink($file);
                 echo "O arquivo foi excluído com sucesso! A seguir, esta página será recarregada";
                 break;
@@ -452,7 +453,7 @@ if ($obj_Busca->isActive()) {
             // comentário
 
             case 'excluirNoticia':
-                $id = $_POST["id"];
+                $id = filter_input(INPUT_POST, 'id');
                 echo $obj_Geral->excluirNoticia($id);
                 break;
 
