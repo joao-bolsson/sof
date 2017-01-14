@@ -48,53 +48,6 @@ if ($obj_Busca->isActive()) {
 
         switch ($form) {
 
-            case 'cadContrato':
-                $complemento_item = "";
-                $id_item_processo = "";
-                $id_item_contrato = "";
-                $cod_despesa = "";
-                $descrDespesa = "";
-                $descrTipoDoc = "";
-                $num_contrato = "";
-                $num_processo = "";
-                $descr_mod_compra = "";
-                $num_licitacao = "";
-                $dt_inicio = "";
-                $dt_fim = "";
-                $dt_geracao = "";
-                $cgc_fornecedor = "";
-                $nome_fornecedor = "";
-                $num_extrato = "";
-                $cod_estruturado = "";
-                $nome_unidade = "";
-                $cod_reduzido = "";
-                $descricao = "";
-                $id_extrato_contr = "";
-                $id_unidade = "";
-                $vl_unitario = "0";
-                $qt_contrato = 0;
-                $vl_contrato = "0";
-                $qt_utilizada = 0;
-                $vl_utilizado = "0";
-                $qt_saldo = 0;
-                $vl_saldo = "0";
-                $ano_orcamento = "";
-                $seq_item_processo = "";
-
-                // array com os nomes das variaveis POST
-                $array = array('complemento_item', 'id_item_processo', 'id_item_contrato', 'cod_despesa', 'descrDespesa', 'descrTipoDoc', 'num_contrato', 'num_processo', 'descr_mod_compra', 'num_licitacao', 'dt_inicio', 'dt_fim', 'dt_geracao', 'cgc_fornecedor', 'nome_fornecedor', 'num_extrato', 'cod_estruturado', 'nome_unidade', 'cod_reduzido', 'descricao', 'id_extrato_contr', 'id_unidade', 'vl_unitario', 'qt_contrato', 'vl_contrato', 'qt_utilizada', 'vl_utilizado', 'qt_saldo', 'vl_saldo', 'ano_orcamento', 'seq_item_processo');
-                // lê as variaveis
-                $len = count($array);
-                for ($i = 0; $i < $len; $i++) {
-                    $filter_input = filter_input(INPUT_POST, $array[$i]);
-                    if (!is_null($filter_input) && $filter_input !== FALSE) {
-                        ${$array[$i]} = str_replace("\"", "'", $filter_input);
-                    }
-                }
-                $obj_Geral->cadContrato($complemento_item, $id_item_processo, $id_item_contrato, $cod_despesa, $descrDespesa, $descrTipoDoc, $num_contrato, $num_processo, $descr_mod_compra, $num_licitacao, $dt_inicio, $dt_fim, $dt_geracao, $cgc_fornecedor, $nome_fornecedor, $num_extrato, $cod_estruturado, $nome_unidade, $cod_reduzido, $descricao, $id_extrato_contr, $id_unidade, $vl_unitario, $qt_contrato, $vl_contrato, $qt_utilizada, $vl_utilizado, $qt_saldo, $vl_saldo, $ano_orcamento, $seq_item_processo);
-                header("Location: ../admin/adminsolicitacoes.php");
-                break;
-
             case 'altUser':
                 $user = filter_input(INPUT_POST, 'user');
                 if (!is_null($user)) {

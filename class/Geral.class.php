@@ -36,19 +36,6 @@ class Geral extends Conexao {
         $this->mysqli = NULL;
     }
 
-    public function cadContrato(string $complemento_item, int $id_item_processo, int $id_item_contrato, string $cod_despesa, string $descrDespesa, string $descrTipoDoc, string $num_contrato, string $num_processo, string $descr_mod_compra, string $num_licitacao, string $dt_inicio, string $dt_fim, string $dt_geracao, string $cgc_fornecedor, string $nome_fornecedor, string $num_extrato, string $cod_estruturado, string $nome_unidade, string $cod_reduzido, string $descricao, int $id_extrato_contr, int $id_unidade, string $vl_unitario, int $qt_contrato, string $vl_contrato, int $qt_utilizada, string $vl_utilizado, int $qt_saldo, string $vl_saldo, int $ano_orcamento, string $seq_item_processo) {
-
-        $chave = $num_processo . '#' . $cod_reduzido . '#' . $seq_item_processo;
-        $sql = "INSERT INTO itens VALUES (NULL, " . $id_item_processo . ", " . $id_item_contrato . ", \"" . $cod_despesa . "\", \"" . $descrDespesa . "\", \"" . $descrTipoDoc . "\", \"" . $num_contrato . "\", \"" . $num_processo . "\", \"" . $descr_mod_compra . "\", \"" . $num_licitacao . "\", \"" . $dt_inicio . "\", \"" . $dt_fim . "\", \"" . $dt_geracao . "\", \"" . $cgc_fornecedor . "\", \"" . $nome_fornecedor . "\", \"" . $num_extrato . "\", \"" . $cod_estruturado . "\", \"" . $nome_unidade . "\", \"" . $cod_reduzido . "\", \"" . $complemento_item . "\", \"" . $descricao . "\", \"" . $id_extrato_contr . "\", \"" . $vl_unitario . "\", " . $qt_contrato . ", \"" . $vl_contrato . "\", " . $qt_utilizada . ", \"" . $vl_utilizado . "\", " . $qt_saldo . ", \"" . $vl_saldo . "\", \"" . $id_unidade . "\", \"" . $ano_orcamento . "\", 0, \"" . $chave . "\", \"" . $seq_item_processo . "\");";
-
-        if (is_null($this->mysqli)) {
-            $this->mysqli = parent::getConexao();
-        }
-
-        $this->mysqli->query($sql) or exit("Erro um erro ao inserir os dados no banco.");
-        $this->mysqli = NULL;
-    }
-
     /**
      * Cadastra um usuário.
      * @param string $nome Nome do usuário.
