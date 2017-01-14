@@ -246,7 +246,7 @@ function iniDataTable(tabela) {
 }
 function changeTipoContr(element) {
     var val = element.value;
-    document.getElementById('siafi').required = (val == 2 || val == 3);
+    document.getElementById('siafi').required = (val == 3);
 }
 
 function maybeRequiredTipoContr(flag) {
@@ -1007,17 +1007,17 @@ function limpaTelaSolic() {
     document.getElementById('gera').checked = false;
     document.getElementById('gera').required = false;
     document.getElementById('gera').disabled = true;
-    
+
     document.getElementById('ngera').checked = false;
     document.getElementById('ngera').required = false;
     document.getElementById('ngera').disabled = true;
-    
+
     document.getElementById('checkPedContr').checked = false;
-    
+
     // opções de contrato
     for (var i = 1; i <= 3; i++) {
-        document.getElementById('tipoCont'+i).required = false;
-        document.getElementById('tipoCont'+i).checked = false;
+        document.getElementById('tipoCont' + i).required = false;
+        document.getElementById('tipoCont' + i).checked = false;
     }
     $('#divSiafi').removeClass('control-highlight');
     document.getElementById('siafi').value = '';
