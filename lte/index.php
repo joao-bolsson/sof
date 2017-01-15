@@ -33,8 +33,9 @@ $permissao = $obj_Busca->getPermissoes($_SESSION["id"]);
              folder instead of downloading all of them to reduce the load. -->
         <link rel="stylesheet" href="dist/css/skins/_all-skins.min.css">
 
+        <link rel="icon" href="../favicon.ico">
     </head>
-    <body class="hold-transition skin-blue sidebar-mini">
+    <body class="hold-transition skin-blue sidebar-mini" onload="iniAdminSolicitacoes();">
         <div class="wrapper">
 
             <header class="main-header">
@@ -218,10 +219,14 @@ $permissao = $obj_Busca->getPermissoes($_SESSION["id"]);
                             <div class="box">
                                 <div class="box-header">
                                     <h3 class="box-title">Pedidos</h3>
+                                    <div class="box-tools pull-right">
+                                        <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
+                                        </button>
+                                    </div>
                                 </div>
                                 <!-- /.box-header -->
                                 <div class="box-body">
-                                    <table id="example1" class="table table-bordered table-striped">
+                                    <table id="tableSolicitacoes" class="table table-bordered table-striped">
                                         <thead>
                                             <tr>
                                                 <th>Opções</th>
@@ -235,26 +240,7 @@ $permissao = $obj_Busca->getPermissoes($_SESSION["id"]);
                                                 <th>Empenho</th>
                                             </tr>
                                         </thead>
-                                        <tbody>
-                                            <?php $i = 0; ?>
-                                            <?php while ($i < 50): ?>
-                                                <tr>
-                                                    <td>
-                                                        <a href="#"><i class="fa fa-print"></i></a>
-                                                        <a href="#"><i class="fa fa-paper-plane-o"></i></a>
-                                                    </td>
-                                                    <td>1</td>
-                                                    <td>Farmácia de Medicamentos</td>
-                                                    <td>14/01/2017</td>
-                                                    <td>Jan</td>
-                                                    <td>Normal</td>
-                                                    <td>Empenhado</td>
-                                                    <td>R$ 2.001,370</td>
-                                                    <td>355312</td>
-                                                </tr>
-                                                <?php $i++ ?>
-                                            <?php endwhile; ?>                                           
-                                        </tbody>
+                                        <tbody id="conteudoSolicitacoes"></tbody>
                                     </table>
                                 </div>
                                 <!-- /.box-body -->
@@ -272,9 +258,9 @@ $permissao = $obj_Busca->getPermissoes($_SESSION["id"]);
                 <div class="pull-right hidden-xs">
                     <b>Version</b> 2.0.0
                 </div>
-                <strong>Copyright &copy; 2016-2017.</strong>
+                <strong>Copyright © 2016-2017 <a href="https://github.com/joao-bolsson">João Bolsson</a>.</strong> All rights
+                reserved.
             </footer>
-
         </div>
         <!-- ./wrapper -->
 
@@ -294,17 +280,6 @@ $permissao = $obj_Busca->getPermissoes($_SESSION["id"]);
         <!-- AdminLTE for demo purposes -->
         <script src="dist/js/demo.js"></script>
         <!-- page script -->
-        <script>
-            $(function () {
-                $('#example2').DataTable({
-                    "paging": true,
-                    "lengthChange": false,
-                    "searching": false,
-                    "ordering": true,
-                    "info": true,
-                    "autoWidth": false
-                });
-            });
-        </script>
+        <script type="text/javascript" src="../iniLTE.js"></script>
     </body>
 </html>
