@@ -89,7 +89,6 @@ $permissao = $obj_Busca->getPermissoes($_SESSION["id"]);
                     </div>
                     <!-- sidebar menu: : style can be found in sidebar.less -->
                     <ul class="sidebar-menu">
-                        <li class="header">NAVEGAÇÃO</li>
                         <li>
                             <a href="javascript:mostraSolicAdiant();">
                                 <i class="fa fa-credit-card"></i> <span>Solic Adiantamento</span>
@@ -374,6 +373,20 @@ $permissao = $obj_Busca->getPermissoes($_SESSION["id"]);
                 <strong>Copyright © 2016-2017 <a href="https://github.com/joao-bolsson">João Bolsson</a>.</strong> All rights
                 reserved.
             </footer>
+            <div id="viewCompl" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="gridSystemModalLabel">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                            <h4 class="modal-title" id="gridSystemModalLabel">Informação</h4>
+                        </div>
+                        <div id="complementoItem" class="modal-body"></div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-primary" data-dismiss="modal">Fechar</button>
+                        </div>
+                    </div><!-- /.modal-content -->
+                </div><!-- /.modal-dialog -->
+            </div><!-- /.modal -->
         </div><!-- ./wrapper -->
 
         <!-- jQuery 2.2.3 -->
