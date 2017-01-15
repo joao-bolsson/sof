@@ -6,6 +6,15 @@ $(function () {
     if (str.endsWith("adminsolicitacoes.php")) {
         $('.date').mask('00/00/0000');
     }
+    var status = ['stabertos', 'staprovados', 'streprovado'];
+    for (var i = 0; i < status.length; i++) {
+        var element = document.getElementById(status[i]);
+        if (element !== null) {
+            $('#' + status[i]).on('ifChecked', function (event) {
+                iniTableSolicAdiant();
+            });
+        }
+    }
 });
 
 $('.modal').on('hidden.bs.modal', function (event) {
@@ -124,23 +133,14 @@ function hideDivs() {
     }
 }
 
-function mostra(row, id_icon) {
-    $('a').blur();
-    hideDivs();
+function mostra(row) {
     var display = document.getElementById(row).style.display;
-    var icon = '';
-    var display_ped;
-    if (display == 'block') {
+    if (display === 'block') {
         display = 'none';
-        display_ped = 'block';
-        icon = 'keyboard_arrow_down';
     } else {
         display = 'block';
-        display_ped = 'none';
-        icon = 'keyboard_arrow_up';
     }
     document.getElementById(row).style.display = display;
-    document.getElementById(id_icon).innerHTML = icon;
 }
 
 function mostraPed() {
@@ -150,12 +150,12 @@ function mostraPed() {
     iniSolicitacoes();
 }
 function mostraSolicAdiant() {
-    mostra('rowSolicAdi', 'iconSolicAdi');
+    mostra('rowSolicAdi');
     iniTableSolicAdiant();
 }
 
 function mostraSolicAltPed() {
-    mostra('rowAltPed', 'iconSolicAlt');
+    mostra('rowAltPed');
     iniTableSolicAltPed();
 }
 // solicitação de alteração de pedidos
@@ -807,12 +807,14 @@ function iniTableSolicAdiant() {
             st = element.value;
         }
     }
-    $.post('../php/busca.php', {
+    $.post('../php/buscaLTE.php', {
         admin: 1,
         form: 'tableSolicitacoesAdiantamento',
         status: st
     }, function (resposta) {
-        $('#tableSolicitacoesAdiantamento').DataTable().destroy();
+        if ($.fn.DataTable.isDataTable('#tableSolicitacoesAdiantamento')) {
+            $('#tableSolicitacoesAdiantamento').DataTable().destroy();
+        }
         document.getElementById('conteudoSolicitacoesAdiantamento').innerHTML = resposta;
         iniDataTable('#tableSolicitacoesAdiantamento');
     });

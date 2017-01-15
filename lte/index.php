@@ -27,6 +27,8 @@ $permissao = $obj_Busca->getPermissoes($_SESSION["id"]);
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/ionicons/2.0.1/css/ionicons.min.css">
         <!-- DataTables -->
         <link rel="stylesheet" href="plugins/datatables/dataTables.bootstrap.css">
+        <!-- iCheck for checkboxes and radio inputs -->
+        <link rel="stylesheet" href="plugins/iCheck/all.css">
         <!-- Theme style -->
         <link rel="stylesheet" href="dist/css/AdminLTE.min.css">
         <!-- AdminLTE Skins. Choose a skin from the css/skins
@@ -89,7 +91,7 @@ $permissao = $obj_Busca->getPermissoes($_SESSION["id"]);
                     <ul class="sidebar-menu">
                         <li class="header">NAVEGAÇÃO</li>
                         <li>
-                            <a href="#">
+                            <a href="javascript:mostraSolicAdiant();">
                                 <i class="fa fa-credit-card"></i> <span>Solic Adiantamento</span>
                                 <span class="pull-right-container">
                                     <small class="label pull-right bg-blue">17</small>
@@ -223,8 +225,7 @@ $permissao = $obj_Busca->getPermissoes($_SESSION["id"]);
                                         <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
                                         </button>
                                     </div>
-                                </div>
-                                <!-- /.box-header -->
+                                </div><!-- /.box-header -->
                                 <div class="box-body">
                                     <table id="tableSolicitacoes" class="table table-bordered table-striped">
                                         <thead>
@@ -242,18 +243,71 @@ $permissao = $obj_Busca->getPermissoes($_SESSION["id"]);
                                         </thead>
                                         <tbody id="conteudoSolicitacoes"></tbody>
                                     </table>
-                                </div>
-                                <!-- /.box-body -->
-                            </div>
-                            <!-- /.box -->
-                        </div>
-                        <!-- /.col -->
-                    </div>
-                    <!-- /.row -->
-                </section>
-                <!-- /.content -->
-            </div>
-            <!-- /.content-wrapper -->
+                                </div><!-- /.box-body -->
+                            </div><!-- /.box -->
+                        </div><!-- /.col -->
+                    </div><!-- /.row -->
+                    <?php if ($permissao->saldos): ?>
+                    <div id="rowSolicAdi" class="row" style="display: none;">
+                            <div class="col-xs-12">
+                                <div class="box">
+                                    <div class="box-header">
+                                        <h3 class="box-title">Solicitações de Adiantamento</h3>
+                                        <div class="box-tools pull-right">
+                                            <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
+                                            </button>
+                                        </div>
+                                    </div><!-- /.box-header -->
+                                    <div class="box-body">
+                                        <table class="table">
+                                            <tr>
+                                                <td>
+                                                    <div class="form-group">
+                                                        <label>
+                                                            <input id="stabertos" type="radio" name="stadi" class="minimal" value="2" onclick="iniTableSolicAdiant();" checked>
+                                                            Abertos
+                                                        </label>
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <div class="form-group">
+                                                        <label>
+                                                            <input id="staprovados" type="radio" name="stadi" class="minimal" value="1" onclick="iniTableSolicAdiant();">
+                                                            Aprovados
+                                                        </label>
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <div class="form-group">
+                                                        <label>
+                                                            <input id="streprovado" type="radio" name="stadi" class="minimal" value="0" onclick="iniTableSolicAdiant();">
+                                                            Reprovados
+                                                        </label>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                        <table id="tableSolicitacoesAdiantamento" class="table table-bordered table-striped">
+                                            <thead>
+                                                <tr>
+                                                    <th>Opções</th>
+                                                    <th>Setor</th>
+                                                    <th>Data Solic</th>
+                                                    <th>Data Análise</th>
+                                                    <th>Valor Adiantado</th>
+                                                    <th>Justificativa</th>
+                                                    <th>Status</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody id="conteudoSolicitacoesAdiantamento"></tbody>
+                                        </table>
+                                    </div><!-- /.box-body -->
+                                </div><!-- /.box -->
+                            </div><!-- /.col -->
+                        </div><!-- /.row -->
+                    <?php endif; ?>
+                </section><!-- /.content -->
+            </div><!-- /.content-wrapper -->
             <footer class="main-footer">
                 <div class="pull-right hidden-xs">
                     <b>Version</b> 2.0.0
@@ -261,8 +315,7 @@ $permissao = $obj_Busca->getPermissoes($_SESSION["id"]);
                 <strong>Copyright © 2016-2017 <a href="https://github.com/joao-bolsson">João Bolsson</a>.</strong> All rights
                 reserved.
             </footer>
-        </div>
-        <!-- ./wrapper -->
+        </div><!-- ./wrapper -->
 
         <!-- jQuery 2.2.3 -->
         <script src="plugins/jQuery/jquery-2.2.3.min.js"></script>
@@ -279,6 +332,20 @@ $permissao = $obj_Busca->getPermissoes($_SESSION["id"]);
         <script src="dist/js/app.min.js"></script>
         <!-- AdminLTE for demo purposes -->
         <script src="dist/js/demo.js"></script>
+        <!-- iCheck 1.0.1 -->
+        <script src="plugins/iCheck/icheck.min.js"></script>
+
+        <!-- Page script -->
+        <script>
+                                                                $(function () {
+
+                                                                    $('input[type="checkbox"].minimal, input[type="radio"].minimal').iCheck({
+                                                                        checkboxClass: 'icheckbox_minimal-blue',
+                                                                        radioClass: 'iradio_minimal-blue'
+                                                                    });
+                                                                });
+        </script>
+
         <!-- page script -->
         <script type="text/javascript" src="../iniLTE.js"></script>
     </body>

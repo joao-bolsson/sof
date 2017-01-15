@@ -1171,15 +1171,15 @@ class BuscaLTE extends Conexao {
         switch ($st) {
             case 0:
                 $status = "Reprovado";
-                $label = "label-red";
+                $label = "red";
                 break;
             case 1:
                 $status = "Aprovado";
-                $label = "label-green";
+                $label = "green";
                 break;
             case 2:
                 $status = "Aberto";
-                $label = "label-orange";
+                $label = "orange";
                 break;
             default:
                 break;
@@ -1190,9 +1190,8 @@ class BuscaLTE extends Conexao {
                 if ($st == 2) {
                     // em análise / aberto
                     $solic->data_analise = "---------------";
-                    //$solic->mes_subtraido = "---------------";
-                    $btn_aprovar = "<a title=\"Aprovar\" href=\"javascript:analisaAdi(" . $solic->id . ", 1);\" class=\"modal-close\"><span class=\"icon\">done_all<span></span></span></a>";
-                    $btn_reprovar = "<a title=\"Reprovar\" href=\"javascript:analisaAdi(" . $solic->id . ", 0);\" class=\"modal-close\"><span class=\"icon\">delete<span></span></span></a>";
+                    $btn_aprovar = "<a title=\"Aprovar\" href=\"javascript:analisaAdi(" . $solic->id . ", 1);\"><i class=\"fa fa-check\"></a>";
+                    $btn_reprovar = "<a title=\"Reprovar\" href=\"javascript:analisaAdi(" . $solic->id . ", 0);\"><i class=\"fa fa-trash\"></i></a>";
                 }
                 $solic->justificativa = $this->mysqli->real_escape_string($solic->justificativa);
                 $solic->justificativa = str_replace("\"", "'", $solic->justificativa);
@@ -1205,9 +1204,9 @@ class BuscaLTE extends Conexao {
                         <td>" . $solic->data_analise . "</td>
                         <td>R$ " . $solic->valor_adiantado . "</td>
                         <td>
-                            <button onclick=\"viewCompl('" . $solic->justificativa . "');\" class=\"btn btn-flat waves-attach waves-effect\" type=\"button\" title=\"Ver Justificativa\">JUSTIFICATIVA</button>
+                            <button onclick=\"viewCompl('" . $solic->justificativa . "');\" class=\"btn btn-sm btn-primary\" type=\"button\" title=\"Ver Justificativa\">JUSTIFICATIVA</button>
                         </td>
-                        <td><span class=\"label " . $label . "\" style=\"font-size: 11pt !important; font-weight: bold;\">" . $status . "</span></td>
+                        <td><small class=\"label pull-right bg-" . $label . "\">" . $status . "</small></td>
                     </tr>";
             }
         }
