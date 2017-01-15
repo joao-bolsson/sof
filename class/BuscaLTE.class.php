@@ -1118,23 +1118,23 @@ class BuscaLTE extends Conexao {
         while ($solic = $query->fetch_object()) {
             switch ($solic->status) {
                 case 0:
-                    $status = "Reprovado";
-                    $label = "label-red";
+                    $status = 'Reprovado';
+                    $label = 'red';
                     break;
                 case 1:
-                    $status = "Aprovado";
-                    $label = "label-green";
+                    $status = 'Aprovado';
+                    $label = 'green';
                     break;
                 default:
-                    $status = "Aberto";
-                    $label = "label-orange";
-                    $solic->data_analise = "--------------";
+                    $status = 'Aberto';
+                    $label = 'orange';
+                    $solic->data_analise = '--------------';
                     break;
             }
             $btn_aprovar = $btn_reprovar = "";
             if ($st == 2) {
-                $btn_aprovar = "<a title=\"Aprovar\" href=\"javascript:analisaSolicAlt(" . $solic->id . ", " . $solic->id_pedido . ", 1);\" class=\"modal-close\"><span class=\"icon\">done_all<span></span></span></a>";
-                $btn_reprovar = "<a title=\"Reprovar\" href=\"javascript:analisaSolicAlt(" . $solic->id . ", " . $solic->id_pedido . ", 0);\" class=\"modal-close\"><span class=\"icon\">delete<span></span></span></a>";
+                $btn_aprovar = "<a title=\"Aprovar\" href=\"javascript:analisaSolicAlt(" . $solic->id . ", " . $solic->id_pedido . ", 1);\"><i class=\"fa fa-check\"></i></a>";
+                $btn_reprovar = "<a title=\"Reprovar\" href=\"javascript:analisaSolicAlt(" . $solic->id . ", " . $solic->id_pedido . ", 0);\"><i class=\"fa fa-trash\"></i></a>";
             }
             $solic->justificativa = $this->mysqli->real_escape_string($solic->justificativa);
             $solic->justificativa = str_replace("\"", "'", $solic->justificativa);
@@ -1146,9 +1146,9 @@ class BuscaLTE extends Conexao {
                     <td>" . $solic->data_solicitacao . "</td>
                     <td>" . $solic->data_analise . "</td>
                     <td>
-                        <button onclick=\"viewCompl('" . $solic->justificativa . "');\" class=\"btn btn-flat waves-attach waves-effect\" type=\"button\" title=\"Ver Justificativa\">JUSTIFICATIVA</button>
+                        <button onclick=\"viewCompl('" . $solic->justificativa . "');\" class=\"btn btn-sm btn-primary\" type=\"button\" title=\"Ver Justificativa\">JUSTIFICATIVA</button>
                     </td>
-                    <td><span class=\"label " . $label . "\" style=\"font-size: 11pt !important; font-weight: bold;\">" . $status . "</span></td>
+                    <td><small class=\"label pull-right bg-" . $label . "\">" . $status . "</small></td>
                 </tr>";
         }
         $this->mysqli = NULL;
@@ -1170,16 +1170,16 @@ class BuscaLTE extends Conexao {
         $status = $label = "";
         switch ($st) {
             case 0:
-                $status = "Reprovado";
-                $label = "red";
+                $status = 'Reprovado';
+                $label = 'red';
                 break;
             case 1:
-                $status = "Aprovado";
-                $label = "green";
+                $status = 'Aprovado';
+                $label = 'green';
                 break;
             case 2:
-                $status = "Aberto";
-                $label = "orange";
+                $status = 'Aberto';
+                $label = 'orange';
                 break;
             default:
                 break;
@@ -1190,7 +1190,7 @@ class BuscaLTE extends Conexao {
                 if ($st == 2) {
                     // em análise / aberto
                     $solic->data_analise = "---------------";
-                    $btn_aprovar = "<a title=\"Aprovar\" href=\"javascript:analisaAdi(" . $solic->id . ", 1);\"><i class=\"fa fa-check\"></a>";
+                    $btn_aprovar = "<a title=\"Aprovar\" href=\"javascript:analisaAdi(" . $solic->id . ", 1);\"><i class=\"fa fa-check\"></i></a>";
                     $btn_reprovar = "<a title=\"Reprovar\" href=\"javascript:analisaAdi(" . $solic->id . ", 0);\"><i class=\"fa fa-trash\"></i></a>";
                 }
                 $solic->justificativa = $this->mysqli->real_escape_string($solic->justificativa);
@@ -1198,7 +1198,7 @@ class BuscaLTE extends Conexao {
                 $solic->valor_adiantado = number_format($solic->valor_adiantado, 3, ',', '.');
                 $retorno .= "
                     <tr>
-                        <td>" . $btn_reprovar . $btn_aprovar . "</td>
+                        <td>" . $btn_aprovar . $btn_reprovar . "</td>
                         <td>" . $solic->nome . "</td>
                         <td>" . $solic->data_solicitacao . "</td>
                         <td>" . $solic->data_analise . "</td>

@@ -10,11 +10,30 @@ $(function () {
     for (var i = 0; i < status.length; i++) {
         var element = document.getElementById(status[i]);
         if (element !== null) {
+            $('#' + status[i]).iCheck({
+                checkboxClass: 'icheckbox_minimal-blue',
+                radioClass: 'iradio_minimal-blue'
+            });
             $('#' + status[i]).on('ifChecked', function (event) {
                 iniTableSolicAdiant();
             });
         }
     }
+
+    status = ['stAltAbertos', 'stAltAprovados', 'stAltReprovado'];
+    for (var i = 0; i < status.length; i++) {
+        var element = document.getElementById(status[i]);
+        if (element !== null) {
+            $('#' + status[i]).iCheck({
+                checkboxClass: 'icheckbox_minimal-blue',
+                radioClass: 'iradio_minimal-blue'
+            });
+            $('#' + status[i]).on('ifChecked', function (event) {
+                iniTableSolicAltPed();
+            });
+        }
+    }
+
 });
 
 $('.modal').on('hidden.bs.modal', function (event) {
@@ -206,51 +225,36 @@ function avisoSnack(aviso, corpo) {
 function iniDataTable(tabela) {
     $(tabela).DataTable({
         "paging": true,
-        "lengthChange": false,
-        "searching": false,
+        "lengthChange": true,
+        "searching": true,
         "ordering": true,
         "info": true,
-        "autoWidth": false
+        "autoWidth": true,
+        language: {
+            "decimal": "",
+            "emptyTable": "Nenhum dado na tabela",
+            "info": "_MAX_ resultados encontrados",
+            "infoEmpty": "",
+            "infoFiltered": "",
+            "infoPostFix": "",
+            "thousands": ",",
+            "lengthMenu": "Monstrando _MENU_ entradas",
+            "loadingRecords": "Carregando...",
+            "processing": "Processando...",
+            "search": "Pesquisar:",
+            "zeroRecords": "Nenhum resultado encontrado",
+            "paginate": {
+                "first": "Primeiro",
+                "last": "Último",
+                "next": "Próximo",
+                "previous": "Anterior"
+            },
+            "aria": {
+                "sortAscending": ": activate to sort column ascending",
+                "sortDescending": ": activate to sort column descending"
+            }
+        }
     });
-//    $(tabela).DataTable({
-//        destroy: true,
-//        searching: true,
-//        "ordering": false,
-//        language: {
-//            "decimal": "",
-//            "emptyTable": "Nenhum dado na tabela",
-//            "info": "_MAX_ resultados encontrados",
-//            "infoEmpty": "",
-//            "infoFiltered": "",
-//            "infoPostFix": "",
-//            "thousands": ",",
-//            "lengthMenu": "Monstrando _MENU_ entradas",
-//            "loadingRecords": "Carregando...",
-//            "processing": "Processando...",
-//            "search": "Pesquisar:",
-//            "zeroRecords": "Nenhum resultado encontrado",
-//            "paginate": {
-//                "first": "Primeiro",
-//                "last": "Último",
-//                "next": "Próximo",
-//                "previous": "Anterior"
-//            },
-//            "aria": {
-//                "sortAscending": ": activate to sort column ascending",
-//                "sortDescending": ": activate to sort column descending"
-//            }
-//        },
-//        "lengthMenu": [
-//            [5, 10, 25, 50, -1],
-//            [5, 10, 25, 50, "All"]
-//        ], "columnDefs": [
-//            {"className": "dt-center", "targets": "_all"}
-//        ],
-//        "scrollY": "400px",
-//        "scrollCollapse": true,
-//        "paging": false,
-//        "scrollX": true
-//    });
 }
 function changeTipoContr(element) {
     var val = element.value;
@@ -830,12 +834,14 @@ function iniTableSolicAltPed() {
             st = element.value;
         }
     }
-    $.post('../php/busca.php', {
+    $.post('../php/buscaLTE.php', {
         admin: 1,
         form: 'iniTableSolicAltPed',
         status: st
     }, function (resposta) {
-        $('#' + table).DataTable().destroy();
+        if ($.fn.DataTable.isDataTable('#' + table)) {
+            $('#' + table).DataTable().destroy();
+        }
         document.getElementById('contSolicAltPedido').innerHTML = resposta;
         iniDataTable('#' + table);
     });

@@ -99,7 +99,7 @@ $permissao = $obj_Busca->getPermissoes($_SESSION["id"]);
                             </a>
                         </li>
                         <li>
-                            <a href="#">
+                            <a href="javascript:mostraSolicAltPed();">
                                 <i class="fa fa-cog"></i> <span>Solic Alt Pedidos</span>
                                 <span class="pull-right-container">
                                     <small class="label pull-right bg-red">3</small>
@@ -216,39 +216,8 @@ $permissao = $obj_Busca->getPermissoes($_SESSION["id"]);
 
                 <!-- Main content -->
                 <section class="content">
-                    <div class="row">
-                        <div class="col-xs-12">
-                            <div class="box">
-                                <div class="box-header">
-                                    <h3 class="box-title">Pedidos</h3>
-                                    <div class="box-tools pull-right">
-                                        <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
-                                        </button>
-                                    </div>
-                                </div><!-- /.box-header -->
-                                <div class="box-body">
-                                    <table id="tableSolicitacoes" class="table table-bordered table-striped">
-                                        <thead>
-                                            <tr>
-                                                <th>Opções</th>
-                                                <th>Pedido</th>
-                                                <th>Setor</th>
-                                                <th>Data</th>
-                                                <th>Mês</th>
-                                                <th>Prioridade</th>
-                                                <th>Status</th>
-                                                <th>Valor</th>
-                                                <th>Empenho</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody id="conteudoSolicitacoes"></tbody>
-                                    </table>
-                                </div><!-- /.box-body -->
-                            </div><!-- /.box -->
-                        </div><!-- /.col -->
-                    </div><!-- /.row -->
                     <?php if ($permissao->saldos): ?>
-                    <div id="rowSolicAdi" class="row" style="display: none;">
+                        <div id="rowSolicAdi" class="row" style="display: none;">
                             <div class="col-xs-12">
                                 <div class="box">
                                     <div class="box-header">
@@ -264,7 +233,7 @@ $permissao = $obj_Busca->getPermissoes($_SESSION["id"]);
                                                 <td>
                                                     <div class="form-group">
                                                         <label>
-                                                            <input id="stabertos" type="radio" name="stadi" class="minimal" value="2" onclick="iniTableSolicAdiant();" checked>
+                                                            <input id="stabertos" type="radio" name="stadi" class="minimal" value="2" checked/>
                                                             Abertos
                                                         </label>
                                                     </div>
@@ -272,7 +241,7 @@ $permissao = $obj_Busca->getPermissoes($_SESSION["id"]);
                                                 <td>
                                                     <div class="form-group">
                                                         <label>
-                                                            <input id="staprovados" type="radio" name="stadi" class="minimal" value="1" onclick="iniTableSolicAdiant();">
+                                                            <input id="staprovados" type="radio" name="stadi" class="minimal" value="1"/>
                                                             Aprovados
                                                         </label>
                                                     </div>
@@ -280,7 +249,7 @@ $permissao = $obj_Busca->getPermissoes($_SESSION["id"]);
                                                 <td>
                                                     <div class="form-group">
                                                         <label>
-                                                            <input id="streprovado" type="radio" name="stadi" class="minimal" value="0" onclick="iniTableSolicAdiant();">
+                                                            <input id="streprovado" type="radio" name="stadi" class="minimal" value="0"/>
                                                             Reprovados
                                                         </label>
                                                     </div>
@@ -300,6 +269,96 @@ $permissao = $obj_Busca->getPermissoes($_SESSION["id"]);
                                                 </tr>
                                             </thead>
                                             <tbody id="conteudoSolicitacoesAdiantamento"></tbody>
+                                        </table>
+                                    </div><!-- /.box-body -->
+                                </div><!-- /.box -->
+                            </div><!-- /.col -->
+                        </div><!-- /.row -->
+                    <?php endif; ?>
+                    <?php if ($permissao->pedidos): ?>
+                        <div id="rowAltPed" class="row" style="display: none;">
+                            <div class="col-xs-12">
+                                <div class="box">
+                                    <div class="box-header">
+                                        <h3 class="box-title">Solicitações de Alteração de Pedido</h3>
+                                        <div class="box-tools pull-right">
+                                            <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
+                                            </button>
+                                        </div>
+                                    </div><!-- /.box-header -->
+                                    <div class="box-body">
+                                        <table class="table">
+                                            <tr>
+                                                <td>
+                                                    <div class="form-group">
+                                                        <label>
+                                                            <input id="stAltAbertos" type="radio" name="stAlt" class="minimal" value="2" checked/>
+                                                            Abertos
+                                                        </label>
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <div class="form-group">
+                                                        <label>
+                                                            <input id="stAltAprovados" type="radio" name="stAlt" class="minimal" value="1"/>
+                                                            Aprovados
+                                                        </label>
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <div class="form-group">
+                                                        <label>
+                                                            <input id="stAltReprovado" type="radio" name="stAlt" class="minimal" value="0"/>
+                                                            Reprovados
+                                                        </label>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                        <table id="tableSolicAltPedido" class="table table-bordered table-striped">
+                                            <thead>
+                                                <tr>
+                                                    <th>Opções</th>
+                                                    <th>Pedido</th>
+                                                    <th>Setor</th>
+                                                    <th>Data Solic</th>
+                                                    <th>Data Análise</th>
+                                                    <th>Justificativa</th>
+                                                    <th>Status</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody id="contSolicAltPedido"></tbody>
+                                        </table>
+                                    </div><!-- /.box-body -->
+                                </div><!-- /.box -->
+                            </div><!-- /.col -->
+                        </div><!-- /.row -->
+                        <div class="row">
+                            <div class="col-xs-12">
+                                <div class="box">
+                                    <div class="box-header">
+                                        <h3 class="box-title">Pedidos</h3>
+                                        <div class="box-tools pull-right">
+                                            <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
+                                            </button>
+                                        </div>
+                                    </div><!-- /.box-header -->
+                                    <div class="box-body">
+                                        <table id="tableSolicitacoes" class="table table-bordered table-striped">
+                                            <thead>
+                                                <tr>
+                                                    <th>Opções</th>
+                                                    <th>Pedido</th>
+                                                    <th>Setor</th>
+                                                    <th>Data</th>
+                                                    <th>Mês</th>
+                                                    <th>Prioridade</th>
+                                                    <th>Status</th>
+                                                    <th>Valor</th>
+                                                    <th>Empenho</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody id="conteudoSolicitacoes"></tbody>
                                         </table>
                                     </div><!-- /.box-body -->
                                 </div><!-- /.box -->
@@ -334,17 +393,6 @@ $permissao = $obj_Busca->getPermissoes($_SESSION["id"]);
         <script src="dist/js/demo.js"></script>
         <!-- iCheck 1.0.1 -->
         <script src="plugins/iCheck/icheck.min.js"></script>
-
-        <!-- Page script -->
-        <script>
-                                                                $(function () {
-
-                                                                    $('input[type="checkbox"].minimal, input[type="radio"].minimal').iCheck({
-                                                                        checkboxClass: 'icheckbox_minimal-blue',
-                                                                        radioClass: 'iradio_minimal-blue'
-                                                                    });
-                                                                });
-        </script>
 
         <!-- page script -->
         <script type="text/javascript" src="../iniLTE.js"></script>
