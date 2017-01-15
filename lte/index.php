@@ -1,3 +1,16 @@
+<?php
+ini_set('display_erros', true);
+error_reporting(E_ALL);
+
+session_start();
+if (!isset($_SESSION["id_setor"]) || $_SESSION["id_setor"] != 2) {
+    header("Location: ../");
+}
+include_once '../class/BuscaLTE.class.php';
+//instanciando classe de busca para popular o select de estados
+$obj_Busca = new BuscaLTE();
+$permissao = $obj_Busca->getPermissoes($_SESSION["id"]);
+?>
 <!DOCTYPE html>
 <html>
     <head>
@@ -51,6 +64,9 @@
                                     <span class="hidden-xs">João Bolsson</span>
                                 </a>
                             </li>
+                            <li>
+                                <a href="#"><i class="fa fa-power-off"></i></a>
+                            </li>
                         </ul>
                     </div>
                 </nav>
@@ -95,63 +111,88 @@
                                 </span>
                             </a>
                         </li>
-                        <li>
-                            <a href="#">
-                                <i class="fa fa-user"></i> <span>Alterar Usuário</span>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="#">
-                                <i class="fa fa-user-plus"></i> <span>Adicionar Usuário</span>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="#">
-                                <i class="fa fa-exclamation-circle"></i> <span>Resetar</span>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="#">
-                                <i class="fa fa-warning"></i> <span>Problemas</span>
-                            </a>
-                        </li>
+                        <?php if ($_SESSION['login'] == 'joao' || $_SESSION['login'] == 'iara'): ?>
+                            <li>
+                                <a href="#">
+                                    <i class="fa fa-user"></i> <span>Alterar Usuário</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#">
+                                    <i class="fa fa-user-plus"></i> <span>Adicionar Usuário</span>
+                                </a>
+                            </li>
+                        <?php endif; ?>
+                        <?php if ($_SESSION['login'] == 'joao'): ?>
+                            <li>
+                                <a href="#">
+                                    <i class="fa fa-exclamation-circle"></i> <span>Resetar</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#">
+                                    <i class="fa fa-warning"></i> <span>Problemas</span>
+                                </a>
+                            </li>
+                        <?php endif; ?>
                         <li>
                             <a href="#">
                                 <i class="fa fa-comments"></i> <span>Relatar Problema</span>
                             </a>
                         </li>
-                        <li>
-                            <a href="#">
-                                <i class="fa fa-send"></i> <span>Liberar Saldo</span>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="#">
-                                <i class="fa fa-dollar"></i> <span>Liberações Orçamentárias</span>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="#">
-                                <i class="fa fa-arrows-h"></i> <span>Transferências</span>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="#">
-                                <i class="fa fa-cloud-upload"></i> <span>Importar Itens</span>
-                            </a>
-                        </li>
-                        <li class="treeview">
-                            <a href="#">
-                                <i class="fa fa-file-text"></i> <span>Relatórios</span>
-                                <span class="pull-right-container">
-                                    <i class="fa fa-angle-left pull-right"></i>
-                                </span>
-                            </a>
-                            <ul class="treeview-menu">
-                                <li><a href="#"><i class="fa fa-circle-o"></i> Pedidos</a></li>
-                                <li><a href="#"><i class="fa fa-circle-o"></i> Lista de Pedidos</a></li>
-                            </ul>
-                        </li>
+                        <?php if ($permissao->saldos): ?>
+                            <li>
+                                <a href="#">
+                                    <i class="fa fa-send"></i> <span>Liberar Saldo</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#">
+                                    <i class="fa fa-dollar"></i> <span>Liberações Orçamentárias</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#">
+                                    <i class="fa fa-arrows-h"></i> <span>Transferências</span>
+                                </a>
+                            </li>
+                        <?php endif; ?>
+                        <?php if ($permissao->pedidos): ?>
+                            <li>
+                                <a href="#">
+                                    <i class="fa fa-cloud-upload"></i> <span>Importar Itens</span>
+                                </a>
+                            </li>
+                            <li class="treeview">
+                                <a href="#">
+                                    <i class="fa fa-file-text"></i> <span>Relatórios</span>
+                                    <span class="pull-right-container">
+                                        <i class="fa fa-angle-left pull-right"></i>
+                                    </span>
+                                </a>
+                                <ul class="treeview-menu">
+                                    <li><a href="#"><i class="fa fa-circle-o"></i> Pedidos</a></li>
+                                    <li><a href="#"><i class="fa fa-circle-o"></i> Lista de Pedidos</a></li>
+                                </ul>
+                            </li>
+                        <?php endif; ?>
+                        <?php if ($permissao->recepcao): ?>
+                            <li>
+                                <a href="#">
+                                    <i class="fa fa-archive"></i> <span>Processos</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#">
+                                    <i class="fa fa-plus"></i> <span>Novo Tipo</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#">
+                                    <i class="fa fa-pie-chart"></i> <span>Relatório</span>
+                                </a>
+                            </li>
+                        <?php endif; ?>
                     </ul>
                 </section>
                 <!-- /.sidebar -->
@@ -211,7 +252,7 @@
                                                     <td>R$ 2.001,370</td>
                                                     <td>355312</td>
                                                 </tr>
-                                            <?php $i++ ?>
+                                                <?php $i++ ?>
                                             <?php endwhile; ?>                                           
                                         </tbody>
                                     </table>
@@ -255,7 +296,6 @@
         <!-- page script -->
         <script>
             $(function () {
-                $("#example1").DataTable();
                 $('#example2').DataTable({
                     "paging": true,
                     "lengthChange": false,
