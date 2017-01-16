@@ -24,7 +24,7 @@ class BuscaLTE extends Conexao {
         parent::__construct();
         $this->obj_Util = new Util();
     }
-    
+
     public function getInfoContrato(int $id_pedido) {
         if (is_null($this->mysqli)) {
             $this->mysqli = parent::getConexao();
@@ -913,10 +913,10 @@ class BuscaLTE extends Conexao {
         while ($obj = $query->fetch_object()) {
             $nome = ucfirst($obj->nome);
             $retorno .= "
-                <div class=\"checkbox checkbox-adv\" style=\"display: inline-block\">
-                    <label for=\"perm{$i}\">
-                        <input class=\"access-hide\" id=\"perm{$i}\" name=\"" . $obj->nome . "\" type=\"checkbox\">" . $nome . "
-                        <span class=\"checkbox-circle\"></span><span class=\"checkbox-circle-check\"></span><span class=\"checkbox-circle-icon icon\">done</span>
+                <div class=\"form-group\" style=\"display: inline-block;\">
+                    <label>
+                        <input id=\"perm{$i}\" type=\"checkbox\" name=\"" . $obj->nome . "\" class=\"minimal\"/>
+                        " . $nome . "
                     </label>
                 </div>";
             $i++;

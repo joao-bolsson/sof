@@ -34,6 +34,19 @@ $(function () {
         }
     }
 
+    // numero de permissoes
+    var perm_count = 4;
+
+    for (var i = 1; i <= perm_count; i++) {
+        var element = document.getElementById('perm' + i);
+        if (element !== null) {
+            $('#perm' + i).iCheck({
+                checkboxClass: 'icheckbox_minimal-blue',
+                radioClass: 'iradio_minimal-blue'
+            });
+        }
+    }
+
 });
 
 $('.modal').on('hidden.bs.modal', function (event) {

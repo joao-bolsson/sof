@@ -120,7 +120,7 @@ $permissao = $obj_Busca->getPermissoes($_SESSION["id"]);
                                 </a>
                             </li>
                             <li>
-                                <a href="#">
+                                <a href="javascript:abreModal('#cadUser');">
                                     <i class="fa fa-user-plus"></i> <span>Adicionar Usuário</span>
                                 </a>
                             </li>
@@ -408,6 +408,46 @@ $permissao = $obj_Busca->getPermissoes($_SESSION["id"]);
                                 </div>
                                 <div class="modal-footer">
                                     <button class="btn btn-primary" type="submit" style="width: 100%;"><i class="fa fa-refresh"></i>&nbsp;Trocar</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            <?php endif; ?>
+            <?php if ($_SESSION['login'] == 'joao' || $_SESSION['login'] == 'iara') : ?>
+                <div aria-hidden="true" class="modal fade" id="cadUser" role="dialog" tabindex="-1">
+                    <div class="modal-dialog" style="width: 40%;">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                <h4 class="modal-title" id="gridSystemModalLabel">Adicionar Usuário</h4>
+                            </div>
+                            <form action="../php/geral.php" method="POST">
+                                <input type="hidden" name="form" value="addUser"/>
+                                <input type="hidden" name="admin" value="1"/>
+                                <div class="modal-body">
+                                    <div class="form-group">
+                                        <label for="nomeU">Nome</label>
+                                        <input type="text" class="form-control" id="nomeU" name="nome" placeholder="Nome" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="loginU">Login</label>
+                                        <input type="text" class="form-control" id="loginU" name="login" placeholder="Login" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="emailU">E-mail</label>
+                                        <input type="email" class="form-control" id="emailU" name="email" placeholder="E-mail" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Setor</label>
+                                        <select id="userA" class="form-control" name="setor" required>
+                                            <?= $obj_Busca->getOptionsSetores(); ?>
+                                        </select>
+                                    </div>
+                                    <?= $obj_Busca->getCheckPermissoes(); ?>
+                                </div>
+                                <div class="modal-footer">
+                                    <button class="btn btn-primary" type="submit" style="width: 100%;"><i class="fa fa-send"></i>&nbsp;Cadastrar</button>
                                 </div>
                             </form>
                         </div>
