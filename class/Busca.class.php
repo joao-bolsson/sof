@@ -343,7 +343,7 @@ class Busca extends Conexao {
         if (is_null($this->mysqli)) {
             $this->mysqli = parent::getConexao();
         }
-        $query = $this->mysqli->query("SELECT pedido_log_status.id_pedido AS id, setores.nome AS setor, DATE_FORMAT(pedido_log_status.data, '%d/%m/%Y') AS data_pedido, prioridade.nome AS prioridade, status.nome AS status, pedido.valor {$empenho} FROM {$tb_empenho} pedido_log_status, setores, pedido, prioridade, status WHERE status.id = pedido.status {$where_setor} {$where_prioridade} {$where_empenho} AND prioridade.id = pedido.prioridade AND pedido.id = pedido_log_status.id_pedido AND pedido.id_setor = setores.id {$where_status} AND pedido_log_status.data BETWEEN '{$dataIni}' AND '{$dataFim}' ORDER BY pedido_log_status.id_pedido ASC;") or exit("Erro ao buscar os pedidos com as especificações do usuário.");
+        $query = $this->mysqli->query("SELECT pedido_log_status.id_pedido AS id, setores.nome AS setor, DATE_FORMAT(pedido_log_status.data, '%d/%m/%Y') AS data_pedido, prioridade.nome AS prioridade, status.nome AS status, pedido.valor {$empenho} FROM {$tb_empenho} pedido_log_status, setores, pedido, prioridade, status WHERE status.id = pedido_log_status.id_status {$where_setor} {$where_prioridade} {$where_empenho} AND prioridade.id = pedido.prioridade AND pedido.id = pedido_log_status.id_pedido AND pedido.id_setor = setores.id {$where_status} AND pedido_log_status.data BETWEEN '{$dataIni}' AND '{$dataFim}' ORDER BY pedido_log_status.id_pedido ASC;") or exit("Erro ao buscar os pedidos com as especificações do usuário.");
         $titulo = "Relatório de Pedidos por Setor e Nível de Prioridade";
         if ($query) {
             $thead = "
@@ -1607,7 +1607,7 @@ class Busca extends Conexao {
         if (is_null($this->mysqli)) {
             $this->mysqli = parent::getConexao();
         }
-        $query = $this->mysqli->query("SELECT pedido.id, pedido.id_setor, setores.nome AS nome_setor, DATE_FORMAT(pedido.data_pedido, '%d/%m/%Y') AS data_pedido, mes.sigla_mes AS ref_mes, prioridade.nome AS prioridade, status.nome AS status, status.id AS id_status, pedido.valor FROM pedido, setores, mes, prioridade, status WHERE status.id = pedido.status AND pedido.status <> 3 AND prioridade.id = pedido.prioridade AND mes.id = pedido.ref_mes AND pedido.alteracao = 0 AND pedido.id_setor = setores.id ORDER BY pedido.id DESC LIMIT 100;") or exit("Erro ao buscar os pedidos que foram mandados ao SOF.");
+        $query = $this->mysqli->query("SELECT pedido.id, pedido.id_setor, setores.nome AS nome_setor, DATE_FORMAT(pedido.data_pedido, '%d/%m/%Y') AS data_pedido, mes.sigla_mes AS ref_mes, prioridade.nome AS prioridade, status.nome AS status, status.id AS id_status, pedido.valor FROM pedido, setores, mes, prioridade, status WHERE status.id = pedido.status AND pedido.status <> 3 AND prioridade.id = pedido.prioridade AND mes.id = pedido.ref_mes AND pedido.alteracao = 0 AND pedido.id_setor = setores.id ORDER BY pedido.id DESC LIMIT 500;") or exit("Erro ao buscar os pedidos que foram mandados ao SOF.");
         $this->mysqli = NULL;
         while ($pedido = $query->fetch_object()) {
             $btnAnalisar = "";
