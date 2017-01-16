@@ -157,7 +157,7 @@ $count = $obj_Busca->getCountSolic();
                                 </a>
                             </li>
                             <li>
-                                <a href="#">
+                                <a href="javascript:listLancamentos();">
                                     <i class="fa fa-dollar"></i> <span>Liberações Orçamentárias</span>
                                 </a>
                             </li>
@@ -381,7 +381,7 @@ $count = $obj_Busca->getCountSolic();
                 <strong>Copyright © 2016-2017 <a href="https://github.com/joao-bolsson">João Bolsson</a>.</strong> All rights
                 reserved.
             </footer>
-            <div id="viewCompl" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="gridSystemModalLabel" data-backdrop="static">
+            <div id="viewCompl" class="modal fade" tabindex="-1" role="dialog" data-backdrop="static">
                 <div class="modal-dialog" role="document">
                     <div class="modal-content">
                         <div class="modal-header">
@@ -401,7 +401,7 @@ $count = $obj_Busca->getCountSolic();
                         <div class="modal-content">
                             <div class="modal-header">
                                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                                <h4 class="modal-title" id="gridSystemModalLabel">Alterar Usuário</h4>
+                                <h4 class="modal-title" >Alterar Usuário</h4>
                             </div>
                             <form action="../php/geral.php" method="POST">
                                 <input type="hidden" name="form" value="altUser"/>
@@ -428,7 +428,7 @@ $count = $obj_Busca->getCountSolic();
                         <div class="modal-content">
                             <div class="modal-header">
                                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                                <h4 class="modal-title" id="gridSystemModalLabel">Adicionar Usuário</h4>
+                                <h4 class="modal-title" >Adicionar Usuário</h4>
                             </div>
                             <form action="../php/geral.php" method="POST">
                                 <input type="hidden" name="form" value="addUser"/>
@@ -468,7 +468,7 @@ $count = $obj_Busca->getCountSolic();
                         <div class="modal-content">
                             <div class="modal-header">
                                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                                <h4 class="modal-title" id="gridSystemModalLabel">Problemas Relatados</h4>
+                                <h4 class="modal-title" >Problemas Relatados</h4>
                             </div>
                             <div class="modal-body">
                                 <table id="tableListProblemas" class="table table-bordered table-striped">
@@ -491,7 +491,7 @@ $count = $obj_Busca->getCountSolic();
                     <div class="modal-content">
                         <div class="modal-header">
                             <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                            <h4 class="modal-title" id="gridSystemModalLabel">Relatar Problema</h4>
+                            <h4 class="modal-title" >Relatar Problema</h4>
                         </div>
                         <form action="../php/geral.php" method="post">
                             <input type="hidden" name="users" value="1">
@@ -520,7 +520,7 @@ $count = $obj_Busca->getCountSolic();
                         <div class="modal-content">
                             <div class="modal-header">
                                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                                <h4 class="modal-title" id="gridSystemModalLabel">Liberar Saldo</h4>
+                                <h4 class="modal-title" >Liberar Saldo</h4>
                             </div>
                             <div class="modal-body">
                                 <form action="javascript:liberaSaldo();" method="post">
@@ -540,6 +540,46 @@ $count = $obj_Busca->getCountSolic();
                                         <button class="btn btn-primary" type="submit" style="width: 100%;"><i class="fa fa-refresh"></i>&nbsp;Liberar</button>
                                     </div>
                                 </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div aria-hidden="true" class="modal fade" id="listLancamentos" role="dialog" tabindex="-1">
+                    <div class="modal-dialog modal-lg">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                <h4 class="modal-title" >Liberarações Orçamentárias</h4>
+                            </div>
+                            <div class="modal-body">
+                                <div class="form-group form-group-label">
+                                    <label>Setor</label>
+                                    <select id="selectSetor" class="form-control" onchange="changeSetor();">
+                                        <option value="-1">Nenhum</option>
+                                        <option value="0">Todos</option>
+                                        <?= $obj_Busca->getOptionsSetores(); ?>
+                                    </select>
+                                </div>
+                                <table class="table table-bordered table-striped">
+                                    <tbody id="rowDataSaldo">
+                                        <tr>
+                                            <td>Dados do setor selecionado</td>
+                                            <td id="totOut">Total de Saídas: R$ 0.000</td>
+                                            <td id="totIn">Total de Entradas: R$ 0.000</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                                <table id="tableListLancamentos" class="table table-bordered table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th>Setor</th>
+                                            <th>Data</th>
+                                            <th>Valor</th>
+                                            <th>Categoria</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="tbodyListLancamentos"></tbody>
+                                </table>
                             </div>
                         </div>
                     </div>
@@ -566,6 +606,6 @@ $count = $obj_Busca->getCountSolic();
         <script src="plugins/iCheck/icheck.min.js"></script>
 
         <!-- page script -->
-        <script type="text/javascript" src="../iniLTE.js"></script>
+        <script type="text/javascript" src="../iniLTE.min.js"></script>
     </body>
 </html>
