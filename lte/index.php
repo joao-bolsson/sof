@@ -115,7 +115,7 @@ $permissao = $obj_Busca->getPermissoes($_SESSION["id"]);
                         </li>
                         <?php if ($_SESSION['login'] == 'joao' || $_SESSION['login'] == 'iara'): ?>
                             <li>
-                                <a href="#">
+                                <a href="javascript:abreModal('#altUser');">
                                     <i class="fa fa-user"></i> <span>Alterar Usuário</span>
                                 </a>
                             </li>
@@ -387,6 +387,33 @@ $permissao = $obj_Busca->getPermissoes($_SESSION["id"]);
                     </div><!-- /.modal-content -->
                 </div><!-- /.modal-dialog -->
             </div><!-- /.modal -->
+            <?php if ($_SESSION['login'] == 'joao' || $_SESSION['login'] == 'iara'): ?>
+                <div aria-hidden="true" class="modal fade" id="altUser" role="dialog" tabindex="-1">
+                    <div class="modal-dialog" style="width: 40%;">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                <h4 class="modal-title" id="gridSystemModalLabel">Alterar Usuário</h4>
+                            </div>
+                            <form action="../php/geral.php" method="POST">
+                                <input type="hidden" name="form" value="altUser"/>
+                                <input type="hidden" name="admin" value="1"/>
+                                <div class="modal-body">
+                                    <div class="form-group">
+                                        <label>Usuário</label>
+                                        <select id="userA" class="form-control" name="user" required>
+                                            <?= $obj_Busca->getUsers(); ?>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="modal-footer">
+                                    <button class="btn btn-primary" type="submit" style="width: 100%;"><i class="fa fa-refresh"></i>&nbsp;Trocar</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            <?php endif; ?>
         </div><!-- ./wrapper -->
 
         <!-- jQuery 2.2.3 -->
