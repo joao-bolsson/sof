@@ -25,6 +25,20 @@ class BuscaLTE extends Conexao {
         $this->obj_Util = new Util();
     }
 
+    /**
+     * Retorna a quantidade de solicitações de adiantamento, alt pedidos e de pedidos em análise.
+     * @return type Objeto com as quantidades de solicitações.
+     */
+    public function getCountSolic() {
+        if (is_null($this->mysqli)) {
+            $this->mysqli = parent::getConexao();
+        }
+        $query = $this->mysqli->query("SELECT count(saldos_adiantados.id) AS solic_adi, (SELECT count(solic_alt_pedido.id) FROM solic_alt_pedido WHERE solic_alt_pedido.status = 2) AS solic_alt, (SELECT count(pedido.id) FROM pedido WHERE pedido.status = 2) AS solic_ped FROM saldos_adiantados WHERE saldos_adiantados.status = 2;") or exit("Erro ao buscar número de solicitações.");
+        $this->mysqli = NULL;
+        $obj = $query->fetch_object();
+        return $obj;
+    }
+
     public function getInfoContrato(int $id_pedido) {
         if (is_null($this->mysqli)) {
             $this->mysqli = parent::getConexao();

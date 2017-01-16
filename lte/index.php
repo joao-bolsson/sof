@@ -10,6 +10,8 @@ include_once '../class/BuscaLTE.class.php';
 //instanciando classe de busca para popular o select de estados
 $obj_Busca = new BuscaLTE();
 $permissao = $obj_Busca->getPermissoes($_SESSION["id"]);
+
+$count = $obj_Busca->getCountSolic();
 ?>
 <!DOCTYPE html>
 <html>
@@ -92,25 +94,31 @@ $permissao = $obj_Busca->getPermissoes($_SESSION["id"]);
                         <li>
                             <a href="javascript:mostraSolicAdiant();">
                                 <i class="fa fa-credit-card"></i> <span>Solic Adiantamento</span>
-                                <span class="pull-right-container">
-                                    <small class="label pull-right bg-blue">17</small>
-                                </span>
+                                <?php if ($count->solic_adi > 0): ?>
+                                    <span class="pull-right-container">
+                                        <small class="label pull-right bg-blue"><?= $count->solic_adi; ?></small>
+                                    </span>
+                                <?php endif; ?>
                             </a>
                         </li>
                         <li>
                             <a href="javascript:mostraSolicAltPed();">
                                 <i class="fa fa-cog"></i> <span>Solic Alt Pedidos</span>
-                                <span class="pull-right-container">
-                                    <small class="label pull-right bg-red">3</small>
-                                </span>
+                                <?php if ($count->solic_alt > 0): ?>
+                                    <span class="pull-right-container">
+                                        <small class="label pull-right bg-red"><?= $count->solic_alt; ?></small>
+                                    </span>
+                                <?php endif; ?>
                             </a>
                         </li>
                         <li>
                             <a href="#">
                                 <i class="fa fa-tags"></i> <span>Pedidos</span>
-                                <span class="pull-right-container">
-                                    <small class="label pull-right bg-blue">29</small>
-                                </span>
+                                <?php if ($count->solic_ped > 0): ?>
+                                    <span class="pull-right-container">
+                                        <small class="label pull-right bg-blue"><?= $count->solic_ped; ?></small>
+                                    </span>
+                                <?php endif; ?>
                             </a>
                         </li>
                         <?php if ($_SESSION['login'] == 'joao' || $_SESSION['login'] == 'iara'): ?>
