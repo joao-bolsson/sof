@@ -138,7 +138,7 @@ $permissao = $obj_Busca->getPermissoes($_SESSION["id"]);
                             </li>
                         <?php endif; ?>
                         <li>
-                            <a href="#">
+                            <a href="javascript:abreModal('#problema');">
                                 <i class="fa fa-comments"></i> <span>Relatar Problema</span>
                             </a>
                         </li>
@@ -478,6 +478,34 @@ $permissao = $obj_Busca->getPermissoes($_SESSION["id"]);
                     </div>
                 </div>
             <?php endif; ?>
+            <div class="modal fade" id="problema" role="dialog">
+                <div class="modal-dialog" style="width: 40%;">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                            <h4 class="modal-title" id="gridSystemModalLabel">Relatar Problema</h4>
+                        </div>
+                        <form action="../php/geral.php" method="post">
+                            <input type="hidden" name="users" value="1">
+                            <input type="hidden" name="form" value="problema">
+                            <input type="hidden" name="pag" value="admin/adminsolicitacoes.php">
+                            <div class="modal-body">
+                                <div class="form-group">
+                                    <label>Assunto</label>
+                                    <input type="text" class="form-control" placeholder="Assunto" name="assunto" required>
+                                </div>
+                                <div class="form-group">
+                                    <label>Descrição</label>
+                                    <textarea class="form-control" rows="3" placeholder="Tente descrever o que aconteceu, o que aparece e o que deveria aparecer. Sinta-se a vontade ;)" name="descr" required></textarea>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button class="btn btn-primary" type="submit" style="width: 100%;"><i class="fa fa-send"></i>&nbsp;Enviar</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
         </div><!-- ./wrapper -->
 
         <!-- jQuery 2.2.3 -->
