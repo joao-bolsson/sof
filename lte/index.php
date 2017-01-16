@@ -127,12 +127,12 @@ $permissao = $obj_Busca->getPermissoes($_SESSION["id"]);
                         <?php endif; ?>
                         <?php if ($_SESSION['login'] == 'joao'): ?>
                             <li>
-                                <a href="#">
+                                <a href="javascript:resetSystem();">
                                     <i class="fa fa-exclamation-circle"></i> <span>Resetar</span>
                                 </a>
                             </li>
                             <li>
-                                <a href="#">
+                                <a href="javascript:listProblemas();">
                                     <i class="fa fa-warning"></i> <span>Problemas</span>
                                 </a>
                             </li>
@@ -373,12 +373,12 @@ $permissao = $obj_Busca->getPermissoes($_SESSION["id"]);
                 <strong>Copyright © 2016-2017 <a href="https://github.com/joao-bolsson">João Bolsson</a>.</strong> All rights
                 reserved.
             </footer>
-            <div id="viewCompl" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="gridSystemModalLabel">
+            <div id="viewCompl" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="gridSystemModalLabel" data-backdrop="static">
                 <div class="modal-dialog" role="document">
                     <div class="modal-content">
                         <div class="modal-header">
                             <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                            <h4 class="modal-title" id="gridSystemModalLabel">Informação</h4>
+                            <h4 class="modal-title">Informação</h4>
                         </div>
                         <div id="complementoItem" class="modal-body"></div>
                         <div class="modal-footer">
@@ -450,6 +450,30 @@ $permissao = $obj_Busca->getPermissoes($_SESSION["id"]);
                                     <button class="btn btn-primary" type="submit" style="width: 100%;"><i class="fa fa-send"></i>&nbsp;Cadastrar</button>
                                 </div>
                             </form>
+                        </div>
+                    </div>
+                </div>
+            <?php endif; ?>
+            <?php if ($_SESSION['login'] == 'joao'): ?>
+                <div aria-hidden="true" class="modal fade" id="listProblemas" role="dialog" tabindex="-1">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                <h4 class="modal-title" id="gridSystemModalLabel">Problemas Relatados</h4>
+                            </div>
+                            <div class="modal-body">
+                                <table id="tableListProblemas" class="table table-bordered table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th>Setor</th>
+                                            <th>Assunto</th>
+                                            <th>Descrição</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="tbodyListProblemas"></tbody>
+                                </table>
+                            </div>
                         </div>
                     </div>
                 </div>
