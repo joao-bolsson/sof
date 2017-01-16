@@ -144,7 +144,7 @@ $permissao = $obj_Busca->getPermissoes($_SESSION["id"]);
                         </li>
                         <?php if ($permissao->saldos): ?>
                             <li>
-                                <a href="#">
+                                <a href="javascript:abreModal('#freeSaldos');">
                                     <i class="fa fa-send"></i> <span>Liberar Saldo</span>
                                 </a>
                             </li>
@@ -506,6 +506,37 @@ $permissao = $obj_Busca->getPermissoes($_SESSION["id"]);
                     </div>
                 </div>
             </div>
+            <?php if ($permissao->saldos): ?>
+                <div aria-hidden="true" class="modal fade" id="freeSaldos" role="dialog" tabindex="-1">
+                    <div class="modal-dialog" style="width: 40%;">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                <h4 class="modal-title" id="gridSystemModalLabel">Liberar Saldo</h4>
+                            </div>
+                            <div class="modal-body">
+                                <form action="javascript:liberaSaldo();" method="post">
+                                    <div class="modal-inner">
+                                        <div class="form-group">
+                                            <label>Setor</label>
+                                            <select id="setor" class="form-control" name="setor" required>
+                                                <?= $obj_Busca->getOptionsSetores(); ?>
+                                            </select>
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Valor</label>
+                                            <input id="valorFree" type="number" class="form-control" placeholder="Valor" name="valor" step="0.001" required min="0.001">
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button class="btn btn-primary" type="submit" style="width: 100%;"><i class="fa fa-refresh"></i>&nbsp;Liberar</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            <?php endif; ?>
         </div><!-- ./wrapper -->
 
         <!-- jQuery 2.2.3 -->
