@@ -162,7 +162,7 @@ $count = $obj_Busca->getCountSolic();
                                 </a>
                             </li>
                             <li>
-                                <a href="#">
+                                <a href="javascript:abreModal('#transferencia');">
                                     <i class="fa fa-arrows-h"></i> <span>Transferências</span>
                                 </a>
                             </li>
@@ -515,6 +515,44 @@ $count = $obj_Busca->getCountSolic();
                 </div>
             </div>
             <?php if ($permissao->saldos): ?>
+                <div aria-hidden="true" class="modal fade" id="transferencia" role="dialog" tabindex="-1">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                <h4 class="modal-title">Nova Transferência</h4>
+                            </div>
+                            <form id="formTransferencia" action="javascript:transfereSaldo();" method="post">
+                                <div class="modal-body">
+                                    <div class="form-group">
+                                        <label>Setor Origem</label>
+                                        <select id="setorOri" class="form-control" name="setorOri" required onchange="getSaldoOri();">
+                                            <?= $obj_Busca->getOptionsSetores(); ?>
+                                        </select>
+                                        <p id="saldoDispOri" style="font-weight: bold;"></p>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Setor Destino</label>
+                                        <select id="setorDest" class="form-control" name="setorDest" required>
+                                            <?= $obj_Busca->getOptionsSetores(); ?>
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Valor</label>
+                                        <input class="form-control" id="valorTransf" name="valor" type="number" step="0.001" required min="0.001">
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Justificativa</label>
+                                        <textarea class="form-control" id="justTransf" name="obs" rows="3" placeholder="Motivo da transferência" required></textarea>
+                                    </div>
+                                </div>
+                                <div class="modal-footer">
+                                    <button class="btn btn-primary" type="submit" style="width: 100%;"><i class="fa fa-refresh"></i>&nbsp;Liberar</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
                 <div aria-hidden="true" class="modal fade" id="freeSaldos" role="dialog" tabindex="-1">
                     <div class="modal-dialog" style="width: 40%;">
                         <div class="modal-content">

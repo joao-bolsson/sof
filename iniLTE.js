@@ -75,6 +75,14 @@ $(function () {
         $('.modal-backdrop').not('fv-modal-stack')
                 .addClass('fv-modal-stack');
     });
+
+    var checkPedContr = document.getElementById("checkPedContr");
+    if (checkPedContr !== null) {
+        document.getElementById("checkPedContr").onclick = function () {
+            checkPedContr(this);
+        };
+    }
+    ;
 });
 
 function cadEmpenho(id_pedido) {
@@ -293,13 +301,8 @@ function checkPedContr(element) {
     maybeRequiredTipoContr(element.checked);
 }
 
-document.getElementById("checkPedContr").onclick = function () {
-    checkPedContr(this);
-};
-
 function transfereSaldo() {
     $('#formTransferencia .btn').blur();
-    document.getElementById('loadingTransf').style.display = 'block';
     var ori = document.getElementById('setorOri').value;
     var dest = document.getElementById('setorDest').value;
     var valor = document.getElementById('valorTransf').value;
@@ -321,7 +324,6 @@ function transfereSaldo() {
             alert('Saldo insuficiente para realizar a transferência');
         }
     });
-    document.getElementById('loadingTransf').style.display = 'none';
 }
 
 function resetSenha() {
@@ -396,9 +398,9 @@ function iniAdminSolicitacoes() {
         if (permissao.pedidos) {
             iniSolicitacoes();
         }
-//        if (permissao.saldos) {
-//            getSaldoOri();
-//        }
+        if (permissao.saldos) {
+            getSaldoOri();
+        }
     });
 }
 
