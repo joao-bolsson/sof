@@ -169,7 +169,7 @@ $count = $obj_Busca->getCountSolic();
                         <?php endif; ?>
                         <?php if ($permissao->pedidos): ?>
                             <li>
-                                <a href="#">
+                                <a href="javascript:abreModal('#importItens');">
                                     <i class="fa fa-cloud-upload"></i> <span>Importar Itens</span>
                                 </a>
                             </li>
@@ -514,6 +514,33 @@ $count = $obj_Busca->getCountSolic();
                     </div>
                 </div>
             </div>
+            <?php if ($permissao->pedidos): ?>
+                <div class="modal fade" id="importItens" role="dialog">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                <h4 class="modal-title">Importar Itens</h4>
+                            </div>
+                            <form enctype="multipart/form-data" action="../php/geral.php" method="post">
+                                <input type="hidden" name="admin" value="1">
+                                <input type="hidden" name="form" value="importItens">
+                                <div class="modal-body">
+                                    <div class="form-group">
+                                        <label for="file">Arquivo</label>
+                                        <input type="file" id="file" name="file" required>
+
+                                        <p class="help-block">Tamanho máximo: 2 MB</p>
+                                    </div>
+                                </div>
+                                <div class="modal-footer">
+                                    <button class="btn btn-primary" type="submit" style="width: 100%;"><i class="fa fa-cloud-upload"></i>&nbsp;Enviar</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            <?php endif; ?>
             <?php if ($permissao->saldos): ?>
                 <div aria-hidden="true" class="modal fade" id="transferencia" role="dialog" tabindex="-1">
                     <div class="modal-dialog">
