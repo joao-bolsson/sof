@@ -181,7 +181,7 @@ $count = $obj_Busca->getCountSolic();
                                     </span>
                                 </a>
                                 <ul class="treeview-menu">
-                                    <li><a href="#"><i class="fa fa-circle-o"></i> Pedidos</a></li>
+                                    <li><a href="javascript:abreModal('#relPedidos');"><i class="fa fa-circle-o"></i> Pedidos</a></li>
                                     <li><a href="#"><i class="fa fa-circle-o"></i> Lista de Pedidos</a></li>
                                 </ul>
                             </li>
@@ -515,6 +515,64 @@ $count = $obj_Busca->getCountSolic();
                 </div>
             </div>
             <?php if ($permissao->pedidos): ?>
+                <div aria-hidden="true" class="modal fade" id="relPedidos" role="dialog" tabindex="-1">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                <h4 class="modal-title">Relatório de Pedidos</h4>
+                            </div>
+                            <form action="printRelatorio.php" method="post" target="_blank">
+                                <input type="hidden" name="tipo" value="pedidos" />
+                                <input type="hidden" name="relatorio" value="1" />
+                                <div class="modal-body">
+                                    <div class="form-group">
+                                        <label>Setor</label>
+                                        <select class="form-control" name="setor" required>
+                                            <option value="0">Todos</option>
+                                            <?= $obj_Busca->getOptionsSetores(); ?>
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Prioridade</label>
+                                        <select class="form-control" name="prioridade" required>
+                                            <option value="0">Todas</option>
+                                            <?= $obj_Busca->getOptionsPrioridades(); ?>
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Status</label>
+                                        <select class="form-control" name="status" required>
+                                            <option value="0">Todos</option>
+                                            <?= $obj_Busca->getOptionsStatus(); ?>
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Data Início</label>
+                                        <div class="input-group">
+                                            <div class="input-group-addon">
+                                                <i class="fa fa-calendar"></i>
+                                            </div>
+                                            <input type="text" class="form-control date" name="dataI" required data-inputmask="'alias': 'dd/mm/yyyy'" data-mask>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Data Fim</label>
+                                        <div class="input-group">
+                                            <div class="input-group-addon">
+                                                <i class="fa fa-calendar"></i>
+                                            </div>
+                                            <input type="text" class="form-control date" name="dataF" required data-inputmask="'alias': 'dd/mm/yyyy'" data-mask>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="modal-footer">
+                                    <button class="btn btn-primary" type="submit" style="width: 100%;"><i class="fa fa-refresh"></i>&nbsp;Gerar</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
                 <div class="modal fade" id="importItens" role="dialog">
                     <div class="modal-dialog">
                         <div class="modal-content">
@@ -669,7 +727,10 @@ $count = $obj_Busca->getCountSolic();
         <script src="dist/js/demo.js"></script>
         <!-- iCheck 1.0.1 -->
         <script src="plugins/iCheck/icheck.min.js"></script>
-
+        <!-- InputMask -->
+        <script src="plugins/input-mask/jquery.inputmask.js"></script>
+        <script src="plugins/input-mask/jquery.inputmask.date.extensions.js"></script>
+        <script src="plugins/input-mask/jquery.inputmask.extensions.js"></script>
         <!-- page script -->
         <script type="text/javascript" src="../iniLTE.min.js"></script>
     </body>
