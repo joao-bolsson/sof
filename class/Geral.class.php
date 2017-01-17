@@ -23,6 +23,48 @@ class Geral extends Conexao {
         $this->obj_Busca = new Busca();
     }
 
+//    public function setLog() {
+//        if (is_null($this->mysqli)) {
+//            $this->mysqli = parent::getConexao();
+//        }
+//
+//        $query = $this->mysqli->query("SELECT pedido.id, pedido.data_pedido AS data FROM pedido;") or exit("Erro ao buscar pedidos.");
+//        while ($pedido = $query->fetch_object()) {
+//            $query_log = $this->mysqli->query("SELECT max(pedido_log_status.id_status) AS max FROM pedido_log_status WHERE pedido_log_status.id_pedido = {$pedido->id};") or exit("Erro ao buscar máximo do pedido.");
+//
+//            $obj = $query_log->fetch_object();
+//            $max = $obj->max;
+//
+//            if (!empty($max)) {
+//                echo $pedido->id . " - ";
+//                switch ($max) {
+//                    case 3:
+//                        $this->mysqli->query("insert ignore into pedido_log_status values({$pedido->id}, 2, '{$pedido->data}', '{$pedido->id}2{$pedido->data}');") or exit("Erro 3");
+//                        break;
+//
+//                    case 5:
+//                        $this->mysqli->query("insert ignore into pedido_log_status values({$pedido->id}, 2, '{$pedido->data}', '{$pedido->id}2{$pedido->data}');") or exit("Erro 5");
+//                        break;
+//
+//                    case 6:
+//                        $this->mysqli->query("insert ignore into pedido_log_status values({$pedido->id}, 2, '{$pedido->data}', '{$pedido->id}2{$pedido->data}'), ({$pedido->id}, 5, '{$pedido->data}', '{$pedido->id}5{$pedido->data}');") or exit("Erro 6: " . $this->mysqli->error);
+//                        break;
+//                    
+//                    case 7:
+//                        $this->mysqli->query("insert ignore into pedido_log_status values({$pedido->id}, 2, '{$pedido->data}', '{$pedido->id}2{$pedido->data}'), ({$pedido->id}, 5, '{$pedido->data}', '{$pedido->id}5{$pedido->data}'), ({$pedido->id}, 6, '{$pedido->data}', '{$pedido->id}6{$pedido->data}');") or exit("Erro 7");
+//                        break;
+//                    
+//                    case 8:
+//                        $this->mysqli->query("insert ignore into pedido_log_status values({$pedido->id}, 2, '{$pedido->data}', '{$pedido->id}2{$pedido->data}'), ({$pedido->id}, 5, '{$pedido->data}', '{$pedido->id}5{$pedido->data}'), ({$pedido->id}, 6, '{$pedido->data}', '{$pedido->id}6{$pedido->data}'), ({$pedido->id}, 7, '{$pedido->data}', '{$pedido->id}7{$pedido->data}');") or exit("Erro 8");
+//                        break;
+//
+//                    default:
+//                        break;
+//                }
+//            }
+//        }
+//    }
+
     public function insertPedContr(int $id_pedido, int $id_tipo, string $siafi) {
         if (is_null($this->mysqli)) {
             $this->mysqli = parent::getConexao();
@@ -72,7 +114,8 @@ class Geral extends Conexao {
         // não deixa ter vários logs com o mesmo status na mesma data
         $query = $this->mysqli->query("SELECT pedido_log_status.id_status FROM pedido_log_status WHERE data = '{$hoje}' AND pedido_log_status.id_status = {$status} AND pedido_log_status.id_pedido = {$id_pedido};") or exit("Erro ao verificar log de status.");
         if ($query->num_rows < 1) {
-            $this->mysqli->query("INSERT INTO pedido_log_status VALUES({$id_pedido}, {$status}, '{$hoje}');") or exit("Erro ao registrar log de mudança de status.");
+            $chave = $id_pedido . $status . $hoje;
+            $this->mysqli->query("INSERT INTO pedido_log_status VALUES({$id_pedido}, {$status}, '{$hoje}', '{$chave}');") or exit("Erro ao registrar log de mudança de status.");
         }
         // NÃO FECHA CONEXÃO AQUI
     }
