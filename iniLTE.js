@@ -20,6 +20,20 @@ $(function () {
         }
     }
 
+    for (var i = 2; i <= 10; i++) {
+        var element = document.getElementById('relStatus' + i);
+        if (element !== null) {
+            $('#relStatus' + i).iCheck({
+                checkboxClass: 'icheckbox_minimal-blue',
+                radioClass: 'iradio_minimal-blue'
+            });
+            $('#relStatus' + i).on('ifChecked', function () {
+                changeReport(this);
+            });
+        }
+    }
+
+
     status = ['stAltAbertos', 'stAltAprovados', 'stAltReprovado'];
     for (var i = 0; i < status.length; i++) {
         var element = document.getElementById(status[i]);
@@ -253,6 +267,7 @@ function avisoSnack(aviso, corpo) {
 
 function iniDataTable(tabela) {
     $(tabela).DataTable({
+        "destroy": true,
         "paging": true,
         "lengthChange": true,
         "searching": true,
@@ -746,18 +761,20 @@ function maybeDisableFields(flag) {
     document.getElementById('ngera').required = !flag;
 }
 
-function changeReport(radio) {
-    var st = radio.split('-');
-    $.post('../php/busca.php', {
+function changeReport(element) {
+    var st = element.value;
+    $.post('../php/buscaLTE.php', {
         admin: 1,
         form: 'listRelatorios',
-        status: st[1]
+        status: st
     }).done(function (resposta) {
-        $('#tableListRelatorios').DataTable().destroy();
+        if ($.fn.DataTable.isDataTable('#tableListPedidos')) {
+            $('#tableListRelatorios').DataTable().destroy();
+        }
         $('#tbodyListRelatorios').html(resposta);
         iniDataTable('#tableListRelatorios');
     });
-    refreshTot(st[1]);
+    refreshTot(st);
 }
 
 function refreshTot(status) {

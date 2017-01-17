@@ -182,7 +182,7 @@ $count = $obj_Busca->getCountSolic();
                                 </a>
                                 <ul class="treeview-menu">
                                     <li><a href="javascript:abreModal('#relPedidos');"><i class="fa fa-circle-o"></i> Pedidos</a></li>
-                                    <li><a href="#"><i class="fa fa-circle-o"></i> Lista de Pedidos</a></li>
+                                    <li><a href="javascript:listRelatorios();"><i class="fa fa-circle-o"></i> Lista de Pedidos</a></li>
                                 </ul>
                             </li>
                         <?php endif; ?>
@@ -515,6 +515,37 @@ $count = $obj_Busca->getCountSolic();
                 </div>
             </div>
             <?php if ($permissao->pedidos): ?>
+                <div aria-hidden="true" class="modal fade" id="listRelatorios" role="dialog" tabindex="-1">
+                    <div class="modal-dialog" style="width: 80%;">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                <h4 class="modal-title">Relatórios</h4>
+                            </div>
+                            <div class="modal-body">
+                                <table style="width: 100%;">
+                                    <?= $obj_Busca->getRadiosStatusRel(); ?>
+                                </table>
+                                <p id="relTotRow" style="display: none;"></p>
+                                <table id="tableListRelatorios" class="table table-bordered table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th>Pedido</th>
+                                            <th>RefMes</th>
+                                            <th>Data de Envio</th>
+                                            <th>Prioridade</th>
+                                            <th>Status</th>
+                                            <th>SIAFI</th>
+                                            <th>Valor</th>
+                                            <th>Opções</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="tbodyListRelatorios"></tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
                 <div aria-hidden="true" class="modal fade" id="relPedidos" role="dialog" tabindex="-1">
                     <div class="modal-dialog">
                         <div class="modal-content">
@@ -732,6 +763,6 @@ $count = $obj_Busca->getCountSolic();
         <script src="plugins/input-mask/jquery.inputmask.date.extensions.js"></script>
         <script src="plugins/input-mask/jquery.inputmask.extensions.js"></script>
         <!-- page script -->
-        <script type="text/javascript" src="../iniLTE.min.js"></script>
+        <script type="text/javascript" src="../iniLTE.js"></script>
     </body>
 </html>

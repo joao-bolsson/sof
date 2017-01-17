@@ -222,7 +222,7 @@ class BuscaLTE extends Conexao {
                 // por ordem descrecente do término do processo
                 // botão para os processos presentes no pedido e suas datas
                 $btnVerProcesso = "
-                    <button class=\"btn btn-default btn-sm\" style=\"text-transform: none !important;font-weight: bold;\" onclick=\"verProcessos(" . $pedido->id . ");\" title=\"Ver Processos\"><span class=\"icon\">remove_red_eye</span></button>";
+                    <button class=\"btn btn-primary\" onclick=\"verProcessos(" . $pedido->id . ");\" title=\"Ver Processos\"><i class=\"fa fa-eye\"></i></button>";
             }
             $pedido->valor = number_format($pedido->valor, 3, ',', '.');
             $retorno .= "
@@ -231,11 +231,11 @@ class BuscaLTE extends Conexao {
                     <td>" . $pedido->ref_mes . "</td>
                     <td>" . $pedido->data_pedido . "</td>
                     <td>" . $pedido->prioridade . "</td>
-                    <td><span class=\"label\" style=\"font-size: 11pt;\">" . $pedido->status . "</span></td>
+                    <td><small class=\"label pull-right bg-gray\">" . $pedido->status . "</small></td>
                     <td>" . $empenho . "</td>
                     <td>R$ " . $pedido->valor . "</td>
                     <td>
-                        <button class=\"btn btn-default btn-sm\" style=\"text-transform: none !important;font-weight: bold;\" onclick=\"imprimir(" . $pedido->id . ");\" title=\"Imprimir\"><span class=\"icon\">print</span></button>
+                        <button class=\"btn btn-primary\" onclick=\"imprimir(" . $pedido->id . ");\" title=\"Imprimir\"><i class=\"fa fa-print\"></i></button>
                             " . $btnVerProcesso . "
                     </td>
                 </tr>";
@@ -287,10 +287,10 @@ class BuscaLTE extends Conexao {
             }
             $retorno .= "
             <td>
-                <div class=\"radiobtn radiobtn-adv\">
-                    <label for=\"relStatus{$status->id}\">
-                    	<input type=\"radio\" name=\"relatorio\" id=\"relStatus{$status->id}\" class=\"access-hide\" onchange=\"changeReport('status-{$status->id}');\">{$status->nome}
-                        <span class=\"radiobtn-circle\"></span><span class=\"radiobtn-circle-check\"></span>
+                <div class=\"form-group\">
+                    <label>
+                        <input id=\"relStatus{$status->id}\" type=\"radio\" name=\"relatorio\" class=\"minimal\" value=\"{$status->id}\"/>
+                       " . $status->nome . "
                     </label>
                 </div>
             </td>";
