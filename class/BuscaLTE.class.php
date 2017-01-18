@@ -1613,6 +1613,24 @@ class BuscaLTE extends Conexao {
     }
 
     /**
+     * @param int $id_pedido Id do pedido
+     * @return string Data do cadastro do empenho
+     */
+    private function verDataEmpenho(int $id_pedido): string {
+        if (is_null($this->mysqli)) {
+            $this->mysqli = parent::getConexao();
+        }
+        $query = $this->mysqli->query("SELECT DATE_FORMAT(pedido_empenho.data, '%d/%m/%Y') AS data FROM pedido_empenho WHERE pedido_empenho.id_pedido = {$id_pedido} LIMIT 1;");
+        $this->mysqli = NULL;
+
+        if ($query->num_rows < 1) {
+            return '';
+        }
+        $obj = $query->fetch_object();
+        return $obj->data;
+    }
+
+    /**
      * Função para retornar as solicitações para o SOF.
      *
      * @return string
@@ -1629,29 +1647,33 @@ class BuscaLTE extends Conexao {
             $btnAnalisar = "";
             if ($pedido->status != 'Reprovado' && $pedido->status != 'Aprovado') {
                 if ($_SESSION['id_setor'] == 12) {
-                    $btnAnalisar = "<a href=\"javascript:enviaForn(" . $pedido->id . ");\" title=\"Enviar ao Fornecedor\"><i class=\"fa fa-send\"></i></a>";
+                    $btnAnalisar = "<button type=\"button\" class=\"btn btn-default\" onclick=\"enviaForn(" . $pedido->id . ");\" title=\"Enviar ao Fornecedor\"><i class=\"fa fa-send\"></i></button>";
                 } else if ($pedido->status == 'Em Analise') {
-                    $btnAnalisar = "<a href=\"javascript:analisarPedido(" . $pedido->id . ", " . $pedido->id_setor . ");\" title=\"Analisar\"><i class=\"fa fa-pencil\"></i></a>";
+                    $btnAnalisar = "<button type=\"button\" class=\"btn btn-default\" onclick=\"javascript:analisarPedido(" . $pedido->id . ", " . $pedido->id_setor . ");\" title=\"Analisar\"><i class=\"fa fa-pencil\"></i></button>";
                 } else if ($pedido->status == 'Aguarda Orcamento') {
-                    $btnAnalisar = "<a href=\"javascript:cadFontes(" . $pedido->id . ");\" title=\"Cadastrar Fontes\"><i class=\"fa fa-pie-chart\"></i></a>";
+                    $btnAnalisar = "<button type=\"button\" class=\"btn btn-default\" onclick=\"cadFontes(" . $pedido->id . ");\" title=\"Cadastrar Fontes\"><i class=\"fa fa-pie-chart\"></i></button>";
                 } else if ($pedido->status == 'Aguarda SIAFI') {
-                    $btnAnalisar = "<a href=\"javascript:cadEmpenho(" . $pedido->id . ");\" title=\"Cadastrar Empenho\"><i class=\"fa fa-comment\"></i></a>";
+                    $btnAnalisar = "<button type=\"button\" class=\"btn btn-default\" onclick=\"cadEmpenho(" . $pedido->id . ");\" title=\"Cadastrar Empenho\"><i class=\"fa fa-comment\"></i></button>";
                 } else if ($pedido->status == 'Empenhado') {
-                    $btnAnalisar = "<a href=\"javascript:enviaOrdenador(" . $pedido->id . ");\" title=\"Enviar ao Ordenador\"><i class=\"fa fa-send\"></i></a>";
+                    $btnAnalisar = "<button type=\"button\" class=\"btn btn-default\" onclick=\"enviaOrdenador(" . $pedido->id . ");\" title=\"Enviar ao Ordenador\"><i class=\"fa fa-send\"></i></button>";
                 } else {
-                    $btnAnalisar = "<a href=\"javascript:getStatus(" . $pedido->id . ", " . $pedido->id_setor . ");\" title=\"Alterar Status\"><i class=\"fa fa-wrench\"></i></a>";
+                    $btnAnalisar = "<button type=\"button\" class=\"btn btn-default\" onclick=\"javascript:getStatus(" . $pedido->id . ", " . $pedido->id_setor . ");\" title=\"Alterar Status\"><i class=\"fa fa-wrench\"></i></button>";
                 }
             }
             $btnVerEmpenho = BuscaLTE::verEmpenho($pedido->id);
             if ($btnVerEmpenho == 'EMPENHO SIAFI PENDENTE') {
                 $btnVerEmpenho = '';
+            } else {
+                $btnAnalisar .= "<button type=\"button\" class=\"btn btn-default\" onclick=\"javascript:cadEmpenho(" . $pedido->id . ", '" . BuscaLTE::verEmpenho($pedido->id) . "', '" . BuscaLTE::verDataEmpenho($pedido->id) . "');\" title=\"Cadastrar Empenho\"><i class=\"fa fa-dollar\"></i></button>";
             }
             $pedido->valor = number_format($pedido->valor, 3, ',', '.');
             $linha = "
                 <tr id=\"rowPedido" . $pedido->id . "\">
                     <td>
-                        " . $btnAnalisar . "
-                        <a href=\"javascript:imprimir(" . $pedido->id . ");\" title=\"Imprimir\"><i class=\"fa fa-print\"></i></a>
+                        <div class=\"btn-group\">
+                            " . $btnAnalisar . "
+                            <button type=\"button\" class=\"btn btn-default\" onclick=\"javascript:imprimir(" . $pedido->id . ");\" title=\"Imprimir\"><i class=\"fa fa-print\"></i></button>
+                        </div>
                     </td>
                     <td>" . $pedido->id . "</td>
                     <td>" . $pedido->nome_setor . "</td>
