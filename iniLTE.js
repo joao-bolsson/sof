@@ -32,7 +32,7 @@ $(function () {
             });
         }
 
-        // radios dos detalhes do pedido
+// radios dos detalhes do pedido
         element = document.getElementById('st' + i);
         if (element !== null) {
             $('#st' + i).iCheck({
@@ -57,9 +57,8 @@ $(function () {
         }
     }
 
-    // numero de permissoes
+// numero de permissoes
     var perm_count = 4;
-
     for (var i = 1; i <= perm_count; i++) {
         var element = document.getElementById('perm' + i);
         if (element !== null) {
@@ -75,18 +74,16 @@ $(function () {
             iniDataTable('#tableListProblemas');
         }
     });
-
     $('.modal').on('hidden.bs.modal', function () {
         $(this).removeClass('fv-modal-stack');
         $('body').data('fv_open_modals', $('body').data('fv_open_modals') - 1);
     });
-
     $('.modal').on('shown.bs.modal', function () {
-        // keep track of the number of open modals
+// keep track of the number of open modals
         if (typeof ($('body').data('fv_open_modals')) == 'undefined') {
             $('body').data('fv_open_modals', 0);
         }
-        // if the z-index of this modal has been set, ignore.
+// if the z-index of this modal has been set, ignore.
         if ($(this).hasClass('fv-modal-stack')) {
             return;
         }
@@ -98,7 +95,6 @@ $(function () {
         $('.modal-backdrop').not('fv-modal-stack')
                 .addClass('fv-modal-stack');
     });
-
     var checkPedContr = document.getElementById("checkPedContr");
     if (checkPedContr !== null) {
         document.getElementById("checkPedContr").onclick = function () {
@@ -110,12 +106,10 @@ $(function () {
         $(".date").inputmask("dd/mm/yyyy", {"placeholder": "dd/mm/yyyy"});
     });
 });
-
 function cadEmpenho(id_pedido, empenho, data) {
     document.getElementById('id_pedido_emp').value = '';
     document.getElementById('empenho').value = '';
     document.getElementById('dataEmp').value = '';
-
     $('#cadEmpenho').modal();
     document.getElementById('id_pedido_emp').value = id_pedido;
     if (empenho.length > 0) {
@@ -283,7 +277,7 @@ function avisoSnack(aviso, corpo) {
 }
 
 function iniDataTable(tabela) {
-    if (tabela === '#tableItensPedido') {
+    if (tabela == '#tableItensPedido') {
         $(tabela).DataTable({
             "destroy": true,
             "paging": true,
@@ -292,6 +286,10 @@ function iniDataTable(tabela) {
             "ordering": true,
             "info": true,
             "scrollX": true,
+            "columnDefs": [
+                {"width": "15%", "targets": 0},
+                {"width": "15%", "targets": 5}
+            ],
             language: {
                 "decimal": "",
                 "emptyTable": "Nenhum dado na tabela",
@@ -368,7 +366,7 @@ function maybeRequiredTipoContr(flag) {
 }
 
 function checkPedContr(element) {
-    // se for um pedido de contrato, deve escolher uma opcao
+// se for um pedido de contrato, deve escolher uma opcao
     maybeRequiredTipoContr(element.checked);
 }
 
@@ -577,7 +575,7 @@ function iniSolicitacoes() {
         admin: 1,
         form: 'tableItensPedido'
     }, function (resposta) {
-        if ($.fn.DataTable.isDataTable('#tableSolicitacoes')) {
+        if (document.getElementById('conteudoSolicitacoes').innerHTML.length > 0) {
             $('#tableSolicitacoes').DataTable().destroy();
         }
         document.getElementById('conteudoSolicitacoes').innerHTML = resposta;
@@ -651,7 +649,6 @@ function refreshSaldo() {
     });
 }
 var userss = false;
-
 $('#listLancamentos').on('shown.bs.modal', function (event) {
     if (!userss) {
         return;
@@ -660,7 +657,6 @@ $('#listLancamentos').on('shown.bs.modal', function (event) {
         iniDataTable('#tableListLancamentos');
     }
 });
-
 function listLancamentos(id_setor) {
     $('#listLancamentos').modal('show');
     if (id_setor !== null) {
@@ -710,7 +706,6 @@ $('#listSolicAltPedidos').on('shown.bs.modal', function (event) {
         iniDataTable('#tableSolicAltPedido');
     }
 });
-
 function listSolicAltPedidos() {
     $('#listSolicAltPedidos').modal();
     if (!$.fn.DataTable.isDataTable('#tableListProcessos')) {
@@ -733,7 +728,6 @@ function listProblemas() {
     }).done(function (resposta) {
         $('#tbodyListProblemas').html(resposta);
     });
-
     $('#listProblemas').modal();
 }
 $('#listProcessos').on('shown.bs.modal', function (event) {
@@ -741,7 +735,6 @@ $('#listProcessos').on('shown.bs.modal', function (event) {
         iniDataTable('#tableListProcessos');
     }
 });
-
 function listProcessos(permissao) {
     if (!$.fn.DataTable.isDataTable('#tableListProcessos')) {
         if (permissao == 'users') {
@@ -768,7 +761,6 @@ $('#listAdiantamentos').on('shown.bs.modal', function (event) {
         iniDataTable('#tableListAdiantamentos');
     }
 });
-
 function listAdiantamentos() {
     $('#listAdiantamentos').modal('show');
     if (!$.fn.DataTable.isDataTable('#tableListProcessos')) {
@@ -805,7 +797,6 @@ function maybeDisableFields(flag) {
     document.getElementById('procOri').disabled = flag;
     document.getElementById('gera').disabled = flag;
     document.getElementById('ngera').disabled = flag;
-
     // required
 
     document.getElementById('uasg').required = !flag;
@@ -857,7 +848,6 @@ $('#listPedidos').on('shown.bs.modal', function (event) {
         iniDataTable('#tableListPedidos');
     }
 });
-
 function listPedidos() {
     $('#listPedidos').modal('show');
     if (!$.fn.DataTable.isDataTable('#tableListPedidos')) {
@@ -874,7 +864,6 @@ $('#listRascunhos').on('shown.bs.modal', function (event) {
         iniDataTable('#tableListRascunhos');
     }
 });
-
 function listRascunhos() {
     $('#listRascunhos').modal('show');
     if (!$.fn.DataTable.isDataTable('#tableListRascunhos')) {
@@ -973,7 +962,7 @@ function checkItemPedido(id_item, vl_unitario, qt_saldo) {
         document.getElementById("qtd" + id_item).style.border = "0.12em solid red";
         document.getElementById("qtd" + id_item).focus();
     } else {
-        //limpando os campos
+//limpando os campos
         document.getElementById("qtd" + id_item).style.border = "none";
         document.getElementById("qtd" + id_item).value = "";
         //verifica se a qtd solicitada está disponível
@@ -983,7 +972,6 @@ function checkItemPedido(id_item, vl_unitario, qt_saldo) {
             var valor = parseFloat(qtd_item * vl_unitario).toFixed(3);
             var total_pedido = document.getElementById('total_hidden').value;
             total_pedido += valor;
-
             saldo_total = parseFloat(document.getElementById("saldo_total").value);
             if (valor > saldo_total) {
                 avisoSnack('SALDO INSUFICIENTE !', 'body');
@@ -997,7 +985,7 @@ function checkItemPedido(id_item, vl_unitario, qt_saldo) {
 // ADICIONA ITEM AO PEDIDO ---------------------------------------------------------
 function addItemPedido(id_item, qtd, vl_unitario) {
 
-    //valor do pedido
+//valor do pedido
     var valor = qtd * vl_unitario;
     t = document.getElementById('total_hidden').value;
     total = parseFloat(t) + parseFloat(valor);
@@ -1010,13 +998,11 @@ function addItemPedido(id_item, qtd, vl_unitario) {
     }).done(function (resposta) {
         document.getElementById('total').value = "R$ " + resposta;
     });
-
     //saldo
     s = document.getElementById('saldo_total').value;
     saldo_total = parseFloat(s) - parseFloat(valor);
     document.getElementById('saldo_total').value = parseFloat(saldo_total).toFixed(3);
     document.getElementById('text_saldo_total').innerHTML = "R$ " + parseFloat(saldo_total).toFixed(3);
-
     $.post('../php/busca.php', {
         users: 1,
         form: 'addItemPedido',
@@ -1030,18 +1016,16 @@ function addItemPedido(id_item, qtd, vl_unitario) {
 }
 
 function removeTableRow(id_item, valor) {
-    //valor do pedido
+//valor do pedido
     t = document.getElementById('total_hidden').value;
     total = parseFloat(t) - parseFloat(valor);
     document.getElementById('total_hidden').value = parseFloat(total).toFixed(3);
     document.getElementById('total').value = "R$ " + parseFloat(total).toFixed(3);
-
     //saldo
     s = document.getElementById('saldo_total').value;
     saldo_total = parseFloat(s) + parseFloat(valor);
     document.getElementById('saldo_total').value = parseFloat(saldo_total).toFixed(3);
     document.getElementById('text_saldo_total').innerHTML = "R$ " + parseFloat(saldo_total).toFixed(3);
-
     var row = document.getElementById("row" + id_item);
     if (row.parentNode) {
         row.parentNode.removeChild(row);
@@ -1098,7 +1082,6 @@ function limpaTelaSolic() {
     document.getElementById('stRascunho').checked = true;
     $('#divObs').removeClass('control-highlight');
     document.getElementById('obs').value = '';
-
     // licitação
     for (var i = 1; i <= 6; i++) {
         document.getElementById('tipoLic' + i).checked = false;
@@ -1110,17 +1093,13 @@ function limpaTelaSolic() {
     document.getElementById('procOri').value = '';
     document.getElementById('procOri').required = false;
     document.getElementById('procOri').disabled = true;
-
     document.getElementById('gera').checked = false;
     document.getElementById('gera').required = false;
     document.getElementById('gera').disabled = true;
-
     document.getElementById('ngera').checked = false;
     document.getElementById('ngera').required = false;
     document.getElementById('ngera').disabled = true;
-
     document.getElementById('checkPedContr').checked = false;
-
     // opções de contrato
     for (var i = 1; i <= 3; i++) {
         document.getElementById('tipoCont' + i).required = false;
@@ -1138,15 +1117,12 @@ function editaPedido(id_pedido) {
         id_pedido: id_pedido
     }, function (retorno) {
         var obj = jQuery.parseJSON(retorno);
-
         //valor do pedido
         document.getElementById('total_hidden').value = obj.valor;
         document.getElementById('total').value = "R$ " + obj.valor;
-
         //saldo
         document.getElementById('saldo_total').value = parseFloat(obj.saldo - obj.valor).toFixed(3);
         document.getElementById('text_saldo_total').innerHTML = "R$ " + parseFloat(obj.saldo - obj.valor).toFixed(3);
-
         // obs
         $('#divObs').addClass('control-highlight');
         document.getElementById('obs').value = obj.obs;
@@ -1329,6 +1305,18 @@ function print() {
 
 function analisarPedido(id_pedido, id_setor) {
     $('button').blur();
+    $.post('../php/buscaLTE.php', {
+        admin: 1,
+        form: 'analisaPedido',
+        id_pedido: id_pedido
+    }, function (resposta) {
+        if (document.getElementById("conteudoPedido").innerHTML.length > 0) {
+            $('#tableItensPedido').DataTable().destroy();
+        }
+        document.getElementById("conteudoPedido").innerHTML = resposta;
+        iniDataTable('#tableItensPedido');
+        $('#tableItensPedido').DataTable().columns.adjust().draw();
+    });
     document.getElementById('form').value = 'gerenciaPedido';
     document.getElementById('id_setor').value = id_setor;
     $('#tableSolicitacoes tr').css('background-color', '');
@@ -1367,23 +1355,10 @@ function analisarPedido(id_pedido, id_setor) {
         //obs
         document.getElementById('obs').value = obj.obs;
     });
-
     document.getElementById("id_pedido").value = id_pedido;
-
     document.getElementById("detPedId").innerHTML = id_pedido;
     document.getElementById('tableItensPedido').style.display = 'block';
     getNomeSetor(id_setor);
-    $.post('../php/buscaLTE.php', {
-        admin: 1,
-        form: 'analisaPedido',
-        id_pedido: id_pedido
-    }, function (resposta) {
-        if (document.getElementById("conteudoPedido").innerHTML.length > 0) {
-            $('#tableItensPedido').DataTable().destroy();
-        }
-        document.getElementById("conteudoPedido").innerHTML = resposta;
-        iniDataTable('#tableItensPedido');
-    });
 }
 
 function getNomeSetor(id_setor) {
@@ -1487,7 +1462,7 @@ function cancelaItem(id_item) {
         document.getElementById("item_cancelado" + id_item).value = 0;
         document.getElementById("row_item" + id_item).style.backgroundColor = "";
     } else {
-        // AVISA O QUE ACONTECERÁ SE O ITEM FOR REMOVIDO
+// AVISA O QUE ACONTECERÁ SE O ITEM FOR REMOVIDO
         var cancel = confirm("O item de id = " + id_item + " será desativado no Banco de Dados ao final da análise do pedido atual, e portanto, os setores não poderão mais solicitá-lo. Deseja prosseguir?");
         if (cancel) {
             $('#icon-cancela-item' + id_item).removeClass('close').addClass('check');
@@ -1571,7 +1546,6 @@ function editaNoticia(id, tabela, data) {
     document.getElementById("id_noticia").value = id;
     document.getElementById("tabela").value = tabela;
     document.getElementById("data").value = data;
-
     $.post('../php/busca.php', {
         admin: 1,
         form: 'editarNoticia',
