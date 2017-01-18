@@ -1,4 +1,7 @@
 $(function () {
+
+    tableItens = document.getElementById('divTableItens').innerHTML;
+
     var str = location.pathname;
     if (str.endsWith("view/solicitacoes.php")) {
         $(".select2").select2();
@@ -1305,14 +1308,12 @@ function print() {
 
 function analisarPedido(id_pedido, id_setor) {
     $('button').blur();
+    $('#divTableItens').html(tableItens);
     $.post('../php/buscaLTE.php', {
         admin: 1,
         form: 'analisaPedido',
         id_pedido: id_pedido
     }, function (resposta) {
-        if (document.getElementById("conteudoPedido").innerHTML.length > 0) {
-            $('#tableItensPedido').DataTable().destroy();
-        }
         document.getElementById("conteudoPedido").innerHTML = resposta;
         iniDataTable('#tableItensPedido');
         $('#tableItensPedido').DataTable().columns.adjust().draw();

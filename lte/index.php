@@ -387,38 +387,40 @@ $count = $obj_Busca->getCountSolic();
                                         <input id="id_pedido" type="hidden" name="id_pedido" value="0"/>
                                         <input id="id_setor" type="hidden" name="id_setor" value="0"/>
                                         <div class="box-body">
-                                            <table id="tableItensPedido" class="table table-bordered table-striped">
-                                                <thead>
-                                                    <tr>
-                                                        <th>Ferramentas</th>
-                                                        <th>COD_DESPESA</th>
-                                                        <th>DESCRICAO_DESPESA</th>
-                                                        <th>NUM_EXTRATO</th>
-                                                        <th>NUM_CONTRATO</th>
-                                                        <th>NUM_PROCESSO</th>
-                                                        <th>DESCR_MOD_COMPRA</th>
-                                                        <th>NUM_LICITACAO</th>
-                                                        <th>DT_INICIO</th>
-                                                        <th>DT_FIM</th>
-                                                        <th>CGC_FORNECEDOR</th>
-                                                        <th>NOME_FORNECEDOR</th>
-                                                        <th>COD_REDUZIDO</th>
-                                                        <th>SEQ_ITEM_PROCESSO</th>
-                                                        <th>DESCRICAO</th>
-                                                        <th>VL_UNITARIO</th>
-                                                        <th>QT_CONTRATO</th>
-                                                        <th>VL_CONTRATO</th>
-                                                        <th>QT_UTILIZADO</th>
-                                                        <th>VL_UTILIZADO</th>
-                                                        <th>QT_SALDO</th>
-                                                        <th>VL_SALDO</th>
-                                                        <th>QT_SOLICITADA</th>
-                                                        <th>VALOR</th>
-                                                        <th></th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody id="conteudoPedido"></tbody>
-                                            </table>
+                                            <div id="divTableItens">
+                                                <table id="tableItensPedido" class="table table-bordered table-striped">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>Ferramentas</th>
+                                                            <th>COD_DESPESA</th>
+                                                            <th>DESCRICAO_DESPESA</th>
+                                                            <th>NUM_EXTRATO</th>
+                                                            <th>NUM_CONTRATO</th>
+                                                            <th>NUM_PROCESSO</th>
+                                                            <th>DESCR_MOD_COMPRA</th>
+                                                            <th>NUM_LICITACAO</th>
+                                                            <th>DT_INICIO</th>
+                                                            <th>DT_FIM</th>
+                                                            <th>CGC_FORNECEDOR</th>
+                                                            <th>NOME_FORNECEDOR</th>
+                                                            <th>COD_REDUZIDO</th>
+                                                            <th>SEQ_ITEM_PROCESSO</th>
+                                                            <th>DESCRICAO</th>
+                                                            <th>VL_UNITARIO</th>
+                                                            <th>QT_CONTRATO</th>
+                                                            <th>VL_CONTRATO</th>
+                                                            <th>QT_UTILIZADO</th>
+                                                            <th>VL_UTILIZADO</th>
+                                                            <th>QT_SALDO</th>
+                                                            <th>VL_SALDO</th>
+                                                            <th>QT_SOLICITADA</th>
+                                                            <th>VALOR</th>
+                                                            <th></th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody id="conteudoPedido"></tbody>
+                                                </table>
+                                            </div>
                                             <div class="form-group">
                                                 <label>Observações</label>
                                                 <textarea class="form-control" id="obs" name="obs" rows="1" disabled></textarea>
