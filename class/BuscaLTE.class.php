@@ -1651,9 +1651,9 @@ class BuscaLTE extends Conexao {
                 } else if ($pedido->status == 'Em Analise') {
                     $btnAnalisar = "<button type=\"button\" class=\"btn btn-default\" onclick=\"javascript:analisarPedido(" . $pedido->id . ", " . $pedido->id_setor . ");\" title=\"Analisar\"><i class=\"fa fa-pencil\"></i></button>";
                 } else if ($pedido->status == 'Aguarda Orcamento') {
-                    $btnAnalisar = "<button type=\"button\" class=\"btn btn-default\" onclick=\"cadFontes(" . $pedido->id . ");\" title=\"Cadastrar Fontes\"><i class=\"fa fa-pie-chart\"></i></button>";
+                    $btnAnalisar = "<button type=\"button\" class=\"btn btn-default\" onclick=\"cadFontes(" . $pedido->id . ");\" title=\"Cadastrar Fontes\"><i class=\"fa fa-comment\"></i></button>";
                 } else if ($pedido->status == 'Aguarda SIAFI') {
-                    $btnAnalisar = "<button type=\"button\" class=\"btn btn-default\" onclick=\"cadEmpenho(" . $pedido->id . ");\" title=\"Cadastrar Empenho\"><i class=\"fa fa-comment\"></i></button>";
+                    $btnAnalisar = "<button type=\"button\" class=\"btn btn-default\" onclick=\"cadEmpenho(" . $pedido->id . ");\" title=\"Cadastrar Empenho\"><i class=\"fa fa-credit-card\"></i></button>";
                 } else if ($pedido->status == 'Empenhado') {
                     $btnAnalisar = "<button type=\"button\" class=\"btn btn-default\" onclick=\"enviaOrdenador(" . $pedido->id . ");\" title=\"Enviar ao Ordenador\"><i class=\"fa fa-send\"></i></button>";
                 } else {
@@ -1664,7 +1664,7 @@ class BuscaLTE extends Conexao {
             if ($btnVerEmpenho == 'EMPENHO SIAFI PENDENTE') {
                 $btnVerEmpenho = '';
             } else {
-                $btnAnalisar .= "<button type=\"button\" class=\"btn btn-default\" onclick=\"javascript:cadEmpenho(" . $pedido->id . ", '" . BuscaLTE::verEmpenho($pedido->id) . "', '" . BuscaLTE::verDataEmpenho($pedido->id) . "');\" title=\"Cadastrar Empenho\"><i class=\"fa fa-dollar\"></i></button>";
+                $btnAnalisar .= "<button type=\"button\" class=\"btn btn-default\" onclick=\"javascript:cadEmpenho(" . $pedido->id . ", '" . BuscaLTE::verEmpenho($pedido->id) . "', '" . BuscaLTE::verDataEmpenho($pedido->id) . "');\" title=\"Cadastrar Empenho\"><i class=\"fa fa-credit-card\"></i></button>";
             }
             $pedido->valor = number_format($pedido->valor, 3, ',', '.');
             $linha = "

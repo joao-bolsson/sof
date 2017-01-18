@@ -515,6 +515,39 @@ $count = $obj_Busca->getCountSolic();
                 </div>
             </div>
             <?php if ($permissao->pedidos): ?>
+                <div aria-hidden="true" class="modal fade" id="cadFontes" role="dialog" tabindex="-1">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                <h4 class="modal-title">Cadastrar Fontes</h4>
+                            </div>
+                            <form action="javascript:enviaFontes();" method="POST">
+                                <div class="modal-body">
+                                    <div class="form-group">
+                                        <label>Pedido</label>
+                                        <input class="form-control" id="id_pedido_fonte" name="id_pedido_fonte" type="number" required disabled>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Fonte de Recurso</label>
+                                        <input class="form-control" id="fonte" name="fonte" required />
+                                    </div>
+                                    <div class="form-group">
+                                        <label>PTRES</label>
+                                        <input class="form-control" id="ptres" name="ptres" required />
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Plano Interno</label>
+                                        <input class="form-control" id="plano" name="plano" required />
+                                    </div>
+                                </div>
+                                <div class="modal-footer">
+                                    <button class="btn btn-primary" type="submit" style="width: 100%;"><i class="fa fa-send"></i>&nbsp;Cadastrar</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
                 <div aria-hidden="true" class="modal fade" id="listRelatorios" role="dialog" tabindex="-1">
                     <div class="modal-dialog" style="width: 80%;">
                         <div class="modal-content">

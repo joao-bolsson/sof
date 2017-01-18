@@ -125,7 +125,6 @@ function cadEmpenho(id_pedido, empenho, data) {
 
 function cadFontes(id_pedido) {
     $('#cadFontes').modal();
-    $('#div-lbl-high').addClass('control-highlight');
     document.getElementById('id_pedido_fonte').value = id_pedido;
 }
 
