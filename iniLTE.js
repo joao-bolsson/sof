@@ -1261,7 +1261,7 @@ function pesquisar() {
 }
 
 function imprimir(id_pedido) {
-    $('a').blur();
+    $('button').blur();
     if (id_pedido == 0) {
         id_pedido = document.getElementById("pedido").value;
     }
@@ -1270,7 +1270,11 @@ function imprimir(id_pedido) {
         form: 'imprimirPedido',
         id_pedido: id_pedido
     }, function (resposta) {
-        window.open("printPedido.php");
+        if (resposta === 2) {
+            window.open("../admin/printPedido.php");
+        } else {
+            window.open("../view/printPedido.php");
+        }
     });
 }
 // função para recepção para gerar relatórios
