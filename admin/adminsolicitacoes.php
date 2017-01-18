@@ -683,11 +683,11 @@ $permissao = $obj_Busca->getPermissoes($_SESSION["id"]);
                                     <label class="floating-label" for="id_pedido_emp"><span class="icon">label</span>&nbsp;Pedido</label>
                                     <input class="form-control" id="id_pedido_emp" name="id_pedido_emp" type="number" required disabled>
                                 </div>
-                                <div class="form-group form-group-label">
+                                <div id="divEmp" class="form-group form-group-label">
                                     <label class="floating-label" for="empenho"><span class="icon">announcement</span>&nbsp;Empenho</label>
                                     <input class="form-control" id="empenho" name="empenho" required />
                                 </div>
-                                <div class="form-group form-group-label">
+                                <div id="divEmpData" class="form-group form-group-label">
                                     <label class="floating-label" for="dataEmp"><span class="icon">date_range</span>&nbsp;Data</label>
                                     <input class="form-control date" id="dataEmp" name="dataEmp" required />
                                 </div>

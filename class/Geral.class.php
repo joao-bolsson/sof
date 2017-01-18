@@ -328,25 +328,25 @@ class Geral extends Conexao {
      * 	@param $empenho Empenho a ser cadastrado.
      * 	@return bool
      */
-    public function cadastraEmpenho($id_pedido, $empenho, $data): bool {
+    public function cadastraEmpenho(int $id_pedido, string $empenho, string $data): bool {
         if (is_null($this->mysqli)) {
             $this->mysqli = parent::getConexao();
         }
         $empenho = $this->mysqli->real_escape_string($empenho);
         // verifica se o pedido ja não possui empenho
-        $query_check = $this->mysqli->query("SELECT pedido_empenho.id FROM pedido_empenho WHERE pedido_empenho.id = {$id_pedido};") or exit("Erro ao buscar informações do emepenho.");
+        $query_check = $this->mysqli->query("SELECT pedido_empenho.id FROM pedido_empenho WHERE pedido_empenho.id_pedido = {$id_pedido};") or exit("Erro ao buscar informações do empenho.");
         $sql = "";
         if ($query_check->num_rows < 1) {
             // cadastrando empenho
             $sql = "INSERT INTO pedido_empenho VALUES(NULL, {$id_pedido}, '{$empenho}', '{$data}');";
+            // mudando status do pedido
+            $this->mysqli->query("UPDATE pedido SET status = 7 WHERE id = {$id_pedido};") or exit("Erro ao atualizar o status do pedido.");
+            $this->registraLog($id_pedido, 7);
         } else {
             // alterando empenho
             $sql = "UPDATE pedido_empenho SET pedido_empenho.empenho = '{$empenho}', pedido_empenho.data = '{$data}' WHERE pedido_empenho.id_pedido = {$id_pedido};";
         }
         $this->mysqli->query($sql) or exit("Erro ao inserir / atualizar empenho.");
-        // mudando status do pedido
-        $this->mysqli->query("UPDATE pedido SET status = 7 WHERE id = {$id_pedido};") or exit("Erro ao atualizar o status do pedido.");
-        $this->registraLog($id_pedido, 7);
         $this->mysqli = NULL;
         return true;
     }

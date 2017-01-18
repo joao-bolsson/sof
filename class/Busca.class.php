@@ -22,7 +22,7 @@ class Busca extends Conexao {
         parent::__construct();
         $this->obj_Util = new Util();
     }
-    
+
     public function getInfoContrato(int $id_pedido) {
         if (is_null($this->mysqli)) {
             $this->mysqli = parent::getConexao();
@@ -1597,6 +1597,24 @@ class Busca extends Conexao {
     }
 
     /**
+     * @param int $id_pedido Id do pedido
+     * @return string Data do cadastro do empenho
+     */
+    private function verDataEmpenho(int $id_pedido): string {
+        if (is_null($this->mysqli)) {
+            $this->mysqli = parent::getConexao();
+        }
+        $query = $this->mysqli->query("SELECT DATE_FORMAT(pedido_empenho.data, '%d/%m/%Y') AS data FROM pedido_empenho WHERE pedido_empenho.id_pedido = {$id_pedido} LIMIT 1;");
+        $this->mysqli = NULL;
+
+        if ($query->num_rows < 1) {
+            return '';
+        }
+        $obj = $query->fetch_object();
+        return $obj->data;
+    }
+
+    /**
      * Função para retornar as solicitações para o SOF.
      *
      * @return string
@@ -1629,6 +1647,8 @@ class Busca extends Conexao {
             $btnVerEmpenho = Busca::verEmpenho($pedido->id);
             if ($btnVerEmpenho == 'EMPENHO SIAFI PENDENTE') {
                 $btnVerEmpenho = '';
+            } else {
+                $btnAnalisar .= "<a class=\"modal-close\" href=\"javascript:cadEmpenho(" . $pedido->id . ", '" . Busca::verEmpenho($pedido->id) . "', '" . Busca::verDataEmpenho($pedido->id) . "');\" title=\"Cadastrar Empenho\"><span class=\"icon\">payment<span></a>";
             }
             $pedido->valor = number_format($pedido->valor, 3, ',', '.');
             $linha = "
