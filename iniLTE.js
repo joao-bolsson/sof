@@ -31,6 +31,15 @@ $(function () {
                 changeReport(this);
             });
         }
+
+        // radios dos detalhes do pedido
+        element = document.getElementById('st' + i);
+        if (element !== null) {
+            $('#st' + i).iCheck({
+                checkboxClass: 'icheckbox_minimal-blue',
+                radioClass: 'iradio_minimal-blue'
+            });
+        }
     }
 
 
@@ -274,6 +283,42 @@ function avisoSnack(aviso, corpo) {
 }
 
 function iniDataTable(tabela) {
+    if (tabela === '#tableItensPedido') {
+        $(tabela).DataTable({
+            "destroy": true,
+            "paging": true,
+            "lengthChange": true,
+            "searching": true,
+            "ordering": true,
+            "info": true,
+            "scrollX": true,
+            language: {
+                "decimal": "",
+                "emptyTable": "Nenhum dado na tabela",
+                "info": "_MAX_ resultados encontrados",
+                "infoEmpty": "",
+                "infoFiltered": "",
+                "infoPostFix": "",
+                "thousands": ",",
+                "lengthMenu": "Monstrando _MENU_ entradas",
+                "loadingRecords": "Carregando...",
+                "processing": "Processando...",
+                "search": "Pesquisar:",
+                "zeroRecords": "Nenhum resultado encontrado",
+                "paginate": {
+                    "first": "Primeiro",
+                    "last": "Último",
+                    "next": "Próximo",
+                    "previous": "Anterior"
+                },
+                "aria": {
+                    "sortAscending": ": activate to sort column ascending",
+                    "sortDescending": ": activate to sort column descending"
+                }
+            }
+        });
+        return;
+    }
     $(tabela).DataTable({
         "destroy": true,
         "paging": true,
@@ -1283,7 +1328,7 @@ function print() {
 }
 
 function analisarPedido(id_pedido, id_setor) {
-    $('a').blur();
+    $('button').blur();
     document.getElementById('form').value = 'gerenciaPedido';
     document.getElementById('id_setor').value = id_setor;
     $('#tableSolicitacoes tr').css('background-color', '');
@@ -1304,23 +1349,22 @@ function analisarPedido(id_pedido, id_setor) {
         //prioridade
         document.getElementById('prioridade').value = obj.prioridade;
         //status
-        document.getElementById('st' + obj.status).checked = true;
+        $('#st' + obj.status).iCheck('check');
         if (obj.status == 2) {
             // pedido em analise deve desabilitar certas opcoes de status
             for (var i = 5; i <= 10; i++) {
-                document.getElementById('st' + i).disabled = true;
+                $('#st' + i).iCheck('disable');
             }
         } else if (obj.status == 7) {
             for (var i = 1; i <= 5; i++) {
-                document.getElementById('st' + i).disabled = true;
+                $('#st' + i).iCheck('disable');
             }
         } else if (obj.status == 5) {
             for (var i = 1; i <= 4; i++) {
-                document.getElementById('st' + i).disabled = true;
+                $('#st' + i).iCheck('disable');
             }
         }
         //obs
-        $('#divObs').addClass('control-highlight');
         document.getElementById('obs').value = obj.obs;
     });
 
@@ -1329,15 +1373,16 @@ function analisarPedido(id_pedido, id_setor) {
     document.getElementById("detPedId").innerHTML = id_pedido;
     document.getElementById('tableItensPedido').style.display = 'block';
     getNomeSetor(id_setor);
-    $.post('../php/busca.php', {
+    $.post('../php/buscaLTE.php', {
         admin: 1,
         form: 'analisaPedido',
         id_pedido: id_pedido
     }, function (resposta) {
-        $('#tableItensPedido').DataTable().destroy();
+        if (document.getElementById("conteudoPedido").innerHTML.length > 0) {
+            $('#tableItensPedido').DataTable().destroy();
+        }
         document.getElementById("conteudoPedido").innerHTML = resposta;
         iniDataTable('#tableItensPedido');
-        avisoSnack('Busca Realizada com Sucesso !', 'body');
     });
 }
 
@@ -1437,7 +1482,7 @@ function cancelaItem(id_item) {
     var cancelado = document.getElementById("item_cancelado" + id_item).value;
     // SE O ITEM JÁ ESTÁ CANCELADO, ENTÃO DESCANCELAR
     if (cancelado == "1") {
-        icone.innerHTML = "cancel";
+        $('#icon-cancela-item' + id_item).removeClass('check').addClass('close');
         $("#icon-cancela-item" + id_item).removeClass('text-green').addClass('text-red');
         document.getElementById("item_cancelado" + id_item).value = 0;
         document.getElementById("row_item" + id_item).style.backgroundColor = "";
@@ -1445,7 +1490,7 @@ function cancelaItem(id_item) {
         // AVISA O QUE ACONTECERÁ SE O ITEM FOR REMOVIDO
         var cancel = confirm("O item de id = " + id_item + " será desativado no Banco de Dados ao final da análise do pedido atual, e portanto, os setores não poderão mais solicitá-lo. Deseja prosseguir?");
         if (cancel) {
-            icone.innerHTML = "check_circle";
+            $('#icon-cancela-item' + id_item).removeClass('close').addClass('check');
             $("#icon-cancela-item" + id_item).removeClass('text-red').addClass('text-green');
             document.getElementById("item_cancelado" + id_item).value = 1;
             document.getElementById("row_item" + id_item).style.backgroundColor = "#ffe6e6";

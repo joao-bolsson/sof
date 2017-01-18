@@ -824,10 +824,10 @@ class BuscaLTE extends Conexao {
             }
             $retorno .= "
                 <td>
-                    <div class=\"radiobtn radiobtn-adv\">
-                        <label for=\"st" . $status->id . "\">
-                            <input type=\"radio\" name=\"fase\" required id=\"st" . $status->id . "\" class=\"access-hide\" value=\"" . $status->id . "\">" . $status->nome . "
-                            <span class=\"radiobtn-circle\"></span><span class=\"radiobtn-circle-check\"></span>
+                    <div class=\"form-group\">
+                        <label>
+                            <input id=\"st{$status->id}\" type=\"radio\" name=\"relatorio\" class=\"minimal\" value=\"{$status->id}\"/>
+                           " . $status->nome . "
                         </label>
                     </div>
                 </td>";
@@ -1717,11 +1717,14 @@ class BuscaLTE extends Conexao {
             $retorno .= "
                 <tr id=\"row_item" . $item->id_itens . "\">
                     <td>
-                        <a class=\"modal-close\" href=\"javascript:cancelaItem(" . $item->id_itens . ");\" title=\"Item Cancelado\"><span id=\"icon-cancela-item" . $item->id_itens . "\" class=\"icon text-red\">cancel<span>
-                        </a>
-                        <a class=\"modal-close\" href=\"javascript:editaItem(" . $item->id_itens . ");\" title=\"Editar\"><span class=\"icon\">edit<span>
-                        </a>
-                        <a class=\"modal-close\" href=\"javascript:viewCompl('" . $item->complemento_item . "');\"  title=\"Ver Complemento do Item\"><span class=\"icon\">assignment<span></a>
+                        <div class=\"btn-group\">
+                            <button class=\"btn btn-default\" onclick=\"cancelaItem(" . $item->id_itens . ");\" title=\"Item Cancelado\"><i id=\"icon-cancela-item" . $item->id_itens . "\" class=\"fa fa-close\"></i>
+                            </button>
+                            <button class=\"btn btn-default\" onclick=\"editaItem(" . $item->id_itens . ");\" title=\"Editar\"><i class=\"fa fa-pencil\"></i>
+                            </button>
+                            <button class=\"btn btn-default\" onclick=\"viewCompl('" . $item->complemento_item . "');\"  title=\"Ver Complemento do Item\"><i class=\"fa fa-file-text\"></i>
+                            </button>
+                        </div>
                     </td>
                     <td>" . $item->cod_despesa . "</td>
                     <td>" . $item->descr_despesa . "</td>
