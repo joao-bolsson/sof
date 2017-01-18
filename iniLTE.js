@@ -107,18 +107,12 @@ function cadEmpenho(id_pedido, empenho, data) {
     document.getElementById('empenho').value = '';
     document.getElementById('dataEmp').value = '';
 
-    $('#divEmp').removeClass('control-highlight');
-    $('#divEmpData').removeClass('control-highlight');
-
     $('#cadEmpenho').modal();
-    $('#div-lb-high').addClass('control-highlight');
     document.getElementById('id_pedido_emp').value = id_pedido;
     if (empenho.length > 0) {
-        $('#divEmp').addClass('control-highlight');
         document.getElementById('empenho').value = empenho;
     }
     if (data.length > 0) {
-        $('#divEmpData').addClass('control-highlight');
         document.getElementById('dataEmp').value = data;
     }
 }

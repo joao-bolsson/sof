@@ -515,6 +515,35 @@ $count = $obj_Busca->getCountSolic();
                 </div>
             </div>
             <?php if ($permissao->pedidos): ?>
+                <div aria-hidden="true" class="modal fade" id="cadEmpenho" role="dialog" tabindex="-1">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                <h4 class="modal-title">Cadastrar Empenho</h4>
+                            </div>
+                            <form action="javascript:enviaEmpenho();" method="POST">
+                                <div class="modal-body">
+                                    <div class="form-group">
+                                        <label>Pedido</label>
+                                        <input class="form-control" id="id_pedido_emp" name="id_pedido_emp" type="number" required disabled>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Empenho</label>
+                                        <input class="form-control" id="empenho" name="empenho" required />
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Data</label>
+                                        <input class="form-control date" id="dataEmp" name="dataEmp" required />
+                                    </div>
+                                </div>
+                                <div class="modal-footer">
+                                    <button class="btn btn-primary" type="submit" style="width: 100%;"><i class="fa fa-send"></i>Cadastrar</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
                 <div aria-hidden="true" class="modal fade" id="cadFontes" role="dialog" tabindex="-1">
                     <div class="modal-dialog">
                         <div class="modal-content">
