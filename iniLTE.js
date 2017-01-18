@@ -106,10 +106,10 @@ function cadEmpenho(id_pedido, empenho, data) {
     document.getElementById('id_pedido_emp').value = '';
     document.getElementById('empenho').value = '';
     document.getElementById('dataEmp').value = '';
-    
+
     $('#divEmp').removeClass('control-highlight');
     $('#divEmpData').removeClass('control-highlight');
-    
+
     $('#cadEmpenho').modal();
     $('#div-lb-high').addClass('control-highlight');
     document.getElementById('id_pedido_emp').value = id_pedido;
@@ -783,7 +783,7 @@ function changeReport(element) {
         form: 'listRelatorios',
         status: st
     }).done(function (resposta) {
-        if ($.fn.DataTable.isDataTable('#tableListPedidos')) {
+        if (document.getElementById('tbodyListRelatorios').innerHTML.length > 0) {
             $('#tableListRelatorios').DataTable().destroy();
         }
         $('#tbodyListRelatorios').html(resposta);
