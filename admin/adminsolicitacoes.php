@@ -3,13 +3,16 @@ ini_set('display_erros', true);
 error_reporting(E_ALL);
 
 session_start();
-if (!isset($_SESSION["id_setor"]) || $_SESSION["id_setor"] != 2) {
-    header("Location: ../");
-}
-include_once '../class/Busca.class.php';
-//instanciando classe de busca para popular o select de estados
-$obj_Busca = new Busca();
-$permissao = $obj_Busca->getPermissoes($_SESSION["id"]);
+header("Location: ../lte/");
+
+
+//if (!isset($_SESSION["id_setor"]) || $_SESSION["id_setor"] != 2) {
+//    header("Location: ../");
+//}
+//include_once '../class/Busca.class.php';
+////instanciando classe de busca para popular o select de estados
+//$obj_Busca = new Busca();
+//$permissao = $obj_Busca->getPermissoes($_SESSION["id"]);
 ?>
 <!DOCTYPE html>
 <html lang="pt">

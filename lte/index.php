@@ -70,7 +70,7 @@ $count = $obj_Busca->getCountSolic();
                                 </a>
                             </li>
                             <li>
-                                <a href="#"><i class="fa fa-power-off"></i></a>
+                                <a href="../admin/sair.php"><i class="fa fa-power-off"></i></a>
                             </li>
                         </ul>
                     </div>
