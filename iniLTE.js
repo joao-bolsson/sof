@@ -414,7 +414,6 @@ function resetSenha() {
 }
 
 function altInfoUser() {
-    document.getElementById("loader").style.display = 'inline-block';
     var nome = document.getElementById('nameUser').value;
     var email = document.getElementById('emailUser').value;
     var senhaAtual = document.getElementById('senhaAtualUser').value;
@@ -430,7 +429,7 @@ function altInfoUser() {
         if (resposta) {
             $('#myInfos').modal('hide');
             document.getElementById('altInfo').reset();
-            avisoSnack('Suas informações foram salvas com sucesso!', 'body');
+            alert('Suas informações foram salvas com sucesso!');
             document.getElementById('nameUser').value = nome;
             document.getElementById('emailUser').value = email;
             document.getElementById('userLogado').innerHTML = nome;
@@ -438,7 +437,6 @@ function altInfoUser() {
             alert("Ocorreu um erro no servidor. Contate o administrador.");
             location.reload();
         }
-        document.getElementById("loader").style.display = 'none';
     });
 }
 
