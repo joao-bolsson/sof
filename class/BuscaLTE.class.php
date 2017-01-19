@@ -2119,12 +2119,12 @@ class BuscaLTE extends Conexao {
         $sql = "SELECT DISTINCT itens.num_processo FROM itens;";
         $onclick = "pesquisarProcesso";
         $title = "Pesquisar Processo";
-        $icon = "search";
+        $icon = "fa-search";
         if ($tela == "recepcao") {
             $sql = "SELECT DISTINCT itens.num_processo FROM itens WHERE itens.num_processo NOT IN (SELECT DISTINCT processos.num_processo FROM processos);";
             $onclick = "addProcesso";
             $title = "Adicionar Processo";
-            $icon = "add";
+            $icon = "fa-plus";
         }
         if (is_null($this->mysqli)) {
             $this->mysqli = parent::getConexao();
@@ -2136,7 +2136,7 @@ class BuscaLTE extends Conexao {
                 <tr>
                     <td>" . $processo->num_processo . "</td>
                     <td>
-                        <button type=\"button\" title=\"" . $title . "\" onclick=\"" . $onclick . "('" . $processo->num_processo . "', 0)\" style=\"text-transform: none !important;font-weight: bold;\" class=\"btn btn-default btn-sm\"><span class=\"icon\">" . $icon . "</span></button>
+                        <button type=\"button\" title=\"" . $title . "\" onclick=\"" . $onclick . "('" . $processo->num_processo . "', 0)\" class=\"btn btn-primary\"><i class=\"fa " . $icon . "\"></i> Adicionar</button>
                     </td>
                 </tr>";
         }

@@ -91,36 +91,40 @@ $count = $obj_Busca->getCountSolic();
                     </div>
                     <!-- sidebar menu: : style can be found in sidebar.less -->
                     <ul class="sidebar-menu">
-                        <li>
-                            <a href="javascript:mostraSolicAdiant();">
-                                <i class="fa fa-credit-card"></i> <span>Solic Adiantamento</span>
-                                <?php if ($count->solic_adi > 0): ?>
-                                    <span class="pull-right-container">
-                                        <small class="label pull-right bg-blue"><?= $count->solic_adi; ?></small>
-                                    </span>
-                                <?php endif; ?>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="javascript:mostraSolicAltPed();">
-                                <i class="fa fa-cog"></i> <span>Solic Alt Pedidos</span>
-                                <?php if ($count->solic_alt > 0): ?>
-                                    <span class="pull-right-container">
-                                        <small class="label pull-right bg-red"><?= $count->solic_alt; ?></small>
-                                    </span>
-                                <?php endif; ?>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="#">
-                                <i class="fa fa-tags"></i> <span>Pedidos</span>
-                                <?php if ($count->solic_ped > 0): ?>
-                                    <span class="pull-right-container">
-                                        <small class="label pull-right bg-blue"><?= $count->solic_ped; ?></small>
-                                    </span>
-                                <?php endif; ?>
-                            </a>
-                        </li>
+                        <?php if ($permissao->saldos): ?>
+                            <li>
+                                <a href="javascript:mostraSolicAdiant();">
+                                    <i class="fa fa-credit-card"></i> <span>Solic Adiantamento</span>
+                                    <?php if ($count->solic_adi > 0): ?>
+                                        <span class="pull-right-container">
+                                            <small class="label pull-right bg-blue"><?= $count->solic_adi; ?></small>
+                                        </span>
+                                    <?php endif; ?>
+                                </a>
+                            </li>
+                        <?php endif; ?>
+                        <?php if ($permissao->pedidos): ?>
+                            <li>
+                                <a href="javascript:mostraSolicAltPed();">
+                                    <i class="fa fa-cog"></i> <span>Solic Alt Pedidos</span>
+                                    <?php if ($count->solic_alt > 0): ?>
+                                        <span class="pull-right-container">
+                                            <small class="label pull-right bg-red"><?= $count->solic_alt; ?></small>
+                                        </span>
+                                    <?php endif; ?>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#">
+                                    <i class="fa fa-tags"></i> <span>Pedidos</span>
+                                    <?php if ($count->solic_ped > 0): ?>
+                                        <span class="pull-right-container">
+                                            <small class="label pull-right bg-blue"><?= $count->solic_ped; ?></small>
+                                        </span>
+                                    <?php endif; ?>
+                                </a>
+                            </li>
+                        <?php endif; ?>
                         <?php if ($_SESSION['login'] == 'joao' || $_SESSION['login'] == 'iara'): ?>
                             <li>
                                 <a href="javascript:abreModal('#altUser');">
@@ -188,7 +192,7 @@ $count = $obj_Busca->getCountSolic();
                         <?php endif; ?>
                         <?php if ($permissao->recepcao): ?>
                             <li>
-                                <a href="#">
+                                <a href="javascript:listProcessos('admin');">
                                     <i class="fa fa-archive"></i> <span>Processos</span>
                                 </a>
                             </li>
@@ -456,6 +460,29 @@ $count = $obj_Busca->getCountSolic();
                 <strong>Copyright © 2016-2017 <a href="https://github.com/joao-bolsson">João Bolsson</a>.</strong> All rights
                 reserved.
             </footer>
+            <?php if ($permissao->recepcao): ?>
+                <div aria-hidden="true" class="modal fade" id="listProcessos" role="dialog" tabindex="-1">
+                    <div class="modal-dialog" style="width: 60%;">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                <h4 class="modal-title">Processos Atendidos pelo SOF</h4>
+                            </div>
+                            <div class="modal-body">
+                                <table id="tableListProcessos" class="table table-bordered table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th>Número do Processo</th>
+                                            <th></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="tbodyListProcessos"></tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            <?php endif; ?>
             <div id="viewCompl" class="modal fade" tabindex="-1" role="dialog" data-backdrop="static">
                 <div class="modal-dialog" role="document">
                     <div class="modal-content">

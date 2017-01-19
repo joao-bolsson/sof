@@ -1,6 +1,10 @@
 $(function () {
 
-    tableItens = document.getElementById('divTableItens').innerHTML;
+    tableItens = '';
+    var ta = document.getElementById('divTableItens');
+    if (ta !== null) {
+        tableItens = ta.innerHTML;
+    }
 
     var str = location.pathname;
     if (str.endsWith("view/solicitacoes.php")) {
@@ -596,6 +600,9 @@ function putNumberFormat(value) {
 
 function getSaldoOri() {
     var select = document.getElementById('setorOri');
+    if (select === null) {
+        return;
+    }
     var setorOri = select.options[select.selectedIndex].value;
     $.post('../php/busca.php', {
         admin: 1,
@@ -608,11 +615,15 @@ function getSaldoOri() {
 }
 
 function iniSolicitacoes() {
+    var element = document.getElementById('conteudoSolicitacoes');
+    if (element === null) {
+        return;
+    }
     $.post('../php/buscaLTE.php', {
         admin: 1,
         form: 'tableItensPedido'
     }, function (resposta) {
-        if (document.getElementById('conteudoSolicitacoes').innerHTML.length > 0) {
+        if (element.innerHTML.length > 0) {
             $('#tableSolicitacoes').DataTable().destroy();
         }
         document.getElementById('conteudoSolicitacoes').innerHTML = resposta;
@@ -781,7 +792,7 @@ function listProcessos(permissao) {
                 $('#tbodyListProcessos').html(resposta);
             });
         } else if (permissao == 'admin') {
-            $.post('../php/busca.php', {
+            $.post('../php/buscaLTE.php', {
                 admin: 1,
                 form: 'listProcessos'
             }).done(function (resposta) {
