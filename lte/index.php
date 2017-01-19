@@ -197,7 +197,7 @@ $count = $obj_Busca->getCountSolic();
                                 </a>
                             </li>
                             <li>
-                                <a href="#">
+                                <a href="javascript:abreModal('#newTypeProcess');">
                                     <i class="fa fa-plus"></i> <span>Novo Tipo</span>
                                 </a>
                             </li>
@@ -514,6 +514,29 @@ $count = $obj_Busca->getCountSolic();
                                     <tbody id="tbodyListProcessos"></tbody>
                                 </table>
                             </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal fade" id="newTypeProcess" role="dialog">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                <h4 class="modal-title">Novo Tipo de Processo</h4>
+                            </div>
+                            <form action="../php/geral.php" method="post">
+                                <input type="hidden" name="admin" value="1"/>
+                                <input type="hidden" name="form" value="newTypeProcess"/>
+                                <div class="modal-body">
+                                    <div class="form-group">
+                                        <label>Nome</label>
+                                        <input class="form-control" id="newType" name="newType" type="text" required>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button class="btn btn-primary" type="submit" style="width: 100%;"><i class="fa fa-refresh"></i>&nbsp;Cadastrar</button>
+                                    </div>
+                                </div>
+                            </form>
                         </div>
                     </div>
                 </div>

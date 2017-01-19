@@ -173,7 +173,7 @@ if ($obj_Busca->isActive()) {
             case 'newTypeProcess':
                 $tipo = filter_input(INPUT_POST, 'newType');
                 if (empty($tipo)) {
-                    header("Location: ../admin/adminsolicitacoes.php");
+                    header("Location: ../lte/");
                     break;
                 }
                 $cadastra = $obj_Geral->newTypeProcess($tipo);
@@ -183,7 +183,7 @@ if ($obj_Busca->isActive()) {
                     // destroy the session
                     session_destroy();
                 }
-                header("Location: ../admin/adminsolicitacoes.php");
+                header("Location: ../lte/");
                 break;
             // comentário
 

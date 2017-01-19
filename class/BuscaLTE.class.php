@@ -765,7 +765,6 @@ class BuscaLTE extends Conexao {
         $query = $this->mysqli->query("SELECT id, nome FROM processos_tipo;") or exit("Erro ao buscar os tipos de processo.");
         $this->mysqli = NULL;
         while ($tipo = $query->fetch_object()) {
-            $tipo->nome = utf8_encode($tipo->nome);
             $retorno .= "<option value=\"" . $tipo->id . "\">" . $tipo->nome . "</option>";
         }
         return $retorno;
