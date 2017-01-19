@@ -315,7 +315,8 @@ if ($obj_Busca->isActive()) {
                 $analisado = $obj_Geral->pedidoAnalisado($id_pedido, $fase, $prioridade, $id_item, $item_cancelado, $qtd_solicitada, $qt_saldo, $qt_utilizado, $vl_saldo, $vl_utilizado, $valor_item, $saldo_setor, $total_pedido, $comentario);
 
                 if ($analisado) {
-                    header("Location: ../admin/adminsolicitacoes.php");
+                    echo "ola mundo";
+//                    header("Location: ../admin/adminsolicitacoes.php");
                 } else {
                     echo "Ocorreu algum erro no servidor. Contate o administrador.";
                 }

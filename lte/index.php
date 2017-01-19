@@ -64,7 +64,7 @@ $count = $obj_Busca->getCountSolic();
                         <ul class="nav navbar-nav">
                             <!-- User Account: style can be found in dropdown.less -->
                             <li class="dropdown user user-menu">
-                                <a href="javascript:abreModal('#myInfos');" class="dropdown-toggle" data-toggle="dropdown">
+                                <a href="javascript:abreModal('#myInfos');" class="dropdown-toggle">
                                     <img src="dist/img/user.png" class="user-image" alt="User Image">
                                     <span id="userLogado" class="hidden-xs"><?= $_SESSION["nome"] ?></span>
                                 </a>

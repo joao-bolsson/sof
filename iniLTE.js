@@ -1459,7 +1459,7 @@ function cancelaItem(id_item) {
     var cancelado = document.getElementById("item_cancelado" + id_item).value;
     // SE O ITEM JÁ ESTÁ CANCELADO, ENTÃO DESCANCELAR
     if (cancelado == "1") {
-        $('#icon-cancela-item' + id_item).removeClass('check').addClass('close');
+        $('#icon-cancela-item' + id_item).removeClass('fa-check').addClass('fa-close');
         $("#icon-cancela-item" + id_item).removeClass('text-green').addClass('text-red');
         document.getElementById("item_cancelado" + id_item).value = 0;
         document.getElementById("row_item" + id_item).style.backgroundColor = "";
@@ -1467,7 +1467,7 @@ function cancelaItem(id_item) {
 // AVISA O QUE ACONTECERÁ SE O ITEM FOR REMOVIDO
         var cancel = confirm("O item de id = " + id_item + " será desativado no Banco de Dados ao final da análise do pedido atual, e portanto, os setores não poderão mais solicitá-lo. Deseja prosseguir?");
         if (cancel) {
-            $('#icon-cancela-item' + id_item).removeClass('close').addClass('check');
+            $('#icon-cancela-item' + id_item).removeClass('fa-close').addClass('fa-check');
             $("#icon-cancela-item" + id_item).removeClass('text-red').addClass('text-green');
             document.getElementById("item_cancelado" + id_item).value = 1;
             document.getElementById("row_item" + id_item).style.backgroundColor = "#ffe6e6";

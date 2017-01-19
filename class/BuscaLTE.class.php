@@ -222,7 +222,7 @@ class BuscaLTE extends Conexao {
                 // por ordem descrecente do término do processo
                 // botão para os processos presentes no pedido e suas datas
                 $btnVerProcesso = "
-                    <button class=\"btn btn-primary\" onclick=\"verProcessos(" . $pedido->id . ");\" title=\"Ver Processos\"><i class=\"fa fa-eye\"></i></button>";
+                    <button type=\"button\" class=\"btn btn-primary\" onclick=\"verProcessos(" . $pedido->id . ");\" title=\"Ver Processos\"><i class=\"fa fa-eye\"></i></button>";
             }
             $pedido->valor = number_format($pedido->valor, 3, ',', '.');
             $retorno .= "
@@ -235,7 +235,7 @@ class BuscaLTE extends Conexao {
                     <td>" . $empenho . "</td>
                     <td>R$ " . $pedido->valor . "</td>
                     <td>
-                        <button class=\"btn btn-primary\" onclick=\"imprimir(" . $pedido->id . ");\" title=\"Imprimir\"><i class=\"fa fa-print\"></i></button>
+                        <button type=\"button\" class=\"btn btn-primary\" onclick=\"imprimir(" . $pedido->id . ");\" title=\"Imprimir\"><i class=\"fa fa-print\"></i></button>
                             " . $btnVerProcesso . "
                     </td>
                 </tr>";
@@ -987,7 +987,7 @@ class BuscaLTE extends Conexao {
             $retorno .= "<tr><td>";
             $retorno .= html_entity_decode($postagem->titulo);
 
-            $retorno .= "<button class=\"btn btn-flat btn-sm\" style=\"text-transform: lowercase !important;font-weight: bold;\" onclick=\"ver_noticia(" . $postagem->id . ", '" . $tabela . "', 0);\">...ver mais</button></td>";
+            $retorno .= "<button type=\"button\" class=\"btn btn-flat btn-sm\" style=\"text-transform: lowercase !important;font-weight: bold;\" onclick=\"ver_noticia(" . $postagem->id . ", '" . $tabela . "', 0);\">...ver mais</button></td>";
             $retorno .= "<td><span style=\"font-weight: bold;\" class=\"pull-right\">" . $postagem->data . "</span></td></tr>";
         }
         return $retorno;
@@ -1102,7 +1102,7 @@ class BuscaLTE extends Conexao {
                 $titulo = html_entity_decode($postagem->titulo);
                 $retorno .= "
                                         <tr>
-                                            <td>" . $titulo . "<button class=\"btn btn-flat btn-sm\" style=\"text-transform: lowercase !important;font-weight: bold;\" onclick=\"ver_noticia(" . $postagem->id . ", '" . $postagem->tabela . "', 1);\">...ver mais</button></td>
+                                            <td>" . $titulo . "<button type=\"button\" class=\"btn btn-flat btn-sm\" style=\"text-transform: lowercase !important;font-weight: bold;\" onclick=\"ver_noticia(" . $postagem->id . ", '" . $postagem->tabela . "', 1);\">...ver mais</button></td>'
                                             <td><span class=\"pull-right\">" . $postagem->data . "</span></td>
                                         </tr>";
             }
@@ -1571,8 +1571,8 @@ class BuscaLTE extends Conexao {
                     <td>" . $postagem->data . "</td>
                     <td>" . $postagem->titulo . "</td>
                     <td>
-                        <button class=\"btn btn-default btn-sm\" style=\"text-transform: none !important;font-weight: bold;\" onclick=\"editaNoticia(" . $postagem->id . ", " . $postagem->tabela . ", '" . $postagem->data . "')\" title=\"Editar\"><span class=\"icon\">create</span></button>
-                        <button class=\"btn btn-default btn-sm\" style=\"text-transform: none !important;font-weight: bold;\" onclick=\"excluirNoticia(" . $postagem->id . ");\" title=\"Excluir\"><span class=\"icon\">delete</span></button>
+                        <button type=\"button\" class=\"btn btn-default btn-sm\" style=\"text-transform: none !important;font-weight: bold;\" onclick=\"editaNoticia(" . $postagem->id . ", " . $postagem->tabela . ", '" . $postagem->data . "')\" title=\"Editar\"><span class=\"icon\">create</span></button>
+                        <button type=\"button\" class=\"btn btn-default btn-sm\" style=\"text-transform: none !important;font-weight: bold;\" onclick=\"excluirNoticia(" . $postagem->id . ");\" title=\"Excluir\"><span class=\"icon\">delete</span></button>
                     </td>
                 </tr>";
         }
@@ -1718,11 +1718,11 @@ class BuscaLTE extends Conexao {
                 <tr id=\"row_item" . $item->id_itens . "\">
                     <td>
                         <div class=\"btn-group\">
-                            <button class=\"btn btn-default\" onclick=\"cancelaItem(" . $item->id_itens . ");\" title=\"Item Cancelado\"><i id=\"icon-cancela-item" . $item->id_itens . "\" class=\"fa fa-close\"></i>
+                            <button type=\"button\" class=\"btn btn-default\" onclick=\"cancelaItem(" . $item->id_itens . ");\" title=\"Item Cancelado\"><i id=\"icon-cancela-item" . $item->id_itens . "\" class=\"text-red fa fa-close\"></i>
                             </button>
-                            <button class=\"btn btn-default\" onclick=\"editaItem(" . $item->id_itens . ");\" title=\"Editar\"><i class=\"fa fa-pencil\"></i>
+                            <button type=\"button\" class=\"btn btn-default\" onclick=\"editaItem(" . $item->id_itens . ");\" title=\"Editar\"><i class=\"fa fa-pencil\"></i>
                             </button>
-                            <button class=\"btn btn-default\" onclick=\"viewCompl('" . $item->complemento_item . "');\"  title=\"Ver Complemento do Item\"><i class=\"fa fa-file-text\"></i>
+                            <button type=\"button\" class=\"btn btn-default\" onclick=\"viewCompl('" . $item->complemento_item . "');\"  title=\"Ver Complemento do Item\"><i class=\"fa fa-file-text\"></i>
                             </button>
                         </div>
                     </td>
@@ -1978,9 +1978,9 @@ class BuscaLTE extends Conexao {
                     <td>" . $rascunho->data_pedido . "</td>
                     <td>R$ " . $rascunho->valor . "</td>
                     <td>
-                        <button class=\"btn btn-default btn-sm\" style=\"text-transform: none !important;font-weight: bold;\" onclick=\"editaPedido(" . $rascunho->id . ");\" title=\"Editar\"><span class=\"icon\">create</span></button>
-                        <button class=\"btn btn-default btn-sm\" style=\"text-transform: none !important;font-weight: bold;\" onclick=\"imprimir(" . $rascunho->id . ");\" title=\"Imprimir\"><span class=\"icon\">print</span></button>
-                        <button class=\"btn btn-default btn-sm\" style=\"text-transform: none !important;font-weight: bold;\" onclick=\"deletePedido(" . $rascunho->id . ");\" title=\"Excluir\"><span class=\"icon\">delete</span></button>
+                        <button type=\"button\" class=\"btn btn-default btn-sm\" style=\"text-transform: none !important;font-weight: bold;\" onclick=\"editaPedido(" . $rascunho->id . ");\" title=\"Editar\"><span class=\"icon\">create</span></button>
+                        <button type=\"button\" class=\"btn btn-default btn-sm\" style=\"text-transform: none !important;font-weight: bold;\" onclick=\"imprimir(" . $rascunho->id . ");\" title=\"Imprimir\"><span class=\"icon\">print</span></button>
+                        <button type=\"button\" class=\"btn btn-default btn-sm\" style=\"text-transform: none !important;font-weight: bold;\" onclick=\"deletePedido(" . $rascunho->id . ");\" title=\"Excluir\"><span class=\"icon\">delete</span></button>
                     </td>
                 </tr>";
         }
@@ -2088,7 +2088,7 @@ class BuscaLTE extends Conexao {
             $pedido->valor = number_format($pedido->valor, 3, ',', '.');
             $btnSolicAlt = "";
             if ($pedido->status == 'Em Analise' || $pedido->status == 'Aguarda Orcamento') {
-                $btnSolicAlt = "<button class=\"btn btn-default btn-sm\" style=\"text-transform: none !important;font-weight: bold;\" onclick=\"solicAltPed(" . $pedido->id . ");\" title=\"Solicitar Alteração\"><span class=\"icon\">build</span></button>";
+                $btnSolicAlt = "<button type=\"button\" class=\"btn btn-default btn-sm\" style=\"text-transform: none !important;font-weight: bold;\" onclick=\"solicAltPed(" . $pedido->id . ");\" title=\"Solicitar Alteração\"><span class=\"icon\">build</span></button>";
             }
             $retorno .= "
                 <tr>
@@ -2101,7 +2101,7 @@ class BuscaLTE extends Conexao {
                     <td>R$ " . $pedido->valor . "</td>
                     <td>
                         " . $btnSolicAlt . "
-                        <button class=\"btn btn-default btn-sm\" style=\"text-transform: none !important;font-weight: bold;\" onclick=\"imprimir(" . $pedido->id . ");\" title=\"Imprimir\"><span class=\"icon\">print</span></button>
+                        <button type=\"button\" class=\"btn btn-default btn-sm\" style=\"text-transform: none !important;font-weight: bold;\" onclick=\"imprimir(" . $pedido->id . ");\" title=\"Imprimir\"><span class=\"icon\">print</span></button>
                     </td>
                 </tr>";
         }
@@ -2136,7 +2136,7 @@ class BuscaLTE extends Conexao {
                 <tr>
                     <td>" . $processo->num_processo . "</td>
                     <td>
-                        <button title=\"" . $title . "\" onclick=\"" . $onclick . "('" . $processo->num_processo . "', 0)\" style=\"text-transform: none !important;font-weight: bold;\" class=\"btn btn-default btn-sm\"><span class=\"icon\">" . $icon . "</span></button>
+                        <button type=\"button\" title=\"" . $title . "\" onclick=\"" . $onclick . "('" . $processo->num_processo . "', 0)\" style=\"text-transform: none !important;font-weight: bold;\" class=\"btn btn-default btn-sm\"><span class=\"icon\">" . $icon . "</span></button>
                     </td>
                 </tr>";
         }
