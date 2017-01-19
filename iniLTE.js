@@ -1351,8 +1351,8 @@ function print() {
         admin: 1,
         form: 'relatorioProcessos',
         tipo: tipo
-    }, function (resposta) {
-        window.open("printRel.php");
+    }, function () {
+        window.open("../admin/printRel.php");
     });
 }
 

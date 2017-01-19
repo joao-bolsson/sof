@@ -202,7 +202,7 @@ $count = $obj_Busca->getCountSolic();
                                 </a>
                             </li>
                             <li>
-                                <a href="#">
+                                <a href="javascript:abreModal('#relatorio');">
                                     <i class="fa fa-pie-chart"></i> <span>Relatório</span>
                                 </a>
                             </li>
@@ -496,6 +496,30 @@ $count = $obj_Busca->getCountSolic();
                 reserved.
             </footer>
             <?php if ($permissao->recepcao): ?>
+                <div class="modal fade" id="relatorio" role="dialog">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                <h4 class="modal-title">Gerar Relatório</h4>
+                            </div>
+                            <form action="javascript:print();" method="post">
+                                <div class="modal-body">
+                                    <div class="form-group">
+                                        <label>Tipo</label>
+                                        <select id="type" class="form-control" name="type" required>
+                                            <option value="0">Todos</option>
+                                            <?= $obj_Busca->getTiposProcessos() ?>
+                                        </select>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button class="btn btn-primary" type="submit" style="width: 100%;"><i class="fa fa-print"></i>&nbsp;Gerar</button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
                 <div aria-hidden="true" class="modal fade" id="listProcessos" role="dialog" tabindex="-1">
                     <div class="modal-dialog" style="width: 60%;">
                         <div class="modal-content">
@@ -1182,6 +1206,6 @@ $count = $obj_Busca->getCountSolic();
         <script src="plugins/input-mask/jquery.inputmask.date.extensions.js"></script>
         <script src="plugins/input-mask/jquery.inputmask.extensions.js"></script>
         <!-- page script -->
-        <script type="text/javascript" src="../iniLTE.js"></script>
+        <script type="text/javascript" src="../iniLTE.min.js"></script>
     </body>
 </html>
