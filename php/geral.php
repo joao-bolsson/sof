@@ -100,7 +100,7 @@ if ($obj_Busca->isActive()) {
 
                 //send the message, check for errors
                 if ($obj_Util->mail->send()) {
-                    header("Location: ../admin/adminsolicitacoes.php");
+                    header("Location: ../lte/");
                 } else {
                     echo "Usuário e permissões cadastradas. Erro ao enviar o e-mail com a senha : " . $senha;
                 }
@@ -136,8 +136,8 @@ if ($obj_Busca->isActive()) {
                 break;
             // comment.
             case 'editItem':
-                $fields = $_POST['fields'];
-                $dados = $_POST['dados'];
+                $fields = filter_input(INPUT_POST, 'fields', FILTER_DEFAULT, FILTER_FORCE_ARRAY);
+                $dados = filter_input(INPUT_POST, 'dados', FILTER_DEFAULT, FILTER_FORCE_ARRAY);
                 $array_dados = [];
 
                 for ($i = 0; $i < count($dados); $i++) {
@@ -173,7 +173,7 @@ if ($obj_Busca->isActive()) {
             case 'newTypeProcess':
                 $tipo = filter_input(INPUT_POST, 'newType');
                 if (empty($tipo)) {
-                    header("Location: ../admin/adminsolicitacoes.php");
+                    header("Location: ../lte/");
                     break;
                 }
                 $cadastra = $obj_Geral->newTypeProcess($tipo);
@@ -183,13 +183,13 @@ if ($obj_Busca->isActive()) {
                     // destroy the session
                     session_destroy();
                 }
-                header("Location: ../admin/adminsolicitacoes.php");
+                header("Location: ../lte/");
                 break;
             // comentário
 
             case 'recepcao':
                 // array com os dados
-                $dados = $_POST["dados"];
+                $dados = filter_input(INPUT_POST, 'dados', FILTER_DEFAULT, FILTER_FORCE_ARRAY);
                 $update = $obj_Geral->updateProcesso($dados);
 
                 if ($update) {
@@ -254,7 +254,7 @@ if ($obj_Busca->isActive()) {
                 $insert = $obj_Geral->importaItens($array_sql);
                 unset($array_sql);
                 if ($insert) {
-                    header("Location: ../admin/adminsolicitacoes.php");
+                    header("Location: ../lte/");
                 } else {
                     echo "Ocorreu um erro ao importar os itens. Contate o administrador.";
                     exit;
@@ -280,7 +280,7 @@ if ($obj_Busca->isActive()) {
                 $status = filter_input(INPUT_POST, 'fase');
                 $analisado = $obj_Geral->altStatus($id_pedido, $id_setor, $comentario, $status);
                 if ($analisado) {
-                    header("Location: ../admin/adminsolicitacoes.php");
+                    header("Location: ../lte/");
                 } else {
                     echo "Ocorreu algum erro no servidor. Contate o administrador.";
                 }
@@ -288,34 +288,34 @@ if ($obj_Busca->isActive()) {
             // comentário
 
             case 'gerenciaPedido':
-                $saldo_setor = $_POST["saldo_total"];
+                $saldo_setor = filter_input(INPUT_POST, 'saldo_total');
                 //id do pedido
-                $id_pedido = $_POST["id_pedido"];
-                $total_pedido = $_POST["total_hidden"];
-                $id_item = $_POST["id_item"];
+                $id_pedido = filter_input(INPUT_POST, 'id_pedido');
+                $total_pedido = filter_input(INPUT_POST, 'total_hidden');
+                $id_item = filter_input(INPUT_POST, 'id_item', FILTER_DEFAULT, FILTER_FORCE_ARRAY);
                 // id dos itens cancelados
-                $item_cancelado = $_POST["item_cancelado"];
+                $item_cancelado = filter_input(INPUT_POST, 'item_cancelado', FILTER_DEFAULT, FILTER_FORCE_ARRAY);
 
-                $qtd_solicitada = $_POST["qtd_solicitada"];
-                $qt_saldo = $_POST["qt_saldo"];
-                $qt_utilizado = $_POST["qt_utilizado"];
-                $vl_saldo = $_POST["vl_saldo"];
-                $vl_utilizado = $_POST["vl_utilizado"];
-                $valor_item = $_POST["valor_item"];
+                $qtd_solicitada = filter_input(INPUT_POST, 'qtd_solicitada', FILTER_DEFAULT, FILTER_FORCE_ARRAY);
+                $qt_saldo = filter_input(INPUT_POST, 'qt_saldo', FILTER_DEFAULT, FILTER_FORCE_ARRAY);
+                $qt_utilizado = filter_input(INPUT_POST, 'qt_utilizado', FILTER_DEFAULT, FILTER_FORCE_ARRAY);
+                $vl_saldo = filter_input(INPUT_POST, 'vl_saldo', FILTER_DEFAULT, FILTER_FORCE_ARRAY);
+                $vl_utilizado = filter_input(INPUT_POST, 'vl_utilizado', FILTER_DEFAULT, FILTER_FORCE_ARRAY);
+                $valor_item = filter_input(INPUT_POST, 'valor_item', FILTER_DEFAULT, FILTER_FORCE_ARRAY);
 
-                $fase = $_POST["fase"];
-                $prioridade = $_POST["prioridade"];
+                $fase = filter_input(INPUT_POST, 'fase');
+                $prioridade = filter_input(INPUT_POST, 'prioridade');
                 if ($fase == 'rascunho') {
                     $prioridade = $fase;
                     $fase = 'Rascunho';
                 }
 
-                $comentario = $_POST["comentario"];
+                $comentario = filter_input(INPUT_POST, 'comentario');
 
                 $analisado = $obj_Geral->pedidoAnalisado($id_pedido, $fase, $prioridade, $id_item, $item_cancelado, $qtd_solicitada, $qt_saldo, $qt_utilizado, $vl_saldo, $vl_utilizado, $valor_item, $saldo_setor, $total_pedido, $comentario);
 
                 if ($analisado) {
-                    header("Location: ../admin/adminsolicitacoes.php");
+                    header("Location: ../lte/");
                 } else {
                     echo "Ocorreu algum erro no servidor. Contate o administrador.";
                 }
@@ -369,7 +369,7 @@ if ($obj_Busca->isActive()) {
             // comentário
 
             case 'novanoticia':
-                $data = filter_input(INPUT_POST, 'data');;
+                $data = filter_input(INPUT_POST, 'data');
                 $postagem = filter_input(INPUT_POST, 'postagem');
                 $pag = filter_input(INPUT_POST, 'pag');
                 $funcao = filter_input(INPUT_POST, 'funcao');
@@ -423,25 +423,25 @@ if ($obj_Busca->isActive()) {
         switch ($form) {
 
             case 'problema':
-                $assunto = $_POST['assunto'];
-                $descricao = $_POST['descr'];
+                $assunto = filter_input(INPUT_POST, 'assunto');
+                $descricao = filter_input(INPUT_POST, 'descr');
                 $id_setor = $_SESSION['id_setor'];
-                $pag = $_POST['pag']; // like view/solicitacoes.php
+                $pag = filter_input(INPUT_POST, 'pag'); // like view/solicitacoes.php
                 $obj_Geral->insereProblema($id_setor, $assunto, $descricao);
                 header('Location: ../' . $pag);
                 break;
 
             case 'deletePedido':
-                $id_pedido = $_POST['id_pedido'];
+                $id_pedido = filter_input(INPUT_POST, 'id_pedido');
                 echo $delete = $obj_Geral->deletePedido($id_pedido);
                 break;
             // redefinindo informações do usuário
             case 'infoUser':
                 $id_user = $_SESSION["id"];
-                $nome = $_POST["nome"];
-                $email = $_POST["email"];
-                $novaSenha = $_POST["novaSenha"];
-                $senhaAtual = $_POST["senhaAtual"];
+                $nome = filter_input(INPUT_POST, 'nome');
+                $email = filter_input(INPUT_POST, 'email');
+                $novaSenha = filter_input(INPUT_POST, 'novaSenha');
+                $senhaAtual = filter_input(INPUT_POST, 'senhaAtual');
 
                 $redefini = $obj_Geral->altInfoUser($id_user, $nome, $email, $novaSenha, $senhaAtual);
                 echo $redefini;
@@ -450,16 +450,16 @@ if ($obj_Busca->isActive()) {
             // solicitação para alterar um pedido
 
             case 'alt_pedido':
-                $id_pedido = $_POST["id_pedido"];
-                $justificativa = $_POST["justificativa"];
+                $id_pedido = filter_input(INPUT_POST, 'id_pedido');
+                $justificativa = filter_input(INPUT_POST, 'justificativa');
                 $id_setor = $_SESSION["id_setor"];
 
                 $solicita = $obj_Geral->solicAltPedido($id_pedido, $id_setor, $justificativa);
                 echo $solicita;
                 break;
             case 'adiantamento':
-                $valor = $_POST["valor_adiantamento"];
-                $justificativa = $_POST["justificativa"];
+                $valor = filter_input(INPUT_POST, 'valor_adiantamento');
+                $justificativa = filter_input(INPUT_POST, 'justificativa');
                 $id_setor = $_SESSION["id_setor"];
 
                 $envia = $obj_Geral->solicitaAdiantamento($id_setor, $valor, $justificativa);
@@ -554,13 +554,23 @@ if ($obj_Busca->isActive()) {
                 break;
         }
     } else {
-        $form = $_POST["form"];
+        $form = '';
+
+        $filter = filter_input(INPUT_POST, 'form');
+        if (!empty($filter)) {
+            $form = $filter;
+        }
+
         switch ($form) {
 
             // resetando senha
 
             case 'resetSenha':
-                $email = $_POST["email"];
+                $email = '';
+                $input = filter_input(INPUT_POST, 'email');
+                if (!empty($filter)) {
+                    $email = $input;
+                }
                 // gera uma senha aleatória (sem criptografia)
                 $senha = $obj_Util->criaSenha();
 
@@ -568,8 +578,7 @@ if ($obj_Busca->isActive()) {
 
                 if ($reset == "Sucesso") {
                     $from = $obj_Util->mail->Username;
-                    $nome_from = "Setor de Orçamento e Finanças do HUSM";
-                    $nome_from = utf8_decode($nome_from);
+                    $nome_from = utf8_decode("Setor de Orçamento e Finanças do HUSM");
                     $assunto = "Reset Senha";
                     $altBody = "Sua senha resetada";
                     $body = "Sua nova senha:<strong>{$senha}</strong>";
@@ -599,20 +608,22 @@ if ($obj_Busca->isActive()) {
             // formulário para contato
 
             case 'faleconosco':
-                $nome_from = utf8_decode($_POST["nome"]);
-                $from = $_POST["email"];
+                $nome = filter_input(INPUT_POST, 'nome');
+                $nome_from = utf8_decode($nome);
+                $from = filter_input(INPUT_POST, 'email');
                 $para = "orcamentofinancashusm@gmail.com";
                 $nome_para = "Setor de Orçamento e Finanças do HUSM";
-                $assunto = utf8_decode($_POST["assunto"]);
-                $mensagem = utf8_decode($_POST["mensagem"]);
+                $assunto = utf8_decode(filter_input(INPUT_POST, 'assunto'));
+                $mensagem = utf8_decode(filter_input(INPUT_POST, 'mensagem'));
 
                 $altBody = 'SOF Fale Conosco';
                 $body = $mensagem;
 
                 $obj_Util->preparaEmail($from, $nome_from, $para, $nome_para, $assunto, $altBody, $body);
 
+                $qtd_arquivos = filter_input(INPUT_POST, 'qtd-arquivos');
                 /* =========== ANEXANDO OS ARQUIVOS ========  */
-                if ($_POST["qtd-arquivos"] != 0) {
+                if ($qtd_arquivos != 0) {
                     // Tamanho máximo do arquivo (em Bytes)
                     $_UP['tamanho'] = 1024 * 1024 * 1024 * 1024 * 1024 * 1024 * 1024 * 1024 * 1024 * 1024 * 1024; //
                     // Array com as extensões permitidas
@@ -626,7 +637,7 @@ if ($obj_Busca->isActive()) {
                     $_UP['erros'][3] = 'O upload do arquivo foi feito parcialmente';
                     $_UP['erros'][4] = 'Não foi feito o upload do arquivo';
                     //fazendo o upload de todos os arquivos inseridos
-                    for ($i = 1; $i <= $_POST["qtd-arquivos"]; $i++) {
+                    for ($i = 1; $i <= $qtd_arquivos; $i++) {
                         // Verifica se houve algum erro com o upload. Se sim, exibe a mensagem do erro
                         if ($_FILES["file-$i"]["error"] != 0) {
                             die("Não foi possível fazer o upload, erro:" . $_UP['erros'][$_FILES["file-$i"]['error']]);
