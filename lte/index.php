@@ -66,7 +66,7 @@ $count = $obj_Busca->getCountSolic();
                             <li class="dropdown user user-menu">
                                 <a href="javascript:abreModal('#myInfos');" class="dropdown-toggle" data-toggle="dropdown">
                                     <img src="dist/img/user.png" class="user-image" alt="User Image">
-                                    <span class="hidden-xs">João Bolsson</span>
+                                    <span id="userLogado" class="hidden-xs"><?= $_SESSION["nome"] ?></span>
                                 </a>
                             </li>
                             <li>
@@ -86,7 +86,7 @@ $count = $obj_Busca->getCountSolic();
                             <img src="dist/img/user.png" class="img-circle" alt="User Image">
                         </div>
                         <div class="pull-left info">
-                            <p>João Bolsson</p>
+                            <p id="userLogadop"><?= $_SESSION["nome"] ?></p>
                         </div>
                     </div>
                     <!-- sidebar menu: : style can be found in sidebar.less -->

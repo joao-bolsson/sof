@@ -433,6 +433,7 @@ function altInfoUser() {
             document.getElementById('nameUser').value = nome;
             document.getElementById('emailUser').value = email;
             document.getElementById('userLogado').innerHTML = nome;
+            document.getElementById('userLogadop').innerHTML = nome;
         } else {
             alert("Ocorreu um erro no servidor. Contate o administrador.");
             location.reload();
