@@ -31,10 +31,25 @@ $('.modal').on('shown.bs.modal', function (event) {
             .addClass('fv-modal-stack');
 });
 
-function cadEmpenho(id_pedido) {
+function cadEmpenho(id_pedido, empenho, data) {
+    document.getElementById('id_pedido_emp').value = '';
+    document.getElementById('empenho').value = '';
+    document.getElementById('dataEmp').value = '';
+    
+    $('#divEmp').removeClass('control-highlight');
+    $('#divEmpData').removeClass('control-highlight');
+    
     $('#cadEmpenho').modal();
     $('#div-lb-high').addClass('control-highlight');
     document.getElementById('id_pedido_emp').value = id_pedido;
+    if (empenho.length > 0) {
+        $('#divEmp').addClass('control-highlight');
+        document.getElementById('empenho').value = empenho;
+    }
+    if (data.length > 0) {
+        $('#divEmpData').addClass('control-highlight');
+        document.getElementById('dataEmp').value = data;
+    }
 }
 
 function cadFontes(id_pedido) {
@@ -1245,11 +1260,11 @@ function analisarPedido(id_pedido, id_setor) {
                 document.getElementById('st' + i).disabled = true;
             }
         } else if (obj.status == 7) {
-            for (var i = 1; i <= 5; i++) {
+            for (var i = 2; i <= 5; i++) {
                 document.getElementById('st' + i).disabled = true;
             }
         } else if (obj.status == 5) {
-            for (var i = 1; i <= 4; i++) {
+            for (var i = 2; i <= 4; i++) {
                 document.getElementById('st' + i).disabled = true;
             }
         }
@@ -1335,7 +1350,7 @@ function getStatus(id_pedido, id_setor) {
         //status
         document.getElementById('st' + obj.status).checked = true;
         if (obj.status >= 5) {
-            for (var i = 1; i < 5; i++) {
+            for (var i = 2; i < 5; i++) {
                 document.getElementById('st' + i).disabled = true;
             }
         } else if (obj.status == 2) {

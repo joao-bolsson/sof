@@ -23,6 +23,48 @@ class Geral extends Conexao {
         $this->obj_Busca = new Busca();
     }
 
+//    public function setLog() {
+//        if (is_null($this->mysqli)) {
+//            $this->mysqli = parent::getConexao();
+//        }
+//
+//        $query = $this->mysqli->query("SELECT pedido.id, pedido.data_pedido AS data FROM pedido;") or exit("Erro ao buscar pedidos.");
+//        while ($pedido = $query->fetch_object()) {
+//            $query_log = $this->mysqli->query("SELECT max(pedido_log_status.id_status) AS max FROM pedido_log_status WHERE pedido_log_status.id_pedido = {$pedido->id};") or exit("Erro ao buscar máximo do pedido.");
+//
+//            $obj = $query_log->fetch_object();
+//            $max = $obj->max;
+//
+//            if (!empty($max)) {
+//                echo $pedido->id . " - ";
+//                switch ($max) {
+//                    case 3:
+//                        $this->mysqli->query("insert ignore into pedido_log_status values({$pedido->id}, 2, '{$pedido->data}', '{$pedido->id}2{$pedido->data}');") or exit("Erro 3");
+//                        break;
+//
+//                    case 5:
+//                        $this->mysqli->query("insert ignore into pedido_log_status values({$pedido->id}, 2, '{$pedido->data}', '{$pedido->id}2{$pedido->data}');") or exit("Erro 5");
+//                        break;
+//
+//                    case 6:
+//                        $this->mysqli->query("insert ignore into pedido_log_status values({$pedido->id}, 2, '{$pedido->data}', '{$pedido->id}2{$pedido->data}'), ({$pedido->id}, 5, '{$pedido->data}', '{$pedido->id}5{$pedido->data}');") or exit("Erro 6: " . $this->mysqli->error);
+//                        break;
+//                    
+//                    case 7:
+//                        $this->mysqli->query("insert ignore into pedido_log_status values({$pedido->id}, 2, '{$pedido->data}', '{$pedido->id}2{$pedido->data}'), ({$pedido->id}, 5, '{$pedido->data}', '{$pedido->id}5{$pedido->data}'), ({$pedido->id}, 6, '{$pedido->data}', '{$pedido->id}6{$pedido->data}');") or exit("Erro 7");
+//                        break;
+//                    
+//                    case 8:
+//                        $this->mysqli->query("insert ignore into pedido_log_status values({$pedido->id}, 2, '{$pedido->data}', '{$pedido->id}2{$pedido->data}'), ({$pedido->id}, 5, '{$pedido->data}', '{$pedido->id}5{$pedido->data}'), ({$pedido->id}, 6, '{$pedido->data}', '{$pedido->id}6{$pedido->data}'), ({$pedido->id}, 7, '{$pedido->data}', '{$pedido->id}7{$pedido->data}');") or exit("Erro 8");
+//                        break;
+//
+//                    default:
+//                        break;
+//                }
+//            }
+//        }
+//    }
+
     public function insertPedContr(int $id_pedido, int $id_tipo, string $siafi) {
         if (is_null($this->mysqli)) {
             $this->mysqli = parent::getConexao();
@@ -70,9 +112,10 @@ class Geral extends Conexao {
         }
         $hoje = date('Y-m-d');
         // não deixa ter vários logs com o mesmo status na mesma data
-        $query = $this->mysqli->query("SELECT pedido_log_status.id_status FROM pedido_log_status WHERE data = '{$hoje}' AND pedido_log_status.id_status = {$status};") or exit("Erro ao verificar log de status.");
+        $query = $this->mysqli->query("SELECT pedido_log_status.id_status FROM pedido_log_status WHERE data = '{$hoje}' AND pedido_log_status.id_status = {$status} AND pedido_log_status.id_pedido = {$id_pedido};") or exit("Erro ao verificar log de status.");
         if ($query->num_rows < 1) {
-            $this->mysqli->query("INSERT INTO pedido_log_status VALUES({$id_pedido}, {$status}, '{$hoje}');") or exit("Erro ao registrar log de mudança de status.");
+            $chave = $id_pedido . $status . $hoje;
+            $this->mysqli->query("INSERT INTO pedido_log_status VALUES({$id_pedido}, {$status}, '{$hoje}', '{$chave}');") or exit("Erro ao registrar log de mudança de status.");
         }
         // NÃO FECHA CONEXÃO AQUI
     }
@@ -285,25 +328,25 @@ class Geral extends Conexao {
      * 	@param $empenho Empenho a ser cadastrado.
      * 	@return bool
      */
-    public function cadastraEmpenho($id_pedido, $empenho, $data): bool {
+    public function cadastraEmpenho(int $id_pedido, string $empenho, string $data): bool {
         if (is_null($this->mysqli)) {
             $this->mysqli = parent::getConexao();
         }
         $empenho = $this->mysqli->real_escape_string($empenho);
         // verifica se o pedido ja não possui empenho
-        $query_check = $this->mysqli->query("SELECT pedido_empenho.id FROM pedido_empenho WHERE pedido_empenho.id = {$id_pedido};") or exit("Erro ao buscar informações do emepenho.");
+        $query_check = $this->mysqli->query("SELECT pedido_empenho.id FROM pedido_empenho WHERE pedido_empenho.id_pedido = {$id_pedido};") or exit("Erro ao buscar informações do empenho.");
         $sql = "";
         if ($query_check->num_rows < 1) {
             // cadastrando empenho
             $sql = "INSERT INTO pedido_empenho VALUES(NULL, {$id_pedido}, '{$empenho}', '{$data}');";
+            // mudando status do pedido
+            $this->mysqli->query("UPDATE pedido SET status = 7 WHERE id = {$id_pedido};") or exit("Erro ao atualizar o status do pedido.");
+            $this->registraLog($id_pedido, 7);
         } else {
             // alterando empenho
             $sql = "UPDATE pedido_empenho SET pedido_empenho.empenho = '{$empenho}', pedido_empenho.data = '{$data}' WHERE pedido_empenho.id_pedido = {$id_pedido};";
         }
         $this->mysqli->query($sql) or exit("Erro ao inserir / atualizar empenho.");
-        // mudando status do pedido
-        $this->mysqli->query("UPDATE pedido SET status = 7 WHERE id = {$id_pedido};") or exit("Erro ao atualizar o status do pedido.");
-        $this->registraLog($id_pedido, 7);
         $this->mysqli = NULL;
         return true;
     }
@@ -714,7 +757,7 @@ class Geral extends Conexao {
             } else {
                 //remover resgistros antigos do rascunho
                 $this->mysqli->query("DELETE FROM itens_pedido WHERE id_pedido = {$pedido};") or exit("Ocorreu um erro ao remover os registros antigos do pedido.") or exit("Erro ao remover registros antigos do rascunho.");
-                $this->mysqli->query("UPDATE pedido SET data_pedido = '{$hoje}', ref_mes = {$mes}, prioridade = {$prioridade}, valor = '{$total_pedido}', obs = '{$obs}', pedido_contrato = {$pedido_contrato} WHERE id = {$pedido};") or exit("Ocorreu um erro ao atualizar o pedido.UPDATE pedido SET data_pedido = '{$hoje}', ref_mes = {$mes}, prioridade = {$prioridade}, valor = '{$total_pedido}', obs = '{$obs}', pedido_contrato = {$pedido_contrato} WHERE id = {$pedido};");
+                $this->mysqli->query("UPDATE pedido SET data_pedido = '{$hoje}', ref_mes = {$mes}, prioridade = {$prioridade}, valor = '{$total_pedido}', obs = '{$obs}', pedido_contrato = {$pedido_contrato} WHERE id = {$pedido};") or exit("Ocorreu um erro ao atualizar o pedido.");
             }
             //inserindo os itens do pedido
             for ($i = 0; $i < count($id_item); $i++) {
