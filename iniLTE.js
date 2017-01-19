@@ -1346,11 +1346,11 @@ function analisarPedido(id_pedido, id_setor) {
                 $('#st' + i).iCheck('disable');
             }
         } else if (obj.status == 7) {
-            for (var i = 1; i <= 5; i++) {
+            for (var i = 2; i <= 5; i++) {
                 $('#st' + i).iCheck('disable');
             }
         } else if (obj.status == 5) {
-            for (var i = 1; i <= 4; i++) {
+            for (var i = 2; i <= 4; i++) {
                 $('#st' + i).iCheck('disable');
             }
         }
