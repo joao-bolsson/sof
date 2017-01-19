@@ -280,7 +280,7 @@ if ($obj_Busca->isActive()) {
                 $status = filter_input(INPUT_POST, 'fase');
                 $analisado = $obj_Geral->altStatus($id_pedido, $id_setor, $comentario, $status);
                 if ($analisado) {
-                    header("Location: ../admin/adminsolicitacoes.php");
+                    header("Location: ../lte/");
                 } else {
                     echo "Ocorreu algum erro no servidor. Contate o administrador.";
                 }
@@ -315,8 +315,7 @@ if ($obj_Busca->isActive()) {
                 $analisado = $obj_Geral->pedidoAnalisado($id_pedido, $fase, $prioridade, $id_item, $item_cancelado, $qtd_solicitada, $qt_saldo, $qt_utilizado, $vl_saldo, $vl_utilizado, $valor_item, $saldo_setor, $total_pedido, $comentario);
 
                 if ($analisado) {
-                    echo "ola mundo";
-//                    header("Location: ../admin/adminsolicitacoes.php");
+                    header("Location: ../lte/");
                 } else {
                     echo "Ocorreu algum erro no servidor. Contate o administrador.";
                 }

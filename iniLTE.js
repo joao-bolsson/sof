@@ -325,6 +325,9 @@ function iniDataTable(tabela) {
         "ordering": true,
         "info": true,
         "autoWidth": true,
+        "columnDefs": [
+            {"width": "15%", "targets": 0}
+        ],
         language: {
             "decimal": "",
             "emptyTable": "Nenhum dado na tabela",
