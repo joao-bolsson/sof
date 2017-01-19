@@ -895,7 +895,9 @@ class BuscaLTE extends Conexao {
             $retorno .= "
                 <tr>
                     <td>
-                        <a class=\"modal-close\" href=\"javascript:addProcesso('', " . $processo->id . ");\"><span class=\"icon\">mode_edit</span></a>
+                    <div class=\"btn-group\">
+                        <button type=\"button\" class=\"btn btn-default\" onclick=\"addProcesso('', " . $processo->id . ")\"><i class=\"fa fa-pencil\"></i></button>
+                    </div>
                     </td>
                     <td>" . $processo->num_processo . "</td>
                     <td>" . $processo->tipo . "</td>
@@ -906,7 +908,7 @@ class BuscaLTE extends Conexao {
 <td>" . $processo->responsavel . "</td>
                     <td>" . $processo->retorno . "</td>
                     <td>
-                            <button onclick=\"viewCompl('" . $processo->obs . "');\" class=\"btn btn-flat waves-attach waves-effect\" type=\"button\" title=\"Ver Observação\">OBS</button>
+                        <button onclick=\"viewCompl('" . $processo->obs . "');\" class=\"btn btn-default\" type=\"button\" title=\"Ver Observação\">OBS</button>
                     </td>
                 </tr>";
         }

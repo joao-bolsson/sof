@@ -116,6 +116,10 @@ $(function () {
     $('#cadEmpenho').on('shown.bs.modal', function () {
         $(".date").inputmask("dd/mm/yyyy", {"placeholder": "dd/mm/yyyy"});
     });
+
+    $('#addProcesso').on('shown.bs.modal', function () {
+        $(".date").inputmask("dd/mm/yyyy", {"placeholder": "dd/mm/yyyy"});
+    });
 });
 function cadEmpenho(id_pedido, empenho, data) {
     document.getElementById('id_pedido_emp').value = '';
@@ -502,9 +506,9 @@ function iniAdminSolicitacoes() {
         form: 'permissoes',
     }, function (resposta) {
         var permissao = jQuery.parseJSON(resposta);
-//        if (permissao.recepcao) {
-//            iniRecepcao();
-//        }
+        if (permissao.recepcao) {
+            iniRecepcao();
+        }
         if (permissao.pedidos) {
             iniSolicitacoes();
         }
@@ -515,33 +519,35 @@ function iniAdminSolicitacoes() {
 }
 
 function iniRecepcao() {
-    $.post('../php/busca.php', {
+    $.post('../php/buscaLTE.php', {
         admin: 1,
         form: 'tableRecepcao',
     }, function (resposta) {
-        $('#tableRecepcao').DataTable().destroy();
+        if (document.getElementById('conteudoRecepcao').innerHTML.length > 0) {
+            $('#tableRecepcao').DataTable().destroy();
+        }
         document.getElementById('conteudoRecepcao').innerHTML = resposta;
         iniDataTable('#tableRecepcao');
     });
 }
 
 function iniListProcessos() {
-    $.post('../php/busca.php', {
+    $.post('../php/buscaLTE.php', {
         admin: 1,
         form: 'listProcessos',
     }, function (resposta) {
-        $('#tableListProcessos').DataTable().destroy();
+        if (document.getElementById('tbodyListProcessos').innerHTML.length > 0) {
+            $('#tableListProcessos').DataTable().destroy();
+        }
         document.getElementById('tbodyListProcessos').innerHTML = resposta;
         iniDataTable('#tableListProcessos');
     });
 }
 
 function addProcesso(numProcesso, id) {
-    $('#addProcesso').modal();
     document.getElementById("id_processo").value = id;
     if (id === 0) {
         document.getElementById('num_processo').value = numProcesso;
-        $('#divNumProc').addClass('control-highlight');
     } else {
         $.post('../php/busca.php', {
             admin: 1,
@@ -558,9 +564,9 @@ function addProcesso(numProcesso, id) {
             document.getElementById("responsavel").value = obj.responsavel;
             document.getElementById("retorno").value = obj.retorno;
             document.getElementById("obs").value = obj.obs;
-            $('#formProcesso .form-group').addClass('control-highlight');
         });
     }
+    $('#addProcesso').modal();
 }
 
 function updateProcesso() {
@@ -575,17 +581,17 @@ function updateProcesso() {
         dados: dados
     }, function (resposta) {
         if (resposta === "true") {
-            iniRecepcao();
             document.getElementById('formProcesso').reset();
             document.getElementById('id_processo').value = 0;
-            iniListProcessos();
-            $('#addProcesso').modal('hide');
-            avisoSnack('Sucesso!');
+            alert('Sucesso!');
         } else {
             alert('Ocorreu um erro no servidor. Contate o administrador');
             window.location.href = "sair.php";
         }
     });
+    iniRecepcao();
+    iniListProcessos();
+    $('#addProcesso').modal('hide');
 }
 
 function putNumberFormat(value) {
