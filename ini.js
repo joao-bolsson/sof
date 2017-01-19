@@ -1260,11 +1260,11 @@ function analisarPedido(id_pedido, id_setor) {
                 document.getElementById('st' + i).disabled = true;
             }
         } else if (obj.status == 7) {
-            for (var i = 1; i <= 5; i++) {
+            for (var i = 2; i <= 5; i++) {
                 document.getElementById('st' + i).disabled = true;
             }
         } else if (obj.status == 5) {
-            for (var i = 1; i <= 4; i++) {
+            for (var i = 2; i <= 4; i++) {
                 document.getElementById('st' + i).disabled = true;
             }
         }
