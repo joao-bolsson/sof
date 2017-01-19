@@ -100,7 +100,7 @@ if ($obj_Busca->isActive()) {
 
                 //send the message, check for errors
                 if ($obj_Util->mail->send()) {
-                    header("Location: ../admin/adminsolicitacoes.php");
+                    header("Location: ../lte/");
                 } else {
                     echo "Usuário e permissões cadastradas. Erro ao enviar o e-mail com a senha : " . $senha;
                 }

@@ -316,6 +316,44 @@ function iniDataTable(tabela) {
             }
         });
         return;
+    } else if (tabela == '#tableSolicitacoes') {
+        $(tabela).DataTable({
+            "destroy": true,
+            "paging": true,
+            "lengthChange": true,
+            "searching": true,
+            "ordering": true,
+            "info": true,
+            "autoWidth": true,
+            "columnDefs": [
+                {"width": "15%", "targets": 0}
+            ],
+            language: {
+                "decimal": "",
+                "emptyTable": "Nenhum dado na tabela",
+                "info": "_MAX_ resultados encontrados",
+                "infoEmpty": "",
+                "infoFiltered": "",
+                "infoPostFix": "",
+                "thousands": ",",
+                "lengthMenu": "Monstrando _MENU_ entradas",
+                "loadingRecords": "Carregando...",
+                "processing": "Processando...",
+                "search": "Pesquisar:",
+                "zeroRecords": "Nenhum resultado encontrado",
+                "paginate": {
+                    "first": "Primeiro",
+                    "last": "Último",
+                    "next": "Próximo",
+                    "previous": "Anterior"
+                },
+                "aria": {
+                    "sortAscending": ": activate to sort column ascending",
+                    "sortDescending": ": activate to sort column descending"
+                }
+            }
+        });
+        return;
     }
     $(tabela).DataTable({
         "destroy": true,
@@ -325,9 +363,6 @@ function iniDataTable(tabela) {
         "ordering": true,
         "info": true,
         "autoWidth": true,
-        "columnDefs": [
-            {"width": "15%", "targets": 0}
-        ],
         language: {
             "decimal": "",
             "emptyTable": "Nenhum dado na tabela",
@@ -622,7 +657,6 @@ function solicAltPed(id_pedido) {
 }
 
 function liberaSaldo() {
-    document.getElementById('loadingFree').style.display = 'block';
     var setor = document.getElementById('setor').value;
     var valor = document.getElementById('valorFree').value;
     valor = parseFloat(valor).toFixed(3);
