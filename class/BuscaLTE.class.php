@@ -826,7 +826,7 @@ class BuscaLTE extends Conexao {
                 <td>
                     <div class=\"form-group\">
                         <label>
-                            <input id=\"st{$status->id}\" type=\"radio\" name=\"relatorio\" class=\"minimal\" value=\"{$status->id}\"/>
+                            <input id=\"st{$status->id}\" type=\"radio\" name=\"fase\" class=\"minimal\" value=\"{$status->id}\"/>
                            " . $status->nome . "
                         </label>
                     </div>

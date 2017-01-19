@@ -371,7 +371,7 @@ $count = $obj_Busca->getCountSolic();
                                 </div><!-- /.box -->
                             </div><!-- /.col -->
                         </div><!-- /.row -->
-                        <div id="rowDetPedido" class="row">
+                        <div id="rowDetPedido" class="row" style="display: none;">
                             <div class="col-xs-12">
                                 <div class="box">
                                     <div class="box-header">
@@ -423,7 +423,7 @@ $count = $obj_Busca->getCountSolic();
                                             </div>
                                             <div class="form-group">
                                                 <label>Observações</label>
-                                                <textarea class="form-control" id="obs" name="obs" rows="1" disabled></textarea>
+                                                <textarea class="form-control" id="obs" name="obs" rows="2" disabled></textarea>
                                             </div>
                                             <input id="total_hidden" type="hidden" name="total_hidden" value="0">
                                             <input id="saldo_total" type="hidden" name="saldo_total" value="0.000">
@@ -433,7 +433,7 @@ $count = $obj_Busca->getCountSolic();
                                             </table>
                                             <div class="form-group">
                                                 <label>Comentário</label>
-                                                <textarea class="form-control" rows="1" id="comentario" name="comentario"></textarea>
+                                                <textarea class="form-control" rows="2" id="comentario" name="comentario"></textarea>
                                             </div>
                                         </div><!-- ./box-body -->
                                         <div class="box-footer">
