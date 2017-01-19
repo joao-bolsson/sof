@@ -334,7 +334,7 @@ class BuscaLTE extends Conexao {
      */
     public function getRelatorioPedidos(int $id_setor, int $prioridade, int $status, string $dataI, string $dataF): string {
         $retorno = "";
-        $where_status = "AND pedido_log_status.id_status = " . $status;
+        $where_status = "AND pedido.status = " . $status;
         $where_prioridade = "AND pedido.prioridade = " . $prioridade;
         $where_setor = "AND pedido.id_setor = " . $id_setor;
         if ($status == 0) {
@@ -359,12 +359,12 @@ class BuscaLTE extends Conexao {
         if (is_null($this->mysqli)) {
             $this->mysqli = parent::getConexao();
         }
-        + $query = $this->mysqli->query("SELECT pedido_log_status.id_pedido AS id, setores.nome AS setor, DATE_FORMAT(pedido_log_status.data, '%d/%m/%Y') AS data_pedido, prioridade.nome AS prioridade, status.nome AS status, pedido.valor {$empenho} FROM {$tb_empenho} pedido_log_status, setores, pedido, prioridade, status WHERE status.id = pedido_log_status.id_status {$where_setor} {$where_prioridade} {$where_empenho} AND prioridade.id = pedido.prioridade AND pedido.id = pedido_log_status.id_pedido AND pedido.id_setor = setores.id {$where_status} AND pedido_log_status.data BETWEEN '{$dataIni}' AND '{$dataFim}' ORDER BY pedido_log_status.id_pedido ASC;") or exit("Erro ao buscar os pedidos com as especificações do usuário.");
+        $query = $this->mysqli->query("SELECT pedido.id, setores.nome AS setor, DATE_FORMAT(pedido.data_pedido, '%d/%m/%Y') AS data_pedido, prioridade.nome AS prioridade, status.nome AS status, pedido.valor {$empenho} FROM {$tb_empenho} setores, pedido, prioridade, status WHERE status.id = pedido.status {$where_setor} {$where_prioridade} {$where_empenho} AND prioridade.id = pedido.prioridade AND pedido.id_setor = setores.id {$where_status} AND pedido.data_pedido BETWEEN '{$dataIni}' AND '{$dataFim}' ORDER BY pedido.id ASC;") or exit("Erro ao buscar os pedidos com as especificações do usuário.");
 
         $titulo = "Relatório de Pedidos por Setor e Nível de Prioridade";
         if ($query) {
             $thead = "
-                <th>Data</th>
+                <th>Enviado em</th>
                 <th>Prioridade</th>
                 <th>Status</th>
                 <th>Valor</th>";
@@ -374,11 +374,11 @@ class BuscaLTE extends Conexao {
                     <th>Prioridade</th>
                     <th>SIAFI</th>";
             }
-            $query_tot = $this->mysqli->query("SELECT sum(pedido.valor) AS total FROM {$tb_empenho} pedido, pedido_log_status WHERE pedido_log_status.id_pedido = pedido.id {$where_setor} {$where_prioridade} {$where_empenho} AND pedido.alteracao = 0 {$where_status} AND pedido_log_status.data BETWEEN '{$dataIni}' AND '{$dataFim}';") or exit("Erro ao somar os pedidos.");
+            $query_tot = $this->mysqli->query("SELECT sum(pedido.valor) AS total FROM {$tb_empenho} pedido WHERE 1 > 0 {$where_setor} {$where_prioridade} {$where_empenho} AND pedido.alteracao = 0 {$where_status} AND pedido.data_pedido BETWEEN '{$dataIni}' AND '{$dataFim}';") or exit("Erro ao somar os pedidos.");
             $total = "R$ 0";
             $tot = $query_tot->fetch_object();
             if ($tot->total > 0) {
-                $total = "R$ " . $tot->total;
+                $total = "R$ " . number_format($tot->total, 3, ',', '.');;
             }
             $retorno .= "
                 <fieldset class=\"preg\">

@@ -4,9 +4,9 @@ error_reporting(E_ALL);
 
 session_start();
 
-include_once '../class/Busca.class.php';
+include_once '../class/BuscaLTE.class.php';
 //instanciando classe de busca para popular o select de estados
-$obj_Busca = new Busca();
+$obj_Busca = new BuscaLTE();
 
 //definimos uma constante com o nome da pasta
 define('MPDF_PATH', '../pdf/MPDF57/');
@@ -29,16 +29,19 @@ $html_header = "
     <img src=\"../sof_files/header_setor_2.png\"/>
   </p>
   <hr/>";
-if (isset($_POST["relatorio"]) && $_SESSION["id_setor"] == 2) {
+$input = filter_input(INPUT_POST, 'relatorio');
+if (!empty($input) && $_SESSION["id_setor"] == 2) {
 	$html = $html_style . $html_header;
 
-	$tipo = $_POST['tipo'];
+	$tipo = filter_input(INPUT_POST, 'tipo');
 	switch ($tipo) {
 	case 'pedidos':
-		$id_setor = $_POST['setor'];
-		$prioridade = $_POST['prioridade'];
-		$status = $_POST['status'];
-		$html .= $obj_Busca->getRelatorioPedidos($id_setor, $prioridade, $status, $_POST['dataI'], $_POST['dataF']);
+		$id_setor = filter_input(INPUT_POST, 'setor');
+		$prioridade = filter_input(INPUT_POST, 'prioridade');
+		$status = filter_input(INPUT_POST, 'status');
+                $dataI = filter_input(INPUT_POST, 'dataI');
+                $dataF = filter_input(INPUT_POST, 'dataF');
+		$html .= $obj_Busca->getRelatorioPedidos($id_setor, $prioridade, $status, $dataI, $dataF);
 		break;
 
 	default:
