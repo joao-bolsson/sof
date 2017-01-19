@@ -519,14 +519,18 @@ function iniAdminSolicitacoes() {
 }
 
 function iniRecepcao() {
+    var element = document.getElementById('conteudoRecepcao');
+    if (element === null) {
+        return;
+    }
     $.post('../php/buscaLTE.php', {
         admin: 1,
         form: 'tableRecepcao',
     }, function (resposta) {
-        if (document.getElementById('conteudoRecepcao').innerHTML.length > 0) {
+        if (element.innerHTML.length > 0) {
             $('#tableRecepcao').DataTable().destroy();
         }
-        document.getElementById('conteudoRecepcao').innerHTML = resposta;
+        element.innerHTML = resposta;
         iniDataTable('#tableRecepcao');
     });
 }
