@@ -1522,7 +1522,6 @@ function editaItem(id_item) {
         id_item: id_item
     }, function (retorno) {
         var obj = jQuery.parseJSON(retorno);
-        $('#infoItem table div').addClass('control-highlight');
         document.getElementById('compItem').value = obj.complemento_item;
         document.getElementById('vlUnitario').value = obj.vl_unitario;
         document.getElementById('qtContrato').value = obj.qt_contrato;
@@ -1548,11 +1547,11 @@ function submitEditItem() {
     }, function (resposta) {
         if (resposta) {
             alert('Informações salvas com sucesso!');
-            $('#infoItem').modal('hide');
         } else {
             alert('Ocorreu um erro no servidor. Verifique suas informações e teste novamente, ou contate o administrador.');
         }
     });
+    $('#infoItem').modal('hide');
     limpaTela();
     iniSolicitacoes();
 }
