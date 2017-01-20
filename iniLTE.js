@@ -230,6 +230,7 @@ function hideDivs() {
 }
 
 function mostra(row) {
+    hideDivs();
     var display = document.getElementById(row).style.display;
     if (display === 'block') {
         display = 'none';
@@ -240,7 +241,7 @@ function mostra(row) {
 }
 
 function mostraPed() {
-    $('a').blur();
+    $('button').blur();
     hideDivs();
     document.getElementById('rowPedidos').style.display = 'block';
     iniSolicitacoes();

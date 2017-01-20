@@ -115,7 +115,7 @@ $count = $obj_Busca->getCountSolic();
                                 </a>
                             </li>
                             <li>
-                                <a href="#">
+                                <a href="javascript:mostraPed();">
                                     <i class="fa fa-tags"></i> <span>Pedidos</span>
                                     <?php if ($count->solic_ped > 0): ?>
                                         <span class="pull-right-container">
@@ -379,7 +379,7 @@ $count = $obj_Busca->getCountSolic();
                                 </div><!-- /.box -->
                             </div><!-- /.col -->
                         </div><!-- /.row -->
-                        <div class="row">
+                        <div id="rowPedidos" class="row">
                             <div class="col-xs-12">
                                 <div class="box">
                                     <div class="box-header">
