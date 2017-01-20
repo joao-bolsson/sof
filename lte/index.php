@@ -402,6 +402,7 @@ $count = $obj_Busca->getCountSolic();
                                                     <th>Status</th>
                                                     <th>Valor</th>
                                                     <th>Empenho</th>
+                                                    <th>Fornecedor</th>
                                                 </tr>
                                             </thead>
                                             <tbody id="conteudoSolicitacoes"></tbody>

@@ -1710,6 +1710,9 @@ class BuscaLTE extends Conexao {
                     <td>
                         " . $btnVerEmpenho . "
                     </td>
+                    <td>
+                    " . BuscaLTE::getFornecedor($pedido->id) . "
+                    </td>
                 </tr>";
             if ($_SESSION['id_setor'] == 12) {
                 if ($pedido->status == 'Enviado ao Ordenador') {
