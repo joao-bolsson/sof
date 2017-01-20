@@ -474,6 +474,13 @@ $count = $obj_Busca->getCountSolic();
                                                 <label>Comentário</label>
                                                 <textarea class="form-control" rows="2" id="comentario" name="comentario"></textarea>
                                             </div>
+                                            <small class="label bg-gray">Essa opção só irá ser considerada se o pedido for marcado como Reprovado</small>
+                                            <div class="form-group">
+                                                <label>
+                                                    <input id="checkExcluir" type="checkbox" class="minimal" name="excluir">
+                                                    Excluir pedido
+                                                </label>
+                                            </div>
                                         </div><!-- ./box-body -->
                                         <div class="box-footer">
                                             <div class="btn-group" style="width: 100%;">

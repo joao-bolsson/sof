@@ -279,6 +279,10 @@ if ($obj_Busca->isActive()) {
                 $comentario = filter_input(INPUT_POST, 'comentario');
                 $status = filter_input(INPUT_POST, 'fase');
                 $analisado = $obj_Geral->altStatus($id_pedido, $id_setor, $comentario, $status);
+                $excluir = filter_input(INPUT_POST, 'excluir');
+                if (!empty($excluir) && $status == 3) {
+                    $obj_Geral->deletePedido($id_pedido);
+                }
                 if ($analisado) {
                     header("Location: ../lte/");
                 } else {
@@ -314,6 +318,10 @@ if ($obj_Busca->isActive()) {
 
                 $analisado = $obj_Geral->pedidoAnalisado($id_pedido, $fase, $prioridade, $id_item, $item_cancelado, $qtd_solicitada, $qt_saldo, $qt_utilizado, $vl_saldo, $vl_utilizado, $valor_item, $saldo_setor, $total_pedido, $comentario);
 
+                $excluir = filter_input(INPUT_POST, 'excluir');
+                if (!empty($excluir) && $fase == 3) {
+                    $obj_Geral->deletePedido($id_pedido);
+                }
                 if ($analisado) {
                     header("Location: ../lte/");
                 } else {

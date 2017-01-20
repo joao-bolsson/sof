@@ -873,6 +873,9 @@ class Geral extends Conexao {
         if (is_null($this->mysqli)) {
             $this->mysqli = parent::getConexao();
         }
+        $this->mysqli->query("DELETE FROM licitacao WHERE licitacao.id_pedido = {$id_pedido};") or exit("Erro ao remover o grupo do pedido");
+        $this->mysqli->query("DELETE FROM pedido_contrato WHERE pedido_contrato.id_pedido = {$id_pedido};") or exit("Erro ao remover o grupo do pedido");
+        $this->mysqli->query("DELETE FROM pedido_grupo WHERE pedido_grupo.id_pedido = {$id_pedido};") or exit("Erro ao remover o grupo do pedido");
         $this->mysqli->query("DELETE FROM comentarios WHERE comentarios.id_pedido = {$id_pedido};") or exit("Erro ao remover comentarios");
         $this->mysqli->query("DELETE FROM itens_pedido WHERE itens_pedido.id_pedido = {$id_pedido};") or exit("Erro ao remover os itens do pedido");
         $this->mysqli->query("DELETE FROM pedido_empenho WHERE pedido_empenho.id_pedido = {$id_pedido};") or exit("Erro ao remover o empenho do pedido.");

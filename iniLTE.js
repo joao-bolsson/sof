@@ -76,6 +76,14 @@ $(function () {
         }
     }
 
+    var excluir = document.getElementById('checkExcluir');
+    if (excluir !== null) {
+        $('#checkExcluir').iCheck({
+            checkboxClass: 'icheckbox_minimal-blue',
+            radioClass: 'iradio_minimal-blue'
+        });
+    }
+
     $('#listProblemas').on('shown.bs.modal', function () {
         if (!$.fn.DataTable.isDataTable('#tableListProblemas')) {
             iniDataTable('#tableListProblemas');
@@ -1411,6 +1419,7 @@ function analisarPedido(id_pedido, id_setor) {
                 $('#st' + i).iCheck('disable');
             }
         }
+        $('#st3').iCheck('enable');
         //obs
         document.getElementById('obs').value = obj.obs;
     });
@@ -1492,6 +1501,7 @@ function getStatus(id_pedido, id_setor) {
                 $('#st' + i).iCheck('disable');
             }
         }
+        $('#st3').iCheck('enable');
     });
     $('#detPedId').html(id_pedido);
     getNomeSetor(id_setor);
@@ -1506,6 +1516,7 @@ function limpaTela() {
     for (var i = 2; i <= 8; i++) {
         $('#st' + i).iCheck('disable');
     }
+    $('#checkExcluir').iCheck('uncheck');
     document.getElementById('formPedido').reset();
     $('#btnLimpa').blur();
     document.getElementById('rowDetPedido').style.display = "none";
