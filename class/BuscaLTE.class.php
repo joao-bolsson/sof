@@ -328,6 +328,25 @@ class BuscaLTE extends Conexao {
     }
 
     /**
+     * Função para trazer informação do fornecedor de um pedido.
+     * @param int $id_pedido Id do pedido.
+     * @return string Fornecedor do pedido
+     */
+    private function getFornecedor(int $id_pedido): string {
+        if (is_null($this->mysqli)) {
+            $this->mysqli = parent::getConexao();
+        }
+        $query = $this->mysqli->query("SELECT itens.nome_fornecedor FROM itens, itens_pedido WHERE itens_pedido.id_item = itens.id AND itens_pedido.id_pedido = " . $id_pedido . " LIMIT 1;") or exit("Erro ao buscar fornecedor do pedido");
+        $this->mysqli = NULL;
+        if ($query->num_rows < 1) {
+            return '';
+        }
+
+        $obj = $query->fetch_object();
+        return $obj->nome_fornecedor;
+    }
+
+    /**
      * 	Função que retonar o relatorio de pedidos.
      *
      * 	@return string Retorna a interface de um documento pdf.
@@ -374,11 +393,15 @@ class BuscaLTE extends Conexao {
                     <th>Prioridade</th>
                     <th>SIAFI</th>";
             }
+            if (is_null($this->mysqli)) {
+                $this->mysqli = parent::getConexao();
+            }
             $query_tot = $this->mysqli->query("SELECT sum(pedido.valor) AS total FROM {$tb_empenho} pedido WHERE 1 > 0 {$where_setor} {$where_prioridade} {$where_empenho} AND pedido.alteracao = 0 {$where_status} AND pedido.data_pedido BETWEEN '{$dataIni}' AND '{$dataFim}';") or exit("Erro ao somar os pedidos.");
+            $this->mysqli = NULL;
             $total = "R$ 0";
             $tot = $query_tot->fetch_object();
             if ($tot->total > 0) {
-                $total = "R$ " . number_format($tot->total, 3, ',', '.');;
+                $total = "R$ " . number_format($tot->total, 3, ',', '.');
             }
             $retorno .= "
                 <fieldset class=\"preg\">
@@ -398,6 +421,7 @@ class BuscaLTE extends Conexao {
                     <thead>
                         <tr>
                             <th>Pedido</th>
+                            <th>Fornecedor</th>
                             <th>Setor</th>
                             " . $thead . "
                         </tr>
@@ -417,8 +441,9 @@ class BuscaLTE extends Conexao {
                         <td>R$ " . $pedido->valor . "</td>";
                 }
                 $retorno .= "
-                        <tr>
+                        <tr style=\"\">
                             <td>" . $pedido->id . "</td>
+                            <td>" . BuscaLTE::getFornecedor($pedido->id) . "</td>
                             <td>" . $pedido->setor . "</td>
                             " . $tbody . "
                         </tr>";
@@ -438,7 +463,6 @@ class BuscaLTE extends Conexao {
                 </h5><br><br>
                 <h4 style=\"text-align: center\" class=\"ass\">Santa Maria, ___ de ___________________ de _____.</h4>";
         }
-        $this->mysqli = NULL;
         return $retorno;
     }
 
