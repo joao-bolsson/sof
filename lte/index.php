@@ -217,7 +217,7 @@ $count = $obj_Busca->getCountSolic();
                 <!-- Content Header (Page header) -->
                 <section class="content-header">
                     <h1>
-                        Setor de Orçamento e Finanças
+                        <?= $_SESSION['nome_setor']; ?>
                         <small>Saldo: R$ <?= number_format($obj_Busca->getSaldo($_SESSION['id_setor']), 3, ',', '.'); ?></small>
                     </h1>
                     <ol class="breadcrumb">

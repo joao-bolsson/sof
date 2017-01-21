@@ -63,6 +63,50 @@ $(function () {
             });
         }
     }
+    
+    status = ['stNormal', 'stPreferencial', 'stUrgente', 'stEmergencial', 'stRascunho'];
+    for (var i = 0; i < status.length; i++) {
+        var element = document.getElementById(status[i]);
+        if (element !== null) {
+            $('#' + status[i]).iCheck({
+                checkboxClass: 'icheckbox_minimal-blue',
+                radioClass: 'iradio_minimal-blue'
+            });
+            if (i === status.length - 1) {
+                $('#' + status[i]).iCheck('check');
+            }
+        }
+    }
+
+    for (var i = 1; i <= 6; i++) {
+        var element = document.getElementById('tipoLic' + i);
+        if (element !== null) {
+            $('#tipoLic' + i).iCheck({
+                checkboxClass: 'icheckbox_minimal-blue',
+                radioClass: 'iradio_minimal-blue'
+            });
+            $('#tipoLic' + i).on('ifChecked', function () {
+                changeTipoLic(this);
+            });
+        }
+    }
+    
+    var element = document.getElementById('gera');
+    if (element !== null) {
+        $('#gera').iCheck({
+            checkboxClass: 'icheckbox_minimal-blue',
+            radioClass: 'iradio_minimal-blue'
+        });
+        $('#gera').iCheck('disable');
+    }
+    var element = document.getElementById('ngera');
+    if (element !== null) {
+        $('#ngera').iCheck({
+            checkboxClass: 'icheckbox_minimal-blue',
+            radioClass: 'iradio_minimal-blue'
+        });
+        $('#ngera').iCheck('disable');
+    }
 
 // numero de permissoes
     var perm_count = 4;
@@ -294,7 +338,7 @@ function avisoSnack(aviso, corpo) {
 }
 
 function iniDataTable(tabela) {
-    if (tabela == '#tableItensPedido') {
+    if (tabela == '#tableItensPedido' || tabela == '#tableProcessos') {
         $(tabela).DataTable({
             "destroy": true,
             "paging": true,
@@ -861,8 +905,12 @@ function changeTipoLic(element) {
 function maybeDisableFields(flag) {
     document.getElementById('uasg').disabled = flag;
     document.getElementById('procOri').disabled = flag;
-    document.getElementById('gera').disabled = flag;
-    document.getElementById('ngera').disabled = flag;
+    var status = 'enable';
+    if (flag) {
+        status = 'disable';
+    }
+    $('#gera').iCheck(status);
+    $('#ngera').iCheck(status);
     // required
 
     document.getElementById('uasg').required = !flag;
@@ -944,7 +992,17 @@ function listRascunhos() {
 
 function iniPagSolicitacoes() {
     iniDataTable('#tableProcessos');
-    avisoSnack('Carregamento concluído!', 'body');
+    $(".select2").select2();
+    $('#checkPedContr').iCheck({
+        checkboxClass: 'icheckbox_minimal-blue',
+        radioClass: 'iradio_minimal-blue'
+    });
+    for (var i = 1; i <= 3; i++) {
+        $('#tipoCont' + i).iCheck({
+        checkboxClass: 'icheckbox_minimal-blue',
+        radioClass: 'iradio_minimal-blue'
+    });
+    }
 }
 
 function iniTableSolicAdiant() {

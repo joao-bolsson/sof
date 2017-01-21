@@ -1,0 +1,353 @@
+<?php
+session_start();
+ini_set('display_erros', true);
+error_reporting(E_ALL);
+
+if (!isset($_SESSION["id"]) || $_SESSION['id_setor'] == 12) {
+    header("Location: ../");
+}
+include_once '../class/BuscaLTE.class.php';
+//instanciando classe de busca para popular o select de estados
+$obj_Busca = new BuscaLTE();
+$id_setor = $_SESSION["id_setor"];
+$saldo_total = $obj_Busca->getSaldo($id_setor);
+$pedidos_em_analise = $obj_Busca->getPedidosAnalise($id_setor);
+$select_grupo = $obj_Busca->getOptionsGrupos($id_setor);
+?>
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title>Setor de Orçamento e Finanças – HUSM</title>
+        <!-- Tell the browser to be responsive to screen width -->
+        <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+        <!-- Bootstrap 3.3.6 -->
+        <link rel="stylesheet" href="bootstrap/css/bootstrap.min.css">
+        <!-- Font Awesome -->
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.5.0/css/font-awesome.min.css">
+        <!-- Ionicons -->
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/ionicons/2.0.1/css/ionicons.min.css">
+        <!-- Select2 -->
+        <link rel="stylesheet" href="plugins/select2/select2.min.css">
+        <!-- DataTables -->
+        <link rel="stylesheet" href="plugins/datatables/dataTables.bootstrap.css">
+        <!-- iCheck for checkboxes and radio inputs -->
+        <link rel="stylesheet" href="plugins/iCheck/all.css">
+        <!-- Theme style -->
+        <link rel="stylesheet" href="dist/css/AdminLTE.min.css">
+        <!-- AdminLTE Skins. Choose a skin from the css/skins
+             folder instead of downloading all of them to reduce the load. -->
+        <link rel="stylesheet" href="dist/css/skins/_all-skins.min.css">
+
+        <link rel="icon" href="../favicon.ico">
+    </head>
+    <body class="hold-transition skin-blue sidebar-mini" onload="iniPagSolicitacoes();">
+        <div class="wrapper">
+
+            <!-- Main Header -->
+            <header class="main-header">
+                <!-- Logo -->
+                <a href="#" class="logo">
+                    <!-- mini logo for sidebar mini 50x50 pixels -->
+                    <span class="logo-mini"><b>S</b>OF</span>
+                    <!-- logo for regular state and mobile devices -->
+                    <span class="logo-lg"><b>SOF</b>HUSM</span>
+                </a>
+                <!-- Header Navbar: style can be found in header.less -->
+                <nav class="navbar navbar-static-top">
+                    <!-- Sidebar toggle button-->
+                    <a href="#" class="sidebar-toggle" data-toggle="offcanvas" role="button">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </a>
+
+                    <div class="navbar-custom-menu">
+                        <ul class="nav navbar-nav">
+                            <!-- User Account: style can be found in dropdown.less -->
+                            <li class="dropdown user user-menu">
+                                <a href="javascript:abreModal('#myInfos');" class="dropdown-toggle">
+                                    <img src="dist/img/user.png" class="user-image" alt="User Image">
+                                    <span id="userLogado" class="hidden-xs"><?= $_SESSION["nome"] ?></span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="../admin/sair.php"><i class="fa fa-power-off"></i></a>
+                            </li>
+                        </ul>
+                    </div>
+                </nav>
+            </header>
+            <!-- Left side column. contains the logo and sidebar -->
+            <aside class="main-sidebar">
+
+                <!-- sidebar: style can be found in sidebar.less -->
+                <section class="sidebar">
+
+                    <!-- Sidebar user panel (optional) -->
+                    <div class="user-panel">
+                        <div class="pull-left image">
+                            <img src="dist/img/user.png" class="img-circle" alt="User Image">
+                        </div>
+                        <div class="pull-left info">
+                            <p><?= $_SESSION["nome"] ?></p>
+                        </div>
+                    </div>
+
+                    <!-- Sidebar Menu -->
+                    <ul class="sidebar-menu">
+                        <li>
+                            <a href="#">
+                                <i class="fa fa-pencil"></i> <span>Rascunhos</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#">
+                                <i class="fa fa-file-text"></i> <span>Meus Pedidos</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#">
+                                <i class="fa fa-dollar"></i> <span>Saldos</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#">
+                                <i class="fa fa-plus"></i> <span>Meus Adiantamentos</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#">
+                                <i class="fa fa-refresh"></i> <span>Solic Alt Pedidos</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#">
+                                <i class="fa fa-tags"></i> <span>Processos</span>
+                            </a>
+                        </li>
+                    </ul>
+                    <!-- /.sidebar-menu -->
+                </section>
+                <!-- /.sidebar -->
+            </aside>
+
+            <!-- Content Wrapper. Contains page content -->
+            <div class="content-wrapper">
+                <!-- Content Header (Page header) -->
+                <section class="content-header">
+                    <h1>
+                        <?= $_SESSION['nome_setor']; ?>
+                        <small>Saldo: R$ <?= number_format($obj_Busca->getSaldo($_SESSION['id_setor']), 3, ',', '.'); ?></small>
+                    </h1>
+                    <ol class="breadcrumb">
+                        <li class="active"><i class="fa fa-dashboard"></i> Solicitações de Empenho</li>
+                    </ol>
+                </section>
+
+                <!-- Main content -->
+                <section class="content">
+                    <div class="row">
+                        <div class="col-xs-12">
+                            <div class="box">
+                                <div class="box-header">
+                                    <h3 class="box-title">Itens do Processo: --------------------</h3>
+                                    <div class="box-tools pull-right">
+                                        <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
+                                        </button>
+                                    </div>
+                                </div><!-- /.box-header -->
+                                <input id="searchProcesso" type="hidden">
+                                <div class="box-body">
+                                    <table class="table table-bordered table-striped" id="tableProcessos">
+                                        <thead>
+                                            <tr>
+                                                <th></th>
+                                                <th>Fornecedor</th>
+                                                <th>Cod Reduzido</th>
+                                                <th>Qt Solicitada</th>
+                                                <th>Complemento</th>
+                                                <th style="display: none;"></th>
+                                                <th>Vl Unitário</th>
+                                                <th>Qt Saldo</th>
+                                                <th>Qt Utilizado</th>
+                                                <th>Vl Saldo</th>
+                                                <th>Vl Utilizado</th>
+                                                <th>Qt Contrato</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="conteudoProcesso"></tbody>
+                                    </table>
+                                </div><!-- ./box-body -->
+                            </div><!-- ./box -->
+                        </div> <!-- ./col-xs-12 -->
+                    </div><!-- /.row -->
+                    <div class="row">
+                        <div class="col-xs-12">
+                            <div class="box">
+                                <div class="box-header">
+                                    <h3 class="box-title">Pedido | SALDO <span id="text_saldo_total">R$ <?= number_format($saldo_total, 3, ',', '.'); ?></span></h3>
+                                    <div class="box-tools pull-right">
+                                        <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
+                                        </button>
+                                    </div>
+                                </div><!-- /.box-header -->
+                                <form action="../php/geral.php" method="POST">
+                                    <input type="hidden" name="users" value="1">
+                                    <input type="hidden" name="form" value="pedido">
+                                    <input id="pedido" type="hidden" name="pedido" value="0">
+                                    <div class="box-body">
+                                        <table class="table table-bordered table-striped">
+                                            <thead>
+                                            <th></th>
+                                            <th>COD_REDUZIDO</th>
+                                            <th>COMPLEMENTO_ITEM</th>
+                                            <th>VL_UNITARIO</th>
+                                            <th>NOME_FORNECEDOR</th>
+                                            <th>NUM_LICITACAO</th>
+                                            <th>QT_SOLICITADA</th>
+                                            <th>VALOR</th>
+                                            </thead>
+                                            <tbody id="conteudoPedido"></tbody>
+                                        </table>
+                                        <table class="table table-bordered table-striped">
+                                            <tr>
+                                                <td>
+                                                    <div class="form-group">
+                                                        <label>Total</label>
+                                                        <input class="form-control" id="total" name="total" style="font-size: 14pt;" type="text" disabled value="R$ 0">
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            <input id="total_hidden" type="hidden" name="total_hidden" value="0">
+                                            <input id="saldo_total" type="hidden" name="saldo_total" value="<?= $saldo_total ?>">
+                                        </table>
+                                        <div class="form-group">
+                                            <table class="table table-bordered table-striped">
+                                                <tr>
+                                                    <?= $obj_Busca->getPrioridades(); ?>
+                                                </tr>
+                                            </table>
+                                        </div>
+                                        <div id="divObs" class="form-group">
+                                            <label>Observações</label>
+                                            <textarea class="form-control" id="obs" name="obs" rows="1" required></textarea>
+                                        </div>
+                                        <h2>Licitação</h2>
+                                        <table class="table table-bordered table-striped">
+                                            <?= $obj_Busca->getOptionsLicitacao(4); ?>
+                                        </table>
+                                        <table class="table table-bordered table-striped">
+                                            <input id="idLic" type="hidden" name="idLic" value="0">
+                                            <tr>
+                                                <td>
+                                                    <div id="divNum" class="form-group">
+                                                        <label>Número</label>
+                                                        <input class="form-control" id="infoLic" name="infoLic" required/>
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <div id="divUasg" class="form-group">
+                                                        <label>UASG</label>
+                                                        <input class="form-control" id="uasg" name="uasg" disabled/>
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <div id="divProcOri" class="form-group">
+                                                        <label>Processo Original</label>
+                                                        <input class="form-control" id="procOri" name="procOri" disabled/>
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <div class="form-group">
+                                                        <input type="radio" name="geraContrato" id="gera" class="minimal" value="1">
+                                                        Gera Contrato
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <input type="radio" name="geraContrato" id="ngera" class="minimal" value="0">
+                                                        Não Gera Contrato
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                        <?php if (strlen($select_grupo) > 0): ?>
+                                            <h2>Grupo</h2>
+                                            <div class="form-group">
+                                                <label>Selecione o grupo</label>
+                                                <select id="grupo" class="form-control select2" name="grupo" required>
+                                                    <?= $select_grupo ?>
+                                                </select>
+                                            </div>
+                                        <?php endif ?>
+                                        <div class="form-group">
+                                            <input class="minimal" id="checkPedContr" name="pedidoContrato" type="checkbox">
+                                            Pedido de Contrato
+                                        </div>
+                                        <table class="table table-bordered table-striped">
+                                            <tr>
+                                                <?= $obj_Busca->getOptionsContrato(); ?>
+                                            </tr>
+                                        </table>
+                                        <div id="divSiafi" class="form-group">
+                                            <label>SIAFI</label>
+                                            <input class="form-control" id="siafi" name="siafi" type="text">
+                                        </div>
+                                    </div><!-- ./card-inner -->
+                                    <div class="box-footer">
+                                        <button id="btnLimpa" class="btn btn-default" type="button" style="width: 49%;" onclick="limpaTelaSolic();"><i class="fa fa-close"></i>&nbsp;Limpar</button>
+                                        <button class="btn btn-primary" type="submit" style="width: 50%;"><i class="fa fa-send"></i>&nbsp;Enviar Pedido / Salvar Rascunho</button>
+                                    </div>
+                                </form>
+                            </div><!-- ./card-main -->
+                        </div> <!-- ./card -->
+                    </div>
+                </section>
+                <!-- /.content -->
+            </div>
+            <!-- /.content-wrapper -->
+
+            <!-- Main Footer -->
+            <footer class="main-footer">
+                <div class="pull-right hidden-xs">
+                    <b>Version</b> 2.0.0
+                </div>
+                <strong>Copyright © 2016-2017 <a href="https://github.com/joao-bolsson">João Bolsson</a>.</strong> All rights
+                reserved.
+            </footer>
+        </div>
+        <!-- ./wrapper -->
+
+        <!-- REQUIRED JS SCRIPTS -->
+
+        <!-- jQuery 2.2.3 -->
+        <script src="plugins/jQuery/jquery-2.2.3.min.js"></script>
+        <!-- Bootstrap 3.3.6 -->
+        <script src="bootstrap/js/bootstrap.min.js"></script>
+        <!-- DataTables -->
+        <script src="plugins/datatables/jquery.dataTables.min.js"></script>
+        <script src="plugins/datatables/dataTables.bootstrap.min.js"></script>
+        <!-- Select2 -->
+        <script src="plugins/select2/select2.full.min.js"></script>
+        <!-- SlimScroll -->
+        <script src="plugins/slimScroll/jquery.slimscroll.min.js"></script>
+        <!-- FastClick -->
+        <script src="plugins/fastclick/fastclick.js"></script>
+        <!-- AdminLTE App -->
+        <script src="dist/js/app.min.js"></script>
+        <!-- AdminLTE for demo purposes -->
+        <script src="dist/js/demo.js"></script>
+        <!-- iCheck 1.0.1 -->
+        <script src="plugins/iCheck/icheck.min.js"></script>
+        <!-- InputMask -->
+        <script src="plugins/input-mask/jquery.inputmask.js"></script>
+        <script src="plugins/input-mask/jquery.inputmask.date.extensions.js"></script>
+        <script src="plugins/input-mask/jquery.inputmask.extensions.js"></script>
+        <!-- page script -->
+        <script type="text/javascript" src="../iniLTE.js"></script>
+
+    </body>
+</html>
+
+

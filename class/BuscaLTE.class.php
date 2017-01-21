@@ -62,11 +62,9 @@ class BuscaLTE extends Conexao {
         while ($obj = $query->fetch_object()) {
             $retorno .= "
                 <td>
-                    <div class=\"radiobtn radiobtn-adv\">
-                        <label for=\"tipoCont" . $obj->id . "\">
-                            <input type=\"radio\" name=\"tipoCont\" id=\"tipoCont" . $obj->id . "\" class=\"access-hide\" value=\"" . $obj->id . "\" onchange=\"changeTipoContr(this);\">" . $obj->nome . "
-                            <span class=\"radiobtn-circle\"></span><span class=\"radiobtn-circle-check\"></span>
-                        </label>
+                    <div class=\"form-group\">
+                        <input type=\"radio\" name=\"tipoCont\" id=\"tipoCont" . $obj->id . "\" class=\"minimal\" value=\"" . $obj->id . "\" onchange=\"changeTipoContr(this);\">" 
+                        . $obj->nome . "
                     </div>
                 </td>";
         }
@@ -159,11 +157,8 @@ class BuscaLTE extends Conexao {
             }
             $retorno .= "
                 <td>
-                    <div class=\"radiobtn radiobtn-adv\">
-                        <label for=\"tipoLic" . $obj->id . "\">
-                            <input type=\"radio\" name=\"tipoLic\" id=\"tipoLic" . $obj->id . "\" class=\"access-hide\" value=\"" . $obj->id . "\" required onchange=\"changeTipoLic(this);\">" . $obj->nome . "
-                            <span class=\"radiobtn-circle\"></span><span class=\"radiobtn-circle-check\"></span>
-                        </label>
+                    <div class=\"form-group\">
+                        <input type=\"radio\" name=\"tipoLic\" id=\"tipoLic" . $obj->id . "\" class=\"minimal\" value=\"" . $obj->id . "\" required > " . $obj->nome . "
                     </div>
                 </td>";
             $i++;
@@ -875,11 +870,8 @@ class BuscaLTE extends Conexao {
         while ($prioridade = $query->fetch_object()) {
             $retorno .= "
                 <td>
-                    <div class=\"radiobtn radiobtn-adv\">
-                        <label for=\"st" . $prioridade->nome . "\">
-                            <input type=\"radio\" name=\"st\" id=\"st" . $prioridade->nome . "\" class=\"access-hide\" checked=\"\" value=\"" . $prioridade->id . "\">" . $prioridade->nome . "
-                            <span class=\"radiobtn-circle\"></span><span class=\"radiobtn-circle-check\"></span>
-                        </label>
+                    <div class=\"form-group\">
+                        <input type=\"radio\" name=\"st\" id=\"st" . $prioridade->nome . "\" class=\"minimal\" value=\"" . $prioridade->id . "\"> ". $prioridade->nome . "
                     </div>
                 </td>";
         }

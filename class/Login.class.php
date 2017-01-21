@@ -37,6 +37,21 @@ class Login extends Conexao {
     }
 
     /**
+     * Seleciona o nome do setor do usuário.
+     * @param int $id_setor Id do setor
+     * @return string Nome do setor
+     */
+    private function getNomeSetor(int $id_setor): string {
+        if (is_null($this->mysqli)) {
+            $this->mysqli = parent::getConexao();
+        }
+        $query = $this->mysqli->query("SELECT setores.nome FROM setores WHERE setores.id = " . $id_setor . " LIMIT 1;") or exit("Erro ao buscar o nome do setor do usuário.");
+        $this->mysqli = NULL;
+        $obj = $query->fetch_object();
+        return $obj->nome;
+    }
+
+    /**
      * Função para verificar a validade do login
      * As senhas são criptografas com a função crypt do php
      *
@@ -70,6 +85,7 @@ class Login extends Conexao {
                 $_SESSION[$this->campoLogin] = $login;
                 $_SESSION[$this->campoEmail] = $usuario->{$this->campoEmail};
                 $_SESSION[$this->campoSetor] = $usuario->{$this->campoSetor};
+                $_SESSION['nome_setor'] = Login::getNomeSetor($usuario->{$this->campoSetor});
 
                 //definindo os slides para evitar recarregamentos desnecessários
                 $_SESSION["slide1"] = $this->obj_Busca->getSlide(1);
@@ -102,6 +118,7 @@ class Login extends Conexao {
             $_SESSION[$this->campoLogin] = $usuario->{$this->campoLogin};
             $_SESSION[$this->campoEmail] = $usuario->{$this->campoEmail};
             $_SESSION[$this->campoSetor] = $usuario->{$this->campoSetor};
+            $_SESSION['nome_setor'] = Login::getNomeSetor($usuario->{$this->campoSetor});
             if ($usuario->{$this->campoSetor} == 2) {
                 $_SESSION["admin"] = true;
             }
