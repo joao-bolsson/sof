@@ -1255,7 +1255,6 @@ class Busca extends Conexao {
         $query = $this->mysqli->query("SELECT pedido.id, DATE_FORMAT(pedido.data_pedido, '%d/%m/%Y') AS data_pedido, EXTRACT(YEAR FROM pedido.data_pedido) AS ano, mes.sigla_mes AS ref_mes, status.nome AS status, replace(pedido.valor, '.', ',') AS valor, pedido.obs, pedido.pedido_contrato, prioridade.nome AS prioridade FROM prioridade, pedido, mes, status WHERE pedido.prioridade = prioridade.id AND status.id = pedido.status AND pedido.id = {$id_pedido} AND mes.id = pedido.ref_mes;") or exit("Erro ao formar o cabeçalho do pedido.");
         $this->mysqli = NULL;
         $pedido = $query->fetch_object();
-        $pedido->valor = number_format($pedido->valor, 3, ',', '.');
         $lblPedido = "Pedido";
         if ($pedido->pedido_contrato) {
             $lblPedido = "Pedido de Contrato";
