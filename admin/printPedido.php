@@ -26,10 +26,15 @@ if (isset($_SESSION["imprimirPedido"]) && $_SESSION["imprimirPedido"] && $_SESSI
   <title>SOFHUSM | Impressão de pedido</title>
 </head>";
 
+    $img = "../sof_files/header_setor_" . $id_setor . ".png";
+    if (!file_exists($img)) {
+        $img = "../sof_files/header_setor_2.png";
+    }
+
     $html_header = "
 <body>
   <p style=\"text-align: center;\">
-    <img src=\"../sof_files/header_setor_{$id_setor}.png\"/>
+    <img src=\"{$img}\"/>
   </p>
   <hr/>";
     $html_header .= $obj_Busca->getHeader($id_pedido);
