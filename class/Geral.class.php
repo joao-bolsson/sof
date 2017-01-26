@@ -10,6 +10,8 @@
 ini_set('display_erros', true);
 error_reporting(E_ALL);
 
+require_once '../defines.php';
+
 include_once 'Conexao.class.php';
 include_once 'Busca.class.php';
 

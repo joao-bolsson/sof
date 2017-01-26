@@ -10,8 +10,6 @@ error_reporting(E_ALL);
 
 session_start();
 
-defined('SALT') or define('SALT', '$1$j:[]bols$');
-
 include_once 'class/Busca.class.php';
 //instanciando classe de busca para popular o select de estados
 $obj_Busca = new Busca();
@@ -34,4 +32,3 @@ if (isset($_SESSION['id_setor']) && $_SESSION['id_setor'] == 12) {
 } else {
     header("Location: view/");
 }
-?>

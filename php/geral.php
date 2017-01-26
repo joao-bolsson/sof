@@ -22,6 +22,9 @@ ini_set('display_erros', true);
 error_reporting(E_ALL);
 
 session_start();
+
+require_once '../defines.php';
+
 include_once '../class/Geral.class.php';
 include_once '../class/Busca.class.php';
 include_once '../class/Util.class.php';
