@@ -364,7 +364,7 @@ if ($obj_Busca->isActive()) {
                 $id_user = filter_input(INPUT_POST, 'id_user');
                 $input_senha = filter_input(INPUT_POST, 'senha');
                 //encritpando a senha
-                $senha = crypt($input_senha);
+                $senha = crypt($input_senha, SALT);
                 //alterando no banco
                 $update = $obj_Geral->updateSenha($id_user, $senha);
                 if ($update) {

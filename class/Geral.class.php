@@ -45,7 +45,7 @@ class Geral extends Conexao {
      * @return string Senha do usuário feita pelo sistema.
      */
     public function cadUser(string $nome, string $login, string $email, int $setor, string $senha): int {
-        $senha_crp = crypt($senha);
+        $senha_crp = crypt($senha, SALT);
         if (is_null($this->mysqli)) {
             $this->mysqli = parent::getConexao();
         }
@@ -436,7 +436,7 @@ class Geral extends Conexao {
         if ($query_email->num_rows == 1) {
             $id = $query_email->fetch_object()->id;
             // criptografando a senha
-            $senha = crypt($senha);
+            $senha = crypt($senha, SALT);
             $this->mysqli->query("UPDATE usuario SET senha = '{$senha}' WHERE id = {$id};") or exit("Erro ao atualizar a senha do usuário.");
             $this->mysqli = NULL;
             return "Sucesso";
@@ -457,7 +457,7 @@ class Geral extends Conexao {
         if (crypt($senhaAtual, $usuario->senha) == $usuario->senha) {
             $nome = $this->mysqli->real_escape_string($nome);
             $email = $this->mysqli->real_escape_string($email);
-            $novaSenha = crypt($novaSenha);
+            $novaSenha = crypt($novaSenha, SALT);
             $this->mysqli->query("UPDATE usuario SET nome = '{$nome}', email = '{$email}', senha = '{$novaSenha}' WHERE id = {$id_user};") or exit("Erro ao atualizar os dados do usuário.");
             $_SESSION["nome"] = $nome;
             $_SESSION["email"] = $email;
