@@ -3,7 +3,7 @@ ini_set('display_erros', true);
 error_reporting(E_ALL);
 
 session_start();
-if (!isset($_SESSION["id_setor"]) || $_SESSION["id_setor"] != 2) {
+if (!isset($_SESSION["id_setor"]) || $_SESSION["id_setor"] != 2 || !defined('SALT')) {
     header("Location: ../");
 }
 include_once '../class/Busca.class.php';
