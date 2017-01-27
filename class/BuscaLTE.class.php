@@ -1993,14 +1993,14 @@ class BuscaLTE extends Conexao {
             $retorno .= "
                 <tr>
                     <td>" . $rascunho->id . "</td>
-                    <td><span class=\"label\" style=\"font-size: 11pt;\">" . $rascunho->status . "</span></td>
+                    <td><small class=\"label bg-gray\">" . $rascunho->status . "</small></td>
                     <td>" . $rascunho->ref_mes . "</td>
                     <td>" . $rascunho->data_pedido . "</td>
                     <td>R$ " . $rascunho->valor . "</td>
                     <td>
-                        <button type=\"button\" class=\"btn btn-default btn-sm\" style=\"text-transform: none !important;font-weight: bold;\" onclick=\"editaPedido(" . $rascunho->id . ");\" title=\"Editar\"><span class=\"icon\">create</span></button>
-                        <button type=\"button\" class=\"btn btn-default btn-sm\" style=\"text-transform: none !important;font-weight: bold;\" onclick=\"imprimir(" . $rascunho->id . ");\" title=\"Imprimir\"><span class=\"icon\">print</span></button>
-                        <button type=\"button\" class=\"btn btn-default btn-sm\" style=\"text-transform: none !important;font-weight: bold;\" onclick=\"deletePedido(" . $rascunho->id . ");\" title=\"Excluir\"><span class=\"icon\">delete</span></button>
+                        <button type=\"button\" class=\"btn btn-default btn-sm\" onclick=\"editaPedido(" . $rascunho->id . ");\" title=\"Editar\"><i class=\"fa fa-pencil\"></i></button>
+                        <button type=\"button\" class=\"btn btn-default btn-sm\" onclick=\"imprimir(" . $rascunho->id . ");\" title=\"Imprimir\"><i class=\"fa fa-print\"></i></button>
+                        <button type=\"button\" class=\"btn btn-default btn-sm\" onclick=\"deletePedido(" . $rascunho->id . ");\" title=\"Excluir\"><i class=\"fa fa-trash\"></i></button>
                     </td>
                 </tr>";
         }
@@ -2046,10 +2046,10 @@ class BuscaLTE extends Conexao {
             $item->complemento_item = str_replace("\"", "'", $item->complemento_item);
             $retorno .= "
                 <tr id=\"row" . $id_item . "\">
-                    <td><a class=\"modal-close\" href=\"javascript:removeTableRow(" . $id_item . ", '" . $item->valor . "');\"><span class=\"icon\">delete</span></a></td>
+                    <td><button type=\"button\" class=\"btn btn-default\" onclick=\"removeTableRow(" . $id_item . ", '" . $item->valor . "');\" title=\"Remover\"><i class=\"fa fa-trash\"></i></button></td>
                     <td>" . $item->cod_reduzido . "</td>
                     <td>
-                        <button onclick=\"viewCompl(\"" . $item->complemento_item . "\");\" class=\"btn btn-flat waves-attach waves-effect\" type=\"button\" title=\"Ver Complemento do Item\">complemento_item</button>
+                        <button type=\"button\" onclick=\"viewCompl(\"" . $item->complemento_item . "\");\" class=\"btn btn-default\" title=\"Ver Complemento do Item\"><i class=\"fa fa-eye\"></i></button>
                     </td>
                     <td>R$ " . $item->vl_unitario . "</td>
                     <td>" . $item->nome_fornecedor . "</td>

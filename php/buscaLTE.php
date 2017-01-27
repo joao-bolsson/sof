@@ -250,7 +250,7 @@ if (isset($_POST["admin"]) && isset($_SESSION['id_setor']) && ($_SESSION['id_set
         // edita pedido
 
         case 'editaPedido':
-            $id_pedido = $_POST["id_pedido"];
+            $id_pedido = filter_input(INPUT_POST, 'id_pedido');
 
             echo $obj_Busca->getConteudoPedido($id_pedido);
             break;

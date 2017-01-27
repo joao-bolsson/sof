@@ -101,7 +101,7 @@ $select_grupo = $obj_Busca->getOptionsGrupos($id_setor);
                     <!-- Sidebar Menu -->
                     <ul class="sidebar-menu">
                         <li>
-                            <a href="#">
+                            <a href="javascript:listRascunhos();">
                                 <i class="fa fa-pencil"></i> <span>Rascunhos</span>
                             </a>
                         </li>
@@ -233,7 +233,7 @@ $select_grupo = $obj_Busca->getOptionsGrupos($id_setor);
                                                 </tr>
                                             </table>
                                         </div>
-                                        <div id="divObs" class="form-group">
+                                        <div class="form-group">
                                             <label>Observações</label>
                                             <textarea class="form-control" id="obs" name="obs" rows="1" required></textarea>
                                         </div>
@@ -245,13 +245,13 @@ $select_grupo = $obj_Busca->getOptionsGrupos($id_setor);
                                             <input id="idLic" type="hidden" name="idLic" value="0">
                                             <tr>
                                                 <td>
-                                                    <div id="divNum" class="form-group">
+                                                    <div class="form-group">
                                                         <label>Número</label>
                                                         <input class="form-control" id="infoLic" name="infoLic" required/>
                                                     </div>
                                                 </td>
                                                 <td>
-                                                    <div id="divUasg" class="form-group">
+                                                    <div class="form-group">
                                                         <label>UASG</label>
                                                         <input class="form-control" id="uasg" name="uasg" disabled/>
                                                     </div>
@@ -292,7 +292,7 @@ $select_grupo = $obj_Busca->getOptionsGrupos($id_setor);
                                                 <?= $obj_Busca->getOptionsContrato(); ?>
                                             </tr>
                                         </table>
-                                        <div id="divSiafi" class="form-group">
+                                        <div class="form-group">
                                             <label>SIAFI</label>
                                             <input class="form-control" id="siafi" name="siafi" type="text">
                                         </div>
@@ -320,6 +320,31 @@ $select_grupo = $obj_Busca->getOptionsGrupos($id_setor);
                 <strong>Copyright © 2016-2017 <a href="https://github.com/joao-bolsson">João Bolsson</a>.</strong> All rights
                 reserved.
             </footer>
+            <div aria-hidden="true" class="modal fade" id="listRascunhos" role="dialog" tabindex="-1">
+                <div class="modal-dialog modal-lg">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                            <h4 class="modal-title">Rascunhos</h4>
+                        </div>
+                        <div class="modal-body">
+                            <table id="tableListRascunhos" class="table table-bordered table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>Num Pedido</th>
+                                        <th>Status</th>
+                                        <th>RefMes</th>
+                                        <th>Última modificação</th>
+                                        <th>Valor</th>
+                                        <th>Opções</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="tbodyListRascunhos"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
             <div aria-hidden="true" class="modal fade" id="listProcessos" role="dialog" tabindex="-1">
                 <div class="modal-dialog modal-lg">
                     <div class="modal-content">
