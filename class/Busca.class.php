@@ -1262,13 +1262,18 @@ class Busca extends Conexao {
         $retorno = "
             <fieldset>
                 <p>
-                    <b>" . $lblPedido . ":</b> " . $id_pedido . "
+                    <b>" . $lblPedido . ":</b> " . $id_pedido . "&emsp;
                     <b>Data de Envio:</b> " . $pedido->data_pedido . ".&emsp;
                     <b>Situação:</b> " . $pedido->status . "&emsp;
                     <b>Prioridade:</b> " . $pedido->prioridade . "&emsp;
-                    <b>Total do Pedido:</b> R$ " . $pedido->valor . "
                 </p>
-                <p>" . Busca::getGrupoPedido($id_pedido) . "&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;" . Busca::getEmpenho($id_pedido) . "</p>
+                <p><b>Total do Pedido:</b> R$ " . $pedido->valor . "</p>
+                <table style=\"font-size: 8pt; margin: 5px;\">
+                    <tr>
+                        <td style=\"text-align: left;\">" . Busca::getGrupoPedido($id_pedido) . "</td>
+                        <td style=\"text-align: right;\">" . Busca::getEmpenho($id_pedido) . "</td>
+                    </tr>
+                </table>
                 <p><b>Observação da Unidade Solicitante: </b></p>
                 <p style=\"font-weight: normal !important;\">	" . $pedido->obs . "</p>
             </fieldset><br>";
