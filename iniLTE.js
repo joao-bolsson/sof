@@ -338,13 +338,27 @@ function resetSystem() {
         $.post('../php/geral.php', {
             admin: 1,
             form: 'resetSystem'
-        }).done(function (resposta) {
+        }).done(function () {
             location.reload();
         });
     }
 }
 
-function avisoSnack(aviso, corpo) {
+function avisoSnack(aviso) {
+    // Get the snackbar DIV
+    var x = document.getElementById('snackbar');
+    if (x === null) {
+        return;
+    }
+    x.innerHTML = aviso;
+
+    // Add the "show" class to DIV
+    x.className = 'show';
+
+    // After 3 seconds, remove the show class from DIV
+    setTimeout(function () {
+        x.className = x.className.replace('show', '');
+    }, 3000);
 }
 
 function iniDataTable(tabela) {
@@ -361,6 +375,7 @@ function iniDataTable(tabela) {
                 {"width": "15%", "targets": 0},
                 {"width": "15%", "targets": 5}
             ],
+            "lengthMenu": [5, 10, 25, 50, 100],
             language: {
                 "decimal": "",
                 "emptyTable": "Nenhum dado na tabela",
@@ -713,9 +728,9 @@ function enviaForn(id_pedido) {
         admin: 1,
         form: 'enviaForn',
         id_pedido: id_pedido
-    }, function (resposta) {
+    }, function () {
         iniSolicitacoes();
-        avisoSnack('Pedido enviado ao Fornecedor', 'body');
+        avisoSnack('Pedido enviado ao Fornecedor');
     });
 }
 
@@ -1078,13 +1093,12 @@ function analisaAdi(id, acao) {
     }
 }
 
-// FUNÇÃO DISPARADA QUANDO O ITEM É CLICADO P/ ADC ---------------------------------
 function checkItemPedido(id_item, vl_unitario, qt_saldo) {
     var qtd_item = document.getElementById('qtd' + id_item).value;
     var itens = document.getElementsByClassName('classItens');
     for (var i = 0; i < itens.length; i++) {
         if (itens[i].value == id_item) {
-            alert('Esse item já está contido no pedido. Verifique!');
+            avisoSnack('Esse item já está contido no pedido. Verifique!');
             return;
         }
     }
@@ -1092,19 +1106,19 @@ function checkItemPedido(id_item, vl_unitario, qt_saldo) {
         document.getElementById("qtd" + id_item).style.border = "0.12em solid red";
         document.getElementById("qtd" + id_item).focus();
     } else {
-//limpando os campos
+        //limpando os campos
         document.getElementById("qtd" + id_item).style.border = "none";
         document.getElementById("qtd" + id_item).value = "";
         //verifica se a qtd solicitada está disponível
         if (qtd_item > qt_saldo) {
-            avisoSnack('QUANTIDADE INDISPONÍVEL !', 'body');
+            avisoSnack('QUANTIDADE INDISPONÍVEL !');
         } else {
             var valor = parseFloat(qtd_item * vl_unitario).toFixed(3);
             var total_pedido = document.getElementById('total_hidden').value;
             total_pedido += valor;
             saldo_total = parseFloat(document.getElementById("saldo_total").value);
             if (valor > saldo_total) {
-                avisoSnack('SALDO INSUFICIENTE !', 'body');
+                avisoSnack('SALDO INSUFICIENTE !');
             } else {
                 addItemPedido(id_item, qtd_item, vl_unitario);
             }
@@ -1112,10 +1126,8 @@ function checkItemPedido(id_item, vl_unitario, qt_saldo) {
     }
 }
 
-// ADICIONA ITEM AO PEDIDO ---------------------------------------------------------
 function addItemPedido(id_item, qtd, vl_unitario) {
-
-//valor do pedido
+    //valor do pedido
     var valor = qtd * vl_unitario;
     t = document.getElementById('total_hidden').value;
     total = parseFloat(t) + parseFloat(valor);
@@ -1141,12 +1153,12 @@ function addItemPedido(id_item, qtd, vl_unitario) {
     }, function (resposta) {
         conteudoPedido = document.getElementById("conteudoPedido").innerHTML;
         document.getElementById("conteudoPedido").innerHTML = conteudoPedido + resposta;
-        avisoSnack('Item Inserido ao Pedido !', 'body');
+        avisoSnack('Item Inserido ao Pedido !');
     });
 }
 
 function removeTableRow(id_item, valor) {
-//valor do pedido
+    //valor do pedido
     t = document.getElementById('total_hidden').value;
     total = parseFloat(t) - parseFloat(valor);
     document.getElementById('total_hidden').value = parseFloat(total).toFixed(3);
@@ -1160,14 +1172,14 @@ function removeTableRow(id_item, valor) {
     if (row.parentNode) {
         row.parentNode.removeChild(row);
     }
-    avisoSnack('Item Removido do Pedido !', 'body');
+    avisoSnack('Item Removido do Pedido !');
 }
-// VISUALIZAR O COMPLEMENTO DO ITEM ------------------------------------------------
+
 function viewCompl(texto) {
     document.getElementById("complementoItem").innerHTML = texto;
     $('#viewCompl').modal();
 }
-// PESQUISA POR UM PROCESSO CONTENDO ITENS -----------------------------------------
+
 function pesquisarProcesso(busca) {
     $('#listProcessos').modal('hide');
     $.post('../php/buscaLTE.php', {
@@ -1179,7 +1191,7 @@ function pesquisarProcesso(busca) {
         $('#conteudoProcesso').html(resposta);
         iniDataTable('#tableProcessos');
         document.getElementById('numProc').innerHTML = "Processo: " + busca;
-        avisoSnack('Busca Realizada com Sucesso !', 'body');
+        avisoSnack('Busca Realizada com Sucesso !');
     });
 }
 
@@ -1520,7 +1532,7 @@ function deletePedido(id_pedido) {
         if (resposta != "true") {
             alert(resposta);
         } else {
-            avisoSnack('Pedido deletado com sucesso !', 'body');
+            avisoSnack('Pedido deletado com sucesso !');
         }
         $('#tableListRascunhos').DataTable().destroy();
     });
@@ -1565,7 +1577,7 @@ function getStatus(id_pedido, id_setor) {
     });
     $('#detPedId').html(id_pedido);
     getNomeSetor(id_setor);
-    avisoSnack('Carregamento concluído!', 'body');
+    avisoSnack('Carregamento concluído!');
 }
 
 function limpaTela() {
@@ -1580,7 +1592,7 @@ function limpaTela() {
     document.getElementById('formPedido').reset();
     $('#btnLimpa').blur();
     document.getElementById('rowDetPedido').style.display = "none";
-    avisoSnack('Tela Limpa', 'body');
+    avisoSnack('Tela Limpa');
 }
 // cancelar um item
 function cancelaItem(id_item) {

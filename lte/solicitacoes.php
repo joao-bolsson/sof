@@ -39,6 +39,8 @@ $select_grupo = $obj_Busca->getOptionsGrupos($id_setor);
         <!-- AdminLTE Skins. Choose a skin from the css/skins
              folder instead of downloading all of them to reduce the load. -->
         <link rel="stylesheet" href="dist/css/skins/_all-skins.min.css">
+        <!-- Custom snackbar style -->
+        <link rel="stylesheet" href="dist/css/snackbar.min.css">
 
         <link rel="icon" href="../favicon.ico">
     </head>
@@ -153,7 +155,7 @@ $select_grupo = $obj_Busca->getOptionsGrupos($id_setor);
                         <div class="col-xs-12">
                             <div class="box">
                                 <div class="box-header">
-                                    <h3 class="box-title">Itens do Processo: --------------------</h3>
+                                    <h3 class="box-title">Itens do Processo: <span id="numProc">--------------------</span></h3>
                                     <div class="box-tools pull-right">
                                         <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
                                         </button>
@@ -306,6 +308,8 @@ $select_grupo = $obj_Busca->getOptionsGrupos($id_setor);
                 </section>
                 <!-- /.content -->
             </div>
+
+            <div id="snackbar">Some text some message..</div>
             <!-- /.content-wrapper -->
 
             <!-- Main Footer -->

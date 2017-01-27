@@ -36,6 +36,8 @@ $count = $obj_Busca->getCountSolic();
         <!-- AdminLTE Skins. Choose a skin from the css/skins
              folder instead of downloading all of them to reduce the load. -->
         <link rel="stylesheet" href="dist/css/skins/_all-skins.min.css">
+        <!-- Custom snackbar style -->
+        <link rel="stylesheet" href="dist/css/snackbar.min.css">
 
         <link rel="icon" href="../favicon.ico">
     </head>
@@ -496,6 +498,9 @@ $count = $obj_Busca->getCountSolic();
                     <?php endif; ?>
                 </section><!-- /.content -->
             </div><!-- /.content-wrapper -->
+
+            <div id="snackbar">Some text some message..</div>
+
             <footer class="main-footer">
                 <div class="pull-right hidden-xs">
                     <b>Version</b> 2.0.0
