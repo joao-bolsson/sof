@@ -185,6 +185,12 @@ $(function () {
         }
     });
 
+    $('#listPedidos').on('shown.bs.modal', function () {
+        if (!$.fn.DataTable.isDataTable('#tableListPedidos')) {
+            iniDataTable('#tableListPedidos');
+        }
+    });
+
 });
 function cadEmpenho(id_pedido, empenho, data) {
     document.getElementById('id_pedido_emp').value = '';
@@ -985,21 +991,16 @@ function verProcessos(pedido) {
     });
 }
 
-$('#listPedidos').on('shown.bs.modal', function (event) {
-    if (!$.fn.DataTable.isDataTable('#tableListPedidos')) {
-        iniDataTable('#tableListPedidos');
-    }
-});
 function listPedidos() {
-    $('#listPedidos').modal('show');
-    if (!$.fn.DataTable.isDataTable('#tableListPedidos')) {
-        $.post('../php/busca.php', {
+    if (document.getElementById('tbodyListPedidos').innerHTML.length === 0) {
+        $.post('../php/buscaLTE.php', {
             users: 1,
             form: 'listPedidos'
         }, function (resposta) {
-            document.getElementById('tbodyListPedidos').innerHTML = resposta;
+            $('#tbodyListPedidos').html(resposta);
         });
     }
+    $('#listPedidos').modal('show');
 }
 
 function listRascunhos() {

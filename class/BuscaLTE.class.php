@@ -2108,7 +2108,7 @@ class BuscaLTE extends Conexao {
             $pedido->valor = number_format($pedido->valor, 3, ',', '.');
             $btnSolicAlt = "";
             if ($pedido->status == 'Em Analise' || $pedido->status == 'Aguarda Orcamento') {
-                $btnSolicAlt = "<button type=\"button\" class=\"btn btn-default btn-sm\" style=\"text-transform: none !important;font-weight: bold;\" onclick=\"solicAltPed(" . $pedido->id . ");\" title=\"Solicitar Alteração\"><span class=\"icon\">build</span></button>";
+                $btnSolicAlt = "<button type=\"button\" class=\"btn btn-default btn-sm\" onclick=\"solicAltPed(" . $pedido->id . ");\" title=\"Solicitar Alteração\"><i class=\"fa fa-wrench\"></i></button>";
             }
             $retorno .= "
                 <tr>
@@ -2116,12 +2116,12 @@ class BuscaLTE extends Conexao {
                     <td>" . $pedido->ref_mes . "</td>
                     <td>" . $pedido->data_pedido . "</td>
                     <td>" . $pedido->prioridade . "</td>
-                    <td><span class=\"label\" style=\"font-size: 11pt;\">" . $pedido->status . "</span></td>
+                    <td><small class=\"label bg-gray\">" . $pedido->status . "</small></td>
                     <td>" . $empenho . "</td>
                     <td>R$ " . $pedido->valor . "</td>
                     <td>
                         " . $btnSolicAlt . "
-                        <button type=\"button\" class=\"btn btn-default btn-sm\" style=\"text-transform: none !important;font-weight: bold;\" onclick=\"imprimir(" . $pedido->id . ");\" title=\"Imprimir\"><span class=\"icon\">print</span></button>
+                        <button type=\"button\" class=\"btn btn-default btn-sm\" onclick=\"imprimir(" . $pedido->id . ");\" title=\"Imprimir\"><i class=\"fa fa-print\"></i></button>
                     </td>
                 </tr>";
         }
