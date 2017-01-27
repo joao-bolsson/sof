@@ -63,7 +63,7 @@ $(function () {
             });
         }
     }
-    
+
     status = ['stNormal', 'stPreferencial', 'stUrgente', 'stEmergencial', 'stRascunho'];
     for (var i = 0; i < status.length; i++) {
         var element = document.getElementById(status[i]);
@@ -90,7 +90,7 @@ $(function () {
             });
         }
     }
-    
+
     var element = document.getElementById('gera');
     if (element !== null) {
         $('#gera').iCheck({
@@ -172,6 +172,13 @@ $(function () {
     $('#addProcesso').on('shown.bs.modal', function () {
         $(".date").inputmask("dd/mm/yyyy", {"placeholder": "dd/mm/yyyy"});
     });
+
+    $('#listProcessos').on('shown.bs.modal', function () {
+        if (!$.fn.DataTable.isDataTable('#tableListProcessos')) {
+            iniDataTable('#tableListProcessos');
+        }
+    });
+
 });
 function cadEmpenho(id_pedido, empenho, data) {
     document.getElementById('id_pedido_emp').value = '';
@@ -843,28 +850,25 @@ function listProblemas() {
     });
     $('#listProblemas').modal();
 }
-$('#listProcessos').on('shown.bs.modal', function (event) {
-    if (!$.fn.DataTable.isDataTable('#tableListProcessos')) {
-        iniDataTable('#tableListProcessos');
-    }
-});
+
 function listProcessos(permissao) {
-    if (!$.fn.DataTable.isDataTable('#tableListProcessos')) {
-        if (permissao == 'users') {
-            $.post('../php/busca.php', {
-                users: 1,
-                form: 'listProcessos'
-            }).done(function (resposta) {
-                $('#tbodyListProcessos').html(resposta);
-            });
-        } else if (permissao == 'admin') {
-            $.post('../php/buscaLTE.php', {
-                admin: 1,
-                form: 'listProcessos'
-            }).done(function (resposta) {
-                $('#tbodyListProcessos').html(resposta);
-            });
-        }
+    if (document.getElementById('tbodyListProcessos').innerHTML.length > 0) {
+        $('#tableListProcessos').DataTable().destroy();
+    }
+    if (permissao == 'users') {
+        $.post('../php/buscaLTE.php', {
+            users: 1,
+            form: 'listProcessos'
+        }).done(function (resposta) {
+            $('#tbodyListProcessos').html(resposta);
+        });
+    } else if (permissao == 'admin') {
+        $.post('../php/buscaLTE.php', {
+            admin: 1,
+            form: 'listProcessos'
+        }).done(function (resposta) {
+            $('#tbodyListProcessos').html(resposta);
+        });
     }
     $('#listProcessos').modal('show');
 }
@@ -1002,9 +1006,9 @@ function iniPagSolicitacoes() {
     });
     for (var i = 1; i <= 3; i++) {
         $('#tipoCont' + i).iCheck({
-        checkboxClass: 'icheckbox_minimal-blue',
-        radioClass: 'iradio_minimal-blue'
-    });
+            checkboxClass: 'icheckbox_minimal-blue',
+            radioClass: 'iradio_minimal-blue'
+        });
     }
 }
 
@@ -1076,12 +1080,11 @@ function analisaAdi(id, acao) {
 
 // FUNÇÃO DISPARADA QUANDO O ITEM É CLICADO P/ ADC ---------------------------------
 function checkItemPedido(id_item, vl_unitario, qt_saldo) {
-    $('a').blur();
     var qtd_item = document.getElementById('qtd' + id_item).value;
     var itens = document.getElementsByClassName('classItens');
     for (var i = 0; i < itens.length; i++) {
         if (itens[i].value == id_item) {
-            alert('Esse item já está contigo no pedido. Verifique!');
+            alert('Esse item já está contido no pedido. Verifique!');
             return;
         }
     }
@@ -1130,7 +1133,7 @@ function addItemPedido(id_item, qtd, vl_unitario) {
     saldo_total = parseFloat(s) - parseFloat(valor);
     document.getElementById('saldo_total').value = parseFloat(saldo_total).toFixed(3);
     document.getElementById('text_saldo_total').innerHTML = "R$ " + parseFloat(saldo_total).toFixed(3);
-    $.post('../php/busca.php', {
+    $.post('../php/buscaLTE.php', {
         users: 1,
         form: 'addItemPedido',
         id_item: id_item,
@@ -1167,22 +1170,17 @@ function viewCompl(texto) {
 // PESQUISA POR UM PROCESSO CONTENDO ITENS -----------------------------------------
 function pesquisarProcesso(busca) {
     $('#listProcessos').modal('hide');
-    len = busca.length;
-    if (len < 20) {
-        avisoSnack('Digite um processo válido !', 'body');
-    } else {
-        $.post('../php/busca.php', {
-            users: 1,
-            form: 'pesquisarProcesso',
-            busca: busca
-        }, function (resposta) {
-            $('#tableProcessos').DataTable().destroy();
-            $('#conteudoProcesso').html(resposta);
-            iniDataTable('#tableProcessos');
-            document.getElementById('numProc').innerHTML = "Processo: " + busca;
-            avisoSnack('Busca Realizada com Sucesso !', 'body');
-        });
-    }
+    $.post('../php/buscaLTE.php', {
+        users: 1,
+        form: 'pesquisarProcesso',
+        busca: busca
+    }, function (resposta) {
+        $('#tableProcessos').DataTable().destroy();
+        $('#conteudoProcesso').html(resposta);
+        iniDataTable('#tableProcessos');
+        document.getElementById('numProc').innerHTML = "Processo: " + busca;
+        avisoSnack('Busca Realizada com Sucesso !', 'body');
+    });
 }
 
 function fillSaldo() {

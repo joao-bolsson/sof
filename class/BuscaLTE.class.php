@@ -63,8 +63,8 @@ class BuscaLTE extends Conexao {
             $retorno .= "
                 <td>
                     <div class=\"form-group\">
-                        <input type=\"radio\" name=\"tipoCont\" id=\"tipoCont" . $obj->id . "\" class=\"minimal\" value=\"" . $obj->id . "\" onchange=\"changeTipoContr(this);\">" 
-                        . $obj->nome . "
+                        <input type=\"radio\" name=\"tipoCont\" id=\"tipoCont" . $obj->id . "\" class=\"minimal\" value=\"" . $obj->id . "\" onchange=\"changeTipoContr(this);\">"
+                    . $obj->nome . "
                     </div>
                 </td>";
         }
@@ -871,7 +871,7 @@ class BuscaLTE extends Conexao {
             $retorno .= "
                 <td>
                     <div class=\"form-group\">
-                        <input type=\"radio\" name=\"st\" id=\"st" . $prioridade->nome . "\" class=\"minimal\" value=\"" . $prioridade->id . "\"> ". $prioridade->nome . "
+                        <input type=\"radio\" name=\"st\" id=\"st" . $prioridade->nome . "\" class=\"minimal\" value=\"" . $prioridade->id . "\"> " . $prioridade->nome . "
                     </div>
                 </td>";
         }
@@ -1912,13 +1912,13 @@ class BuscaLTE extends Conexao {
             $retorno .= "
                 <tr>
                     <td>
-                            <a class=\"modal-close\" href=\"javascript:checkItemPedido(" . $item->id . ", '" . $item->vl_unitario . "', " . $item->qt_saldo . ");\"><span class=\"icon\">add<span></a>
+                        <button type=\"button\" class=\"btn btn-default\" onclick=\"checkItemPedido(" . $item->id . ", '" . $item->vl_unitario . "', " . $item->qt_saldo . ")\" title=\"Adicionar\"><span class=\"fa fa-plus\"></span></button>
                     </td>
                     <td>" . $item->nome_fornecedor . "</td>
                     <td>" . $item->cod_reduzido . "</td>
                     <td><input type=\"number\" id=\"qtd" . $item->id . "\" min=\"1\" max=\"" . $item->qt_saldo . "\"></td>
                     <td>
-                            <a onclick=\"viewCompl('" . $item->complemento_item . "');\" class=\"btn btn-flat waves-attach waves-effect\" type=\"button\" title=\"Mais Detalhes\">complemento_item</a>
+                        <button type=\"button\" onclick=\"viewCompl('" . $item->complemento_item . "');\" class=\"btn btn-default\" title=\"Mais Detalhes\"><span class=\"fa fa-eye\"></span></button>
                     </td>
                     <td style=\"display: none;\">" . $item->complemento_item . "</td>
                     <td>" . $item->vl_unitario . "</td>
@@ -1949,10 +1949,10 @@ class BuscaLTE extends Conexao {
         $valor = $qtd * $item->vl_unitario;
         $retorno = "
             <tr id=\"row" . $id_item . "\">
-                <td><a class=\"modal-close\" href=\"javascript:removeTableRow(" . $id_item . ", '" . $valor . "');\"><span class=\"icon\">delete</span></a></td>
+                <td><button type=\"button\" class=\"btn btn-default\" onclick=\"removeTableRow(" . $id_item . ", '" . $valor . "')\"><span class=\"fa fa-trash\"></span></a></td>
                 <td>" . $item->cod_reduzido . "</td>
                 <td>
-                    <button onclick=\"viewCompl('" . $item->complemento_item . "');\" class=\"btn btn-flat waves-attach waves-effect\" type=\"button\" title=\"Ver Complemento do Item\">complemento_item</button>
+                    <button onclick=\"viewCompl('" . $item->complemento_item . "');\" class=\"btn btn-default\" type=\"button\" title=\"Ver Complemento do Item\"><span class=\"fa fa-eye\"></span></button>
                 </td>
                 <td>R$ " . $item->vl_unitario . "</td>
                 <td>" . $item->nome_fornecedor . "</td>
@@ -2140,11 +2140,13 @@ class BuscaLTE extends Conexao {
         $onclick = "pesquisarProcesso";
         $title = "Pesquisar Processo";
         $icon = "fa-search";
+        $act = 'Pesquisar';
         if ($tela == "recepcao") {
             $sql = "SELECT DISTINCT itens.num_processo FROM itens WHERE itens.num_processo NOT IN (SELECT DISTINCT processos.num_processo FROM processos);";
             $onclick = "addProcesso";
             $title = "Adicionar Processo";
             $icon = "fa-plus";
+            $act = 'Adicionar';
         }
         if (is_null($this->mysqli)) {
             $this->mysqli = parent::getConexao();
@@ -2156,7 +2158,7 @@ class BuscaLTE extends Conexao {
                 <tr>
                     <td>" . $processo->num_processo . "</td>
                     <td>
-                        <button type=\"button\" title=\"" . $title . "\" onclick=\"" . $onclick . "('" . $processo->num_processo . "', 0)\" class=\"btn btn-primary\"><i class=\"fa " . $icon . "\"></i> Adicionar</button>
+                        <button type=\"button\" title=\"" . $title . "\" onclick=\"" . $onclick . "('" . $processo->num_processo . "', 0)\" class=\"btn btn-primary\"><i class=\"fa " . $icon . "\"></i> " . $act . "</button>
                     </td>
                 </tr>";
         }

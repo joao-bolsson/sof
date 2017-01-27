@@ -25,9 +25,9 @@ $select_grupo = $obj_Busca->getOptionsGrupos($id_setor);
         <!-- Bootstrap 3.3.6 -->
         <link rel="stylesheet" href="bootstrap/css/bootstrap.min.css">
         <!-- Font Awesome -->
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.5.0/css/font-awesome.min.css">
+        <link rel="stylesheet" href="plugins/font-awesome-4.7.0/css/font-awesome.min.css">
         <!-- Ionicons -->
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/ionicons/2.0.1/css/ionicons.min.css">
+        <link rel="stylesheet" href="plugins/ionicons/css/ionicons.min.css">
         <!-- Select2 -->
         <link rel="stylesheet" href="plugins/select2/select2.min.css">
         <!-- DataTables -->
@@ -124,7 +124,7 @@ $select_grupo = $obj_Busca->getOptionsGrupos($id_setor);
                             </a>
                         </li>
                         <li>
-                            <a href="#">
+                            <a href="javascript:listProcessos('users');">
                                 <i class="fa fa-tags"></i> <span>Processos</span>
                             </a>
                         </li>
@@ -316,6 +316,41 @@ $select_grupo = $obj_Busca->getOptionsGrupos($id_setor);
                 <strong>Copyright © 2016-2017 <a href="https://github.com/joao-bolsson">João Bolsson</a>.</strong> All rights
                 reserved.
             </footer>
+            <div aria-hidden="true" class="modal fade" id="listProcessos" role="dialog" tabindex="-1">
+                <div class="modal-dialog modal-lg">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                            <h4 class="modal-title">Processos Atendidos pelo SOF</h4>
+                        </div>
+                        <div class="modal-body">
+                            <table id="tableListProcessos" class="table table-bordered table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>Número do Processo</th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+                                <tbody id="tbodyListProcessos"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div id="viewCompl" class="modal fade" tabindex="-1" role="dialog" data-backdrop="static">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                            <h4 class="modal-title">Informação</h4>
+                        </div>
+                        <div id="complementoItem" class="modal-body"></div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-primary" data-dismiss="modal">Fechar</button>
+                        </div>
+                    </div><!-- /.modal-content -->
+                </div><!-- /.modal-dialog -->
+            </div><!-- /.modal -->
         </div>
         <!-- ./wrapper -->
 
