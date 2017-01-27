@@ -2049,7 +2049,7 @@ class BuscaLTE extends Conexao {
                     <td><button type=\"button\" class=\"btn btn-default\" onclick=\"removeTableRow(" . $id_item . ", '" . $item->valor . "');\" title=\"Remover\"><i class=\"fa fa-trash\"></i></button></td>
                     <td>" . $item->cod_reduzido . "</td>
                     <td>
-                        <button type=\"button\" onclick=\"viewCompl(\"" . $item->complemento_item . "\");\" class=\"btn btn-default\" title=\"Ver Complemento do Item\"><i class=\"fa fa-eye\"></i></button>
+                        <button type=\"button\" class=\"btn btn-default\" onclick=\"viewCompl('" . $item->complemento_item . "');\"  title=\"Ver Complemento do Item\"><i class=\"fa fa-eye\"></i>
                     </td>
                     <td>R$ " . $item->vl_unitario . "</td>
                     <td>" . $item->nome_fornecedor . "</td>
