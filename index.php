@@ -32,4 +32,3 @@ if (isset($_SESSION['id_setor']) && $_SESSION['id_setor'] == 12) {
 } else {
     header("Location: view/");
 }
-?>

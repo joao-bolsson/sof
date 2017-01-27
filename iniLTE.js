@@ -269,7 +269,10 @@ function verEmpenho(id_pedido) {
 function hideDivs() {
     var divs = ['rowPedidos', 'rowDetPedido', 'rowSolicAdi', 'rowAltPed'];
     for (i = 0; i < divs.length; i++) {
-        document.getElementById(divs[i]).style.display = 'none';
+        var element = document.getElementById(divs[i]);
+        if (element !== null) {
+            element.style.display = 'none';
+        }
     }
 }
 

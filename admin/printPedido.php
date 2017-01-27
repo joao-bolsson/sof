@@ -6,12 +6,13 @@ error_reporting(E_ALL);
 session_start();
 
 if (isset($_SESSION["imprimirPedido"]) && $_SESSION["imprimirPedido"] && $_SESSION["id_setor"] != 0) {
-    $id_setor = $_SESSION["id_pedido_setor"];
     $id_pedido = $_SESSION["id_ped_imp"];
     $pedido_rascunho = $_SESSION['pedido_rascunho'];
     include_once '../class/Busca.class.php';
 //instanciando classe de busca para popular o select de estados
     $obj_Busca = new Busca();
+
+    $id_setor = $obj_Busca->getSetorPedido($id_pedido);
 
 //definimos uma constante com o nome da pasta
     define('MPDF_PATH', '../pdf/MPDF57/');
@@ -25,10 +26,15 @@ if (isset($_SESSION["imprimirPedido"]) && $_SESSION["imprimirPedido"] && $_SESSI
   <title>SOFHUSM | Impressão de pedido</title>
 </head>";
 
+    $img = "../sof_files/header_setor_" . $id_setor . ".png";
+    if (!file_exists($img)) {
+        $img = "../sof_files/header_setor_2.png";
+    }
+
     $html_header = "
 <body>
   <p style=\"text-align: center;\">
-    <img src=\"../sof_files/header_setor_{$id_setor}.png\"/>
+    <img src=\"{$img}\"/>
   </p>
   <hr/>";
     $html_header .= $obj_Busca->getHeader($id_pedido);

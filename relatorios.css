@@ -2,53 +2,53 @@ fieldset {
     border: 2px solid black;
     padding-left: 5px;
 }
-  fieldset p{
+fieldset p{
     margin: 5px;
     font-size: 8pt;
     font-weight: normal;
-  }
-  fieldset h5{
+}
+fieldset h5{
     text-align: center;
     margin: 10px;
-  }
-  fieldset h6{
+}
+fieldset h6{
     text-align: center;
     margin: 0 0 2px 0;
-  }
-  table{
+}
+table{
     border-collapse: collapse;
     border-spacing: 0;
     font-size: 7pt;
     width: 100% !important;
     background-color: #ffffff;
     border: 0;
-  }
-  table td, table th {
+}
+table td, table th {
     line-height: 20px;
     padding: 1px;
     vertical-align: top;
-  }
-  table td {
+}
+table td {
     text-align: center;
-  }
-  thead {
+}
+thead {
     display: table-header-group;
-  }
-  fieldset.preg table td{
+}
+fieldset.preg table td{
     padding: 10px;
     font-weight: bold;
     font-size: 7pt;
-  }
-  table.prod td, table.prod th{
+}
+table.prod td, table.prod th{
     text-align: left;
     font-size: 8pt;
     padding: 3px;
-  }
+}
 h5, h6 {
     font-family: Arial, sans-serif;
-  }
-  .ass {
+}
+.ass {
     font-weight: normal;
     display: inline;
     text-align: center;
-  }
+}
