@@ -1033,6 +1033,9 @@ function iniPagSolicitacoes() {
             checkboxClass: 'icheckbox_minimal-blue',
             radioClass: 'iradio_minimal-blue'
         });
+        $('#tipoCont' + i).on('ifChecked', function () {
+            changeTipoContr(this);
+        });
     }
 }
 
@@ -1138,8 +1141,8 @@ function checkItemPedido(id_item, vl_unitario, qt_saldo) {
 function addItemPedido(id_item, qtd, vl_unitario) {
     //valor do pedido
     var valor = qtd * vl_unitario;
-    t = document.getElementById('total_hidden').value;
-    total = parseFloat(t) + parseFloat(valor);
+    var t = document.getElementById('total_hidden').value;
+    var total = parseFloat(t) + parseFloat(valor);
     document.getElementById('total_hidden').value = parseFloat(total).toFixed(3);
     var tot_str = parseFloat(total).toFixed(3);
     $.post('../php/busca.php', {
@@ -1150,18 +1153,18 @@ function addItemPedido(id_item, qtd, vl_unitario) {
         document.getElementById('total').value = "R$ " + resposta;
     });
     //saldo
-    s = document.getElementById('saldo_total').value;
-    saldo_total = parseFloat(s) - parseFloat(valor);
+    var s = document.getElementById('saldo_total').value;
+    var saldo_total = parseFloat(s) - parseFloat(valor);
     document.getElementById('saldo_total').value = parseFloat(saldo_total).toFixed(3);
-    document.getElementById('text_saldo_total').innerHTML = "R$ " + parseFloat(saldo_total).toFixed(3);
+    $('#text_saldo_total').html('R$ ' + parseFloat(saldo_total).toFixed(3));
     $.post('../php/buscaLTE.php', {
         users: 1,
         form: 'addItemPedido',
         id_item: id_item,
         qtd: qtd
     }, function (resposta) {
-        conteudoPedido = document.getElementById("conteudoPedido").innerHTML;
-        document.getElementById("conteudoPedido").innerHTML = conteudoPedido + resposta;
+        var conteudoPedido = document.getElementById('conteudoPedido').innerHTML;
+        $('#conteudoPedido').html(conteudoPedido + resposta);
         avisoSnack('Item Inserido ao Pedido !');
     });
 }
@@ -1233,6 +1236,9 @@ function limpaTelaSolic() {
     }
     document.getElementById('infoLic').value = '';
     document.getElementById('infoLic').required = true;
+    document.getElementById('uasg').value = '';
+    document.getElementById('uasg').required = false;
+    document.getElementById('uasg').disabled = true;
     document.getElementById('procOri').value = '';
     document.getElementById('procOri').required = false;
     document.getElementById('procOri').disabled = true;
@@ -1249,6 +1255,7 @@ function limpaTelaSolic() {
         $('#tipoCont' + i).iCheck('uncheck');
     }
     document.getElementById('siafi').value = '';
+    $('button').blur();
 }
 
 function editaPedido(id_pedido) {
@@ -1327,6 +1334,11 @@ function populaLicitacao(id_pedido) {
             if (obj.tipo == 3 || obj.tipo == 4 || obj.tipo == 2) {
                 document.getElementById('uasg').value = obj.uasg;
                 document.getElementById('procOri').value = obj.processo_original;
+            }
+            if (obj.gera_contrato == 1) {
+                $('#gera').iCheck('check');
+            } else {
+                $('#ngera').iCheck('check');
             }
             maybeDisableFields(!(obj.tipo == 3 || obj.tipo == 4 || obj.tipo == 2));
             var element = document.getElementById('tipoLic' + obj.tipo);
@@ -1522,8 +1534,9 @@ function sleep(milliseconds) {
 
 function deletePedido(id_pedido) {
     var confirma = confirm('Todos os registros referentes à esse pedido serão excluído do sistema para economizar espaço ;) Deseja prosseguir?');
-    if (!confirma)
+    if (!confirma) {
         return;
+    }
     $.post('../php/geral.php', {
         users: 1,
         form: 'deletePedido',
@@ -1533,9 +1546,11 @@ function deletePedido(id_pedido) {
             alert(resposta);
         } else {
             avisoSnack('Pedido deletado com sucesso !');
+            $('#tableListRascunhos').DataTable().destroy();
+            $('#tbodyListRascunhos').html('');
         }
-        $('#tableListRascunhos').DataTable().destroy();
     });
+    $('button').blur();
     $('#listRascunhos').modal('hide');
 }
 

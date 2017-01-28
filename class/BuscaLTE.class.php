@@ -63,7 +63,7 @@ class BuscaLTE extends Conexao {
             $retorno .= "
                 <td>
                     <div class=\"form-group\">
-                        <input type=\"radio\" name=\"tipoCont\" id=\"tipoCont" . $obj->id . "\" class=\"minimal\" value=\"" . $obj->id . "\" onchange=\"changeTipoContr(this);\">"
+                        <input type=\"radio\" name=\"tipoCont\" id=\"tipoCont" . $obj->id . "\" class=\"minimal\" value=\"" . $obj->id . "\">"
                     . $obj->nome . "
                     </div>
                 </td>";

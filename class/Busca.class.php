@@ -1261,12 +1261,14 @@ class Busca extends Conexao {
         }
         $retorno = "
             <fieldset>
-                <p>
-                    <b>" . $lblPedido . ":</b> " . $id_pedido . "&emsp;
-                    <b>Data de Envio:</b> " . $pedido->data_pedido . ".&emsp;
-                    <b>Situação:</b> " . $pedido->status . "&emsp;
-                    <b>Prioridade:</b> " . $pedido->prioridade . "&emsp;
-                </p>
+                <table style=\"font-size: 8pt; margin: 5px;\">
+                    <tr>
+                        <td style=\"text-align: left;\"><b>" . $lblPedido . ":</b> " . $id_pedido . "</td>
+                        <td><b>Data de Envio:</b> " . $pedido->data_pedido . "</td>
+                        <td><b>Situação:</b> " . $pedido->status . "</td>
+                        <td><b>Prioridade:</b> " . $pedido->prioridade . "</td>
+                    </tr>
+                </table>
                 <p><b>Total do Pedido:</b> R$ " . $pedido->valor . "</p>
                 <table style=\"font-size: 8pt; margin: 5px;\">
                     <tr>
@@ -2130,7 +2132,7 @@ class Busca extends Conexao {
         if (is_null($this->mysqli)) {
             $this->mysqli = parent::getConexao();
         }
-        $query = $this->mysqli->query("SELECT licitacao.id, licitacao.tipo, licitacao.numero, licitacao.uasg, licitacao.processo_original FROM licitacao WHERE licitacao.id_pedido = {$id_pedido};") or exit("Erro ao buscar as licitações do pedido.");
+        $query = $this->mysqli->query("SELECT licitacao.id, licitacao.tipo, licitacao.numero, licitacao.uasg, licitacao.processo_original, licitacao.gera_contrato FROM licitacao WHERE licitacao.id_pedido = {$id_pedido};") or exit("Erro ao buscar as licitações do pedido.");
         $this->mysqli = NULL;
         $retorno = false;
         if ($query->num_rows > 0) {
