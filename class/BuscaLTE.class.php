@@ -1817,15 +1817,15 @@ class BuscaLTE extends Conexao {
             switch ($solic->status) {
                 case 0:
                     $status = "Reprovado";
-                    $label = "label-red";
+                    $label = "bg-red";
                     break;
                 case 1:
                     $status = "Aprovado";
-                    $label = "label-green";
+                    $label = "bg-green";
                     break;
                 default:
                     $status = "Aberto";
-                    $label = "label-orange";
+                    $label = "bg-orange";
                     $solic->data_analise = "--------------";
                     break;
             }
@@ -1837,9 +1837,9 @@ class BuscaLTE extends Conexao {
                     <td>" . $solic->data_solicitacao . "</td>
                     <td>" . $solic->data_analise . "</td>
                     <td>
-                        <button onclick=\"viewCompl('" . $solic->justificativa . "');\" class=\"btn btn-flat waves-attach waves-effect\" type=\"button\" title=\"Ver Justificativa\">JUSTIFICATIVA</button>
+                        <button onclick=\"viewCompl('" . $solic->justificativa . "');\" class=\"btn btn-default\" type=\"button\" title=\"Ver Justificativa\">JUSTIFICATIVA</button>
                     </td>
-                    <td><span class=\"label " . $label . "\" style=\"font-size: 11pt !important; font-weight: bold;\">" . $status . "</span></td>
+                    <td><small class=\"label " . $label . "\">" . $status . "</small></td>
                 </tr>";
         }
         $this->mysqli = NULL;

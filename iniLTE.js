@@ -191,6 +191,12 @@ $(function () {
         }
     });
 
+    $('#listSolicAltPedidos').on('shown.bs.modal', function () {
+        if (!$.fn.DataTable.isDataTable('#tableSolicAltPedido')) {
+            iniDataTable('#tableSolicAltPedido');
+        }
+    });
+
 });
 function cadEmpenho(id_pedido, empenho, data) {
     document.getElementById('id_pedido_emp').value = '';
@@ -848,21 +854,16 @@ function refreshDataSaldo(id_setor) {
     });
 }
 
-$('#listSolicAltPedidos').on('shown.bs.modal', function (event) {
-    if (!$.fn.DataTable.isDataTable('#tableSolicAltPedido')) {
-        iniDataTable('#tableSolicAltPedido');
-    }
-});
 function listSolicAltPedidos() {
-    $('#listSolicAltPedidos').modal();
     if (!$.fn.DataTable.isDataTable('#tableListProcessos')) {
-        $.post('../php/busca.php', {
+        $.post('../php/buscaLTE.php', {
             users: 1,
             form: 'iniSolicAltPedSetor'
         }, function (resposta) {
-            document.getElementById('tbodySolicAltPedido').innerHTML = resposta;
+            $('#tbodySolicAltPedido').html(resposta);
         });
     }
+    $('#listSolicAltPedidos').modal();
 }
 
 function listProblemas() {
