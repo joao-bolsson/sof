@@ -481,7 +481,6 @@ class BuscaLTE extends Conexao {
                 $retorno = "
                 <tr>
                     <td colspan=\"2\">Você tem " . $query->num_rows . " pedido(s) em análise no total de R$ " . $soma . "</td>
-                    <td></td>
                 </tr>";
             }
         }

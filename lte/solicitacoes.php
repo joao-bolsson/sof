@@ -111,7 +111,7 @@ $select_grupo = $obj_Busca->getOptionsGrupos($id_setor);
                             </a>
                         </li>
                         <li>
-                            <a href="#">
+                            <a href="javascript:listLancamentos(<?= $id_setor ?>);">
                                 <i class="fa fa-dollar"></i> <span>Saldos</span>
                             </a>
                         </li>
@@ -320,6 +320,39 @@ $select_grupo = $obj_Busca->getOptionsGrupos($id_setor);
                 <strong>Copyright © 2016-2017 <a href="https://github.com/joao-bolsson">João Bolsson</a>.</strong> All rights
                 reserved.
             </footer>
+            <div aria-hidden="true" class="modal fade" id="listLancamentos" role="dialog" tabindex="-1">
+                <div class="modal-dialog modal-lg">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                            <h4 class="modal-title">Saldos</h4>
+                        </div>
+                        <div class="modal-body">
+                            <table class="table table-bordered table-striped">
+                                <tr>
+                                    <td>Saldo Disponível</td>
+                                    <td>R$ <?= $saldo_total ?></td>
+                                </tr>
+                                <?= $pedidos_em_analise ?>
+                            </table>
+                            <table id="tableListLancamentos" class="table table-bordered table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>Setor</th>
+                                        <th>Data</th>
+                                        <th>Valor</th>
+                                        <th>Categoria</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="tbodyListLancamentos"></tbody>
+                            </table>
+                        </div>
+                        <div class="modal-footer">
+                            <button class="btn btn-primary" type="button" onclick="abreModal('#adiantamento');" style="width: 100%;"><i class="fa fa-dollar"></i>&nbsp;Solicitar Adiantamento</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
             <div aria-hidden="true" class="modal fade" id="listSolicAltPedidos" role="dialog" tabindex="-1">
                 <div class="modal-dialog modal-lg">
                     <div class="modal-content">

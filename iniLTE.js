@@ -197,6 +197,16 @@ $(function () {
         }
     });
 
+    userss = false;
+    $('#listLancamentos').on('shown.bs.modal', function () {
+        if (!userss) {
+            return;
+        }
+        if (!$.fn.DataTable.isDataTable('#tableListLancamentos')) {
+            iniDataTable('#tableListLancamentos');
+        }
+    });
+
 });
 function cadEmpenho(id_pedido, empenho, data) {
     document.getElementById('id_pedido_emp').value = '';
@@ -801,15 +811,7 @@ function refreshSaldo() {
         document.getElementById('labelSaldoSOF').innerHTML = 'Saldo disponível: R$ ' + resposta;
     });
 }
-var userss = false;
-$('#listLancamentos').on('shown.bs.modal', function (event) {
-    if (!userss) {
-        return;
-    }
-    if (!$.fn.DataTable.isDataTable('#tableListLancamentos')) {
-        iniDataTable('#tableListLancamentos');
-    }
-});
+
 function listLancamentos(id_setor) {
     $('#listLancamentos').modal('show');
     if (id_setor !== null) {
@@ -831,7 +833,9 @@ function changeSetor(id_setor) {
         form: 'listLancamentos',
         id_setor: setor
     }).done(function (resposta) {
-        $('#tableListLancamentos').DataTable().destroy();
+        if (document.getElementById('tbodyListLancamentos').innerHTML.length > 0) {
+            $('#tableListLancamentos').DataTable().destroy();
+        }
         $('#tbodyListLancamentos').html(resposta);
         if (id_setor == null) {
             iniDataTable('#tableListLancamentos');
