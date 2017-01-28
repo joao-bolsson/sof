@@ -38,6 +38,8 @@ $obj_Busca = new BuscaLTE();
         <!-- AdminLTE Skins. Choose a skin from the css/skins
              folder instead of downloading all of them to reduce the load. -->
         <link rel="stylesheet" href="dist/css/skins/_all-skins.min.css">
+        <!-- Custom snackbar style -->
+        <link rel="stylesheet" href="dist/css/snackbar.min.css">
 
         <link rel="icon" href="../favicon.ico">
     </head>
@@ -123,6 +125,7 @@ $obj_Busca = new BuscaLTE();
                 <!-- /.container -->
             </div>
             <!-- /.content-wrapper -->
+            <div id="snackbar"></div>
             <footer class="main-footer">
                 <div class="container">
                     <div class="pull-right hidden-xs">
@@ -133,6 +136,39 @@ $obj_Busca = new BuscaLTE();
                 </div>
                 <!-- /.container -->
             </footer>
+            <div class="modal fade" id="myInfos" role="dialog">
+                <div class="modal-dialog" style="width: 40%;">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                            <h4 class="modal-title" >Informações do Usuário</h4>
+                        </div>
+                        <form id="altInfo" action="javascript:altInfoUser();" method="post">
+                            <div class="modal-body">
+                                <div class="form-group">
+                                    <label>Nome</label>
+                                    <input class="form-control" id="nameUser" name="nameUser" type="text" value="<?= $_SESSION['nome'] ?>" required>
+                                </div>
+                                <div class="form-group">
+                                    <label>E-mail</label>
+                                    <input class="form-control" id="emailUser" name="emailUser" type="email" value="<?= $_SESSION['email'] ?>" required>
+                                </div>
+                                <div class="form-group">
+                                    <label>Senha Atual</label>
+                                    <input class="form-control" id="senhaAtualUser" name="senhaAtualUser" type="password" required>
+                                </div>
+                                <div class="form-group">
+                                    <label>Nova Senha</label>
+                                    <input class="form-control" id="senhaUser" name="senhaUser" type="password" required>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button class="btn btn-primary" type="submit" style="width: 100%;"><i class="fa fa-refresh"></i>&nbsp;Atualizar</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
         </div>
         <!-- ./wrapper -->
 
@@ -152,6 +188,6 @@ $obj_Busca = new BuscaLTE();
         <!-- AdminLTE for demo purposes -->
         <script src="dist/js/demo.js"></script>
         <!-- page script -->
-        <script type="text/javascript" src="../iniLTE.js"></script>
+        <script type="text/javascript" src="../iniLTE.min.js"></script>
     </body>
 </html>
