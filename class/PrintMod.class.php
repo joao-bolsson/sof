@@ -468,4 +468,117 @@ class PrintMod extends Conexao {
         return $retorno;
     }
 
+    /**
+     * 	Função que retorna um relatório para a recepção dos processos (ajustar)
+     *
+     * 	@return string
+     */
+    public function getRelatorioProcessos(int $tipo): string {
+        $retorno = "";
+        // tratando tipo == 0 primeiro, buscando TODOS os processos
+        $where = "";
+        if ($tipo != 0) {
+            $where = "AND processos.tipo = " . $tipo;
+        }
+        if (is_null($this->mysqli)) {
+            $this->mysqli = parent::getConexao();
+        }
+        if ($where == "") {
+            $query_proc = $this->mysqli->query("SELECT processos_tipo.id, processos_tipo.nome FROM processos_tipo;") or exit("Erro ao buscar os tipos de processo.");
+            while ($tipo_proc = $query_proc->fetch_object()) {
+                $query = $this->mysqli->query("SELECT processos.num_processo, processos_tipo.nome AS tipo, processos_tipo.id AS id_tipo, processos.estante, processos.prateleira, processos.entrada, processos.saida, processos.responsavel, processos.retorno, processos.obs FROM processos, processos_tipo WHERE processos.tipo = processos_tipo.id AND processos.tipo = {$tipo_proc->id} ORDER BY processos.tipo ASC;") or exit("Erro ao buscar os processos.");
+                if ($query->num_rows > 0) {
+                    $retorno .= "
+                        <fieldset class=\"preg\">
+                                <table>
+                                        <tr>
+                                            <td>Tipo: " . $tipo_proc->nome . "</td>
+                                        </tr>
+                                </table>
+                        </fieldset><br>
+                        <table class=\"prod\">
+                            <thead>
+                                <tr>
+                                    <th>Processo</th>
+                                    <th>Tipo</th>
+                                    <th>Estante</th>
+                                    <th>Prateleira</th>
+                                    <th>Entrada</th>
+                                    <th>Saída</th>
+                                    <th>Responsável</th>
+                                    <th>Retorno</th>
+                                    <th>Obs</th>
+                                </tr>
+                            </thead>
+                            <tbody>";
+                    while ($processo = $query->fetch_object()) {
+                        $retorno .= "
+                                <tr>
+                                    <td>" . $processo->num_processo . "</td>
+                                    <td>" . $processo->tipo . "</td>
+                                    <td>" . $processo->estante . "</td>
+                                    <td>" . $processo->prateleira . "</td>
+                                    <td>" . $processo->entrada . "</td>
+                                    <td>" . $processo->saida . "</td>
+                                    <td>" . $processo->responsavel . "</td>
+                                    <td>" . $processo->retorno . "</td>
+                                    <td>" . $processo->obs . "</td>
+                                </tr>";
+                    }
+                    $retorno .= "
+                            </tbody>
+                    </table><br>";
+                }
+            }
+        } else {
+            $query_proc = $this->mysqli->query("SELECT processos_tipo.nome FROM processos_tipo WHERE processos_tipo.id = {$tipo};") or exit("Erro ao buscar os tipos de processo.");
+            $tipo_proc = $query_proc->fetch_object();
+            $retorno .= "
+                <fieldset class=\"preg\">
+                    <table>
+                        <tr>
+                            <td>Tipo: " . $tipo_proc->nome . "</td>
+                        </tr>
+                    </table>
+                </fieldset><br>
+                <table class=\"prod\">
+                    <thead>
+                        <tr>
+                            <th>Processo</th>
+                            <th>Tipo</th>
+                            <th>Estante</th>
+                            <th>Prateleira</th>
+                            <th>Entrada</th>
+                            <th>Saída</th>
+                            <th>Responsável</th>
+                            <th>Retorno</th>
+                            <th>Obs</th>
+                        </tr>
+                    </thead>
+                    <tbody>";
+            $query = $this->mysqli->query("SELECT processos.num_processo, processos_tipo.nome AS tipo, processos_tipo.id AS id_tipo, processos.estante, processos.prateleira, processos.entrada, processos.saida, processos.responsavel, processos.retorno, processos.obs FROM processos, processos_tipo WHERE processos.tipo = processos_tipo.id {$where} ORDER BY processos.tipo ASC;") or exit("Erro ao buscar os processos.");
+            if ($query->num_rows > 0) {
+                while ($processo = $query->fetch_object()) {
+                    $retorno .= "
+                        <tr>
+                            <td>" . $processo->num_processo . "</td>
+                            <td>" . $processo->tipo . "</td>
+                            <td>" . $processo->estante . "</td>
+                            <td>" . $processo->prateleira . "</td>
+                            <td>" . $processo->entrada . "</td>
+                            <td>" . $processo->saida . "</td>
+                            <td>" . $processo->responsavel . "</td>
+                            <td>" . $processo->retorno . "</td>
+                            <td>" . $processo->obs . "</td>
+                        </tr>";
+                }
+            }
+            $retorno .= "
+                    </tbody>
+            </table><br>";
+        }
+        $this->mysqli = NULL;
+        return $retorno;
+    }
+
 }
