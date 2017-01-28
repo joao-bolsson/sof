@@ -10,10 +10,12 @@ ini_set('display_erros', true);
 error_reporting(E_ALL);
 
 include_once 'Conexao.class.php';
+include_once 'Util.class.php';
+include_once 'BuscaLTE.class.php';
 
 class PrintMod extends Conexao {
 
-    private $mysqli;
+    private $mysqli, $obj_Util, $obj_Busca;
 
     public function __construct() {
         parent::__construct();
@@ -336,6 +338,134 @@ class PrintMod extends Conexao {
         $this->mysqli = NULL;
         $obj = $query->fetch_object();
         return $obj->id_setor;
+    }
+
+    /**
+     * 	Função que retonar o relatorio de pedidos.
+     *
+     * 	@return string Retorna a interface de um documento pdf.
+     */
+    public function getRelatorioPedidos(int $id_setor, int $prioridade, int $status, string $dataI, string $dataF): string {
+        $retorno = "";
+        $where_status = "AND pedido.status = " . $status;
+        $where_prioridade = "AND pedido.prioridade = " . $prioridade;
+        $where_setor = "AND pedido.id_setor = " . $id_setor;
+        if ($status == 0) {
+            $where_status = '';
+        }
+        if ($prioridade == 0) {
+            $where_prioridade = '';
+        }
+        if ($id_setor == 0) {
+            $where_setor = '';
+        }
+        if (is_null($this->obj_Util)) {
+            $this->obj_Util = new Util();
+        }
+        $dataIni = $this->obj_Util->dateFormat($dataI);
+        $dataFim = $this->obj_Util->dateFormat($dataF);
+        $this->obj_Util = NULL;
+        $where_empenho = "";
+        $tb_empenho = "";
+        $empenho = "";
+        if ($status == 8) {
+            $where_empenho = "AND pedido_empenho.id_pedido = pedido.id";
+            $tb_empenho = "pedido_empenho, ";
+            $empenho = ", pedido_empenho.empenho";
+        }
+        if (is_null($this->mysqli)) {
+            $this->mysqli = parent::getConexao();
+        }
+        $query = $this->mysqli->query("SELECT pedido.id, setores.nome AS setor, DATE_FORMAT(pedido.data_pedido, '%d/%m/%Y') AS data_pedido, prioridade.nome AS prioridade, status.nome AS status, pedido.valor {$empenho} FROM {$tb_empenho} setores, pedido, prioridade, status WHERE status.id = pedido.status {$where_setor} {$where_prioridade} {$where_empenho} AND prioridade.id = pedido.prioridade AND pedido.id_setor = setores.id {$where_status} AND pedido.data_pedido BETWEEN '{$dataIni}' AND '{$dataFim}' ORDER BY pedido.id ASC;") or exit("Erro ao buscar os pedidos com as especificações do usuário.");
+
+        $titulo = "Relatório de Pedidos por Setor e Nível de Prioridade";
+        if ($query) {
+            $thead = "
+                <th>Enviado em</th>
+                <th>Prioridade</th>
+                <th>Status</th>
+                <th>Valor</th>";
+            if ($status == 8) {
+                $titulo = "Relatório de Empenhos Enviados ao Ordenador";
+                $thead = "
+                    <th>Prioridade</th>
+                    <th>SIAFI</th>";
+            }
+            if (is_null($this->mysqli)) {
+                $this->mysqli = parent::getConexao();
+            }
+            $query_tot = $this->mysqli->query("SELECT sum(pedido.valor) AS total FROM {$tb_empenho} pedido WHERE 1 > 0 {$where_setor} {$where_prioridade} {$where_empenho} AND pedido.alteracao = 0 {$where_status} AND pedido.data_pedido BETWEEN '{$dataIni}' AND '{$dataFim}';") or exit("Erro ao somar os pedidos.");
+            $this->mysqli = NULL;
+            $total = "R$ 0";
+            $tot = $query_tot->fetch_object();
+            if ($tot->total > 0) {
+                $total = "R$ " . number_format($tot->total, 3, ',', '.');
+            }
+            $retorno .= "
+                <fieldset class=\"preg\">
+                    <h5>DESCRIÇÃO DO RELATÓRIO</h5>
+                    <h6>" . $titulo . "</h6>
+                    <h6>Período de Emissão: {$dataI} à {$dataF}</h6>
+                </fieldset><br>
+                <fieldset class=\"preg\">
+                    <table>
+                        <tr>
+                            <td>" . $query->num_rows . " resultados encontrados</td>
+                            <td>Totalizando " . $total . "</td>
+                        </tr>
+                    </table>
+                </fieldset>
+                <table class=\"prod\">
+                    <thead>
+                        <tr>
+                            <th>Pedido</th>
+                            <th>Fornecedor</th>
+                            <th>Setor</th>
+                            " . $thead . "
+                        </tr>
+                    </thead>
+                    <tbody>";
+            while ($pedido = $query->fetch_object()) {
+                $tbody = "";
+                if ($status == 8) {
+                    $tbody = "
+                        <td>" . $pedido->prioridade . "</td>
+                        <td>" . $pedido->empenho . "</td>";
+                } else {
+                    $tbody = "
+                        <td>" . $pedido->data_pedido . "</td>
+                        <td>" . $pedido->prioridade . "</td>
+                        <td>" . $pedido->status . "</td>
+                        <td>R$ " . $pedido->valor . "</td>";
+                }
+                if (is_null($this->obj_Busca)) {
+                    $this->obj_Busca = new BuscaLTE();
+                }
+                $retorno .= "
+                        <tr style=\"\">
+                            <td>" . $pedido->id . "</td>
+                            <td>" . $this->obj_Busca->getFornecedor($pedido->id) . "</td>
+                            <td>" . $pedido->setor . "</td>
+                            " . $tbody . "
+                        </tr>";
+            }
+            $retorno .= "<tbody></table>";
+        }
+        if ($status == 8) {
+            $retorno .= "
+                <br><br><br>
+                <h5 class=\"ass\" style=\"margin-right: 50%; margin-bottom: 0;\">
+                _______________________________________________<br>
+                RESPONSÁVEL PELA INFORMAÇÃO
+                </h5>
+                <h5 class=\"ass\" style=\"margin-left: 51%; margin-top: -32px;\">
+                _______________________________________________<br>
+                RESPONSÁVEL PELO RECEBIMENTO
+                </h5><br><br>
+                <h4 style=\"text-align: center\" class=\"ass\">Santa Maria, ___ de ___________________ de _____.</h4>";
+        }
+        $this->obj_Busca = NULL;
+        return $retorno;
     }
 
 }
