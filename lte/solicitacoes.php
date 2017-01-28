@@ -116,7 +116,7 @@ $select_grupo = $obj_Busca->getOptionsGrupos($id_setor);
                             </a>
                         </li>
                         <li>
-                            <a href="#">
+                            <a href="javascript:listAdiantamentos();">
                                 <i class="fa fa-plus"></i> <span>Meus Adiantamentos</span>
                             </a>
                         </li>
@@ -320,6 +320,30 @@ $select_grupo = $obj_Busca->getOptionsGrupos($id_setor);
                 <strong>Copyright © 2016-2017 <a href="https://github.com/joao-bolsson">João Bolsson</a>.</strong> All rights
                 reserved.
             </footer>
+            <div aria-hidden="true" class="modal fade" id="listAdiantamentos" role="dialog" tabindex="-1">
+                <div class="modal-dialog modal-lg">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                            <h4 class="modal-title">Solicitações de Adiantamentos</h4>
+                        </div>
+                        <div class="modal-body">
+                            <table class="table table-bordered table-striped" id="tableListAdiantamentos">
+                                <thead>
+                                    <tr>
+                                        <th>DATA_SOLICITACAO</th>
+                                        <th>DATA_ANALISE</th>
+                                        <th>VALOR_ADIANTADO</th>
+                                        <th>JUSTIFICATIVA</th>
+                                        <th>STATUS</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="tbodyListAdiantamentos"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
             <div aria-hidden="true" class="modal fade" id="adiantamento" role="dialog" tabindex="-1" data-backdrop="static">
                 <div class="modal-dialog">
                     <div class="modal-content">
@@ -545,7 +569,7 @@ $select_grupo = $obj_Busca->getOptionsGrupos($id_setor);
         <script src="plugins/input-mask/jquery.inputmask.date.extensions.js"></script>
         <script src="plugins/input-mask/jquery.inputmask.extensions.js"></script>
         <!-- page script -->
-        <script type="text/javascript" src="../iniLTE.js"></script>
+        <script type="text/javascript" src="../iniLTE.min.js"></script>
 
     </body>
 </html>

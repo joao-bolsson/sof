@@ -207,6 +207,12 @@ $(function () {
         }
     });
 
+    $('#listAdiantamentos').on('shown.bs.modal', function (event) {
+        if (!$.fn.DataTable.isDataTable('#tableListAdiantamentos')) {
+            iniDataTable('#tableListAdiantamentos');
+        }
+    });
+
 });
 function cadEmpenho(id_pedido, empenho, data) {
     document.getElementById('id_pedido_emp').value = '';
@@ -905,21 +911,16 @@ function listProcessos(permissao) {
     $('#listProcessos').modal('show');
 }
 
-$('#listAdiantamentos').on('shown.bs.modal', function (event) {
-    if (!$.fn.DataTable.isDataTable('#tableListAdiantamentos')) {
-        iniDataTable('#tableListAdiantamentos');
-    }
-});
 function listAdiantamentos() {
-    $('#listAdiantamentos').modal('show');
-    if (!$.fn.DataTable.isDataTable('#tableListProcessos')) {
-        $.post('../php/busca.php', {
+    if (!$.fn.DataTable.isDataTable('#tableListAdiantamentos')) {
+        $.post('../php/buscaLTE.php', {
             users: 1,
             form: 'listAdiantamentos'
         }, function (resposta) {
-            document.getElementById('tbodyListAdiantamentos').innerHTML = resposta;
+            $('#tbodyListAdiantamentos').html(resposta);
         });
     }
+    $('#listAdiantamentos').modal('show');
 }
 
 function listRelatorios() {
