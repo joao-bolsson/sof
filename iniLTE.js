@@ -1432,12 +1432,8 @@ function imprimir(id_pedido) {
         users: 1,
         form: 'imprimirPedido',
         id_pedido: id_pedido
-    }, function (resposta) {
-        if (resposta === 2) {
-            window.open("../admin/printPedido.php");
-        } else {
-            window.open("../view/printPedido.php");
-        }
+    }, function () {
+        window.open("../view/printPedido.php");
     });
 }
 // função para recepção para gerar relatórios
