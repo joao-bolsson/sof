@@ -7,7 +7,7 @@
  *  Usada para a nova aparência da parte administrativa do SOF.
  *
  *  @author João Bolsson (joaovictorbolsson@gmail.com).
- *  @since 2016, 16 Mar.
+ *  @since 2017, 15 Jan.
  */
 ini_set('display_erros', true);
 error_reporting(E_ALL);
@@ -1679,7 +1679,7 @@ class BuscaLTE extends Conexao {
             $btnVerEmpenho = BuscaLTE::verEmpenho($pedido->id);
             if ($btnVerEmpenho == 'EMPENHO SIAFI PENDENTE') {
                 $btnVerEmpenho = '';
-            } else {
+            } else if ($_SESSION['id_setor'] != 12) {
                 $btnAnalisar .= "<button type=\"button\" class=\"btn btn-default\" onclick=\"javascript:cadEmpenho(" . $pedido->id . ", '" . BuscaLTE::verEmpenho($pedido->id) . "', '" . BuscaLTE::verDataEmpenho($pedido->id) . "');\" title=\"Cadastrar Empenho\"><i class=\"fa fa-credit-card\"></i></button>";
             }
             $pedido->valor = number_format($pedido->valor, 3, ',', '.');

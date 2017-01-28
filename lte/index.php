@@ -1,4 +1,10 @@
 <?php
+/**
+ *  Interface usada pelo Setor de Orçamento.
+ *
+ *  @author João Bolsson (joaovictorbolsson@gmail.com).
+ *  @since 2017, 15 Jan.
+ */
 ini_set('display_erros', true);
 error_reporting(E_ALL);
 
@@ -7,6 +13,7 @@ if (!isset($_SESSION["id_setor"]) || $_SESSION["id_setor"] != 2) {
     header("Location: ../");
 }
 include_once '../class/BuscaLTE.class.php';
+require_once '../defines.php';
 //instanciando classe de busca para popular o select de estados
 $obj_Busca = new BuscaLTE();
 $permissao = $obj_Busca->getPermissoes($_SESSION["id"]);
@@ -503,7 +510,7 @@ $count = $obj_Busca->getCountSolic();
 
             <footer class="main-footer">
                 <div class="pull-right hidden-xs">
-                    <b>Version</b> 2.0.0
+                    <b>Version</b> <?= VERSION ?>
                 </div>
                 <strong>Copyright © 2016-2017 <a href="https://github.com/joao-bolsson">João Bolsson</a>.</strong> All rights
                 reserved.

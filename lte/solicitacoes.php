@@ -1,4 +1,10 @@
 <?php
+/**
+ *  Interface usada pelos demais setores cadastrados no sistema.
+ *
+ *  @author João Bolsson (joaovictorbolsson@gmail.com).
+ *  @since 2017, 21 Jan.
+ */
 session_start();
 ini_set('display_erros', true);
 error_reporting(E_ALL);
@@ -7,6 +13,7 @@ if (!isset($_SESSION["id"]) || $_SESSION['id_setor'] == 12) {
     header("Location: ../");
 }
 include_once '../class/BuscaLTE.class.php';
+require_once '../defines.php';
 //instanciando classe de busca para popular o select de estados
 $obj_Busca = new BuscaLTE();
 $id_setor = $_SESSION["id_setor"];
@@ -315,7 +322,7 @@ $select_grupo = $obj_Busca->getOptionsGrupos($id_setor);
             <!-- Main Footer -->
             <footer class="main-footer">
                 <div class="pull-right hidden-xs">
-                    <b>Version</b> 2.0.0
+                    <b>Version</b> <?= VERSION ?>
                 </div>
                 <strong>Copyright © 2016-2017 <a href="https://github.com/joao-bolsson">João Bolsson</a>.</strong> All rights
                 reserved.

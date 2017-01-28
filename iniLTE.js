@@ -754,7 +754,7 @@ function iniSolicitacoes() {
 }
 
 function enviaForn(id_pedido) {
-    $('a').blur();
+    $('button').blur();
     if (!confirm("O status do pedido " + id_pedido + " será alterado para 'Enviado ao Fornecedor'. \n\nDeseja Continuar?")) {
         return;
     }
@@ -1604,13 +1604,11 @@ function limpaTela() {
     }
     $('#checkExcluir').iCheck('uncheck');
     document.getElementById('formPedido').reset();
-    $('#btnLimpa').blur();
     document.getElementById('rowDetPedido').style.display = "none";
     avisoSnack('Tela Limpa');
 }
 // cancelar um item
 function cancelaItem(id_item) {
-    var icone = document.getElementById("icon-cancela-item" + id_item);
     var cancelado = document.getElementById("item_cancelado" + id_item).value;
     // SE O ITEM JÁ ESTÁ CANCELADO, ENTÃO DESCANCELAR
     if (cancelado == "1") {
@@ -1619,7 +1617,7 @@ function cancelaItem(id_item) {
         document.getElementById("item_cancelado" + id_item).value = 0;
         document.getElementById("row_item" + id_item).style.backgroundColor = "";
     } else {
-// AVISA O QUE ACONTECERÁ SE O ITEM FOR REMOVIDO
+        // AVISA O QUE ACONTECERÁ SE O ITEM FOR REMOVIDO
         var cancel = confirm("O item de id = " + id_item + " será desativado no Banco de Dados ao final da análise do pedido atual, e portanto, os setores não poderão mais solicitá-lo. Deseja prosseguir?");
         if (cancel) {
             $('#icon-cancela-item' + id_item).removeClass('fa-close').addClass('fa-check');
@@ -1631,7 +1629,7 @@ function cancelaItem(id_item) {
 }
 
 function editaItem(id_item) {
-    $('a').blur();
+    $('button').blur();
     $('#infoItem').modal();
     document.getElementById('idItem').value = id_item;
     $.post('../php/busca.php', {

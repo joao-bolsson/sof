@@ -1653,7 +1653,7 @@ class Busca extends Conexao {
             $btnVerEmpenho = Busca::verEmpenho($pedido->id);
             if ($btnVerEmpenho == 'EMPENHO SIAFI PENDENTE') {
                 $btnVerEmpenho = '';
-            } else {
+            } else if ($_SESSION['id_setor'] != 12) {
                 $btnAnalisar .= "<a class=\"modal-close\" href=\"javascript:cadEmpenho(" . $pedido->id . ", '" . Busca::verEmpenho($pedido->id) . "', '" . Busca::verDataEmpenho($pedido->id) . "');\" title=\"Cadastrar Empenho\"><span class=\"icon\">payment<span></a>";
             }
             $pedido->valor = number_format($pedido->valor, 3, ',', '.');
