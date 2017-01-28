@@ -1,4 +1,5 @@
 <?php
+
 ini_set('display_erros', true);
 error_reporting(E_ALL);
 
@@ -19,10 +20,7 @@ $dataF = $_POST['dataF'];
 $local = $_POST['local'];
 $valor = $_POST['valor'];
 
-include_once '../class/Busca.class.php';
 include_once '../class/Util.class.php';
-//instanciando classe de busca para popular o select de estados
-$obj_Busca = new Busca();
 $obj_Util = new Util();
 //incluimos o arquivo
 include '../pdf/MPDF57/mpdf.php';
@@ -83,15 +81,13 @@ $html_style = "
 </style>
 <head>
   <title>SOFHUSM | Impressão de pedido</title>
-</head>
-";
+</head>";
 $html_header = "
 <body>
   <p style=\"text-align: center;\">
     <img src=\"../sof_files/header_setor_2.png\"/>
   </p>
-  <hr/>
-  ";
+  <hr/>";
 
 $date = new DateTime($obj_Util->dateFormat($dataF));
 $date->add(new DateInterval('P15D'));
@@ -141,8 +137,7 @@ $html = "
   <fieldset>
     <h5>APROVADO PELA GERÊNCIA ADMINISTRATIVA</h5>
     <p id=\"apro\">ASSINATURA - CARIMBO - DATA</p><br><br><br>
-  </fieldset>
-";
+  </fieldset>";
 
 $html = $html_style . $html_header . $html . "</body>";
 $mpdf = new mPDF();
@@ -151,12 +146,11 @@ $mpdf->SetDisplayMode('fullpage');
 
 $data = date('j/m/Y  H:i');
 //definimos oque vai conter no rodape do pdf
-$mpdf->SetFooter("{$data}||Pagina {PAGENO}/{nb}");
+$mpdf->SetFooter($data . '||Página {PAGENO}/{nb}');
 //e escreve todo conteudo html vindo de nossa página html em nosso arquivo
 $mpdf->WriteHTML($html);
 //fechamos nossa instancia ao pdf
 $mpdf->Output();
 
 exit();
-
 ?>
