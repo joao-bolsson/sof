@@ -320,6 +320,33 @@ $select_grupo = $obj_Busca->getOptionsGrupos($id_setor);
                 <strong>Copyright © 2016-2017 <a href="https://github.com/joao-bolsson">João Bolsson</a>.</strong> All rights
                 reserved.
             </footer>
+            <div aria-hidden="true" class="modal fade" id="adiantamento" role="dialog" tabindex="-1" data-backdrop="static">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                            <h4 class="modal-title">Solicitar Adiantamento</h4>
+                        </div>
+                        <form action="../php/geral.php" method="POST">
+                            <input type="hidden" name="form" value="adiantamento" />
+                            <input type="hidden" name="users" value="1" />
+                            <div class="modal-body">
+                                <div class="form-group">
+                                    <label>Valor</label>
+                                    <input class="form-control" id="valor_adiantamento" name="valor_adiantamento" type="number" step="0.001" min="0.001" required>
+                                </div>
+                                <div class="form-group">
+                                    <label>Justificativa</label>
+                                    <textarea class="form-control" id="justificativa" name="justificativa" rows="2" required></textarea>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button class="btn btn-primary" type="submit" style="width: 100%;"><i class="fa fa-send"></i>&nbsp;Enviar</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
             <div aria-hidden="true" class="modal fade" id="listLancamentos" role="dialog" tabindex="-1">
                 <div class="modal-dialog modal-lg">
                     <div class="modal-content">
