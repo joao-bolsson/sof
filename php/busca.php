@@ -260,7 +260,6 @@ if (isset($_POST["admin"]) && isset($_SESSION['id_setor']) && ($_SESSION['id_set
             $_SESSION["imprimirPedido"] = 1;
             $_SESSION["id_ped_imp"] = $_POST["id_pedido"];
             $_SESSION['pedido_rascunho'] = $obj_Busca->getRequestDraft($_POST['id_pedido']);
-            echo $_SESSION['id_setor'];
             break;
 
         default:

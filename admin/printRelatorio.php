@@ -1,12 +1,13 @@
 <?php
+
 ini_set('display_erros', true);
 error_reporting(E_ALL);
 
 session_start();
 
-include_once '../class/BuscaLTE.class.php';
+include_once '../class/PrintMod.class.php';
 //instanciando classe de busca para popular o select de estados
-$obj_Busca = new BuscaLTE();
+$obj_Print = new PrintMod();
 
 //definimos uma constante com o nome da pasta
 define('MPDF_PATH', '../pdf/MPDF57/');
@@ -31,40 +32,39 @@ $html_header = "
   <hr/>";
 $input = filter_input(INPUT_POST, 'relatorio');
 if (!empty($input) && $_SESSION["id_setor"] == 2) {
-	$html = $html_style . $html_header;
+    $html = $html_style . $html_header;
 
-	$tipo = filter_input(INPUT_POST, 'tipo');
-	switch ($tipo) {
-	case 'pedidos':
-		$id_setor = filter_input(INPUT_POST, 'setor');
-		$prioridade = filter_input(INPUT_POST, 'prioridade');
-		$status = filter_input(INPUT_POST, 'status');
-                $dataI = filter_input(INPUT_POST, 'dataI');
-                $dataF = filter_input(INPUT_POST, 'dataF');
-		$html .= $obj_Busca->getRelatorioPedidos($id_setor, $prioridade, $status, $dataI, $dataF);
-		break;
+    $tipo = filter_input(INPUT_POST, 'tipo');
+    switch ($tipo) {
+        case 'pedidos':
+            $id_setor = filter_input(INPUT_POST, 'setor');
+            $prioridade = filter_input(INPUT_POST, 'prioridade');
+            $status = filter_input(INPUT_POST, 'status');
+            $dataI = filter_input(INPUT_POST, 'dataI');
+            $dataF = filter_input(INPUT_POST, 'dataF');
+            $html .= $obj_Print->getRelatorioPedidos($id_setor, $prioridade, $status, $dataI, $dataF);
+            break;
 
-	default:
-		// remove all session variables
-		session_unset();
-		// destroy the session
-		session_destroy();
-		break;
-	}
+        default:
+            // remove all session variables
+            session_unset();
+            // destroy the session
+            session_destroy();
+            break;
+    }
 
-	$html .= "</body>";
+    $html .= "</body>";
 
-//definimos o tipo de exibicao
-	$mpdf->SetDisplayMode('fullpage');
-	$data = date('j/m/Y  H:i');
-//definimos oque vai conter no rodape do pdf
-	$mpdf->SetFooter("{$data}||Pagina {PAGENO}/{nb}");
-//e escreve todo conteudo html vindo de nossa página html em nosso arquivo
-	$mpdf->WriteHTML($html);
-//fechamos nossa instancia ao pdf
-	$mpdf->Output();
-//pausamos a tela para exibir oque foi feito
-	exit();
+    //definimos o tipo de exibicao
+    $mpdf->SetDisplayMode('fullpage');
+    $data = date('j/m/Y  H:i');
+    //definimos oque vai conter no rodape do pdf
+    $mpdf->SetFooter("{$data}||Pagina {PAGENO}/{nb}");
+    //e escreve todo conteudo html vindo de nossa página html em nosso arquivo
+    $mpdf->WriteHTML($html);
+    //fechamos nossa instancia ao pdf
+    $mpdf->Output();
+    //pausamos a tela para exibir oque foi feito
+    exit();
 }
-
 ?>
