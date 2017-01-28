@@ -7,7 +7,7 @@
  *  Usada para a nova aparência da parte administrativa do SOF.
  *
  *  @author João Bolsson (joaovictorbolsson@gmail.com).
- *  @since 2016, 16 Mar.
+ *  @since 2017, 15 Jan.
  */
 ini_set('display_erros', true);
 error_reporting(E_ALL);
@@ -62,11 +62,9 @@ class BuscaLTE extends Conexao {
         while ($obj = $query->fetch_object()) {
             $retorno .= "
                 <td>
-                    <div class=\"radiobtn radiobtn-adv\">
-                        <label for=\"tipoCont" . $obj->id . "\">
-                            <input type=\"radio\" name=\"tipoCont\" id=\"tipoCont" . $obj->id . "\" class=\"access-hide\" value=\"" . $obj->id . "\" onchange=\"changeTipoContr(this);\">" . $obj->nome . "
-                            <span class=\"radiobtn-circle\"></span><span class=\"radiobtn-circle-check\"></span>
-                        </label>
+                    <div class=\"form-group\">
+                        <input type=\"radio\" name=\"tipoCont\" id=\"tipoCont" . $obj->id . "\" class=\"minimal\" value=\"" . $obj->id . "\">"
+                    . $obj->nome . "
                     </div>
                 </td>";
         }
@@ -159,11 +157,8 @@ class BuscaLTE extends Conexao {
             }
             $retorno .= "
                 <td>
-                    <div class=\"radiobtn radiobtn-adv\">
-                        <label for=\"tipoLic" . $obj->id . "\">
-                            <input type=\"radio\" name=\"tipoLic\" id=\"tipoLic" . $obj->id . "\" class=\"access-hide\" value=\"" . $obj->id . "\" required onchange=\"changeTipoLic(this);\">" . $obj->nome . "
-                            <span class=\"radiobtn-circle\"></span><span class=\"radiobtn-circle-check\"></span>
-                        </label>
+                    <div class=\"form-group\">
+                        <input type=\"radio\" name=\"tipoLic\" id=\"tipoLic" . $obj->id . "\" class=\"minimal\" value=\"" . $obj->id . "\" required > " . $obj->nome . "
                     </div>
                 </td>";
             $i++;
@@ -486,7 +481,6 @@ class BuscaLTE extends Conexao {
                 $retorno = "
                 <tr>
                     <td colspan=\"2\">Você tem " . $query->num_rows . " pedido(s) em análise no total de R$ " . $soma . "</td>
-                    <td></td>
                 </tr>";
             }
         }
@@ -875,11 +869,8 @@ class BuscaLTE extends Conexao {
         while ($prioridade = $query->fetch_object()) {
             $retorno .= "
                 <td>
-                    <div class=\"radiobtn radiobtn-adv\">
-                        <label for=\"st" . $prioridade->nome . "\">
-                            <input type=\"radio\" name=\"st\" id=\"st" . $prioridade->nome . "\" class=\"access-hide\" checked=\"\" value=\"" . $prioridade->id . "\">" . $prioridade->nome . "
-                            <span class=\"radiobtn-circle\"></span><span class=\"radiobtn-circle-check\"></span>
-                        </label>
+                    <div class=\"form-group\">
+                        <input type=\"radio\" name=\"st\" id=\"st" . $prioridade->nome . "\" class=\"minimal\" value=\"" . $prioridade->id . "\"> " . $prioridade->nome . "
                     </div>
                 </td>";
         }
@@ -1688,7 +1679,7 @@ class BuscaLTE extends Conexao {
             $btnVerEmpenho = BuscaLTE::verEmpenho($pedido->id);
             if ($btnVerEmpenho == 'EMPENHO SIAFI PENDENTE') {
                 $btnVerEmpenho = '';
-            } else {
+            } else if ($_SESSION['id_setor'] != 12) {
                 $btnAnalisar .= "<button type=\"button\" class=\"btn btn-default\" onclick=\"javascript:cadEmpenho(" . $pedido->id . ", '" . BuscaLTE::verEmpenho($pedido->id) . "', '" . BuscaLTE::verDataEmpenho($pedido->id) . "');\" title=\"Cadastrar Empenho\"><i class=\"fa fa-credit-card\"></i></button>";
             }
             $pedido->valor = number_format($pedido->valor, 3, ',', '.');
@@ -1825,15 +1816,15 @@ class BuscaLTE extends Conexao {
             switch ($solic->status) {
                 case 0:
                     $status = "Reprovado";
-                    $label = "label-red";
+                    $label = "bg-red";
                     break;
                 case 1:
                     $status = "Aprovado";
-                    $label = "label-green";
+                    $label = "bg-green";
                     break;
                 default:
                     $status = "Aberto";
-                    $label = "label-orange";
+                    $label = "bg-orange";
                     $solic->data_analise = "--------------";
                     break;
             }
@@ -1845,9 +1836,9 @@ class BuscaLTE extends Conexao {
                     <td>" . $solic->data_solicitacao . "</td>
                     <td>" . $solic->data_analise . "</td>
                     <td>
-                        <button onclick=\"viewCompl('" . $solic->justificativa . "');\" class=\"btn btn-flat waves-attach waves-effect\" type=\"button\" title=\"Ver Justificativa\">JUSTIFICATIVA</button>
+                        <button onclick=\"viewCompl('" . $solic->justificativa . "');\" class=\"btn btn-default\" type=\"button\" title=\"Ver Justificativa\">JUSTIFICATIVA</button>
                     </td>
-                    <td><span class=\"label " . $label . "\" style=\"font-size: 11pt !important; font-weight: bold;\">" . $status . "</span></td>
+                    <td><small class=\"label " . $label . "\">" . $status . "</small></td>
                 </tr>";
         }
         $this->mysqli = NULL;
@@ -1869,15 +1860,15 @@ class BuscaLTE extends Conexao {
         while ($solic = $query->fetch_object()) {
             switch ($solic->status) {
                 case 0:
-                    $label = "label-red";
+                    $label = "bg-red";
                     $status = "Reprovado";
                     break;
                 case 1:
-                    $label = "label-green";
+                    $label = "bg-green";
                     $status = "Aprovado";
                     break;
                 case 2:
-                    $label = "label-orange";
+                    $label = "bg-orange";
                     $status = "Aberto";
                     $solic->data_analise = "--------------";
                     break;
@@ -1891,9 +1882,9 @@ class BuscaLTE extends Conexao {
                     <td>" . $solic->data_analise . "</td>
                     <td>R$ " . $solic->valor_adiantado . "</td>
                     <td>
-                        <button onclick=\"viewCompl('" . $solic->justificativa . "');\" class=\"btn btn-flat waves-attach waves-effect\" type=\"button\" title=\"Ver Justificativa\">JUSTIFICATIVA</button>
+                        <button onclick=\"viewCompl('" . $solic->justificativa . "');\" class=\"btn btn-default\" type=\"button\" title=\"Ver Justificativa\">Justificativa</button>
                     </td>
-                    <td><span class=\"label " . $label . "\" style=\"font-size: 11pt !important; font-weight: bold;\">" . $status . "</span></td>
+                    <td><small class=\"label " . $label . "\">" . $status . "</small></td>
                 </tr>";
         }
         $this->mysqli = NULL;
@@ -1920,13 +1911,13 @@ class BuscaLTE extends Conexao {
             $retorno .= "
                 <tr>
                     <td>
-                            <a class=\"modal-close\" href=\"javascript:checkItemPedido(" . $item->id . ", '" . $item->vl_unitario . "', " . $item->qt_saldo . ");\"><span class=\"icon\">add<span></a>
+                        <button type=\"button\" class=\"btn btn-default\" onclick=\"checkItemPedido(" . $item->id . ", '" . $item->vl_unitario . "', " . $item->qt_saldo . ")\" title=\"Adicionar\"><span class=\"fa fa-plus\"></span></button>
                     </td>
                     <td>" . $item->nome_fornecedor . "</td>
                     <td>" . $item->cod_reduzido . "</td>
                     <td><input type=\"number\" id=\"qtd" . $item->id . "\" min=\"1\" max=\"" . $item->qt_saldo . "\"></td>
                     <td>
-                            <a onclick=\"viewCompl('" . $item->complemento_item . "');\" class=\"btn btn-flat waves-attach waves-effect\" type=\"button\" title=\"Mais Detalhes\">complemento_item</a>
+                        <button type=\"button\" onclick=\"viewCompl('" . $item->complemento_item . "');\" class=\"btn btn-default\" title=\"Mais Detalhes\"><span class=\"fa fa-eye\"></span></button>
                     </td>
                     <td style=\"display: none;\">" . $item->complemento_item . "</td>
                     <td>" . $item->vl_unitario . "</td>
@@ -1957,10 +1948,10 @@ class BuscaLTE extends Conexao {
         $valor = $qtd * $item->vl_unitario;
         $retorno = "
             <tr id=\"row" . $id_item . "\">
-                <td><a class=\"modal-close\" href=\"javascript:removeTableRow(" . $id_item . ", '" . $valor . "');\"><span class=\"icon\">delete</span></a></td>
+                <td><button type=\"button\" class=\"btn btn-default\" onclick=\"removeTableRow(" . $id_item . ", '" . $valor . "')\"><span class=\"fa fa-trash\"></span></a></td>
                 <td>" . $item->cod_reduzido . "</td>
                 <td>
-                    <button onclick=\"viewCompl('" . $item->complemento_item . "');\" class=\"btn btn-flat waves-attach waves-effect\" type=\"button\" title=\"Ver Complemento do Item\">complemento_item</button>
+                    <button onclick=\"viewCompl('" . $item->complemento_item . "');\" class=\"btn btn-default\" type=\"button\" title=\"Ver Complemento do Item\"><span class=\"fa fa-eye\"></span></button>
                 </td>
                 <td>R$ " . $item->vl_unitario . "</td>
                 <td>" . $item->nome_fornecedor . "</td>
@@ -2001,14 +1992,14 @@ class BuscaLTE extends Conexao {
             $retorno .= "
                 <tr>
                     <td>" . $rascunho->id . "</td>
-                    <td><span class=\"label\" style=\"font-size: 11pt;\">" . $rascunho->status . "</span></td>
+                    <td><small class=\"label bg-gray\">" . $rascunho->status . "</small></td>
                     <td>" . $rascunho->ref_mes . "</td>
                     <td>" . $rascunho->data_pedido . "</td>
                     <td>R$ " . $rascunho->valor . "</td>
                     <td>
-                        <button type=\"button\" class=\"btn btn-default btn-sm\" style=\"text-transform: none !important;font-weight: bold;\" onclick=\"editaPedido(" . $rascunho->id . ");\" title=\"Editar\"><span class=\"icon\">create</span></button>
-                        <button type=\"button\" class=\"btn btn-default btn-sm\" style=\"text-transform: none !important;font-weight: bold;\" onclick=\"imprimir(" . $rascunho->id . ");\" title=\"Imprimir\"><span class=\"icon\">print</span></button>
-                        <button type=\"button\" class=\"btn btn-default btn-sm\" style=\"text-transform: none !important;font-weight: bold;\" onclick=\"deletePedido(" . $rascunho->id . ");\" title=\"Excluir\"><span class=\"icon\">delete</span></button>
+                        <button type=\"button\" class=\"btn btn-default btn-sm\" onclick=\"editaPedido(" . $rascunho->id . ");\" title=\"Editar\"><i class=\"fa fa-pencil\"></i></button>
+                        <button type=\"button\" class=\"btn btn-default btn-sm\" onclick=\"imprimir(" . $rascunho->id . ");\" title=\"Imprimir\"><i class=\"fa fa-print\"></i></button>
+                        <button type=\"button\" class=\"btn btn-default btn-sm\" onclick=\"deletePedido(" . $rascunho->id . ");\" title=\"Excluir\"><i class=\"fa fa-trash\"></i></button>
                     </td>
                 </tr>";
         }
@@ -2054,10 +2045,10 @@ class BuscaLTE extends Conexao {
             $item->complemento_item = str_replace("\"", "'", $item->complemento_item);
             $retorno .= "
                 <tr id=\"row" . $id_item . "\">
-                    <td><a class=\"modal-close\" href=\"javascript:removeTableRow(" . $id_item . ", '" . $item->valor . "');\"><span class=\"icon\">delete</span></a></td>
+                    <td><button type=\"button\" class=\"btn btn-default\" onclick=\"removeTableRow(" . $id_item . ", '" . $item->valor . "');\" title=\"Remover\"><i class=\"fa fa-trash\"></i></button></td>
                     <td>" . $item->cod_reduzido . "</td>
                     <td>
-                        <button onclick=\"viewCompl(\"" . $item->complemento_item . "\");\" class=\"btn btn-flat waves-attach waves-effect\" type=\"button\" title=\"Ver Complemento do Item\">complemento_item</button>
+                        <button type=\"button\" class=\"btn btn-default\" onclick=\"viewCompl('" . $item->complemento_item . "');\"  title=\"Ver Complemento do Item\"><i class=\"fa fa-eye\"></i>
                     </td>
                     <td>R$ " . $item->vl_unitario . "</td>
                     <td>" . $item->nome_fornecedor . "</td>
@@ -2116,7 +2107,7 @@ class BuscaLTE extends Conexao {
             $pedido->valor = number_format($pedido->valor, 3, ',', '.');
             $btnSolicAlt = "";
             if ($pedido->status == 'Em Analise' || $pedido->status == 'Aguarda Orcamento') {
-                $btnSolicAlt = "<button type=\"button\" class=\"btn btn-default btn-sm\" style=\"text-transform: none !important;font-weight: bold;\" onclick=\"solicAltPed(" . $pedido->id . ");\" title=\"Solicitar Alteração\"><span class=\"icon\">build</span></button>";
+                $btnSolicAlt = "<button type=\"button\" class=\"btn btn-default btn-sm\" onclick=\"solicAltPed(" . $pedido->id . ");\" title=\"Solicitar Alteração\"><i class=\"fa fa-wrench\"></i></button>";
             }
             $retorno .= "
                 <tr>
@@ -2124,12 +2115,12 @@ class BuscaLTE extends Conexao {
                     <td>" . $pedido->ref_mes . "</td>
                     <td>" . $pedido->data_pedido . "</td>
                     <td>" . $pedido->prioridade . "</td>
-                    <td><span class=\"label\" style=\"font-size: 11pt;\">" . $pedido->status . "</span></td>
+                    <td><small class=\"label bg-gray\">" . $pedido->status . "</small></td>
                     <td>" . $empenho . "</td>
                     <td>R$ " . $pedido->valor . "</td>
                     <td>
                         " . $btnSolicAlt . "
-                        <button type=\"button\" class=\"btn btn-default btn-sm\" style=\"text-transform: none !important;font-weight: bold;\" onclick=\"imprimir(" . $pedido->id . ");\" title=\"Imprimir\"><span class=\"icon\">print</span></button>
+                        <button type=\"button\" class=\"btn btn-default btn-sm\" onclick=\"imprimir(" . $pedido->id . ");\" title=\"Imprimir\"><i class=\"fa fa-print\"></i></button>
                     </td>
                 </tr>";
         }
@@ -2148,11 +2139,13 @@ class BuscaLTE extends Conexao {
         $onclick = "pesquisarProcesso";
         $title = "Pesquisar Processo";
         $icon = "fa-search";
+        $act = 'Pesquisar';
         if ($tela == "recepcao") {
             $sql = "SELECT DISTINCT itens.num_processo FROM itens WHERE itens.num_processo NOT IN (SELECT DISTINCT processos.num_processo FROM processos);";
             $onclick = "addProcesso";
             $title = "Adicionar Processo";
             $icon = "fa-plus";
+            $act = 'Adicionar';
         }
         if (is_null($this->mysqli)) {
             $this->mysqli = parent::getConexao();
@@ -2164,7 +2157,7 @@ class BuscaLTE extends Conexao {
                 <tr>
                     <td>" . $processo->num_processo . "</td>
                     <td>
-                        <button type=\"button\" title=\"" . $title . "\" onclick=\"" . $onclick . "('" . $processo->num_processo . "', 0)\" class=\"btn btn-primary\"><i class=\"fa " . $icon . "\"></i> Adicionar</button>
+                        <button type=\"button\" title=\"" . $title . "\" onclick=\"" . $onclick . "('" . $processo->num_processo . "', 0)\" class=\"btn btn-primary\"><i class=\"fa " . $icon . "\"></i> " . $act . "</button>
                     </td>
                 </tr>";
         }

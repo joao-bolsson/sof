@@ -1,4 +1,10 @@
 <?php
+/**
+ *  Interface usada pelo Setor de Orçamento.
+ *
+ *  @author João Bolsson (joaovictorbolsson@gmail.com).
+ *  @since 2017, 15 Jan.
+ */
 ini_set('display_erros', true);
 error_reporting(E_ALL);
 
@@ -7,6 +13,7 @@ if (!isset($_SESSION["id_setor"]) || $_SESSION["id_setor"] != 2) {
     header("Location: ../");
 }
 include_once '../class/BuscaLTE.class.php';
+require_once '../defines.php';
 //instanciando classe de busca para popular o select de estados
 $obj_Busca = new BuscaLTE();
 $permissao = $obj_Busca->getPermissoes($_SESSION["id"]);
@@ -36,6 +43,8 @@ $count = $obj_Busca->getCountSolic();
         <!-- AdminLTE Skins. Choose a skin from the css/skins
              folder instead of downloading all of them to reduce the load. -->
         <link rel="stylesheet" href="dist/css/skins/_all-skins.min.css">
+        <!-- Custom snackbar style -->
+        <link rel="stylesheet" href="dist/css/snackbar.min.css">
 
         <link rel="icon" href="../favicon.ico">
     </head>
@@ -217,7 +226,7 @@ $count = $obj_Busca->getCountSolic();
                 <!-- Content Header (Page header) -->
                 <section class="content-header">
                     <h1>
-                        Setor de Orçamento e Finanças
+                        <?= $_SESSION['nome_setor']; ?>
                         <small>Saldo: R$ <?= number_format($obj_Busca->getSaldo($_SESSION['id_setor']), 3, ',', '.'); ?></small>
                     </h1>
                     <ol class="breadcrumb">
@@ -496,9 +505,12 @@ $count = $obj_Busca->getCountSolic();
                     <?php endif; ?>
                 </section><!-- /.content -->
             </div><!-- /.content-wrapper -->
+
+            <div id="snackbar">Some text some message..</div>
+
             <footer class="main-footer">
                 <div class="pull-right hidden-xs">
-                    <b>Version</b> 2.0.0
+                    <b>Version</b> <?= VERSION ?>
                 </div>
                 <strong>Copyright © 2016-2017 <a href="https://github.com/joao-bolsson">João Bolsson</a>.</strong> All rights
                 reserved.

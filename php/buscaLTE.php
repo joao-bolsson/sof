@@ -13,8 +13,8 @@
  *
  * 	user chama funções que podem ser feitas por todos os setores (inclusive o SOF)
  *
- * 	@author João Bolsson
- * 	@since Version 1.0
+ * 	@author João Bolsson (joaovictorbolsson@gmail.com)
+ * 	@since 2017, 15 Jan.
  *
  */
 ini_set('display_erros', true);
@@ -150,7 +150,7 @@ if (isset($_POST["admin"]) && isset($_SESSION['id_setor']) && ($_SESSION['id_set
         case 'fillSaldo':
             echo number_format($obj_Busca->getSaldo($_SESSION['id_setor']), 3, ',', '.');
             break;
-        
+
         case 'getSaldo':
             echo $obj_Busca->getSaldo($_SESSION['id_setor']);
             break;
@@ -250,7 +250,7 @@ if (isset($_POST["admin"]) && isset($_SESSION['id_setor']) && ($_SESSION['id_set
         // edita pedido
 
         case 'editaPedido':
-            $id_pedido = $_POST["id_pedido"];
+            $id_pedido = filter_input(INPUT_POST, 'id_pedido');
 
             echo $obj_Busca->getConteudoPedido($id_pedido);
             break;

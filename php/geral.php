@@ -475,7 +475,7 @@ if ($obj_Busca->isActive()) {
 
                 $envia = $obj_Geral->solicitaAdiantamento($id_setor, $valor, $justificativa);
                 if ($envia) {
-                    header("Location: ../view/solicitacoes.php");
+                    header("Location: ../lte/solicitacoes.php");
                 } else {
                     echo "Ocorreu algum erro no servidor. Contate o administrador";
                 }
@@ -559,7 +559,7 @@ if ($obj_Busca->isActive()) {
                 }
                 $obj_Geral->insertPedContr($pedido, $tipo_cont, $siafi);
 
-                header("Location: ../view/solicitacoes.php");
+                header("Location: ../lte/solicitacoes.php");
                 break;
             default:
                 break;
