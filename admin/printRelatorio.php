@@ -43,7 +43,7 @@ if (isset($_SESSION['pedidosRel'])) {
     $mpdf->SetDisplayMode('fullpage');
     $data = date('j/m/Y  H:i');
     //definimos oque vai conter no rodape do pdf
-    $mpdf->SetFooter("{$data}||Pagina {PAGENO}/{nb}");
+    $mpdf->SetFooter("{$data}||Página {PAGENO}/{nb}");
     //e escreve todo conteudo html vindo de nossa página html em nosso arquivo
     $mpdf->WriteHTML($html);
     //fechamos nossa instancia ao pdf
@@ -78,7 +78,7 @@ if (isset($_SESSION['pedidosRel'])) {
     $mpdf->SetDisplayMode('fullpage');
     $data = date('j/m/Y  H:i');
     //definimos oque vai conter no rodape do pdf
-    $mpdf->SetFooter("{$data}||Pagina {PAGENO}/{nb}");
+    $mpdf->SetFooter("{$data}||Página {PAGENO}/{nb}");
     //e escreve todo conteudo html vindo de nossa página html em nosso arquivo
     $mpdf->WriteHTML($html);
     //fechamos nossa instancia ao pdf

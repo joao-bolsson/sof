@@ -736,18 +736,17 @@ function getSaldoOri() {
     });
 }
 
+pedidosRelCustom = [];
+
 function printChecks() {
     $('#btnPrintCheck').blur();
-    var elements = document.getElementsByName('checkPedRel');
-    var len = elements.length;
+    var len = pedidosRelCustom.length;
     var pedidos = [];
     for (var i = 0; i < len; i++) {
-        var id_pedido = elements[i].value;
-        var input = document.getElementById('checkPedRel' + id_pedido);
-        if (input !== null) {
-            if (input.checked) {
-                pedidos.push(id_pedido);
-            }
+        if (pedidosRelCustom[i] !== 0) {
+            pedidos.push(pedidosRelCustom[i]);
+        } else {
+            console.log('zero');
         }
     }
     if (pedidos.length < 1) {
@@ -779,6 +778,39 @@ function checkImp() {
     document.getElementById('btnPrintCheck').disabled = true;
 }
 
+function pushOrRemove(element) {
+    var len = pedidosRelCustom.length;
+    if (element.checked) {
+        console.log('push: ' + element.value);
+        // push the id on the array
+        if (len == 0) {
+            console.log('array vazio');
+            pedidosRelCustom.push(element.value);
+        } else {
+            console.log('array nao vazio -> procura por 0 e substitui');
+            for (var i = 0; i < len; i++) {
+                if (pedidosRelCustom[i] == 0) {
+                    console.log('achou zero, vai substituir');
+                    pedidosRelCustom[i] = element.value;
+                    return;
+                }
+            }
+            console.log('nao achou zero, faz o push');
+            pedidosRelCustom.push(element.value);
+        }
+    } else {
+        console.log('remove: ' + element.value);
+        // procura o id e substitui por zero
+        for (var i = 0; i < len; i++) {
+            if (pedidosRelCustom[i] == element.value) {
+                console.log('achou, substitui por zero');
+                pedidosRelCustom[i] = 0;
+                return;
+            }
+        }
+    }
+}
+
 function loadChecks() {
     var elements = document.getElementsByName('checkPedRel');
     var len = elements.length;
@@ -796,9 +828,11 @@ function loadChecks() {
             });
             $('#' + id_e).on('ifChecked', function () {
                 checkImp();
+                pushOrRemove(this);
             });
             $('#' + id_e).on('ifUnchecked', function () {
                 checkImp();
+                pushOrRemove(this);
             });
         }
     }
