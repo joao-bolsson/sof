@@ -763,18 +763,15 @@ function printChecks() {
 }
 
 function checkImp() {
-    var elements = document.getElementsByName('checkPedRel');
-    var len = elements.length;
+    var len = pedidosRelCustom.length;
     for (var i = 0; i < len; i++) {
-        var id_pedido = elements[i].value;
-        var input = document.getElementById('checkPedRel' + id_pedido);
-        if (input !== null) {
-            if (input.checked) {
-                document.getElementById('btnPrintCheck').disabled = false;
-                return;
-            }
+        if (pedidosRelCustom[i] !== 0) {
+            console.log('tem algum selecionado');
+            document.getElementById('btnPrintCheck').disabled = false;
+            return;
         }
     }
+    console.log('nenhum selecionado');
     document.getElementById('btnPrintCheck').disabled = true;
 }
 
@@ -827,12 +824,12 @@ function loadChecks() {
                 radioClass: 'iradio_flat-blue'
             });
             $('#' + id_e).on('ifChecked', function () {
-                checkImp();
                 pushOrRemove(this);
+                checkImp();
             });
             $('#' + id_e).on('ifUnchecked', function () {
-                checkImp();
                 pushOrRemove(this);
+                checkImp();
             });
         }
     }
