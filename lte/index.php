@@ -390,7 +390,7 @@ $count = $obj_Busca->getCountSolic();
                         </div><!-- /.row -->
                         <div id="rowPedidos" class="row">
                             <div class="col-xs-12">
-                                <div class="box">
+                                <div class="box box-primary">
                                     <div class="box-header">
                                         <h3 class="box-title">Pedidos</h3>
                                         <div class="box-tools pull-right">
@@ -399,9 +399,13 @@ $count = $obj_Busca->getCountSolic();
                                         </div>
                                     </div><!-- /.box-header -->
                                     <div class="box-body">
+                                        <div class="form-group">
+                                            <button id="btnPrintCheck" class="btn btn-primary" type="button" onclick="printChecks()" disabled><i class="fa fa-print"></i>&nbsp;Imprimir</button>
+                                        </div>
                                         <table id="tableSolicitacoes" class="table table-bordered table-striped">
                                             <thead>
                                                 <tr>
+                                                    <th></th>
                                                     <th>Opções</th>
                                                     <th>Pedido</th>
                                                     <th>Setor</th>
@@ -1226,6 +1230,6 @@ $count = $obj_Busca->getCountSolic();
         <script src="plugins/input-mask/jquery.inputmask.date.extensions.js"></script>
         <script src="plugins/input-mask/jquery.inputmask.extensions.js"></script>
         <!-- page script -->
-        <script type="text/javascript" src="../iniLTE.min.js"></script>
+        <script type="text/javascript" src="../iniLTE.js"></script>
     </body>
 </html>

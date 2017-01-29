@@ -207,7 +207,7 @@ $(function () {
         }
     });
 
-    $('#listAdiantamentos').on('shown.bs.modal', function (event) {
+    $('#listAdiantamentos').on('shown.bs.modal', function () {
         if (!$.fn.DataTable.isDataTable('#tableListAdiantamentos')) {
             iniDataTable('#tableListAdiantamentos');
         }
@@ -446,7 +446,7 @@ function iniDataTable(tabela) {
             "info": true,
             "autoWidth": true,
             "columnDefs": [
-                {"width": "15%", "targets": 0}
+                {"width": "15%", "targets": 1}
             ],
             language: {
                 "decimal": "",
@@ -736,6 +736,74 @@ function getSaldoOri() {
     });
 }
 
+function printChecks() {
+    $('#btnPrintCheck').blur();
+    var elements = document.getElementsByName('checkPedRel');
+    var len = elements.length;
+    var pedidos = [];
+    for (var i = 0; i < len; i++) {
+        var id_pedido = elements[i].value;
+        var input = document.getElementById('checkPedRel' + id_pedido);
+        if (input !== null) {
+            if (input.checked) {
+                pedidos.push(id_pedido);
+            }
+        }
+    }
+    if (pedidos.length < 1) {
+        console.log('nenhum pedido selecionado');
+        return;
+    }
+    $.post('../php/buscaLTE.php', {
+        admin: 1,
+        form: 'customRel',
+        pedidos: pedidos
+    }, function () {
+        window.open("../admin/printRelatorio.php");
+    });
+}
+
+function checkImp() {
+    var elements = document.getElementsByName('checkPedRel');
+    var len = elements.length;
+    for (var i = 0; i < len; i++) {
+        var id_pedido = elements[i].value;
+        var input = document.getElementById('checkPedRel' + id_pedido);
+        if (input !== null) {
+            if (input.checked) {
+                document.getElementById('btnPrintCheck').disabled = false;
+                return;
+            }
+        }
+    }
+    document.getElementById('btnPrintCheck').disabled = true;
+}
+
+function loadChecks() {
+    var elements = document.getElementsByName('checkPedRel');
+    var len = elements.length;
+    for (var i = 0; i < len; i++) {
+        var id_pedido = elements[i].value;
+        var id_e = 'checkPedRel' + id_pedido;
+        var input = document.getElementById(id_e);
+        if (input !== null) {
+            $('#' + id_e).on('ifCreated', function () {
+                $('#' + id_e).iCheck('destroy');
+            });
+            $('#' + id_e).iCheck({
+                checkboxClass: 'icheckbox_flat-blue',
+                radioClass: 'iradio_flat-blue'
+            });
+            $('#' + id_e).on('ifChecked', function () {
+                checkImp();
+            });
+            $('#' + id_e).on('ifUnchecked', function () {
+                checkImp();
+            });
+        }
+    }
+}
+
 function iniSolicitacoes() {
     var element = document.getElementById('conteudoSolicitacoes');
     if (element === null) {
@@ -749,6 +817,7 @@ function iniSolicitacoes() {
             $('#tableSolicitacoes').DataTable().destroy();
         }
         document.getElementById('conteudoSolicitacoes').innerHTML = resposta;
+        loadChecks();
         iniDataTable('#tableSolicitacoes');
     });
 }
