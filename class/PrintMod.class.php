@@ -430,11 +430,14 @@ class PrintMod extends Conexao {
                 $this->obj_Busca = new BuscaLTE();
             }
             $flag = false;
+            $i = 0;
             while ($pedido = $query->fetch_object()) {
                 $tbody = '';
                 if ($pedido->id_status != 8) {
                     $flag = true;
                     break;
+                } else {
+                    $i++;
                 }
                 if ($status == 8) {
                     $tbody = "
@@ -456,14 +459,14 @@ class PrintMod extends Conexao {
                         </tr>";
             }
             $table_pedidos .= "<tbody></table>";
-            if ($query->num_rows > 0 && !$flag) {
+            if ($query->num_rows > 0 && !$flag && $i == count($pedidos)) {
                 $retorno .= $sub_header . $table_pedidos;
             } else {
                 $retorno .= 'RELATÓRIO INVÁLIDO: Essa versão suporta apenas pedidos com status de Enviado ao Ordenador.';
                 $flag = true;
             }
         }
-        if ($status == 8 && !$flag) {
+        if ($status == 8 && !$flag && $i == count($pedidos)) {
             $retorno .= "
                 <br><br><br>
                 <h5 class=\"ass\" style=\"margin-right: 50%; margin-bottom: 0;\">
