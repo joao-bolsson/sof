@@ -50,11 +50,6 @@ if (!is_null($admin) && isset($_SESSION['id_setor']) && ($_SESSION['id_setor'] =
             echo $obj_Busca->getProcessosPedido($id_pedido);
             break;
 
-        case 'listRelatorios':
-            $status = filter_input(INPUT_POST, 'status');
-            echo $obj_Busca->getRelatorio($status);
-            break;
-
         case 'listProblemas':
             echo $obj_Busca->getProblemas();
             break;

@@ -12,10 +12,7 @@ session_start();
 if (!isset($_SESSION['id_setor']) || $_SESSION['id_setor'] != 12) {
     header('Location: ../');
 }
-include_once '../class/BuscaLTE.class.php';
 require_once '../defines.php';
-//instanciando classe de busca para popular o select de estados
-$obj_Busca = new BuscaLTE();
 ?>
 <!DOCTYPE html>
 <html>
