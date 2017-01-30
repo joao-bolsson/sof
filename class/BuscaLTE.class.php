@@ -39,19 +39,6 @@ class BuscaLTE extends Conexao {
         return $obj;
     }
 
-    public function getInfoContrato(int $id_pedido) {
-        if (is_null($this->mysqli)) {
-            $this->mysqli = parent::getConexao();
-        }
-        $query = $this->mysqli->query("SELECT pedido.pedido_contrato, pedido_contrato.id_tipo, pedido_contrato.siafi FROM pedido, pedido_contrato WHERE pedido.id = pedido_contrato.id_pedido AND pedido.id = {$id_pedido};") or exit("Erro ao buscar informações do contrato.");
-        $this->mysqli = NULL;
-        if ($query->num_rows < 1) {
-            return false;
-        }
-        $obj = $query->fetch_object();
-        return json_encode($obj);
-    }
-
     public function getOptionsContrato() {
         if (is_null($this->mysqli)) {
             $this->mysqli = parent::getConexao();
@@ -79,40 +66,14 @@ class BuscaLTE extends Conexao {
         if (is_null($this->mysqli)) {
             $this->mysqli = parent::getConexao();
         }
-        $query = $this->mysqli->query("SELECT usuario.id, usuario.nome FROM usuario;") or exit("Erro ao buscar usuários.");
+        $query = $this->mysqli->query("SELECT usuario.id, usuario.nome, setores.nome AS setor FROM usuario, setores WHERE usuario.id_setor = setores.id;") or exit("Erro ao buscar usuários.");
         $this->mysqli = NULL;
 
         $retorno = "";
         while ($user = $query->fetch_object()) {
-            $retorno .= "<option value=\"" . $user->id . "\">" . $user->nome . "</option>";
+            $retorno .= "<option value=\"" . $user->id . "\">" . $user->nome . " (" . $user->setor . ")</option>";
         }
         return $retorno;
-    }
-
-    public function getGrupo(int $id_pedido) {
-        if (is_null($this->mysqli)) {
-            $this->mysqli = parent::getConexao();
-        }
-        $query = $this->mysqli->query("SELECT pedido_grupo.id_grupo FROM pedido_grupo WHERE pedido_grupo.id_pedido = {$id_pedido};");
-        $this->mysqli = NULL;
-        if ($query->num_rows < 1) {
-            return false;
-        }
-        $obj = $query->fetch_object();
-        return $obj->id_grupo;
-    }
-
-    /**
-     * @return bool Se o sistema está ativo - true, senão - false.
-     */
-    public function isActive(): bool {
-        if (is_null($this->mysqli)) {
-            $this->mysqli = parent::getConexao();
-        }
-        $query = $this->mysqli->query("SELECT ativo FROM sistema LIMIT 1;") or exit("Ocorreu um erro ao tentar verificar a disponibilidade do sistema. Contate o administrador.");
-        $obj = $query->fetch_object();
-        $this->mysqli = NULL;
-        return $obj->ativo;
     }
 
     /**
@@ -165,22 +126,6 @@ class BuscaLTE extends Conexao {
         }
 
         return $retorno;
-    }
-
-    /**
-     * Função para retornar uma string para mostrar o total dos pedidos com determinado status.
-     * @param int $status status dos pedidos para somar.
-     * @return string String "Totalizando R$ x".
-     */
-    public function getTotalByStatus(int $status): string {
-        if (is_null($this->mysqli)) {
-            $this->mysqli = parent::getConexao();
-        }
-        $query = $this->mysqli->query("SELECT sum(pedido.valor) AS total FROM pedido WHERE pedido.status = {$status};") or exit("Erro ao buscar o total pelo status.");
-        $this->mysqli = NULL;
-        $tot = $query->fetch_object();
-        $tot->total = number_format($tot->total, 3, ',', '.');
-        return "Totalizando R$ " . $tot->total;
     }
 
     /**
@@ -239,29 +184,6 @@ class BuscaLTE extends Conexao {
     }
 
     /**
-     * 	Função para retornar os processos que estão nos pedidos com suas datas de vencimento
-     *
-     * 	@param $pedido Id do pedido.
-     * 	@return Uma tabela com os processos e as informações dele.
-     */
-    public function getProcessosPedido(int $pedido): string {
-        if (is_null($this->mysqli)) {
-            $this->mysqli = parent::getConexao();
-        }
-        $query = $this->mysqli->query("SELECT DISTINCT itens.num_processo, itens.dt_fim FROM itens, itens_pedido WHERE itens_pedido.id_pedido = {$pedido} AND itens_pedido.id_item = itens.id;") or exit("Erro ao buscar os processos do pedido.");
-        $this->mysqli = NULL;
-        $retorno = "";
-        while ($processo = $query->fetch_object()) {
-            $retorno .= "
-                <tr>
-                    <td>" . $processo->num_processo . "</td>
-                    <td>" . $processo->dt_fim . "</td>
-                </tr>";
-        }
-        return $retorno;
-    }
-
-    /**
      * 	Função para retornar os radios buttons para gerar relatórios por status.
      *
      * 	@return Colunas com alguns status.
@@ -292,33 +214,6 @@ class BuscaLTE extends Conexao {
             $i++;
         }
         $retorno .= "</tr>";
-        return $retorno;
-    }
-
-    /**
-     * 	Função para retornar os problemas relatados
-     *
-     * 	@return string Linhas para uma tabela mostrar os problemas.
-     */
-    public function getProblemas(): string {
-        if (is_null($this->mysqli)) {
-            $this->mysqli = parent::getConexao();
-        }
-        $query = $this->mysqli->query("SELECT setores.nome AS setor, problemas.assunto, problemas.descricao FROM setores, problemas WHERE setores.id = problemas.id_setor ORDER BY problemas.id DESC;") or exit("Erro ao buscar os problemas.");
-        $retorno = "";
-        while ($problema = $query->fetch_object()) {
-            $problema->descricao = $this->mysqli->real_escape_string($problema->descricao);
-            $problema->descricao = str_replace("\"", "'", $problema->descricao);
-            $retorno .= "
-                <tr>
-                    <td>" . $problema->setor . "</td>
-                    <td>" . $problema->assunto . "</td>
-                    <td>
-                        <button onclick=\"viewCompl('" . $problema->descricao . "');\" class=\"btn btn-flat waves-attach waves-effect\" type=\"button\" title=\"Descrição\">Descrição</button>
-                    </td>
-                </tr>";
-        }
-        $this->mysqli = NULL;
         return $retorno;
     }
 
@@ -368,22 +263,6 @@ class BuscaLTE extends Conexao {
     }
 
     /**
-     * 	Função que que retorna informações de um item para possível edição
-     *
-     * 	@param Id do item da tbela itens
-     * 	@return object
-     */
-    public function getInfoItem($id_item) {
-        if (is_null($this->mysqli)) {
-            $this->mysqli = parent::getConexao();
-        }
-        $query = $this->mysqli->query("SELECT itens.complemento_item, replace(itens.vl_unitario, ',', '.') AS vl_unitario, itens.qt_contrato, replace(itens.vl_contrato, ',', '.') AS vl_contrato, itens.qt_utilizado, replace(itens.vl_utilizado, ',', '.') AS vl_utilizado, itens.qt_saldo, replace(itens.vl_saldo, ',', '.') AS vl_saldo FROM itens WHERE itens.id = {$id_item};") or exit("Erro ao buscar informações do item.");
-        $this->mysqli = NULL;
-        $obj = $query->fetch_object();
-        return json_encode($obj);
-    }
-
-    /**
      * 	Função que retornar o empenho de um pedido
      *
      * 	@param $id_pedido Id do pedido.
@@ -406,68 +285,6 @@ class BuscaLTE extends Conexao {
     }
 
     /**
-     * 	Função que retorna a tabela com os lançamentos de saldos pelo SOF
-     *
-     * 	@param $id_setor id do setor
-     * 	@return string
-     */
-    public function getLancamentos(int $id_setor): string {
-        $retorno = "";
-        $where = "";
-        if ($id_setor != 0) {
-            $where = "AND saldos_lancamentos.id_setor = " . $id_setor;
-        }
-        if (is_null($this->mysqli)) {
-            $this->mysqli = parent::getConexao();
-        }
-        $query = $this->mysqli->query("SELECT setores.nome, DATE_FORMAT(saldos_lancamentos.data, '%d/%m/%Y') AS data, saldos_lancamentos.valor, saldo_categoria.nome AS categoria FROM setores, saldos_lancamentos, saldo_categoria WHERE setores.id = saldos_lancamentos.id_setor {$where} AND saldos_lancamentos.categoria = saldo_categoria.id ORDER BY saldos_lancamentos.id DESC;") or exit("Erro ao buscar informações dos lançamentos.");
-        $this->mysqli = NULL;
-        $cor = '';
-        while ($lancamento = $query->fetch_object()) {
-            if ($lancamento->valor < 0) {
-                $cor = 'red';
-            } else {
-                $cor = 'green';
-            }
-            $lancamento->valor = number_format($lancamento->valor, 3, ',', '.');
-            $retorno .= "
-                <tr>
-                    <td>" . $lancamento->nome . "</td>
-                    <td>" . $lancamento->data . "</td>
-                    <td style=\"color: " . $cor . ";\">R$ " . $lancamento->valor . "</td>
-                    <td>" . $lancamento->categoria . "</td>
-                </tr>";
-        }
-        return $retorno;
-    }
-
-    public function getTotalInOutSaldos(int $id_setor): string {
-        $entrada = $saida = 0;
-        $where = "";
-        if ($id_setor != 0) {
-            $where = "AND saldos_lancamentos.id_setor = " . $id_setor;
-        }
-        if (is_null($this->mysqli)) {
-            $this->mysqli = parent::getConexao();
-        }
-        $query = $this->mysqli->query("SELECT saldos_lancamentos.valor FROM setores, saldos_lancamentos WHERE setores.id = saldos_lancamentos.id_setor {$where};") or exit("Erro ao buscar informações dos totais de entrada e saída do setor.");
-        $this->mysqli = NULL;
-        while ($lancamento = $query->fetch_object()) {
-            if ($lancamento->valor < 0) {
-                $saida -= $lancamento->valor;
-            } else {
-                $entrada += $lancamento->valor;
-            }
-        }
-        $entrada = number_format($entrada, 3, ',', '.');
-        $saida = number_format($saida, 3, ',', '.');
-        $array = array('entrada' => "Total de Entradas: R$ " . $entrada,
-            'saida' => "Total de Saídas: R$ " . $saida);
-
-        return json_encode($array);
-    }
-
-    /**
      * 	Função que retorna as options com os setores cadastrados no sistema
      *
      * 	@return string
@@ -483,20 +300,6 @@ class BuscaLTE extends Conexao {
             $retorno .= "<option value=\"" . $setor->id . "\">" . $setor->nome . "</option>";
         }
         return $retorno;
-    }
-
-    /**
-     * Retorna o nome do setor.
-     * @param int $id_setor id do setor.
-     */
-    public function getSetorNome(int $id_setor): string {
-        if (is_null($this->mysqli)) {
-            $this->mysqli = parent::getConexao();
-        }
-        $query = $this->mysqli->query("SELECT setores.nome FROM setores WHERE setores.id = " . $id_setor . ";") or exit("Erro ao buscar o nome do setor.");
-        $this->mysqli = NULL;
-        $obj = $query->fetch_object();
-        return $obj->nome;
     }
 
     /**
@@ -629,21 +432,6 @@ class BuscaLTE extends Conexao {
     }
 
     /**
-     *   Função utilizada para retornar as informações de um processo clicado da tabela da recepção.
-     *
-     *   @return Informações do processo.
-     */
-    public function getInfoProcesso(int $id_processo): string {
-        if (is_null($this->mysqli)) {
-            $this->mysqli = parent::getConexao();
-        }
-        $query = $this->mysqli->query("SELECT processos.num_processo, processos.tipo, processos.estante, processos.prateleira, processos.entrada, processos.saida, processos.responsavel, processos.retorno, processos.obs FROM processos WHERE processos.id = {$id_processo};") or exit("Erro ao buscar informações dos processos.");
-        $this->mysqli = NULL;
-        $obj = $query->fetch_object();
-        return json_encode($obj);
-    }
-
-    /**
      *   Função utilizada para retornar a tabela dos processos da recepção.
      *
      *   @return string
@@ -722,170 +510,6 @@ class BuscaLTE extends Conexao {
     }
 
     /**
-     * Função que busca os detalhes de uma notícia completa.
-     *
-     * @return Informação da postagem.
-     */
-    public function getInfoNoticia(int $id): string {
-        if (is_null($this->mysqli)) {
-            $this->mysqli = parent::getConexao();
-        }
-        $query = $this->mysqli->query("SELECT postagem FROM postagens WHERE id = {$id};") or exit("Erro ao buscar informações da notícia.");
-        $this->mysqli = NULL;
-        $noticia = $query->fetch_object();
-        return html_entity_decode($noticia->postagem);
-    }
-
-    /**
-     * Função para mostrar uma tabela com todas as publicações de certa página
-     *
-     * @param $tabela -> filtra por nome da tabela
-     * @return string
-     */
-    public function getPostagens(string $tabela): string {
-        //declarando retorno
-        $retorno = "";
-        if (is_null($this->mysqli)) {
-            $this->mysqli = parent::getConexao();
-        }
-        $query = $this->mysqli->query("SELECT postagens.id, postagens.titulo, DATE_FORMAT(postagens.data, '%d/%m/%Y') AS data FROM postagens, paginas_post WHERE postagens.tabela = paginas_post.id AND paginas_post.tabela = '{$tabela}' AND ativa = 1 ORDER BY data ASC;") or exit("Erro ao buscar postagens.");
-        $this->mysqli = NULL;
-        while ($postagem = $query->fetch_object()) {
-            $retorno .= "<tr><td>";
-            $retorno .= html_entity_decode($postagem->titulo);
-
-            $retorno .= "<button type=\"button\" class=\"btn btn-flat btn-sm\" style=\"text-transform: lowercase !important;font-weight: bold;\" onclick=\"ver_noticia(" . $postagem->id . ", '" . $tabela . "', 0);\">...ver mais</button></td>";
-            $retorno .= "<td><span style=\"font-weight: bold;\" class=\"pull-right\">" . $postagem->data . "</span></td></tr>";
-        }
-        return $retorno;
-    }
-
-    /**
-     * Função para popular os slides na página inicial
-     *
-     * @param $slide (1 ou 2)-> o primeiro mostra as últimas notícias e o segundo aleatórias
-     * @return string
-     */
-    public function getSlide(int $slide): string {
-        $order = "";
-        if ($slide == 1) {
-            $order = "postagens.data DESC";
-        } else {
-            $order = "rand()";
-        }
-        $retorno = "";
-        $array_anima = array("primeira", "segunda", "terceira", "quarta", "quinta");
-        $array_id = array("primeiro", "segundo", "terceiro", "quarto", "quinto");
-        if (is_null($this->mysqli)) {
-            $this->mysqli = parent::getConexao();
-        }
-        $query_postagem = $this->mysqli->query("SELECT postagens.id, postagens.postagem, DATE_FORMAT(postagens.data, '%d/%m/%Y') AS data, paginas_post.tabela, postagens.titulo FROM postagens, paginas_post WHERE postagens.tabela = paginas_post.id AND postagens.ativa = 1 ORDER BY {$order} LIMIT 5;") or exit("Erro ao buscar notícias dos slides.");
-        $this->mysqli = NULL;
-        $aux = 0;
-        while ($postagem = $query_postagem->fetch_object()) {
-            $array_post = str_split($postagem->titulo);
-            $pos = strlen($postagem->titulo);
-            $titulo = "";
-            for ($i = 0; $i < $pos; $i++) {
-                $titulo .= $array_post[$i];
-            }
-            $array_post = str_split($postagem->postagem);
-            $pos = strpos($postagem->postagem, "<img");
-            $src = "../sof_files/logo_blue.png";
-            if ($pos !== false) {
-                $pos = strpos($postagem->postagem, "src=\"");
-                $src = "";
-                $i = $pos + 5;
-                while ($array_post[$i] != "\"") {
-                    $src .= $array_post[$i];
-                    $i++;
-                }
-            }
-            $width = "550";
-
-            $pos = strpos($postagem->postagem, "width: ");
-            $posu = strpos($postagem->postagem, "px;");
-            if ($postagem->tabela != "noticia" || $postagem->id != 8) {
-                if ($pos !== false) {
-                    if ($posu !== false) {
-                        for ($i = $pos; $i < $posu; $i++) {
-                            $width .= $array_post[$i];
-                        }
-                    }
-                }
-            }
-            $retorno .= "
-                <li id=\"" . $array_id[$aux] . "\" class=\"" . $array_anima[$aux] . "-anima\">
-                    <div class=\"card-img\">
-                        <img style=\"width: " . $width . "px; height: 275px;\" src=\"" . $src . "\" >
-                        <a href=\"javascript:ver_noticia(" . $postagem->id . ", '" . $postagem->tabela . "', 1);\" class=\"card-img-heading padding\" style=\"font-weight: bold;\">" . $titulo . "<span class=\"pull-right\">" . $postagem->data . "</span></a>
-                    </div>
-                </li>";
-            $aux++;
-        }
-        return $retorno;
-    }
-
-    /**
-     * Função para pesquisar alguma publicação.
-     *
-     * @return Publicações com o título parecido com $busca.
-     */
-    public function pesquisar(string $busca): string {
-        $retorno = "";
-        $busca = htmlentities($busca);
-        //escapando string especiais para evitar SQL Injections
-        if (is_null($this->mysqli)) {
-            $this->mysqli = parent::getConexao();
-        }
-        $busca = $this->mysqli->real_escape_string($busca);
-        $retorno = "
-            <div class=\"card\">
-                <div class=\"card-main\">
-                    <div class=\"card-header card-brand\">
-                        <div class=\"card-header-side pull-left\">
-                            <p class=\"card-heading\">Publicações</p>
-                        </div>
-                    </div><!--  ./card-header -->
-                    <div class=\"card-inner margin-top-no\">
-                        <div class=\"card-table\">
-                            <div class=\"table-responsive\">
-                                <table class=\"table\">
-                                    <thead>
-                                        <th>Título</th>
-                                        <th class=\"pull-right\">Data de Publicação</th>
-                                    </thead>
-                                    <tbody>";
-        $query = $this->mysqli->query("SELECT postagens.id, postagens.tabela, postagens.titulo, DATE_FORMAT(postagens.data, '%d/%m/%Y') AS data, postagens.ativa FROM postagens WHERE postagens.titulo LIKE '%{$busca}%' AND postagens.ativa = 1 ORDER BY postagens.data DESC;") or exit("Erro ao pesquisar notícias.");
-        $this->mysqli = NULL;
-        if ($query->num_rows < 1) {
-            $retorno .= "
-                                        <tr>
-                                            <td colspan=\"2\">Nenhum resultado para '" . $busca . "'</td>
-                                            <td></td>
-                                        </tr>";
-        } else {
-            while ($postagem = $query->fetch_object()) {
-                $titulo = html_entity_decode($postagem->titulo);
-                $retorno .= "
-                                        <tr>
-                                            <td>" . $titulo . "<button type=\"button\" class=\"btn btn-flat btn-sm\" style=\"text-transform: lowercase !important;font-weight: bold;\" onclick=\"ver_noticia(" . $postagem->id . ", '" . $postagem->tabela . "', 1);\">...ver mais</button></td>'
-                                            <td><span class=\"pull-right\">" . $postagem->data . "</span></td>
-                                        </tr>";
-            }
-        }
-        $retorno .= "
-                                    </tbody>
-                                </table>
-                            </div><!-- ./table-responsive -->
-                        </div><!-- ./card-table -->
-                    </div><!-- ./card-inner -->
-                </div><!-- ./card-main -->
-            </div> <!-- ./card -->";
-        return $retorno;
-    }
-
-    /**
      * 	Função que retorna a tabela com as solicitações de alteração de pedidos	para o SOF analisar
      *
      * 	@return string
@@ -915,8 +539,8 @@ class BuscaLTE extends Conexao {
             }
             $btn_aprovar = $btn_reprovar = "";
             if ($st == 2) {
-                $btn_aprovar = "<a title=\"Aprovar\" href=\"javascript:analisaSolicAlt(" . $solic->id . ", " . $solic->id_pedido . ", 1);\"><i class=\"fa fa-check\"></i></a>";
-                $btn_reprovar = "<a title=\"Reprovar\" href=\"javascript:analisaSolicAlt(" . $solic->id . ", " . $solic->id_pedido . ", 0);\"><i class=\"fa fa-trash\"></i></a>";
+                $btn_aprovar = "<button class=\"btn btn-default\" type=\"button\" title=\"Aprovar\" onclick=\"analisaSolicAlt(" . $solic->id . ", " . $solic->id_pedido . ", 1)\"><i class=\"fa fa-check\"></i></button>";
+                $btn_reprovar = "<button class=\"btn btn-default\" type=\"button\" title=\"Reprovar\" onclick=\"analisaSolicAlt(" . $solic->id . ", " . $solic->id_pedido . ", 0)\"><i class=\"fa fa-trash\"></i></button>";
             }
             $solic->justificativa = $this->mysqli->real_escape_string($solic->justificativa);
             $solic->justificativa = str_replace("\"", "'", $solic->justificativa);
@@ -928,7 +552,7 @@ class BuscaLTE extends Conexao {
                     <td>" . $solic->data_solicitacao . "</td>
                     <td>" . $solic->data_analise . "</td>
                     <td>
-                        <button onclick=\"viewCompl('" . $solic->justificativa . "');\" class=\"btn btn-sm btn-primary\" type=\"button\" title=\"Ver Justificativa\">JUSTIFICATIVA</button>
+                        <button onclick=\"viewCompl('" . $solic->justificativa . "')\" class=\"btn btn-sm btn-primary\" type=\"button\" title=\"Ver Justificativa\">JUSTIFICATIVA</button>
                     </td>
                     <td><small class=\"label pull-right bg-" . $label . "\">" . $status . "</small></td>
                 </tr>";
@@ -972,8 +596,8 @@ class BuscaLTE extends Conexao {
                 if ($st == 2) {
                     // em análise / aberto
                     $solic->data_analise = "---------------";
-                    $btn_aprovar = "<a title=\"Aprovar\" href=\"javascript:analisaAdi(" . $solic->id . ", 1);\"><i class=\"fa fa-check\"></i></a>";
-                    $btn_reprovar = "<a title=\"Reprovar\" href=\"javascript:analisaAdi(" . $solic->id . ", 0);\"><i class=\"fa fa-trash\"></i></a>";
+                    $btn_aprovar = "<button class=\"btn btn-default\" type=\"button\" title=\"Aprovar\" onclick=\"analisaAdi(" . $solic->id . ", 1)\"><i class=\"fa fa-check\"></i></button>";
+                    $btn_reprovar = "<button class=\"btn btn-default\" type=\"button\" title=\"Reprovar\" onclick=\"javascript:analisaAdi(" . $solic->id . ", 0)\"><i class=\"fa fa-trash\"></i></button>";
                 }
                 $solic->justificativa = $this->mysqli->real_escape_string($solic->justificativa);
                 $solic->justificativa = str_replace("\"", "'", $solic->justificativa);
@@ -993,91 +617,6 @@ class BuscaLTE extends Conexao {
             }
         }
         $this->mysqli = NULL;
-        return $retorno;
-    }
-
-    /**
-     * 	Função que retorna as 'tabs' com as ṕáginas das notícias para editar.
-     *
-     * 	@return string
-     */
-    public function getTabsNoticias(): string {
-        $retorno = "";
-        if (is_null($this->mysqli)) {
-            $this->mysqli = parent::getConexao();
-        }
-        $query = $this->mysqli->query("SELECT paginas_post.id, paginas_post.tabela, paginas_post.nome FROM paginas_post;") or exit("Erro ao buscar as abas de notícias para edição.");
-        $this->mysqli = NULL;
-        while ($pag = $query->fetch_object()) {
-            $retorno .= "
-                <td>
-                    <div class=\"radiobtn radiobtn-adv\">
-                        <label for=\"pag-" . $pag->tabela . "\">
-                            <input type=\"radio\" id=\"pag-" . $pag->tabela . "\" name=\"pag\" class=\"access-hide\" onclick=\"carregaPostsPag(" . $pag->id . ");\">" . $pag->nome . "
-                            <span class=\"radiobtn-circle\"></span><span class=\"radiobtn-circle-check\"></span>
-                        </label>
-                    </div>
-                </td>";
-        }
-        return $retorno;
-    }
-
-    /**
-     * 	Função para retornar a tabela de notícias de uma página para edição
-     *
-     * 	@return string
-     */
-    public function getNoticiasEditar(int $tabela): string {
-        $retorno = "";
-        if (is_null($this->mysqli)) {
-            $this->mysqli = parent::getConexao();
-        }
-        $query = $this->mysqli->query("SELECT postagens.id, postagens.tabela, postagens.titulo, DATE_FORMAT(postagens.data, '%d/%m/%Y') AS data FROM postagens WHERE postagens.ativa = 1 AND postagens.tabela = {$tabela} ORDER BY postagens.data ASC;") or exit("Erro ao buscar as notícias para editar.");
-        $this->mysqli = NULL;
-        while ($postagem = $query->fetch_object()) {
-            $retorno .= "
-                <tr>
-                    <td>" . $postagem->data . "</td>
-                    <td>" . $postagem->titulo . "</td>
-                    <td>
-                        <button type=\"button\" class=\"btn btn-default btn-sm\" style=\"text-transform: none !important;font-weight: bold;\" onclick=\"editaNoticia(" . $postagem->id . ", " . $postagem->tabela . ", '" . $postagem->data . "')\" title=\"Editar\"><span class=\"icon\">create</span></button>
-                        <button type=\"button\" class=\"btn btn-default btn-sm\" style=\"text-transform: none !important;font-weight: bold;\" onclick=\"excluirNoticia(" . $postagem->id . ");\" title=\"Excluir\"><span class=\"icon\">delete</span></button>
-                    </td>
-                </tr>";
-        }
-        return $retorno;
-    }
-
-    /**
-     * Função para buscar conteúdo de uma publicação para edição.
-     *
-     * @return string
-     */
-    public function getPublicacaoEditar(int $id): string {
-        if (is_null($this->mysqli)) {
-            $this->mysqli = parent::getConexao();
-        }
-        $query = $this->mysqli->query("SELECT postagens.postagem FROM postagens WHERE id={$id};") or exit("Erro ao buscar postagem.");
-        $this->mysqli = NULL;
-        $publicacao = $query->fetch_object();
-        return $publicacao->postagem;
-    }
-
-    /**
-     * Função para escrever as opções para "Postar em " do painel administrativo
-     *
-     * @return string
-     */
-    public function getPostarEm(): string {
-        $retorno = "";
-        if (is_null($this->mysqli)) {
-            $this->mysqli = parent::getConexao();
-        }
-        $query = $this->mysqli->query("SELECT id, nome FROM paginas_post;") or exit("Erro ao buscar as páginas para postagem.");
-        $this->mysqli = NULL;
-        while ($pagina = $query->fetch_object()) {
-            $retorno .= "<option id=\"op" . $pagina->id . "\" value=\"" . $pagina->id . "\">" . $pagina->nome . "</option>";
-        }
         return $retorno;
     }
 
@@ -1138,6 +677,11 @@ class BuscaLTE extends Conexao {
             $pedido->valor = number_format($pedido->valor, 3, ',', '.');
             $linha = "
                 <tr id=\"rowPedido" . $pedido->id . "\">
+                    <td>
+                        <div class=\"form-group\">
+                            <input type=\"checkbox\" name=\"checkPedRel\" id=\"checkPedRel" . $pedido->id . "\" value=\"" . $pedido->id . "\">
+                        </div>
+                    </td>
                     <td>
                         <div class=\"btn-group\">
                             " . $btnAnalisar . "
@@ -1235,22 +779,6 @@ class BuscaLTE extends Conexao {
         }
         $this->mysqli = NULL;
         return $retorno;
-    }
-
-    /**
-     * Função para trazer o restante das informações para analisar o pedido:
-     *               saldo, total, prioridade, fase, etc.
-     *   
-     * @return string
-     */
-    public function getInfoPedidoAnalise(int $id_pedido, int $id_setor): string {
-        if (is_null($this->mysqli)) {
-            $this->mysqli = parent::getConexao();
-        }
-        $query = $this->mysqli->query("SELECT saldo_setor.saldo, pedido.prioridade, pedido.status, pedido.valor, pedido.obs FROM saldo_setor, pedido WHERE saldo_setor.id_setor = {$id_setor} AND pedido.id = {$id_pedido};") or exit("Erro ao buscar as informações do pedido para análise.");
-        $this->mysqli = NULL;
-        $pedido = $query->fetch_object();
-        return json_encode($pedido);
     }
 
     /**
@@ -1526,21 +1054,6 @@ class BuscaLTE extends Conexao {
     }
 
     /**
-     * Função dispara logo após clicar em editar rascunho de pedido.
-     *
-     * @return string
-     */
-    public function getPopulaRascunho(int $id_pedido, int $id_setor): string {
-        if (is_null($this->mysqli)) {
-            $this->mysqli = parent::getConexao();
-        }
-        $query = $this->mysqli->query("SELECT saldo_setor.saldo, pedido.valor, pedido.obs FROM saldo_setor, pedido WHERE pedido.id = {$id_pedido} AND saldo_setor.id_setor = {$id_setor};") or exit("Erro ao buscar informações do rascunho.");
-        $this->mysqli = NULL;
-        $pedido = $query->fetch_object();
-        return json_encode($pedido);
-    }
-
-    /**
      * Função para o setor acompanhar o andamento do seu pedido.
      *
      * @return string
@@ -1617,21 +1130,4 @@ class BuscaLTE extends Conexao {
         return $retorno;
     }
 
-    public function getLicitacao(int $id_pedido) {
-        if (is_null($this->mysqli)) {
-            $this->mysqli = parent::getConexao();
-        }
-        $query = $this->mysqli->query("SELECT licitacao.id, licitacao.tipo, licitacao.numero, licitacao.uasg, licitacao.processo_original FROM licitacao WHERE licitacao.id_pedido = {$id_pedido};") or exit("Erro ao buscar as licitações do pedido.");
-        $this->mysqli = NULL;
-        $retorno = false;
-        if ($query->num_rows > 0) {
-            $obj = $query->fetch_object();
-            $retorno = json_encode($obj);
-        }
-
-        return $retorno;
-    }
-
 }
-
-?>

@@ -12,10 +12,7 @@ session_start();
 if (!isset($_SESSION['id_setor']) || $_SESSION['id_setor'] != 12) {
     header('Location: ../');
 }
-include_once '../class/BuscaLTE.class.php';
 require_once '../defines.php';
-//instanciando classe de busca para popular o select de estados
-$obj_Busca = new BuscaLTE();
 ?>
 <!DOCTYPE html>
 <html>
@@ -33,6 +30,8 @@ $obj_Busca = new BuscaLTE();
         <link rel="stylesheet" href="plugins/font-awesome-4.7.0/css/font-awesome.min.css">
         <!-- Ionicons -->
         <link rel="stylesheet" href="plugins/ionicons/css/ionicons.min.css">
+        <!-- iCheck for checkboxes and radio inputs -->
+        <link rel="stylesheet" href="plugins/iCheck/all.css">
         <!-- Theme style -->
         <link rel="stylesheet" href="dist/css/AdminLTE.min.css">
         <!-- AdminLTE Skins. Choose a skin from the css/skins
@@ -42,6 +41,13 @@ $obj_Busca = new BuscaLTE();
         <link rel="stylesheet" href="dist/css/snackbar.min.css">
 
         <link rel="icon" href="../favicon.ico">
+
+        <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+        <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+        <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+        <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+        <![endif]-->
     </head>
     <!-- ADD THE CLASS layout-top-nav TO REMOVE THE SIDEBAR. -->
     <body class="hold-transition skin-blue layout-top-nav" onload="iniSolicitacoes();">
@@ -98,9 +104,13 @@ $obj_Busca = new BuscaLTE();
                                 <h3 class="box-title">Pedidos</h3>
                             </div>
                             <div class="box-body">
+                                <div class="form-group">
+                                    <button id="btnPrintCheck" class="btn btn-primary" type="button" onclick="printChecks()" disabled><i class="fa fa-print"></i>&nbsp;Imprimir</button>
+                                </div>
                                 <table class="table table-bordered table-striped" id="tableSolicitacoes">
                                     <thead>
                                         <tr>
+                                            <th></th>
                                             <th>Opções</th>
                                             <th>Num Pedido</th>
                                             <th>Setor</th>
@@ -183,6 +193,8 @@ $obj_Busca = new BuscaLTE();
         <script src="plugins/slimScroll/jquery.slimscroll.min.js"></script>
         <!-- FastClick -->
         <script src="plugins/fastclick/fastclick.js"></script>
+        <!-- iCheck 1.0.1 -->
+        <script src="plugins/iCheck/icheck.min.js"></script>
         <!-- AdminLTE App -->
         <script src="dist/js/app.min.js"></script>
         <!-- AdminLTE for demo purposes -->

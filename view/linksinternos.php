@@ -18,7 +18,7 @@ if (!isset($_SESSION["id_setor"]) || $_SESSION["id_setor"] == 0) {
 	if ($_SESSION["id_setor"] == 2) {
 		$btnAdmin = true;
 	}
-	$hrefSolicitacoes = "solicitacoes.php";
+	$hrefSolicitacoes = "../lte/solicitacoes.php";
 	$btnLogin = false;
 	$btnSair = true;
 }
@@ -49,11 +49,6 @@ $obj_Busca = new Busca();
       <li id="limenu">
         <a data-toggle="menu" href="#doc_menu">
           <span class="icon icon-lg">menu</span><span class="text-white">MENU</span>
-        </a>
-      </li>
-      <li>
-        <a class="btn btn-flat waves-attach waves-light" href="javascript:btnPesquisa();">
-          <span class="text-white"><span class="icon icon-lg">search</span>PESQUISAR</span>
         </a>
       </li>
     </ul>

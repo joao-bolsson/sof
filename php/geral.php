@@ -41,14 +41,14 @@ if ($obj_Busca->isActive()) {
     $admin = filter_input(INPUT_POST, "admin");
     $users = filter_input(INPUT_POST, "users");
 
-    if (!is_null($admin) && isset($_SESSION["id_setor"]) && ($_SESSION["id_setor"] == 2 || $_SESSION["id_setor"] == 12)) {
-        // variável que controla o que deve ser feito quando geral.php for chamado
-        $form = "";
-        $filter = filter_input(INPUT_POST, "form");
-        if (!is_null($filter)) {
-            $form = $filter;
-        }
+    $form = '';
 
+    $filter = filter_input(INPUT_POST, 'form');
+    if (!empty($filter)) {
+        $form = $filter;
+    }
+
+    if (!is_null($admin) && isset($_SESSION["id_setor"]) && ($_SESSION["id_setor"] == 2 || $_SESSION["id_setor"] == 12)) {
         switch ($form) {
 
             case 'altUser':
@@ -77,10 +77,17 @@ if ($obj_Busca->isActive()) {
 
                 $id_user = $obj_Geral->cadUser($nome, $login, $email, $setor, $senha);
 
-                $noticias = !is_null(filter_input(INPUT_POST, 'noticias'));
-                $saldos = !is_null(filter_input(INPUT_POST, 'saldos'));
-                $pedidos = !is_null(filter_input(INPUT_POST, 'pedidos'));
-                $recepcao = !is_null(filter_input(INPUT_POST, 'recepcao'));
+                $noticias = 0;
+                $saldos = 0;
+                $pedidos = 0;
+                $recepcao = 0;
+
+                if ($setor == 2) {
+                    $noticias = !is_null(filter_input(INPUT_POST, 'noticias'));
+                    $saldos = !is_null(filter_input(INPUT_POST, 'saldos'));
+                    $pedidos = !is_null(filter_input(INPUT_POST, 'pedidos'));
+                    $recepcao = !is_null(filter_input(INPUT_POST, 'recepcao'));
+                }
 
                 $obj_Geral->cadPermissao($id_user, $noticias, $saldos, $pedidos, $recepcao);
 
@@ -425,19 +432,13 @@ if ($obj_Busca->isActive()) {
                 break;
         }
     } else if ($users !== NULL && isset($_SESSION["id_setor"]) && $_SESSION["id_setor"] != 0) {
-        $form = "";
-        $filter = filter_input(INPUT_POST, "form");
-        if (!is_null($filter)) {
-            $form = $filter;
-        }
-
         switch ($form) {
 
             case 'problema':
                 $assunto = filter_input(INPUT_POST, 'assunto');
                 $descricao = filter_input(INPUT_POST, 'descr');
                 $id_setor = $_SESSION['id_setor'];
-                $pag = filter_input(INPUT_POST, 'pag'); // like view/solicitacoes.php
+                $pag = filter_input(INPUT_POST, 'pag'); // like lte/solicitacoes.php
                 $obj_Geral->insereProblema($id_setor, $assunto, $descricao);
                 header('Location: ../' . $pag);
                 break;
@@ -565,13 +566,6 @@ if ($obj_Busca->isActive()) {
                 break;
         }
     } else {
-        $form = '';
-
-        $filter = filter_input(INPUT_POST, 'form');
-        if (!empty($filter)) {
-            $form = $filter;
-        }
-
         switch ($form) {
 
             // resetando senha
@@ -701,4 +695,3 @@ if ($obj_Busca->isActive()) {
     session_destroy();
     echo "Estamos realizando uma manutenção no momento. Tente fazer o login novamente dentro de 10min ;)";
 }
-?>

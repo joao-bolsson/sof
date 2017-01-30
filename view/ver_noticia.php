@@ -18,7 +18,7 @@ if (!isset($_SESSION["id_setor"]) || $_SESSION["id_setor"] == 0) {
     if ($_SESSION["id_setor"] == 2) {
         $btnAdmin = true;
     }
-    $hrefSolicitacoes = "solicitacoes.php";
+    $hrefSolicitacoes = "../lte/solicitacoes.php";
     $btnLogin = false;
     $btnSair = true;
 }

@@ -4,7 +4,7 @@ ini_set('display_erros', true);
 error_reporting(E_ALL);
 
 session_start();
-//incluindo classe de Login
+
 include_once '../class/Login.class.php';
 include_once '../class/Busca.class.php';
 
@@ -12,7 +12,6 @@ $obj_Busca = new Busca();
 if (!$obj_Busca->isActive()) {
     echo "desativado";
 } else {
-    //instanciando objeto de login
     $obj_Login = new Login();
 
     $login = filter_input(INPUT_POST, 'login');
@@ -33,4 +32,3 @@ if (!$obj_Busca->isActive()) {
         }
     }
 }
-?>

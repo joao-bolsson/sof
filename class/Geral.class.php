@@ -51,7 +51,7 @@ class Geral extends Conexao {
         if (is_null($this->mysqli)) {
             $this->mysqli = parent::getConexao();
         }
-        $this->mysqli->query("INSERT INTO usuario VALUES(NULL, '{$nome}', '{$login}', '{$senha_crp}', {$setor}, '{$email}');") or exit("Erro ao inserir o usuário no banco.");
+        $this->mysqli->query("INSERT INTO usuario VALUES(NULL, '{$nome}', '{$login}', '{$senha_crp}', {$setor}, '{$email}');") or exit("Erro ao inserir o usuário no banco." . $this->mysqli->error);
         $id = $this->mysqli->insert_id;
         $this->mysqli = NULL;
 
@@ -848,5 +848,3 @@ class Geral extends Conexao {
     }
 
 }
-
-?>

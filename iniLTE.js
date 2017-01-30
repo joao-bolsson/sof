@@ -6,13 +6,6 @@ $(function () {
         tableItens = ta.innerHTML;
     }
 
-    var str = location.pathname;
-    if (str.endsWith("view/solicitacoes.php")) {
-        $(".select2").select2();
-    }
-    if (str.endsWith("adminsolicitacoes.php")) {
-        $('.date').mask('00/00/0000');
-    }
     var status = ['stabertos', 'staprovados', 'streprovado'];
     for (var i = 0; i < status.length; i++) {
         var element = document.getElementById(status[i]);
@@ -207,7 +200,7 @@ $(function () {
         }
     });
 
-    $('#listAdiantamentos').on('shown.bs.modal', function (event) {
+    $('#listAdiantamentos').on('shown.bs.modal', function () {
         if (!$.fn.DataTable.isDataTable('#tableListAdiantamentos')) {
             iniDataTable('#tableListAdiantamentos');
         }
@@ -297,7 +290,7 @@ function verEmpenho(id_pedido) {
     $.post('../php/busca.php', {
         users: 1,
         form: 'verEmpenho',
-        id_pedido: id_pedido,
+        id_pedido: id_pedido
     }, function (resposta) {
         if (resposta === 'EMPENHO SIAFI PENDENTE') {
             viewCompl(resposta);
@@ -343,7 +336,7 @@ function mostraSolicAltPed() {
     mostra('rowAltPed');
     iniTableSolicAltPed();
 }
-// solicitação de alteração de pedidos
+
 function analisaSolicAlt(id_solic, id_pedido, acao) {
     $.post('../php/geral.php', {
         admin: 1,
@@ -446,7 +439,7 @@ function iniDataTable(tabela) {
             "info": true,
             "autoWidth": true,
             "columnDefs": [
-                {"width": "15%", "targets": 0}
+                {"width": "15%", "targets": 1}
             ],
             language: {
                 "decimal": "",
@@ -599,23 +592,10 @@ function altInfoUser() {
     });
 }
 
-function carregaPostsPag(tabela) {
-    document.getElementById('loader');
-    $.post('../php/busca.php', {
-        admin: 1,
-        form: 'carregaPostsPag',
-        tabela: tabela
-    }, function (resposta) {
-        $('#tableNoticiasEditar').DataTable().destroy();
-        document.getElementById('contNoticiasEditar').innerHTML = resposta;
-        iniDataTable('#tableNoticiasEditar');
-    });
-}
-
 function iniAdminSolicitacoes() {
     $.post('../php/busca.php', {
         admin: 1,
-        form: 'permissoes',
+        form: 'permissoes'
     }, function (resposta) {
         var permissao = jQuery.parseJSON(resposta);
         if (permissao.recepcao) {
@@ -637,7 +617,7 @@ function iniRecepcao() {
     }
     $.post('../php/buscaLTE.php', {
         admin: 1,
-        form: 'tableRecepcao',
+        form: 'tableRecepcao'
     }, function (resposta) {
         if (element.innerHTML.length > 0) {
             $('#tableRecepcao').DataTable().destroy();
@@ -650,7 +630,7 @@ function iniRecepcao() {
 function iniListProcessos() {
     $.post('../php/buscaLTE.php', {
         admin: 1,
-        form: 'listProcessos',
+        form: 'listProcessos'
     }, function (resposta) {
         if (document.getElementById('tbodyListProcessos').innerHTML.length > 0) {
             $('#tableListProcessos').DataTable().destroy();
@@ -736,6 +716,109 @@ function getSaldoOri() {
     });
 }
 
+var pedidosRelCustom = [];
+
+function printChecks() {
+    $('#btnPrintCheck').blur();
+    var len = pedidosRelCustom.length;
+    var pedidos = [];
+    for (var i = 0; i < len; i++) {
+        if (pedidosRelCustom[i] !== 0) {
+            pedidos.push(pedidosRelCustom[i]);
+        } else {
+            console.log('zero');
+        }
+    }
+    if (pedidos.length < 1) {
+        console.log('nenhum pedido selecionado');
+        return;
+    }
+    $.post('../php/buscaLTE.php', {
+        admin: 1,
+        form: 'customRel',
+        pedidos: pedidos
+    }, function () {
+        window.open("../admin/printRelatorio.php");
+    });
+}
+
+function checkImp() {
+    var len = pedidosRelCustom.length;
+    var btn = document.getElementById('btnPrintCheck');
+    if (btn === null) {
+        return;
+    }
+    for (var i = 0; i < len; i++) {
+        if (pedidosRelCustom[i] !== 0) {
+            console.log('tem algum selecionado');
+            btn.disabled = false;
+            return;
+        }
+    }
+    console.log('nenhum selecionado');
+    btn.disabled = true;
+}
+
+function pushOrRemove(element) {
+    var len = pedidosRelCustom.length;
+    if (element.checked) {
+        console.log('push: ' + element.value);
+        // push the id on the array
+        if (len === 0) {
+            console.log('array vazio');
+            pedidosRelCustom.push(element.value);
+        } else {
+            console.log('array nao vazio -> procura por 0 e substitui');
+            for (var i = 0; i < len; i++) {
+                if (pedidosRelCustom[i] === 0) {
+                    console.log('achou zero, vai substituir');
+                    pedidosRelCustom[i] = element.value;
+                    return;
+                }
+            }
+            console.log('nao achou zero, faz o push');
+            pedidosRelCustom.push(element.value);
+        }
+    } else {
+        console.log('remove: ' + element.value);
+        // procura o id e substitui por zero
+        for (var i = 0; i < len; i++) {
+            if (pedidosRelCustom[i] === element.value) {
+                console.log('achou, substitui por zero');
+                pedidosRelCustom[i] = 0;
+                return;
+            }
+        }
+    }
+}
+
+function loadChecks() {
+    var elements = document.getElementsByName('checkPedRel');
+    var len = elements.length;
+    for (var i = 0; i < len; i++) {
+        var id_pedido = elements[i].value;
+        var id_e = 'checkPedRel' + id_pedido;
+        var input = document.getElementById(id_e);
+        if (input !== null) {
+            $('#' + id_e).on('ifCreated', function () {
+                $('#' + id_e).iCheck('destroy');
+            });
+            $('#' + id_e).iCheck({
+                checkboxClass: 'icheckbox_flat-blue',
+                radioClass: 'iradio_flat-blue'
+            });
+            $('#' + id_e).on('ifChecked', function () {
+                pushOrRemove(this);
+                checkImp();
+            });
+            $('#' + id_e).on('ifUnchecked', function () {
+                pushOrRemove(this);
+                checkImp();
+            });
+        }
+    }
+}
+
 function iniSolicitacoes() {
     var element = document.getElementById('conteudoSolicitacoes');
     if (element === null) {
@@ -749,6 +832,7 @@ function iniSolicitacoes() {
             $('#tableSolicitacoes').DataTable().destroy();
         }
         document.getElementById('conteudoSolicitacoes').innerHTML = resposta;
+        loadChecks();
         iniDataTable('#tableSolicitacoes');
     });
 }
@@ -1171,13 +1255,13 @@ function addItemPedido(id_item, qtd, vl_unitario) {
 
 function removeTableRow(id_item, valor) {
     //valor do pedido
-    t = document.getElementById('total_hidden').value;
-    total = parseFloat(t) - parseFloat(valor);
+    var t = document.getElementById('total_hidden').value;
+    var total = parseFloat(t) - parseFloat(valor);
     document.getElementById('total_hidden').value = parseFloat(total).toFixed(3);
     document.getElementById('total').value = "R$ " + parseFloat(total).toFixed(3);
     //saldo
-    s = document.getElementById('saldo_total').value;
-    saldo_total = parseFloat(s) + parseFloat(valor);
+    var s = document.getElementById('saldo_total').value;
+    var saldo_total = parseFloat(s) + parseFloat(valor);
     document.getElementById('saldo_total').value = parseFloat(saldo_total).toFixed(3);
     document.getElementById('text_saldo_total').innerHTML = "R$ " + parseFloat(saldo_total).toFixed(3);
     var row = document.getElementById("row" + id_item);
@@ -1367,14 +1451,6 @@ function login() {
     });
 }
 
-function aviso() {
-    var tile = document.getElementById("aviso");
-    if (tile.parentNode) {
-        tile.parentNode.removeChild(tile);
-    }
-    document.getElementById("card").style.marginTop = "-3%";
-}
-
 function btnPesquisa() {
     if (document.getElementById("pesquisa").style.display == "" ||
             document.getElementById("pesquisa").style.display == "none") {
@@ -1384,51 +1460,12 @@ function btnPesquisa() {
     }
 }
 
-function ver_noticia(id, tabela, slide) {
-    $.post('../php/busca.php', {
-        form: 'ver_noticia',
-        id: id,
-        tabela: tabela,
-        slide: slide
-    }, function (resposta) {
-        window.location.href = 'ver_noticia.php';
-    });
-}
-
-function addInputsArquivo() {
-    qtd = document.getElementById('qtd-arquivos').value;
-    $.post('../php/busca.php', {
-        form: 'addInputsArquivo',
-        qtd: qtd
-    }, function (resposta) {
-        // Quando terminada a requisição
-        tabela_arq = document.getElementById('arquivos').innerHTML;
-        document.getElementById('arquivos').innerHTML = tabela_arq + "" + resposta;
-        document.getElementById('qtd-arquivos').value = parseInt(qtd) + 1;
-    });
-}
-
-function pesquisar() {
-    $('button').blur();
-    busca = document.getElementById("search").value;
-    if (busca.length < 1) {
-        alert('Digite alguma coisa para pesquisar! ;)');
-        return;
-    }
-    $.post('../php/busca.php', {
-        form: 'pesquisar',
-        busca: busca
-    }, function (resposta) {
-        document.getElementById("conteudo").innerHTML = resposta;
-    });
-}
-
 function imprimir(id_pedido) {
     $('button').blur();
     if (id_pedido == 0) {
         id_pedido = document.getElementById("pedido").value;
     }
-    $.post('../php/busca.php', {
+    $.post('../php/buscaLTE.php', {
         users: 1,
         form: 'imprimirPedido',
         id_pedido: id_pedido
@@ -1666,83 +1703,4 @@ function submitEditItem() {
     $('#infoItem').modal('hide');
     limpaTela();
     iniSolicitacoes();
-}
-//removendo um input de arquivo para adicionar notícias
-function dropTile(id) {
-    var tile = document.getElementById(id);
-    if (tile.parentNode) {
-        tile.parentNode.removeChild(tile);
-    }
-    qtd = document.getElementById('qtd-arquivos').value;
-    document.getElementById('qtd-arquivos').value = parseInt(qtd) - 1;
-}
-
-function delArquivo(caminho) {
-    del = confirm("Este arquivo será excluído PERMANENTEMENTE do sistema! Estando impossibilitada a sua recuperação.");
-    if (del) {
-        $.post('../php/geral.php', {
-            admin: 1,
-            form: 'delArquivo',
-            caminhoDel: caminho
-        }, function (resposta) {
-            alert(resposta);
-            window.location.href = "index.php";
-        });
-    }
-}
-
-function editaNoticia(id, tabela, data) {
-    document.getElementById("funcao").value = "editar";
-    document.getElementById("id_noticia").value = id;
-    document.getElementById("tabela").value = tabela;
-    document.getElementById("data").value = data;
-    $.post('../php/busca.php', {
-        admin: 1,
-        form: 'editarNoticia',
-        id: id
-    }, function (resposta) {
-        $('#txtnoticia').froalaEditor('destroy');
-        document.getElementById("txtnoticia").value = "";
-        $('#txtnoticia').froalaEditor({
-            language: 'pt_br',
-            charCounterCount: false,
-            heightMin: 100,
-            heightMax: 400,
-            // Set the image upload URL.
-            imageUploadURL: 'upload_image.php',
-            // Set the file upload URL.
-            fileUploadURL: 'upload_file.php',
-            // Set the image upload URL.
-            imageManagerLoadURL: 'load_images.php',
-            // Set the image delete URL.
-            imageManagerDeleteURL: 'delete_image.php',
-        });
-        $('#txtnoticia').froalaEditor('html.insert', resposta, true);
-        tabela = "op" + document.getElementById("tabela").value;
-        document.getElementById(tabela).selected = true;
-        $('#listNoticias').modal('hide');
-    });
-}
-
-function recarregaForm() {
-    document.getElementById("funcao").value = "novanoticia";
-    document.getElementById("id_noticia").value = 0;
-    document.getElementById("tabela").value = 0;
-}
-
-function excluirNoticia(id) {
-    var confirma = confirm("Essa notícia será desativada do sistema. Deseja continuar?");
-    if (confirma) {
-        $.post('../php/geral.php', {
-            admin: 1,
-            form: 'excluirNoticia',
-            id: id
-        }, function (resposta) {
-            if (!resposta) {
-                window.location.href = "../";
-            } else {
-                carregaPostsPag(resposta);
-            }
-        });
-    }
 }

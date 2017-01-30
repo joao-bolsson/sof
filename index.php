@@ -28,7 +28,7 @@ if (isset($_SESSION['id_setor']) && $_SESSION['id_setor'] == 12) {
 //redireciona para a página do admin
     header('Location: admin/');
 } else if (isset($_SESSION["id_setor"]) && $_SESSION["id_setor"] != 0) {
-    header("Location: view/solicitacoes.php");
+    header("Location: lte/solicitacoes.php");
 } else {
     header("Location: view/");
 }

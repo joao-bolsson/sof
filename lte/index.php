@@ -47,6 +47,13 @@ $count = $obj_Busca->getCountSolic();
         <link rel="stylesheet" href="dist/css/snackbar.min.css">
 
         <link rel="icon" href="../favicon.ico">
+
+        <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+        <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+        <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+        <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+        <![endif]-->
     </head>
     <body class="hold-transition skin-blue sidebar-mini" onload="iniAdminSolicitacoes();">
         <div class="wrapper">
@@ -390,7 +397,7 @@ $count = $obj_Busca->getCountSolic();
                         </div><!-- /.row -->
                         <div id="rowPedidos" class="row">
                             <div class="col-xs-12">
-                                <div class="box">
+                                <div class="box box-primary">
                                     <div class="box-header">
                                         <h3 class="box-title">Pedidos</h3>
                                         <div class="box-tools pull-right">
@@ -399,9 +406,13 @@ $count = $obj_Busca->getCountSolic();
                                         </div>
                                     </div><!-- /.box-header -->
                                     <div class="box-body">
+                                        <div class="form-group">
+                                            <button id="btnPrintCheck" class="btn btn-primary" type="button" onclick="printChecks()" disabled><i class="fa fa-print"></i>&nbsp;Imprimir</button>
+                                        </div>
                                         <table id="tableSolicitacoes" class="table table-bordered table-striped">
                                             <thead>
                                                 <tr>
+                                                    <th></th>
                                                     <th>Opções</th>
                                                     <th>Pedido</th>
                                                     <th>Setor</th>
@@ -728,15 +739,15 @@ $count = $obj_Busca->getCountSolic();
                                 <div class="modal-body">
                                     <div class="form-group">
                                         <label for="nomeU">Nome</label>
-                                        <input type="text" class="form-control" id="nomeU" name="nome" placeholder="Nome" required>
+                                        <input type="text" class="form-control" id="nomeU" name="nome" placeholder="Nome" maxlength="40" required>
                                     </div>
                                     <div class="form-group">
                                         <label for="loginU">Login</label>
-                                        <input type="text" class="form-control" id="loginU" name="login" placeholder="Login" required>
+                                        <input type="text" class="form-control" id="loginU" name="login" placeholder="Login" maxlength="30" required>
                                     </div>
                                     <div class="form-group">
                                         <label for="emailU">E-mail</label>
-                                        <input type="email" class="form-control" id="emailU" name="email" placeholder="E-mail" required>
+                                        <input type="email" class="form-control" id="emailU" name="email" placeholder="E-mail" maxlength="40" required>
                                     </div>
                                     <div class="form-group">
                                         <label>Setor</label>
@@ -788,7 +799,7 @@ $count = $obj_Busca->getCountSolic();
                         <form action="../php/geral.php" method="post">
                             <input type="hidden" name="users" value="1">
                             <input type="hidden" name="form" value="problema">
-                            <input type="hidden" name="pag" value="admin/adminsolicitacoes.php">
+                            <input type="hidden" name="pag" value="lte/">
                             <div class="modal-body">
                                 <div class="form-group">
                                     <label>Assunto</label>

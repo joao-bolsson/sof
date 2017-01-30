@@ -341,6 +341,149 @@ class PrintMod extends Conexao {
     }
 
     /**
+     * Função para fazer um relatório específico de pedidos feito pelo usuário do SOF.
+     * @param array $pedidos Array com os pedidos selecionados
+     * @param int $status Status dos pedidos (default = 8)
+     * @return string Relatório personalizado pelo SOF.
+     */
+    public function getRelPed(array $pedidos, int $status = 8) {
+        $retorno = "";
+        if (empty($pedidos)) {
+            return $retorno;
+        }
+
+        $where_status = "AND pedido.status = " . $status;
+        if ($status == 0) {
+            $where_status = '';
+        }
+        if ($status == 8) {
+            $where_empenho = "AND pedido_empenho.id_pedido = pedido.id";
+            $tb_empenho = "pedido_empenho, ";
+            $empenho = ", pedido_empenho.empenho";
+        }
+        if (is_null($this->mysqli)) {
+            $this->mysqli = parent::getConexao();
+        }
+
+        $where_pedidos = '(';
+        $len = count($pedidos);
+        for ($i = 0; $i < $len; $i++) {
+            $where_pedidos .= 'pedido.id = ' . $pedidos[$i];
+            if ($i != $len - 1) {
+                $where_pedidos .= ' OR ';
+            }
+        }
+        $where_pedidos .= ')';
+
+        $query = $this->mysqli->query("SELECT pedido.id, setores.nome AS setor, DATE_FORMAT(pedido.data_pedido, '%d/%m/%Y') AS data_pedido, prioridade.nome AS prioridade, status.id AS id_status, status.nome AS status, pedido.valor {$empenho} FROM {$tb_empenho} setores, pedido, prioridade, status WHERE status.id = pedido.status {$where_empenho} AND prioridade.id = pedido.prioridade AND pedido.id_setor = setores.id {$where_status} AND {$where_pedidos} ORDER BY pedido.id ASC;") or exit("Erro ao buscar os pedidos com as especificações do usuário.");
+
+        $titulo = "Relatório de Pedidos por Setor e Nível de Prioridade";
+        if ($query) {
+            $thead = "
+                <th>Enviado em</th>
+                <th>Prioridade</th>
+                <th>Status</th>
+                <th>Valor</th>";
+            if ($status == 8) {
+                $titulo = "Relatório de Empenhos Enviados ao Ordenador";
+                $thead = "
+                    <th>Prioridade</th>
+                    <th>SIAFI</th>";
+            }
+            if (is_null($this->mysqli)) {
+                $this->mysqli = parent::getConexao();
+            }
+            $query_tot = $this->mysqli->query("SELECT sum(pedido.valor) AS total FROM {$tb_empenho} pedido WHERE 1 > 0 {$where_empenho} AND pedido.alteracao = 0 {$where_status};") or exit("Erro ao somar os pedidos.");
+            $this->mysqli = NULL;
+            $total = "R$ 0";
+            $tot = $query_tot->fetch_object();
+            if ($tot->total > 0) {
+                $total = "R$ " . number_format($tot->total, 3, ',', '.');
+            }
+            $retorno .= "
+                <fieldset class=\"preg\">
+                    <h5>DESCRIÇÃO DO RELATÓRIO</h5>
+                    <h6>" . $titulo . "</h6>
+                    <h6>Pedidos selecionados pelo SOF</h6>
+                </fieldset><br>";
+            $sub_header = "
+                <fieldset class=\"preg\">
+                    <table>
+                        <tr>
+                            <td>" . count($pedidos) . " selecionados</td>
+                            <td>Totalizando " . $total . "</td>
+                        </tr>
+                    </table>
+                </fieldset>";
+            $table_pedidos = "
+                <table class=\"prod\">
+                    <thead>
+                        <tr>
+                            <th>Pedido</th>
+                            <th>Fornecedor</th>
+                            <th>Setor</th>
+                            " . $thead . "
+                        </tr>
+                    </thead>
+                    <tbody>";
+            if (is_null($this->obj_Busca)) {
+                $this->obj_Busca = new BuscaLTE();
+            }
+            $flag = false;
+            $i = 0;
+            while ($pedido = $query->fetch_object()) {
+                $tbody = '';
+                if ($pedido->id_status != 8) {
+                    $flag = true;
+                    break;
+                } else {
+                    $i++;
+                }
+                if ($status == 8) {
+                    $tbody = "
+                        <td>" . $pedido->prioridade . "</td>
+                        <td>" . $pedido->empenho . "</td>";
+                } else {
+                    $tbody = "
+                        <td>" . $pedido->data_pedido . "</td>
+                        <td>" . $pedido->prioridade . "</td>
+                        <td>" . $pedido->status . "</td>
+                        <td>R$ " . $pedido->valor . "</td>";
+                }
+                $table_pedidos .= "
+                        <tr>
+                            <td>" . $pedido->id . "</td>
+                            <td>" . $this->obj_Busca->getFornecedor($pedido->id) . "</td>
+                            <td>" . $pedido->setor . "</td>
+                            " . $tbody . "
+                        </tr>";
+            }
+            $table_pedidos .= "<tbody></table>";
+            if ($query->num_rows > 0 && !$flag && $i == count($pedidos)) {
+                $retorno .= $sub_header . $table_pedidos;
+            } else {
+                $retorno .= 'RELATÓRIO INVÁLIDO: Essa versão suporta apenas pedidos com status de Enviado ao Ordenador.';
+                $flag = true;
+            }
+        }
+        if ($status == 8 && !$flag && $i == count($pedidos)) {
+            $retorno .= "
+                <br><br><br>
+                <h5 class=\"ass\" style=\"margin-right: 50%; margin-bottom: 0;\">
+                _______________________________________________<br>
+                RESPONSÁVEL PELA INFORMAÇÃO
+                </h5>
+                <h5 class=\"ass\" style=\"margin-left: 51%; margin-top: -32px;\">
+                _______________________________________________<br>
+                RESPONSÁVEL PELO RECEBIMENTO
+                </h5><br><br>
+                <h4 style=\"text-align: center\" class=\"ass\">Santa Maria, ___ de ___________________ de _____.</h4>";
+        }
+        $this->obj_Busca = NULL;
+        return $retorno;
+    }
+
+    /**
      * 	Função que retonar o relatorio de pedidos.
      *
      * 	@return string Retorna a interface de um documento pdf.
@@ -425,6 +568,9 @@ class PrintMod extends Conexao {
                         </tr>
                     </thead>
                     <tbody>";
+            if (is_null($this->obj_Busca)) {
+                $this->obj_Busca = new BuscaLTE();
+            }
             while ($pedido = $query->fetch_object()) {
                 $tbody = "";
                 if ($status == 8) {
@@ -437,9 +583,6 @@ class PrintMod extends Conexao {
                         <td>" . $pedido->prioridade . "</td>
                         <td>" . $pedido->status . "</td>
                         <td>R$ " . $pedido->valor . "</td>";
-                }
-                if (is_null($this->obj_Busca)) {
-                    $this->obj_Busca = new BuscaLTE();
                 }
                 $retorno .= "
                         <tr style=\"\">
