@@ -437,7 +437,7 @@ if ($obj_Busca->isActive()) {
                 $assunto = filter_input(INPUT_POST, 'assunto');
                 $descricao = filter_input(INPUT_POST, 'descr');
                 $id_setor = $_SESSION['id_setor'];
-                $pag = filter_input(INPUT_POST, 'pag'); // like view/solicitacoes.php
+                $pag = filter_input(INPUT_POST, 'pag'); // like lte/solicitacoes.php
                 $obj_Geral->insereProblema($id_setor, $assunto, $descricao);
                 header('Location: ../' . $pag);
                 break;

@@ -1,44 +1,36 @@
 $(function () {
-    var str = location.pathname;
-    if (str.endsWith("view/solicitacoes.php")) {
-        $(".select2").select2();
-    }
-    if (str.endsWith("adminsolicitacoes.php")) {
-        $('.date').mask('00/00/0000');
-    }
-});
+    $('.modal').on('hidden.bs.modal', function () {
+        $(this).removeClass('fv-modal-stack');
+        $('body').data('fv_open_modals', $('body').data('fv_open_modals') - 1);
+    });
 
-$('.modal').on('hidden.bs.modal', function (event) {
-    $(this).removeClass('fv-modal-stack');
-    $('body').data('fv_open_modals', $('body').data('fv_open_modals') - 1);
-});
-
-$('.modal').on('shown.bs.modal', function (event) {
-    // keep track of the number of open modals
-    if (typeof ($('body').data('fv_open_modals')) == 'undefined') {
-        $('body').data('fv_open_modals', 0);
-    }
-    // if the z-index of this modal has been set, ignore.
-    if ($(this).hasClass('fv-modal-stack')) {
-        return;
-    }
-    $(this).addClass('fv-modal-stack');
-    $('body').data('fv_open_modals', $('body').data('fv_open_modals') + 1);
-    $(this).css('z-index', 1040 + (10 * $('body').data('fv_open_modals')));
-    $('.modal-backdrop').not('.fv-modal-stack')
-            .css('z-index', 1039 + (10 * $('body').data('fv_open_modals')));
-    $('.modal-backdrop').not('fv-modal-stack')
-            .addClass('fv-modal-stack');
+    $('.modal').on('shown.bs.modal', function () {
+        // keep track of the number of open modals
+        if (typeof ($('body').data('fv_open_modals')) == 'undefined') {
+            $('body').data('fv_open_modals', 0);
+        }
+        // if the z-index of this modal has been set, ignore.
+        if ($(this).hasClass('fv-modal-stack')) {
+            return;
+        }
+        $(this).addClass('fv-modal-stack');
+        $('body').data('fv_open_modals', $('body').data('fv_open_modals') + 1);
+        $(this).css('z-index', 1040 + (10 * $('body').data('fv_open_modals')));
+        $('.modal-backdrop').not('.fv-modal-stack')
+                .css('z-index', 1039 + (10 * $('body').data('fv_open_modals')));
+        $('.modal-backdrop').not('fv-modal-stack')
+                .addClass('fv-modal-stack');
+    });
 });
 
 function cadEmpenho(id_pedido, empenho, data) {
     document.getElementById('id_pedido_emp').value = '';
     document.getElementById('empenho').value = '';
     document.getElementById('dataEmp').value = '';
-    
+
     $('#divEmp').removeClass('control-highlight');
     $('#divEmpData').removeClass('control-highlight');
-    
+
     $('#cadEmpenho').modal();
     $('#div-lb-high').addClass('control-highlight');
     document.getElementById('id_pedido_emp').value = id_pedido;
