@@ -757,15 +757,19 @@ function printChecks() {
 
 function checkImp() {
     var len = pedidosRelCustom.length;
+    var btn = document.getElementById('btnPrintCheck');
+    if (btn === null) {
+        return;
+    }
     for (var i = 0; i < len; i++) {
         if (pedidosRelCustom[i] !== 0) {
             console.log('tem algum selecionado');
-            document.getElementById('btnPrintCheck').disabled = false;
+            btn.disabled = false;
             return;
         }
     }
     console.log('nenhum selecionado');
-    document.getElementById('btnPrintCheck').disabled = true;
+    btn.disabled = true;
 }
 
 function pushOrRemove(element) {

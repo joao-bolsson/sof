@@ -33,6 +33,8 @@ $obj_Busca = new BuscaLTE();
         <link rel="stylesheet" href="plugins/font-awesome-4.7.0/css/font-awesome.min.css">
         <!-- Ionicons -->
         <link rel="stylesheet" href="plugins/ionicons/css/ionicons.min.css">
+        <!-- iCheck for checkboxes and radio inputs -->
+        <link rel="stylesheet" href="plugins/iCheck/all.css">
         <!-- Theme style -->
         <link rel="stylesheet" href="dist/css/AdminLTE.min.css">
         <!-- AdminLTE Skins. Choose a skin from the css/skins
@@ -98,9 +100,13 @@ $obj_Busca = new BuscaLTE();
                                 <h3 class="box-title">Pedidos</h3>
                             </div>
                             <div class="box-body">
+                                <div class="form-group">
+                                    <button id="btnPrintCheck" class="btn btn-primary" type="button" onclick="printChecks()" disabled><i class="fa fa-print"></i>&nbsp;Imprimir</button>
+                                </div>
                                 <table class="table table-bordered table-striped" id="tableSolicitacoes">
                                     <thead>
                                         <tr>
+                                            <th></th>
                                             <th>Opções</th>
                                             <th>Num Pedido</th>
                                             <th>Setor</th>
@@ -183,6 +189,8 @@ $obj_Busca = new BuscaLTE();
         <script src="plugins/slimScroll/jquery.slimscroll.min.js"></script>
         <!-- FastClick -->
         <script src="plugins/fastclick/fastclick.js"></script>
+        <!-- iCheck 1.0.1 -->
+        <script src="plugins/iCheck/icheck.min.js"></script>
         <!-- AdminLTE App -->
         <script src="dist/js/app.min.js"></script>
         <!-- AdminLTE for demo purposes -->
