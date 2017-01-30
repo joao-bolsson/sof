@@ -701,4 +701,3 @@ if ($obj_Busca->isActive()) {
     session_destroy();
     echo "Estamos realizando uma manutenção no momento. Tente fazer o login novamente dentro de 10min ;)";
 }
-?>
