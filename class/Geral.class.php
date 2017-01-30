@@ -848,5 +848,3 @@ class Geral extends Conexao {
     }
 
 }
-
-?>

@@ -1597,5 +1597,3 @@ class Busca extends Conexao {
     }
 
 }
-
-?>

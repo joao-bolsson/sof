@@ -84,7 +84,7 @@ class BuscaLTE extends Conexao {
 
         $retorno = "";
         while ($user = $query->fetch_object()) {
-            $retorno .= "<option value=\"" . $user->id . "\">" . $user->nome . " (".$user->setor.")</option>";
+            $retorno .= "<option value=\"" . $user->id . "\">" . $user->nome . " (" . $user->setor . ")</option>";
         }
         return $retorno;
     }
@@ -1638,5 +1638,3 @@ class BuscaLTE extends Conexao {
     }
 
 }
-
-?>

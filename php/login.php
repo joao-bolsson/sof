@@ -33,4 +33,3 @@ if (!$obj_Busca->isActive()) {
         }
     }
 }
-?>

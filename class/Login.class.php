@@ -126,5 +126,3 @@ class Login extends Conexao {
     }
 
 }
-
-?>
