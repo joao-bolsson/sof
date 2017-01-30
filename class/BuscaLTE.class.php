@@ -79,12 +79,12 @@ class BuscaLTE extends Conexao {
         if (is_null($this->mysqli)) {
             $this->mysqli = parent::getConexao();
         }
-        $query = $this->mysqli->query("SELECT usuario.id, usuario.nome FROM usuario;") or exit("Erro ao buscar usuários.");
+        $query = $this->mysqli->query("SELECT usuario.id, usuario.nome, setores.nome AS setor FROM usuario, setores WHERE usuario.id_setor = setores.id;") or exit("Erro ao buscar usuários.");
         $this->mysqli = NULL;
 
         $retorno = "";
         while ($user = $query->fetch_object()) {
-            $retorno .= "<option value=\"" . $user->id . "\">" . $user->nome . "</option>";
+            $retorno .= "<option value=\"" . $user->id . "\">" . $user->nome . " (".$user->setor.")</option>";
         }
         return $retorno;
     }
