@@ -739,15 +739,15 @@ $count = $obj_Busca->getCountSolic();
                                 <div class="modal-body">
                                     <div class="form-group">
                                         <label for="nomeU">Nome</label>
-                                        <input type="text" class="form-control" id="nomeU" name="nome" placeholder="Nome" required>
+                                        <input type="text" class="form-control" id="nomeU" name="nome" placeholder="Nome" maxlength="40" required>
                                     </div>
                                     <div class="form-group">
                                         <label for="loginU">Login</label>
-                                        <input type="text" class="form-control" id="loginU" name="login" placeholder="Login" required>
+                                        <input type="text" class="form-control" id="loginU" name="login" placeholder="Login" maxlength="30" required>
                                     </div>
                                     <div class="form-group">
                                         <label for="emailU">E-mail</label>
-                                        <input type="email" class="form-control" id="emailU" name="email" placeholder="E-mail" required>
+                                        <input type="email" class="form-control" id="emailU" name="email" placeholder="E-mail" maxlength="40" required>
                                     </div>
                                     <div class="form-group">
                                         <label>Setor</label>
