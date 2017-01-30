@@ -290,7 +290,7 @@ function verEmpenho(id_pedido) {
     $.post('../php/busca.php', {
         users: 1,
         form: 'verEmpenho',
-        id_pedido: id_pedido,
+        id_pedido: id_pedido
     }, function (resposta) {
         if (resposta === 'EMPENHO SIAFI PENDENTE') {
             viewCompl(resposta);
@@ -336,7 +336,7 @@ function mostraSolicAltPed() {
     mostra('rowAltPed');
     iniTableSolicAltPed();
 }
-// solicitação de alteração de pedidos
+
 function analisaSolicAlt(id_solic, id_pedido, acao) {
     $.post('../php/geral.php', {
         admin: 1,
@@ -617,7 +617,7 @@ function iniRecepcao() {
     }
     $.post('../php/buscaLTE.php', {
         admin: 1,
-        form: 'tableRecepcao',
+        form: 'tableRecepcao'
     }, function (resposta) {
         if (element.innerHTML.length > 0) {
             $('#tableRecepcao').DataTable().destroy();
@@ -630,7 +630,7 @@ function iniRecepcao() {
 function iniListProcessos() {
     $.post('../php/buscaLTE.php', {
         admin: 1,
-        form: 'listProcessos',
+        form: 'listProcessos'
     }, function (resposta) {
         if (document.getElementById('tbodyListProcessos').innerHTML.length > 0) {
             $('#tableListProcessos').DataTable().destroy();
@@ -716,7 +716,7 @@ function getSaldoOri() {
     });
 }
 
-pedidosRelCustom = [];
+var pedidosRelCustom = [];
 
 function printChecks() {
     $('#btnPrintCheck').blur();
@@ -764,13 +764,13 @@ function pushOrRemove(element) {
     if (element.checked) {
         console.log('push: ' + element.value);
         // push the id on the array
-        if (len == 0) {
+        if (len === 0) {
             console.log('array vazio');
             pedidosRelCustom.push(element.value);
         } else {
             console.log('array nao vazio -> procura por 0 e substitui');
             for (var i = 0; i < len; i++) {
-                if (pedidosRelCustom[i] == 0) {
+                if (pedidosRelCustom[i] === 0) {
                     console.log('achou zero, vai substituir');
                     pedidosRelCustom[i] = element.value;
                     return;
@@ -783,7 +783,7 @@ function pushOrRemove(element) {
         console.log('remove: ' + element.value);
         // procura o id e substitui por zero
         for (var i = 0; i < len; i++) {
-            if (pedidosRelCustom[i] == element.value) {
+            if (pedidosRelCustom[i] === element.value) {
                 console.log('achou, substitui por zero');
                 pedidosRelCustom[i] = 0;
                 return;
@@ -1255,13 +1255,13 @@ function addItemPedido(id_item, qtd, vl_unitario) {
 
 function removeTableRow(id_item, valor) {
     //valor do pedido
-    t = document.getElementById('total_hidden').value;
-    total = parseFloat(t) - parseFloat(valor);
+    var t = document.getElementById('total_hidden').value;
+    var total = parseFloat(t) - parseFloat(valor);
     document.getElementById('total_hidden').value = parseFloat(total).toFixed(3);
     document.getElementById('total').value = "R$ " + parseFloat(total).toFixed(3);
     //saldo
-    s = document.getElementById('saldo_total').value;
-    saldo_total = parseFloat(s) + parseFloat(valor);
+    var s = document.getElementById('saldo_total').value;
+    var saldo_total = parseFloat(s) + parseFloat(valor);
     document.getElementById('saldo_total').value = parseFloat(saldo_total).toFixed(3);
     document.getElementById('text_saldo_total').innerHTML = "R$ " + parseFloat(saldo_total).toFixed(3);
     var row = document.getElementById("row" + id_item);
