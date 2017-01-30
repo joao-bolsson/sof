@@ -25,8 +25,16 @@ include_once '../class/BuscaLTE.class.php';
 include_once '../class/Util.class.php';
 $obj_Busca = new BuscaLTE();
 
-if (isset($_POST["admin"]) && isset($_SESSION['id_setor']) && ($_SESSION['id_setor'] == 2 || $_SESSION['id_setor'] == 12)) {
-    $form = $_POST["form"];
+$admin = filter_input(INPUT_POST, "admin");
+$users = filter_input(INPUT_POST, "users");
+
+if (!is_null($admin) && isset($_SESSION['id_setor']) && ($_SESSION['id_setor'] == 2 || $_SESSION['id_setor'] == 12)) {
+    $form = '';
+
+    $filter = filter_input(INPUT_POST, 'form');
+    if (!is_null($filter)) {
+        $form = $filter;
+    }
 
     switch ($form) {
 
@@ -35,109 +43,92 @@ if (isset($_POST["admin"]) && isset($_SESSION['id_setor']) && ($_SESSION['id_set
             $_SESSION['pedidosRel'] = $pedidos;
             break;
 
-        // relatórios nova versão
         case 'listRelatorios':
-            echo $obj_Busca->getRelatorio($_POST['status']);
+            $status = filter_input(INPUT_POST, 'status');
+            echo $obj_Busca->getRelatorio($status);
             break;
-        // comment.
 
         case 'listProcessos':
             echo $obj_Busca->getProcessos("recepcao");
             break;
 
-        // retornar a tabela com os processos para edição na recepção
         case 'tableRecepcao':
             echo $obj_Busca->getTabelaRecepcao();
             break;
 
-        // retornar a tabela com as solicitações de alteração de pedidos
-
         case 'iniTableSolicAltPed':
-            $status = $_POST["status"];
+            $status = filter_input(INPUT_POST, 'status');
             echo $obj_Busca->getAdminSolicAltPedidos($status);
             break;
-
-        // comentário
 
         case 'tableItensPedido':
             echo $obj_Busca->getSolicitacoesAdmin();
             break;
 
-        // comentário
-
         case 'tableSolicitacoesAdiantamento':
-            $status = $_POST["status"];
+            $status = filter_input(INPUT_POST, 'status');
             echo $obj_Busca->getSolicAdiantamentos($status);
             break;
 
-        // busca a tabela com os itens do pedido analisado
-
         case 'analisaPedido':
-            $id_pedido = $_POST["id_pedido"];
-
+            $id_pedido = filter_input(INPUT_POST, 'id_pedido');
             echo $obj_Busca->getItensPedidoAnalise($id_pedido);
             break;
         default:
             break;
     }
-} else if (isset($_POST["users"]) && isset($_SESSION['id_setor']) && $_SESSION['id_setor'] != 0) {
-    $form = $_POST["form"];
+} else if (!is_null($users)&& isset($_SESSION['id_setor']) && $_SESSION['id_setor'] != 0) {
+    $form = '';
+
+    $filter = filter_input(INPUT_POST, 'form');
+    if (!is_null($filter)) {
+        $form = $filter;
+    }
 
     switch ($form) {
-        // comment.
         case 'listRascunhos':
             echo $obj_Busca->getRascunhos($_SESSION['id_setor']);
             break;
 
-        // comment.
-
         case 'listPedidos':
             echo $obj_Busca->getMeusPedidos($_SESSION['id_setor']);
             break;
-        // comment.
 
         case 'listProcessos':
             echo $obj_Busca->getProcessos("solicitacoes");
             break;
-        // comment.
 
         case 'iniSolicAltPedSetor':
             echo $obj_Busca->getSolicAltPedidos($_SESSION['id_setor']);
             break;
-        // retorna a tabela de solicitações de adiantamento de um setor
 
         case 'listAdiantamentos':
             echo $obj_Busca->getSolicAdiSetor($_SESSION['id_setor']);
             break;
 
-        // adiciona um item ao pedido
-
         case 'addItemPedido':
-            $id_item = $_POST["id_item"];
-            $qtd = $_POST["qtd"];
+            $id_item = filter_input(INPUT_POST, 'id_item');
+            $qtd = filter_input(INPUT_POST, 'qtd');
 
             echo $obj_Busca->addItemPedido($id_item, $qtd);
             break;
 
-        // pesquisar processo
-
         case 'pesquisarProcesso':
-            $busca = $_POST["busca"];
+            $busca = filter_input(INPUT_POST, 'busca');
             echo $obj_Busca->getConteudoProcesso($busca);
             break;
 
-        // edita pedido
         case 'editaPedido':
             $id_pedido = filter_input(INPUT_POST, 'id_pedido');
 
             echo $obj_Busca->getConteudoPedido($id_pedido);
             break;
 
-        // imprime pedido
         case 'imprimirPedido':
+            $id_pedido = filter_input(INPUT_POST, 'id_pedido');
             $_SESSION["imprimirPedido"] = 1;
-            $_SESSION["id_ped_imp"] = $_POST["id_pedido"];
-            $_SESSION['pedido_rascunho'] = $obj_Busca->getRequestDraft($_POST['id_pedido']);
+            $_SESSION["id_ped_imp"] = $id_pedido;
+            $_SESSION['pedido_rascunho'] = $obj_Busca->getRequestDraft($id_pedido);
             break;
 
         default:
