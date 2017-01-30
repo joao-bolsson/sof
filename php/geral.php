@@ -77,10 +77,17 @@ if ($obj_Busca->isActive()) {
 
                 $id_user = $obj_Geral->cadUser($nome, $login, $email, $setor, $senha);
 
-                $noticias = !is_null(filter_input(INPUT_POST, 'noticias'));
-                $saldos = !is_null(filter_input(INPUT_POST, 'saldos'));
-                $pedidos = !is_null(filter_input(INPUT_POST, 'pedidos'));
-                $recepcao = !is_null(filter_input(INPUT_POST, 'recepcao'));
+                $noticias = 0;
+                $saldos = 0;
+                $pedidos = 0;
+                $recepcao = 0;
+
+                if ($setor == 2) {
+                    $noticias = !is_null(filter_input(INPUT_POST, 'noticias'));
+                    $saldos = !is_null(filter_input(INPUT_POST, 'saldos'));
+                    $pedidos = !is_null(filter_input(INPUT_POST, 'pedidos'));
+                    $recepcao = !is_null(filter_input(INPUT_POST, 'recepcao'));
+                }
 
                 $obj_Geral->cadPermissao($id_user, $noticias, $saldos, $pedidos, $recepcao);
 
