@@ -6,13 +6,6 @@ $(function () {
         tableItens = ta.innerHTML;
     }
 
-    var str = location.pathname;
-    if (str.endsWith("view/solicitacoes.php")) {
-        $(".select2").select2();
-    }
-    if (str.endsWith("adminsolicitacoes.php")) {
-        $('.date').mask('00/00/0000');
-    }
     var status = ['stabertos', 'staprovados', 'streprovado'];
     for (var i = 0; i < status.length; i++) {
         var element = document.getElementById(status[i]);

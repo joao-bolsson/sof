@@ -792,7 +792,7 @@ $count = $obj_Busca->getCountSolic();
                         <form action="../php/geral.php" method="post">
                             <input type="hidden" name="users" value="1">
                             <input type="hidden" name="form" value="problema">
-                            <input type="hidden" name="pag" value="admin/adminsolicitacoes.php">
+                            <input type="hidden" name="pag" value="lte/">
                             <div class="modal-body">
                                 <div class="form-group">
                                     <label>Assunto</label>

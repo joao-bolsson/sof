@@ -15,7 +15,7 @@ $obj_Util = new Util();
 
 $permissao = $obj_Busca->getPermissoes($_SESSION["id"]);
 if (!$permissao->noticias) {
-    header("Location: adminsolicitacoes.php");
+    header("Location: ../lte/");
 }
 ?>
 <!DOCTYPE html>
@@ -105,7 +105,7 @@ if (!$permissao->noticias) {
                                     <a class="waves-attach" href="javascript:abreModal('#listNoticias');"><span style="color: white;"><span class="icon">note_add</span>EDITAR NOTÍCIA</span></a>
                                 </li>
                                 <li>
-                                    <a class="waves-attach" href="adminsolicitacoes.php"><span style="color: white;"><span class="icon">payment</span>SOLICITAÇÕES</span></a>
+                                    <a class="waves-attach" href="../lte/"><span style="color: white;"><span class="icon">payment</span>SOLICITAÇÕES</span></a>
                                 </li>
                             </ul>
                         </nav>
