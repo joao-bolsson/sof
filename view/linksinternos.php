@@ -51,11 +51,6 @@ $obj_Busca = new Busca();
           <span class="icon icon-lg">menu</span><span class="text-white">MENU</span>
         </a>
       </li>
-      <li>
-        <a class="btn btn-flat waves-attach waves-light" href="javascript:btnPesquisa();">
-          <span class="text-white"><span class="icon icon-lg">search</span>PESQUISAR</span>
-        </a>
-      </li>
     </ul>
     <nav class="tab-nav pull-right ">
       <ul class="nav nav-list">
