@@ -30,6 +30,11 @@ if (isset($_POST["admin"]) && isset($_SESSION['id_setor']) && ($_SESSION['id_set
     $form = $_POST["form"];
 
     switch ($form) {
+        
+        case 'customRel':
+            $pedidos = filter_input(INPUT_POST, 'pedidos', FILTER_DEFAULT, FILTER_FORCE_ARRAY);
+            $_SESSION['pedidosRel'] = $pedidos;
+            break;
 
         // retorna o total dos pedidos pelo status selecionado
         case 'refreshTot':

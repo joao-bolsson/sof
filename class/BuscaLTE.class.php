@@ -1139,6 +1139,11 @@ class BuscaLTE extends Conexao {
             $linha = "
                 <tr id=\"rowPedido" . $pedido->id . "\">
                     <td>
+                        <div class=\"form-group\">
+                            <input type=\"checkbox\" name=\"checkPedRel\" id=\"checkPedRel" . $pedido->id . "\" value=\"" . $pedido->id . "\">
+                        </div>
+                    </td>
+                    <td>
                         <div class=\"btn-group\">
                             " . $btnAnalisar . "
                             <button type=\"button\" class=\"btn btn-default\" onclick=\"javascript:imprimir(" . $pedido->id . ");\" title=\"Imprimir\"><i class=\"fa fa-print\"></i></button>

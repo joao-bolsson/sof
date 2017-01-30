@@ -207,7 +207,7 @@ $(function () {
         }
     });
 
-    $('#listAdiantamentos').on('shown.bs.modal', function (event) {
+    $('#listAdiantamentos').on('shown.bs.modal', function () {
         if (!$.fn.DataTable.isDataTable('#tableListAdiantamentos')) {
             iniDataTable('#tableListAdiantamentos');
         }
@@ -446,7 +446,7 @@ function iniDataTable(tabela) {
             "info": true,
             "autoWidth": true,
             "columnDefs": [
-                {"width": "15%", "targets": 0}
+                {"width": "15%", "targets": 1}
             ],
             language: {
                 "decimal": "",
@@ -736,6 +736,105 @@ function getSaldoOri() {
     });
 }
 
+pedidosRelCustom = [];
+
+function printChecks() {
+    $('#btnPrintCheck').blur();
+    var len = pedidosRelCustom.length;
+    var pedidos = [];
+    for (var i = 0; i < len; i++) {
+        if (pedidosRelCustom[i] !== 0) {
+            pedidos.push(pedidosRelCustom[i]);
+        } else {
+            console.log('zero');
+        }
+    }
+    if (pedidos.length < 1) {
+        console.log('nenhum pedido selecionado');
+        return;
+    }
+    $.post('../php/buscaLTE.php', {
+        admin: 1,
+        form: 'customRel',
+        pedidos: pedidos
+    }, function () {
+        window.open("../admin/printRelatorio.php");
+    });
+}
+
+function checkImp() {
+    var len = pedidosRelCustom.length;
+    for (var i = 0; i < len; i++) {
+        if (pedidosRelCustom[i] !== 0) {
+            console.log('tem algum selecionado');
+            document.getElementById('btnPrintCheck').disabled = false;
+            return;
+        }
+    }
+    console.log('nenhum selecionado');
+    document.getElementById('btnPrintCheck').disabled = true;
+}
+
+function pushOrRemove(element) {
+    var len = pedidosRelCustom.length;
+    if (element.checked) {
+        console.log('push: ' + element.value);
+        // push the id on the array
+        if (len == 0) {
+            console.log('array vazio');
+            pedidosRelCustom.push(element.value);
+        } else {
+            console.log('array nao vazio -> procura por 0 e substitui');
+            for (var i = 0; i < len; i++) {
+                if (pedidosRelCustom[i] == 0) {
+                    console.log('achou zero, vai substituir');
+                    pedidosRelCustom[i] = element.value;
+                    return;
+                }
+            }
+            console.log('nao achou zero, faz o push');
+            pedidosRelCustom.push(element.value);
+        }
+    } else {
+        console.log('remove: ' + element.value);
+        // procura o id e substitui por zero
+        for (var i = 0; i < len; i++) {
+            if (pedidosRelCustom[i] == element.value) {
+                console.log('achou, substitui por zero');
+                pedidosRelCustom[i] = 0;
+                return;
+            }
+        }
+    }
+}
+
+function loadChecks() {
+    var elements = document.getElementsByName('checkPedRel');
+    var len = elements.length;
+    for (var i = 0; i < len; i++) {
+        var id_pedido = elements[i].value;
+        var id_e = 'checkPedRel' + id_pedido;
+        var input = document.getElementById(id_e);
+        if (input !== null) {
+            $('#' + id_e).on('ifCreated', function () {
+                $('#' + id_e).iCheck('destroy');
+            });
+            $('#' + id_e).iCheck({
+                checkboxClass: 'icheckbox_flat-blue',
+                radioClass: 'iradio_flat-blue'
+            });
+            $('#' + id_e).on('ifChecked', function () {
+                pushOrRemove(this);
+                checkImp();
+            });
+            $('#' + id_e).on('ifUnchecked', function () {
+                pushOrRemove(this);
+                checkImp();
+            });
+        }
+    }
+}
+
 function iniSolicitacoes() {
     var element = document.getElementById('conteudoSolicitacoes');
     if (element === null) {
@@ -749,6 +848,7 @@ function iniSolicitacoes() {
             $('#tableSolicitacoes').DataTable().destroy();
         }
         document.getElementById('conteudoSolicitacoes').innerHTML = resposta;
+        loadChecks();
         iniDataTable('#tableSolicitacoes');
     });
 }

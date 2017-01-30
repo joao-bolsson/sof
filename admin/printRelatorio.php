@@ -31,7 +31,26 @@ $html_header = "
   </p>
   <hr/>";
 $input = filter_input(INPUT_POST, 'relatorio');
-if (!empty($input) && $_SESSION["id_setor"] == 2) {
+
+if (isset($_SESSION['pedidosRel'])) {
+
+    $html = $html_style . $html_header;
+    $html .= $obj_Print->getRelPed($_SESSION['pedidosRel']);
+    unset($_SESSION['pedidosRel']);
+    $html .= "</body>";
+
+    //definimos o tipo de exibicao
+    $mpdf->SetDisplayMode('fullpage');
+    $data = date('j/m/Y  H:i');
+    //definimos oque vai conter no rodape do pdf
+    $mpdf->SetFooter("{$data}||Página {PAGENO}/{nb}");
+    //e escreve todo conteudo html vindo de nossa página html em nosso arquivo
+    $mpdf->WriteHTML($html);
+    //fechamos nossa instancia ao pdf
+    $mpdf->Output();
+    //pausamos a tela para exibir oque foi feito
+    exit();
+} else if (!empty($input) && $_SESSION["id_setor"] == 2) {
     $html = $html_style . $html_header;
 
     $tipo = filter_input(INPUT_POST, 'tipo');
@@ -59,12 +78,13 @@ if (!empty($input) && $_SESSION["id_setor"] == 2) {
     $mpdf->SetDisplayMode('fullpage');
     $data = date('j/m/Y  H:i');
     //definimos oque vai conter no rodape do pdf
-    $mpdf->SetFooter("{$data}||Pagina {PAGENO}/{nb}");
+    $mpdf->SetFooter("{$data}||Página {PAGENO}/{nb}");
     //e escreve todo conteudo html vindo de nossa página html em nosso arquivo
     $mpdf->WriteHTML($html);
     //fechamos nossa instancia ao pdf
     $mpdf->Output();
     //pausamos a tela para exibir oque foi feito
     exit();
+} else {
+    exit('Página inválida. É preciso mandar imprimir novamente.');
 }
-?>
