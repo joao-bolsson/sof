@@ -41,14 +41,14 @@ if ($obj_Busca->isActive()) {
     $admin = filter_input(INPUT_POST, "admin");
     $users = filter_input(INPUT_POST, "users");
 
-    if (!is_null($admin) && isset($_SESSION["id_setor"]) && ($_SESSION["id_setor"] == 2 || $_SESSION["id_setor"] == 12)) {
-        // variável que controla o que deve ser feito quando geral.php for chamado
-        $form = "";
-        $filter = filter_input(INPUT_POST, "form");
-        if (!is_null($filter)) {
-            $form = $filter;
-        }
+    $form = '';
 
+    $filter = filter_input(INPUT_POST, 'form');
+    if (!empty($filter)) {
+        $form = $filter;
+    }
+
+    if (!is_null($admin) && isset($_SESSION["id_setor"]) && ($_SESSION["id_setor"] == 2 || $_SESSION["id_setor"] == 12)) {
         switch ($form) {
 
             case 'altUser':
@@ -425,12 +425,6 @@ if ($obj_Busca->isActive()) {
                 break;
         }
     } else if ($users !== NULL && isset($_SESSION["id_setor"]) && $_SESSION["id_setor"] != 0) {
-        $form = "";
-        $filter = filter_input(INPUT_POST, "form");
-        if (!is_null($filter)) {
-            $form = $filter;
-        }
-
         switch ($form) {
 
             case 'problema':
@@ -565,13 +559,6 @@ if ($obj_Busca->isActive()) {
                 break;
         }
     } else {
-        $form = '';
-
-        $filter = filter_input(INPUT_POST, 'form');
-        if (!empty($filter)) {
-            $form = $filter;
-        }
-
         switch ($form) {
 
             // resetando senha
