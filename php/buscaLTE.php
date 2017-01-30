@@ -28,13 +28,14 @@ $obj_Busca = new BuscaLTE();
 $admin = filter_input(INPUT_POST, "admin");
 $users = filter_input(INPUT_POST, "users");
 
-if (!is_null($admin) && isset($_SESSION['id_setor']) && ($_SESSION['id_setor'] == 2 || $_SESSION['id_setor'] == 12)) {
-    $form = '';
+$form = '';
 
-    $filter = filter_input(INPUT_POST, 'form');
-    if (!is_null($filter)) {
-        $form = $filter;
-    }
+$filter = filter_input(INPUT_POST, 'form');
+if (!is_null($filter)) {
+    $form = $filter;
+}
+
+if (!is_null($admin) && isset($_SESSION['id_setor']) && ($_SESSION['id_setor'] == 2 || $_SESSION['id_setor'] == 12)) {
 
     switch ($form) {
 
@@ -77,13 +78,7 @@ if (!is_null($admin) && isset($_SESSION['id_setor']) && ($_SESSION['id_setor'] =
         default:
             break;
     }
-} else if (!is_null($users)&& isset($_SESSION['id_setor']) && $_SESSION['id_setor'] != 0) {
-    $form = '';
-
-    $filter = filter_input(INPUT_POST, 'form');
-    if (!is_null($filter)) {
-        $form = $filter;
-    }
+} else if (!is_null($users) && isset($_SESSION['id_setor']) && $_SESSION['id_setor'] != 0) {
 
     switch ($form) {
         case 'listRascunhos':

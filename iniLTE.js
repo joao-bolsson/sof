@@ -595,7 +595,7 @@ function altInfoUser() {
 function iniAdminSolicitacoes() {
     $.post('../php/busca.php', {
         admin: 1,
-        form: 'permissoes',
+        form: 'permissoes'
     }, function (resposta) {
         var permissao = jQuery.parseJSON(resposta);
         if (permissao.recepcao) {
@@ -1465,7 +1465,7 @@ function imprimir(id_pedido) {
     if (id_pedido == 0) {
         id_pedido = document.getElementById("pedido").value;
     }
-    $.post('../php/busca.php', {
+    $.post('../php/buscaLTE.php', {
         users: 1,
         form: 'imprimirPedido',
         id_pedido: id_pedido
