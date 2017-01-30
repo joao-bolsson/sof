@@ -85,4 +85,6 @@ if (isset($_SESSION['pedidosRel'])) {
     $mpdf->Output();
     //pausamos a tela para exibir oque foi feito
     exit();
+} else {
+    exit('Página inválida. É preciso mandar imprimir novamente.');
 }
