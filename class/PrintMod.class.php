@@ -30,7 +30,7 @@ class PrintMod extends Conexao {
         if (is_null($this->mysqli)) {
             $this->mysqli = parent::getConexao();
         }
-        $query = $this->mysqli->query("SELECT pedido.id, DATE_FORMAT(pedido.data_pedido, '%d/%m/%Y') AS data_pedido, EXTRACT(YEAR FROM pedido.data_pedido) AS ano, mes.sigla_mes AS ref_mes, status.nome AS status, replace(pedido.valor, '.', ',') AS valor, pedido.obs, pedido.pedido_contrato, prioridade.nome AS prioridade FROM prioridade, pedido, mes, status WHERE pedido.prioridade = prioridade.id AND status.id = pedido.status AND pedido.id = {$id_pedido} AND mes.id = pedido.ref_mes;") or exit("Erro ao formar o cabeçalho do pedido.");
+        $query = $this->mysqli->query("SELECT pedido.id, DATE_FORMAT(pedido.data_pedido, '%d/%m/%Y') AS data_pedido, EXTRACT(YEAR FROM pedido.data_pedido) AS ano, mes.sigla_mes AS ref_mes, status.nome AS status, replace(pedido.valor, '.', ',') AS valor, pedido.obs, pedido.pedido_contrato, prioridade.nome AS prioridade, pedido.aprov_gerencia FROM prioridade, pedido, mes, status WHERE pedido.prioridade = prioridade.id AND status.id = pedido.status AND pedido.id = {$id_pedido} AND mes.id = pedido.ref_mes;") or exit("Erro ao formar o cabeçalho do pedido.");
         $this->mysqli = NULL;
         $pedido = $query->fetch_object();
         $lblPedido = "Pedido";
@@ -53,8 +53,11 @@ class PrintMod extends Conexao {
                         <td style=\"text-align: left;\">" . PrintMod::getGrupoPedido($id_pedido) . "</td>
                         <td style=\"text-align: right;\">" . PrintMod::getEmpenho($id_pedido) . "</td>
                     </tr>
-                </table>
-                <p><b>Observação da Unidade Solicitante: </b></p>
+                </table>";
+        if ($pedido->aprov_gerencia) {
+            $retorno .= "<p><b>Aprovado Pela Gerência</b></p>";
+        }
+        $retorno .= "<p><b>Observação da Unidade Solicitante: </b></p>
                 <p style=\"font-weight: normal !important;\">	" . $pedido->obs . "</p>
             </fieldset><br>";
         $retorno .= PrintMod::getTableFontes($id_pedido);
