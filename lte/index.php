@@ -406,8 +406,9 @@ $count = $obj_Busca->getCountSolic();
                                         </div>
                                     </div><!-- /.box-header -->
                                     <div class="box-body">
-                                        <div class="form-group">
+                                        <div class="margin">
                                             <button id="btnPrintCheck" class="btn btn-primary" type="button" onclick="printChecks()" disabled><i class="fa fa-print"></i>&nbsp;Imprimir</button>
+                                            <button id="btnAprovGeren" class="btn btn-primary" type="button" onclick="aprovGerencia()" disabled><i class="fa fa-check-circle"></i>&nbsp;Aprovado pela Gerência</button>
                                         </div>
                                         <table id="tableSolicitacoes" class="table table-bordered table-striped">
                                             <thead>

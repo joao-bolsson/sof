@@ -25,6 +25,26 @@ class Geral extends Conexao {
         $this->obj_Busca = new Busca();
     }
 
+    public function aprovaGerencia(array $pedidos) {
+        if (empty($pedidos)) {
+            return;
+        }
+        if (is_null($this->mysqli)) {
+            $this->mysqli = parent::getConexao();
+        }
+
+        $where = '';
+        $len = count($pedidos);
+        for ($i = 0; $i < $len; $i++) {
+            $where .= 'id = ' . $pedidos[$i];
+            if ($i < $len - 1) {
+                $where .= ' AND ';
+            }
+        }
+
+        $this->mysqli->query('UPDATE pedido SET aprov_gerencia = 1 WHERE ' . $where) or exit('Erro ao atualizar pedidos: ' + $this->mysqli->error);
+    }
+
     public function insertPedContr(int $id_pedido, int $id_tipo, string $siafi) {
         if (is_null($this->mysqli)) {
             $this->mysqli = parent::getConexao();
