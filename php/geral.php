@@ -51,6 +51,11 @@ if ($obj_Busca->isActive()) {
     if (!is_null($admin) && isset($_SESSION["id_setor"]) && ($_SESSION["id_setor"] == 2 || $_SESSION["id_setor"] == 12)) {
         switch ($form) {
 
+            case 'aprovaGeren':
+                $pedidos = filter_input(INPUT_POST, 'pedidos', FILTER_DEFAULT, FILTER_FORCE_ARRAY);
+                $obj_Geral->aprovaGerencia($pedidos);
+                break;
+            
             case 'altUser':
                 $user = filter_input(INPUT_POST, 'user');
                 if (!is_null($user)) {

@@ -23,6 +23,45 @@ class Busca extends Conexao {
         $this->obj_Util = new Util();
     }
 
+    public function testValores() {
+        if (is_null($this->mysqli)) {
+            $this->mysqli = parent::getConexao();
+        }
+
+        $query_ped = $this->mysqli->query("SELECT pedido.id, pedido.id_setor, pedido.valor, saldo_setor.saldo FROM pedido, saldo_setor WHERE saldo_setor.id_setor = pedido.id_setor;");
+        while ($pedido = $query_ped->fetch_object()) {
+            $query = $this->mysqli->query("SELECT sum(valor) AS soma FROM itens_pedido WHERE itens_pedido.id_pedido = " . $pedido->id . ";");
+            $obj = $query->fetch_object();
+            $novo_saldo = $pedido->saldo;
+            if ($obj->soma != $pedido->valor) {
+                if ($obj->soma == NULL) {
+                    echo "sem itens<br>";
+                    $obj->soma = 0;
+                    $novo_saldo += $pedido->valor;
+                } else if ($obj->soma < $pedido->valor) {
+                    echo "soma < valor<br>";
+                    $dif = $pedido->valor - $obj->soma;
+                    $novo_saldo += $dif;
+                } else if ($obj->soma > $pedido->valor) {
+                    echo "soma > valor<br>";
+                    $dif = $obj->soma - $pedido->valor;
+                    $novo_saldo -= $dif;
+                }
+                if ($obj->soma == 0 && $pedido->valor == 0) {
+                    echo "soma zero, valor zero <br>";
+                } else {
+                    $this->mysqli->query("UPDATE pedido SET valor = {$obj->soma} WHERE id = {$pedido->id};");
+                    echo "atualiza valor do pedido {$pedido->id} <br>";
+                }
+            }
+            if ($novo_saldo != $pedido->saldo) {
+                $this->mysqli->query("UPDATE saldo_setor SET saldo = {$novo_saldo} WHERE id_setor = {$pedido->id_setor};");
+                echo "atualiza saldo do setor {$pedido->id_setor} <br>";
+            }
+        }
+        $this->mysqli = NULL;
+    }
+
     public function getInfoContrato(int $id_pedido) {
         if (is_null($this->mysqli)) {
             $this->mysqli = parent::getConexao();

@@ -742,21 +742,65 @@ function printChecks() {
     });
 }
 
+function aprovGerencia() {
+    $('#btnAprovGeren').blur();
+    var len = pedidosRelCustom.length;
+    var pedidos = [];
+    var str = '[';
+    for (var i = 0; i < len; i++) {
+        if (pedidosRelCustom[i] !== 0) {
+            pedidos.push(pedidosRelCustom[i]);
+            str += '' + pedidosRelCustom[i];
+            if (i !== len - 1) {
+                str += ', ';
+            }
+        } else {
+            console.log('zero');
+        }
+    }
+    str += ']';
+    if (pedidos.length < 1) {
+        console.log('nenhum pedido selecionado');
+        return;
+    }
+
+    if (confirm('Os pedidos ' + str + ' serão sinalizados como Aprovado pela Gerência. Essa açao é irreversível. Prosseguir?')) {
+        $.post('../php/geral.php', {
+            admin: 1,
+            form: 'aprovaGeren',
+            pedidos: pedidos
+        }, function () {
+            iniSolicitacoes();
+        });
+    }
+}
+
 function checkImp() {
     var len = pedidosRelCustom.length;
     var btn = document.getElementById('btnPrintCheck');
-    if (btn === null) {
+    var btnAprov = document.getElementById('btnAprovGeren');
+    if (btn === null && btnAprov === null) {
         return;
     }
     for (var i = 0; i < len; i++) {
         if (pedidosRelCustom[i] !== 0) {
             console.log('tem algum selecionado');
-            btn.disabled = false;
+            if (btn !== null) {
+                btn.disabled = false;
+            }
+            if (btnAprov !== null) {
+                btnAprov.disabled = false;
+            }
             return;
         }
     }
     console.log('nenhum selecionado');
-    btn.disabled = true;
+    if (btn !== null) {
+        btn.disabled = true;
+    }
+    if (btnAprov !== null) {
+        btnAprov.disabled = true;
+    }
 }
 
 function pushOrRemove(element) {
