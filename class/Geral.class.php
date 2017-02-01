@@ -731,13 +731,13 @@ class Geral extends Conexao {
             if ($pedido == 0) {
                 // NOVO
                 //inserindo os dados iniciais do pedido
-                $query_pedido = $this->mysqli->query("INSERT INTO pedido VALUES(NULL, {$id_setor}, {$id_user}, '{$hoje}', '{$mes}', 1, {$prioridade}, 1, '{$total_pedido}', '{$obs}', {$pedido_contrato});") or exit("Ocorreu um erro ao inserir o pedido.");
+                $query_pedido = $this->mysqli->query("INSERT INTO pedido VALUES(NULL, {$id_setor}, {$id_user}, '{$hoje}', '{$mes}', 1, {$prioridade}, 1, '{$total_pedido}', '{$obs}', {$pedido_contrato}, 0);") or exit("Ocorreu um erro ao inserir o pedido.");
                 $pedido = $this->mysqli->insert_id;
                 $this->registraLog($pedido, 1);
             } else {
                 //remover resgistros antigos do rascunho
                 $this->mysqli->query("DELETE FROM itens_pedido WHERE id_pedido = {$pedido};") or exit("Ocorreu um erro ao remover os registros antigos do pedido.") or exit("Erro ao remover registros antigos do rascunho.");
-                $this->mysqli->query("UPDATE pedido SET data_pedido = '{$hoje}', ref_mes = {$mes}, prioridade = {$prioridade}, valor = '{$total_pedido}', obs = '{$obs}', pedido_contrato = {$pedido_contrato} WHERE id = {$pedido};") or exit("Ocorreu um erro ao atualizar o pedido.");
+                $this->mysqli->query("UPDATE pedido SET data_pedido = '{$hoje}', ref_mes = {$mes}, prioridade = {$prioridade}, valor = '{$total_pedido}', obs = '{$obs}', pedido_contrato = {$pedido_contrato}, aprov_gerencia = 0 WHERE id = {$pedido};") or exit("Ocorreu um erro ao atualizar o pedido.");
             }
             //inserindo os itens do pedido
             for ($i = 0; $i < count($id_item); $i++) {
@@ -749,12 +749,12 @@ class Geral extends Conexao {
             // enviado ao sof
             if ($pedido == 0) {
                 //inserindo os dados iniciais do pedido
-                $query_pedido = $this->mysqli->query("INSERT INTO pedido VALUES(NULL, {$id_setor}, {$id_user}, '{$hoje}', '{$mes}', 0, {$prioridade}, 2, '{$total_pedido}', '{$obs}', {$pedido_contrato});") or exit("Ocorreu um erro ao inserir os dados iniciais do pedido.");
+                $query_pedido = $this->mysqli->query("INSERT INTO pedido VALUES(NULL, {$id_setor}, {$id_user}, '{$hoje}', '{$mes}', 0, {$prioridade}, 2, '{$total_pedido}', '{$obs}', {$pedido_contrato}, 0);") or exit("Ocorreu um erro ao inserir os dados iniciais do pedido.");
                 $pedido = $this->mysqli->insert_id;
                 $this->registraLog($pedido, 2);
             } else {
                 // atualizando pedido
-                $this->mysqli->query("UPDATE pedido SET data_pedido = '{$hoje}', ref_mes = {$mes}, alteracao = 0, prioridade = {$prioridade}, status = 2, valor = '{$total_pedido}', obs = '{$obs}', pedido_contrato = {$pedido_contrato} WHERE id = {$pedido};") or exit("Ocorreu um erro ao atualizar o pedido existente.");
+                $this->mysqli->query("UPDATE pedido SET data_pedido = '{$hoje}', ref_mes = {$mes}, alteracao = 0, prioridade = {$prioridade}, status = 2, valor = '{$total_pedido}', obs = '{$obs}', pedido_contrato = {$pedido_contrato}, aprov_gerencia = 0 WHERE id = {$pedido};") or exit("Ocorreu um erro ao atualizar o pedido existente.");
                 $this->registraLog($pedido, 2);
             }
             //remover resgistros antigos do pedido
@@ -816,15 +816,14 @@ class Geral extends Conexao {
         }
         // alterar o status do pedido
         $alteracao = 0;
-        if ($fase == 3 || $fase == 4) {
-            // somente se o pedido for reprovado ou aprovado
+        if ($fase == 2 || $fase == 3 || $fase == 4) {
             $total_pedido = number_format($total_pedido, 3, '.', '');
             $this->mysqli->query("UPDATE pedido SET valor = '{$total_pedido}' WHERE id = {$id_pedido};") or exit("Erro ao atualizar informações do pedido.");
             if ($fase == 3) {
                 // reprovado
                 $alteracao = 1;
                 $prioridade = 5;
-            } else {
+            } else if ($fase == 4) {
                 // aprovado
                 $this->mysqli->query("INSERT INTO saldos_lancamentos VALUES(NULL, {$id_setor}, '{$hoje}', '-{$total_pedido}', 4);") or exit("Erro ao inserir um lançamento de saldo");
                 // próxima fase
