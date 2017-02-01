@@ -38,11 +38,11 @@ class Geral extends Conexao {
         for ($i = 0; $i < $len; $i++) {
             $where .= 'id = ' . $pedidos[$i];
             if ($i < $len - 1) {
-                $where .= ' AND ';
+                $where .= ' OR ';
             }
         }
 
-        $this->mysqli->query('UPDATE pedido SET aprov_gerencia = 1 WHERE ' . $where) or exit('Erro ao atualizar pedidos: ' + $this->mysqli->error);
+        $this->mysqli->query('UPDATE pedido SET aprov_gerencia = 1 WHERE ' . $where) or exit('Erro ao atualizar pedidos: ' . $this->mysqli->error);
     }
 
     public function insertPedContr(int $id_pedido, int $id_tipo, string $siafi) {

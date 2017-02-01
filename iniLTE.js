@@ -769,10 +769,13 @@ function aprovGerencia() {
             admin: 1,
             form: 'aprovaGeren',
             pedidos: pedidos
-        }, function () {
+        }, function (resposta) {
+            console.log(resposta);
             iniSolicitacoes();
         });
     }
+    pedidosRelCustom = [];
+    checkImp();
 }
 
 function checkImp() {

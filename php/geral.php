@@ -53,7 +53,7 @@ if ($obj_Busca->isActive()) {
 
             case 'aprovaGeren':
                 $pedidos = filter_input(INPUT_POST, 'pedidos', FILTER_DEFAULT, FILTER_FORCE_ARRAY);
-                $obj_Geral->aprovaGerencia($pedidos);
+                echo $obj_Geral->aprovaGerencia($pedidos);
                 break;
             
             case 'altUser':
