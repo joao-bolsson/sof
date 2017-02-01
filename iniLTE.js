@@ -206,7 +206,26 @@ $(function () {
         }
     });
 
+    var id_e = 'checkPedRel';
+    var input = document.getElementById(id_e);
+    if (input !== null) {
+        $('#' + id_e).on('ifCreated', function () {
+            $('#' + id_e).iCheck('destroy');
+        });
+        $('#' + id_e).iCheck({
+            checkboxClass: 'icheckbox_flat-blue',
+            radioClass: 'iradio_flat-blue'
+        });
+        $('#' + id_e).on('ifChecked', function () {
+            selectAll(true)
+        });
+        $('#' + id_e).on('ifUnchecked', function () {
+            selectAll(false);
+        });
+    }
+
 });
+
 function cadEmpenho(id_pedido, empenho, data) {
     document.getElementById('id_pedido_emp').value = '';
     document.getElementById('empenho').value = '';
@@ -466,6 +485,9 @@ function iniDataTable(tabela) {
                 }
             }
         });
+        $(tabela).on('page.dt', function () {
+            selectAll(false);
+        }).DataTable();
         return;
     }
     $(tabela).DataTable({
@@ -836,6 +858,26 @@ function pushOrRemove(element) {
                 return;
             }
         }
+    }
+}
+
+function selectAll(flag) {
+    var state = 'uncheck';
+    if (flag) {
+        state = 'check';
+    }
+    $('#checkPedRel').iCheck(state);
+    var element = document.getElementById('tableSolicitacoes');
+    if (element == null) {
+        console.log("tableSolicitacoes doesn't exists");
+        return;
+    }
+    var rows = element.rows;
+    var len = rows.length;
+    for (var i = 0; i < len; i++) {
+        var id = rows[i].id;
+        id = id.replace("rowPedido", "checkPedRel");
+        $('#' + id).iCheck(state);
     }
 }
 

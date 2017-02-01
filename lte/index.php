@@ -413,7 +413,11 @@ $count = $obj_Busca->getCountSolic();
                                         <table id="tableSolicitacoes" class="table table-bordered table-striped">
                                             <thead>
                                                 <tr>
-                                                    <th></th>
+                                                    <th>
+                                                        <div class=form-group>
+                                                            <input type="checkbox" name="checkPedRel" id="checkPedRel" value="1">
+                                                        </div>
+                                                    </th>
                                                     <th>Opções</th>
                                                     <th>Pedido</th>
                                                     <th>Setor</th>
