@@ -36,6 +36,8 @@ $count = $obj_Busca->getCountSolic();
         <link rel="stylesheet" href="plugins/ionicons/css/ionicons.min.css">
         <!-- DataTables -->
         <link rel="stylesheet" href="plugins/datatables/dataTables.bootstrap.css">
+        <!-- Select2 -->
+        <link rel="stylesheet" href="plugins/select2/select2.min.css">
         <!-- iCheck for checkboxes and radio inputs -->
         <link rel="stylesheet" href="plugins/iCheck/all.css">
         <!-- Theme style -->
@@ -943,7 +945,7 @@ $count = $obj_Busca->getCountSolic();
                                     </div>
                                     <div class="form-group">
                                         <label>Status</label>
-                                        <select class="form-control" name="status" required>
+                                        <select class="form-control select2" multiple="multiple" data-placeholder="Selecione" name="status[]" required>
                                             <option value="0">Todos</option>
                                             <?= $obj_Busca->getOptionsStatus(); ?>
                                         </select>
@@ -1230,6 +1232,8 @@ $count = $obj_Busca->getCountSolic();
         <script src="plugins/datatables/dataTables.bootstrap.min.js"></script>
         <!-- SlimScroll -->
         <script src="plugins/slimScroll/jquery.slimscroll.min.js"></script>
+        <!-- Select2 -->
+        <script src="plugins/select2/select2.full.min.js"></script>
         <!-- FastClick -->
         <script src="plugins/fastclick/fastclick.js"></script>
         <!-- AdminLTE App -->

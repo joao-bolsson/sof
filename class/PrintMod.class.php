@@ -66,15 +66,15 @@ class PrintMod extends Conexao {
         $retorno .= PrintMod::getTableLicitacao($id_pedido);
         return $retorno;
     }
-    
+
     private function getUserName(int $id_user) {
         if (is_null($this->mysqli)) {
             $this->mysqli = parent::getConexao();
         }
-        
+
         $query = $this->mysqli->query("SELECT usuario.nome FROM usuario WHERE usuario.id = " . $id_user) or exit("Erro ao buscar o nome do usuario do pedido");
         $obj = $query->fetch_object();
-        
+
         $this->mysqli = NULL;
         return $obj->nome;
     }
@@ -505,13 +505,22 @@ class PrintMod extends Conexao {
      *
      * 	@return string Retorna a interface de um documento pdf.
      */
-    public function getRelatorioPedidos(int $id_setor, int $prioridade, int $status, string $dataI, string $dataF): string {
+    public function getRelatorioPedidos(int $id_setor, int $prioridade, array $status, string $dataI, string $dataF): string {
         $retorno = "";
-        $where_status = "AND pedido.status = " . $status;
+        $where_status = '';
         $where_prioridade = "AND pedido.prioridade = " . $prioridade;
         $where_setor = "AND pedido.id_setor = " . $id_setor;
-        if ($status == 0) {
-            $where_status = '';
+
+        if (!in_array(0, $status)) {
+            $len = count($status);
+            $where_status = "AND (";
+            for ($i = 0; $i < $len; $i++) {
+                $where_status .= "pedido.status = " . $status[$i];
+                if ($i < $len - 1) {
+                    $where_status .= " OR ";
+                }
+            }
+            $where_status .= ") ";
         }
         if ($prioridade == 0) {
             $where_prioridade = '';
