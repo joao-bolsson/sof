@@ -796,7 +796,7 @@ class BuscaLTE extends Conexao {
         if (is_null($this->mysqli)) {
             $this->mysqli = parent::getConexao();
         }
-        $query = $this->mysqli->query("SELECT solic_alt_pedido.id_pedido, DATE_FORMAT(solic_alt_pedido.data_solicitacao, '%d/%m/%Y') AS data_solicitacao, DATE_FORMAT(solic_alt_pedido.data_analise, '%d/%m/%Y') AS data_analise, solic_alt_pedido.justificativa, solic_alt_pedido.status FROM solic_alt_pedido WHERE solic_alt_pedido.id_setor = {$id_setor} ORDER BY id DESC;") or exit("Erro ao buscar solicitações de alteração de pedidos.");
+        $query = $this->mysqli->query("SELECT solic_alt_pedido.id_pedido, DATE_FORMAT(solic_alt_pedido.data_solicitacao, '%d/%m/%Y') AS data_solicitacao, DATE_FORMAT(solic_alt_pedido.data_analise, '%d/%m/%Y') AS data_analise, solic_alt_pedido.justificativa, solic_alt_pedido.status, pedido.id_usuario FROM solic_alt_pedido, pedido WHERE pedido.id = solic_alt_pedido.id_pedido AND solic_alt_pedido.id_setor = {$id_setor} ORDER BY solic_alt_pedido.id DESC;") or exit("Erro ao buscar solicitações de alteração de pedidos.");
         $status = $label = "";
         while ($solic = $query->fetch_object()) {
             switch ($solic->status) {
@@ -816,7 +816,8 @@ class BuscaLTE extends Conexao {
             }
             $solic->justificativa = $this->mysqli->real_escape_string($solic->justificativa);
             $solic->justificativa = str_replace("\"", "'", $solic->justificativa);
-            $retorno .= "
+            if ($solic->id_usuario == $_SESSION['id']) {
+                $retorno .= "
                 <tr>
                     <td>" . $solic->id_pedido . "</td>
                     <td>" . $solic->data_solicitacao . "</td>
@@ -826,6 +827,7 @@ class BuscaLTE extends Conexao {
                     </td>
                     <td><small class=\"label " . $label . "\">" . $status . "</small></td>
                 </tr>";
+            }
         }
         $this->mysqli = NULL;
         return $retorno;
@@ -970,11 +972,17 @@ class BuscaLTE extends Conexao {
         if (is_null($this->mysqli)) {
             $this->mysqli = parent::getConexao();
         }
-        $query = $this->mysqli->query("SELECT pedido.id, DATE_FORMAT(pedido.data_pedido, '%d/%m/%Y') AS data_pedido, mes.sigla_mes AS ref_mes, pedido.valor, status.nome AS status FROM pedido, mes, status WHERE pedido.id_setor = {$id_setor} AND pedido.alteracao = 1 AND mes.id = pedido.ref_mes AND status.id = pedido.status ORDER BY pedido.id DESC;") or exit("Erro ao buscar rascunhos do setor.");
+        $query = $this->mysqli->query("SELECT pedido.id, DATE_FORMAT(pedido.data_pedido, '%d/%m/%Y') AS data_pedido, mes.sigla_mes AS ref_mes, pedido.valor, status.nome AS status, pedido.id_usuario FROM pedido, mes, status WHERE pedido.id_setor = {$id_setor} AND pedido.alteracao = 1 AND mes.id = pedido.ref_mes AND status.id = pedido.status ORDER BY pedido.id DESC;") or exit("Erro ao buscar rascunhos do setor.");
         $this->mysqli = NULL;
 
         while ($rascunho = $query->fetch_object()) {
             $rascunho->valor = number_format($rascunho->valor, 3, ',', '.');
+            $btnEdit = '';
+            $btnDel = '';
+            if ($rascunho->id_usuario == $_SESSION['id']) {
+                $btnEdit = "<button type=\"button\" class=\"btn btn-default btn-sm\" onclick=\"editaPedido(" . $rascunho->id . ");\" title=\"Editar\"><i class=\"fa fa-pencil\"></i></button>";
+                $btnDel = "<button type=\"button\" class=\"btn btn-default btn-sm\" onclick=\"deletePedido(" . $rascunho->id . ");\" title=\"Excluir\"><i class=\"fa fa-trash\"></i></button>";
+            }
             $retorno .= "
                 <tr>
                     <td>" . $rascunho->id . "</td>
@@ -983,9 +991,9 @@ class BuscaLTE extends Conexao {
                     <td>" . $rascunho->data_pedido . "</td>
                     <td>R$ " . $rascunho->valor . "</td>
                     <td>
-                        <button type=\"button\" class=\"btn btn-default btn-sm\" onclick=\"editaPedido(" . $rascunho->id . ");\" title=\"Editar\"><i class=\"fa fa-pencil\"></i></button>
+                        " . $btnEdit . "
                         <button type=\"button\" class=\"btn btn-default btn-sm\" onclick=\"imprimir(" . $rascunho->id . ");\" title=\"Imprimir\"><i class=\"fa fa-print\"></i></button>
-                        <button type=\"button\" class=\"btn btn-default btn-sm\" onclick=\"deletePedido(" . $rascunho->id . ");\" title=\"Excluir\"><i class=\"fa fa-trash\"></i></button>
+                        " . $btnDel . "
                     </td>
                 </tr>";
         }
@@ -1068,7 +1076,7 @@ class BuscaLTE extends Conexao {
         if (is_null($this->mysqli)) {
             $this->mysqli = parent::getConexao();
         }
-        $query = $this->mysqli->query("SELECT pedido.id, DATE_FORMAT(pedido.data_pedido, '%d/%m/%Y') AS data_pedido, mes.sigla_mes AS ref_mes, prioridade.nome AS prioridade, status.nome AS status, pedido.valor FROM pedido, mes, prioridade, status WHERE prioridade.id = pedido.prioridade AND status.id = pedido.status AND pedido.id_setor = {$id_setor} AND pedido.alteracao = 0 AND mes.id = pedido.ref_mes ORDER BY pedido.id DESC;") or exit("Erro ao buscar os pedidos do setor.");
+        $query = $this->mysqli->query("SELECT pedido.id, DATE_FORMAT(pedido.data_pedido, '%d/%m/%Y') AS data_pedido, mes.sigla_mes AS ref_mes, prioridade.nome AS prioridade, status.nome AS status, pedido.valor, pedido.id_usuario FROM pedido, mes, prioridade, status WHERE prioridade.id = pedido.prioridade AND status.id = pedido.status AND pedido.id_setor = {$id_setor} AND pedido.alteracao = 0 AND mes.id = pedido.ref_mes ORDER BY pedido.id DESC;") or exit("Erro ao buscar os pedidos do setor.");
         $this->mysqli = NULL;
         while ($pedido = $query->fetch_object()) {
             $empenho = BuscaLTE::verEmpenho($pedido->id);
@@ -1077,7 +1085,7 @@ class BuscaLTE extends Conexao {
             }
             $pedido->valor = number_format($pedido->valor, 3, ',', '.');
             $btnSolicAlt = "";
-            if ($pedido->status == 'Em Analise' || $pedido->status == 'Aguarda Orcamento') {
+            if ($pedido->status == 'Em Analise' || $pedido->status == 'Aguarda Orcamento' && $pedido->id_usuario == $_SESSION['id']) {
                 $btnSolicAlt = "<button type=\"button\" class=\"btn btn-default btn-sm\" onclick=\"solicAltPed(" . $pedido->id . ");\" title=\"Solicitar Alteração\"><i class=\"fa fa-wrench\"></i></button>";
             }
             $retorno .= "
