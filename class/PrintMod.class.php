@@ -30,7 +30,7 @@ class PrintMod extends Conexao {
         if (is_null($this->mysqli)) {
             $this->mysqli = parent::getConexao();
         }
-        $query = $this->mysqli->query("SELECT pedido.id, DATE_FORMAT(pedido.data_pedido, '%d/%m/%Y') AS data_pedido, EXTRACT(YEAR FROM pedido.data_pedido) AS ano, mes.sigla_mes AS ref_mes, status.nome AS status, pedido.valor AS valor, pedido.obs, pedido.pedido_contrato, prioridade.nome AS prioridade, pedido.aprov_gerencia FROM prioridade, pedido, mes, status WHERE pedido.prioridade = prioridade.id AND status.id = pedido.status AND pedido.id = {$id_pedido} AND mes.id = pedido.ref_mes;") or exit("Erro ao formar o cabeçalho do pedido.");
+        $query = $this->mysqli->query("SELECT pedido.id, DATE_FORMAT(pedido.data_pedido, '%d/%m/%Y') AS data_pedido, EXTRACT(YEAR FROM pedido.data_pedido) AS ano, mes.sigla_mes AS ref_mes, status.nome AS status, pedido.valor AS valor, pedido.obs, pedido.pedido_contrato, prioridade.nome AS prioridade, pedido.aprov_gerencia, pedido.id_usuario FROM prioridade, pedido, mes, status WHERE pedido.prioridade = prioridade.id AND status.id = pedido.status AND pedido.id = {$id_pedido} AND mes.id = pedido.ref_mes;") or exit("Erro ao formar o cabeçalho do pedido.");
         $this->mysqli = NULL;
         $pedido = $query->fetch_object();
         $lblPedido = "Pedido";
@@ -49,6 +49,7 @@ class PrintMod extends Conexao {
                     </tr>
                 </table>
                 <p><b>Total do Pedido:</b> R$ " . $pedido->valor . "</p>
+                <p><b>Autor:</b> " . PrintMod::getUserName($pedido->id_usuario) . "</p>
                 <table style=\"font-size: 8pt; margin: 5px;\">
                     <tr>
                         <td style=\"text-align: left;\">" . PrintMod::getGrupoPedido($id_pedido) . "</td>
@@ -64,6 +65,18 @@ class PrintMod extends Conexao {
         $retorno .= PrintMod::getTableFontes($id_pedido);
         $retorno .= PrintMod::getTableLicitacao($id_pedido);
         return $retorno;
+    }
+    
+    private function getUserName(int $id_user) {
+        if (is_null($this->mysqli)) {
+            $this->mysqli = parent::getConexao();
+        }
+        
+        $query = $this->mysqli->query("SELECT usuario.nome FROM usuario WHERE usuario.id = " . $id_user) or exit("Erro ao buscar o nome do usuario do pedido");
+        $obj = $query->fetch_object();
+        
+        $this->mysqli = NULL;
+        return $obj->nome;
     }
 
     private function getTableLicitacao(int $id_pedido): string {

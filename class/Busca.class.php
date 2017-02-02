@@ -259,6 +259,7 @@ class Busca extends Conexao {
             $id_lancamento--;
         }
         $query_l = $this->mysqli->query("SELECT saldos_lancamentos.id_setor, setores.nome AS setor, saldos_lancamentos.valor FROM saldos_lancamentos, setores WHERE setores.id = saldos_lancamentos.id_setor AND saldos_lancamentos.id = " . $id_lancamento) or exit("Erro ao buscar nome do setor da transferência");
+        $this->mysqli = NULL;
 
         $lancamento = $query_l->fetch_object();
         return $lancamento->setor;
