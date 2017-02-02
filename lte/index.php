@@ -1176,6 +1176,7 @@ $count = $obj_Busca->getCountSolic();
                                             <th>Data</th>
                                             <th>Valor</th>
                                             <th>Categoria</th>
+                                            <th>Origem / Destino</th>
                                         </tr>
                                     </thead>
                                     <tbody id="tbodyListLancamentos"></tbody>

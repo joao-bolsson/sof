@@ -220,7 +220,7 @@ class Busca extends Conexao {
         if (is_null($this->mysqli)) {
             $this->mysqli = parent::getConexao();
         }
-        $query = $this->mysqli->query("SELECT setores.nome, DATE_FORMAT(saldos_lancamentos.data, '%d/%m/%Y') AS data, saldos_lancamentos.valor, saldo_categoria.nome AS categoria FROM setores, saldos_lancamentos, saldo_categoria WHERE setores.id = saldos_lancamentos.id_setor {$where} AND saldos_lancamentos.categoria = saldo_categoria.id ORDER BY saldos_lancamentos.id DESC;") or exit("Erro ao buscar informações dos lançamentos.");
+        $query = $this->mysqli->query("SELECT saldos_lancamentos.id, setores.nome, DATE_FORMAT(saldos_lancamentos.data, '%d/%m/%Y') AS data, saldos_lancamentos.valor, saldo_categoria.nome AS categoria, saldo_categoria.id AS id_categoria FROM setores, saldos_lancamentos, saldo_categoria WHERE setores.id = saldos_lancamentos.id_setor {$where} AND saldos_lancamentos.categoria = saldo_categoria.id ORDER BY saldos_lancamentos.id DESC;") or exit("Erro ao buscar informações dos lançamentos.");
         $this->mysqli = NULL;
         $cor = '';
         while ($lancamento = $query->fetch_object()) {
@@ -229,6 +229,11 @@ class Busca extends Conexao {
             } else {
                 $cor = 'green';
             }
+            $setor_transf = '';
+            if ($lancamento->id_categoria == 3) { // transferencia
+                $setor_transf = Busca::getSetorTransf($lancamento->id);
+            }
+
             $lancamento->valor = number_format($lancamento->valor, 3, ',', '.');
             $retorno .= "
                 <tr>
@@ -236,9 +241,27 @@ class Busca extends Conexao {
                     <td>" . $lancamento->data . "</td>
                     <td style=\"color: " . $cor . ";\">R$ " . $lancamento->valor . "</td>
                     <td>" . $lancamento->categoria . "</td>
+                    <td>" . $setor_transf . "</td>
                 </tr>";
         }
         return $retorno;
+    }
+
+    private function getSetorTransf(int $id_lancamento) {
+        if (is_null($this->mysqli)) {
+            $this->mysqli = parent::getConexao();
+        }
+        $query = $this->mysqli->query("SELECT saldos_lancamentos.id_setor, saldos_lancamentos.valor FROM saldos_lancamentos WHERE id = " . $id_lancamento) or exit("Erro ao buscar setor da transferência");
+        $obj = $query->fetch_object();
+        if ($obj->valor < 0) { // pega o destino
+            $id_lancamento++;
+        } else {
+            $id_lancamento--;
+        }
+        $query_l = $this->mysqli->query("SELECT saldos_lancamentos.id_setor, setores.nome AS setor, saldos_lancamentos.valor FROM saldos_lancamentos, setores WHERE setores.id = saldos_lancamentos.id_setor AND saldos_lancamentos.id = " . $id_lancamento) or exit("Erro ao buscar nome do setor da transferência");
+
+        $lancamento = $query_l->fetch_object();
+        return $lancamento->setor;
     }
 
     public function getTotalInOutSaldos(int $id_setor): string {

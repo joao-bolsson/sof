@@ -294,7 +294,7 @@ class BuscaLTE extends Conexao {
         if (is_null($this->mysqli)) {
             $this->mysqli = parent::getConexao();
         }
-        $query = $this->mysqli->query("SELECT setores.id, setores.nome FROM setores WHERE setores.id <> 1;") or exit("Erro ao buscar os setores cadastrados no sistema.");
+        $query = $this->mysqli->query("SELECT setores.id, setores.nome FROM setores WHERE setores.id <> 1 ORDER BY setores.nome ASC;") or exit("Erro ao buscar os setores cadastrados no sistema.");
         $this->mysqli = NULL;
         while ($setor = $query->fetch_object()) {
             $retorno .= "<option value=\"" . $setor->id . "\">" . $setor->nome . "</option>";
