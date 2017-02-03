@@ -1151,7 +1151,7 @@ $count = $obj_Busca->getCountSolic();
                         <div class="modal-content">
                             <div class="modal-header">
                                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                                <h4 class="modal-title" >Liberarações Orçamentárias</h4>
+                                <h4 class="modal-title" >Liberações Orçamentárias</h4>
                             </div>
                             <div class="modal-body">
                                 <div class="form-group form-group-label">
