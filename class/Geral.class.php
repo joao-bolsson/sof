@@ -25,6 +25,33 @@ class Geral extends Conexao {
         $this->obj_Busca = new Busca();
     }
 
+    /**
+     * Desfaz uma liberação orçamentária. Suporta apenas do tipo 'normal' até a v2.1.4.
+     * @param int $id_lancamento Id do lançamento.
+     */
+    public function undoFreeMoney(int $id_lancamento) {
+        if (is_null($this->mysqli)) {
+            $this->mysqli = parent::getConexao();
+        }
+        // seleciona os dados da liberação
+        $query = $this->mysqli->query("SELECT saldos_lancamentos.id_setor, saldos_lancamentos.valor, saldos_lancamentos.categoria, saldo_setor.saldo FROM saldos_lancamentos, saldo_setor WHERE saldo_setor.id_setor = saldos_lancamentos.id_setor AND saldos_lancamentos.id = " . $id_lancamento) or exit("Erro ao buscar os dados da liberação. " . $this->mysqli->error);
+
+        $obj = $query->fetch_object();
+        $novo_saldo = $obj->saldo;
+        if ($obj->categoria == 1 && $obj->valor > 0) { // normal
+            $novo_saldo -= $obj->valor;
+            if ($novo_saldo >= 0) {
+                // apaga registros
+                $this->mysqli->query("DELETE FROM saldos_lancamentos WHERE id = " . $id_lancamento);
+            }
+        }
+
+        if ($novo_saldo != $obj->saldo && $novo_saldo >= 0) {
+            $this->mysqli->query("UPDATE saldo_setor SET saldo = '" . $novo_saldo . "' WHERE id_setor = " . $obj->id_setor) or exit("Erro ao atualizar o saldo do setor.");
+        }
+        $this->mysqli = NULL;
+    }
+
     public function aprovaGerencia(array $pedidos) {
         if (empty($pedidos)) {
             return;
@@ -43,6 +70,7 @@ class Geral extends Conexao {
         }
 
         $this->mysqli->query('UPDATE pedido SET aprov_gerencia = 1 WHERE ' . $where) or exit('Erro ao atualizar pedidos: ' . $this->mysqli->error);
+        $this->mysqli  = NULL;
     }
 
     public function insertPedContr(int $id_pedido, int $id_tipo, string $siafi) {
