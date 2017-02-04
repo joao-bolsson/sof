@@ -190,11 +190,7 @@ $(function () {
         }
     });
 
-    userss = false;
     $('#listLancamentos').on('shown.bs.modal', function () {
-        if (!userss) {
-            return;
-        }
         if (!$.fn.DataTable.isDataTable('#tableListLancamentos')) {
             iniDataTable('#tableListLancamentos');
         }
@@ -1004,12 +1000,11 @@ function listLancamentos(id_setor) {
 
 function changeSetor(id_setor) {
     var setor;
-    if (id_setor != null) {
-        setor = id_setor;
-        userss = true;
+    var el = document.getElementById('selectSetor');
+    if (el !== null) {
+        setor = el.value;
     } else {
-        setor = document.getElementById('selectSetor').value;
-        userss = false;
+        setor = id_setor;
     }
     $.post('../php/buscaLTE.php', {
         users: 1,

@@ -1181,7 +1181,7 @@ class BuscaLTE extends Conexao {
         if (is_null($this->mysqli)) {
             $this->mysqli = parent::getConexao();
         }
-        $query = $this->mysqli->query("SELECT saldos_lancamentos.id, setores.nome, DATE_FORMAT(saldos_lancamentos.data, '%d/%m/%Y') AS data, saldos_lancamentos.valor, saldos_lancamentos.categoria AS id_categoria, saldo_categoria.nome AS categoria, saldo_categoria.id AS id_categoria FROM setores, saldos_lancamentos, saldo_categoria WHERE setores.id = saldos_lancamentos.id_setor {$where} AND saldos_lancamentos.categoria = saldo_categoria.id ORDER BY saldos_lancamentos.id DESC;") or exit("Erro ao buscar informações dos lançamentos.");
+        $query = $this->mysqli->query("SELECT saldos_lancamentos.id, setores.nome, DATE_FORMAT(saldos_lancamentos.data, '%d/%m/%Y') AS data, saldos_lancamentos.valor, saldo_categoria.nome AS categoria, saldo_categoria.id AS id_categoria FROM setores, saldos_lancamentos, saldo_categoria WHERE setores.id = saldos_lancamentos.id_setor {$where} AND saldos_lancamentos.categoria = saldo_categoria.id ORDER BY saldos_lancamentos.id DESC;") or exit("Erro ao buscar informações dos lançamentos.");
         $this->mysqli = NULL;
         $cor = '';
         while ($lancamento = $query->fetch_object()) {
