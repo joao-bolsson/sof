@@ -152,11 +152,6 @@ if (!is_null($admin) && isset($_SESSION['id_setor']) && ($_SESSION['id_setor'] =
             echo $obj_Busca->verEmpenho($id_pedido);
             break;
 
-        case 'listLancamentos':
-            $id_setor = filter_input(INPUT_POST, 'id_setor');
-            echo $obj_Busca->getLancamentos($id_setor);
-            break;
-
         case 'populaRascunho':
             $id_pedido = filter_input(INPUT_POST, 'id_pedido');
             $id_setor = $_SESSION['id_setor'];

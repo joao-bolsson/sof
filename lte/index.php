@@ -1184,6 +1184,7 @@ if (isset($_SESSION['editmode'])) {
                                 <table id="tableListLancamentos" class="table table-bordered table-striped">
                                     <thead>
                                         <tr>
+                                            <th></th>
                                             <th>Setor</th>
                                             <th>Data</th>
                                             <th>Valor</th>
@@ -1257,6 +1258,6 @@ if (isset($_SESSION['editmode'])) {
         <script src="plugins/input-mask/jquery.inputmask.date.extensions.js"></script>
         <script src="plugins/input-mask/jquery.inputmask.extensions.js"></script>
         <!-- page script -->
-        <script type="text/javascript" src="../iniLTE.min.js"></script>
+        <script type="text/javascript" src="../iniLTE.js"></script>
     </body>
 </html>

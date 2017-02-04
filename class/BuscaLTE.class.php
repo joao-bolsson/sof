@@ -1148,4 +1148,69 @@ class BuscaLTE extends Conexao {
         return $retorno;
     }
 
+    private function getSetorTransf(int $id_lancamento) {
+        if (is_null($this->mysqli)) {
+            $this->mysqli = parent::getConexao();
+        }
+        $query = $this->mysqli->query("SELECT saldos_lancamentos.id_setor, saldos_lancamentos.valor FROM saldos_lancamentos WHERE id = " . $id_lancamento) or exit("Erro ao buscar setor da transferência");
+        $obj = $query->fetch_object();
+        if ($obj->valor < 0) { // pega o destino
+            $id_lancamento++;
+        } else {
+            $id_lancamento--;
+        }
+        $query_l = $this->mysqli->query("SELECT saldos_lancamentos.id_setor, setores.nome AS setor, saldos_lancamentos.valor FROM saldos_lancamentos, setores WHERE setores.id = saldos_lancamentos.id_setor AND saldos_lancamentos.id = " . $id_lancamento) or exit("Erro ao buscar nome do setor da transferência");
+        $this->mysqli = NULL;
+
+        $lancamento = $query_l->fetch_object();
+        return $lancamento->setor;
+    }
+
+    /**
+     * 	Função que retorna a tabela com os lançamentos de saldos pelo SOF
+     *
+     * 	@param $id_setor id do setor
+     * 	@return string
+     */
+    public function getLancamentos(int $id_setor): string {
+        $retorno = "";
+        $where = "";
+        if ($id_setor != 0) {
+            $where = "AND saldos_lancamentos.id_setor = " . $id_setor;
+        }
+        if (is_null($this->mysqli)) {
+            $this->mysqli = parent::getConexao();
+        }
+        $query = $this->mysqli->query("SELECT saldos_lancamentos.id, setores.nome, DATE_FORMAT(saldos_lancamentos.data, '%d/%m/%Y') AS data, saldos_lancamentos.valor, saldo_categoria.nome AS categoria, saldo_categoria.id AS id_categoria FROM setores, saldos_lancamentos, saldo_categoria WHERE setores.id = saldos_lancamentos.id_setor {$where} AND saldos_lancamentos.categoria = saldo_categoria.id ORDER BY saldos_lancamentos.id DESC;") or exit("Erro ao buscar informações dos lançamentos.");
+        $this->mysqli = NULL;
+        $cor = '';
+        while ($lancamento = $query->fetch_object()) {
+            if ($lancamento->valor < 0) {
+                $cor = 'red';
+            } else {
+                $cor = 'green';
+            }
+            $setor_transf = '';
+            if ($lancamento->id_categoria == 3) { // transferencia
+                $setor_transf = BuscaLTE::getSetorTransf($lancamento->id);
+            }
+
+            $btn = '';
+            if ($_SESSION['id_setor'] == 2) {
+                $btn = "<button type=\"button\" data-toggle=\"tooltip\" title=\"Desfazer\" onclick=\"undoFreeMoney(".$lancamento->id.")\" class=\"btn btn-default\"><i class=\"fa fa-undo\"></i></button>";
+            }
+            $lancamento->valor = number_format($lancamento->valor, 3, ',', '.');
+            $retorno .= "
+                <tr>
+                    <td>" . $btn . "</td>
+                    <td>" . $lancamento->nome . "</td>
+                    <td>" . $lancamento->data . "</td>
+                    <td style=\"color: " . $cor . ";\">R$ " . $lancamento->valor . "</td>
+                    <td>" . $lancamento->categoria . "</td>
+                    <td>" . $setor_transf . "</td>
+                </tr>";
+        }
+        return $retorno;
+    }
+
 }

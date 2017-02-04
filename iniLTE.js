@@ -1011,7 +1011,7 @@ function changeSetor(id_setor) {
         setor = document.getElementById('selectSetor').value;
         userss = false;
     }
-    $.post('../php/busca.php', {
+    $.post('../php/buscaLTE.php', {
         users: 1,
         form: 'listLancamentos',
         id_setor: setor
@@ -1027,6 +1027,10 @@ function changeSetor(id_setor) {
     if (id_setor == null) {
         refreshDataSaldo(setor);
     }
+}
+
+function undoFreeMoney(id_lancamento) {
+    console.log("Undo free money: " + id_lancamento);
 }
 
 function refreshDataSaldo(id_setor) {
