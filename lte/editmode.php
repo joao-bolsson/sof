@@ -120,7 +120,6 @@ if (!isset($_SESSION['editmode'])) {
                                             <th></th>
                                             <th>Fornecedor</th>
                                             <th>Cod Reduzido</th>
-                                            <th>Qt Solicitada</th>
                                             <th>Complemento</th>
                                             <th style="display: none;"></th>
                                             <th>Vl Unitário</th>
