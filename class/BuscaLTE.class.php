@@ -1181,7 +1181,7 @@ class BuscaLTE extends Conexao {
         if (is_null($this->mysqli)) {
             $this->mysqli = parent::getConexao();
         }
-        $query = $this->mysqli->query("SELECT saldos_lancamentos.id, setores.nome, DATE_FORMAT(saldos_lancamentos.data, '%d/%m/%Y') AS data, saldos_lancamentos.valor, saldo_categoria.nome AS categoria, saldo_categoria.id AS id_categoria FROM setores, saldos_lancamentos, saldo_categoria WHERE setores.id = saldos_lancamentos.id_setor {$where} AND saldos_lancamentos.categoria = saldo_categoria.id ORDER BY saldos_lancamentos.id DESC;") or exit("Erro ao buscar informações dos lançamentos.");
+        $query = $this->mysqli->query("SELECT saldos_lancamentos.id, setores.nome, DATE_FORMAT(saldos_lancamentos.data, '%d/%m/%Y') AS data, saldos_lancamentos.valor, saldos_lancamentos.categoria AS id_categoria, saldo_categoria.nome AS categoria, saldo_categoria.id AS id_categoria FROM setores, saldos_lancamentos, saldo_categoria WHERE setores.id = saldos_lancamentos.id_setor {$where} AND saldos_lancamentos.categoria = saldo_categoria.id ORDER BY saldos_lancamentos.id DESC;") or exit("Erro ao buscar informações dos lançamentos.");
         $this->mysqli = NULL;
         $cor = '';
         while ($lancamento = $query->fetch_object()) {
@@ -1196,7 +1196,7 @@ class BuscaLTE extends Conexao {
             }
 
             $btn = '';
-            if ($_SESSION['id_setor'] == 2) {
+            if ($_SESSION['id_setor'] == 2 && ($lancamento->id_categoria == 1 || $lancamento->id_categoria == 2)) {
                 $btn = "<button type=\"button\" data-toggle=\"tooltip\" title=\"Desfazer\" onclick=\"undoFreeMoney(".$lancamento->id.")\" class=\"btn btn-default\"><i class=\"fa fa-undo\"></i></button>";
             }
             $lancamento->valor = number_format($lancamento->valor, 3, ',', '.');

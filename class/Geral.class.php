@@ -34,7 +34,7 @@ class Geral extends Conexao {
             $this->mysqli = parent::getConexao();
         }
         // seleciona os dados da liberação
-        $query = $this->mysqli->query("SELECT saldos_lancamentos.id_setor, saldos_lancamentos.valor, saldos_lancamentos.categoria, saldo_setor.saldo FROM saldos_lancamentos, saldo_setor WHERE saldo_setor.id_setor = saldos_lancamentos.id_setor AND saldos_lancamentos.id = " . $id_lancamento) or exit("Erro ao buscar os dados da liberação. " . $this->mysqli->error);
+        $query = $this->mysqli->query("SELECT saldos_lancamentos.id_setor, saldos_lancamentos.data, saldos_lancamentos.valor, saldos_lancamentos.categoria, saldo_setor.saldo FROM saldos_lancamentos, saldo_setor WHERE saldo_setor.id_setor = saldos_lancamentos.id_setor AND saldos_lancamentos.id = " . $id_lancamento) or exit("Erro ao buscar os dados da liberação. " . $this->mysqli->error);
 
         $obj = $query->fetch_object();
         $novo_saldo = $obj->saldo;
@@ -42,7 +42,14 @@ class Geral extends Conexao {
             $novo_saldo -= $obj->valor;
             if ($novo_saldo >= 0) {
                 // apaga registros
-                $this->mysqli->query("DELETE FROM saldos_lancamentos WHERE id = " . $id_lancamento);
+                $this->mysqli->query("DELETE FROM saldos_lancamentos WHERE id = " . $id_lancamento) or exit("Erro ao remover registros.");
+            }
+        } else if ($obj->categoria == 2 && $obj->valor > 0) { // adiantamento
+            $novo_saldo -= $obj->valor;
+            if ($novo_saldo >= 0) {
+                // apaga registros
+                $this->mysqli->query("DELETE FROM saldos_lancamentos WHERE id = " . $id_lancamento) or exit("Erro ao remover registros.");
+                $this->mysqli->query("UPDATE saldos_adiantados SET saldos_adiantados.status = 0 WHERE saldos_adiantados.id_setor = " . $obj->id_setor . " AND saldos_adiantados.valor_adiantado = '" . $obj->valor . "' AND saldos_adiantados.status = 1 AND saldos_adiantados.data_analise = '" . $obj->data . "' LIMIT 1;") or exit("Erro ao atualizar registros de saldo adiantado.");
             }
         }
 
@@ -70,7 +77,7 @@ class Geral extends Conexao {
         }
 
         $this->mysqli->query('UPDATE pedido SET aprov_gerencia = 1 WHERE ' . $where) or exit('Erro ao atualizar pedidos: ' . $this->mysqli->error);
-        $this->mysqli  = NULL;
+        $this->mysqli = NULL;
     }
 
     public function insertPedContr(int $id_pedido, int $id_tipo, string $siafi) {

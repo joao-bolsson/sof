@@ -403,10 +403,12 @@ $select_grupo = $obj_Busca->getOptionsGrupos($id_setor);
                             <table id="tableListLancamentos" class="table table-bordered table-striped">
                                 <thead>
                                     <tr>
+                                        <th></th>
                                         <th>Setor</th>
                                         <th>Data</th>
                                         <th>Valor</th>
                                         <th>Categoria</th>
+                                        <th>Origem / Destino</th>
                                     </tr>
                                 </thead>
                                 <tbody id="tbodyListLancamentos"></tbody>

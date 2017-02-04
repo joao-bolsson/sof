@@ -1030,7 +1030,6 @@ function changeSetor(id_setor) {
 }
 
 function undoFreeMoney(id_lancamento) {
-    alert("Essa opção suporta apenas liberações com a categoria 'normal'. A página será recarregada em seguida.");
     console.log("Undo free money: " + id_lancamento);
     $.post('../php/geral.php', {
         admin: 1,
