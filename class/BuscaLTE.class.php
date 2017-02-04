@@ -1196,7 +1196,7 @@ class BuscaLTE extends Conexao {
             }
 
             $btn = '';
-            if ($_SESSION['id_setor'] == 2 && ($lancamento->id_categoria == 1 || $lancamento->id_categoria == 2)) {
+            if ($_SESSION['id_setor'] == 2 && $lancamento->id_categoria != 4) {
                 $btn = "<button type=\"button\" data-toggle=\"tooltip\" title=\"Desfazer\" onclick=\"undoFreeMoney(".$lancamento->id.")\" class=\"btn btn-default\"><i class=\"fa fa-undo\"></i></button>";
             }
             $lancamento->valor = number_format($lancamento->valor, 3, ',', '.');

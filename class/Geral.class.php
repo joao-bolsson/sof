@@ -42,20 +42,85 @@ class Geral extends Conexao {
             $novo_saldo -= $obj->valor;
             if ($novo_saldo >= 0) {
                 // apaga registros
-                $this->mysqli->query("DELETE FROM saldos_lancamentos WHERE id = " . $id_lancamento) or exit("Erro ao remover registros.");
+                $this->mysqli->query("DELETE FROM saldos_lancamentos WHERE saldos_lancamentos.id = " . $id_lancamento) or exit("Erro ao remover registros.");
             }
         } else if ($obj->categoria == 2 && $obj->valor > 0) { // adiantamento
             $novo_saldo -= $obj->valor;
             if ($novo_saldo >= 0) {
                 // apaga registros
-                $this->mysqli->query("DELETE FROM saldos_lancamentos WHERE id = " . $id_lancamento) or exit("Erro ao remover registros.");
+                $this->mysqli->query("DELETE FROM saldos_lancamentos WHERE saldos_lancamentos.id = " . $id_lancamento) or exit("Erro ao remover registros.");
                 $this->mysqli->query("UPDATE saldos_adiantados SET saldos_adiantados.status = 0 WHERE saldos_adiantados.id_setor = " . $obj->id_setor . " AND saldos_adiantados.valor_adiantado = '" . $obj->valor . "' AND saldos_adiantados.status = 1 AND saldos_adiantados.data_analise = '" . $obj->data . "' LIMIT 1;") or exit("Erro ao atualizar registros de saldo adiantado.");
             }
+        } else if ($obj->categoria == 3) { // transferencia
+            Geral::undoTransf($id_lancamento);
         }
 
-        if ($novo_saldo != $obj->saldo && $novo_saldo >= 0) {
+        if ($novo_saldo != $obj->saldo && $novo_saldo >= 0 && $obj->categoria != 3) {
+            if (is_null($this->mysqli)) {
+                $this->mysqli = parent::getConexao();
+            }
             $this->mysqli->query("UPDATE saldo_setor SET saldo = '" . $novo_saldo . "' WHERE id_setor = " . $obj->id_setor) or exit("Erro ao atualizar o saldo do setor.");
         }
+        $this->mysqli = NULL;
+    }
+
+    private function undoTransf(int $id_lancamento) {
+        if (is_null($this->mysqli)) {
+            $this->mysqli = parent::getConexao();
+        }
+
+        // seleciona os dados da liberação
+        $query = $this->mysqli->query("SELECT saldos_lancamentos.id_setor, saldos_lancamentos.data, saldos_lancamentos.valor, saldos_lancamentos.categoria, saldo_setor.saldo FROM saldos_lancamentos, saldo_setor WHERE saldo_setor.id_setor = saldos_lancamentos.id_setor AND saldos_lancamentos.id = " . $id_lancamento) or exit("Erro ao buscar os dados da liberação. " . $this->mysqli->error);
+
+        $obj = $query->fetch_object();
+        $novo_saldo = $obj->saldo;
+
+        $id_ori = $id_dest = 0;
+        $valor = 0;
+        if ($obj->valor > 0) { // destino
+            $valor = $obj->valor;
+            $novo_saldo -= $obj->valor;
+            $this->mysqli->query("UPDATE saldo_setor SET saldo = '" . $novo_saldo . "' WHERE id_setor = " . $obj->id_setor) or exit("Erro ao atualizar o saldo do setor.");
+            $id_dest = $obj->id_setor;
+
+            // apaga registros
+            $this->mysqli->query("DELETE FROM saldos_lancamentos WHERE saldos_lancamentos.id = " . $id_lancamento) or exit("Erro ao remover registros.");
+
+            $id_lancamento--;
+
+            $query_tr = $this->mysqli->query("SELECT saldos_lancamentos.id_setor, saldos_lancamentos.data, saldos_lancamentos.valor, saldos_lancamentos.categoria, saldo_setor.saldo FROM saldos_lancamentos, saldo_setor WHERE saldo_setor.id_setor = saldos_lancamentos.id_setor AND saldos_lancamentos.id = " . $id_lancamento) or exit("Erro ao buscar os dados da liberação. " . $this->mysqli->error);
+            $obj = $query_tr->fetch_object();
+
+            $novo_saldo = $obj->saldo - $obj->valor;
+            $this->mysqli->query("UPDATE saldo_setor SET saldo = '" . $novo_saldo . "' WHERE id_setor = " . $obj->id_setor) or exit("Erro ao atualizar o saldo do setor.");
+            $id_ori = $obj->id_setor;
+
+            // apaga registros
+            $this->mysqli->query("DELETE FROM saldos_lancamentos WHERE saldos_lancamentos.id = " . $id_lancamento) or exit("Erro ao remover registros.");
+        } else if ($obj->valor < 0) { // origem
+            $novo_saldo -= $obj->valor;
+            $id_ori = $obj->id_setor;
+            $this->mysqli->query("UPDATE saldo_setor SET saldo = '" . $novo_saldo . "' WHERE id_setor = " . $obj->id_setor) or exit("Erro ao atualizar o saldo do setor.");
+            // apaga registros
+            $this->mysqli->query("DELETE FROM saldos_lancamentos WHERE saldos_lancamentos.id = " . $id_lancamento) or exit("Erro ao remover registros.");
+
+            $id_lancamento++;
+
+            $query_tr = $this->mysqli->query("SELECT saldos_lancamentos.id_setor, saldos_lancamentos.data, saldos_lancamentos.valor, saldos_lancamentos.categoria, saldo_setor.saldo FROM saldos_lancamentos, saldo_setor WHERE saldo_setor.id_setor = saldos_lancamentos.id_setor AND saldos_lancamentos.id = " . $id_lancamento) or exit("Erro ao buscar os dados da liberação. " . $this->mysqli->error);
+            $obj = $query_tr->fetch_object();
+            $id_dest = $obj->id_setor;
+            $novo_saldo = $obj->saldo - $obj->valor;
+
+            $this->mysqli->query("UPDATE saldo_setor SET saldo = '" . $novo_saldo . "' WHERE id_setor = " . $obj->id_setor) or exit("Erro ao atualizar o saldo do setor.");
+
+            // apaga registros
+            $this->mysqli->query("DELETE FROM saldos_lancamentos WHERE saldos_lancamentos.id = " . $id_lancamento) or exit("Erro ao remover registros.");
+        }
+
+        if ($id_ori != $id_dest) {
+            $this->mysqli->query("DELETE FROM saldos_transferidos WHERE saldos_transferidos.id_setor_ori = " . $id_ori . " AND saldos_transferidos.id_setor_dest = " . $id_dest . " AND saldos_transferidos.valor = '" . $valor . "' LIMIT 1;");
+        }
+
         $this->mysqli = NULL;
     }
 
