@@ -1800,4 +1800,5 @@ function submitEditItem() {
 
 function editInfoItem(id_item) {
     console.log('Edit: ' + id_item);
+    editaItem(id_item);
 }

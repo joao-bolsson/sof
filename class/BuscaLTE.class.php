@@ -898,10 +898,10 @@ class BuscaLTE extends Conexao {
             $item->complemento_item = str_replace("\"", "'", $item->complemento_item);
             $btn = $input_qtd = '';
             if (!isset($_SESSION['editmode'])) {
-                $btn = "<button type=\"button\" class=\"btn btn-default\" onclick=\"checkItemPedido(" . $item->id . ", '" . $item->vl_unitario . "', " . $item->qt_saldo . ")\" title=\"Adicionar\"><span class=\"fa fa-plus\"></span></button>";
+                $btn = "<button type=\"button\" class=\"btn btn-default\" onclick=\"checkItemPedido(" . $item->id . ", '" . $item->vl_unitario . "', " . $item->qt_saldo . ")\" data-toggle=\"tooltip\" title=\"Adicionar\"><span class=\"fa fa-plus\"></span></button>";
                 $input_qtd = "<td><input type=\"number\" id=\"qtd" . $item->id . "\" min=\"1\" max=\"" . $item->qt_saldo . "\"></td>";
             } else {
-                $btn = "<button type=\"button\" class=\"btn btn-default\" onclick=\"editInfoItem(" . $item->id . ")\" title=\"Editar Informações\"><span class=\"fa fa-pencil\"></span></button>";
+                $btn = "<button type=\"button\" class=\"btn btn-default\" onclick=\"editInfoItem(" . $item->id . ")\" data-toggle=\"tooltip\" title=\"Editar Informações\"><span class=\"fa fa-pencil\"></span></button>";
             }
             $retorno .= "
                 <tr>
@@ -910,7 +910,7 @@ class BuscaLTE extends Conexao {
                     <td>" . $item->cod_reduzido . "</td>
                     " . $input_qtd . "
                     <td>
-                        <button type=\"button\" onclick=\"viewCompl('" . $item->complemento_item . "');\" class=\"btn btn-default\" title=\"Mais Detalhes\"><span class=\"fa fa-eye\"></span></button>
+                        <button type=\"button\" onclick=\"viewCompl('" . $item->complemento_item . "');\" class=\"btn btn-default\" data-toggle=\"tooltip\" title=\"Mais Detalhes\"><span class=\"fa fa-eye\"></span></button>
                     </td>
                     <td style=\"display: none;\">" . $item->complemento_item . "</td>
                     <td>" . $item->vl_unitario . "</td>

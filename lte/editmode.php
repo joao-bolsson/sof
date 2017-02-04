@@ -153,6 +153,82 @@ if (!isset($_SESSION['editmode'])) {
                 </div>
                 <!-- /.container -->
             </footer>
+            <div class="modal fade" id="infoItem" role="dialog">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                            <h4 class="modal-title">Informações do Item</h4>
+                        </div>
+                        <form id="formEditItem" action="javascript:submitEditItem();" method="post">
+                            <input id="idItem" type="hidden" name="idItem" value="0"/>
+                            <div class="modal-body">
+                                <table class="table">
+                                    <tr>
+                                        <td colspan="3">
+                                            <div class="form-group">
+                                                <label>Complemento do Item</label>
+                                                <textarea class="form-control" id="compItem" name="complemento" required rows="5"></textarea>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <div class="form-group">
+                                                <label>Valor Unitário</label>
+                                                <input class="form-control" id="vlUnitario" name="vl_unitario" type="number" step="0.001" required>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div class="form-group">
+                                                <label>Quantidade Contrato</label>
+                                                <input class="form-control" id="qtContrato" name="qt_contrato" type="number" required>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div class="form-group">
+                                                <label>Valor Contrato</label>
+                                                <input class="form-control" id="vlContrato" name="vl_contrato" type="number" step="0.001" required>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <div class="form-group">
+                                                <label>Quantidade Utilizada</label>
+                                                <input class="form-control" id="qtUtilizada" name="qt_utilizada" type="number" required>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div class="form-group">
+                                                <label>Valor Utilizado</label>
+                                                <input class="form-control" id="vlUtilizado" name="vl_utilizado" type="number" step="0.001" required>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div class="form-group">
+                                                <label>Quantidade Saldo</label>
+                                                <input class="form-control" id="qtSaldo" name="qt_saldo" type="number" required>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="3">
+                                            <div class="form-group">
+                                                <label>Valor Saldo</label>
+                                                <input class="form-control" id="vlSaldo" name="vl_saldo" type="number" step="0.001" required>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>
+                            <div class="modal-footer">
+                                <button class="btn btn-primary" type="submit" style="width: 100%;"><i class="fa fa-refresh"></i>&nbsp;Atualizar</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
             <div aria-hidden="true" class="modal fade" id="listProcessos" role="dialog" tabindex="-1">
                 <div class="modal-dialog modal-lg">
                     <div class="modal-content">
