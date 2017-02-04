@@ -896,11 +896,15 @@ class BuscaLTE extends Conexao {
             //remove as aspas do complemento_item
             $item->complemento_item = $this->mysqli->real_escape_string($item->complemento_item);
             $item->complemento_item = str_replace("\"", "'", $item->complemento_item);
+            $btn = '';
+            if (!isset($_SESSION['editmode'])) {
+                $btn = "<button type=\"button\" class=\"btn btn-default\" onclick=\"checkItemPedido(" . $item->id . ", '" . $item->vl_unitario . "', " . $item->qt_saldo . ")\" title=\"Adicionar\"><span class=\"fa fa-plus\"></span></button>";
+            } else {
+                $btn = "<button type=\"button\" class=\"btn btn-default\" onclick=\"editInfoItem(".$item->id.")\" title=\"Editar Informações\"><span class=\"fa fa-pencil\"></span></button>";
+            }
             $retorno .= "
                 <tr>
-                    <td>
-                        <button type=\"button\" class=\"btn btn-default\" onclick=\"checkItemPedido(" . $item->id . ", '" . $item->vl_unitario . "', " . $item->qt_saldo . ")\" title=\"Adicionar\"><span class=\"fa fa-plus\"></span></button>
-                    </td>
+                    <td>" . $btn . "</td>
                     <td>" . $item->nome_fornecedor . "</td>
                     <td>" . $item->cod_reduzido . "</td>
                     <td><input type=\"number\" id=\"qtd" . $item->id . "\" min=\"1\" max=\"" . $item->qt_saldo . "\"></td>

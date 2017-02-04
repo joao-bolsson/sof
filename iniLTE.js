@@ -1797,3 +1797,7 @@ function submitEditItem() {
     limpaTela();
     iniSolicitacoes();
 }
+
+function editInfoItem(id_item) {
+    console.log('Edit: ' + id_item);
+}

@@ -19,6 +19,11 @@ $obj_Busca = new BuscaLTE();
 $permissao = $obj_Busca->getPermissoes($_SESSION["id"]);
 
 $count = $obj_Busca->getCountSolic();
+
+if (isset($_SESSION['editmode'])) {
+    unset($_SESSION['editmode']);
+}
+
 ?>
 <!DOCTYPE html>
 <html>
@@ -208,6 +213,11 @@ $count = $obj_Busca->getCountSolic();
                                 </ul>
                             </li>
                         <?php endif; ?>
+                        <li>
+                            <a href="editmode.php">
+                                <i class="fa fa-pencil"></i> <span>Editar Itens</span>
+                            </a>
+                        </li>
                         <?php if ($permissao->recepcao): ?>
                             <li>
                                 <a href="javascript:listProcessos('admin');">
