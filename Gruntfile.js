@@ -25,7 +25,7 @@ module.exports = function (grunt) {
                 },
                 src: './',
                 dest: './web/',
-                exclusions: ['./ini.js', './iniLTE.js', './node_modules/', './*.sql', '.gitignore', '.ftppass', 'package.json', 'Gruntfile.js', './*.md']
+                exclusions: ['./ini.js', './iniLTE.js', './node_modules', './*.sql', '.git', '.gitignore', '.ftppass', 'package.json', 'Gruntfile.js', './*.md']
             }
         }
 
