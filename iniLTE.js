@@ -190,11 +190,7 @@ $(function () {
         }
     });
 
-    userss = false;
     $('#listLancamentos').on('shown.bs.modal', function () {
-        if (!userss) {
-            return;
-        }
         if (!$.fn.DataTable.isDataTable('#tableListLancamentos')) {
             iniDataTable('#tableListLancamentos');
         }
@@ -206,7 +202,30 @@ $(function () {
         }
     });
 
+    var id_e = 'checkPedRel';
+    var input = document.getElementById(id_e);
+    if (input !== null) {
+        $('#' + id_e).on('ifCreated', function () {
+            $('#' + id_e).iCheck('destroy');
+        });
+        $('#' + id_e).iCheck({
+            checkboxClass: 'icheckbox_flat-blue',
+            radioClass: 'iradio_flat-blue'
+        });
+        $('#' + id_e).on('ifChecked', function () {
+            selectAll(true)
+        });
+        $('#' + id_e).on('ifUnchecked', function () {
+            selectAll(false);
+        });
+    }
+
+    $('#relPedidos').on('shown.bs.modal', function () {
+        $('.select2').select2();
+    });
+
 });
+
 function cadEmpenho(id_pedido, empenho, data) {
     document.getElementById('id_pedido_emp').value = '';
     document.getElementById('empenho').value = '';
@@ -466,6 +485,9 @@ function iniDataTable(tabela) {
                 }
             }
         });
+        $(tabela).on('page.dt', function () {
+            selectAll(false);
+        }).DataTable();
         return;
     }
     $(tabela).DataTable({
@@ -839,6 +861,26 @@ function pushOrRemove(element) {
     }
 }
 
+function selectAll(flag) {
+    var state = 'uncheck';
+    if (flag) {
+        state = 'check';
+    }
+    $('#checkPedRel').iCheck(state);
+    var element = document.getElementById('tableSolicitacoes');
+    if (element == null) {
+        console.log("tableSolicitacoes doesn't exists");
+        return;
+    }
+    var rows = element.rows;
+    var len = rows.length;
+    for (var i = 0; i < len; i++) {
+        var id = rows[i].id;
+        id = id.replace("rowPedido", "checkPedRel");
+        $('#' + id).iCheck(state);
+    }
+}
+
 function loadChecks() {
     var elements = document.getElementsByName('checkPedRel');
     var len = elements.length;
@@ -958,14 +1000,13 @@ function listLancamentos(id_setor) {
 
 function changeSetor(id_setor) {
     var setor;
-    if (id_setor != null) {
-        setor = id_setor;
-        userss = true;
+    var el = document.getElementById('selectSetor');
+    if (el !== null) {
+        setor = el.value;
     } else {
-        setor = document.getElementById('selectSetor').value;
-        userss = false;
+        setor = id_setor;
     }
-    $.post('../php/busca.php', {
+    $.post('../php/buscaLTE.php', {
         users: 1,
         form: 'listLancamentos',
         id_setor: setor
@@ -981,6 +1022,17 @@ function changeSetor(id_setor) {
     if (id_setor == null) {
         refreshDataSaldo(setor);
     }
+}
+
+function undoFreeMoney(id_lancamento) {
+    console.log("Undo free money: " + id_lancamento);
+    $.post('../php/geral.php', {
+        admin: 1,
+        form: 'undoFreeMoney',
+        id_lancamento: id_lancamento
+    }).done(function () {
+        location.reload();
+    });
 }
 
 function refreshDataSaldo(id_setor) {
@@ -1324,6 +1376,7 @@ function viewCompl(texto) {
 }
 
 function pesquisarProcesso(busca) {
+    console.log(busca);
     $('#listProcessos').modal('hide');
     $.post('../php/buscaLTE.php', {
         users: 1,
@@ -1333,7 +1386,7 @@ function pesquisarProcesso(busca) {
         $('#tableProcessos').DataTable().destroy();
         $('#conteudoProcesso').html(resposta);
         iniDataTable('#tableProcessos');
-        document.getElementById('numProc').innerHTML = "Processo: " + busca;
+        document.getElementById('numProc').innerHTML = busca;
         avisoSnack('Busca Realizada com Sucesso !');
     });
 }
@@ -1709,6 +1762,7 @@ function cancelaItem(id_item) {
 }
 
 function editaItem(id_item) {
+    console.log('Edit: ' + id_item);
     $('button').blur();
     $('#infoItem').modal();
     document.getElementById('idItem').value = id_item;
@@ -1726,11 +1780,14 @@ function editaItem(id_item) {
         document.getElementById('vlUtilizado').value = obj.vl_utilizado;
         document.getElementById('qtSaldo').value = obj.qt_saldo;
         document.getElementById('vlSaldo').value = obj.vl_saldo;
+        document.getElementById('codDespesa').value = obj.cod_despesa;
+        document.getElementById('codReduzido').value = obj.cod_reduzido;
+        document.getElementById('dtFim').value = obj.dt_fim;
     });
 }
 
 function submitEditItem() {
-    var fields = ['idItem', 'compItem', 'vlUnitario', 'qtContrato', 'vlContrato', 'qtUtilizada', 'vlUtilizado', 'qtSaldo', 'vlSaldo'];
+    var fields = ['idItem', 'compItem', 'vlUnitario', 'qtContrato', 'vlContrato', 'qtUtilizada', 'vlUtilizado', 'qtSaldo', 'vlSaldo', 'codDespesa', 'codReduzido', 'dtFim'];
     var dados = [];
     for (var i = 0; i < fields.length; i++) {
         dados[i] = document.getElementById(fields[i]).value;
@@ -1741,13 +1798,17 @@ function submitEditItem() {
         fields: fields,
         dados: dados
     }, function (resposta) {
-        if (resposta) {
-            alert('Informações salvas com sucesso!');
-        } else {
-            alert('Ocorreu um erro no servidor. Verifique suas informações e teste novamente, ou contate o administrador.');
+        if (resposta == 0) {
+            alert("Ocorreu um erro ao atualizar informações.");
         }
     });
     $('#infoItem').modal('hide');
-    limpaTela();
-    iniSolicitacoes();
+    var element = document.getElementById('editmode');
+    if (element !== null) {
+        var proc = document.getElementById('numProc').innerHTML;
+        pesquisarProcesso(proc);
+    } else {
+        limpaTela();
+        iniSolicitacoes();
+    }
 }

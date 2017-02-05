@@ -1,0 +1,17 @@
+{
+  "name": "sof",
+  "version": "2.1.3",
+  "title": "Setor de Orcamento e Financas",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/joao-bolsson/sof.git"
+  },
+  "license": "MIT",
+  "homepage": "http://www.sofhusm.net.br",
+  "private": true,
+  "devDependencies": {
+    "grunt": "^1.0.1",
+    "grunt-contrib-uglify": "^2.0.0",
+    "grunt-ftp-deploy": "^0.1.10"
+  }
+}

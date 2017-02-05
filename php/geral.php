@@ -51,11 +51,18 @@ if ($obj_Busca->isActive()) {
     if (!is_null($admin) && isset($_SESSION["id_setor"]) && ($_SESSION["id_setor"] == 2 || $_SESSION["id_setor"] == 12)) {
         switch ($form) {
 
+            case 'undoFreeMoney':
+                $id_lancamento = filter_input(INPUT_POST, 'id_lancamento');
+                if (!empty($id_lancamento)) {
+                    $obj_Geral->undoFreeMoney($id_lancamento);
+                }
+                break;
+
             case 'aprovaGeren':
                 $pedidos = filter_input(INPUT_POST, 'pedidos', FILTER_DEFAULT, FILTER_FORCE_ARRAY);
                 echo $obj_Geral->aprovaGerencia($pedidos);
                 break;
-            
+
             case 'altUser':
                 $user = filter_input(INPUT_POST, 'user');
                 if (!is_null($user)) {
@@ -163,7 +170,13 @@ if ($obj_Busca->isActive()) {
                 unset($fields);
                 unset($dados);
                 unset($array_dados);
-                echo $obj_Geral->editItem($obj_dados);
+                $success = $obj_Geral->editItem($obj_dados);
+                if ($success) {
+                    $obj_Geral->editItemFactory($obj_dados);
+                    echo 1;
+                } else {
+                    echo 0;
+                }
 
                 break;
             // comment.

@@ -81,6 +81,11 @@ if (!is_null($admin) && isset($_SESSION['id_setor']) && ($_SESSION['id_setor'] =
 } else if (!is_null($users) && isset($_SESSION['id_setor']) && $_SESSION['id_setor'] != 0) {
 
     switch ($form) {
+        case 'listLancamentos':
+            $id_setor = filter_input(INPUT_POST, 'id_setor');
+            echo $obj_Busca->getLancamentos($id_setor);
+            break;
+
         case 'listRascunhos':
             echo $obj_Busca->getRascunhos($_SESSION['id_setor']);
             break;

@@ -19,6 +19,10 @@ $obj_Busca = new BuscaLTE();
 $permissao = $obj_Busca->getPermissoes($_SESSION["id"]);
 
 $count = $obj_Busca->getCountSolic();
+
+if (isset($_SESSION['editmode'])) {
+    unset($_SESSION['editmode']);
+}
 ?>
 <!DOCTYPE html>
 <html>
@@ -36,6 +40,8 @@ $count = $obj_Busca->getCountSolic();
         <link rel="stylesheet" href="plugins/ionicons/css/ionicons.min.css">
         <!-- DataTables -->
         <link rel="stylesheet" href="plugins/datatables/dataTables.bootstrap.css">
+        <!-- Select2 -->
+        <link rel="stylesheet" href="plugins/select2/select2.min.css">
         <!-- iCheck for checkboxes and radio inputs -->
         <link rel="stylesheet" href="plugins/iCheck/all.css">
         <!-- Theme style -->
@@ -206,6 +212,11 @@ $count = $obj_Busca->getCountSolic();
                                 </ul>
                             </li>
                         <?php endif; ?>
+                        <li>
+                            <a href="editmode.php">
+                                <i class="fa fa-pencil"></i> <span>Editar Itens</span>
+                            </a>
+                        </li>
                         <?php if ($permissao->recepcao): ?>
                             <li>
                                 <a href="javascript:listProcessos('admin');">
@@ -413,7 +424,11 @@ $count = $obj_Busca->getCountSolic();
                                         <table id="tableSolicitacoes" class="table table-bordered table-striped">
                                             <thead>
                                                 <tr>
-                                                    <th></th>
+                                                    <th>
+                                                        <div class=form-group>
+                                                            <input type="checkbox" name="checkPedRel" id="checkPedRel" value="1">
+                                                        </div>
+                                                    </th>
                                                     <th>Opções</th>
                                                     <th>Pedido</th>
                                                     <th>Setor</th>
@@ -939,7 +954,7 @@ $count = $obj_Busca->getCountSolic();
                                     </div>
                                     <div class="form-group">
                                         <label>Status</label>
-                                        <select class="form-control" name="status" required>
+                                        <select class="form-control select2" multiple="multiple" data-placeholder="Selecione" name="status[]" required>
                                             <option value="0">Todos</option>
                                             <?= $obj_Busca->getOptionsStatus(); ?>
                                         </select>
@@ -1002,7 +1017,7 @@ $count = $obj_Busca->getCountSolic();
                                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                                 <h4 class="modal-title">Informações do Item</h4>
                             </div>
-                            <form id="formEditItem" action="javascript:submitEditItem();" method="post">
+                            <form action="javascript:submitEditItem();" method="post">
                                 <input id="idItem" type="hidden" name="idItem" value="0"/>
                                 <div class="modal-body">
                                     <table class="table">
@@ -1011,6 +1026,26 @@ $count = $obj_Busca->getCountSolic();
                                                 <div class="form-group">
                                                     <label>Complemento do Item</label>
                                                     <textarea class="form-control" id="compItem" name="complemento" required rows="5"></textarea>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <div class="form-group">
+                                                    <label>Código Despesa</label>
+                                                    <input class="form-control" id="codDespesa" name="cod_despesa" type="text" maxlength="15" required>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div class="form-group">
+                                                    <label>Código Reduzido</label>
+                                                    <input class="form-control" id="codReduzido" name="cod_reduzido" type="text" maxlength="20" required>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div class="form-group">
+                                                    <label>Data Fim</label>
+                                                    <input class="form-control" id="dtFim" name="dt_fim" type="text" maxlength="10" required>
                                                 </div>
                                             </td>
                                         </tr>
@@ -1145,7 +1180,7 @@ $count = $obj_Busca->getCountSolic();
                         <div class="modal-content">
                             <div class="modal-header">
                                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                                <h4 class="modal-title" >Liberarações Orçamentárias</h4>
+                                <h4 class="modal-title" >Liberações Orçamentárias</h4>
                             </div>
                             <div class="modal-body">
                                 <div class="form-group form-group-label">
@@ -1168,10 +1203,12 @@ $count = $obj_Busca->getCountSolic();
                                 <table id="tableListLancamentos" class="table table-bordered table-striped">
                                     <thead>
                                         <tr>
+                                            <th></th>
                                             <th>Setor</th>
                                             <th>Data</th>
                                             <th>Valor</th>
                                             <th>Categoria</th>
+                                            <th>Origem / Destino</th>
                                         </tr>
                                     </thead>
                                     <tbody id="tbodyListLancamentos"></tbody>
@@ -1225,6 +1262,8 @@ $count = $obj_Busca->getCountSolic();
         <script src="plugins/datatables/dataTables.bootstrap.min.js"></script>
         <!-- SlimScroll -->
         <script src="plugins/slimScroll/jquery.slimscroll.min.js"></script>
+        <!-- Select2 -->
+        <script src="plugins/select2/select2.full.min.js"></script>
         <!-- FastClick -->
         <script src="plugins/fastclick/fastclick.js"></script>
         <!-- AdminLTE App -->

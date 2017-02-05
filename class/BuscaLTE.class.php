@@ -294,7 +294,7 @@ class BuscaLTE extends Conexao {
         if (is_null($this->mysqli)) {
             $this->mysqli = parent::getConexao();
         }
-        $query = $this->mysqli->query("SELECT setores.id, setores.nome FROM setores WHERE setores.id <> 1;") or exit("Erro ao buscar os setores cadastrados no sistema.");
+        $query = $this->mysqli->query("SELECT setores.id, setores.nome FROM setores WHERE setores.id <> 1 ORDER BY setores.nome ASC;") or exit("Erro ao buscar os setores cadastrados no sistema.");
         $this->mysqli = NULL;
         while ($setor = $query->fetch_object()) {
             $retorno .= "<option value=\"" . $setor->id . "\">" . $setor->nome . "</option>";
@@ -796,7 +796,7 @@ class BuscaLTE extends Conexao {
         if (is_null($this->mysqli)) {
             $this->mysqli = parent::getConexao();
         }
-        $query = $this->mysqli->query("SELECT solic_alt_pedido.id_pedido, DATE_FORMAT(solic_alt_pedido.data_solicitacao, '%d/%m/%Y') AS data_solicitacao, DATE_FORMAT(solic_alt_pedido.data_analise, '%d/%m/%Y') AS data_analise, solic_alt_pedido.justificativa, solic_alt_pedido.status FROM solic_alt_pedido WHERE solic_alt_pedido.id_setor = {$id_setor} ORDER BY id DESC;") or exit("Erro ao buscar solicitações de alteração de pedidos.");
+        $query = $this->mysqli->query("SELECT solic_alt_pedido.id_pedido, DATE_FORMAT(solic_alt_pedido.data_solicitacao, '%d/%m/%Y') AS data_solicitacao, DATE_FORMAT(solic_alt_pedido.data_analise, '%d/%m/%Y') AS data_analise, solic_alt_pedido.justificativa, solic_alt_pedido.status, pedido.id_usuario FROM solic_alt_pedido, pedido WHERE pedido.id = solic_alt_pedido.id_pedido AND solic_alt_pedido.id_setor = {$id_setor} ORDER BY solic_alt_pedido.id DESC;") or exit("Erro ao buscar solicitações de alteração de pedidos.");
         $status = $label = "";
         while ($solic = $query->fetch_object()) {
             switch ($solic->status) {
@@ -816,7 +816,8 @@ class BuscaLTE extends Conexao {
             }
             $solic->justificativa = $this->mysqli->real_escape_string($solic->justificativa);
             $solic->justificativa = str_replace("\"", "'", $solic->justificativa);
-            $retorno .= "
+            if ($solic->id_usuario == $_SESSION['id']) {
+                $retorno .= "
                 <tr>
                     <td>" . $solic->id_pedido . "</td>
                     <td>" . $solic->data_solicitacao . "</td>
@@ -826,6 +827,7 @@ class BuscaLTE extends Conexao {
                     </td>
                     <td><small class=\"label " . $label . "\">" . $status . "</small></td>
                 </tr>";
+            }
         }
         $this->mysqli = NULL;
         return $retorno;
@@ -894,16 +896,21 @@ class BuscaLTE extends Conexao {
             //remove as aspas do complemento_item
             $item->complemento_item = $this->mysqli->real_escape_string($item->complemento_item);
             $item->complemento_item = str_replace("\"", "'", $item->complemento_item);
+            $btn = $input_qtd = '';
+            if (!isset($_SESSION['editmode'])) {
+                $btn = "<button type=\"button\" class=\"btn btn-default\" onclick=\"checkItemPedido(" . $item->id . ", '" . $item->vl_unitario . "', " . $item->qt_saldo . ")\" data-toggle=\"tooltip\" title=\"Adicionar\"><span class=\"fa fa-plus\"></span></button>";
+                $input_qtd = "<td><input type=\"number\" id=\"qtd" . $item->id . "\" min=\"1\" max=\"" . $item->qt_saldo . "\"></td>";
+            } else {
+                $btn = "<button type=\"button\" class=\"btn btn-default\" onclick=\"editaItem(" . $item->id . ")\" data-toggle=\"tooltip\" title=\"Editar Informações\"><span class=\"fa fa-pencil\"></span></button>";
+            }
             $retorno .= "
                 <tr>
-                    <td>
-                        <button type=\"button\" class=\"btn btn-default\" onclick=\"checkItemPedido(" . $item->id . ", '" . $item->vl_unitario . "', " . $item->qt_saldo . ")\" title=\"Adicionar\"><span class=\"fa fa-plus\"></span></button>
-                    </td>
+                    <td>" . $btn . "</td>
                     <td>" . $item->nome_fornecedor . "</td>
                     <td>" . $item->cod_reduzido . "</td>
-                    <td><input type=\"number\" id=\"qtd" . $item->id . "\" min=\"1\" max=\"" . $item->qt_saldo . "\"></td>
+                    " . $input_qtd . "
                     <td>
-                        <button type=\"button\" onclick=\"viewCompl('" . $item->complemento_item . "');\" class=\"btn btn-default\" title=\"Mais Detalhes\"><span class=\"fa fa-eye\"></span></button>
+                        <button type=\"button\" onclick=\"viewCompl('" . $item->complemento_item . "');\" class=\"btn btn-default\" data-toggle=\"tooltip\" title=\"Mais Detalhes\"><span class=\"fa fa-eye\"></span></button>
                     </td>
                     <td style=\"display: none;\">" . $item->complemento_item . "</td>
                     <td>" . $item->vl_unitario . "</td>
@@ -970,11 +977,17 @@ class BuscaLTE extends Conexao {
         if (is_null($this->mysqli)) {
             $this->mysqli = parent::getConexao();
         }
-        $query = $this->mysqli->query("SELECT pedido.id, DATE_FORMAT(pedido.data_pedido, '%d/%m/%Y') AS data_pedido, mes.sigla_mes AS ref_mes, pedido.valor, status.nome AS status FROM pedido, mes, status WHERE pedido.id_setor = {$id_setor} AND pedido.alteracao = 1 AND mes.id = pedido.ref_mes AND status.id = pedido.status ORDER BY pedido.id DESC;") or exit("Erro ao buscar rascunhos do setor.");
+        $query = $this->mysqli->query("SELECT pedido.id, DATE_FORMAT(pedido.data_pedido, '%d/%m/%Y') AS data_pedido, mes.sigla_mes AS ref_mes, pedido.valor, status.nome AS status, pedido.id_usuario FROM pedido, mes, status WHERE pedido.id_setor = {$id_setor} AND pedido.alteracao = 1 AND mes.id = pedido.ref_mes AND status.id = pedido.status ORDER BY pedido.id DESC;") or exit("Erro ao buscar rascunhos do setor.");
         $this->mysqli = NULL;
 
         while ($rascunho = $query->fetch_object()) {
             $rascunho->valor = number_format($rascunho->valor, 3, ',', '.');
+            $btnEdit = '';
+            $btnDel = '';
+            if ($rascunho->id_usuario == $_SESSION['id']) {
+                $btnEdit = "<button type=\"button\" class=\"btn btn-default btn-sm\" onclick=\"editaPedido(" . $rascunho->id . ");\" title=\"Editar\"><i class=\"fa fa-pencil\"></i></button>";
+                $btnDel = "<button type=\"button\" class=\"btn btn-default btn-sm\" onclick=\"deletePedido(" . $rascunho->id . ");\" title=\"Excluir\"><i class=\"fa fa-trash\"></i></button>";
+            }
             $retorno .= "
                 <tr>
                     <td>" . $rascunho->id . "</td>
@@ -983,9 +996,9 @@ class BuscaLTE extends Conexao {
                     <td>" . $rascunho->data_pedido . "</td>
                     <td>R$ " . $rascunho->valor . "</td>
                     <td>
-                        <button type=\"button\" class=\"btn btn-default btn-sm\" onclick=\"editaPedido(" . $rascunho->id . ");\" title=\"Editar\"><i class=\"fa fa-pencil\"></i></button>
+                        " . $btnEdit . "
                         <button type=\"button\" class=\"btn btn-default btn-sm\" onclick=\"imprimir(" . $rascunho->id . ");\" title=\"Imprimir\"><i class=\"fa fa-print\"></i></button>
-                        <button type=\"button\" class=\"btn btn-default btn-sm\" onclick=\"deletePedido(" . $rascunho->id . ");\" title=\"Excluir\"><i class=\"fa fa-trash\"></i></button>
+                        " . $btnDel . "
                     </td>
                 </tr>";
         }
@@ -1068,7 +1081,7 @@ class BuscaLTE extends Conexao {
         if (is_null($this->mysqli)) {
             $this->mysqli = parent::getConexao();
         }
-        $query = $this->mysqli->query("SELECT pedido.id, DATE_FORMAT(pedido.data_pedido, '%d/%m/%Y') AS data_pedido, mes.sigla_mes AS ref_mes, prioridade.nome AS prioridade, status.nome AS status, pedido.valor FROM pedido, mes, prioridade, status WHERE prioridade.id = pedido.prioridade AND status.id = pedido.status AND pedido.id_setor = {$id_setor} AND pedido.alteracao = 0 AND mes.id = pedido.ref_mes ORDER BY pedido.id DESC;") or exit("Erro ao buscar os pedidos do setor.");
+        $query = $this->mysqli->query("SELECT pedido.id, DATE_FORMAT(pedido.data_pedido, '%d/%m/%Y') AS data_pedido, mes.sigla_mes AS ref_mes, prioridade.nome AS prioridade, status.nome AS status, pedido.valor, pedido.id_usuario FROM pedido, mes, prioridade, status WHERE prioridade.id = pedido.prioridade AND status.id = pedido.status AND pedido.id_setor = {$id_setor} AND pedido.alteracao = 0 AND mes.id = pedido.ref_mes ORDER BY pedido.id DESC;") or exit("Erro ao buscar os pedidos do setor.");
         $this->mysqli = NULL;
         while ($pedido = $query->fetch_object()) {
             $empenho = BuscaLTE::verEmpenho($pedido->id);
@@ -1077,7 +1090,7 @@ class BuscaLTE extends Conexao {
             }
             $pedido->valor = number_format($pedido->valor, 3, ',', '.');
             $btnSolicAlt = "";
-            if ($pedido->status == 'Em Analise' || $pedido->status == 'Aguarda Orcamento') {
+            if ($pedido->status == 'Em Analise' || $pedido->status == 'Aguarda Orcamento' && $pedido->id_usuario == $_SESSION['id']) {
                 $btnSolicAlt = "<button type=\"button\" class=\"btn btn-default btn-sm\" onclick=\"solicAltPed(" . $pedido->id . ");\" title=\"Solicitar Alteração\"><i class=\"fa fa-wrench\"></i></button>";
             }
             $retorno .= "
@@ -1130,6 +1143,71 @@ class BuscaLTE extends Conexao {
                     <td>
                         <button type=\"button\" title=\"" . $title . "\" onclick=\"" . $onclick . "('" . $processo->num_processo . "', 0)\" class=\"btn btn-primary\"><i class=\"fa " . $icon . "\"></i> " . $act . "</button>
                     </td>
+                </tr>";
+        }
+        return $retorno;
+    }
+
+    private function getSetorTransf(int $id_lancamento) {
+        if (is_null($this->mysqli)) {
+            $this->mysqli = parent::getConexao();
+        }
+        $query = $this->mysqli->query("SELECT saldos_lancamentos.id_setor, saldos_lancamentos.valor FROM saldos_lancamentos WHERE id = " . $id_lancamento) or exit("Erro ao buscar setor da transferência");
+        $obj = $query->fetch_object();
+        if ($obj->valor < 0) { // pega o destino
+            $id_lancamento++;
+        } else {
+            $id_lancamento--;
+        }
+        $query_l = $this->mysqli->query("SELECT saldos_lancamentos.id_setor, setores.nome AS setor, saldos_lancamentos.valor FROM saldos_lancamentos, setores WHERE setores.id = saldos_lancamentos.id_setor AND saldos_lancamentos.id = " . $id_lancamento) or exit("Erro ao buscar nome do setor da transferência");
+        $this->mysqli = NULL;
+
+        $lancamento = $query_l->fetch_object();
+        return $lancamento->setor;
+    }
+
+    /**
+     * 	Função que retorna a tabela com os lançamentos de saldos pelo SOF
+     *
+     * 	@param $id_setor id do setor
+     * 	@return string
+     */
+    public function getLancamentos(int $id_setor): string {
+        $retorno = "";
+        $where = "";
+        if ($id_setor != 0) {
+            $where = "AND saldos_lancamentos.id_setor = " . $id_setor;
+        }
+        if (is_null($this->mysqli)) {
+            $this->mysqli = parent::getConexao();
+        }
+        $query = $this->mysqli->query("SELECT saldos_lancamentos.id, setores.nome, DATE_FORMAT(saldos_lancamentos.data, '%d/%m/%Y') AS data, saldos_lancamentos.valor, saldo_categoria.nome AS categoria, saldo_categoria.id AS id_categoria FROM setores, saldos_lancamentos, saldo_categoria WHERE setores.id = saldos_lancamentos.id_setor {$where} AND saldos_lancamentos.categoria = saldo_categoria.id ORDER BY saldos_lancamentos.id DESC;") or exit("Erro ao buscar informações dos lançamentos.");
+        $this->mysqli = NULL;
+        $cor = '';
+        while ($lancamento = $query->fetch_object()) {
+            if ($lancamento->valor < 0) {
+                $cor = 'red';
+            } else {
+                $cor = 'green';
+            }
+            $setor_transf = '';
+            if ($lancamento->id_categoria == 3) { // transferencia
+                $setor_transf = BuscaLTE::getSetorTransf($lancamento->id);
+            }
+
+            $btn = '';
+            if ($_SESSION['id_setor'] == 2 && $lancamento->id_categoria != 4) {
+                $btn = "<button type=\"button\" data-toggle=\"tooltip\" title=\"Desfazer\" onclick=\"undoFreeMoney(".$lancamento->id.")\" class=\"btn btn-default\"><i class=\"fa fa-undo\"></i></button>";
+            }
+            $lancamento->valor = number_format($lancamento->valor, 3, ',', '.');
+            $retorno .= "
+                <tr>
+                    <td>" . $btn . "</td>
+                    <td>" . $lancamento->nome . "</td>
+                    <td>" . $lancamento->data . "</td>
+                    <td style=\"color: " . $cor . ";\">R$ " . $lancamento->valor . "</td>
+                    <td>" . $lancamento->categoria . "</td>
+                    <td>" . $setor_transf . "</td>
                 </tr>";
         }
         return $retorno;

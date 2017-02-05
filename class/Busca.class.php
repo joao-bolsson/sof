@@ -177,7 +177,7 @@ class Busca extends Conexao {
         if (is_null($this->mysqli)) {
             $this->mysqli = parent::getConexao();
         }
-        $query = $this->mysqli->query("SELECT itens.complemento_item, replace(itens.vl_unitario, ',', '.') AS vl_unitario, itens.qt_contrato, replace(itens.vl_contrato, ',', '.') AS vl_contrato, itens.qt_utilizado, replace(itens.vl_utilizado, ',', '.') AS vl_utilizado, itens.qt_saldo, replace(itens.vl_saldo, ',', '.') AS vl_saldo FROM itens WHERE itens.id = {$id_item};") or exit("Erro ao buscar informações do item.");
+        $query = $this->mysqli->query("SELECT itens.cod_despesa, itens.cod_reduzido, itens.dt_fim, itens.complemento_item, replace(itens.vl_unitario, ',', '.') AS vl_unitario, itens.qt_contrato, replace(itens.vl_contrato, ',', '.') AS vl_contrato, itens.qt_utilizado, replace(itens.vl_utilizado, ',', '.') AS vl_utilizado, itens.qt_saldo, replace(itens.vl_saldo, ',', '.') AS vl_saldo FROM itens WHERE itens.id = {$id_item};") or exit("Erro ao buscar informações do item.");
         $this->mysqli = NULL;
         $obj = $query->fetch_object();
         return json_encode($obj);
@@ -205,44 +205,7 @@ class Busca extends Conexao {
         return $retorno;
     }
 
-    /**
-     * 	Função que retorna a tabela com os lançamentos de saldos pelo SOF
-     *
-     * 	@param $id_setor id do setor
-     * 	@return string
-     */
-    public function getLancamentos(int $id_setor): string {
-        $retorno = "";
-        $where = "";
-        if ($id_setor != 0) {
-            $where = "AND saldos_lancamentos.id_setor = " . $id_setor;
-        }
-        if (is_null($this->mysqli)) {
-            $this->mysqli = parent::getConexao();
-        }
-        $query = $this->mysqli->query("SELECT setores.nome, DATE_FORMAT(saldos_lancamentos.data, '%d/%m/%Y') AS data, saldos_lancamentos.valor, saldo_categoria.nome AS categoria FROM setores, saldos_lancamentos, saldo_categoria WHERE setores.id = saldos_lancamentos.id_setor {$where} AND saldos_lancamentos.categoria = saldo_categoria.id ORDER BY saldos_lancamentos.id DESC;") or exit("Erro ao buscar informações dos lançamentos.");
-        $this->mysqli = NULL;
-        $cor = '';
-        while ($lancamento = $query->fetch_object()) {
-            if ($lancamento->valor < 0) {
-                $cor = 'red';
-            } else {
-                $cor = 'green';
-            }
-            $lancamento->valor = number_format($lancamento->valor, 3, ',', '.');
-            $retorno .= "
-                <tr>
-                    <td>" . $lancamento->nome . "</td>
-                    <td>" . $lancamento->data . "</td>
-                    <td style=\"color: " . $cor . ";\">R$ " . $lancamento->valor . "</td>
-                    <td>" . $lancamento->categoria . "</td>
-                </tr>";
-        }
-        return $retorno;
-    }
-
     public function getTotalInOutSaldos(int $id_setor): string {
-        $entrada = $saida = 0;
         $where = "";
         if ($id_setor != 0) {
             $where = "AND saldos_lancamentos.id_setor = " . $id_setor;
@@ -250,19 +213,15 @@ class Busca extends Conexao {
         if (is_null($this->mysqli)) {
             $this->mysqli = parent::getConexao();
         }
-        $query = $this->mysqli->query("SELECT saldos_lancamentos.valor FROM setores, saldos_lancamentos WHERE setores.id = saldos_lancamentos.id_setor {$where};") or exit("Erro ao buscar informações dos totais de entrada e saída do setor.");
+        $query_in = $this->mysqli->query("SELECT sum(saldos_lancamentos.valor) soma FROM saldos_lancamentos WHERE saldos_lancamentos.valor > 0 {$where};") or exit("Erro ao buscar informações dos totais de entrada e saída do setor.");
+        $query_out = $this->mysqli->query("SELECT sum(saldos_lancamentos.valor) soma FROM saldos_lancamentos WHERE saldos_lancamentos.valor < 0 {$where};") or exit("Erro ao buscar informações dos totais de entrada e saída do setor.");
         $this->mysqli = NULL;
-        while ($lancamento = $query->fetch_object()) {
-            if ($lancamento->valor < 0) {
-                $saida -= $lancamento->valor;
-            } else {
-                $entrada += $lancamento->valor;
-            }
-        }
-        $entrada = number_format($entrada, 3, ',', '.');
-        $saida = number_format($saida, 3, ',', '.');
-        $array = array('entrada' => "Total de Entradas: R$ " . $entrada,
-            'saida' => "Total de Saídas: R$ " . $saida);
+
+        $obj_in = $query_in->fetch_object();
+        $obj_out = $query_out->fetch_object();
+
+        $array = array('entrada' => "Total de Entradas: R$ " . number_format($obj_in->soma, 3, ',', '.'),
+            'saida' => "Total de Saídas: R$ " . number_format($obj_out->soma, 3, ',', '.'));
 
         return json_encode($array);
     }

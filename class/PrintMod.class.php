@@ -30,13 +30,14 @@ class PrintMod extends Conexao {
         if (is_null($this->mysqli)) {
             $this->mysqli = parent::getConexao();
         }
-        $query = $this->mysqli->query("SELECT pedido.id, DATE_FORMAT(pedido.data_pedido, '%d/%m/%Y') AS data_pedido, EXTRACT(YEAR FROM pedido.data_pedido) AS ano, mes.sigla_mes AS ref_mes, status.nome AS status, replace(pedido.valor, '.', ',') AS valor, pedido.obs, pedido.pedido_contrato, prioridade.nome AS prioridade, pedido.aprov_gerencia FROM prioridade, pedido, mes, status WHERE pedido.prioridade = prioridade.id AND status.id = pedido.status AND pedido.id = {$id_pedido} AND mes.id = pedido.ref_mes;") or exit("Erro ao formar o cabeçalho do pedido.");
+        $query = $this->mysqli->query("SELECT pedido.id, DATE_FORMAT(pedido.data_pedido, '%d/%m/%Y') AS data_pedido, EXTRACT(YEAR FROM pedido.data_pedido) AS ano, mes.sigla_mes AS ref_mes, status.nome AS status, pedido.valor AS valor, pedido.obs, pedido.pedido_contrato, prioridade.nome AS prioridade, pedido.aprov_gerencia, pedido.id_usuario FROM prioridade, pedido, mes, status WHERE pedido.prioridade = prioridade.id AND status.id = pedido.status AND pedido.id = {$id_pedido} AND mes.id = pedido.ref_mes;") or exit("Erro ao formar o cabeçalho do pedido.");
         $this->mysqli = NULL;
         $pedido = $query->fetch_object();
         $lblPedido = "Pedido";
         if ($pedido->pedido_contrato) {
             $lblPedido = "Pedido de Contrato";
         }
+        $pedido->valor = number_format($pedido->valor, 3, ',', '.');
         $retorno = "
             <fieldset>
                 <table style=\"font-size: 8pt; margin: 5px;\">
@@ -48,6 +49,7 @@ class PrintMod extends Conexao {
                     </tr>
                 </table>
                 <p><b>Total do Pedido:</b> R$ " . $pedido->valor . "</p>
+                <p><b>Autor:</b> " . PrintMod::getUserName($pedido->id_usuario) . "</p>
                 <table style=\"font-size: 8pt; margin: 5px;\">
                     <tr>
                         <td style=\"text-align: left;\">" . PrintMod::getGrupoPedido($id_pedido) . "</td>
@@ -63,6 +65,18 @@ class PrintMod extends Conexao {
         $retorno .= PrintMod::getTableFontes($id_pedido);
         $retorno .= PrintMod::getTableLicitacao($id_pedido);
         return $retorno;
+    }
+
+    private function getUserName(int $id_user) {
+        if (is_null($this->mysqli)) {
+            $this->mysqli = parent::getConexao();
+        }
+
+        $query = $this->mysqli->query("SELECT usuario.nome FROM usuario WHERE usuario.id = " . $id_user) or exit("Erro ao buscar o nome do usuario do pedido");
+        $obj = $query->fetch_object();
+
+        $this->mysqli = NULL;
+        return $obj->nome;
     }
 
     private function getTableLicitacao(int $id_pedido): string {
@@ -171,7 +185,7 @@ class PrintMod extends Conexao {
         $retorno = "";
         if ($query->num_rows > 0) {
             $obj = $query->fetch_object();
-            $retorno = "<b>Tipo de Empenho:</b> " . $obj->nome . " <input type=\"text\" value=\"" . $obj->siafi . "\"/>";
+            $retorno = "<b>Tipo:</b> " . $obj->nome . " <input type=\"text\" value=\"" . $obj->siafi . "\"/>";
         }
         return $retorno;
     }
@@ -491,13 +505,22 @@ class PrintMod extends Conexao {
      *
      * 	@return string Retorna a interface de um documento pdf.
      */
-    public function getRelatorioPedidos(int $id_setor, int $prioridade, int $status, string $dataI, string $dataF): string {
+    public function getRelatorioPedidos(int $id_setor, int $prioridade, array $status, string $dataI, string $dataF): string {
         $retorno = "";
-        $where_status = "AND pedido.status = " . $status;
+        $where_status = '';
         $where_prioridade = "AND pedido.prioridade = " . $prioridade;
         $where_setor = "AND pedido.id_setor = " . $id_setor;
-        if ($status == 0) {
-            $where_status = '';
+
+        if (!in_array(0, $status)) {
+            $len = count($status);
+            $where_status = "AND (";
+            for ($i = 0; $i < $len; $i++) {
+                $where_status .= "pedido.status = " . $status[$i];
+                if ($i < $len - 1) {
+                    $where_status .= " OR ";
+                }
+            }
+            $where_status .= ") ";
         }
         if ($prioridade == 0) {
             $where_prioridade = '';
