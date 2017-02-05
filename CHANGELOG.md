@@ -8,4 +8,4 @@
 - Marcar / desmarcar todos os pedidos da tabela principal da análise
 - Permite relatórios com mais de um status selecionado
 - Mostra o nome do usuário no pedido impresso
-
+- O sof pode ter acesso à qualquer item para edição de certas colunas
