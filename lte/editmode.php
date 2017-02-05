@@ -108,7 +108,7 @@ if (!isset($_SESSION['editmode'])) {
 
                     <!-- Main content -->
                     <section class="content">
-                        <div class="box box-default">
+                        <div class="box box-primary">
                             <div class="box-header with-border">
                                 <h3 class="box-title">Itens do Processo: <span id="numProc">--------------------</span></h3>
                             </div>
@@ -160,7 +160,8 @@ if (!isset($_SESSION['editmode'])) {
                             <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                             <h4 class="modal-title">Informações do Item</h4>
                         </div>
-                        <form id="formEditItem" action="javascript:submitEditItem();" method="post">
+                        <span id="editmode" style="display: none;"></span>
+                        <form action="javascript:submitEditItem();" method="post">
                             <input id="idItem" type="hidden" name="idItem" value="0"/>
                             <div class="modal-body">
                                 <table class="table">
@@ -169,6 +170,26 @@ if (!isset($_SESSION['editmode'])) {
                                             <div class="form-group">
                                                 <label>Complemento do Item</label>
                                                 <textarea class="form-control" id="compItem" name="complemento" required rows="5"></textarea>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <div class="form-group">
+                                                <label>Código Despesa</label>
+                                                <input class="form-control" id="codDespesa" name="cod_despesa" type="text" maxlength="15" required>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div class="form-group">
+                                                <label>Código Reduzido</label>
+                                                <input class="form-control" id="codReduzido" name="cod_reduzido" type="text" maxlength="20" required>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div class="form-group">
+                                                <label>Data Fim</label>
+                                                <input class="form-control" id="dtFim" name="dt_fim" type="text" maxlength="10" required>
                                             </div>
                                         </td>
                                     </tr>
@@ -316,7 +337,7 @@ if (!isset($_SESSION['editmode'])) {
         <!-- AdminLTE for demo purposes -->
         <script src="dist/js/demo.js"></script>
         <!-- page script -->
-        <script type="text/javascript" src="../iniLTE.js"></script>
+        <script type="text/javascript" src="../iniLTE.min.js"></script>
     </body>
 </html>
 

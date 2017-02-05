@@ -901,7 +901,7 @@ class BuscaLTE extends Conexao {
                 $btn = "<button type=\"button\" class=\"btn btn-default\" onclick=\"checkItemPedido(" . $item->id . ", '" . $item->vl_unitario . "', " . $item->qt_saldo . ")\" data-toggle=\"tooltip\" title=\"Adicionar\"><span class=\"fa fa-plus\"></span></button>";
                 $input_qtd = "<td><input type=\"number\" id=\"qtd" . $item->id . "\" min=\"1\" max=\"" . $item->qt_saldo . "\"></td>";
             } else {
-                $btn = "<button type=\"button\" class=\"btn btn-default\" onclick=\"editInfoItem(" . $item->id . ")\" data-toggle=\"tooltip\" title=\"Editar Informações\"><span class=\"fa fa-pencil\"></span></button>";
+                $btn = "<button type=\"button\" class=\"btn btn-default\" onclick=\"editaItem(" . $item->id . ")\" data-toggle=\"tooltip\" title=\"Editar Informações\"><span class=\"fa fa-pencil\"></span></button>";
             }
             $retorno .= "
                 <tr>

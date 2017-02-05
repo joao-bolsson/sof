@@ -170,7 +170,13 @@ if ($obj_Busca->isActive()) {
                 unset($fields);
                 unset($dados);
                 unset($array_dados);
-                echo $obj_Geral->editItem($obj_dados);
+                $success = $obj_Geral->editItem($obj_dados);
+                if ($success) {
+                    $obj_Geral->editItemFactory($obj_dados);
+                    echo 1;
+                } else {
+                    echo 0;
+                }
 
                 break;
             // comment.

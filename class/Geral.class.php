@@ -30,6 +30,15 @@ class Geral extends Conexao {
             $this->mysqli = parent::getConexao();
         }
     }
+    
+    public function editItemFactory($dados) {
+        Geral::openConnection();
+        if (empty($dados)) {
+            exit("Factory data is empty.");
+        }
+        $this->mysqli->query("UPDATE itens SET itens.cod_despesa = '{$dados->codDespesa}', itens.cod_reduzido = '{$dados->codReduzido}', itens.dt_fim = '{$dados->dtFim}' WHERE itens.id = {$dados->idItem} LIMIT 1;") or exit("Erro ao atualizar informações do item: " . $this->mysqli->error);
+        $this->mysqli = NULL;
+    }
 
     /**
      * Desfaz uma liberação orçamentária. Suporta apenas do tipo 'normal' até a v2.1.4.

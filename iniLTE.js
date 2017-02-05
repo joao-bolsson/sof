@@ -1376,6 +1376,7 @@ function viewCompl(texto) {
 }
 
 function pesquisarProcesso(busca) {
+    console.log(busca);
     $('#listProcessos').modal('hide');
     $.post('../php/buscaLTE.php', {
         users: 1,
@@ -1385,7 +1386,7 @@ function pesquisarProcesso(busca) {
         $('#tableProcessos').DataTable().destroy();
         $('#conteudoProcesso').html(resposta);
         iniDataTable('#tableProcessos');
-        document.getElementById('numProc').innerHTML = "Processo: " + busca;
+        document.getElementById('numProc').innerHTML = busca;
         avisoSnack('Busca Realizada com Sucesso !');
     });
 }
@@ -1761,6 +1762,7 @@ function cancelaItem(id_item) {
 }
 
 function editaItem(id_item) {
+    console.log('Edit: ' + id_item);
     $('button').blur();
     $('#infoItem').modal();
     document.getElementById('idItem').value = id_item;
@@ -1778,11 +1780,14 @@ function editaItem(id_item) {
         document.getElementById('vlUtilizado').value = obj.vl_utilizado;
         document.getElementById('qtSaldo').value = obj.qt_saldo;
         document.getElementById('vlSaldo').value = obj.vl_saldo;
+        document.getElementById('codDespesa').value = obj.cod_despesa;
+        document.getElementById('codReduzido').value = obj.cod_reduzido;
+        document.getElementById('dtFim').value = obj.dt_fim;
     });
 }
 
 function submitEditItem() {
-    var fields = ['idItem', 'compItem', 'vlUnitario', 'qtContrato', 'vlContrato', 'qtUtilizada', 'vlUtilizado', 'qtSaldo', 'vlSaldo'];
+    var fields = ['idItem', 'compItem', 'vlUnitario', 'qtContrato', 'vlContrato', 'qtUtilizada', 'vlUtilizado', 'qtSaldo', 'vlSaldo', 'codDespesa', 'codReduzido', 'dtFim'];
     var dados = [];
     for (var i = 0; i < fields.length; i++) {
         dados[i] = document.getElementById(fields[i]).value;
@@ -1793,18 +1798,17 @@ function submitEditItem() {
         fields: fields,
         dados: dados
     }, function (resposta) {
-        if (resposta) {
-            alert('Informações salvas com sucesso!');
-        } else {
-            alert('Ocorreu um erro no servidor. Verifique suas informações e teste novamente, ou contate o administrador.');
+        if (resposta == 0) {
+            alert("Ocorreu um erro ao atualizar informações.");
         }
     });
     $('#infoItem').modal('hide');
-    limpaTela();
-    iniSolicitacoes();
-}
-
-function editInfoItem(id_item) {
-    console.log('Edit: ' + id_item);
-    editaItem(id_item);
+    var element = document.getElementById('editmode');
+    if (element !== null) {
+        var proc = document.getElementById('numProc').innerHTML;
+        pesquisarProcesso(proc);
+    } else {
+        limpaTela();
+        iniSolicitacoes();
+    }
 }
