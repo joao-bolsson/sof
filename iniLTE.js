@@ -232,10 +232,10 @@ function cadEmpenho(id_pedido, empenho, data) {
     document.getElementById('dataEmp').value = '';
     $('#cadEmpenho').modal();
     document.getElementById('id_pedido_emp').value = id_pedido;
-    if (empenho.length > 0) {
+    if (empenho != null) {
         document.getElementById('empenho').value = empenho;
     }
-    if (data.length > 0) {
+    if (data != null) {
         document.getElementById('dataEmp').value = data;
     }
 }
