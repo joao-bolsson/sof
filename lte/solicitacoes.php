@@ -480,13 +480,14 @@ $select_grupo = $obj_Busca->getOptionsGrupos($id_setor);
                             <table id="tableListPedidos" class="table table-bordered table-striped">
                                 <thead>
                                     <tr>
-                                        <th>NUM_PEDIDO</th>
+                                        <th>NUM</th>
                                         <th>RefMes</th>
                                         <th>Data de Envio</th>
                                         <th>Prioridade</th>
                                         <th>Status</th>
                                         <th>SIAFI</th>
                                         <th>Valor</th>
+                                        <th>Fornecedor</th>
                                         <th>Opções</th>
                                     </tr>
                                 </thead>

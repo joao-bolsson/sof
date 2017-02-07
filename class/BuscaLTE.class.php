@@ -1102,6 +1102,7 @@ class BuscaLTE extends Conexao {
                     <td><small class=\"label bg-gray\">" . $pedido->status . "</small></td>
                     <td>" . $empenho . "</td>
                     <td>R$ " . $pedido->valor . "</td>
+                    <td>" . BuscaLTE::getFornecedor($pedido->id) . "</td>
                     <td>
                         " . $btnSolicAlt . "
                         <button type=\"button\" class=\"btn btn-default btn-sm\" onclick=\"imprimir(" . $pedido->id . ");\" title=\"Imprimir\"><i class=\"fa fa-print\"></i></button>
@@ -1197,7 +1198,7 @@ class BuscaLTE extends Conexao {
 
             $btn = '';
             if ($_SESSION['id_setor'] == 2 && $lancamento->id_categoria != 4) {
-                $btn = "<button type=\"button\" data-toggle=\"tooltip\" title=\"Desfazer\" onclick=\"undoFreeMoney(".$lancamento->id.")\" class=\"btn btn-default\"><i class=\"fa fa-undo\"></i></button>";
+                $btn = "<button type=\"button\" data-toggle=\"tooltip\" title=\"Desfazer\" onclick=\"undoFreeMoney(" . $lancamento->id . ")\" class=\"btn btn-default\"><i class=\"fa fa-undo\"></i></button>";
             }
             $lancamento->valor = number_format($lancamento->valor, 3, ',', '.');
             $retorno .= "
