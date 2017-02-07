@@ -66,6 +66,43 @@ if (!is_null($admin) && isset($_SESSION['id_setor']) && ($_SESSION['id_setor'] =
             echo $obj_Busca->getSolicitacoesAdmin();
             break;
 
+        case 'tableItensPedidoSSP':
+            // DB table to use
+            $table = 'pedido';
+
+            // Table's primary key
+            $primaryKey = 'id';
+
+            // Array of database columns which should be read and sent back to DataTables.
+            // The `db` parameter represents the column name in the database, while the `dt`
+            // parameter represents the DataTables column identifier. In this case simple
+            // indexes
+            $columns = array(
+                array('db' => 'id', 'dt' => 'id'),
+                array('db' => 'data_pedido', 'dt' => 'data_pedido'),
+                array('db' => 'status', 'dt' => 'status'),
+                array('db' => 'prioridade', 'dt' => 'prioridade'),
+                array('db' => 'aprov_gerencia', 'dt' => 'aprov_gerencia'),
+                array('db' => 'valor','dt' => 'valor'),
+                array('db' => 'alteracao','dt' => 'alteracao'),
+                array('db' => 'ref_mes','dt' => 'ref_mes'),
+                array('db' => 'pedido_contrato','dt' => 'pedido_contrato'),
+                array('db' => 'obs','dt' => 'obs')
+            );
+
+            // SQL server connection information
+            $sql_details = array(
+                'user' => 'root',
+                'pass' => 'j:03984082037@[]ccufsm',
+                'db' => 'sof',
+                'host' => 'localhost'
+            );
+
+            require( '../class/SSP.class.php' );
+
+            echo json_encode(SSP::simple($_POST, $sql_details, $table, $primaryKey, $columns));
+            break;
+
         case 'tableSolicitacoesAdiantamento':
             $status = filter_input(INPUT_POST, 'status');
             echo $obj_Busca->getSolicAdiantamentos($status);

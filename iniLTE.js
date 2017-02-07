@@ -913,16 +913,48 @@ function iniSolicitacoes() {
     if (element === null) {
         return;
     }
+//    $.post('../php/buscaLTE.php', {
+//        admin: 1,
+//        form: 'tableItensPedido'
+//    }).done(function (resposta) {
+//        if (element.innerHTML.length > 0) {
+//            $('#tableSolicitacoes').DataTable().destroy();
+//        }
+//        document.getElementById('conteudoSolicitacoes').innerHTML = resposta;
+//        loadChecks();
+//        iniDataTable('#tableSolicitacoes');
+//    });
+
     $.post('../php/buscaLTE.php', {
         admin: 1,
-        form: 'tableItensPedido'
+        form: 'tableItensPedidoSSP'
     }).done(function (resposta) {
-        if (element.innerHTML.length > 0) {
-            $('#tableSolicitacoes').DataTable().destroy();
-        }
-        document.getElementById('conteudoSolicitacoes').innerHTML = resposta;
-        loadChecks();
-        iniDataTable('#tableSolicitacoes');
+        console.log(resposta);
+    });
+
+    $('#tableSolicitacoes').DataTable({
+        "processing": true,
+        "serverSide": true,
+        "ajax": {
+            "url": "../php/buscaLTE.php",
+            "type": "POST",
+            "data": function ( d ) {
+                d.admin = 1;
+                d.form = "tableItensPedidoSSP";
+            }
+        },
+        "columns": [
+            {"data": "id"},
+            {"data": "data_pedido"},
+            {"data": "status"},
+            {"data": "prioridade"},
+            {"data": "aprov_gerencia"},
+            {"data": "valor"},
+            {"data": "alteracao"},
+            {"data": "ref_mes"},
+            {"data": "pedido_contrato"},
+            {"data": "obs"}
+        ]
     });
 }
 
