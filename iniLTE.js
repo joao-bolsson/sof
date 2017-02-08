@@ -944,6 +944,7 @@ function iniSolicitacoes() {
             }
         },
         "columns": [
+            {"data": "fornecedor"},
             {"data": "id"},
             {"data": "data_pedido"},
             {"data": "status"},

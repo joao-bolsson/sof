@@ -79,6 +79,7 @@ if (!is_null($admin) && isset($_SESSION['id_setor']) && ($_SESSION['id_setor'] =
             // parameter represents the DataTables column identifier. In this case simple
             // indexes
             $columns = array(
+                array('db' => 'id', 'dt' => 'fornecedor'),
                 array('db' => 'id', 'dt' => 'id'),
                 array(
                     'db' => 'data_pedido',

@@ -425,6 +425,7 @@ if (isset($_SESSION['editmode'])) {
                                             <thead>
                                                 <tr>
                                                     <th>Opções</th>
+                                                    <th>Opções</th>
                                                     <th>Pedido</th>
                                                     <th>Setor</th>
                                                     <th>Data</th>
