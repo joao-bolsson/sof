@@ -624,7 +624,7 @@ class BuscaLTE extends Conexao {
      * @param int $id_pedido Id do pedido
      * @return string Data do cadastro do empenho
      */
-    private function verDataEmpenho(int $id_pedido): string {
+    public function verDataEmpenho(int $id_pedido): string {
         if (is_null($this->mysqli)) {
             $this->mysqli = parent::getConexao();
         }
@@ -657,7 +657,7 @@ class BuscaLTE extends Conexao {
                 if ($_SESSION['id_setor'] == 12) {
                     $btnAnalisar = "<button type=\"button\" class=\"btn btn-default\" onclick=\"enviaForn(" . $pedido->id . ");\" data-toggle=\"tooltip\" title=\"Enviar ao Fornecedor\"><i class=\"fa fa-send\"></i></button>";
                 } else if ($pedido->status == 'Em Analise') {
-                    $btnAnalisar = "<button type=\"button\" class=\"btn btn-default\" onclick=\"javascript:analisarPedido(" . $pedido->id . ", " . $pedido->id_setor . ");\" data-toggle=\"tooltip\" title=\"Analisar\"><i class=\"fa fa-pencil\"></i></button>";
+                    $btnAnalisar = "<button type=\"button\" class=\"btn btn-default\" onclick=\"analisarPedido(" . $pedido->id . ", " . $pedido->id_setor . ");\" data-toggle=\"tooltip\" title=\"Analisar\"><i class=\"fa fa-pencil\"></i></button>";
                 } else if ($pedido->status == 'Aguarda Orcamento') {
                     $btnAnalisar = "<button type=\"button\" class=\"btn btn-default\" onclick=\"cadFontes(" . $pedido->id . ");\" data-toggle=\"tooltip\" title=\"Cadastrar Fontes\"><i class=\"fa fa-comment\"></i></button>";
                 } else if ($pedido->status == 'Aguarda SIAFI') {
@@ -665,14 +665,14 @@ class BuscaLTE extends Conexao {
                 } else if ($pedido->status == 'Empenhado') {
                     $btnAnalisar = "<button type=\"button\" class=\"btn btn-default\" onclick=\"enviaOrdenador(" . $pedido->id . ");\" data-toggle=\"tooltip\" title=\"Enviar ao Ordenador\"><i class=\"fa fa-send\"></i></button>";
                 } else {
-                    $btnAnalisar = "<button type=\"button\" class=\"btn btn-default\" onclick=\"javascript:getStatus(" . $pedido->id . ", " . $pedido->id_setor . ");\" data-toggle=\"tooltip\" title=\"Alterar Status\"><i class=\"fa fa-wrench\"></i></button>";
+                    $btnAnalisar = "<button type=\"button\" class=\"btn btn-default\" onclick=\"getStatus(" . $pedido->id . ", " . $pedido->id_setor . ");\" data-toggle=\"tooltip\" title=\"Alterar Status\"><i class=\"fa fa-wrench\"></i></button>";
                 }
             }
             $btnVerEmpenho = BuscaLTE::verEmpenho($pedido->id);
             if ($btnVerEmpenho == 'EMPENHO SIAFI PENDENTE') {
                 $btnVerEmpenho = '';
-            } else if ($_SESSION['id_setor'] != 12) {
-                $btnAnalisar .= "<button type=\"button\" class=\"btn btn-default\" onclick=\"javascript:cadEmpenho(" . $pedido->id . ", '" . BuscaLTE::verEmpenho($pedido->id) . "', '" . BuscaLTE::verDataEmpenho($pedido->id) . "');\" data-toggle=\"tooltip\" title=\"Cadastrar Empenho\"><i class=\"fa fa-credit-card\"></i></button>";
+            } else if ($_SESSION['id_setor'] != 12 && $pedido->id_status > 6) {
+                $btnAnalisar .= "<button type=\"button\" class=\"btn btn-default\" onclick=\"cadEmpenho(" . $pedido->id . ", '" . BuscaLTE::verEmpenho($pedido->id) . "', '" . BuscaLTE::verDataEmpenho($pedido->id) . "');\" data-toggle=\"tooltip\" title=\"Cadastrar Empenho\"><i class=\"fa fa-credit-card\"></i></button>";
             }
             $pedido->valor = number_format($pedido->valor, 3, ',', '.');
             $aprovGerencia = '';
@@ -1102,6 +1102,7 @@ class BuscaLTE extends Conexao {
                     <td><small class=\"label bg-gray\">" . $pedido->status . "</small></td>
                     <td>" . $empenho . "</td>
                     <td>R$ " . $pedido->valor . "</td>
+                    <td>" . BuscaLTE::getFornecedor($pedido->id) . "</td>
                     <td>
                         " . $btnSolicAlt . "
                         <button type=\"button\" class=\"btn btn-default btn-sm\" onclick=\"imprimir(" . $pedido->id . ");\" title=\"Imprimir\"><i class=\"fa fa-print\"></i></button>
@@ -1197,7 +1198,7 @@ class BuscaLTE extends Conexao {
 
             $btn = '';
             if ($_SESSION['id_setor'] == 2 && $lancamento->id_categoria != 4) {
-                $btn = "<button type=\"button\" data-toggle=\"tooltip\" title=\"Desfazer\" onclick=\"undoFreeMoney(".$lancamento->id.")\" class=\"btn btn-default\"><i class=\"fa fa-undo\"></i></button>";
+                $btn = "<button type=\"button\" data-toggle=\"tooltip\" title=\"Desfazer\" onclick=\"undoFreeMoney(" . $lancamento->id . ")\" class=\"btn btn-default\"><i class=\"fa fa-undo\"></i></button>";
             }
             $lancamento->valor = number_format($lancamento->valor, 3, ',', '.');
             $retorno .= "

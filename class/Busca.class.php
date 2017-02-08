@@ -23,6 +23,51 @@ class Busca extends Conexao {
         $this->obj_Util = new Util();
     }
 
+    public function openConnection() {
+        if (is_null($this->mysqli)) {
+            $this->mysqli = parent::getConexao();
+        }
+    }
+
+    public function getArrayStatus(): array {
+        self::openConnection();
+        $query = $this->mysqli->query("SELECT status.id, status.nome FROM status;") or exit("Erro ao buscar nome dos status.");
+
+        $array = ["NULL"];
+
+        while ($status = $query->fetch_object()) {
+            $array[$status->id] = $status->nome;
+        }
+
+        return $array;
+    }
+
+    public function getArraySetores(): array {
+        self::openConnection();
+        $query = $this->mysqli->query("SELECT setores.id, setores.nome FROM setores;") or exit("Erro ao buscar nome dos setores.");
+
+        $array = ["NULL"];
+
+        while ($setor = $query->fetch_object()) {
+            $array[$setor->id] = $setor->nome;
+        }
+
+        return $array;
+    }
+
+    public function getArrayMes(): array {
+        self::openConnection();
+        $query = $this->mysqli->query("SELECT mes.id, mes.sigla_mes FROM mes;") or exit("Erro ao buscar nome dos meses.");
+
+        $array = ["NULL"];
+
+        while ($mes = $query->fetch_object()) {
+            $array[$mes->id] = $mes->sigla_mes;
+        }
+
+        return $array;
+    }
+
     public function testValores() {
         if (is_null($this->mysqli)) {
             $this->mysqli = parent::getConexao();
