@@ -133,7 +133,10 @@ if (!is_null($admin) && isset($_SESSION['id_setor']) && ($_SESSION['id_setor'] =
                     'formatter' => function($d, $row) {
                         return ARRAY_SETORES[$d];
                     }),
-                array('db' => 'ref_mes', 'dt' => 'ref_mes'),
+                array('db' => 'ref_mes', 'dt' => 'ref_mes',
+                    'formatter' => function($d, $row) {
+                        return ARRAY_MES[$d];
+                    }),
                 array('db' => 'obs', 'dt' => 'obs')
             );
 

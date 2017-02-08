@@ -55,6 +55,19 @@ class Busca extends Conexao {
         return $array;
     }
 
+    public function getArrayMes(): array {
+        self::openConnection();
+        $query = $this->mysqli->query("SELECT mes.id, mes.sigla_mes FROM mes;") or exit("Erro ao buscar nome dos meses.");
+
+        $array = ["NULL"];
+
+        while ($mes = $query->fetch_object()) {
+            $array[$mes->id] = $mes->sigla_mes;
+        }
+
+        return $array;
+    }
+
     public function testValores() {
         if (is_null($this->mysqli)) {
             $this->mysqli = parent::getConexao();
