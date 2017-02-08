@@ -23,6 +23,25 @@ class Busca extends Conexao {
         $this->obj_Util = new Util();
     }
 
+    public function openConnection() {
+        if (is_null($this->mysqli)) {
+            $this->mysqli = parent::getConexao();
+        }
+    }
+
+    public function getArrayStatus(): array {
+        self::openConnection();
+        $query = $this->mysqli->query("SELECT status.id, status.nome FROM status;") or exit("Erro ao buscar nome dos status.");
+
+        $array = ["NULL"];
+
+        while ($status = $query->fetch_object()) {
+            $array[$status->id] = $status->nome;
+        }
+
+        return $array;
+    }
+
     public function testValores() {
         if (is_null($this->mysqli)) {
             $this->mysqli = parent::getConexao();

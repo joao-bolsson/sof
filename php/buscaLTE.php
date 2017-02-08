@@ -23,6 +23,7 @@ error_reporting(E_ALL);
 session_start();
 include_once '../class/BuscaLTE.class.php';
 include_once '../class/Util.class.php';
+require_once '../defines.php';
 $obj_Busca = new BuscaLTE();
 
 $admin = filter_input(INPUT_POST, "admin");
@@ -82,10 +83,13 @@ if (!is_null($admin) && isset($_SESSION['id_setor']) && ($_SESSION['id_setor'] =
                 array(
                     'db' => 'data_pedido',
                     'dt' => 'data_pedido',
-                    'formatter' => function( $d, $row ) {
+                    'formatter' => function($d, $row) {
                         return date('d/m/Y', strtotime($d));
                     }),
-                array('db' => 'status', 'dt' => 'status'),
+                array('db' => 'status', 'dt' => 'status',
+                    'formatter' => function($d, $row) {
+                        return ARRAY_STATUS[$d];
+                    }),
                 array('db' => 'prioridade', 'dt' => 'prioridade'),
                 array('db' => 'aprov_gerencia', 'dt' => 'aprov_gerencia'),
                 array('db' => 'valor', 'dt' => 'valor'),
@@ -103,7 +107,7 @@ if (!is_null($admin) && isset($_SESSION['id_setor']) && ($_SESSION['id_setor'] =
                 'host' => 'localhost'
             );
 
-            require( '../class/SSP.class.php' );
+            require('../class/SSP.class.php');
 
             echo json_encode(SSP::simple($_POST, $sql_details, $table, $primaryKey, $columns));
             break;
