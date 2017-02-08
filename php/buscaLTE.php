@@ -79,15 +79,20 @@ if (!is_null($admin) && isset($_SESSION['id_setor']) && ($_SESSION['id_setor'] =
             // indexes
             $columns = array(
                 array('db' => 'id', 'dt' => 'id'),
-                array('db' => 'data_pedido', 'dt' => 'data_pedido'),
+                array(
+                    'db' => 'data_pedido',
+                    'dt' => 'data_pedido',
+                    'formatter' => function( $d, $row ) {
+                        return date('d/m/Y', strtotime($d));
+                    }),
                 array('db' => 'status', 'dt' => 'status'),
                 array('db' => 'prioridade', 'dt' => 'prioridade'),
                 array('db' => 'aprov_gerencia', 'dt' => 'aprov_gerencia'),
-                array('db' => 'valor','dt' => 'valor'),
-                array('db' => 'alteracao','dt' => 'alteracao'),
-                array('db' => 'ref_mes','dt' => 'ref_mes'),
-                array('db' => 'pedido_contrato','dt' => 'pedido_contrato'),
-                array('db' => 'obs','dt' => 'obs')
+                array('db' => 'valor', 'dt' => 'valor'),
+                array('db' => 'alteracao', 'dt' => 'alteracao'),
+                array('db' => 'ref_mes', 'dt' => 'ref_mes'),
+                array('db' => 'pedido_contrato', 'dt' => 'pedido_contrato'),
+                array('db' => 'obs', 'dt' => 'obs')
             );
 
             // SQL server connection information
