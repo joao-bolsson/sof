@@ -89,6 +89,7 @@ if (!is_null($admin) && isset($_SESSION['id_setor']) && ($_SESSION['id_setor'] =
                     'formatter' => function($d, $row) {
                         $obj_Busca = new BuscaLTE();
                         $btnAnalisar = "";
+                        $btnGroup = "<div class=\"btn-group\">";
                         $status = ARRAY_STATUS[$row['status']];
                         if ($status != 'Reprovado' && $status != 'Aprovado') {
                             if ($_SESSION['id_setor'] == 12) {
@@ -110,7 +111,11 @@ if (!is_null($admin) && isset($_SESSION['id_setor']) && ($_SESSION['id_setor'] =
                             $btnAnalisar .= "<button type=\"button\" class=\"btn btn-default\" onclick=\"cadEmpenho(" . $d . ", '" . $obj_Busca->verEmpenho($d) . "', '" . $obj_Busca->verDataEmpenho($d) . "');\" data-toggle=\"tooltip\" title=\"Cadastrar Empenho\"><i class=\"fa fa-credit-card\"></i></button>";
                         }
 
-                        return $btnAnalisar;
+                        $btnAnalisar .= "<button type=\"button\" class=\"btn btn-default\" onclick=\"imprimir(" . $d . ");\" data-toggle=\"tooltip\" title=\"Imprimir\"><i class=\"fa fa-print\"></i></button>";
+
+                        $btnGroup .= $btnAnalisar . "</div>";
+
+                        return $btnGroup;
                     }),
                 array('db' => 'id', 'dt' => 'id'),
                 array('db' => 'data_pedido', 'dt' => 'data_pedido',
