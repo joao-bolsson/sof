@@ -624,7 +624,7 @@ class BuscaLTE extends Conexao {
      * @param int $id_pedido Id do pedido
      * @return string Data do cadastro do empenho
      */
-    private function verDataEmpenho(int $id_pedido): string {
+    public function verDataEmpenho(int $id_pedido): string {
         if (is_null($this->mysqli)) {
             $this->mysqli = parent::getConexao();
         }

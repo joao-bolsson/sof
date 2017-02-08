@@ -212,7 +212,7 @@ class SSP {
      *  @param  array $columns Column information array
      *  @return array          Server-side processing response array
      */
-    static function simple($request, $conn, $table, $primaryKey, $columns) {
+    static function simple($request, $conn, $table, $primaryKey, $columns, $custom_where = null) {
         $bindings = array();
         $db = self::db($conn);
 
@@ -220,6 +220,15 @@ class SSP {
         $limit = self::limit($request, $columns);
         $order = self::order($request, $columns);
         $where = self::filter($request, $columns, $bindings);
+
+        // custom where for table 'tableItensPedido'
+        if ($custom_where !== null) {
+            if (strlen($where) > 0) {
+                $where .= " AND " . $custom_where;
+            } else {
+                $where = "WHERE " . $custom_where;
+            }
+        }
 
         // Main query to actually get the data
         $data = self::sql_exec($db, $bindings, "SELECT `" . implode("`, `", self::pluck($columns, 'db')) . "`

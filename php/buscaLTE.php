@@ -79,11 +79,36 @@ if (!is_null($admin) && isset($_SESSION['id_setor']) && ($_SESSION['id_setor'] =
             // parameter represents the DataTables column identifier. In this case simple
             // indexes
             $columns = array(
-                array('db' => 'id', 'dt' => 'fornecedor'),
+                array('db' => 'id', 'dt' => 'selectAll'),
+                array('db' => 'id', 'dt' => 'buttons',
+                    'formatter' => function($d, $row) {
+                        $obj_Busca = new BuscaLTE();
+                        $btnAnalisar = "";
+                        $status = ARRAY_STATUS[$row['status']];
+                        if ($status != 'Reprovado' && $status != 'Aprovado') {
+                            if ($_SESSION['id_setor'] == 12) {
+                                $btnAnalisar = "<button type=\"button\" class=\"btn btn-default\" onclick=\"enviaForn(" . $d . ");\" data-toggle=\"tooltip\" title=\"Enviar ao Fornecedor\"><i class=\"fa fa-send\"></i></button>";
+                            } else if ($status == 'Em Analise') {
+                                $btnAnalisar = "<button type=\"button\" class=\"btn btn-default\" onclick=\"analisarPedido(" . $d . ", " . $row['id_setor'] . ");\" data-toggle=\"tooltip\" title=\"Analisar\"><i class=\"fa fa-pencil\"></i></button>";
+                            } else if ($status == 'Aguarda Orcamento') {
+                                $btnAnalisar = "<button type=\"button\" class=\"btn btn-default\" onclick=\"cadFontes(" . $d . ");\" data-toggle=\"tooltip\" title=\"Cadastrar Fontes\"><i class=\"fa fa-comment\"></i></button>";
+                            } else if ($status == 'Aguarda SIAFI') {
+                                $btnAnalisar = "<button type=\"button\" class=\"btn btn-default\" onclick=\"cadEmpenho(" . $d . ");\" data-toggle=\"tooltip\" title=\"Cadastrar Empenho\"><i class=\"fa fa-credit-card\"></i></button>";
+                            } else if ($status == 'Empenhado') {
+                                $btnAnalisar = "<button type=\"button\" class=\"btn btn-default\" onclick=\"enviaOrdenador(" . $d . ");\" data-toggle=\"tooltip\" title=\"Enviar ao Ordenador\"><i class=\"fa fa-send\"></i></button>";
+                            } else {
+                                $btnAnalisar = "<button type=\"button\" class=\"btn btn-default\" onclick=\"getStatus(" . $d . ", " . $row['id_setor'] . ");\" data-toggle=\"tooltip\" title=\"Alterar Status\"><i class=\"fa fa-wrench\"></i></button>";
+                            }
+                        }
+
+                        if ($_SESSION['id_setor'] != 12 && $row['status'] > 6) {
+                            $btnAnalisar .= "<button type=\"button\" class=\"btn btn-default\" onclick=\"cadEmpenho(" . $d . ", '" . $obj_Busca->verEmpenho($d) . "', '" . $obj_Busca->verDataEmpenho($d) . "');\" data-toggle=\"tooltip\" title=\"Cadastrar Empenho\"><i class=\"fa fa-credit-card\"></i></button>";
+                        }
+
+                        return $btnAnalisar;
+                    }),
                 array('db' => 'id', 'dt' => 'id'),
-                array(
-                    'db' => 'data_pedido',
-                    'dt' => 'data_pedido',
+                array('db' => 'data_pedido', 'dt' => 'data_pedido',
                     'formatter' => function($d, $row) {
                         return date('d/m/Y', strtotime($d));
                     }),
@@ -94,11 +119,12 @@ if (!is_null($admin) && isset($_SESSION['id_setor']) && ($_SESSION['id_setor'] =
                 array('db' => 'prioridade', 'dt' => 'prioridade'),
                 array('db' => 'aprov_gerencia', 'dt' => 'aprov_gerencia'),
                 array('db' => 'valor', 'dt' => 'valor'),
-                array('db' => 'alteracao', 'dt' => 'alteracao'),
+                array('db' => 'id_setor', 'dt' => 'id_setor'),
                 array('db' => 'ref_mes', 'dt' => 'ref_mes'),
-                array('db' => 'pedido_contrato', 'dt' => 'pedido_contrato'),
                 array('db' => 'obs', 'dt' => 'obs')
             );
+
+            $custom_where = "status <> 1";
 
             // SQL server connection information
             $sql_details = array(
@@ -110,7 +136,7 @@ if (!is_null($admin) && isset($_SESSION['id_setor']) && ($_SESSION['id_setor'] =
 
             require('../class/SSP.class.php');
 
-            echo json_encode(SSP::simple($_POST, $sql_details, $table, $primaryKey, $columns));
+            echo json_encode(SSP::simple($_POST, $sql_details, $table, $primaryKey, $columns, $custom_where));
             break;
 
         case 'tableSolicitacoesAdiantamento':

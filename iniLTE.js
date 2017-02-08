@@ -925,37 +925,72 @@ function iniSolicitacoes() {
 //        iniDataTable('#tableSolicitacoes');
 //    });
 
-    $.post('../php/buscaLTE.php', {
-        admin: 1,
-        form: 'tableItensPedidoSSP'
-    }).done(function (resposta) {
-        console.log(resposta);
-    });
-
+//    $.post('../php/buscaLTE.php', {
+//        admin: 1,
+//        form: 'tableItensPedidoSSP'
+//    }).done(function (resposta) {
+//        console.log(resposta);
+//    });
+    loadChecks();
     $('#tableSolicitacoes').DataTable({
         "processing": true,
         "serverSide": true,
         "ajax": {
             "url": "../php/buscaLTE.php",
             "type": "POST",
-            "data": function ( d ) {
+            "data": function (d) {
                 d.admin = 1;
                 d.form = "tableItensPedidoSSP";
             }
         },
         "columns": [
-            {"data": "fornecedor"},
+            {"data": "selectAll"},
+            {"data": "buttons"},
             {"data": "id"},
+            {"data": "id_setor"},
             {"data": "data_pedido"},
-            {"data": "status"},
-            {"data": "prioridade"},
-            {"data": "aprov_gerencia"},
-            {"data": "valor"},
-            {"data": "alteracao"},
             {"data": "ref_mes"},
-            {"data": "pedido_contrato"},
+            {"data": "prioridade"},
+            {"data": "status"},
+            {"data": "valor"},
+            {"data": "status"},
             {"data": "obs"}
-        ]
+        ],
+        "order": [[2, "desc"]],
+        "destroy": true,
+        "paging": true,
+        "lengthChange": true,
+        "searching": true,
+        "ordering": true,
+        "info": true,
+        "autoWidth": true,
+        "columnDefs": [
+            {"width": "15%", "targets": 1}
+        ],
+        language: {
+            "decimal": "",
+            "emptyTable": "Nenhum dado na tabela",
+            "info": "_MAX_ resultados encontrados",
+            "infoEmpty": "",
+            "infoFiltered": "",
+            "infoPostFix": "",
+            "thousands": ",",
+            "lengthMenu": "Monstrando _MENU_ entradas",
+            "loadingRecords": "Carregando...",
+            "processing": "Processando...",
+            "search": "Pesquisar:",
+            "zeroRecords": "Nenhum resultado encontrado",
+            "paginate": {
+                "first": "Primeiro",
+                "last": "Último",
+                "next": "Próximo",
+                "previous": "Anterior"
+            },
+            "aria": {
+                "sortAscending": ": activate to sort column ascending",
+                "sortDescending": ": activate to sort column descending"
+            }
+        }
     });
 }
 
