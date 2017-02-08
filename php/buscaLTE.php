@@ -129,7 +129,10 @@ if (!is_null($admin) && isset($_SESSION['id_setor']) && ($_SESSION['id_setor'] =
                 array('db' => 'prioridade', 'dt' => 'prioridade'),
                 array('db' => 'aprov_gerencia', 'dt' => 'aprov_gerencia'),
                 array('db' => 'valor', 'dt' => 'valor'),
-                array('db' => 'id_setor', 'dt' => 'id_setor'),
+                array('db' => 'id_setor', 'dt' => 'id_setor',
+                    'formatter' => function($d, $row) {
+                        return ARRAY_SETORES[$d];
+                    }),
                 array('db' => 'ref_mes', 'dt' => 'ref_mes'),
                 array('db' => 'obs', 'dt' => 'obs')
             );

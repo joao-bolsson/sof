@@ -42,6 +42,19 @@ class Busca extends Conexao {
         return $array;
     }
 
+    public function getArraySetores(): array {
+        self::openConnection();
+        $query = $this->mysqli->query("SELECT setores.id, setores.nome FROM setores;") or exit("Erro ao buscar nome dos setores.");
+
+        $array = ["NULL"];
+
+        while ($setor = $query->fetch_object()) {
+            $array[$setor->id] = $setor->nome;
+        }
+
+        return $array;
+    }
+
     public function testValores() {
         if (is_null($this->mysqli)) {
             $this->mysqli = parent::getConexao();
