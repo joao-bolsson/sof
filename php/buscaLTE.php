@@ -63,7 +63,8 @@ if (!is_null($admin) && isset($_SESSION['id_setor']) && ($_SESSION['id_setor'] =
             break;
 
         case 'tableItensPedido':
-            echo $obj_Busca->getSolicitacoesAdmin();
+            $request = filter_input(INPUT_POST, 'request');
+            echo $obj_Busca->getSolicitacoesAdmin($request);
             break;
 
         case 'tableSolicitacoesAdiantamento':

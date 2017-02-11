@@ -422,6 +422,7 @@ if (isset($_SESSION['editmode'])) {
                                         <div class="margin">
                                             <button id="btnPrintCheck" class="btn btn-primary" type="button" onclick="printChecks()" disabled><i class="fa fa-print"></i>&nbsp;Imprimir</button>
                                             <button id="btnAprovGeren" class="btn btn-primary" type="button" onclick="aprovGerencia()" disabled><i class="fa fa-check-circle"></i>&nbsp;Aprovado pela Gerência</button>
+                                            <button class="btn btn-primary" type="button" onclick="loadMore()" data-toggle="tooltip" title="Carregar mais pedidos"><i class="fa fa-cloud-download"></i>&nbsp;Carregar</button>
                                         </div>
                                         <table id="tableSolicitacoes" class="table table-bordered table-striped">
                                             <thead>
@@ -540,8 +541,7 @@ if (isset($_SESSION['editmode'])) {
                 <div class="pull-right hidden-xs">
                     <b>Version</b> <?= VERSION ?>
                 </div>
-                <strong>Copyright © 2016-2017 <a href="https://github.com/joao-bolsson">João Bolsson</a>.</strong> All rights
-                reserved.
+                <strong>Copyright © 2016-2017 <a href="https://github.com/joao-bolsson">João Bolsson</a>.</strong> All rights reserved.
             </footer>
             <?php if ($permissao->recepcao): ?>
                 <div class="modal fade" id="relatorio" role="dialog">

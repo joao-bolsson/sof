@@ -911,20 +911,27 @@ function loadChecks() {
         }
     }
 }
+requestLoadMore = 0;
+function loadMore() {
+    requestLoadMore += 10
+    iniSolicitacoes();
+}
 
 function iniSolicitacoes() {
     var element = document.getElementById('conteudoSolicitacoes');
     if (element === null) {
         return;
     }
+    console.log('request: ' + requestLoadMore);
     $.post('../php/buscaLTE.php', {
         admin: 1,
-        form: 'tableItensPedido'
+        form: 'tableItensPedido',
+        request: requestLoadMore
     }).done(function (resposta) {
         if (element.innerHTML.length > 0) {
             $('#tableSolicitacoes').DataTable().destroy();
         }
-        document.getElementById('conteudoSolicitacoes').innerHTML = resposta;
+        element.innerHTML += resposta;
         loadChecks();
         iniDataTable('#tableSolicitacoes');
     });

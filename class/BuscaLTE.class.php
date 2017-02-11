@@ -600,10 +600,11 @@ class BuscaLTE extends Conexao {
      * @return string
      *
      */
-    public function getSolicitacoesAdmin(): string {
+    public function getSolicitacoesAdmin(int $request): string {
         $retorno = "";
         BuscaLTE::openConnection();
-        $query = $this->mysqli->query("SELECT id, id_setor, DATE_FORMAT(data_pedido, '%d/%m/%Y') AS data_pedido, prioridade, status, valor, aprov_gerencia FROM pedido WHERE status <> 3 AND alteracao = 0 ORDER BY id DESC LIMIT 500;") or exit("Erro ao buscar os pedidos que foram mandados ao SOF.");
+        $limit = 'LIMIT ' . $request . ',' . 10;
+        $query = $this->mysqli->query("SELECT id, id_setor, DATE_FORMAT(data_pedido, '%d/%m/%Y') AS data_pedido, prioridade, status, valor, aprov_gerencia FROM pedido WHERE status <> 3 AND alteracao = 0 ORDER BY id DESC " . $limit) or exit("Erro ao buscar os pedidos que foram mandados ao SOF.");
         $this->mysqli = NULL;
         while ($pedido = $query->fetch_object()) {
             $btnAnalisar = "";
