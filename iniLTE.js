@@ -459,6 +459,7 @@ function iniDataTable(tabela) {
             "lengthChange": true,
             "searching": true,
             "ordering": true,
+            "order": [[2, "desc"]],
             "info": true,
             "autoWidth": true,
             "columnDefs": [
@@ -911,22 +912,31 @@ function loadChecks() {
         }
     }
 }
-requestLoadMore = 0;
+
 function loadMore() {
-    requestLoadMore += 10
-    iniSolicitacoes();
+    $('button').blur();
+    $('#loadMoreCustom').modal('hide');
+    iniSolicitacoes(true);
 }
 
-function iniSolicitacoes() {
+function iniSolicitacoes(flag) {
     var element = document.getElementById('conteudoSolicitacoes');
     if (element === null) {
         return;
     }
-    console.log('request: ' + requestLoadMore);
+    var limit1 = 0, limit2 = 0;
+    if (flag) {
+        var input = document.getElementById('limit1');
+        if (input !== null) {
+            limit1 = document.getElementById('limit1').value;
+            limit2 = document.getElementById('limit2').value;
+        }
+    }
     $.post('../php/buscaLTE.php', {
         admin: 1,
         form: 'tableItensPedido',
-        request: requestLoadMore
+        limit1: limit1,
+        limit2: limit2
     }).done(function (resposta) {
         if (element.innerHTML.length > 0) {
             $('#tableSolicitacoes').DataTable().destroy();

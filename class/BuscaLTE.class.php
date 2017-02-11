@@ -600,11 +600,11 @@ class BuscaLTE extends Conexao {
      * @return string
      *
      */
-    public function getSolicitacoesAdmin(int $request): string {
+    public function getSolicitacoesAdmin(string $where = ''): string {
         $retorno = "";
         BuscaLTE::openConnection();
-        $limit = 'LIMIT ' . $request . ',' . 10;
-        $query = $this->mysqli->query("SELECT id, id_setor, DATE_FORMAT(data_pedido, '%d/%m/%Y') AS data_pedido, prioridade, status, valor, aprov_gerencia FROM pedido WHERE status <> 3 AND alteracao = 0 ORDER BY id DESC " . $limit) or exit("Erro ao buscar os pedidos que foram mandados ao SOF.");
+        $limit = 'LIMIT ' . LIMIT_MAX;
+        $query = $this->mysqli->query("SELECT id, id_setor, DATE_FORMAT(data_pedido, '%d/%m/%Y') AS data_pedido, prioridade, status, valor, aprov_gerencia FROM pedido WHERE status <> 3 AND alteracao = 0 $where ORDER BY id DESC " . $limit) or exit("Erro ao buscar os pedidos que foram mandados ao SOF.");
         $this->mysqli = NULL;
         while ($pedido = $query->fetch_object()) {
             $btnAnalisar = "";
@@ -642,6 +642,7 @@ class BuscaLTE extends Conexao {
                         <div class=\"form-group\">
                             <input type=\"checkbox\" name=\"checkPedRel\" id=\"checkPedRel" . $pedido->id . "\" value=\"" . $pedido->id . "\">
                         </div>
+                        " . $aprovGerencia . "
                     </td>
                     <td>
                         <div class=\"btn-group\">
@@ -649,7 +650,7 @@ class BuscaLTE extends Conexao {
                             <button type=\"button\" class=\"btn btn-default\" onclick=\"imprimir(" . $pedido->id . ");\" data-toggle=\"tooltip\" title=\"Imprimir\"><i class=\"fa fa-print\"></i></button>
                         </div>
                     </td>
-                    <td>" . $pedido->id . $aprovGerencia . "</td>
+                    <td>" . $pedido->id . "</td>
                     <td>" . ARRAY_SETORES[$pedido->id_setor] . "</td>
                     <td>" . $pedido->data_pedido . "</td>
                     <td>" . ARRAY_PRIORIDADE[$pedido->prioridade] . "</td>

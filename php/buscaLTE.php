@@ -62,9 +62,19 @@ if (!is_null($admin) && isset($_SESSION['id_setor']) && ($_SESSION['id_setor'] =
             echo $obj_Busca->getAdminSolicAltPedidos($status);
             break;
 
-        case 'tableItensPedido':
-            $request = filter_input(INPUT_POST, 'request');
-            echo $obj_Busca->getSolicitacoesAdmin($request);
+        case 'tableItensPedido':            
+            $limit1 = filter_input(INPUT_POST, 'limit1');
+            $limit2 = filter_input(INPUT_POST, 'limit2');
+            
+            $where = '';
+            
+            if ($limit1 < $limit2) {
+                $where = 'AND id > ' . $limit1 . ' AND id < ' . $limit2;
+            } else if ($limit1 > $limit2) {
+                $where = 'AND id > ' . $limit2 . ' AND id < ' . $limit1;
+            }
+            
+            echo $obj_Busca->getSolicitacoesAdmin($where);
             break;
 
         case 'tableSolicitacoesAdiantamento':
