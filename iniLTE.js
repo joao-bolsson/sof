@@ -1,5 +1,7 @@
 $(function () {
 
+    Pace.restart();
+
     tableItens = '';
     var ta = document.getElementById('divTableItens');
     if (ta !== null) {
@@ -1724,10 +1726,10 @@ function getStatus(id_pedido, id_setor) {
     });
     $('#detPedId').html(id_pedido);
     getNomeSetor(id_setor);
-    avisoSnack('Carregamento concluído!');
 }
 
 function limpaTela() {
+    Pace.restart();
     $('button').blur();
     $('#divTableItens').html(tableItens);
     $('#tableSolicitacoes tr').css('background-color', '');
@@ -1738,7 +1740,6 @@ function limpaTela() {
     $('#checkExcluir').iCheck('uncheck');
     document.getElementById('formPedido').reset();
     document.getElementById('rowDetPedido').style.display = "none";
-    avisoSnack('Tela Limpa');
 }
 // cancelar um item
 function cancelaItem(id_item) {
