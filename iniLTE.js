@@ -255,7 +255,7 @@ function enviaEmpenho() {
         id_pedido: id_pedido,
         empenho: empenho,
         data: data
-    }, function (resposta) {
+    }).done(function (resposta) {
         if (resposta) {
             $('#cadEmpenho').modal('hide');
             iniSolicitacoes();
@@ -272,7 +272,7 @@ function enviaOrdenador(id_pedido) {
             admin: 1,
             form: 'enviaOrdenador',
             id_pedido: id_pedido
-        }, function (resposta) {
+        }).done(function (resposta) {
             if (resposta) {
                 iniSolicitacoes();
             } else {
@@ -294,7 +294,7 @@ function enviaFontes() {
         fonte: fonte,
         ptres: ptres,
         plano: plano
-    }, function (resposta) {
+    }).done(function (resposta) {
         if (resposta) {
             $('#cadFontes').modal('hide');
             iniSolicitacoes();
@@ -310,7 +310,7 @@ function verEmpenho(id_pedido) {
         users: 1,
         form: 'verEmpenho',
         id_pedido: id_pedido
-    }, function (resposta) {
+    }).done(function (resposta) {
         if (resposta === 'EMPENHO SIAFI PENDENTE') {
             viewCompl(resposta);
         } else {
@@ -363,7 +363,7 @@ function analisaSolicAlt(id_solic, id_pedido, acao) {
         id_solic: id_solic,
         id_pedido: id_pedido,
         acao: acao
-    }, function (resposta) {
+    }).done(function (resposta) {
         if (resposta == false) {
             alert(resposta);
             window.location.href = 'index.php';
@@ -556,7 +556,7 @@ function transfereSaldo() {
         dest: dest,
         valor: valor,
         just: just
-    }, function (resposta) {
+    }).done(function (resposta) {
         if (resposta) {
             alert('O valor de R$ ' + valor + ' foi transferido com SUCESSO! ');
             $('#tableListLancamentos').DataTable().destroy();
@@ -574,7 +574,7 @@ function resetSenha() {
     $.post('../php/geral.php', {
         form: 'resetSenha',
         email: email
-    }, function (resposta) {
+    }).done(function (resposta) {
         if (resposta) {
             alert("Sua senha foi resetada e enviada para o seu e-mail.");
         } else {
@@ -598,7 +598,7 @@ function altInfoUser() {
         email: email,
         novaSenha: novaSenha,
         senhaAtual: senhaAtual
-    }, function (resposta) {
+    }).done(function (resposta) {
         if (resposta) {
             $('#myInfos').modal('hide');
             document.getElementById('altInfo').reset();
@@ -618,7 +618,7 @@ function iniAdminSolicitacoes() {
     $.post('../php/busca.php', {
         admin: 1,
         form: 'permissoes'
-    }, function (resposta) {
+    }).done(function (resposta) {
         var permissao = jQuery.parseJSON(resposta);
         if (permissao.recepcao) {
             iniRecepcao();
@@ -640,7 +640,7 @@ function iniRecepcao() {
     $.post('../php/buscaLTE.php', {
         admin: 1,
         form: 'tableRecepcao'
-    }, function (resposta) {
+    }).done(function (resposta) {
         if (element.innerHTML.length > 0) {
             $('#tableRecepcao').DataTable().destroy();
         }
@@ -653,7 +653,7 @@ function iniListProcessos() {
     $.post('../php/buscaLTE.php', {
         admin: 1,
         form: 'listProcessos'
-    }, function (resposta) {
+    }).done(function (resposta) {
         if (document.getElementById('tbodyListProcessos').innerHTML.length > 0) {
             $('#tableListProcessos').DataTable().destroy();
         }
@@ -671,7 +671,7 @@ function addProcesso(numProcesso, id) {
             admin: 1,
             form: 'addProcesso',
             id_processo: id
-        }, function (resposta) {
+        }).done(function (resposta) {
             var obj = jQuery.parseJSON(resposta);
             document.getElementById("num_processo").value = obj.num_processo;
             document.getElementById("tipo").value = obj.tipo;
@@ -697,7 +697,7 @@ function updateProcesso() {
         admin: 1,
         form: 'recepcao',
         dados: dados
-    }, function (resposta) {
+    }).done(function (resposta) {
         if (resposta === "true") {
             document.getElementById('formProcesso').reset();
             document.getElementById('id_processo').value = 0;
@@ -732,7 +732,7 @@ function getSaldoOri() {
         admin: 1,
         form: 'getSaldoOri',
         setorOri: setorOri
-    }, function (resposta) {
+    }).done(function (resposta) {
         putNumberFormat(resposta);
         $('#valorTransf').attr('max', resposta);
     });
@@ -759,7 +759,7 @@ function printChecks() {
         admin: 1,
         form: 'customRel',
         pedidos: pedidos
-    }, function () {
+    }).done(function () {
         window.open("../admin/printRelatorio.php");
     });
 }
@@ -791,7 +791,7 @@ function aprovGerencia() {
             admin: 1,
             form: 'aprovaGeren',
             pedidos: pedidos
-        }, function (resposta) {
+        }).done(function (resposta) {
             console.log(resposta);
             iniSolicitacoes();
         });
@@ -916,7 +916,7 @@ function iniSolicitacoes() {
     $.post('../php/buscaLTE.php', {
         admin: 1,
         form: 'tableItensPedido'
-    }, function (resposta) {
+    }).done(function (resposta) {
         if (element.innerHTML.length > 0) {
             $('#tableSolicitacoes').DataTable().destroy();
         }
@@ -935,7 +935,7 @@ function enviaForn(id_pedido) {
         admin: 1,
         form: 'enviaForn',
         id_pedido: id_pedido
-    }, function () {
+    }).done(function () {
         iniSolicitacoes();
         avisoSnack('Pedido enviado ao Fornecedor');
     });
@@ -949,7 +949,7 @@ function formEnvia() {
         form: 'alt_pedido',
         id_pedido: id_pedido,
         justificativa: justificativa
-    }, function (resposta) {
+    }).done(function (resposta) {
         // Quando terminada a requisição
         alert(resposta);
         $('#alt_pedido').modal('hide');
@@ -971,7 +971,7 @@ function liberaSaldo() {
         form: 'liberaSaldo',
         id_setor: setor,
         valor: valor
-    }, function (resposta) {
+    }).done(function (resposta) {
         if (resposta) {
             alert('O valor de R$ ' + valor + ' foi acrescentado ao saldo do setor com SUCESSO.');
             location.reload();
@@ -986,7 +986,7 @@ function refreshSaldo() {
     $.post('../php/busca.php', {
         admin: 1,
         form: 'refreshSaldo'
-    }, function (resposta) {
+    }).done(function (resposta) {
         document.getElementById('labelSaldoSOF').innerHTML = 'Saldo disponível: R$ ' + resposta;
     });
 }
@@ -1052,7 +1052,7 @@ function listSolicAltPedidos() {
         $.post('../php/buscaLTE.php', {
             users: 1,
             form: 'iniSolicAltPedSetor'
-        }, function (resposta) {
+        }).done(function (resposta) {
             $('#tbodySolicAltPedido').html(resposta);
         });
     }
@@ -1099,7 +1099,7 @@ function listAdiantamentos() {
         $.post('../php/buscaLTE.php', {
             users: 1,
             form: 'listAdiantamentos'
-        }, function (resposta) {
+        }).done(function (resposta) {
             $('#tbodyListAdiantamentos').html(resposta);
         });
     }
@@ -1185,7 +1185,7 @@ function listPedidos() {
         $.post('../php/buscaLTE.php', {
             users: 1,
             form: 'listPedidos'
-        }, function (resposta) {
+        }).done(function (resposta) {
             $('#tbodyListPedidos').html(resposta);
         });
     }
@@ -1197,7 +1197,7 @@ function listRascunhos() {
         $.post('../php/buscaLTE.php', {
             users: 1,
             form: 'listRascunhos'
-        }, function (resposta) {
+        }).done(function (resposta) {
             $('#tbodyListRascunhos').html(resposta);
         });
     }
@@ -1235,7 +1235,7 @@ function iniTableSolicAdiant() {
         admin: 1,
         form: 'tableSolicitacoesAdiantamento',
         status: st
-    }, function (resposta) {
+    }).done(function (resposta) {
         if ($.fn.DataTable.isDataTable('#tableSolicitacoesAdiantamento')) {
             $('#tableSolicitacoesAdiantamento').DataTable().destroy();
         }
@@ -1258,7 +1258,7 @@ function iniTableSolicAltPed() {
         admin: 1,
         form: 'iniTableSolicAltPed',
         status: st
-    }, function (resposta) {
+    }).done(function (resposta) {
         if ($.fn.DataTable.isDataTable('#' + table)) {
             $('#' + table).DataTable().destroy();
         }
@@ -1281,7 +1281,7 @@ function analisaAdi(id, acao) {
             form: 'aprovaAdi',
             id: id,
             acao: acao
-        }, function (resposta) {
+        }).done(function () {
             $('#tableListLancamentos').DataTable().destroy();
             iniTableSolicAdiant();
         });
@@ -1345,7 +1345,7 @@ function addItemPedido(id_item, qtd, vl_unitario) {
         form: 'addItemPedido',
         id_item: id_item,
         qtd: qtd
-    }, function (resposta) {
+    }).done(function (resposta) {
         var conteudoPedido = document.getElementById('conteudoPedido').innerHTML;
         $('#conteudoPedido').html(conteudoPedido + resposta);
         avisoSnack('Item Inserido ao Pedido !');
@@ -1382,7 +1382,7 @@ function pesquisarProcesso(busca) {
         users: 1,
         form: 'pesquisarProcesso',
         busca: busca
-    }, function (resposta) {
+    }).done(function (resposta) {
         $('#tableProcessos').DataTable().destroy();
         $('#conteudoProcesso').html(resposta);
         iniDataTable('#tableProcessos');
@@ -1395,13 +1395,13 @@ function fillSaldo() {
     $.post('../php/busca.php', {
         users: 1,
         form: 'fillSaldo'
-    }, function (resposta) {
+    }).done(function (resposta) {
         $('#text_saldo_total').html('R$ ' + resposta);
     });
     $.post('../php/busca.php', {
         users: 1,
         form: 'getSaldo'
-    }, function (resposta) {
+    }).done(function (resposta) {
         document.getElementById('saldo_total').value = resposta;
     });
 }
@@ -1448,7 +1448,7 @@ function editaPedido(id_pedido) {
         users: 1,
         form: 'populaRascunho',
         id_pedido: id_pedido
-    }, function (retorno) {
+    }).done(function (retorno) {
         var obj = jQuery.parseJSON(retorno);
         //valor do pedido
         document.getElementById('total_hidden').value = obj.valor;
@@ -1465,7 +1465,7 @@ function editaPedido(id_pedido) {
         users: 1,
         form: 'editaPedido',
         id_pedido: id_pedido
-    }, function (resposta) {
+    }).done(function (resposta) {
         $('#conteudoPedido').html(resposta);
     });
     populaLicitacao(id_pedido);
@@ -1478,7 +1478,7 @@ function populaContrato(id_pedido) {
         users: 1,
         form: 'populaContrato',
         id_pedido: id_pedido
-    }, function (resposta) {
+    }).done(function (resposta) {
         if (resposta !== false) {
             var obj = jQuery.parseJSON(resposta);
             document.getElementById('siafi').value = obj.siafi;
@@ -1497,7 +1497,7 @@ function populaGrupo(id_pedido) {
         users: 1,
         form: 'populaGrupo',
         id_pedido: id_pedido
-    }, function (resposta) {
+    }).done(function (resposta) {
         if (resposta) {
             $('#grupo').val(resposta).trigger('change');
         }
@@ -1509,7 +1509,7 @@ function populaLicitacao(id_pedido) {
         users: 1,
         form: 'populaLicitacao',
         id_pedido: id_pedido
-    }, function (resposta) {
+    }).done(function (resposta) {
         if (resposta) {
             var obj = jQuery.parseJSON(resposta);
             document.getElementById('idLic').value = obj.id;
@@ -1538,7 +1538,7 @@ function login() {
     $.post('../php/login.php', {
         login: user,
         senha: senha
-    }, function (resposta) {
+    }).done(function (resposta) {
         if (resposta == "false") {
             document.getElementById("formLogin").reset();
             document.getElementById("aviso").style.display = 'flex';
@@ -1569,7 +1569,7 @@ function imprimir(id_pedido) {
         users: 1,
         form: 'imprimirPedido',
         id_pedido: id_pedido
-    }, function () {
+    }).done(function () {
         window.open("../view/printPedido.php");
     });
 }
@@ -1580,7 +1580,7 @@ function print() {
         admin: 1,
         form: 'relatorioProcessos',
         tipo: tipo
-    }, function () {
+    }).done(function () {
         window.open("../admin/printRel.php");
     });
 }
@@ -1596,7 +1596,7 @@ function analisarPedido(id_pedido, id_setor) {
         admin: 1,
         form: 'analisaPedido',
         id_pedido: id_pedido
-    }, function (resposta) {
+    }).done(function (resposta) {
         document.getElementById("conteudoPedido").innerHTML = resposta;
         iniDataTable('#tableItensPedido');
         $('#tableItensPedido').DataTable().columns.adjust().draw();
@@ -1611,7 +1611,7 @@ function analisarPedido(id_pedido, id_setor) {
         form: 'infoPedido',
         id_pedido: id_pedido,
         id_setor: id_setor
-    }, function (retorno) {
+    }).done(function (retorno) {
         var obj = jQuery.parseJSON(retorno);
         //valor do pedido
         document.getElementById('total_hidden').value = obj.valor;
@@ -1651,7 +1651,7 @@ function getNomeSetor(id_setor) {
         users: 1,
         form: 'getNomeSetor',
         id_setor: id_setor
-    }, function (resposta) {
+    }).done(function (resposta) {
         document.getElementById("nomeSetorDet").innerHTML = resposta;
     });
 }
@@ -1674,7 +1674,7 @@ function deletePedido(id_pedido) {
         users: 1,
         form: 'deletePedido',
         id_pedido: id_pedido
-    }, function (resposta) {
+    }).done(function (resposta) {
         if (resposta != "true") {
             alert(resposta);
         } else {
@@ -1703,7 +1703,7 @@ function getStatus(id_pedido, id_setor) {
         form: 'infoPedido',
         id_pedido: id_pedido,
         id_setor: id_setor
-    }, function (retorno) {
+    }).done(function (retorno) {
         var obj = jQuery.parseJSON(retorno);
         document.getElementById('text_saldo_total').innerHTML = "R$ " + parseFloat(obj.saldo).toFixed(3);
         //obs
@@ -1770,7 +1770,7 @@ function editaItem(id_item) {
         admin: 1,
         form: 'infoItem',
         id_item: id_item
-    }, function (retorno) {
+    }).done(function (retorno) {
         var obj = jQuery.parseJSON(retorno);
         document.getElementById('compItem').value = obj.complemento_item;
         document.getElementById('vlUnitario').value = obj.vl_unitario;
@@ -1797,7 +1797,7 @@ function submitEditItem() {
         form: 'editItem',
         fields: fields,
         dados: dados
-    }, function (resposta) {
+    }).done(function (resposta) {
         if (resposta == 0) {
             alert("Ocorreu um erro ao atualizar informações.");
         }
