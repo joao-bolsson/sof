@@ -1012,7 +1012,7 @@ class BuscaLTE extends Conexao {
     public function getMeusPedidos(int $id_setor): string {
         $retorno = "";
         BuscaLTE::openConnection();
-        $query = $this->mysqli->query("SELECT pedido.id, DATE_FORMAT(pedido.data_pedido, '%d/%m/%Y') AS data_pedido, mes.sigla_mes AS ref_mes, prioridade.nome AS prioridade, status.nome AS status, pedido.valor, pedido.id_usuario FROM pedido, mes, prioridade, status WHERE prioridade.id = pedido.prioridade AND status.id = pedido.status AND pedido.id_setor = {$id_setor} AND pedido.alteracao = 0 AND mes.id = pedido.ref_mes ORDER BY pedido.id DESC;") or exit("Erro ao buscar os pedidos do setor.");
+        $query = $this->mysqli->query("SELECT id, DATE_FORMAT(data_pedido, '%d/%m/%Y') AS data_pedido, prioridade, status, valor, id_usuario FROM pedido WHERE id_setor = " . $id_setor . " AND alteracao = 0 ORDER BY id DESC LIMIT 500;") or exit("Erro ao buscar os pedidos do setor.");
         $this->mysqli = NULL;
         while ($pedido = $query->fetch_object()) {
             $empenho = BuscaLTE::verEmpenho($pedido->id);
@@ -1021,21 +1021,21 @@ class BuscaLTE extends Conexao {
             }
             $pedido->valor = number_format($pedido->valor, 3, ',', '.');
             $btnSolicAlt = "";
-            if ($pedido->status == 'Em Analise' || $pedido->status == 'Aguarda Orcamento' && $pedido->id_usuario == $_SESSION['id']) {
-                $btnSolicAlt = "<button type=\"button\" class=\"btn btn-default btn-sm\" onclick=\"solicAltPed(" . $pedido->id . ");\" title=\"Solicitar Alteração\"><i class=\"fa fa-wrench\"></i></button>";
+            if ($pedido->status == 2 || $pedido->status == 5 && $pedido->id_usuario == $_SESSION['id']) {
+                $btnSolicAlt = "<button type=\"button\" class=\"btn btn-default btn-sm\" onclick=\"solicAltPed(" . $pedido->id . ");\" data-toggle=\"tooltip\" title=\"Solicitar Alteração\"><i class=\"fa fa-wrench\"></i></button>";
             }
             $retorno .= "
                 <tr>
                     <td>" . $pedido->id . "</td>
-                    <td>" . $pedido->ref_mes . "</td>
                     <td>" . $pedido->data_pedido . "</td>
-                    <td>" . $pedido->prioridade . "</td>
-                    <td><small class=\"label bg-gray\">" . $pedido->status . "</small></td>
+                    <td>" . ARRAY_PRIORIDADE[$pedido->prioridade] . "</td>
+                    <td><small class=\"label bg-gray\">" . ARRAY_STATUS[$pedido->status] . "</small></td>
                     <td>" . $empenho . "</td>
                     <td>R$ " . $pedido->valor . "</td>
+                    <td>" . BuscaLTE::getFornecedor($pedido->id) . "</td>
                     <td>
                         " . $btnSolicAlt . "
-                        <button type=\"button\" class=\"btn btn-default btn-sm\" onclick=\"imprimir(" . $pedido->id . ");\" title=\"Imprimir\"><i class=\"fa fa-print\"></i></button>
+                        <button type=\"button\" class=\"btn btn-default btn-sm\" onclick=\"imprimir(" . $pedido->id . ");\" data-toggle=\"tooltip\" title=\"Imprimir\"><i class=\"fa fa-print\"></i></button>
                     </td>
                 </tr>";
         }

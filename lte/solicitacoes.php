@@ -470,7 +470,7 @@ $select_grupo = $obj_Busca->getOptionsGrupos($id_setor);
                 </div>
             </div>
             <div aria-hidden="true" class="modal fade" id="listPedidos" role="dialog" tabindex="-1">
-                <div class="modal-dialog modal-lg">
+                <div class="modal-dialog" style="width: 90%">
                     <div class="modal-content">
                         <div class="modal-header">
                             <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
@@ -480,13 +480,13 @@ $select_grupo = $obj_Busca->getOptionsGrupos($id_setor);
                             <table id="tableListPedidos" class="table table-bordered table-striped">
                                 <thead>
                                     <tr>
-                                        <th>NUM_PEDIDO</th>
-                                        <th>RefMes</th>
+                                        <th>NUM</th>
                                         <th>Data de Envio</th>
                                         <th>Prioridade</th>
                                         <th>Status</th>
                                         <th>SIAFI</th>
                                         <th>Valor</th>
+                                        <th>Fornecedor</th>
                                         <th>Opções</th>
                                     </tr>
                                 </thead>
