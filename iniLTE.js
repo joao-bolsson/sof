@@ -913,6 +913,15 @@ function loadChecks() {
     }
 }
 
+function tableValidade() {
+    $('[id]').each(function () {
+        var $ids = $('[id=' + this.id + ']');
+        if ($ids.length > 1) {
+            $ids.not(':first').remove();
+        }
+    });
+}
+
 function loadMore() {
     $('button').blur();
     $('#loadMoreCustom').modal('hide');
@@ -942,6 +951,7 @@ function iniSolicitacoes(flag) {
             $('#tableSolicitacoes').DataTable().destroy();
         }
         element.innerHTML += resposta;
+        tableValidade();
         loadChecks();
         iniDataTable('#tableSolicitacoes');
     });
