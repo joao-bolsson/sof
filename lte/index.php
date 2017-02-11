@@ -433,7 +433,6 @@ if (isset($_SESSION['editmode'])) {
                                                     <th>Pedido</th>
                                                     <th>Setor</th>
                                                     <th>Data</th>
-                                                    <th>Mês</th>
                                                     <th>Prioridade</th>
                                                     <th>Status</th>
                                                     <th>Valor</th>
