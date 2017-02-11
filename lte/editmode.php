@@ -41,6 +41,8 @@ if (!isset($_SESSION['editmode'])) {
         <link rel="stylesheet" href="dist/css/skins/_all-skins.min.css">
         <!-- Custom snackbar style -->
         <link rel="stylesheet" href="dist/css/snackbar.min.css">
+        <!-- Pace style -->
+        <link rel="stylesheet" href="plugins/pace/pace.min.css">
 
         <link rel="icon" href="../favicon.ico">
 
@@ -336,6 +338,8 @@ if (!isset($_SESSION['editmode'])) {
         <script src="dist/js/app.min.js"></script>
         <!-- AdminLTE for demo purposes -->
         <script src="dist/js/demo.js"></script>
+        <!-- PACE -->
+        <script src="plugins/pace/pace.min.js"></script>
         <!-- page script -->
         <script type="text/javascript" src="../iniLTE.min.js"></script>
     </body>

@@ -1,6 +1,8 @@
 $(function () {
 
-    Pace.restart();
+    $(document).ajaxStart(function () {
+        Pace.restart();
+    });
 
     tableItens = '';
     var ta = document.getElementById('divTableItens');
