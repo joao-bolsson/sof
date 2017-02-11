@@ -723,7 +723,7 @@ if (isset($_SESSION['editmode'])) {
                             </div>
                             <form action="../php/geral.php" method="POST">
                                 <input type="hidden" name="form" value="altUser"/>
-                                <input type="hidden" name="admin" value="1"/>
+                                <input type="hidden" name="users" value="1"/>
                                 <div class="modal-body">
                                     <div class="form-group">
                                         <label>Usuário</label>

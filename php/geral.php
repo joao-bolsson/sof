@@ -63,14 +63,6 @@ if ($obj_Busca->isActive()) {
                 echo $obj_Geral->aprovaGerencia($pedidos);
                 break;
 
-            case 'altUser':
-                $user = filter_input(INPUT_POST, 'user');
-                if (!is_null($user)) {
-                    $obj_Login->changeUser($user);
-                }
-                header("Location: ../");
-                break;
-
             case 'addUser':
                 $nome = filter_input(INPUT_POST, 'nome');
                 $login = filter_input(INPUT_POST, 'login');
@@ -451,6 +443,14 @@ if ($obj_Busca->isActive()) {
         }
     } else if ($users !== NULL && isset($_SESSION["id_setor"]) && $_SESSION["id_setor"] != 0) {
         switch ($form) {
+
+            case 'altUser':
+                $user = filter_input(INPUT_POST, 'user');
+                if (!is_null($user)) {
+                    $obj_Login->changeUser($user);
+                }
+                header("Location: ../");
+                break;
 
             case 'problema':
                 $assunto = filter_input(INPUT_POST, 'assunto');

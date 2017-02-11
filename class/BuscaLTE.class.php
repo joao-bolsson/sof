@@ -66,14 +66,19 @@ class BuscaLTE extends Conexao {
     /**
      * @return string Lista de usuários cadastrados.
      */
-    public function getUsers(): string {
+    public function getUsers(bool $users = false): string {
         BuscaLTE::openConnection();
-        $query = $this->mysqli->query("SELECT usuario.id, usuario.nome, setores.nome AS setor FROM usuario, setores WHERE usuario.id_setor = setores.id ORDER BY nome ASC;") or exit("Erro ao buscar usuários.");
+        $where = '';
+
+        if ($users) {
+            $where = "WHERE id_setor = 12";
+        }
+        $query = $this->mysqli->query("SELECT id, nome, id_setor FROM usuario " . $where . " ORDER BY nome ASC;") or exit("Erro ao buscar usuários.");
         $this->mysqli = NULL;
 
         $retorno = "";
         while ($user = $query->fetch_object()) {
-            $retorno .= "<option value=\"" . $user->id . "\">" . $user->nome . " (" . $user->setor . ")</option>";
+            $retorno .= "<option value=\"" . $user->id . "\">" . $user->nome . " (" . ARRAY_SETORES[$user->id_setor] . ")</option>";
         }
         return $retorno;
     }
@@ -1105,7 +1110,7 @@ class BuscaLTE extends Conexao {
             $where = "AND saldos_lancamentos.id_setor = " . $id_setor;
         }
         BuscaLTE::openConnection();
-        $query = $this->mysqli->query("SELECT saldos_lancamentos.id, setores.nome, DATE_FORMAT(saldos_lancamentos.data, '%d/%m/%Y') AS data, saldos_lancamentos.valor, saldo_categoria.nome AS categoria, saldo_categoria.id AS id_categoria FROM setores, saldos_lancamentos, saldo_categoria WHERE setores.id = saldos_lancamentos.id_setor {$where} AND saldos_lancamentos.categoria = saldo_categoria.id ORDER BY saldos_lancamentos.id DESC;") or exit("Erro ao buscar informações dos lançamentos.");
+        $query = $this->mysqli->query("SELECT saldos_lancamentos.id, saldos_lancamentos.id_setor, DATE_FORMAT(saldos_lancamentos.data, '%d/%m/%Y') AS data, saldos_lancamentos.valor, saldo_categoria.nome AS categoria, saldo_categoria.id AS id_categoria FROM saldos_lancamentos, saldo_categoria WHERE saldos_lancamentos.categoria = saldo_categoria.id " . $where . " ORDER BY saldos_lancamentos.id DESC LIMIT 500;") or exit("Erro ao buscar informações dos lançamentos.");
         $this->mysqli = NULL;
         $cor = '';
         while ($lancamento = $query->fetch_object()) {
@@ -1127,7 +1132,7 @@ class BuscaLTE extends Conexao {
             $retorno .= "
                 <tr>
                     <td>" . $btn . "</td>
-                    <td>" . $lancamento->nome . "</td>
+                    <td>" . ARRAY_SETORES[$lancamento->id_setor] . "</td>
                     <td>" . $lancamento->data . "</td>
                     <td style=\"color: " . $cor . ";\">R$ " . $lancamento->valor . "</td>
                     <td>" . $lancamento->categoria . "</td>

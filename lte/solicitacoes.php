@@ -115,6 +115,14 @@ $select_grupo = $obj_Busca->getOptionsGrupos($id_setor);
                     <!-- Sidebar Menu -->
                     <ul class="sidebar-menu">
                         <li>
+                            <a href="javascript:abreModal('#altUser');">
+                                <i class="fa fa-user"></i> <span>Alterar Usuário</span>
+                                <span class="pull-right-container">
+                                    <small class="label pull-right bg-blue">novo</small>
+                                </span>
+                            </a>
+                        </li>
+                        <li>
                             <a href="javascript:listRascunhos();">
                                 <i class="fa fa-pencil"></i> <span>Rascunhos</span>
                             </a>
@@ -334,6 +342,31 @@ $select_grupo = $obj_Busca->getOptionsGrupos($id_setor);
                 <strong>Copyright © 2016-2017 <a href="https://github.com/joao-bolsson">João Bolsson</a>.</strong> All rights
                 reserved.
             </footer>
+            <div aria-hidden="true" class="modal fade" id="altUser" role="dialog" tabindex="-1">
+                <div class="modal-dialog" style="width: 40%;">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                            <h4 class="modal-title" >Alterar Usuário</h4>
+                        </div>
+                        <form action="../php/geral.php" method="POST">
+                            <input type="hidden" name="form" value="altUser"/>
+                            <input type="hidden" name="users" value="1"/>
+                            <div class="modal-body">
+                                <div class="form-group">
+                                    <label>Usuário</label>
+                                    <select id="userA" class="form-control" name="user" required>
+                                        <?= $obj_Busca->getUsers(true); ?>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button class="btn btn-primary" type="submit" style="width: 100%;"><i class="fa fa-refresh"></i>&nbsp;Trocar</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
             <div aria-hidden="true" class="modal fade" id="listAdiantamentos" role="dialog" tabindex="-1">
                 <div class="modal-dialog modal-lg">
                     <div class="modal-content">

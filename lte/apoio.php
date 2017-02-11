@@ -115,7 +115,6 @@ require_once '../defines.php';
                                             <th>Num Pedido</th>
                                             <th>Setor</th>
                                             <th>Data Pedido</th>
-                                            <th>Ref Mês</th>
                                             <th>Prioridade</th>
                                             <th>Status</th>
                                             <th>Valor</th>
