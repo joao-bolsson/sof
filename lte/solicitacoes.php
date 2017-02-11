@@ -509,7 +509,6 @@ $select_grupo = $obj_Busca->getOptionsGrupos($id_setor);
                                     <tr>
                                         <th>Num Pedido</th>
                                         <th>Status</th>
-                                        <th>RefMes</th>
                                         <th>Última modificação</th>
                                         <th>Valor</th>
                                         <th>Opções</th>

@@ -914,7 +914,7 @@ class BuscaLTE extends Conexao {
     public function getRascunhos(int $id_setor): string {
         $retorno = "";
         BuscaLTE::openConnection();
-        $query = $this->mysqli->query("SELECT pedido.id, DATE_FORMAT(pedido.data_pedido, '%d/%m/%Y') AS data_pedido, mes.sigla_mes AS ref_mes, pedido.valor, status.nome AS status, pedido.id_usuario FROM pedido, mes, status WHERE pedido.id_setor = {$id_setor} AND pedido.alteracao = 1 AND mes.id = pedido.ref_mes AND status.id = pedido.status ORDER BY pedido.id DESC;") or exit("Erro ao buscar rascunhos do setor.");
+        $query = $this->mysqli->query("SELECT id, DATE_FORMAT(data_pedido, '%d/%m/%Y') AS data_pedido, pedido.valor, status, pedido.id_usuario FROM pedido WHERE id_setor = " . $id_setor . " AND alteracao = 1 ORDER BY id DESC LIMIT 500;") or exit("Erro ao buscar rascunhos do setor.");
         $this->mysqli = NULL;
 
         while ($rascunho = $query->fetch_object()) {
@@ -922,19 +922,18 @@ class BuscaLTE extends Conexao {
             $btnEdit = '';
             $btnDel = '';
             if ($rascunho->id_usuario == $_SESSION['id']) {
-                $btnEdit = "<button type=\"button\" class=\"btn btn-default btn-sm\" onclick=\"editaPedido(" . $rascunho->id . ");\" title=\"Editar\"><i class=\"fa fa-pencil\"></i></button>";
-                $btnDel = "<button type=\"button\" class=\"btn btn-default btn-sm\" onclick=\"deletePedido(" . $rascunho->id . ");\" title=\"Excluir\"><i class=\"fa fa-trash\"></i></button>";
+                $btnEdit = "<button type=\"button\" class=\"btn btn-default btn-sm\" onclick=\"editaPedido(" . $rascunho->id . ");\" data-toggle=\"tooltip\" title=\"Editar\"><i class=\"fa fa-pencil\"></i></button>";
+                $btnDel = "<button type=\"button\" class=\"btn btn-default btn-sm\" onclick=\"deletePedido(" . $rascunho->id . ");\" data-toggle=\"tooltip\" title=\"Excluir\"><i class=\"fa fa-trash\"></i></button>";
             }
             $retorno .= "
                 <tr>
                     <td>" . $rascunho->id . "</td>
-                    <td><small class=\"label bg-gray\">" . $rascunho->status . "</small></td>
-                    <td>" . $rascunho->ref_mes . "</td>
+                    <td><small class=\"label bg-gray\">" . ARRAY_STATUS[$rascunho->status] . "</small></td>
                     <td>" . $rascunho->data_pedido . "</td>
                     <td>R$ " . $rascunho->valor . "</td>
                     <td>
                         " . $btnEdit . "
-                        <button type=\"button\" class=\"btn btn-default btn-sm\" onclick=\"imprimir(" . $rascunho->id . ");\" title=\"Imprimir\"><i class=\"fa fa-print\"></i></button>
+                        <button type=\"button\" class=\"btn btn-default btn-sm\" onclick=\"imprimir(" . $rascunho->id . ");\" data-toggle=\"tooltip\" title=\"Imprimir\"><i class=\"fa fa-print\"></i></button>
                         " . $btnDel . "
                     </td>
                 </tr>";
