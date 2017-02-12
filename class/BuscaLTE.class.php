@@ -47,7 +47,7 @@ class BuscaLTE extends Conexao {
 
     public function getOptionsContrato() {
         BuscaLTE::openConnection();
-        $query = $this->mysqli->query("SELECT contrato_tipo.id, contrato_tipo.nome FROM contrato_tipo;") or exit("Erro ao buscar opções de contrato.");
+        $query = $this->mysqli->query("SELECT id, nome FROM contrato_tipo;") or exit("Erro ao buscar opções de contrato.");
         $this->mysqli = NULL;
         $retorno = "";
         while ($obj = $query->fetch_object()) {
@@ -90,7 +90,7 @@ class BuscaLTE extends Conexao {
      */
     public function getOptionsGrupos(int $id_setor): string {
         BuscaLTE::openConnection();
-        $query = $this->mysqli->query("SELECT setores_grupos.id, setores_grupos.nome FROM setores_grupos WHERE setores_grupos.id_setor = {$id_setor};") or exit("Erro ao buscar grupos.");
+        $query = $this->mysqli->query("SELECT id, nome FROM setores_grupos WHERE id_setor = " . $id_setor) or exit("Erro ao buscar grupos.");
         $this->mysqli = NULL;
         $retorno = "";
         if ($query->num_rows >= 1) {
@@ -241,7 +241,7 @@ class BuscaLTE extends Conexao {
     public function getPedidosAnalise(int $id_setor): string {
         $retorno = "";
         BuscaLTE::openConnection();
-        $query = $this->mysqli->query("SELECT sum(pedido.valor) AS soma FROM pedido WHERE pedido.id_setor = {$id_setor} AND pedido.status = 2;") or exit("Erro ao buscar informações dos pedidos em análise.");
+        $query = $this->mysqli->query("SELECT sum(valor) AS soma FROM pedido WHERE id_setor = " . $id_setor . " AND status = 2;") or exit("Erro ao buscar informações dos pedidos em análise.");
         $this->mysqli = NULL;
         if ($query->num_rows > 0) {
             $obj = $query->fetch_object();
@@ -265,7 +265,7 @@ class BuscaLTE extends Conexao {
     public function verEmpenho(int $id_pedido): string {
         $retorno = '';
         BuscaLTE::openConnection();
-        $query = $this->mysqli->query("SELECT empenho FROM pedido_empenho WHERE id_pedido = {$id_pedido};") or exit("Erro so ver empenho.");
+        $query = $this->mysqli->query("SELECT empenho FROM pedido_empenho WHERE id_pedido = " . $id_pedido) or exit("Erro so ver empenho.");
         $this->mysqli = NULL;
         if ($query->num_rows < 1) {
             $retorno = 'EMPENHO SIAFI PENDENTE';
@@ -344,7 +344,7 @@ class BuscaLTE extends Conexao {
      */
     public function getRequestDraft(int $id_pedido): bool {
         BuscaLTE::openConnection();
-        $query = $this->mysqli->query("SELECT prioridade.nome FROM pedido, prioridade WHERE pedido.id = {$id_pedido} AND pedido.prioridade = prioridade.id;") or exit("Erro ao buscar prioridade do pedido.");
+        $query = $this->mysqli->query("SELECT prioridade.nome FROM pedido, prioridade WHERE pedido.id = " . $id_pedido . " AND pedido.prioridade = prioridade.id;") or exit("Erro ao buscar prioridade do pedido.");
         $this->mysqli = NULL;
         $obj = $query->fetch_object();
         return $obj->nome == 'Rascunho';
@@ -465,7 +465,7 @@ class BuscaLTE extends Conexao {
      */
     public function getPermissoes(int $id_user) {
         BuscaLTE::openConnection();
-        $query = $this->mysqli->query("SELECT usuario_permissoes.noticias, usuario_permissoes.saldos, usuario_permissoes.pedidos, usuario_permissoes.recepcao FROM usuario_permissoes WHERE usuario_permissoes.id_usuario = {$id_user};") or exit("Erro ao buscar permissões do usuário.");
+        $query = $this->mysqli->query("SELECT noticias, saldos, pedidos, recepcao FROM usuario_permissoes WHERE id_usuario = " . $id_user) or exit("Erro ao buscar permissões do usuário.");
         $this->mysqli = NULL;
         $obj_permissoes = $query->fetch_object();
         return $obj_permissoes;
@@ -584,7 +584,7 @@ class BuscaLTE extends Conexao {
      */
     private function verDataEmpenho(int $id_pedido): string {
         BuscaLTE::openConnection();
-        $query = $this->mysqli->query("SELECT DATE_FORMAT(pedido_empenho.data, '%d/%m/%Y') AS data FROM pedido_empenho WHERE pedido_empenho.id_pedido = {$id_pedido} LIMIT 1;");
+        $query = $this->mysqli->query("SELECT DATE_FORMAT(data, '%d/%m/%Y') AS data FROM pedido_empenho WHERE id_pedido = " . $id_pedido . " LIMIT 1;");
         $this->mysqli = NULL;
 
         if ($query->num_rows < 1) {
@@ -604,7 +604,7 @@ class BuscaLTE extends Conexao {
         $retorno = "";
         BuscaLTE::openConnection();
         $limit = 'LIMIT ' . LIMIT_MAX;
-        $query = $this->mysqli->query("SELECT id, id_setor, DATE_FORMAT(data_pedido, '%d/%m/%Y') AS data_pedido, prioridade, status, valor, aprov_gerencia FROM pedido WHERE status <> 3 AND alteracao = 0 $where ORDER BY id DESC " . $limit) or exit("Erro ao buscar os pedidos que foram mandados ao SOF.");
+        $query = $this->mysqli->query("SELECT id, id_setor, DATE_FORMAT(data_pedido, '%d/%m/%Y') AS data_pedido, prioridade, status, valor, aprov_gerencia FROM pedido WHERE status <> 3 AND alteracao = 0 " . $where . " ORDER BY id DESC " . $limit) or exit("Erro ao buscar os pedidos que foram mandados ao SOF.");
         $this->mysqli = NULL;
         while ($pedido = $query->fetch_object()) {
             $btnAnalisar = "";
@@ -793,7 +793,7 @@ class BuscaLTE extends Conexao {
     public function getSolicAdiSetor(int $id_setor): string {
         $retorno = "";
         BuscaLTE::openConnection();
-        $query = $this->mysqli->query("SELECT saldos_adiantados.id, DATE_FORMAT(saldos_adiantados.data_solicitacao, '%d/%m/%Y') AS data_solicitacao, DATE_FORMAT(saldos_adiantados.data_analise, '%d/%m/%Y') AS data_analise, saldos_adiantados.valor_adiantado, saldos_adiantados.justificativa, saldos_adiantados.status FROM saldos_adiantados WHERE saldos_adiantados.id_setor = {$id_setor} ORDER BY saldos_adiantados.id DESC;") or exit("Erro ao buscar solicitações de adiantamento.");
+        $query = $this->mysqli->query("SELECT id, DATE_FORMAT(data_solicitacao, '%d/%m/%Y') AS data_solicitacao, DATE_FORMAT(data_analise, '%d/%m/%Y') AS data_analise, valor_adiantado, justificativa, status FROM saldos_adiantados WHERE id_setor = " . $id_setor . " ORDER BY id DESC;") or exit("Erro ao buscar solicitações de adiantamento.");
         $label = $status = "";
         while ($solic = $query->fetch_object()) {
             switch ($solic->status) {
@@ -838,7 +838,7 @@ class BuscaLTE extends Conexao {
         $retorno = "";
 
         BuscaLTE::openConnection();
-        $query = $this->mysqli->query("SELECT itens.id, itens.id_item_processo, itens.nome_fornecedor, itens.cod_reduzido, itens.complemento_item, replace(itens.vl_unitario, ',', '.') AS vl_unitario, itens.qt_contrato, itens.qt_utilizado, itens.vl_utilizado, itens.qt_saldo, itens.vl_saldo FROM itens WHERE num_processo LIKE '%{$busca}%' AND cancelado = 0;") or exit("Erro ao buscar o conteúdo dos processos.");
+        $query = $this->mysqli->query("SELECT id, id_item_processo, nome_fornecedor, cod_reduzido, complemento_item, replace(vl_unitario, ',', '.') AS vl_unitario, qt_contrato, qt_utilizado, vl_utilizado, qt_saldo, vl_saldo FROM itens WHERE num_processo LIKE '%{$busca}%' AND cancelado = 0;") or exit("Erro ao buscar o conteúdo dos processos.");
 
         while ($item = $query->fetch_object()) {
             //remove as aspas do complemento_item
@@ -880,7 +880,7 @@ class BuscaLTE extends Conexao {
      */
     public function addItemPedido(int $id_item, int $qtd): string {
         BuscaLTE::openConnection();
-        $query = $this->mysqli->query("SELECT itens.id, itens.nome_fornecedor, itens.num_licitacao, itens.cod_reduzido, itens.complemento_item, replace(itens.vl_unitario, ',', '.') AS vl_unitario, itens.qt_saldo, itens.qt_contrato, itens.qt_utilizado, itens.vl_saldo, itens.vl_contrato, itens.vl_utilizado FROM itens WHERE itens.id = {$id_item};") or exit("Erro ao buscar ");
+        $query = $this->mysqli->query("SELECT id, nome_fornecedor, num_licitacao, cod_reduzido, complemento_item, replace(vl_unitario, ',', '.') AS vl_unitario, qt_saldo, qt_contrato, qt_utilizado, vl_saldo, vl_contrato, vl_utilizado FROM itens WHERE id = " . $id_item) or exit("Erro ao buscar ");
         $item = $query->fetch_object();
         $item->complemento_item = $this->mysqli->real_escape_string($item->complemento_item);
         $item->complemento_item = str_replace("\"", "'", $item->complemento_item);
@@ -955,9 +955,9 @@ class BuscaLTE extends Conexao {
      */
     public function getSaldo(int $id_setor): string {
         BuscaLTE::openConnection();
-        $query = $this->mysqli->query("SELECT saldo_setor.saldo FROM saldo_setor WHERE saldo_setor.id_setor = {$id_setor};") or exit("Erro ao buscar o saldo do setor.");
+        $query = $this->mysqli->query("SELECT saldo FROM saldo_setor WHERE id_setor = " . $id_setor) or exit("Erro ao buscar o saldo do setor.");
         if ($query->num_rows < 1) {
-            $this->mysqli->query("INSERT INTO saldo_setor VALUES(NULL, {$id_setor}, '0.000');") or exit("Erro ao inserir o saldo do setor.");
+            $this->mysqli->query("INSERT INTO saldo_setor VALUES(NULL, " . $id_setor . ", '0.000');") or exit("Erro ao inserir o saldo do setor.");
             $this->mysqli = NULL;
             return '0.000';
         }
@@ -1056,13 +1056,13 @@ class BuscaLTE extends Conexao {
      */
     public function getProcessos(string $tela): string {
         $retorno = "";
-        $sql = "SELECT DISTINCT itens.num_processo FROM itens;";
+        $sql = "SELECT DISTINCT num_processo FROM itens;";
         $onclick = "pesquisarProcesso";
         $title = "Pesquisar Processo";
         $icon = "fa-search";
         $act = 'Pesquisar';
         if ($tela == "recepcao") {
-            $sql = "SELECT DISTINCT itens.num_processo FROM itens WHERE itens.num_processo NOT IN (SELECT DISTINCT processos.num_processo FROM processos);";
+            $sql = "SELECT DISTINCT num_processo FROM itens WHERE num_processo NOT IN (SELECT DISTINCT num_processo FROM processos);";
             $onclick = "addProcesso";
             $title = "Adicionar Processo";
             $icon = "fa-plus";
@@ -1085,7 +1085,7 @@ class BuscaLTE extends Conexao {
 
     private function getSetorTransf(int $id_lancamento) {
         BuscaLTE::openConnection();
-        $query = $this->mysqli->query("SELECT saldos_lancamentos.id_setor, saldos_lancamentos.valor FROM saldos_lancamentos WHERE id = " . $id_lancamento) or exit("Erro ao buscar setor da transferência");
+        $query = $this->mysqli->query("SELECT id_setor, valor FROM saldos_lancamentos WHERE id = " . $id_lancamento) or exit("Erro ao buscar setor da transferência");
         $obj = $query->fetch_object();
         if ($obj->valor < 0) { // pega o destino
             $id_lancamento++;
