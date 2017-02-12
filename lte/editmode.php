@@ -236,10 +236,16 @@ if (!isset($_SESSION['editmode'])) {
                                         </td>
                                     </tr>
                                     <tr>
-                                        <td colspan="3">
+                                        <td colspan="2">
                                             <div class="form-group">
                                                 <label>Valor Saldo</label>
                                                 <input class="form-control" id="vlSaldo" name="vl_saldo" type="number" step="0.001" required>
+                                            </div>
+                                        </td>
+                                        <td
+                                            <div class="form-group">
+                                                <label>Seq Item Processo</label>
+                                                <input class="form-control" id="seqItemProcesso" name="seq_item_processo" type="text" maxlength="20" required>
                                             </div>
                                         </td>
                                     </tr>

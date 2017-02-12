@@ -1813,11 +1813,12 @@ function editaItem(id_item) {
         document.getElementById('codDespesa').value = obj.cod_despesa;
         document.getElementById('codReduzido').value = obj.cod_reduzido;
         document.getElementById('dtFim').value = obj.dt_fim;
+        document.getElementById('seqItemProcesso').value = obj.seq_item_processo;
     });
 }
 
 function submitEditItem() {
-    var fields = ['idItem', 'compItem', 'vlUnitario', 'qtContrato', 'vlContrato', 'qtUtilizada', 'vlUtilizado', 'qtSaldo', 'vlSaldo', 'codDespesa', 'codReduzido', 'dtFim'];
+    var fields = ['idItem', 'compItem', 'vlUnitario', 'qtContrato', 'vlContrato', 'qtUtilizada', 'vlUtilizado', 'qtSaldo', 'vlSaldo', 'codDespesa', 'codReduzido', 'dtFim', 'seqItemProcesso'];
     var dados = [];
     for (var i = 0; i < fields.length; i++) {
         dados[i] = document.getElementById(fields[i]).value;
