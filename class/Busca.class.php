@@ -186,7 +186,7 @@ class Busca extends Conexao {
      */
     public function getInfoItem($id_item) {
         Busca::openConnection();
-        $query = $this->mysqli->query("SELECT cod_despesa, cod_reduzido, dt_fim, complemento_item, replace(vl_unitario, ',', '.') AS vl_unitario, qt_contrato, replace(vl_contrato, ',', '.') AS vl_contrato, qt_utilizado, replace(vl_utilizado, ',', '.') AS vl_utilizado, qt_saldo, replace(vl_saldo, ',', '.') AS vl_saldo FROM itens WHERE id = " . $id_item) or exit("Erro ao buscar informações do item.");
+        $query = $this->mysqli->query("SELECT cod_despesa, cod_reduzido, dt_fim, complemento_item, replace(vl_unitario, ',', '.') AS vl_unitario, qt_contrato, replace(vl_contrato, ',', '.') AS vl_contrato, qt_utilizado, replace(vl_utilizado, ',', '.') AS vl_utilizado, qt_saldo, replace(vl_saldo, ',', '.') AS vl_saldo, seq_item_processo FROM itens WHERE id = " . $id_item) or exit("Erro ao buscar informações do item.");
         $this->mysqli = NULL;
         $obj = $query->fetch_object();
         return json_encode($obj);
