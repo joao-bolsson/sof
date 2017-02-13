@@ -13,6 +13,8 @@ include_once 'Conexao.class.php';
 include_once 'Util.class.php';
 include_once 'BuscaLTE.class.php';
 
+require_once '../defines.php';
+
 class PrintMod extends Conexao {
 
     private $mysqli, $obj_Util, $obj_Busca;
@@ -545,7 +547,7 @@ class PrintMod extends Conexao {
         if (is_null($this->mysqli)) {
             $this->mysqli = parent::getConexao();
         }
-        $query = $this->mysqli->query("SELECT pedido.id, setores.nome AS setor, DATE_FORMAT(pedido.data_pedido, '%d/%m/%Y') AS data_pedido, prioridade.nome AS prioridade, status.nome AS status, pedido.valor {$empenho} FROM {$tb_empenho} setores, pedido, prioridade, status WHERE status.id = pedido.status {$where_setor} {$where_prioridade} {$where_empenho} AND prioridade.id = pedido.prioridade AND pedido.id_setor = setores.id {$where_status} AND pedido.data_pedido BETWEEN '{$dataIni}' AND '{$dataFim}' ORDER BY pedido.id ASC;") or exit("Erro ao buscar os pedidos com as especificações do usuário.");
+        $query = $this->mysqli->query("SELECT pedido.id, pedido.id_setor, setores.nome AS setor, DATE_FORMAT(pedido.data_pedido, '%d/%m/%Y') AS data_pedido, prioridade.nome AS prioridade, status.nome AS status, pedido.valor {$empenho} FROM {$tb_empenho} setores, pedido, prioridade, status WHERE status.id = pedido.status {$where_setor} {$where_prioridade} {$where_empenho} AND prioridade.id = pedido.prioridade AND pedido.id_setor = setores.id {$where_status} AND pedido.data_pedido BETWEEN '{$dataIni}' AND '{$dataFim}' ORDER BY pedido.id ASC;") or exit("Erro ao buscar os pedidos com as especificações do usuário.");
 
         $titulo = "Relatório de Pedidos por Setor e Nível de Prioridade";
         if ($query) {
@@ -597,8 +599,14 @@ class PrintMod extends Conexao {
             if (is_null($this->obj_Busca)) {
                 $this->obj_Busca = new BuscaLTE();
             }
+
+            $array_sub_totais = [];
             while ($pedido = $query->fetch_object()) {
                 $tbody = "";
+                if (!array_key_exists($pedido->id_setor, $array_sub_totais)) {
+                    $array_sub_totais[$pedido->id_setor] = 0;
+                }
+                $array_sub_totais[$pedido->id_setor] += $pedido->valor;
                 if ($status == 8) {
                     $tbody = "
                         <td>" . $pedido->prioridade . "</td>
@@ -618,7 +626,31 @@ class PrintMod extends Conexao {
                             " . $tbody . "
                         </tr>";
             }
-            $retorno .= "<tbody></table>";
+            $retorno .= "<tbody></table><br>";
+            $retorno .= "
+            <fieldset class=\"preg\">
+                <h5>SUBTOTAIS POR SETOR (beta)</h5>
+                <table class=\"prod\">
+                    <thead>
+                        <tr>
+                            <th>Setor</th>
+                            <th>Total</th>
+                        </tr>
+                    </thead>
+                    <tbody>";
+
+            $len = count(ARRAY_SETORES);
+
+            for ($k = 0; $k < $len; $k++) {
+                if (array_key_exists($k, $array_sub_totais)) {
+                    $retorno .= "
+                        <tr> 
+                            <td>" . ARRAY_SETORES[$k] . "</td>
+                            <td>" . number_format($array_sub_totais[$k], 3, ',', '.') . "</td>
+                        </tr>";
+                }
+            }
+            $retorno .= "</tbody></table></fieldset><br>";
         }
         if ($status == 8) {
             $retorno .= "
