@@ -954,6 +954,7 @@ function iniSolicitacoes(flag) {
             limit2 = document.getElementById('limit2').value;
         }
     }
+    document.getElementById('overlayLoad').style.display = 'block';
     $.post('../php/buscaLTE.php', {
         admin: 1,
         form: 'tableItensPedido',
@@ -964,11 +965,13 @@ function iniSolicitacoes(flag) {
             $('#tableSolicitacoes').DataTable().destroy();
         }
         element.innerHTML += resposta;
+        console.log('ola mundo');
+        document.getElementById('overlayLoad').style.display = 'none';
         tableValidade();
         loadChecks();
         iniDataTable('#tableSolicitacoes');
     });
-    document.getElementById('overlayLoad').style.display = 'none';
+    console.log('tiau');
 }
 
 function enviaForn(id_pedido) {
