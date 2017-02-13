@@ -344,6 +344,39 @@ $select_grupo = $obj_Busca->getOptionsGrupos($id_setor);
                 <strong>Copyright © 2016-2017 <a href="https://github.com/joao-bolsson">João Bolsson</a>.</strong> All rights
                 reserved.
             </footer>
+            <div class="modal fade" id="myInfos" role="dialog">
+                <div class="modal-dialog" style="width: 40%;">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                            <h4 class="modal-title" >Informações do Usuário</h4>
+                        </div>
+                        <form id="altInfo" action="javascript:altInfoUser();" method="post">
+                            <div class="modal-body">
+                                <div class="form-group">
+                                    <label>Nome</label>
+                                    <input class="form-control" id="nameUser" name="nameUser" type="text" value="<?= $_SESSION['nome'] ?>" required>
+                                </div>
+                                <div class="form-group">
+                                    <label>E-mail</label>
+                                    <input class="form-control" id="emailUser" name="emailUser" type="email" value="<?= $_SESSION['email'] ?>" required>
+                                </div>
+                                <div class="form-group">
+                                    <label>Senha Atual</label>
+                                    <input class="form-control" id="senhaAtualUser" name="senhaAtualUser" type="password" required>
+                                </div>
+                                <div class="form-group">
+                                    <label>Nova Senha</label>
+                                    <input class="form-control" id="senhaUser" name="senhaUser" type="password" required>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button class="btn btn-primary" type="submit" style="width: 100%;"><i class="fa fa-refresh"></i>&nbsp;Atualizar</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
             <div aria-hidden="true" class="modal fade" id="altUser" role="dialog" tabindex="-1">
                 <div class="modal-dialog" style="width: 40%;">
                     <div class="modal-content">
