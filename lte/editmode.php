@@ -199,7 +199,7 @@ if (!isset($_SESSION['editmode'])) {
                                         <td>
                                             <div class="form-group">
                                                 <label>Valor Unitário</label>
-                                                <input class="form-control" id="vlUnitario" name="vl_unitario" type="number" step="0.001" required>
+                                                <input class="form-control" id="vlUnitario" name="vl_unitario" type="number" step="0.0001" required>
                                             </div>
                                         </td>
                                         <td>

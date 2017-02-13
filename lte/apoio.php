@@ -127,8 +127,10 @@ require_once '../defines.php';
                                     </thead>
                                     <tbody id="conteudoSolicitacoes"></tbody>
                                 </table>
+                            </div><!-- /.box-body -->
+                            <div id="overlayLoad" class="overlay" style="display: none;">
+                                <i class="fa fa-refresh fa-spin"></i>
                             </div>
-                            <!-- /.box-body -->
                         </div>
                         <!-- /.box -->
                     </section>

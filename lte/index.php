@@ -446,6 +446,9 @@ if (isset($_SESSION['editmode'])) {
                                             <tbody id="conteudoSolicitacoes"></tbody>
                                         </table>
                                     </div><!-- /.box-body -->
+                                    <div id="overlayLoad" class="overlay" style="display: none;">
+                                        <i class="fa fa-refresh fa-spin"></i>
+                                    </div>
                                 </div><!-- /.box -->
                             </div><!-- /.col -->
                         </div><!-- /.row -->
