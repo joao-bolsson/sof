@@ -249,8 +249,18 @@ function cadFontes(id_pedido) {
     document.getElementById('id_pedido_fonte').value = id_pedido;
 }
 
-function enviaEmpenho() {
+function dropTableSolic() {
     document.getElementById('overlayLoad').style.display = 'block';
+    var element = document.getElementById('conteudoSolicitacoes');
+    if (element.innerHTML.length > 0) {
+        $('#tableSolicitacoes').DataTable().destroy();
+    }
+    document.getElementById('conteudoSolicitacoes').innerHTML = '';
+    console.log('overlay');
+}
+
+function enviaEmpenho() {
+    dropTableSolic();
     var id_pedido = document.getElementById('id_pedido_emp').value;
     var empenho = document.getElementById('empenho').value;
     var data = document.getElementById('dataEmp').value;
@@ -265,7 +275,6 @@ function enviaEmpenho() {
             $('#cadEmpenho').modal('hide');
             iniSolicitacoes();
             limpaTela();
-            document.getElementById('overlayLoad').style.display = 'none';
         } else {
             alert('Ocorreu um erro no servidor. Contate o administrador.');
         }
@@ -274,7 +283,7 @@ function enviaEmpenho() {
 
 function enviaOrdenador(id_pedido) {
     if (confirm("Mudar o status do pedido para \"Enviado ao Ordenador\"?")) {
-        document.getElementById('overlayLoad').style.display = 'block';
+        dropTableSolic();
         $.post('../php/geral.php', {
             admin: 1,
             form: 'enviaOrdenador',
@@ -282,7 +291,6 @@ function enviaOrdenador(id_pedido) {
         }).done(function (resposta) {
             if (resposta) {
                 iniSolicitacoes();
-                document.getElementById('overlayLoad').style.display = 'none';
             } else {
                 alert('Ocorreu um erro no servidor. Contate o administrador.');
             }
@@ -291,7 +299,7 @@ function enviaOrdenador(id_pedido) {
 }
 
 function enviaFontes() {
-    document.getElementById('overlayLoad').style.display = 'block';
+    dropTableSolic();
     var id_pedido = document.getElementById('id_pedido_fonte').value;
     var fonte = document.getElementById('fonte').value;
     var ptres = document.getElementById('ptres').value;
@@ -308,7 +316,6 @@ function enviaFontes() {
             $('#cadFontes').modal('hide');
             iniSolicitacoes();
             limpaTela();
-            document.getElementById('overlayLoad').style.display = 'none';
         } else {
             alert('Ocorreu um erro no servidor. Contate o administrador.');
         }
@@ -961,6 +968,7 @@ function iniSolicitacoes(flag) {
         loadChecks();
         iniDataTable('#tableSolicitacoes');
     });
+    document.getElementById('overlayLoad').style.display = 'none';
 }
 
 function enviaForn(id_pedido) {
@@ -968,14 +976,13 @@ function enviaForn(id_pedido) {
     if (!confirm("O status do pedido " + id_pedido + " será alterado para 'Enviado ao Fornecedor'. \n\nDeseja Continuar?")) {
         return;
     }
-    document.getElementById('overlayLoad').style.display = 'block';
+    dropTableSolic();
     $.post('../php/geral.php', {
         admin: 1,
         form: 'enviaForn',
         id_pedido: id_pedido
     }).done(function () {
         iniSolicitacoes();
-        document.getElementById('overlayLoad').style.display = 'none';
         avisoSnack('Pedido enviado ao Fornecedor');
     });
 }
