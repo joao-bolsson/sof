@@ -1236,9 +1236,9 @@ function listPedidos() {
             form: 'listPedidos'
         }).done(function (resposta) {
             $('#tbodyListPedidos').html(resposta);
+            $('#listPedidos').modal('show');
         });
     }
-    $('#listPedidos').modal('show');
 }
 
 function listRascunhos() {
