@@ -249,14 +249,25 @@ function cadFontes(id_pedido) {
     document.getElementById('id_pedido_fonte').value = id_pedido;
 }
 
-function dropTableSolic() {
+function dropTableSolic(id_pedido) {
     document.getElementById('overlayLoad').style.display = 'block';
     var element = document.getElementById('conteudoSolicitacoes');
     if (element.innerHTML.length > 0) {
         $('#tableSolicitacoes').DataTable().destroy();
     }
-    document.getElementById('conteudoSolicitacoes').innerHTML = '';
-    console.log('overlay');
+    if (id_pedido !== null) {
+        console.log('is not null: ' + id_pedido);
+        var row = document.getElementById('rowPedido' + id_pedido);
+        if (row.parentNode) {
+            row.parentNode.removeChild(row);
+            console.log('removeu rowPedido' + id_pedido);
+        } else {
+            console.log('nao removeu');
+        }
+    } else {
+        console.log('is null: clear table');
+        document.getElementById('conteudoSolicitacoes').innerHTML = '';
+    }
 }
 
 function enviaEmpenho() {
@@ -273,7 +284,7 @@ function enviaEmpenho() {
     }).done(function (resposta) {
         if (resposta) {
             $('#cadEmpenho').modal('hide');
-            iniSolicitacoes();
+            iniSolicitacoes(false, 0);
             limpaTela();
         } else {
             alert('Ocorreu um erro no servidor. Contate o administrador.');
@@ -290,7 +301,7 @@ function enviaOrdenador(id_pedido) {
             id_pedido: id_pedido
         }).done(function (resposta) {
             if (resposta) {
-                iniSolicitacoes();
+                iniSolicitacoes(false, 0);
             } else {
                 alert('Ocorreu um erro no servidor. Contate o administrador.');
             }
@@ -299,8 +310,8 @@ function enviaOrdenador(id_pedido) {
 }
 
 function enviaFontes() {
-    dropTableSolic();
     var id_pedido = document.getElementById('id_pedido_fonte').value;
+    dropTableSolic(id_pedido);
     var fonte = document.getElementById('fonte').value;
     var ptres = document.getElementById('ptres').value;
     var plano = document.getElementById('plano').value;
@@ -314,7 +325,7 @@ function enviaFontes() {
     }).done(function (resposta) {
         if (resposta) {
             $('#cadFontes').modal('hide');
-            iniSolicitacoes();
+            iniSolicitacoes(false, id_pedido);
             limpaTela();
         } else {
             alert('Ocorreu um erro no servidor. Contate o administrador.');
@@ -361,7 +372,7 @@ function mostraPed() {
     $('button').blur();
     hideDivs();
     document.getElementById('rowPedidos').style.display = 'block';
-    iniSolicitacoes();
+    iniSolicitacoes(false, 0);
 }
 function mostraSolicAdiant() {
     mostra('rowSolicAdi');
@@ -385,7 +396,7 @@ function analisaSolicAlt(id_solic, id_pedido, acao) {
             alert(resposta);
             window.location.href = 'index.php';
         } else {
-            iniSolicitacoes();
+            iniSolicitacoes(false, 0);
             iniTableSolicAltPed();
         }
     });
@@ -642,7 +653,7 @@ function iniAdminSolicitacoes() {
             iniRecepcao();
         }
         if (permissao.pedidos) {
-            iniSolicitacoes();
+            iniSolicitacoes(false, 0);
         }
         if (permissao.saldos) {
             getSaldoOri();
@@ -811,7 +822,7 @@ function aprovGerencia() {
             pedidos: pedidos
         }).done(function (resposta) {
             console.log(resposta);
-            iniSolicitacoes();
+            iniSolicitacoes(false, 0);
         });
     }
     pedidosRelCustom = [];
@@ -941,7 +952,7 @@ function loadMore() {
     iniSolicitacoes(true);
 }
 
-function iniSolicitacoes(flag) {
+function iniSolicitacoes(flag, id_pedido) {
     var element = document.getElementById('conteudoSolicitacoes');
     if (element === null) {
         return;
@@ -953,25 +964,28 @@ function iniSolicitacoes(flag) {
             limit1 = document.getElementById('limit1').value;
             limit2 = document.getElementById('limit2').value;
         }
+    } else if (id_pedido != 0) {
+        console.log('vai atualizar uma linha');
+    } else if (id_pedido == 0) {
+        console.log('busca os últimos 100 pedidos');
     }
     document.getElementById('overlayLoad').style.display = 'block';
     $.post('../php/buscaLTE.php', {
         admin: 1,
         form: 'tableItensPedido',
         limit1: limit1,
-        limit2: limit2
+        limit2: limit2,
+        id_pedido: id_pedido
     }).done(function (resposta) {
         if (element.innerHTML.length > 0) {
             $('#tableSolicitacoes').DataTable().destroy();
         }
         element.innerHTML += resposta;
-        console.log('ola mundo');
         document.getElementById('overlayLoad').style.display = 'none';
         tableValidade();
         loadChecks();
         iniDataTable('#tableSolicitacoes');
     });
-    console.log('tiau');
 }
 
 function enviaForn(id_pedido) {
@@ -985,7 +999,7 @@ function enviaForn(id_pedido) {
         form: 'enviaForn',
         id_pedido: id_pedido
     }).done(function () {
-        iniSolicitacoes();
+        iniSolicitacoes(false, 0);
         avisoSnack('Pedido enviado ao Fornecedor');
     });
 }
@@ -1858,6 +1872,6 @@ function submitEditItem() {
         pesquisarProcesso(proc);
     } else {
         limpaTela();
-        iniSolicitacoes();
+        iniSolicitacoes(false, 0);
     }
 }
