@@ -997,13 +997,13 @@ function enviaForn(id_pedido) {
     if (!confirm("O status do pedido " + id_pedido + " será alterado para 'Enviado ao Fornecedor'. \n\nDeseja Continuar?")) {
         return;
     }
-    dropTableSolic();
+    dropTableSolic(id_pedido);
     $.post('../php/geral.php', {
         admin: 1,
         form: 'enviaForn',
         id_pedido: id_pedido
     }).done(function () {
-        iniSolicitacoes(false, 0);
+        iniSolicitacoes(false, id_pedido);
         avisoSnack('Pedido enviado ao Fornecedor');
     });
 }
