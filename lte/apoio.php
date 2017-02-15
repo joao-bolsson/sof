@@ -52,7 +52,7 @@ require_once '../defines.php';
         <![endif]-->
     </head>
     <!-- ADD THE CLASS layout-top-nav TO REMOVE THE SIDEBAR. -->
-    <body class="hold-transition skin-blue layout-top-nav" onload="iniSolicitacoes();">
+    <body class="hold-transition skin-blue layout-top-nav" onload="iniSolicitacoes(false, 0);">
         <div class="wrapper">
 
             <header class="main-header">
@@ -113,7 +113,11 @@ require_once '../defines.php';
                                 <table class="table table-bordered table-striped" id="tableSolicitacoes">
                                     <thead>
                                         <tr>
-                                            <th></th>
+                                            <th>
+                                                <div class=form-group>
+                                                    <input type="checkbox" name="checkPedRel" id="checkPedRel" value="1">
+                                                </div>
+                                            </th>
                                             <th>Opções</th>
                                             <th>Num Pedido</th>
                                             <th>Setor</th>

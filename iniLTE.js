@@ -1003,7 +1003,8 @@ function enviaForn(id_pedido) {
         form: 'enviaForn',
         id_pedido: id_pedido
     }).done(function () {
-        iniSolicitacoes(false, id_pedido);
+        iniDataTable('#tableSolicitacoes');
+        document.getElementById('overlayLoad').style.display = 'none';
         avisoSnack('Pedido enviado ao Fornecedor');
     });
 }
