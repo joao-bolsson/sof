@@ -236,11 +236,15 @@ function cadEmpenho(id_pedido, empenho, data) {
     document.getElementById('dataEmp').value = '';
     $('#cadEmpenho').modal();
     document.getElementById('id_pedido_emp').value = id_pedido;
-    if (empenho.length > 0) {
-        document.getElementById('empenho').value = empenho;
+    if (empenho != null) {
+        if (empenho.length > 0) {
+            document.getElementById('empenho').value = empenho;
+        }
     }
-    if (data.length > 0) {
-        document.getElementById('dataEmp').value = data;
+    if (data != null) {
+        if (data.length > 0) {
+            document.getElementById('dataEmp').value = data;
+        }
     }
 }
 
@@ -271,8 +275,8 @@ function dropTableSolic(id_pedido) {
 }
 
 function enviaEmpenho() {
-    dropTableSolic();
     var id_pedido = document.getElementById('id_pedido_emp').value;
+    dropTableSolic(id_pedido);
     var empenho = document.getElementById('empenho').value;
     var data = document.getElementById('dataEmp').value;
     $.post('../php/geral.php', {
@@ -284,7 +288,7 @@ function enviaEmpenho() {
     }).done(function (resposta) {
         if (resposta) {
             $('#cadEmpenho').modal('hide');
-            iniSolicitacoes(false, 0);
+            iniSolicitacoes(false, id_pedido);
             limpaTela();
         } else {
             alert('Ocorreu um erro no servidor. Contate o administrador.');
@@ -965,7 +969,7 @@ function iniSolicitacoes(flag, id_pedido) {
             limit2 = document.getElementById('limit2').value;
         }
     } else if (id_pedido != 0) {
-        console.log('vai atualizar uma linha');
+        console.log('vai atualizar uma linha: ' + id_pedido);
     } else if (id_pedido == 0) {
         console.log('busca os últimos 100 pedidos');
     }
