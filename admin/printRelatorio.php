@@ -9,14 +9,11 @@ include_once '../class/PrintMod.class.php';
 //instanciando classe de busca para popular o select de estados
 $obj_Print = new PrintMod();
 
-//definimos uma constante com o nome da pasta
-define('MPDF_PATH', '../pdf/MPDF57/');
-//incluimos o arquivo
-include MPDF_PATH . 'mpdf.php';
-//definimos o timezone para pegar a hora local
-date_default_timezone_set('America/Sao_Paulo');
+define('MPDF_PATH', '../pdf');
 
+require_once MPDF_PATH . '/vendor/autoload.php';
 $mpdf = new mPDF();
+date_default_timezone_set('America/Sao_Paulo');
 
 $html_style = "
 <link rel=\"stylesheet\" type=\"text/css\" href=\"../relatorios.css\"/>
@@ -50,7 +47,7 @@ if (isset($_SESSION['pedidosRel'])) {
     $mpdf->Output();
     //pausamos a tela para exibir oque foi feito
     exit();
-} else if (!empty($input) && $_SESSION["id_setor"] == 2) {
+} else if (!empty($input)) {
     $html = $html_style . $html_header;
 
     $tipo = filter_input(INPUT_POST, 'tipo');

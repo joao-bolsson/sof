@@ -626,31 +626,34 @@ class PrintMod extends Conexao {
                             " . $tbody . "
                         </tr>";
             }
-            $retorno .= "<tbody></table><br>";
-            $retorno .= "
-            <fieldset class=\"preg\">
-                <h5>SUBTOTAIS POR SETOR (beta)</h5>
-                <table class=\"prod\">
-                    <thead>
-                        <tr>
-                            <th>Setor</th>
-                            <th>Total</th>
-                        </tr>
-                    </thead>
-                    <tbody>";
+            $retorno .= "<tbody></table>";
 
-            $len = count(ARRAY_SETORES);
+            if ($_SESSION['id_setor'] == 2) {
+                $retorno .= "<br>
+                <fieldset class=\"preg\">
+                    <h5>SUBTOTAIS POR SETOR (beta)</h5>
+                    <table class=\"prod\">
+                        <thead>
+                            <tr>
+                                <th>Setor</th>
+                                <th>Total</th>
+                            </tr>
+                        </thead>
+                        <tbody>";
 
-            for ($k = 0; $k < $len; $k++) {
-                if (array_key_exists($k, $array_sub_totais)) {
-                    $retorno .= "
+                $len = count(ARRAY_SETORES);
+
+                for ($k = 0; $k < $len; $k++) {
+                    if (array_key_exists($k, $array_sub_totais)) {
+                        $retorno .= "
                         <tr> 
                             <td>" . ARRAY_SETORES[$k] . "</td>
                             <td>" . number_format($array_sub_totais[$k], 3, ',', '.') . "</td>
                         </tr>";
+                    }
                 }
+                $retorno .= "</tbody></table></fieldset><br>";
             }
-            $retorno .= "</tbody></table></fieldset><br>";
         }
         if ($status == 8) {
             $retorno .= "
