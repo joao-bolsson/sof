@@ -71,7 +71,7 @@ class BuscaLTE extends Conexao {
         $where = '';
 
         if ($users) {
-            $where = "WHERE id_setor = 12";
+            $where = "WHERE login = 'uapublico'";
         }
         $query = $this->mysqli->query("SELECT id, nome, id_setor FROM usuario " . $where . " ORDER BY nome ASC;") or exit("Erro ao buscar usuários.");
         $this->mysqli = NULL;

@@ -276,8 +276,7 @@ if ($obj_Busca->isActive()) {
                 if ($insert) {
                     header("Location: ../lte/");
                 } else {
-                    echo "Ocorreu um erro ao importar os itens. Contate o administrador.";
-                    exit;
+                    exit("Ocorreu um erro ao importar os itens. Contate o administrador.");
                 }
                 break;
 

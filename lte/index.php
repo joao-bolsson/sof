@@ -785,20 +785,20 @@ if (isset($_SESSION['editmode'])) {
                                 <input type="hidden" name="admin" value="1"/>
                                 <div class="modal-body">
                                     <div class="form-group">
-                                        <label for="nomeU">Nome</label>
-                                        <input type="text" class="form-control" id="nomeU" name="nome" placeholder="Nome" maxlength="40" required>
+                                        <label>Nome</label>
+                                        <input type="text" class="form-control" name="nome" placeholder="Nome" maxlength="40" required>
                                     </div>
                                     <div class="form-group">
-                                        <label for="loginU">Login</label>
-                                        <input type="text" class="form-control" id="loginU" name="login" placeholder="Login" maxlength="30" required>
+                                        <label>Login</label>
+                                        <input type="text" class="form-control" name="login" placeholder="Login" maxlength="30" required>
                                     </div>
                                     <div class="form-group">
-                                        <label for="emailU">E-mail</label>
-                                        <input type="email" class="form-control" id="emailU" name="email" placeholder="E-mail" maxlength="40" required>
+                                        <label>E-mail</label>
+                                        <input type="email" class="form-control" name="email" placeholder="E-mail" maxlength="40" required>
                                     </div>
                                     <div class="form-group">
                                         <label>Setor</label>
-                                        <select id="userA" class="form-control" name="setor" required>
+                                        <select class="form-control" name="setor" required>
                                             <?= $obj_Busca->getOptionsSetores(); ?>
                                         </select>
                                     </div>
