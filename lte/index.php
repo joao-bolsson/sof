@@ -408,6 +408,184 @@ if (isset($_SESSION['editmode'])) {
                                 </div><!-- /.box -->
                             </div><!-- /.col -->
                         </div><!-- /.row -->
+                        <div id="rowCadRP" class="row">
+                            <div class="col-xs-12">
+                                <div class="box box-primary">
+                                    <div class="box-header">
+                                        <h3 class="box-title">Cadastro de Itens</h3>
+                                        <div class="box-tools pull-right">
+                                            <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
+                                            </button>
+                                        </div>
+                                    </div><!-- /.box-header -->
+                                    <div class="box-body">
+                                        <!--
+    | id_item_processo  | int(10) unsigned | YES  |     | NULL    |                |
+    | id_item_contrato  | int(10) unsigned | YES  |     | NULL    |                |
+    | cod_despesa       | varchar(15)      | YES  |     | NULL    |                |
+    | descr_despesa     | varchar(100)     | YES  |     | NULL    |                |
+    | descr_tipo_doc    | varchar(80)      | YES  |     | NULL    |                |
+    | num_contrato      | varchar(15)      | YES  |     | NULL    |                |
+    | num_processo      | varchar(25)      | YES  |     | NULL    |                |
+    | descr_mod_compra  | varchar(50)      | YES  |     | NULL    |                |
+    | num_licitacao     | varchar(15)      | YES  |     | NULL    |                |
+    | dt_inicio         | varchar(15)      | YES  |     | NULL    |                |
+    | dt_fim            | varchar(15)      | YES  |     | NULL    |                |
+    | dt_geracao        | varchar(15)      | YES  |     | NULL    |                |
+    | cgc_fornecedor    | varchar(20)      | YES  |     | NULL    |                |
+    | nome_fornecedor   | varchar(150)     | YES  |     | NULL    |                |
+    | num_extrato       | varchar(20)      | YES  |     | NULL    |                |
+    | cod_estruturado   | varchar(20)      | YES  |     | NULL    |                |
+    | nome_unidade      | varchar(100)     | YES  |     | NULL    |                |
+    | cod_reduzido      | varchar(20)      | YES  |     | NULL    |                |
+    | complemento_item  | text             | YES  |     | NULL    |                |
+    | descricao         | varchar(200)     | YES  |     | NULL    |                |
+    | id_extrato_contr  | int(10) unsigned | YES  |     | NULL    |                |
+    | vl_unitario       | varchar(30)      | YES  |     | NULL    |                |
+    | qt_contrato       | int(11)          | YES  |     | NULL    |                |
+    | vl_contrato       | varchar(30)      | YES  |     | NULL    |                |
+    | qt_utilizado      | int(10) unsigned | YES  |     | NULL    |                |
+    | vl_utilizado      | varchar(30)      | YES  |     | NULL    |                |
+    | qt_saldo          | int(11)          | YES  |     | NULL    |                |
+    | vl_saldo          | varchar(30)      | YES  |     | NULL    |                |
+    | id_unidade        | int(10) unsigned | YES  |     | NULL    |                |
+    | ano_orcamento     | int(10) unsigned | YES  |     | NULL    |                |
+    | seq_item_processo
+                                        -->
+                                        <div class="row">
+                                            <div class="col-xs-3">
+                                                <div class="input-group">
+                                                    <span class="input-group-addon"><i class="fa fa-info"></i></span>
+                                                    <input type="email" class="form-control" placeholder="Id Item Processo">
+                                                </div>
+                                            </div>
+                                            <div class="col-xs-3">
+                                                <div class="input-group">
+                                                    <span class="input-group-addon"><i class="fa fa-info"></i></span>
+                                                    <input type="email" class="form-control" placeholder="Id Item Contrato">
+                                                </div>
+                                            </div>
+                                            <div class="col-xs-3">
+                                                <div class="input-group">
+                                                    <span class="input-group-addon"><i class="fa fa-info"></i></span>
+                                                    <input type="email" class="form-control" placeholder="Código Despesa">
+                                                </div>
+                                            </div>
+                                            <div class="col-xs-3">
+                                                <div class="input-group">
+                                                    <span class="input-group-addon"><i class="fa fa-info"></i></span>
+                                                    <input type="email" class="form-control" placeholder="Descrição Despesa">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-xs-3">
+                                                <div class="input-group">
+                                                    <span class="input-group-addon"><i class="fa fa-info"></i></span>
+                                                    <input type="email" class="form-control" placeholder="Descrição Tipo Doc">
+                                                </div>
+                                            </div>
+                                            <div class="col-xs-3">
+                                                <div class="input-group">
+                                                    <span class="input-group-addon"><i class="fa fa-info"></i></span>
+                                                    <input type="email" class="form-control" placeholder="Número do Contrato">
+                                                </div>
+                                            </div>
+                                            <div class="col-xs-3">
+                                                <div class="input-group">
+                                                    <span class="input-group-addon"><i class="fa fa-info"></i></span>
+                                                    <input type="email" class="form-control" placeholder="Número do Processo">
+                                                </div>
+                                            </div>
+                                            <div class="col-xs-3">
+                                                <div class="input-group">
+                                                    <span class="input-group-addon"><i class="fa fa-info"></i></span>
+                                                    <input type="email" class="form-control" placeholder="Descrição Mod Compra">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-xs-3">
+                                                <div class="input-group">
+                                                    <span class="input-group-addon"><i class="fa fa-info"></i></span>
+                                                    <input type="email" class="form-control" placeholder="Número da Licitação">
+                                                </div>
+                                            </div>
+                                            <div class="col-xs-3">
+                                                <div class="input-group">
+                                                    <span class="input-group-addon"><i class="fa fa-info"></i></span>
+                                                    <input type="email" class="form-control" placeholder="Data Início">
+                                                </div>
+                                            </div>
+                                            <div class="col-xs-3">
+                                                <div class="input-group">
+                                                    <span class="input-group-addon"><i class="fa fa-info"></i></span>
+                                                    <input type="email" class="form-control" placeholder="Data Fim">
+                                                </div>
+                                            </div>
+                                            <div class="col-xs-3">
+                                                <div class="input-group">
+                                                    <span class="input-group-addon"><i class="fa fa-info"></i></span>
+                                                    <input type="email" class="form-control" placeholder="Data Geração">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-xs-3">
+                                                <div class="input-group">
+                                                    <span class="input-group-addon"><i class="fa fa-info"></i></span>
+                                                    <input type="email" class="form-control" placeholder="CGC Fornecedor">
+                                                </div>
+                                            </div>
+                                            <div class="col-xs-3">
+                                                <div class="input-group">
+                                                    <span class="input-group-addon"><i class="fa fa-info"></i></span>
+                                                    <input type="email" class="form-control" placeholder="Nome do Fornecedor">
+                                                </div>
+                                            </div>
+                                            <div class="col-xs-3">
+                                                <div class="input-group">
+                                                    <span class="input-group-addon"><i class="fa fa-info"></i></span>
+                                                    <input type="email" class="form-control" placeholder="Número do Extrato">
+                                                </div>
+                                            </div>
+                                            <div class="col-xs-3">
+                                                <div class="input-group">
+                                                    <span class="input-group-addon"><i class="fa fa-info"></i></span>
+                                                    <input type="email" class="form-control" placeholder="Código Estruturado">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-xs-3">
+                                                <div class="input-group">
+                                                    <span class="input-group-addon"><i class="fa fa-info"></i></span>
+                                                    <input type="email" class="form-control" placeholder="Nome da Unidade">
+                                                </div>
+                                            </div>
+                                            <div class="col-xs-3">
+                                                <div class="input-group">
+                                                    <span class="input-group-addon"><i class="fa fa-info"></i></span>
+                                                    <input type="email" class="form-control" placeholder="Código Reduzido">
+                                                </div>
+                                            </div>
+                                            <div class="col-xs-3">
+                                                <div class="input-group">
+                                                    <span class="input-group-addon"><i class="fa fa-info"></i></span>
+                                                    <input type="email" class="form-control" placeholder="Complemento do Item">
+                                                </div>
+                                            </div>
+                                            <div class="col-xs-3">
+                                                <div class="input-group">
+                                                    <span class="input-group-addon"><i class="fa fa-info"></i></span>
+                                                    <input type="email" class="form-control" placeholder="Descrição">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div><!-- /.box-body -->
+                                </div><!-- /.box -->
+                            </div><!-- /.col -->
+                        </div><!-- /.row -->
                         <div id="rowPedidos" class="row">
                             <div class="col-xs-12">
                                 <div class="box box-primary">
@@ -1310,6 +1488,6 @@ if (isset($_SESSION['editmode'])) {
         <!-- PACE -->
         <script src="plugins/pace/pace.min.js"></script>
         <!-- page script -->
-        <script type="text/javascript" src="../iniLTE.min.js"></script>
+        <script type="text/javascript" src="../iniLTE.js"></script>
     </body>
 </html>
