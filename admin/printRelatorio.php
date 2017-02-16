@@ -6,12 +6,11 @@ error_reporting(E_ALL);
 session_start();
 
 include_once '../class/PrintMod.class.php';
-//instanciando classe de busca para popular o select de estados
+require_once '../defines.php';
+require_once MPDF_PATH . '/vendor/autoload.php';
+
 $obj_Print = new PrintMod();
 
-define('MPDF_PATH', '../pdf');
-
-require_once MPDF_PATH . '/vendor/autoload.php';
 $mpdf = new mPDF();
 date_default_timezone_set('America/Sao_Paulo');
 

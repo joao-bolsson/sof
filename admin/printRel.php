@@ -8,15 +8,12 @@ session_start();
 if (isset($_SESSION["relatorioProcessos"]) && $_SESSION["relatorioProcessos"] && $_SESSION["id_setor"] != 0) {
 
     include_once '../class/PrintMod.class.php';
+    require_once '../defines.php';
+    require_once MPDF_PATH . '/vendor/autoload.php';
+
     $tipo = $_SESSION["relatorioTipo"];
     $obj_Print = new PrintMod();
 
-    //definimos uma constante com o nome da pasta
-    define('MPDF_PATH', '../pdf/MPDF57/');
-    //incluimos o arquivo
-    include MPDF_PATH . 'mpdf.php';
-    //definimos o timezone para pegar a hora local
-    date_default_timezone_set('America/Sao_Paulo');
     $html_style = "<link rel=\"stylesheet\" type=\"text/css\" href=\"../relatorios.css\"/>";
 
     $html_header = "
@@ -36,6 +33,7 @@ if (isset($_SESSION["relatorioProcessos"]) && $_SESSION["relatorioProcessos"] &&
     $html = $html_style . $html_header . $html_table_itens . $html_itens . "</body>";
 
     $mpdf = new mPDF();
+    date_default_timezone_set('America/Sao_Paulo');
     //definimos o tipo de exibicao
     $mpdf->SetDisplayMode('fullpage');
     $data = date('j/m/Y  H:i');
@@ -48,4 +46,3 @@ if (isset($_SESSION["relatorioProcessos"]) && $_SESSION["relatorioProcessos"] &&
     //pausamos a tela para exibir oque foi feito
     exit();
 }
-?>

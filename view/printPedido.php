@@ -8,17 +8,15 @@ session_start();
 if (isset($_SESSION['imprimirPedido']) && $_SESSION['imprimirPedido'] && $_SESSION['id_setor'] != 0) {
     $id_pedido = $_SESSION['id_ped_imp'];
     $pedido_rascunho = $_SESSION['pedido_rascunho'];
+
     include_once '../class/PrintMod.class.php';
+    require_once '../defines.php';
+    require_once MPDF_PATH . '/vendor/autoload.php';
+
     $obj_Print = new PrintMod();
 
     $id_setor = $obj_Print->getSetorPedido($id_pedido);
 
-    //definimos uma constante com o nome da pasta
-    define('MPDF_PATH', '../pdf/MPDF57/');
-    //incluimos o arquivo
-    include MPDF_PATH . 'mpdf.php';
-    //definimos o timezone para pegar a hora local
-    date_default_timezone_set('America/Sao_Paulo');
     $html_style = "
         <link rel=\"stylesheet\" type=\"text/css\" href=\"../relatorios.css\"/>
         <head>
@@ -32,7 +30,7 @@ if (isset($_SESSION['imprimirPedido']) && $_SESSION['imprimirPedido'] && $_SESSI
     $html_header = "
         <body>
           <p style=\"text-align: center;\">
-            <img src=\"{$img}\"/>
+            <img src=\"" . $img . "\"/>
           </p>
           <hr/>";
     $html_header .= $obj_Print->getHeader($id_pedido);
@@ -49,6 +47,7 @@ if (isset($_SESSION['imprimirPedido']) && $_SESSION['imprimirPedido'] && $_SESSI
     $html_rel .= $obj_Print->getComentarios($id_pedido);
     $html = $html_style . $html_header . $html_table_itens . $html_itens . $html_rel . "</body>";
     $mpdf = new mPDF();
+    date_default_timezone_set('America/Sao_Paulo');
     //definimos o tipo de exibicao
     $mpdf->SetDisplayMode('fullpage');
     if ($pedido_rascunho) {

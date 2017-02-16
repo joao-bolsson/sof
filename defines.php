@@ -12,3 +12,5 @@ defined('ARRAY_PRIORIDADE') or define('ARRAY_PRIORIDADE', $obj_Busca->getArrayDe
 defined('ARRAY_SETORES') or define('ARRAY_SETORES', $obj_Busca->getArrayDefines('setores'));
 
 defined('LIMIT_MAX') or define('LIMIT_MAX', 100);
+
+defined('MPDF_PATH') or define('MPDF_PATH', '../pdf');

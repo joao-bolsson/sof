@@ -5,27 +5,26 @@ error_reporting(E_ALL);
 
 session_start();
 
-$solicitante = $_POST['nome'];
-$cpf = $_POST['cpf'];
-$matricula = $_POST['matricula'];
-$email = $_POST['email'];
-$telefone = $_POST['telefone'];
-$banco = $_POST['banco'];
-$agencia = $_POST['agencia'];
-$conta = $_POST['conta'];
+$solicitante = filter_input(INPUT_POST, 'nome');
+$cpf = filter_input(INPUT_POST, 'cpf');
+$matricula = filter_input(INPUT_POST, 'matricula');
+$email = filter_input(INPUT_POST, 'email');
+$telefone = filter_input(INPUT_POST, 'telefone');
+$banco = filter_input(INPUT_POST, 'banco');
+$agencia = filter_input(INPUT_POST, 'agencia');
+$conta = filter_input(INPUT_POST, 'conta');
 
-$evento = $_POST['evento'];
-$dataI = $_POST['dataI'];
-$dataF = $_POST['dataF'];
-$local = $_POST['local'];
-$valor = $_POST['valor'];
+$evento = filter_input(INPUT_POST, 'evento');
+$dataI = filter_input(INPUT_POST, 'dataI');
+$dataF = filter_input(INPUT_POST, 'dataF');
+$local = filter_input(INPUT_POST, 'local');
+$valor = filter_input(INPUT_POST, 'valor');
 
 include_once '../class/Util.class.php';
+require_once '../defines.php';
+require_once MPDF_PATH . '/vendor/autoload.php';
 $obj_Util = new Util();
-//incluimos o arquivo
-include '../pdf/MPDF57/mpdf.php';
-//definimos o timezone para pegar a hora local
-date_default_timezone_set('America/Sao_Paulo');
+
 $html_style = "
 <style type=\"text/css\">
   fieldset {
@@ -141,6 +140,7 @@ $html = "
 
 $html = $html_style . $html_header . $html . "</body>";
 $mpdf = new mPDF();
+date_default_timezone_set('America/Sao_Paulo');
 //definimos o tipo de exibicao
 $mpdf->SetDisplayMode('fullpage');
 
@@ -153,4 +153,3 @@ $mpdf->WriteHTML($html);
 $mpdf->Output();
 
 exit();
-?>
