@@ -957,6 +957,7 @@ function loadMore() {
 }
 
 function iniSolicitacoes(flag, id_pedido) {
+    $(".date").inputmask("dd/mm/yyyy", {"placeholder": "dd/mm/yyyy"});
     var element = document.getElementById('conteudoSolicitacoes');
     if (element === null) {
         return;
