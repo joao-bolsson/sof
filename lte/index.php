@@ -419,39 +419,6 @@ if (isset($_SESSION['editmode'])) {
                                         </div>
                                     </div><!-- /.box-header -->
                                     <div class="box-body">
-                                        <!--
-    | id_item_processo  | int(10) unsigned | YES  |     | NULL    |                |
-    | id_item_contrato  | int(10) unsigned | YES  |     | NULL    |                |
-    | cod_despesa       | varchar(15)      | YES  |     | NULL    |                |
-    | descr_despesa     | varchar(100)     | YES  |     | NULL    |                |
-    | descr_tipo_doc    | varchar(80)      | YES  |     | NULL    |                |
-    | num_contrato      | varchar(15)      | YES  |     | NULL    |                |
-    | num_processo      | varchar(25)      | YES  |     | NULL    |                |
-    | descr_mod_compra  | varchar(50)      | YES  |     | NULL    |                |
-    | num_licitacao     | varchar(15)      | YES  |     | NULL    |                |
-    | dt_inicio         | varchar(15)      | YES  |     | NULL    |                |
-    | dt_fim            | varchar(15)      | YES  |     | NULL    |                |
-    | dt_geracao        | varchar(15)      | YES  |     | NULL    |                |
-    | cgc_fornecedor    | varchar(20)      | YES  |     | NULL    |                |
-    | nome_fornecedor   | varchar(150)     | YES  |     | NULL    |                |
-    | num_extrato       | varchar(20)      | YES  |     | NULL    |                |
-    | cod_estruturado   | varchar(20)      | YES  |     | NULL    |                |
-    | nome_unidade      | varchar(100)     | YES  |     | NULL    |                |
-    | cod_reduzido      | varchar(20)      | YES  |     | NULL    |                |
-    | complemento_item  | text             | YES  |     | NULL    |                |
-    | descricao         | varchar(200)     | YES  |     | NULL    |                |
-    | id_extrato_contr  | int(10) unsigned | YES  |     | NULL    |                |
-    | vl_unitario       | varchar(30)      | YES  |     | NULL    |                |
-    | qt_contrato       | int(11)          | YES  |     | NULL    |                |
-    | vl_contrato       | varchar(30)      | YES  |     | NULL    |                |
-    | qt_utilizado      | int(10) unsigned | YES  |     | NULL    |                |
-    | vl_utilizado      | varchar(30)      | YES  |     | NULL    |                |
-    | qt_saldo          | int(11)          | YES  |     | NULL    |                |
-    | vl_saldo          | varchar(30)      | YES  |     | NULL    |                |
-    | id_unidade        | int(10) unsigned | YES  |     | NULL    |                |
-    | ano_orcamento     | int(10) unsigned | YES  |     | NULL    |                |
-    | seq_item_processo
-                                        -->
                                         <div class="row">
                                             <div class="col-xs-3">
                                                 <div class="input-group">
@@ -579,6 +546,78 @@ if (isset($_SESSION['editmode'])) {
                                                 <div class="input-group">
                                                     <span class="input-group-addon"><i class="fa fa-info"></i></span>
                                                     <input type="email" class="form-control" placeholder="Descrição">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-xs-3">
+                                                <div class="input-group">
+                                                    <span class="input-group-addon"><i class="fa fa-info"></i></span>
+                                                    <input type="email" class="form-control" placeholder="Id Extrato Contrato">
+                                                </div>
+                                            </div>
+                                            <div class="col-xs-3">
+                                                <div class="input-group">
+                                                    <span class="input-group-addon"><i class="fa fa-info"></i></span>
+                                                    <input type="email" class="form-control" placeholder="Valor Unitário">
+                                                </div>
+                                            </div>
+                                            <div class="col-xs-3">
+                                                <div class="input-group">
+                                                    <span class="input-group-addon"><i class="fa fa-info"></i></span>
+                                                    <input type="email" class="form-control" placeholder="Quantidade Contrato">
+                                                </div>
+                                            </div>
+                                            <div class="col-xs-3">
+                                                <div class="input-group">
+                                                    <span class="input-group-addon"><i class="fa fa-info"></i></span>
+                                                    <input type="email" class="form-control" placeholder="Valor Contrato">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-xs-3">
+                                                <div class="input-group">
+                                                    <span class="input-group-addon"><i class="fa fa-info"></i></span>
+                                                    <input type="email" class="form-control" placeholder="Quantidade Utilizada">
+                                                </div>
+                                            </div>
+                                            <div class="col-xs-3">
+                                                <div class="input-group">
+                                                    <span class="input-group-addon"><i class="fa fa-info"></i></span>
+                                                    <input type="email" class="form-control" placeholder="Valor Utilizado">
+                                                </div>
+                                            </div>
+                                            <div class="col-xs-3">
+                                                <div class="input-group">
+                                                    <span class="input-group-addon"><i class="fa fa-info"></i></span>
+                                                    <input type="email" class="form-control" placeholder="Quantidade Saldo">
+                                                </div>
+                                            </div>
+                                            <div class="col-xs-3">
+                                                <div class="input-group">
+                                                    <span class="input-group-addon"><i class="fa fa-info"></i></span>
+                                                    <input type="email" class="form-control" placeholder="Valor Saldo">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-xs-3">
+                                                <div class="input-group">
+                                                    <span class="input-group-addon"><i class="fa fa-info"></i></span>
+                                                    <input type="email" class="form-control" placeholder="Id Unidade">
+                                                </div>
+                                            </div>
+                                            <div class="col-xs-3">
+                                                <div class="input-group">
+                                                    <span class="input-group-addon"><i class="fa fa-info"></i></span>
+                                                    <input type="email" class="form-control" placeholder="Ano Orçamento">
+                                                </div>
+                                            </div>
+                                            <div class="col-xs-6">
+                                                <div class="input-group">
+                                                    <span class="input-group-addon"><i class="fa fa-info"></i></span>
+                                                    <input type="email" class="form-control" placeholder="Seq Item Processo">
                                                 </div>
                                             </div>
                                         </div>
