@@ -28,24 +28,12 @@ $html_header = "
   <hr/>";
 $input = filter_input(INPUT_POST, 'relatorio');
 
-if (isset($_SESSION['pedidosRel'])) {
+$html = "";
+if (isset($_SESSION['pedidosRel']) && empty($input)) {
 
     $html = $html_style . $html_header;
     $html .= $obj_Print->getRelPed($_SESSION['pedidosRel']);
     unset($_SESSION['pedidosRel']);
-    $html .= "</body>";
-
-    //definimos o tipo de exibicao
-    $mpdf->SetDisplayMode('fullpage');
-    $data = date('j/m/Y  H:i');
-    //definimos oque vai conter no rodape do pdf
-    $mpdf->SetFooter("{$data}||Página {PAGENO}/{nb}");
-    //e escreve todo conteudo html vindo de nossa página html em nosso arquivo
-    $mpdf->WriteHTML($html);
-    //fechamos nossa instancia ao pdf
-    $mpdf->Output();
-    //pausamos a tela para exibir oque foi feito
-    exit();
 } else if (!empty($input)) {
     $html = $html_style . $html_header;
 
@@ -61,26 +49,22 @@ if (isset($_SESSION['pedidosRel'])) {
             break;
 
         default:
-            // remove all session variables
-            session_unset();
-            // destroy the session
-            session_destroy();
+            exit('Nenhum dado foi recebido para gerar relatório.');
             break;
     }
-
-    $html .= "</body>";
-
-    //definimos o tipo de exibicao
-    $mpdf->SetDisplayMode('fullpage');
-    $data = date('j/m/Y  H:i');
-    //definimos oque vai conter no rodape do pdf
-    $mpdf->SetFooter("{$data}||Página {PAGENO}/{nb}");
-    //e escreve todo conteudo html vindo de nossa página html em nosso arquivo
-    $mpdf->WriteHTML($html);
-    //fechamos nossa instancia ao pdf
-    $mpdf->Output();
-    //pausamos a tela para exibir oque foi feito
-    exit();
 } else {
     exit('Página inválida. É preciso mandar imprimir novamente.');
 }
+
+$html .= "</body>";
+//definimos o tipo de exibicao
+$mpdf->SetDisplayMode('fullpage');
+$data = date('j/m/Y  H:i');
+//definimos oque vai conter no rodape do pdf
+$mpdf->SetFooter("{$data}||Página {PAGENO}/{nb}");
+//e escreve todo conteudo html vindo de nossa página html em nosso arquivo
+$mpdf->WriteHTML($html);
+//fechamos nossa instancia ao pdf
+$mpdf->Output();
+//pausamos a tela para exibir oque foi feito
+exit();
