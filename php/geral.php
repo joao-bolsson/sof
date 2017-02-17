@@ -71,7 +71,6 @@ if ($obj_Busca->isActive()) {
                     }
                 }
                 $dados['chave'] = $dados['num_processo'] . '#' . $dados['cod_reduzido'] . '#' . $dados['seq_item_processo'];
-                echo $len;
                 $obj_Geral->cadItensRP($dados, $array_names);
 
                 break;

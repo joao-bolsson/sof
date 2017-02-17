@@ -57,8 +57,7 @@ class Geral extends Conexao {
         $fields .= ')';
         $insert_dados .= ')';
 
-        echo "INSERT IGNORE INTO itens " . $fields . " VALUES " . $insert_dados;
-//        $this->mysqli->query("INSERT IGNORE INTO itens " . $fields . " VALUES " . $insert_dados) or exit("Ocorreu um erro ao cadastrar o item: " . $this->mysqli->error);
+        $this->mysqli->query("INSERT IGNORE INTO itens " . $fields . " VALUES " . $insert_dados) or exit("Ocorreu um erro ao cadastrar o item: " . $this->mysqli->error);
 
         $this->mysqli = NULL;
     }
