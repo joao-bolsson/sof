@@ -647,7 +647,7 @@ class PrintMod extends Conexao {
             if ($_SESSION['id_setor'] == 2) {
                 $retorno .= "<br>
                 <fieldset class=\"preg\">
-                    <h5>SUBTOTAIS POR SETOR (beta)</h5>
+                    <h5>SUBTOTAIS POR SETOR</h5>
                     <table class=\"prod\">
                         <thead>
                             <tr>
