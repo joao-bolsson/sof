@@ -23,15 +23,55 @@ class PrintMod extends Conexao {
         parent::__construct();
     }
 
+    private function openConnection() {
+        if (is_null($this->mysqli)) {
+            $this->mysqli = parent::getConexao();
+        }
+    }
+
+    public function getRelUsers(): string {
+        self::openConnection();
+        $query = $this->mysqli->query("SELECT nome, login, id_setor, email FROM usuario;") or exit('Erro ao buscar usuários.');
+        $this->mysqli = NULL;
+        $retorno = "
+            <fieldset class=\"preg\">
+                    <h5>DESCRIÇÃO DO RELATÓRIO</h5>
+                    <h6>Relatório de Usuários Cadastrados no Sistema</h6>
+                </fieldset><br>
+            <fieldset>
+                <table class=\"prod\">
+                    <thead>
+                        <tr>
+                            <th>Nome</th>
+                            <th>Login</th>
+                            <th>Setor</th>
+                            <th>E-mail</th>
+                        </tr>
+                    </thead>
+                    <tbody>";
+
+        while ($user = $query->fetch_object()) {
+            $retorno .= " 
+            <tr>
+                <td>" . $user->nome . "</td>
+                <td>" . $user->login . "</td>
+                <td>" . ARRAY_SETORES[$user->id_setor] . "</td>
+                <td>" . $user->email . "</td>
+            </tr>";
+        }
+
+        $retorno .= "</tbody></table></fieldset>";
+
+        return $retorno;
+    }
+
     /**
      * Função para retornar o cabeçalho do pdf do pedido.
      *
      * @return string
      */
     public function getHeader(int $id_pedido): string {
-        if (is_null($this->mysqli)) {
-            $this->mysqli = parent::getConexao();
-        }
+        self::openConnection();
         $query = $this->mysqli->query("SELECT pedido.id, DATE_FORMAT(pedido.data_pedido, '%d/%m/%Y') AS data_pedido, EXTRACT(YEAR FROM pedido.data_pedido) AS ano, mes.sigla_mes AS ref_mes, status.nome AS status, pedido.valor AS valor, pedido.obs, pedido.pedido_contrato, prioridade.nome AS prioridade, pedido.aprov_gerencia, pedido.id_usuario FROM prioridade, pedido, mes, status WHERE pedido.prioridade = prioridade.id AND status.id = pedido.status AND pedido.id = {$id_pedido} AND mes.id = pedido.ref_mes;") or exit("Erro ao formar o cabeçalho do pedido.");
         $this->mysqli = NULL;
         $pedido = $query->fetch_object();
@@ -70,9 +110,7 @@ class PrintMod extends Conexao {
     }
 
     private function getUserName(int $id_user) {
-        if (is_null($this->mysqli)) {
-            $this->mysqli = parent::getConexao();
-        }
+        self::openConnection();
 
         $query = $this->mysqli->query("SELECT usuario.nome FROM usuario WHERE usuario.id = " . $id_user) or exit("Erro ao buscar o nome do usuario do pedido");
         $obj = $query->fetch_object();
@@ -86,9 +124,7 @@ class PrintMod extends Conexao {
                 <h5>PEDIDO SEM LICITAÇÃO</h5>
                 </fieldset><br>";
 
-        if (is_null($this->mysqli)) {
-            $this->mysqli = parent::getConexao();
-        }
+        self::openConnection();
         $query = $this->mysqli->query("SELECT licitacao.tipo AS id_tipo, licitacao_tipo.nome AS tipo, licitacao.numero, licitacao.uasg, licitacao.processo_original, licitacao.gera_contrato FROM licitacao, licitacao_tipo WHERE licitacao_tipo.id = licitacao.tipo AND licitacao.id_pedido = {$id_pedido};") or exit("Erro ao buscar licitação do pedido.");
         $this->mysqli = NULL;
         if ($query->num_rows == 1) {
@@ -141,9 +177,7 @@ class PrintMod extends Conexao {
      */
     public function getTableFontes(int $id_pedido): string {
         $retorno = "";
-        if (is_null($this->mysqli)) {
-            $this->mysqli = parent::getConexao();
-        }
+        self::openConnection();
         $query = $this->mysqli->query("SELECT pedido_fonte.fonte_recurso, pedido_fonte.ptres, pedido_fonte.plano_interno FROM pedido_fonte WHERE pedido_fonte.id_pedido = {$id_pedido};") or exit("Erro ao buscar fontes do pedido.");
         $this->mysqli = NULL;
         if ($query->num_rows > 0) {
@@ -178,9 +212,7 @@ class PrintMod extends Conexao {
     }
 
     private function getEmpenho(int $id_pedido): string {
-        if (is_null($this->mysqli)) {
-            $this->mysqli = parent::getConexao();
-        }
+        self::openConnection();
 
         $query = $this->mysqli->query("SELECT contrato_tipo.nome, pedido_contrato.siafi FROM contrato_tipo, pedido_contrato WHERE pedido_contrato.id_tipo = contrato_tipo.id AND pedido_contrato.id_pedido = {$id_pedido};") or exit("Erro ao buscar o contrato do pedido.");
         $this->mysqli = NULL;
@@ -193,9 +225,7 @@ class PrintMod extends Conexao {
     }
 
     private function getGrupoPedido(int $id_pedido): string {
-        if (is_null($this->mysqli)) {
-            $this->mysqli = parent::getConexao();
-        }
+        self::openConnection();
         $query = $this->mysqli->query("SELECT setores_grupos.nome, pedido_grupo.id_pedido FROM setores_grupos, pedido_grupo WHERE pedido_grupo.id_grupo = setores_grupos.id AND pedido_grupo.id_pedido = {$id_pedido};") or exit("Erro ao buscar grupo do pedido.");
         $this->mysqli = NULL;
         $retorno = "";
@@ -215,9 +245,7 @@ class PrintMod extends Conexao {
     public function getContentPedido(int $id_pedido): string {
         $retorno = "";
         // PRIMEIRO FAZEMOS O CABEÇALHO REFERENTE AO NUM_LICITACAO
-        if (is_null($this->mysqli)) {
-            $this->mysqli = parent::getConexao();
-        }
+        self::openConnection();
         $query_ini = $this->mysqli->query("SELECT DISTINCT itens.num_licitacao, itens.num_processo, itens.dt_inicio, itens.dt_fim FROM itens_pedido, itens WHERE itens.id = itens_pedido.id_item AND itens_pedido.id_pedido = {$id_pedido};") or exit("Erro ao buscar itens do pedido.");
         while ($licitacao = $query_ini->fetch_object()) {
             if ($licitacao->dt_fim == '') {
@@ -302,9 +330,7 @@ class PrintMod extends Conexao {
      */
     public function getComentarios(int $id_pedido): string {
         $retorno = "";
-        if (is_null($this->mysqli)) {
-            $this->mysqli = parent::getConexao();
-        }
+        self::openConnection();
         $query_emp = $this->mysqli->query("SELECT pedido_empenho.empenho, DATE_FORMAT(pedido_empenho.data, '%d/%m/%Y') AS data FROM pedido_empenho WHERE pedido_empenho.id_pedido = {$id_pedido};") or exit("Erro ao mostrar o empenho do pedido nos comentários.");
         if ($query_emp->num_rows > 0) {
             $empenho = $query_emp->fetch_object();
@@ -350,9 +376,7 @@ class PrintMod extends Conexao {
      * 	@return Id do setor que fez o pedido.
      */
     public function getSetorPedido(int $id_pedido): int {
-        if (is_null($this->mysqli)) {
-            $this->mysqli = parent::getConexao();
-        }
+        self::openConnection();
         $query = $this->mysqli->query("SELECT id_setor FROM pedido WHERE id = {$id_pedido};") or exit("Erro ao buscar o id do setor do pedido.");
         $this->mysqli = NULL;
         $obj = $query->fetch_object();
@@ -380,9 +404,7 @@ class PrintMod extends Conexao {
             $tb_empenho = "pedido_empenho, ";
             $empenho = ", pedido_empenho.empenho";
         }
-        if (is_null($this->mysqli)) {
-            $this->mysqli = parent::getConexao();
-        }
+        self::openConnection();
 
         $where_pedidos = '(';
         $len = count($pedidos);
@@ -409,9 +431,7 @@ class PrintMod extends Conexao {
                     <th>Prioridade</th>
                     <th>SIAFI</th>";
             }
-            if (is_null($this->mysqli)) {
-                $this->mysqli = parent::getConexao();
-            }
+            self::openConnection();
             $query_tot = $this->mysqli->query("SELECT sum(pedido.valor) AS total FROM {$tb_empenho} pedido WHERE 1 > 0 {$where_empenho} AND pedido.alteracao = 0 {$where_status};") or exit("Erro ao somar os pedidos.");
             $this->mysqli = NULL;
             $total = "R$ 0";
@@ -544,9 +564,7 @@ class PrintMod extends Conexao {
             $tb_empenho = "pedido_empenho, ";
             $empenho = ", pedido_empenho.empenho";
         }
-        if (is_null($this->mysqli)) {
-            $this->mysqli = parent::getConexao();
-        }
+        self::openConnection();
         $query = $this->mysqli->query("SELECT pedido.id, pedido.id_setor, setores.nome AS setor, DATE_FORMAT(pedido.data_pedido, '%d/%m/%Y') AS data_pedido, prioridade.nome AS prioridade, status.nome AS status, pedido.valor {$empenho} FROM {$tb_empenho} setores, pedido, prioridade, status WHERE status.id = pedido.status {$where_setor} {$where_prioridade} {$where_empenho} AND prioridade.id = pedido.prioridade AND pedido.id_setor = setores.id {$where_status} AND pedido.data_pedido BETWEEN '{$dataIni}' AND '{$dataFim}' ORDER BY pedido.id ASC;") or exit("Erro ao buscar os pedidos com as especificações do usuário.");
 
         $titulo = "Relatório de Pedidos por Setor e Nível de Prioridade";
@@ -562,9 +580,7 @@ class PrintMod extends Conexao {
                     <th>Prioridade</th>
                     <th>SIAFI</th>";
             }
-            if (is_null($this->mysqli)) {
-                $this->mysqli = parent::getConexao();
-            }
+            self::openConnection();
             $query_tot = $this->mysqli->query("SELECT sum(pedido.valor) AS total FROM {$tb_empenho} pedido WHERE 1 > 0 {$where_setor} {$where_prioridade} {$where_empenho} AND pedido.alteracao = 0 {$where_status} AND pedido.data_pedido BETWEEN '{$dataIni}' AND '{$dataFim}';") or exit("Erro ao somar os pedidos.");
             $this->mysqli = NULL;
             $total = "R$ 0";
@@ -684,9 +700,7 @@ class PrintMod extends Conexao {
         if ($tipo != 0) {
             $where = "AND processos.tipo = " . $tipo;
         }
-        if (is_null($this->mysqli)) {
-            $this->mysqli = parent::getConexao();
-        }
+        self::openConnection();
         if ($where == "") {
             $query_proc = $this->mysqli->query("SELECT processos_tipo.id, processos_tipo.nome FROM processos_tipo;") or exit("Erro ao buscar os tipos de processo.");
             while ($tipo_proc = $query_proc->fetch_object()) {

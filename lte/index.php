@@ -219,6 +219,13 @@ if (isset($_SESSION['editmode'])) {
                                 <ul class="treeview-menu">
                                     <li><a href="javascript:abreModal('#relPedidos');"><i class="fa fa-circle-o"></i> Pedidos</a></li>
                                     <li><a href="javascript:listRelatorios();"><i class="fa fa-circle-o"></i> Lista de Pedidos</a></li>
+                                    <li>
+                                        <a href="javascript:relListUsers();"><i class="fa fa-circle-o"></i> Usuários
+                                            <span class="pull-right-container">
+                                                <small class="label pull-right bg-blue">novo</small>
+                                            </span>
+                                        </a>
+                                    </li>
                                 </ul>
                             </li>
                         <?php endif; ?>

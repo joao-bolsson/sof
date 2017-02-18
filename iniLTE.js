@@ -230,6 +230,10 @@ $(function () {
 
 });
 
+function relListUsers() {
+    window.open("../admin/printRelatorio.php?relatorio=1&tipo=users");
+}
+
 function cadEmpenho(id_pedido, empenho, data) {
     document.getElementById('id_pedido_emp').value = '';
     document.getElementById('empenho').value = '';
