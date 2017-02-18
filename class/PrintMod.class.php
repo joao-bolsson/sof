@@ -31,7 +31,7 @@ class PrintMod extends Conexao {
 
     public function getRelUsers(): string {
         self::openConnection();
-        $query = $this->mysqli->query("SELECT nome, login, id_setor, email FROM usuario;") or exit('Erro ao buscar usuários.');
+        $query = $this->mysqli->query('SELECT nome, login, id_setor, email FROM usuario ORDER BY nome ASC') or exit('Erro ao buscar usuários.');
         $this->mysqli = NULL;
         $retorno = "
             <fieldset class=\"preg\">
