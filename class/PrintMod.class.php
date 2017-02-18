@@ -653,6 +653,7 @@ class PrintMod extends Conexao {
                             <tr>
                                 <th>Setor</th>
                                 <th>Total</th>
+                                <th>Porcentagem</th>
                             </tr>
                         </thead>
                         <tbody>";
@@ -661,10 +662,13 @@ class PrintMod extends Conexao {
 
                 for ($k = 0; $k < $len; $k++) {
                     if (array_key_exists($k, $array_sub_totais)) {
+                        $parcial = number_format($array_sub_totais[$k], 3, ',', '.');
+                        $porcentagem = number_format(($array_sub_totais[$k] * 100) / $tot->total, 3, ',', '.');
                         $retorno .= "
-                        <tr> 
+                        <tr>
                             <td>" . ARRAY_SETORES[$k] . "</td>
-                            <td>" . number_format($array_sub_totais[$k], 3, ',', '.') . "</td>
+                            <td>" . $parcial . "</td>
+                            <td>" . $porcentagem . "%</td>
                         </tr>";
                     }
                 }
