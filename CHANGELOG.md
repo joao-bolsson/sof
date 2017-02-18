@@ -10,6 +10,7 @@
 - Melhoria no carregamento e atualização da tabela de pedidos do SOF
 - - A tabela só irá atualizar o pedido que foi alterado, exceto se o botão "Salvar Alterações" nos detalhes do pedido for clicado
 - Os pedidos carregados pelo usuário são mantidos a cada atualização da tabela, exceto no caso acima 
+- Subrelatório por grupos dos pedidos (beta).
 
 #### v2.1.5 - 12/02/2017 ####
 - Os setores têm acesso aos usuários da Unidade de Apoio

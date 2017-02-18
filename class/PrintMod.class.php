@@ -646,6 +646,7 @@ class PrintMod extends Conexao {
 
             if ($_SESSION['id_setor'] == 2) {
                 $retorno .= "<br>
+                <h5>As porcentagens mostradas são em relação ao Total (pag. 1) deste Relatório.</h5>
                 <fieldset class=\"preg\">
                     <h5>SUBTOTAIS POR SETOR</h5>
                     <table class=\"prod\">
@@ -672,6 +673,53 @@ class PrintMod extends Conexao {
                         </tr>";
                     }
                 }
+                $retorno .= "</tbody></table></fieldset><br>";
+
+
+                $retorno .= "
+                <fieldset class=\"preg\">
+                    <h5>SUBTOTAIS POR GRUPO (beta)</h5>
+                    <table class=\"prod\">
+                        <thead>
+                            <tr>
+                                <th>Grupo</th>
+                                <th>Total</th>
+                                <th>Porcentagem</th>
+                            </tr>
+                        </thead>
+                        <tbody>";
+
+                self::openConnection();
+                $query_gr = $this->mysqli->query("SELECT pedido_grupo.id_grupo, setores_grupos.nome AS ng, pedido.valor {$empenho} FROM {$tb_empenho} setores, setores_grupos, pedido, prioridade, status, pedido_grupo WHERE setores_grupos.id = pedido_grupo.id_grupo AND pedido_grupo.id_pedido = pedido.id AND status.id = pedido.status {$where_setor} {$where_prioridade} {$where_empenho} AND prioridade.id = pedido.prioridade AND pedido.id_setor = setores.id {$where_status} AND pedido.data_pedido BETWEEN '{$dataIni}' AND '{$dataFim}'") or exit('Erro ao gerar subrelatorio de grupos');
+                $this->mysqli = NULL;
+
+                $array_gr = []; // guarda o somatorio do grupo
+                $gr_indexes = []; // guarda os indices do array de cima
+                $gr_names = []; // guarda o nome dos grupos
+                $k = 0;
+                while ($obj = $query_gr->fetch_object()) {
+                    $index = 'gr' . $obj->id_grupo;
+                    if (!array_key_exists($index, $array_gr)) {
+                        $array_gr[$index] = 0;
+                        $gr_indexes[$k] = $index;
+                        $gr_names[$index] = $obj->ng;
+                        $k++;
+                    }
+                    $array_gr[$index] += $obj->valor;
+                }
+
+                $count = count($gr_indexes);
+                for ($i = 0; $i < $count; $i++) {
+                    $parcial = number_format($array_gr[$gr_indexes[$i]], 3, ',', '.');
+                    $porcentagem = number_format(($array_gr[$gr_indexes[$i]] * 100) / $tot->total, 3, ',', '.');
+                    $retorno .= "
+                    <tr>
+                        <td>" . utf8_encode($gr_names[$gr_indexes[$i]]) . "</td>
+                        <td>" . $parcial . "</td>
+                        <td>" . $porcentagem . "%</td>
+                    </tr>";
+                }
+
                 $retorno .= "</tbody></table></fieldset><br>";
             }
         }
