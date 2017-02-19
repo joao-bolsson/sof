@@ -1184,7 +1184,6 @@ if (isset($_SESSION['editmode'])) {
                                     <thead>
                                         <tr>
                                             <th>Pedido</th>
-                                            <th>RefMes</th>
                                             <th>Data de Envio</th>
                                             <th>Prioridade</th>
                                             <th>Status</th>
