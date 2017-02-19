@@ -1067,7 +1067,7 @@ if (isset($_SESSION['editmode'])) {
                                         <tr>
                                             <th>Setor</th>
                                             <th>Assunto</th>
-                                            <th>Descrição</th>
+                                            <th>Opções</th>
                                         </tr>
                                     </thead>
                                     <tbody id="tbodyListProblemas"></tbody>

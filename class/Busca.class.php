@@ -170,7 +170,7 @@ class Busca extends Conexao {
                     <td>" . $problema->setor . "</td>
                     <td>" . $problema->assunto . "</td>
                     <td>
-                        <button onclick=\"viewCompl('" . $problema->descricao . "');\" class=\"btn btn-flat waves-attach waves-effect\" type=\"button\" title=\"Descrição\">Descrição</button>
+                        <button onclick=\"viewCompl('" . $problema->descricao . "');\" class=\"btn btn-default\" type=\"button\" data-toggle=\"tooltip\" title=\"Ver Descrição Informada\">Descrição</button>
                     </td>
                 </tr>";
         }
