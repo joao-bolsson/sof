@@ -115,6 +115,14 @@ if (isset($_SESSION['editmode'])) {
                     </div>
                     <!-- sidebar menu: : style can be found in sidebar.less -->
                     <ul class="sidebar-menu">
+                        <li>
+                            <a href="javascript:mostra('rowCadRP');">
+                                <i class="fa fa-database"></i> <span>Cadastrar Itens</span>
+                                <span class="pull-right-container">
+                                    <small class="label pull-right bg-blue">novo</small>
+                                </span>
+                            </a>
+                        </li>
                         <?php if ($permissao->saldos): ?>
                             <li>
                                 <a href="javascript:mostraSolicAdiant();">
@@ -211,6 +219,13 @@ if (isset($_SESSION['editmode'])) {
                                 <ul class="treeview-menu">
                                     <li><a href="javascript:abreModal('#relPedidos');"><i class="fa fa-circle-o"></i> Pedidos</a></li>
                                     <li><a href="javascript:listRelatorios();"><i class="fa fa-circle-o"></i> Lista de Pedidos</a></li>
+                                    <li>
+                                        <a href="javascript:relListUsers();"><i class="fa fa-circle-o"></i> Usuários
+                                            <span class="pull-right-container">
+                                                <small class="label pull-right bg-blue">novo</small>
+                                            </span>
+                                        </a>
+                                    </li>
                                 </ul>
                             </li>
                         <?php endif; ?>
@@ -405,6 +420,232 @@ if (isset($_SESSION['editmode'])) {
                                             <tbody id="contSolicAltPedido"></tbody>
                                         </table>
                                     </div><!-- /.box-body -->
+                                </div><!-- /.box -->
+                            </div><!-- /.col -->
+                        </div><!-- /.row -->
+                        <div id="rowCadRP" class="row" style="display: none;">
+                            <div class="col-xs-12">
+                                <div class="box box-primary">
+                                    <div class="box-header">
+                                        <h3 class="box-title">Cadastro de Itens</h3>
+                                        <div class="box-tools pull-right">
+                                            <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
+                                            </button>
+                                        </div>
+                                    </div><!-- /.box-header -->
+                                    <form action="../php/geral.php" method="POST">
+                                        <input type="hidden" name="admin" value="1"/>
+                                        <input type="hidden" name="form" value="cadItens"/>
+                                        <div class="box-body">
+                                            <div class="row">
+                                                <div class="col-xs-3">
+                                                    <div class="input-group">
+                                                        <span class="input-group-addon"><i class="fa fa-info"></i></span>
+                                                        <input type="number" name="id_item_processo" step="1" class="form-control" placeholder="Id Item Processo">
+                                                    </div>
+                                                </div>
+                                                <div class="col-xs-3">
+                                                    <div class="input-group">
+                                                        <span class="input-group-addon"><i class="fa fa-info"></i></span>
+                                                        <input type="number" name="id_item_contrato" step="1" class="form-control" placeholder="Id Item Contrato">
+                                                    </div>
+                                                </div>
+                                                <div class="col-xs-3">
+                                                    <div class="input-group">
+                                                        <span class="input-group-addon"><i class="fa fa-info"></i></span>
+                                                        <input type="text" name="cod_despesa" maxlength="15" class="form-control" placeholder="Código Despesa">
+                                                    </div>
+                                                </div>
+                                                <div class="col-xs-3">
+                                                    <div class="input-group">
+                                                        <span class="input-group-addon"><i class="fa fa-info"></i></span>
+                                                        <input type="text" name="descr_despesa" maxlength="100" class="form-control" placeholder="Descrição Despesa">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-xs-3">
+                                                    <div class="input-group">
+                                                        <span class="input-group-addon"><i class="fa fa-info"></i></span>
+                                                        <input type="text" name="descr_tipo_doc" maxlength="80" class="form-control" placeholder="Descrição Tipo Doc">
+                                                    </div>
+                                                </div>
+                                                <div class="col-xs-3">
+                                                    <div class="input-group">
+                                                        <span class="input-group-addon"><i class="fa fa-info"></i></span>
+                                                        <input type="text" name="num_contrato" maxlength="15" class="form-control" placeholder="Número do Contrato">
+                                                    </div>
+                                                </div>
+                                                <div class="col-xs-3">
+                                                    <div class="input-group">
+                                                        <span class="input-group-addon"><i class="fa fa-info"></i></span>
+                                                        <input type="text" name="num_processo" maxlength="20" class="form-control" placeholder="Número do Processo">
+                                                    </div>
+                                                </div>
+                                                <div class="col-xs-3">
+                                                    <div class="input-group">
+                                                        <span class="input-group-addon"><i class="fa fa-info"></i></span>
+                                                        <input type="text" name="descr_mod_compra" maxlength="50" class="form-control" placeholder="Descrição Mod Compra">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-xs-3">
+                                                    <div class="input-group">
+                                                        <span class="input-group-addon"><i class="fa fa-info"></i></span>
+                                                        <input type="text" name="num_licitacao" maxlength="15" class="form-control" placeholder="Número da Licitação">
+                                                    </div>
+                                                </div>
+                                                <div class="col-xs-3">
+                                                    <div class="input-group">
+                                                        <span class="input-group-addon"><i class="fa fa-info"></i></span>
+                                                        <input type="text" name="dt_inicio" maxlength="15" class="form-control date" placeholder="Data Início">
+                                                    </div>
+                                                </div>
+                                                <div class="col-xs-3">
+                                                    <div class="input-group">
+                                                        <span class="input-group-addon"><i class="fa fa-info"></i></span>
+                                                        <input type="text" name="dt_fim" maxlength="15" class="form-control date" placeholder="Data Fim">
+                                                    </div>
+                                                </div>
+                                                <div class="col-xs-3">
+                                                    <div class="input-group">
+                                                        <span class="input-group-addon"><i class="fa fa-info"></i></span>
+                                                        <input type="text" name="dt_geracao" maxlength="15" class="form-control date" placeholder="Data Geração">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-xs-3">
+                                                    <div class="input-group">
+                                                        <span class="input-group-addon"><i class="fa fa-info"></i></span>
+                                                        <input type="text" name="cgc_fornecedor" maxlength="20" class="form-control" placeholder="CGC Fornecedor">
+                                                    </div>
+                                                </div>
+                                                <div class="col-xs-3">
+                                                    <div class="input-group">
+                                                        <span class="input-group-addon"><i class="fa fa-info"></i></span>
+                                                        <input type="text" name="nome_fornecedor" maxlength="50" class="form-control" placeholder="Nome do Fornecedor">
+                                                    </div>
+                                                </div>
+                                                <div class="col-xs-3">
+                                                    <div class="input-group">
+                                                        <span class="input-group-addon"><i class="fa fa-info"></i></span>
+                                                        <input type="text" name="num_extrato" maxlength="20" class="form-control" placeholder="Número do Extrato">
+                                                    </div>
+                                                </div>
+                                                <div class="col-xs-3">
+                                                    <div class="input-group">
+                                                        <span class="input-group-addon"><i class="fa fa-info"></i></span>
+                                                        <input type="text" name="cod_estruturado" maxlength="20" class="form-control" placeholder="Código Estruturado">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-xs-3">
+                                                    <div class="input-group">
+                                                        <span class="input-group-addon"><i class="fa fa-info"></i></span>
+                                                        <input type="text" name="nome_unidade" maxlength="100" class="form-control" placeholder="Nome da Unidade">
+                                                    </div>
+                                                </div>
+                                                <div class="col-xs-3">
+                                                    <div class="input-group">
+                                                        <span class="input-group-addon"><i class="fa fa-info"></i></span>
+                                                        <input type="text" name="cod_reduzido" maxlength="20" class="form-control" placeholder="Código Reduzido">
+                                                    </div>
+                                                </div>
+                                                <div class="col-xs-3">
+                                                    <div class="input-group">
+                                                        <span class="input-group-addon"><i class="fa fa-info"></i></span>
+                                                        <input type="text" name="complemento_item" maxlength="500" class="form-control" placeholder="Complemento do Item">
+                                                    </div>
+                                                </div>
+                                                <div class="col-xs-3">
+                                                    <div class="input-group">
+                                                        <span class="input-group-addon"><i class="fa fa-info"></i></span>
+                                                        <input type="text" name="descricao" maxlength="200" class="form-control" placeholder="Descrição">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-xs-3">
+                                                    <div class="input-group">
+                                                        <span class="input-group-addon"><i class="fa fa-info"></i></span>
+                                                        <input type="number" name="id_extrato_contr" step="1" class="form-control" placeholder="Id Extrato Contrato">
+                                                    </div>
+                                                </div>
+                                                <div class="col-xs-3">
+                                                    <div class="input-group">
+                                                        <span class="input-group-addon"><i class="fa fa-info"></i></span>
+                                                        <input type="number" name="vl_unitario" step="0.001" class="form-control" placeholder="Valor Unitário">
+                                                    </div>
+                                                </div>
+                                                <div class="col-xs-3">
+                                                    <div class="input-group">
+                                                        <span class="input-group-addon"><i class="fa fa-info"></i></span>
+                                                        <input type="number" name="qt_contrato" step="1" class="form-control" placeholder="Quantidade Contrato">
+                                                    </div>
+                                                </div>
+                                                <div class="col-xs-3">
+                                                    <div class="input-group">
+                                                        <span class="input-group-addon"><i class="fa fa-info"></i></span>
+                                                        <input type="number" name="vl_contrato" step="0.001" class="form-control" placeholder="Valor Contrato">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-xs-3">
+                                                    <div class="input-group">
+                                                        <span class="input-group-addon"><i class="fa fa-info"></i></span>
+                                                        <input type="number" name="qt_utilizado" step="1" class="form-control" placeholder="Quantidade Utilizada">
+                                                    </div>
+                                                </div>
+                                                <div class="col-xs-3">
+                                                    <div class="input-group">
+                                                        <span class="input-group-addon"><i class="fa fa-info"></i></span>
+                                                        <input type="number" name="vl_utilizado" step="0.001" class="form-control" placeholder="Valor Utilizado">
+                                                    </div>
+                                                </div>
+                                                <div class="col-xs-3">
+                                                    <div class="input-group">
+                                                        <span class="input-group-addon"><i class="fa fa-info"></i></span>
+                                                        <input type="number" name="qt_saldo" step="1" class="form-control" placeholder="Quantidade Saldo">
+                                                    </div>
+                                                </div>
+                                                <div class="col-xs-3">
+                                                    <div class="input-group">
+                                                        <span class="input-group-addon"><i class="fa fa-info"></i></span>
+                                                        <input type="number" name="vl_saldo" step="0.001" class="form-control" placeholder="Valor Saldo">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-xs-3">
+                                                    <div class="input-group">
+                                                        <span class="input-group-addon"><i class="fa fa-info"></i></span>
+                                                        <input type="number" name="id_unidade" step="1" class="form-control" placeholder="Id Unidade">
+                                                    </div>
+                                                </div>
+                                                <div class="col-xs-3">
+                                                    <div class="input-group">
+                                                        <span class="input-group-addon"><i class="fa fa-info"></i></span>
+                                                        <input type="number" name="ano_orcamento" step="1" min="2000" class="form-control" placeholder="Ano Orçamento">
+                                                    </div>
+                                                </div>
+                                                <div class="col-xs-6">
+                                                    <div class="input-group">
+                                                        <span class="input-group-addon"><i class="fa fa-info"></i></span>
+                                                        <input type="text" name="seq_item_processo" maxlength="20" class="form-control" placeholder="Seq Item Processo">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div><!-- /.box-body -->
+                                        <div class="box-footer">
+                                            <div class="btn-group" style="width: 100%;">
+                                                <button class="btn btn-primary" type="submit" style="width: 100%;"><i class="fa fa-check"></i>&nbsp;Cadastrar</button>
+                                            </div>
+                                        </div>
+                                    </form>
                                 </div><!-- /.box -->
                             </div><!-- /.col -->
                         </div><!-- /.row -->
@@ -785,20 +1026,20 @@ if (isset($_SESSION['editmode'])) {
                                 <input type="hidden" name="admin" value="1"/>
                                 <div class="modal-body">
                                     <div class="form-group">
-                                        <label for="nomeU">Nome</label>
-                                        <input type="text" class="form-control" id="nomeU" name="nome" placeholder="Nome" maxlength="40" required>
+                                        <label>Nome</label>
+                                        <input type="text" class="form-control" name="nome" placeholder="Nome" maxlength="40" required>
                                     </div>
                                     <div class="form-group">
-                                        <label for="loginU">Login</label>
-                                        <input type="text" class="form-control" id="loginU" name="login" placeholder="Login" maxlength="30" required>
+                                        <label>Login</label>
+                                        <input type="text" class="form-control" name="login" placeholder="Login" maxlength="30" required>
                                     </div>
                                     <div class="form-group">
-                                        <label for="emailU">E-mail</label>
-                                        <input type="email" class="form-control" id="emailU" name="email" placeholder="E-mail" maxlength="40" required>
+                                        <label>E-mail</label>
+                                        <input type="email" class="form-control" name="email" placeholder="E-mail" maxlength="40" required>
                                     </div>
                                     <div class="form-group">
                                         <label>Setor</label>
-                                        <select id="userA" class="form-control" name="setor" required>
+                                        <select class="form-control" name="setor" required>
                                             <?= $obj_Busca->getOptionsSetores(); ?>
                                         </select>
                                     </div>
@@ -826,7 +1067,7 @@ if (isset($_SESSION['editmode'])) {
                                         <tr>
                                             <th>Setor</th>
                                             <th>Assunto</th>
-                                            <th>Descrição</th>
+                                            <th>Opções</th>
                                         </tr>
                                     </thead>
                                     <tbody id="tbodyListProblemas"></tbody>
@@ -943,7 +1184,6 @@ if (isset($_SESSION['editmode'])) {
                                     <thead>
                                         <tr>
                                             <th>Pedido</th>
-                                            <th>RefMes</th>
                                             <th>Data de Envio</th>
                                             <th>Prioridade</th>
                                             <th>Status</th>

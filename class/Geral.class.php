@@ -31,6 +31,37 @@ class Geral extends Conexao {
         }
     }
 
+    /**
+     * 
+     * @param array $dados Informações que serão inseridas na tabela de itens.
+     * @param array $campos Campos da coluna no banco que deverão ser abastecidos
+     */
+    public function cadItensRP(array $dados, array $campos) {
+        self::openConnection();
+        if (empty($dados)) {
+            exit("Nenhum dado foi recebido para o cadastro");
+        }
+        $fields = $insert_dados = '(';
+
+        $len = count($campos);
+        for ($i = 0; $i < $len; $i++) {
+            $fields .= $campos[$i];
+            $aux = $this->mysqli->real_escape_string($dados[$campos[$i]]);
+            $info = str_replace("\"", "'", $aux);
+            $insert_dados .= "\"" . $info . "\"";
+            if ($i != $len - 1) {
+                $fields .= ', ';
+                $insert_dados .= ', ';
+            }
+        }
+        $fields .= ')';
+        $insert_dados .= ')';
+
+        $this->mysqli->query("INSERT IGNORE INTO itens " . $fields . " VALUES " . $insert_dados) or exit("Ocorreu um erro ao cadastrar o item: " . $this->mysqli->error);
+
+        $this->mysqli = NULL;
+    }
+
     public function editItemFactory($dados) {
         self::openConnection();
         if (empty($dados)) {

@@ -230,17 +230,25 @@ $(function () {
 
 });
 
+function relListUsers() {
+    window.open("../admin/printRelatorio.php?relatorio=1&tipo=users");
+}
+
 function cadEmpenho(id_pedido, empenho, data) {
     document.getElementById('id_pedido_emp').value = '';
     document.getElementById('empenho').value = '';
     document.getElementById('dataEmp').value = '';
     $('#cadEmpenho').modal();
     document.getElementById('id_pedido_emp').value = id_pedido;
-    if (empenho.length > 0) {
-        document.getElementById('empenho').value = empenho;
+    if (empenho != null) {
+        if (empenho.length > 0) {
+            document.getElementById('empenho').value = empenho;
+        }
     }
-    if (data.length > 0) {
-        document.getElementById('dataEmp').value = data;
+    if (data != null) {
+        if (data.length > 0) {
+            document.getElementById('dataEmp').value = data;
+        }
     }
 }
 
@@ -249,19 +257,30 @@ function cadFontes(id_pedido) {
     document.getElementById('id_pedido_fonte').value = id_pedido;
 }
 
-function dropTableSolic() {
+function dropTableSolic(id_pedido) {
     document.getElementById('overlayLoad').style.display = 'block';
     var element = document.getElementById('conteudoSolicitacoes');
     if (element.innerHTML.length > 0) {
         $('#tableSolicitacoes').DataTable().destroy();
     }
-    document.getElementById('conteudoSolicitacoes').innerHTML = '';
-    console.log('overlay');
+    if (id_pedido !== null) {
+        console.log('is not null: ' + id_pedido);
+        var row = document.getElementById('rowPedido' + id_pedido);
+        if (row.parentNode) {
+            row.parentNode.removeChild(row);
+            console.log('removeu rowPedido' + id_pedido);
+        } else {
+            console.log('nao removeu');
+        }
+    } else {
+        console.log('is null: clear table');
+        document.getElementById('conteudoSolicitacoes').innerHTML = '';
+    }
 }
 
 function enviaEmpenho() {
-    dropTableSolic();
     var id_pedido = document.getElementById('id_pedido_emp').value;
+    dropTableSolic(id_pedido);
     var empenho = document.getElementById('empenho').value;
     var data = document.getElementById('dataEmp').value;
     $.post('../php/geral.php', {
@@ -273,7 +292,7 @@ function enviaEmpenho() {
     }).done(function (resposta) {
         if (resposta) {
             $('#cadEmpenho').modal('hide');
-            iniSolicitacoes();
+            iniSolicitacoes(false, id_pedido);
             limpaTela();
         } else {
             alert('Ocorreu um erro no servidor. Contate o administrador.');
@@ -283,14 +302,14 @@ function enviaEmpenho() {
 
 function enviaOrdenador(id_pedido) {
     if (confirm("Mudar o status do pedido para \"Enviado ao Ordenador\"?")) {
-        dropTableSolic();
+        dropTableSolic(id_pedido);
         $.post('../php/geral.php', {
             admin: 1,
             form: 'enviaOrdenador',
             id_pedido: id_pedido
         }).done(function (resposta) {
             if (resposta) {
-                iniSolicitacoes();
+                iniSolicitacoes(false, id_pedido);
             } else {
                 alert('Ocorreu um erro no servidor. Contate o administrador.');
             }
@@ -299,8 +318,8 @@ function enviaOrdenador(id_pedido) {
 }
 
 function enviaFontes() {
-    dropTableSolic();
     var id_pedido = document.getElementById('id_pedido_fonte').value;
+    dropTableSolic(id_pedido);
     var fonte = document.getElementById('fonte').value;
     var ptres = document.getElementById('ptres').value;
     var plano = document.getElementById('plano').value;
@@ -314,7 +333,7 @@ function enviaFontes() {
     }).done(function (resposta) {
         if (resposta) {
             $('#cadFontes').modal('hide');
-            iniSolicitacoes();
+            iniSolicitacoes(false, id_pedido);
             limpaTela();
         } else {
             alert('Ocorreu um erro no servidor. Contate o administrador.');
@@ -337,7 +356,7 @@ function verEmpenho(id_pedido) {
 }
 
 function hideDivs() {
-    var divs = ['rowPedidos', 'rowDetPedido', 'rowSolicAdi', 'rowAltPed'];
+    var divs = ['rowPedidos', 'rowDetPedido', 'rowSolicAdi', 'rowAltPed', 'rowCadRP'];
     for (i = 0; i < divs.length; i++) {
         var element = document.getElementById(divs[i]);
         if (element !== null) {
@@ -361,7 +380,7 @@ function mostraPed() {
     $('button').blur();
     hideDivs();
     document.getElementById('rowPedidos').style.display = 'block';
-    iniSolicitacoes();
+    iniSolicitacoes(false, 0);
 }
 function mostraSolicAdiant() {
     mostra('rowSolicAdi');
@@ -385,7 +404,7 @@ function analisaSolicAlt(id_solic, id_pedido, acao) {
             alert(resposta);
             window.location.href = 'index.php';
         } else {
-            iniSolicitacoes();
+            iniSolicitacoes(false, 0);
             iniTableSolicAltPed();
         }
     });
@@ -642,7 +661,7 @@ function iniAdminSolicitacoes() {
             iniRecepcao();
         }
         if (permissao.pedidos) {
-            iniSolicitacoes();
+            iniSolicitacoes(false, 0);
         }
         if (permissao.saldos) {
             getSaldoOri();
@@ -811,7 +830,7 @@ function aprovGerencia() {
             pedidos: pedidos
         }).done(function (resposta) {
             console.log(resposta);
-            iniSolicitacoes();
+            iniSolicitacoes(false, 0);
         });
     }
     pedidosRelCustom = [];
@@ -941,7 +960,8 @@ function loadMore() {
     iniSolicitacoes(true);
 }
 
-function iniSolicitacoes(flag) {
+function iniSolicitacoes(flag, id_pedido) {
+    $(".date").inputmask("dd/mm/yyyy", {"placeholder": "dd/mm/yyyy"});
     var element = document.getElementById('conteudoSolicitacoes');
     if (element === null) {
         return;
@@ -953,25 +973,28 @@ function iniSolicitacoes(flag) {
             limit1 = document.getElementById('limit1').value;
             limit2 = document.getElementById('limit2').value;
         }
+    } else if (id_pedido != 0) {
+        console.log('vai atualizar uma linha: ' + id_pedido);
+    } else if (id_pedido == 0) {
+        console.log('busca os últimos 100 pedidos');
     }
     document.getElementById('overlayLoad').style.display = 'block';
     $.post('../php/buscaLTE.php', {
         admin: 1,
         form: 'tableItensPedido',
         limit1: limit1,
-        limit2: limit2
+        limit2: limit2,
+        id_pedido: id_pedido
     }).done(function (resposta) {
         if (element.innerHTML.length > 0) {
             $('#tableSolicitacoes').DataTable().destroy();
         }
         element.innerHTML += resposta;
-        console.log('ola mundo');
         document.getElementById('overlayLoad').style.display = 'none';
         tableValidade();
         loadChecks();
         iniDataTable('#tableSolicitacoes');
     });
-    console.log('tiau');
 }
 
 function enviaForn(id_pedido) {
@@ -979,13 +1002,14 @@ function enviaForn(id_pedido) {
     if (!confirm("O status do pedido " + id_pedido + " será alterado para 'Enviado ao Fornecedor'. \n\nDeseja Continuar?")) {
         return;
     }
-    dropTableSolic();
+    dropTableSolic(id_pedido);
     $.post('../php/geral.php', {
         admin: 1,
         form: 'enviaForn',
         id_pedido: id_pedido
     }).done(function () {
-        iniSolicitacoes();
+        iniDataTable('#tableSolicitacoes');
+        document.getElementById('overlayLoad').style.display = 'none';
         avisoSnack('Pedido enviado ao Fornecedor');
     });
 }
@@ -1858,6 +1882,6 @@ function submitEditItem() {
         pesquisarProcesso(proc);
     } else {
         limpaTela();
-        iniSolicitacoes();
+        iniSolicitacoes(false, 0);
     }
 }

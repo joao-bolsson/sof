@@ -119,6 +119,11 @@ $select_grupo = $obj_Busca->getOptionsGrupos($id_setor);
                         <li>
                             <a href="javascript:abreModal('#altUser');">
                                 <i class="fa fa-user"></i> <span>Alterar Usuário</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="javascript:abreModal('#relPedidos');">
+                                <i class="fa fa-bar-chart"></i> <span>Relatório</span>
                                 <span class="pull-right-container">
                                     <small class="label pull-right bg-blue">novo</small>
                                 </span>
@@ -344,6 +349,63 @@ $select_grupo = $obj_Busca->getOptionsGrupos($id_setor);
                 <strong>Copyright © 2016-2017 <a href="https://github.com/joao-bolsson">João Bolsson</a>.</strong> All rights
                 reserved.
             </footer>
+            <div aria-hidden="true" class="modal fade" id="relPedidos" role="dialog" tabindex="-1">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                            <h4 class="modal-title">Relatório de Pedidos</h4>
+                        </div>
+                        <form action="../admin/printRelatorio.php" method="post" target="_blank">
+                            <input type="hidden" name="tipo" value="pedidos" />
+                            <input type="hidden" name="relatorio" value="1" />
+                            <div class="modal-body">
+                                <div class="form-group">
+                                    <label>Setor</label>
+                                    <select class="form-control" name="setor" required>
+                                        <option value="<?= $_SESSION['id_setor'] ?>"><?= ARRAY_SETORES[$_SESSION['id_setor']] ?></option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label>Prioridade</label>
+                                    <select class="form-control" name="prioridade" required>
+                                        <option value="0">Todas</option>
+                                        <?= $obj_Busca->getOptionsPrioridades(); ?>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label>Status</label>
+                                    <select class="form-control select2" multiple="multiple" data-placeholder="Selecione" name="status[]" required>
+                                        <option value="0">Todos</option>
+                                        <?= $obj_Busca->getOptionsStatus(); ?>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label>Data Início</label>
+                                    <div class="input-group">
+                                        <div class="input-group-addon">
+                                            <i class="fa fa-calendar"></i>
+                                        </div>
+                                        <input type="text" class="form-control date" name="dataI" required data-inputmask="'alias': 'dd/mm/yyyy'" data-mask>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label>Data Fim</label>
+                                    <div class="input-group">
+                                        <div class="input-group-addon">
+                                            <i class="fa fa-calendar"></i>
+                                        </div>
+                                        <input type="text" class="form-control date" name="dataF" required data-inputmask="'alias': 'dd/mm/yyyy'" data-mask>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button class="btn btn-primary" type="submit" style="width: 100%;"><i class="fa fa-refresh"></i>&nbsp;Gerar</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
             <div class="modal fade" id="myInfos" role="dialog">
                 <div class="modal-dialog" style="width: 40%;">
                     <div class="modal-content">
