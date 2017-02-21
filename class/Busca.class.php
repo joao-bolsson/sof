@@ -140,18 +140,18 @@ class Busca extends Conexao {
      * 	@return Uma tabela com os processos e as informações dele.
      */
     public function getProcessosPedido(int $pedido): string {
-        Busca::openConnection();
+        self::openConnection();
         $query = $this->mysqli->query("SELECT DISTINCT itens.num_processo, itens.dt_fim FROM itens, itens_pedido WHERE itens_pedido.id_pedido = " . $pedido . " AND itens_pedido.id_item = itens.id;") or exit("Erro ao buscar os processos do pedido.");
         $this->mysqli = NULL;
-        $retorno = "";
+        $table = new Table('', '', array(), false);
         while ($processo = $query->fetch_object()) {
-            $retorno .= "
-                <tr>
-                    <td>" . $processo->num_processo . "</td>
-                    <td>" . $processo->dt_fim . "</td>
-                </tr>";
+            $row = new Row();
+            $row->addColumn(new Column($processo->num_processo));
+            $row->addColumn(new Column($processo->dt_fim));
+
+            $table->addRow($row);
         }
-        return $retorno;
+        return $table;
     }
 
     /**

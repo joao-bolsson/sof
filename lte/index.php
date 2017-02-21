@@ -814,6 +814,27 @@ if (isset($_SESSION['editmode'])) {
                     </div>
                 </div>
             </div>
+            <div aria-hidden="true" class="modal fade" id="listProcessos" role="dialog" tabindex="-1">
+                <div class="modal-dialog" style="width: 60%;">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                            <h4 class="modal-title">Processos Atendidos pelo SOF</h4>
+                        </div>
+                        <div class="modal-body">
+                            <table id="tableListProcessos" class="table table-bordered table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>Número do Processo</th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+                                <tbody id="tbodyListProcessos"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
             <?php if ($permissao->recepcao): ?>
                 <div class="modal fade" id="relatorio" role="dialog">
                     <div class="modal-dialog">
@@ -836,27 +857,6 @@ if (isset($_SESSION['editmode'])) {
                                     </div>
                                 </div>
                             </form>
-                        </div>
-                    </div>
-                </div>
-                <div aria-hidden="true" class="modal fade" id="listProcessos" role="dialog" tabindex="-1">
-                    <div class="modal-dialog" style="width: 60%;">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                                <h4 class="modal-title">Processos Atendidos pelo SOF</h4>
-                            </div>
-                            <div class="modal-body">
-                                <table id="tableListProcessos" class="table table-bordered table-striped">
-                                    <thead>
-                                        <tr>
-                                            <th>Número do Processo</th>
-                                            <th></th>
-                                        </tr>
-                                    </thead>
-                                    <tbody id="tbodyListProcessos"></tbody>
-                                </table>
-                            </div>
                         </div>
                     </div>
                 </div>
