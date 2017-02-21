@@ -234,6 +234,10 @@ require_once '../defines.php';
         <script src="dist/js/app.min.js"></script>
         <!-- AdminLTE for demo purposes -->
         <script src="dist/js/demo.js"></script>
+        <!-- InputMask -->
+        <script src="plugins/input-mask/jquery.inputmask.js"></script>
+        <script src="plugins/input-mask/jquery.inputmask.date.extensions.js"></script>
+        <script src="plugins/input-mask/jquery.inputmask.extensions.js"></script>
         <!-- PACE -->
         <script src="plugins/pace/pace.min.js"></script>
         <!-- page script -->
