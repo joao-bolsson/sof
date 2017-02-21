@@ -10,8 +10,9 @@
 ini_set('display_erros', true);
 error_reporting(E_ALL);
 
-include_once 'Conexao.class.php';
-include_once 'Util.class.php';
+spl_autoload_register(function (string $class_name) {
+    include_once $class_name . '.class.php';
+});
 
 class Busca extends Conexao {
 
@@ -159,23 +160,25 @@ class Busca extends Conexao {
      * 	@return string Linhas para uma tabela mostrar os problemas.
      */
     public function getProblemas(): string {
-        Busca::openConnection();
+        self::openConnection();
         $query = $this->mysqli->query("SELECT setores.nome AS setor, problemas.assunto, problemas.descricao FROM setores, problemas WHERE setores.id = problemas.id_setor ORDER BY problemas.id DESC;") or exit("Erro ao buscar os problemas.");
-        $retorno = "";
+        $table = new Table('', '', array(), false);
+
         while ($problema = $query->fetch_object()) {
             $problema->descricao = $this->mysqli->real_escape_string($problema->descricao);
             $problema->descricao = str_replace("\"", "'", $problema->descricao);
-            $retorno .= "
-                <tr>
-                    <td>" . $problema->setor . "</td>
-                    <td>" . $problema->assunto . "</td>
-                    <td>
-                        <button onclick=\"viewCompl('" . $problema->descricao . "');\" class=\"btn btn-default\" type=\"button\" data-toggle=\"tooltip\" title=\"Ver Descrição Informada\">Descrição</button>
-                    </td>
-                </tr>";
+
+            $btn = "<button onclick=\"viewCompl('" . $problema->descricao . "');\" class=\"btn btn-default\" type=\"button\" data-toggle=\"tooltip\" title=\"Ver Descrição Informada\">Descrição</button>";
+
+            $row = new Row();
+            $row->addColumn(new Column($problema->setor));
+            $row->addColumn(new Column($problema->assunto));
+            $row->addColumn(new Column($btn));
+
+            $table->addRow($row);
         }
         $this->mysqli = NULL;
-        return $retorno;
+        return $table;
     }
 
     /**
