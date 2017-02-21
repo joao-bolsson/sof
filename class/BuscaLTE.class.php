@@ -605,17 +605,17 @@ class BuscaLTE extends Conexao {
 
         if ($status != 3 && $status != 4) {
             if ($_SESSION['id_setor'] == 12) {
-                $btnAnalisar = new Button('', 'btn btn-default', "enviaForn(" . $id . ")", "data-toggle=\"tooltip\"", 'Enviar ao Fornecedor', 'send');
+                $btnAnalisar .= new Button('', 'btn btn-default', "enviaForn(" . $id . ")", "data-toggle=\"tooltip\"", 'Enviar ao Fornecedor', 'send');
             } else if ($status == 2) {
-                $btnAnalisar = new Button('', 'btn btn-default', "analisarPedido(" . $id . ", " . $id_setor . ")", "data-toggle=\"tooltip\"", 'Analisar', 'pencil');
+                $btnAnalisar .= new Button('', 'btn btn-default', "analisarPedido(" . $id . ", " . $id_setor . ")", "data-toggle=\"tooltip\"", 'Analisar', 'pencil');
             } else if ($status == 5) {
-                $btnAnalisar = new Button('', 'btn btn-default', "cadFontes(" . $id . ")", "data-toggle=\"tooltip\"", 'Cadastrar Fontes', 'comment');
+                $btnAnalisar .= new Button('', 'btn btn-default', "cadFontes(" . $id . ")", "data-toggle=\"tooltip\"", 'Cadastrar Fontes', 'comment');
             } else if ($status == 6) {
-                $btnAnalisar = new Button('', 'btn btn-default', "cadEmpenho(" . $id . ")", "data-toggle=\"tooltip\"", 'Cadastrar Empenho', 'credit-card');
+                $btnAnalisar .= new Button('', 'btn btn-default', "cadEmpenho(" . $id . ")", "data-toggle=\"tooltip\"", 'Cadastrar Empenho', 'credit-card');
             } else if ($status == 7) {
-                $btnAnalisar = new Button('', 'btn btn-default', "enviaOrdenador(" . $id . ")", "data-toggle=\"tooltip\"", 'Enviar ao Ordenador', 'send');
+                $btnAnalisar .= new Button('', 'btn btn-default', "enviaOrdenador(" . $id . ")", "data-toggle=\"tooltip\"", 'Enviar ao Ordenador', 'send');
             } else {
-                $btnAnalisar = new Button('', 'btn btn-default', "getStatus(" . $id . ", " . $id_setor . ")", "data-toggle=\"tooltip\"", 'Alterar Status', 'wrench');
+                $btnAnalisar .= new Button('', 'btn btn-default', "getStatus(" . $id . ", " . $id_setor . ")", "data-toggle=\"tooltip\"", 'Alterar Status', 'wrench');
             }
         }
 
