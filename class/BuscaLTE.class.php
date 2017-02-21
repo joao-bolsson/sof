@@ -595,6 +595,40 @@ class BuscaLTE extends Conexao {
     }
 
     /**
+     * Constroi os botoes para a análise.
+     * @param int $id Id do pedido.
+     * @param int $status Status atual do pedido.
+     * @param int $id_setor Id do setor que fez o pedido.
+     */
+    private function buildButtons(int $id, int $status, int $id_setor): string {
+        $btnAnalisar = "<div class=\"btn-group\">";
+
+        if ($status != 3 && $status != 4) {
+            if ($_SESSION['id_setor'] == 12) {
+                $btnAnalisar = new Button('', 'btn btn-default', "enviaForn(" . $id . ")", "data-toggle=\"tooltip\"", 'Enviar ao Fornecedor', 'send');
+            } else if ($status == 2) {
+                $btnAnalisar = new Button('', 'btn btn-default', "analisarPedido(" . $id . ", " . $id_setor . ")", "data-toggle=\"tooltip\"", 'Analisar', 'pencil');
+            } else if ($status == 5) {
+                $btnAnalisar = new Button('', 'btn btn-default', "cadFontes(" . $id . ")", "data-toggle=\"tooltip\"", 'Cadastrar Fontes', 'comment');
+            } else if ($status == 6) {
+                $btnAnalisar = new Button('', 'btn btn-default', "cadEmpenho(" . $id . ")", "data-toggle=\"tooltip\"", 'Cadastrar Empenho', 'credit-card');
+            } else if ($status == 7) {
+                $btnAnalisar = new Button('', 'btn btn-default', "enviaOrdenador(" . $id . ")", "data-toggle=\"tooltip\"", 'Enviar ao Ordenador', 'send');
+            } else {
+                $btnAnalisar = new Button('', 'btn btn-default', "getStatus(" . $id . ", " . $id_setor . ")", "data-toggle=\"tooltip\"", 'Alterar Status', 'wrench');
+            }
+        }
+
+        if (self::verEmpenho($id) != 'EMPENHO SIAFI PENDENTE' && $_SESSION['id_setor'] != 12 && $status > 6) {
+            $btnAnalisar .= new Button('', 'btn btn-default', "cadEmpenho(" . $id . ", '" . self::verEmpenho($id) . "', '" . self::verDataEmpenho($id) . "')", "data-toggle=\"tooltip\"", 'Cadastrar Empenho', 'credit-card');
+        }
+
+        $btnAnalisar .= new Button('', 'btn btn-default', "imprimir(" . $id . ")", "data-toggle=\"tooltip\"", 'Imprimir', 'print');
+        $btnAnalisar .= "</div>";
+        return $btnAnalisar;
+    }
+
+    /**
      * Função para retornar as solicitações para o SOF.
      *
      * @return string
@@ -618,28 +652,9 @@ class BuscaLTE extends Conexao {
             }
 
             if ($flag) {
-                $btnAnalisar = "";
-
-                if ($pedido->status != 3 && $pedido->status != 4) {
-                    if ($_SESSION['id_setor'] == 12) {
-                        $btnAnalisar = "<button type=\"button\" class=\"btn btn-default\" onclick=\"enviaForn(" . $pedido->id . ");\" data-toggle=\"tooltip\" title=\"Enviar ao Fornecedor\"><i class=\"fa fa-send\"></i></button>";
-                    } else if ($pedido->status == 2) {
-                        $btnAnalisar = "<button type=\"button\" class=\"btn btn-default\" onclick=\"analisarPedido(" . $pedido->id . ", " . $pedido->id_setor . ");\" data-toggle=\"tooltip\" title=\"Analisar\"><i class=\"fa fa-pencil\"></i></button>";
-                    } else if ($pedido->status == 5) {
-                        $btnAnalisar = "<button type=\"button\" class=\"btn btn-default\" onclick=\"cadFontes(" . $pedido->id . ");\" data-toggle=\"tooltip\" title=\"Cadastrar Fontes\"><i class=\"fa fa-comment\"></i></button>";
-                    } else if ($pedido->status == 6) {
-                        $btnAnalisar = "<button type=\"button\" class=\"btn btn-default\" onclick=\"cadEmpenho(" . $pedido->id . ");\" data-toggle=\"tooltip\" title=\"Cadastrar Empenho\"><i class=\"fa fa-credit-card\"></i></button>";
-                    } else if ($pedido->status == 7) {
-                        $btnAnalisar = "<button type=\"button\" class=\"btn btn-default\" onclick=\"enviaOrdenador(" . $pedido->id . ");\" data-toggle=\"tooltip\" title=\"Enviar ao Ordenador\"><i class=\"fa fa-send\"></i></button>";
-                    } else {
-                        $btnAnalisar = "<button type=\"button\" class=\"btn btn-default\" onclick=\"getStatus(" . $pedido->id . ", " . $pedido->id_setor . ");\" data-toggle=\"tooltip\" title=\"Alterar Status\"><i class=\"fa fa-wrench\"></i></button>";
-                    }
-                }
                 $btnVerEmpenho = self::verEmpenho($pedido->id);
                 if ($btnVerEmpenho == 'EMPENHO SIAFI PENDENTE') {
                     $btnVerEmpenho = '';
-                } else if ($_SESSION['id_setor'] != 12 && $pedido->status > 6) {
-                    $btnAnalisar .= "<button type=\"button\" class=\"btn btn-default\" onclick=\"cadEmpenho(" . $pedido->id . ", '" . self::verEmpenho($pedido->id) . "', '" . self::verDataEmpenho($pedido->id) . "');\" data-toggle=\"tooltip\" title=\"Cadastrar Empenho\"><i class=\"fa fa-credit-card\"></i></button>";
                 }
                 $pedido->valor = number_format($pedido->valor, 3, ',', '.');
                 $aprovGerencia = '';
@@ -653,10 +668,7 @@ class BuscaLTE extends Conexao {
                 </div>
                 " . $aprovGerencia . "";
 
-                $buttons = "<div class=\"btn-group\">
-                            " . $btnAnalisar . "
-                            <button type=\"button\" class=\"btn btn-default\" onclick=\"imprimir(" . $pedido->id . ");\" data-toggle=\"tooltip\" title=\"Imprimir\"><i class=\"fa fa-print\"></i></button>
-                        </div>";
+                $buttons = self::buildButtons($pedido->id, $pedido->status, $pedido->id_setor);
 
                 $row = new Row('rowPedido' . $pedido->id);
 
