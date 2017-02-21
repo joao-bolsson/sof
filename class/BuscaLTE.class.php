@@ -12,8 +12,9 @@
 ini_set('display_erros', true);
 error_reporting(E_ALL);
 
-include_once 'Conexao.class.php';
-include_once 'Util.class.php';
+spl_autoload_register(function (string $class_name) {
+    include_once $class_name . '.class.php';
+});
 
 require_once '../defines.php';
 
@@ -600,77 +601,80 @@ class BuscaLTE extends Conexao {
      *
      */
     public function getSolicitacoesAdmin(string $where = ''): string {
-        $retorno = "";
         self::openConnection();
         $limit = 'LIMIT ' . LIMIT_MAX;
         $query = $this->mysqli->query("SELECT id, id_setor, DATE_FORMAT(data_pedido, '%d/%m/%Y') AS data_pedido, prioridade, status, valor, aprov_gerencia FROM pedido WHERE status <> 3 AND alteracao = 0 " . $where . " ORDER BY id DESC " . $limit) or exit("Erro ao buscar os pedidos que foram mandados ao SOF.");
         $this->mysqli = NULL;
+
+        $table = new Table('', '', array(), false);
         while ($pedido = $query->fetch_object()) {
-            $btnAnalisar = "";
-
-            if ($pedido->status != 3 && $pedido->status != 4) {
-                if ($_SESSION['id_setor'] == 12) {
-                    $btnAnalisar = "<button type=\"button\" class=\"btn btn-default\" onclick=\"enviaForn(" . $pedido->id . ");\" data-toggle=\"tooltip\" title=\"Enviar ao Fornecedor\"><i class=\"fa fa-send\"></i></button>";
-                } else if ($pedido->status == 2) {
-                    $btnAnalisar = "<button type=\"button\" class=\"btn btn-default\" onclick=\"analisarPedido(" . $pedido->id . ", " . $pedido->id_setor . ");\" data-toggle=\"tooltip\" title=\"Analisar\"><i class=\"fa fa-pencil\"></i></button>";
-                } else if ($pedido->status == 5) {
-                    $btnAnalisar = "<button type=\"button\" class=\"btn btn-default\" onclick=\"cadFontes(" . $pedido->id . ");\" data-toggle=\"tooltip\" title=\"Cadastrar Fontes\"><i class=\"fa fa-comment\"></i></button>";
-                } else if ($pedido->status == 6) {
-                    $btnAnalisar = "<button type=\"button\" class=\"btn btn-default\" onclick=\"cadEmpenho(" . $pedido->id . ");\" data-toggle=\"tooltip\" title=\"Cadastrar Empenho\"><i class=\"fa fa-credit-card\"></i></button>";
-                } else if ($pedido->status == 7) {
-                    $btnAnalisar = "<button type=\"button\" class=\"btn btn-default\" onclick=\"enviaOrdenador(" . $pedido->id . ");\" data-toggle=\"tooltip\" title=\"Enviar ao Ordenador\"><i class=\"fa fa-send\"></i></button>";
-                } else {
-                    $btnAnalisar = "<button type=\"button\" class=\"btn btn-default\" onclick=\"getStatus(" . $pedido->id . ", " . $pedido->id_setor . ");\" data-toggle=\"tooltip\" title=\"Alterar Status\"><i class=\"fa fa-wrench\"></i></button>";
-                }
-            }
-            $btnVerEmpenho = self::verEmpenho($pedido->id);
-            if ($btnVerEmpenho == 'EMPENHO SIAFI PENDENTE') {
-                $btnVerEmpenho = '';
-            } else if ($_SESSION['id_setor'] != 12 && $pedido->status > 6) {
-                $btnAnalisar .= "<button type=\"button\" class=\"btn btn-default\" onclick=\"cadEmpenho(" . $pedido->id . ", '" . self::verEmpenho($pedido->id) . "', '" . self::verDataEmpenho($pedido->id) . "');\" data-toggle=\"tooltip\" title=\"Cadastrar Empenho\"><i class=\"fa fa-credit-card\"></i></button>";
-            }
-            $pedido->valor = number_format($pedido->valor, 3, ',', '.');
-            $aprovGerencia = '';
-            if ($pedido->aprov_gerencia) {
-                $aprovGerencia = "<small class=\"label pull-right bg-gray\" data-toggle=\"tooltip\" title=\"Aprovado pela Gerência\">A</small>";
-            }
-
-            $linha = "
-                <tr id=\"rowPedido" . $pedido->id . "\">
-                    <td>
-                        <div class=\"form-group\">
-                            <input type=\"checkbox\" name=\"checkPedRel\" id=\"checkPedRel" . $pedido->id . "\" value=\"" . $pedido->id . "\">
-                        </div>
-                        " . $aprovGerencia . "
-                    </td>
-                    <td>
-                        <div class=\"btn-group\">
-                            " . $btnAnalisar . "
-                            <button type=\"button\" class=\"btn btn-default\" onclick=\"imprimir(" . $pedido->id . ");\" data-toggle=\"tooltip\" title=\"Imprimir\"><i class=\"fa fa-print\"></i></button>
-                        </div>
-                    </td>
-                    <td>" . $pedido->id . "</td>
-                    <td>" . ARRAY_SETORES[$pedido->id_setor] . "</td>
-                    <td>" . $pedido->data_pedido . "</td>
-                    <td>" . ARRAY_PRIORIDADE[$pedido->prioridade] . "</td>
-                    <td>" . ARRAY_STATUS[$pedido->status] . "</td>
-                    <td>R$ " . $pedido->valor . "</td>
-                    <td>
-                        " . $btnVerEmpenho . "
-                    </td>
-                    <td>
-                    " . self::getFornecedor($pedido->id) . "
-                    </td>
-                </tr>";
+            $flag = false;
             if ($_SESSION['id_setor'] == 12) {
                 if ($pedido->status == 8) {
-                    $retorno .= $linha;
+                    $flag = true;
                 }
             } else {
-                $retorno .= $linha;
+                $flag = true;
+            }
+
+            if ($flag) {
+                $btnAnalisar = "";
+
+                if ($pedido->status != 3 && $pedido->status != 4) {
+                    if ($_SESSION['id_setor'] == 12) {
+                        $btnAnalisar = "<button type=\"button\" class=\"btn btn-default\" onclick=\"enviaForn(" . $pedido->id . ");\" data-toggle=\"tooltip\" title=\"Enviar ao Fornecedor\"><i class=\"fa fa-send\"></i></button>";
+                    } else if ($pedido->status == 2) {
+                        $btnAnalisar = "<button type=\"button\" class=\"btn btn-default\" onclick=\"analisarPedido(" . $pedido->id . ", " . $pedido->id_setor . ");\" data-toggle=\"tooltip\" title=\"Analisar\"><i class=\"fa fa-pencil\"></i></button>";
+                    } else if ($pedido->status == 5) {
+                        $btnAnalisar = "<button type=\"button\" class=\"btn btn-default\" onclick=\"cadFontes(" . $pedido->id . ");\" data-toggle=\"tooltip\" title=\"Cadastrar Fontes\"><i class=\"fa fa-comment\"></i></button>";
+                    } else if ($pedido->status == 6) {
+                        $btnAnalisar = "<button type=\"button\" class=\"btn btn-default\" onclick=\"cadEmpenho(" . $pedido->id . ");\" data-toggle=\"tooltip\" title=\"Cadastrar Empenho\"><i class=\"fa fa-credit-card\"></i></button>";
+                    } else if ($pedido->status == 7) {
+                        $btnAnalisar = "<button type=\"button\" class=\"btn btn-default\" onclick=\"enviaOrdenador(" . $pedido->id . ");\" data-toggle=\"tooltip\" title=\"Enviar ao Ordenador\"><i class=\"fa fa-send\"></i></button>";
+                    } else {
+                        $btnAnalisar = "<button type=\"button\" class=\"btn btn-default\" onclick=\"getStatus(" . $pedido->id . ", " . $pedido->id_setor . ");\" data-toggle=\"tooltip\" title=\"Alterar Status\"><i class=\"fa fa-wrench\"></i></button>";
+                    }
+                }
+                $btnVerEmpenho = self::verEmpenho($pedido->id);
+                if ($btnVerEmpenho == 'EMPENHO SIAFI PENDENTE') {
+                    $btnVerEmpenho = '';
+                } else if ($_SESSION['id_setor'] != 12 && $pedido->status > 6) {
+                    $btnAnalisar .= "<button type=\"button\" class=\"btn btn-default\" onclick=\"cadEmpenho(" . $pedido->id . ", '" . self::verEmpenho($pedido->id) . "', '" . self::verDataEmpenho($pedido->id) . "');\" data-toggle=\"tooltip\" title=\"Cadastrar Empenho\"><i class=\"fa fa-credit-card\"></i></button>";
+                }
+                $pedido->valor = number_format($pedido->valor, 3, ',', '.');
+                $aprovGerencia = '';
+                if ($pedido->aprov_gerencia) {
+                    $aprovGerencia = "<small class=\"label pull-right bg-gray\" data-toggle=\"tooltip\" title=\"Aprovado pela Gerência\">A</small>";
+                }
+
+                $check_all = "
+                <div class=\"form-group\">
+                    <input type=\"checkbox\" name=\"checkPedRel\" id=\"checkPedRel" . $pedido->id . "\" value=\"" . $pedido->id . "\">
+                </div>
+                " . $aprovGerencia . "";
+
+                $buttons = "<div class=\"btn-group\">
+                            " . $btnAnalisar . "
+                            <button type=\"button\" class=\"btn btn-default\" onclick=\"imprimir(" . $pedido->id . ");\" data-toggle=\"tooltip\" title=\"Imprimir\"><i class=\"fa fa-print\"></i></button>
+                        </div>";
+
+                $row = new Row('rowPedido' . $pedido->id);
+
+                $row->addColumn(new Column($check_all));
+                $row->addColumn(new Column($buttons));
+                $row->addColumn(new Column($pedido->id));
+                $row->addColumn(new Column(ARRAY_SETORES[$pedido->id_setor]));
+                $row->addColumn(new Column($pedido->data_pedido));
+                $row->addColumn(new Column(ARRAY_PRIORIDADE[$pedido->prioridade]));
+                $row->addColumn(new Column(ARRAY_STATUS[$pedido->status]));
+                $row->addColumn(new Column("R$ " . $pedido->valor));
+                $row->addColumn(new Column($btnVerEmpenho));
+                $row->addColumn(new Column(self::getFornecedor($pedido->id)));
+
+                $table->addRow($row);
             }
         }
-        return $retorno;
+        return $table;
     }
 
     /**

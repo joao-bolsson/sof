@@ -15,10 +15,17 @@ final class Row {
     private $columns;
 
     /**
+     * Row's id.
+     * @var type String
+     */
+    private $id;
+
+    /**
      * Default contructor.
      */
-    public function __construct() {
+    public function __construct(string $id = '') {
         $this->columns = array();
+        $this->id = $id;
     }
 
     /**
@@ -34,7 +41,11 @@ final class Row {
      * The representation HTML row.
      */
     public function __toString(): string {
-        $row = "<tr>";
+        $id = '';
+        if (!empty($this->id)) {
+            $id = " id=\"" . $this->id . "\"";
+        }
+        $row = "<tr" . $id . ">";
         foreach ($this->columns as $colum) {
             if ($colum instanceof Column) {
                 $row .= $colum;
