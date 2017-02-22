@@ -74,6 +74,8 @@ class Button {
 
         $icon = (!empty($this->icon)) ? "<i class=\"fa fa-" . $this->icon . "\"></i>" : '';
 
+        $this->type = (empty($this->type)) ? 'button' : $this->type;
+
         $button = "<button type=\"" . $this->type . "\"" . $class . $onclick . $attr . $title . ">" . $icon . "</button>";
 
         return $button;

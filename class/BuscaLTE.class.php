@@ -840,36 +840,34 @@ class BuscaLTE extends Conexao {
     public function addItemPedido(int $id_item, int $qtd): string {
         self::openConnection();
         $query = $this->mysqli->query("SELECT id, nome_fornecedor, num_licitacao, cod_reduzido, complemento_item, replace(vl_unitario, ',', '.') AS vl_unitario, qt_saldo, qt_contrato, qt_utilizado, vl_saldo, vl_contrato, vl_utilizado FROM itens WHERE id = " . $id_item) or exit("Erro ao buscar ");
-        $item = $query->fetch_object();
-        $item->complemento_item = $this->mysqli->real_escape_string($item->complemento_item);
-        $item->complemento_item = str_replace("\"", "'", $item->complemento_item);
-        $valor = $qtd * $item->vl_unitario;
-        $retorno = "
-            <tr id=\"row" . $id_item . "\">
-                <td><button type=\"button\" class=\"btn btn-default\" onclick=\"removeTableRow(" . $id_item . ", '" . $valor . "')\"><span class=\"fa fa-trash\"></span></a></td>
-                <td>" . $item->cod_reduzido . "</td>
-                <td>
-                    <button onclick=\"viewCompl('" . $item->complemento_item . "');\" class=\"btn btn-default\" type=\"button\" title=\"Ver Complemento do Item\"><span class=\"fa fa-eye\"></span></button>
-                </td>
-                <td>R$ " . $item->vl_unitario . "</td>
-                <td>" . $item->nome_fornecedor . "</td>
-                <td>" . $item->num_licitacao . "</td>
-                <td>" . $qtd . "</td>
-                <td>R$ " . $valor . "</td>
-                <td>
-                    <input class=\"classItens\" type=\"hidden\" name=\"id_item[]\" value=\"" . $id_item . "\">
-                    <input type=\"hidden\" name=\"qtd_solicitada[]\" value=\"" . $qtd . "\">
-                    <input type=\"hidden\" name=\"qtd_disponivel[]\" value=\"" . $item->qt_saldo . "\">
-                    <input type=\"hidden\" name=\"qtd_contrato[]\" value=\"" . $item->qt_contrato . "\">
-                    <input type=\"hidden\" name=\"qtd_utilizado[]\" value=\"" . $item->qt_utilizado . "\">
-                    <input type=\"hidden\" name=\"vl_saldo[]\" value=\"" . $item->vl_saldo . "\">
-                    <input type=\"hidden\" name=\"vl_contrato[]\" value=\"" . $item->vl_contrato . "\">
-                    <input type=\"hidden\" name=\"vl_utilizado[]\" value=\"" . $item->vl_utilizado . "\">
-                    <input type=\"hidden\" name=\"valor[]\" value=\"" . $valor . "\">
-                </td>
-            </tr>";
         $this->mysqli = NULL;
-        return $retorno;
+        $item = $query->fetch_object();
+        $item->complemento_item = str_replace("\"", "\'", $item->complemento_item);
+        $valor = $qtd * $item->vl_unitario;
+
+        $inputs = "<input class=\"classItens\" type=\"hidden\" name=\"id_item[]\" value=\"" . $id_item . "\">
+                   <input type=\"hidden\" name=\"qtd_solicitada[]\" value=\"" . $qtd . "\">
+                   <input type=\"hidden\" name=\"qtd_disponivel[]\" value=\"" . $item->qt_saldo . "\">
+                   <input type=\"hidden\" name=\"qtd_contrato[]\" value=\"" . $item->qt_contrato . "\">
+                   <input type=\"hidden\" name=\"qtd_utilizado[]\" value=\"" . $item->qt_utilizado . "\">
+                   <input type=\"hidden\" name=\"vl_saldo[]\" value=\"" . $item->vl_saldo . "\">
+                   <input type=\"hidden\" name=\"vl_contrato[]\" value=\"" . $item->vl_contrato . "\">
+                   <input type=\"hidden\" name=\"vl_utilizado[]\" value=\"" . $item->vl_utilizado . "\">
+                   <input type=\"hidden\" name=\"valor[]\" value=\"" . $valor . "\">";
+
+        $row = new Row('row' . $id_item);
+
+        $row->addColumn(new Column(new Button('', 'btn btn-default', "removeTableRow(" . $id_item . ", '" . $valor . "')", "data-toggle=\"tooltip\"", 'Remover do Pedido', 'trash')));
+        $row->addColumn(new Column($item->cod_reduzido));
+        $row->addColumn(new Column(new Button('', 'btn btn-default', "viewCompl('" . $item->complemento_item . "')", "data-toggle=\"tooltip\"", 'Ver Complemento do Item', 'eye')));
+        $row->addColumn(new Column('R$ ' . $item->vl_unitario));
+        $row->addColumn(new Column($item->nome_fornecedor));
+        $row->addColumn(new Column($item->num_licitacao));
+        $row->addColumn(new Column($qtd));
+        $row->addColumn(new Column('R$ ' . $valor));
+        $row->addColumn(new Column($inputs));
+
+        return $row;
     }
 
     /**
