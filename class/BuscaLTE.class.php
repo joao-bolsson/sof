@@ -139,7 +139,6 @@ class BuscaLTE extends Conexao {
      * 	@return Lista de pedidos conforme o solicitado.
      */
     public function getRelatorio(int $status): string {
-        $retorno = '';
         $order = 'ORDER BY id DESC';
         $alteracao = 'AND alteracao = 0';
         if ($status == 3) {
@@ -156,32 +155,32 @@ class BuscaLTE extends Conexao {
         self::openConnection();
         $query = $this->mysqli->query("SELECT id, DATE_FORMAT(data_pedido, '%d/%m/%Y') AS data_pedido, prioridade, status, valor FROM pedido WHERE status = " . $status . " " . $alteracao . " " . $order) or exit('Erro ao gerar relatório.');
         $this->mysqli = NULL;
+        $table = new Table('', '', [], false);
         while ($pedido = $query->fetch_object()) {
-            $empenho = self::verEmpenho($pedido->id);
-            $btnVerProcesso = "";
-            if ($status == 2) {
-                // em análise
-                // por ordem descrecente do término do processo
-                // botão para os processos presentes no pedido e suas datas
-                $btnVerProcesso = "
-                    <button type=\"button\" class=\"btn btn-primary\" onclick=\"verProcessos(" . $pedido->id . ");\" title=\"Ver Processos\"><i class=\"fa fa-eye\"></i></button>";
-            }
             $pedido->valor = number_format($pedido->valor, 3, ',', '.');
-            $retorno .= "
-                <tr>
-                    <td>" . $pedido->id . "</td>
-                    <td>" . $pedido->data_pedido . "</td>
-                    <td>" . ARRAY_PRIORIDADE[$pedido->prioridade] . "</td>
-                    <td><small class=\"label pull-right bg-gray\">" . ARRAY_STATUS[$pedido->status] . "</small></td>
-                    <td>" . $empenho . "</td>
-                    <td>R$ " . $pedido->valor . "</td>
-                    <td>
-                        <button type=\"button\" class=\"btn btn-primary\" onclick=\"imprimir(" . $pedido->id . ");\" title=\"Imprimir\"><i class=\"fa fa-print\"></i></button>
-                            " . $btnVerProcesso . "
-                    </td>
-                </tr>";
+            $row = new Row();
+            $row->addColumn(new Column($pedido->id));
+            $row->addColumn(new Column($pedido->data_pedido));
+            $row->addColumn(new Column(ARRAY_PRIORIDADE[$pedido->prioridade]));
+            $row->addColumn(new Column(new Small('label pull-right bg-gray', ARRAY_STATUS[$pedido->status])));
+            $row->addColumn(new Column(self::verEmpenho($pedido->id)));
+            $row->addColumn(new Column("R$ " . $pedido->valor));
+            $row->addColumn(new Column(self::buildButtonsRel($status, $pedido->id)));
+
+            $table->addRow($row);
         }
-        return $retorno;
+        return $table;
+    }
+
+    private static final function buildButtonsRel(int $status, int $id): string {
+        $group = "<div class=\"btn-group\">";
+
+        $print = new Button('', 'btn btn-primary', "imprimir(" . $id . ")", "data-toggle=\"tooltip\"", 'Imprimir', 'print');
+
+        $btnVerProcesso = ($status == 2) ? new Button('', 'btn btn-primary', "verProcessos(" . $id . ")", "data-toggle=\"tooltip\"", 'Ver Processos', 'eye') : '';
+
+        $group .= $print . $btnVerProcesso . '</div>';
+        return $group;
     }
 
     /**
