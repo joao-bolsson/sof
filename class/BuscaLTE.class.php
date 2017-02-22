@@ -870,39 +870,46 @@ class BuscaLTE extends Conexao {
         return $row;
     }
 
+    private static final function buildButtonsDraft(int $id_usuario, int $id): string {
+        $group = "<div class=\"btn-group\">";
+
+        $btnEdit = $btnDel = '';
+        if ($id_usuario == $_SESSION['id']) {
+            $btnEdit = new Button('', 'btn btn-default btn-sm', "editaPedido(" . $id . ")", "data-toggle=\"tooltip\"", 'Editar', 'pencil');
+
+            $btnDel = new Button('', 'btn btn-default btn-sm', "deletePedido(" . $id . ")", "data-toggle=\"tooltip\"", 'Excluir', 'trash');
+        }
+
+        $btnPrint = new Button('', 'btn btn-default btn-sm', "imprimir(" . $id . ")", "data-toggle=\"tooltip\"", 'Imprimir', 'print');
+
+        $group .= $btnEdit . $btnPrint . $btnDel . '</div>';
+        return $group;
+    }
+
     /**
      * Função para retornar os rascunhos para continuar editando.
      *
      * @return string
      */
     public function getRascunhos(int $id_setor): string {
-        $retorno = "";
         self::openConnection();
         $query = $this->mysqli->query("SELECT id, DATE_FORMAT(data_pedido, '%d/%m/%Y') AS data_pedido, pedido.valor, status, pedido.id_usuario FROM pedido WHERE id_setor = " . $id_setor . " AND alteracao = 1 ORDER BY id DESC LIMIT 500;") or exit("Erro ao buscar rascunhos do setor.");
         $this->mysqli = NULL;
 
+        $table = new Table('', '', [], false);
         while ($rascunho = $query->fetch_object()) {
             $rascunho->valor = number_format($rascunho->valor, 3, ',', '.');
-            $btnEdit = '';
-            $btnDel = '';
-            if ($rascunho->id_usuario == $_SESSION['id']) {
-                $btnEdit = "<button type=\"button\" class=\"btn btn-default btn-sm\" onclick=\"editaPedido(" . $rascunho->id . ");\" data-toggle=\"tooltip\" title=\"Editar\"><i class=\"fa fa-pencil\"></i></button>";
-                $btnDel = "<button type=\"button\" class=\"btn btn-default btn-sm\" onclick=\"deletePedido(" . $rascunho->id . ");\" data-toggle=\"tooltip\" title=\"Excluir\"><i class=\"fa fa-trash\"></i></button>";
-            }
-            $retorno .= "
-                <tr>
-                    <td>" . $rascunho->id . "</td>
-                    <td><small class=\"label bg-gray\">" . ARRAY_STATUS[$rascunho->status] . "</small></td>
-                    <td>" . $rascunho->data_pedido . "</td>
-                    <td>R$ " . $rascunho->valor . "</td>
-                    <td>
-                        " . $btnEdit . "
-                        <button type=\"button\" class=\"btn btn-default btn-sm\" onclick=\"imprimir(" . $rascunho->id . ");\" data-toggle=\"tooltip\" title=\"Imprimir\"><i class=\"fa fa-print\"></i></button>
-                        " . $btnDel . "
-                    </td>
-                </tr>";
+
+            $row = new Row();
+            $row->addColumn(new Column($rascunho->id));
+            $row->addColumn(new Column(new Small('label bg-gray', ARRAY_STATUS[$rascunho->status])));
+            $row->addColumn(new Column($rascunho->data_pedido));
+            $row->addColumn(new Column('R$ ' . $rascunho->valor));
+            $row->addColumn(new Column(self::buildButtonsDraft($rascunho->id_usuario, $rascunho->id)));
+
+            $table->addRow($row);
         }
-        return $retorno;
+        return $table;
     }
 
     /**
