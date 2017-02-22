@@ -809,13 +809,8 @@ class BuscaLTE extends Conexao {
         $table = new Table('', '', [], false);
         while ($item = $query->fetch_object()) {
             $item->complemento_item = str_replace("\"", "\'", $item->complemento_item);
-            $btn = $input_qtd = '';
-            if (!isset($_SESSION['editmode'])) {
-                $btn = new Button('', 'btn btn-default', "checkItemPedido(" . $item->id . ", '" . $item->vl_unitario . "', " . $item->qt_saldo . ")", "data-toggle=\"tooltip\"", 'Adicionar', 'plus');
-                $input_qtd = "<input type=\"number\" id=\"qtd" . $item->id . "\" min=\"1\" max=\"" . $item->qt_saldo . "\">";
-            } else {
-                $btn = new Button('', 'btn btn-default', "editaItem(" . $item->id . ")", "data-toggle=\"tooltip\"", 'Editar Informações', 'pencil');
-            }
+            $btn = (!isset($_SESSION['editmode'])) ? new Button('', 'btn btn-default', "checkItemPedido(" . $item->id . ", '" . $item->vl_unitario . "', " . $item->qt_saldo . ")", "data-toggle=\"tooltip\"", 'Adicionar', 'plus') : new Button('', 'btn btn-default', "editaItem(" . $item->id . ")", "data-toggle=\"tooltip\"", 'Editar Informações', 'pencil');
+            $input_qtd = (!isset($_SESSION['editmode'])) ? "<input type=\"number\" id=\"qtd" . $item->id . "\" min=\"1\" max=\"" . $item->qt_saldo . "\">" : '';
             $row = new Row();
             $row->addColumn(new Column($btn));
             $row->addColumn(new Column($item->nome_fornecedor));
