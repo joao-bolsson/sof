@@ -384,18 +384,17 @@ class BuscaLTE extends Conexao {
      * 	@return Opções de prioridades para os pedidos.
      */
     public function getPrioridades(): string {
-        $retorno = "";
         $count = count(ARRAY_PRIORIDADE);
 
+        $row = new Row();
         for ($i = 1; $i < $count; $i++) {
-            $retorno .= "
-                <td>
-                    <div class=\"form-group\">
+            $form_group = "<div class=\"form-group\">
                         <input type=\"radio\" name=\"st\" id=\"st" . ARRAY_PRIORIDADE[$i] . "\" class=\"minimal\" value=\"" . $i . "\"> " . ARRAY_PRIORIDADE[$i] . "
-                    </div>
-                </td>";
+                    </div>";
+
+            $row->addColumn(new Column($form_group));
         }
-        return $retorno;
+        return $row;
     }
 
     /**
@@ -404,34 +403,28 @@ class BuscaLTE extends Conexao {
      *   @return string
      */
     public function getTabelaRecepcao(): string {
-        $retorno = "";
         self::openConnection();
         $query = $this->mysqli->query("SELECT processos.id, processos.num_processo, processos_tipo.nome as tipo, processos.estante, processos.prateleira, processos.entrada, processos.saida, processos.responsavel, processos.retorno, processos.obs FROM processos, processos_tipo WHERE processos.tipo = processos_tipo.id ORDER BY id ASC;") or exit("Erro ao formar a tabela da recepção.");
-        while ($processo = $query->fetch_object()) {
-            $processo->obs = $this->mysqli->real_escape_string($processo->obs);
-            $processo->obs = str_replace("\"", "'", $processo->obs);
-            $retorno .= "
-                <tr>
-                    <td>
-                    <div class=\"btn-group\">
-                        <button type=\"button\" class=\"btn btn-default\" onclick=\"addProcesso('', " . $processo->id . ")\"><i class=\"fa fa-pencil\"></i></button>
-                    </div>
-                    </td>
-                    <td>" . $processo->num_processo . "</td>
-                    <td>" . $processo->tipo . "</td>
-                    <td>" . $processo->estante . "</td>
-                    <td>" . $processo->prateleira . "</td>
-                    <td>" . $processo->entrada . "</td>
-                    <td>" . $processo->saida . "</td>
-<td>" . $processo->responsavel . "</td>
-                    <td>" . $processo->retorno . "</td>
-                    <td>
-                        <button onclick=\"viewCompl('" . $processo->obs . "');\" class=\"btn btn-default\" type=\"button\" title=\"Ver Observação\">OBS</button>
-                    </td>
-                </tr>";
-        }
         $this->mysqli = NULL;
-        return $retorno;
+        $table = new Table('', '', [], false);
+        while ($processo = $query->fetch_object()) {
+            $processo->obs = str_replace("\"", "\'", $processo->obs);
+
+            $row = new Row();
+            $btn = new Button('', 'btn btn-default', "addProcesso('', " . $processo->id . ")", "data-toggle=\"tooltip\"", 'Editar', 'pencil');
+            $row->addColumn(new Column("<div class=\"btn-group\">" . $btn . '</div>'));
+            $row->addColumn(new Column($processo->num_processo));
+            $row->addColumn(new Column($processo->tipo));
+            $row->addColumn(new Column($processo->estante));
+            $row->addColumn(new Column($processo->prateleira));
+            $row->addColumn(new Column($processo->entrada));
+            $row->addColumn(new Column($processo->saida));
+            $row->addColumn(new Column($processo->responsavel));
+            $row->addColumn(new Column($processo->retorno));
+            $row->addColumn(new Column(new Button('', 'btn btn-default', "viewCompl('" . $processo->obs . "')", "data-toggle=\"tooltip\"", 'Ver Observação', 'eye')));
+            $table->addRow($row);
+        }
+        return $table;
     }
 
     /**

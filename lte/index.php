@@ -276,7 +276,7 @@ if (isset($_SESSION['editmode'])) {
                     <?php if ($permissao->recepcao): ?>
                         <div class="row">
                             <div class="col-xs-12">
-                                <div class="box">
+                                <div class="box box-primary">
                                     <div class="box-header">
                                         <h3 class="box-title">Processos</h3>
                                         <div class="box-tools pull-right">
@@ -285,7 +285,9 @@ if (isset($_SESSION['editmode'])) {
                                         </div>
                                     </div><!-- /.box-header -->
                                     <div class="box-body">
-                                        <a href="javascript:addProcesso(' ', 0);"><i class="fa fa-plus"></i>Adicionar Processo</a>
+                                        <div class="margin">
+                                            <button class="btn btn-primary" type="button" onclick="addProcesso(' ', 0)"><i class="fa fa-plus"></i>&nbsp;Adicionar Processo</button>
+                                        </div>
                                         <table class="table stripe" id="tableRecepcao" style="width: 100%;">
                                             <thead>
                                                 <tr>
