@@ -44,6 +44,16 @@ class Button {
      */
     private $icon;
 
+    /**
+     * Button's HTML representation.
+     * 
+     * @param string $type Button's type.
+     * @param string $class Button's class.
+     * @param string $onclick Method onclick of this button.
+     * @param string $attr Other attributes for this button.
+     * @param string $title Button's title
+     * @param string $icon Button's icon.
+     */
     public function __construct(string $type = 'button', string $class = '', string $onclick = '', string $attr = '', string $title = '', string $icon = '') {
         $this->type = $type;
         $this->class = $class;
@@ -54,27 +64,15 @@ class Button {
     }
 
     public function __toString(): string {
-        $class = $onclick = $title = $attr = $icon = '';
+        $class = (!empty($this->class)) ? " class=\"" . $this->class . "\"" : '';
 
-        if (!empty($this->class)) {
-            $class = " class=\"" . $this->class . "\"";
-        }
+        $onclick = (!empty($this->onclick)) ? " onclick=\"" . $this->onclick . "\"" : '';
 
-        if (!empty($this->onclick)) {
-            $onclick = " onclick=\"" . $this->onclick . "\"";
-        }
+        $title = (!empty($this->title)) ? " title=\"" . $this->title . "\"" : '';
 
-        if (!empty($this->title)) {
-            $title = " title=\"" . $this->title . "\"";
-        }
+        $attr = (!empty($this->attr)) ? " " . $this->attr : '';
 
-        if (!empty($this->attr)) {
-            $attr = " " . $this->attr;
-        }
-
-        if (!empty($this->icon)) {
-            $icon = "<i class=\"fa fa-" . $this->icon . "\"></i>";
-        }
+        $icon = (!empty($this->icon)) ? "<i class=\"fa fa-" . $this->icon . "\"></i>" : '';
 
         $button = "<button type=\"" . $this->type . "\"" . $class . $onclick . $attr . $title . ">" . $icon . "</button>";
 

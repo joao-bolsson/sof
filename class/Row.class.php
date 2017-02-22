@@ -22,6 +22,7 @@ final class Row {
 
     /**
      * Default contructor.
+     * @param string $id Row's id.
      */
     public function __construct(string $id = '') {
         $this->columns = array();
@@ -41,10 +42,7 @@ final class Row {
      * The representation HTML row.
      */
     public function __toString(): string {
-        $id = '';
-        if (!empty($this->id)) {
-            $id = " id=\"" . $this->id . "\"";
-        }
+        $id = (!empty($this->id)) ? " id=\"" . $this->id . "\"" : '';
         $row = "<tr" . $id . ">";
         foreach ($this->columns as $colum) {
             if ($colum instanceof Column) {

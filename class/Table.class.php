@@ -38,6 +38,14 @@ class Table {
      */
     private $build_body;
 
+    /**
+     * Default construct.
+     * 
+     * @param string $id <table> id.
+     * @param string $class <table> class.
+     * @param array $headers Fields in <thead>, if empty: <thead> thead tag will is not build.
+     * @param bool $build_body if true: the table must have the tag <tbody>, else - just its rows.
+     */
     public function __construct(string $id, string $class, array $headers, bool $build_body) {
         $this->rows = array();
         $this->id = $id;
@@ -46,6 +54,11 @@ class Table {
         $this->build_body = $build_body;
     }
 
+    /**
+     * Add a Row element in this table.
+     * 
+     * @param Row $row Row in this table.
+     */
     public function addRow(Row $row) {
         $index = count($this->rows);
         $this->rows[$index] = $row;
@@ -55,15 +68,10 @@ class Table {
         $table = "";
         $must_close = false;
         if (!empty($this->id) || !empty($this->class)) {
-            $id = $class = '';
-            if (!empty($this->id)) {
-                $id = "id=\"" . $this->id . "\"";
-            }
-            if (!empty($this->class)) {
-                $class = "class=\"" . $this->class . "\"";
-            }
+            $id = (!empty($this->id)) ? " id=\"" . $this->id . "\"" : '';
+            $class = (!empty($this->class)) ? " class=\"" . $this->class . "\"" : '';
 
-            $table = "<table " . $id . " " . $class . ">";
+            $table = "<table" . $id . $class . ">";
             $must_close = true;
         }
 

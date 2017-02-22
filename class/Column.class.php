@@ -14,6 +14,10 @@ final class Column {
      */
     private $content;
 
+    /**
+     * Default construct.
+     * @param string $content Column's content.
+     */
     public function __construct(string $content) {
         $this->content = $content;
     }
