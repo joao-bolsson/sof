@@ -479,37 +479,30 @@ class BuscaLTE extends Conexao {
      */
     public function getAdminSolicAltPedidos(int $st): string {
         self::openConnection();
-        $query = $this->mysqli->query("SELECT solic_alt_pedido.id, solic_alt_pedido.id_pedido, setores.nome, DATE_FORMAT(solic_alt_pedido.data_solicitacao, '%d/%m/%Y') AS data_solicitacao, DATE_FORMAT(solic_alt_pedido.data_analise, '%d/%m/%Y') AS data_analise, solic_alt_pedido.justificativa, solic_alt_pedido.status FROM solic_alt_pedido, setores WHERE solic_alt_pedido.id_setor = setores.id AND solic_alt_pedido.status = {$st} ORDER BY solic_alt_pedido.id DESC;") or exit("Erro ao buscar as solicitações de alteração de pedidos enviados ao SOF.");
-        $status = $label = "";
+        $query = $this->mysqli->query("SELECT solic_alt_pedido.id, solic_alt_pedido.id_pedido, setores.nome, DATE_FORMAT(solic_alt_pedido.data_solicitacao, '%d/%m/%Y') AS data_solicitacao, DATE_FORMAT(solic_alt_pedido.data_analise, '%d/%m/%Y') AS data_analise, solic_alt_pedido.justificativa, solic_alt_pedido.status FROM solic_alt_pedido, setores WHERE solic_alt_pedido.id_setor = setores.id AND solic_alt_pedido.status = " . $st . " ORDER BY solic_alt_pedido.id DESC LIMIT 200") or exit("Erro ao buscar as solicitações de alteração de pedidos enviados ao SOF.");
+        $this->mysqli = NULL;
 
         $array_status = ['Reprovado', 'Aprovado', 'Aberto'];
         $array_lb = ['red', 'green', 'orange'];
 
+        $status = $array_status[$st];
+        $label = 'bg-' . $array_lb[$st];
+
         $table = new Table('', '', array(), false);
         while ($solic = $query->fetch_object()) {
-            $status = $array_status[$solic->status];
-            $label = 'bg-' . $array_lb[$solic->status];
-            if ($solic->status == 2) {
-                $solic->data_analise = '--------------';
-            }
-            $btn_group = "";
-            if ($st == 2) {
-                $btn_group = self::buildButtonsSolicAltPedAdmin($solic->id, $solic->id_pedido);
-            }
-            $solic->justificativa = $this->mysqli->real_escape_string($solic->justificativa);
-            $solic->justificativa = str_replace("\"", "'", $solic->justificativa);
+            $btn_group = ($st == 2) ? self::buildButtonsSolicAltPedAdmin($solic->id, $solic->id_pedido) : '';
+            $solic->justificativa = str_replace("\"", "\'", $solic->justificativa);
 
             $row = new Row();
             $row->addColumn(new Column($btn_group));
             $row->addColumn(new Column($solic->id_pedido));
             $row->addColumn(new Column($solic->nome));
             $row->addColumn(new Column($solic->data_solicitacao));
-            $row->addColumn(new Column($solic->data_analise));
+            $row->addColumn(new Column(($st == 2) ? '--------------' : $solic->data_analise));
             $row->addColumn(new Column(new Button('', 'btn btn-sm btn-primary', "viewCompl('" . $solic->justificativa . "')", "data-toggle=\"tooltip\"", 'Ver Justificativa', 'eye')));
             $row->addColumn(new Column(new Small('label pull-right ' . $label, $status)));
             $table->addRow($row);
         }
-        $this->mysqli = NULL;
         return $table;
     }
 
@@ -521,53 +514,44 @@ class BuscaLTE extends Conexao {
      */
     public function getSolicAdiantamentos(int $st): string {
         self::openConnection();
-        $query = $this->mysqli->query("SELECT saldos_adiantados.id, setores.nome, DATE_FORMAT(saldos_adiantados.data_solicitacao, '%d/%m/%Y') AS data_solicitacao, DATE_FORMAT(saldos_adiantados.data_analise, '%d/%m/%Y') AS data_analise, saldos_adiantados.valor_adiantado, saldos_adiantados.justificativa FROM saldos_adiantados, setores WHERE saldos_adiantados.id_setor = setores.id AND saldos_adiantados.status = {$st} ORDER BY saldos_adiantados.data_solicitacao DESC;") or exit("Erro ao buscar solicitações de adiantamento.");
-        $retorno = "";
-        $status = $label = "";
-        switch ($st) {
-            case 0:
-                $status = 'Reprovado';
-                $label = 'red';
-                break;
-            case 1:
-                $status = 'Aprovado';
-                $label = 'green';
-                break;
-            case 2:
-                $status = 'Aberto';
-                $label = 'orange';
-                break;
-            default:
-                break;
-        }
+        $query = $this->mysqli->query("SELECT saldos_adiantados.id, setores.nome, DATE_FORMAT(saldos_adiantados.data_solicitacao, '%d/%m/%Y') AS data_solicitacao, DATE_FORMAT(saldos_adiantados.data_analise, '%d/%m/%Y') AS data_analise, saldos_adiantados.valor_adiantado, saldos_adiantados.justificativa FROM saldos_adiantados, setores WHERE saldos_adiantados.id_setor = setores.id AND saldos_adiantados.status = " . $st . " ORDER BY saldos_adiantados.data_solicitacao DESC LIMIT 200") or exit("Erro ao buscar solicitações de adiantamento.");
+        $this->mysqli = NULL;
+        $array_status = ['Reprovado', 'Aprovado', 'Aberto'];
+        $array_lb = ['red', 'green', 'orange'];
+
+        $status = $array_status[$st];
+        $label = $array_lb[$st];
+
+        $table = new Table('', '', [], false);
         if ($query) {
             while ($solic = $query->fetch_object()) {
-                $btn_aprovar = $btn_reprovar = "";
-                if ($st == 2) {
-                    // em análise / aberto
-                    $solic->data_analise = "---------------";
-                    $btn_aprovar = "<button class=\"btn btn-default\" type=\"button\" title=\"Aprovar\" onclick=\"analisaAdi(" . $solic->id . ", 1)\"><i class=\"fa fa-check\"></i></button>";
-                    $btn_reprovar = "<button class=\"btn btn-default\" type=\"button\" title=\"Reprovar\" onclick=\"javascript:analisaAdi(" . $solic->id . ", 0)\"><i class=\"fa fa-trash\"></i></button>";
-                }
-                $solic->justificativa = $this->mysqli->real_escape_string($solic->justificativa);
-                $solic->justificativa = str_replace("\"", "'", $solic->justificativa);
+                $btn_group = ($st == 2) ? self::buildButtonsSolicAdi($solic->id) : '';
+                $solic->justificativa = str_replace("\"", "\'", $solic->justificativa);
                 $solic->valor_adiantado = number_format($solic->valor_adiantado, 3, ',', '.');
-                $retorno .= "
-                    <tr>
-                        <td>" . $btn_aprovar . $btn_reprovar . "</td>
-                        <td>" . $solic->nome . "</td>
-                        <td>" . $solic->data_solicitacao . "</td>
-                        <td>" . $solic->data_analise . "</td>
-                        <td>R$ " . $solic->valor_adiantado . "</td>
-                        <td>
-                            <button onclick=\"viewCompl('" . $solic->justificativa . "');\" class=\"btn btn-sm btn-primary\" type=\"button\" title=\"Ver Justificativa\">JUSTIFICATIVA</button>
-                        </td>
-                        <td><small class=\"label pull-right bg-" . $label . "\">" . $status . "</small></td>
-                    </tr>";
+
+                $row = new Row();
+                $row->addColumn(new Column($btn_group));
+                $row->addColumn(new Column($solic->nome));
+                $row->addColumn(new Column($solic->data_solicitacao));
+                $row->addColumn(new Column(($st == 2) ? '---------------' : $solic->data_analise));
+                $row->addColumn(new Column($solic->valor_adiantado));
+                $row->addColumn(new Column(new Button('', 'btn btn-sm btn-primary', "viewCompl('" . $solic->justificativa . "')", "data-toggle=\"tooltip\"", 'Ver Justificativa', 'eye')));
+                $row->addColumn(new Column(new Small('label pull-right bg-' . $label, $status)));
+
+                $table->addRow($row);
             }
         }
-        $this->mysqli = NULL;
-        return $retorno;
+        return $table;
+    }
+
+    private static final function buildButtonsSolicAdi(int $id): string {
+        $group = "<div class=\"btn-group\">";
+
+        $btn_aprovar = new Button('', 'btn btn-default', "analisaAdi(" . $id . ", 1)", "data-toggle=\"tooltip\"", 'Aprovar', 'check');
+        $btn_reprovar = new Button('', 'btn btn-default', "analisaAdi(" . $id . ", 0)", "data-toggle=\"tooltip\"", 'Reprovar', 'trash');
+
+        $group .= $btn_aprovar . $btn_reprovar . '</div>';
+        return $group;
     }
 
     /**
@@ -754,7 +738,8 @@ class BuscaLTE extends Conexao {
      */
     public function getSolicAltPedidos(int $id_setor): string {
         self::openConnection();
-        $query = $this->mysqli->query("SELECT solic_alt_pedido.id_pedido, DATE_FORMAT(solic_alt_pedido.data_solicitacao, '%d/%m/%Y') AS data_solicitacao, DATE_FORMAT(solic_alt_pedido.data_analise, '%d/%m/%Y') AS data_analise, solic_alt_pedido.justificativa, solic_alt_pedido.status, pedido.id_usuario FROM solic_alt_pedido, pedido WHERE pedido.id = solic_alt_pedido.id_pedido AND solic_alt_pedido.id_setor = {$id_setor} ORDER BY solic_alt_pedido.id DESC;") or exit("Erro ao buscar solicitações de alteração de pedidos.");
+        $query = $this->mysqli->query("SELECT solic_alt_pedido.id_pedido, DATE_FORMAT(solic_alt_pedido.data_solicitacao, '%d/%m/%Y') AS data_solicitacao, DATE_FORMAT(solic_alt_pedido.data_analise, '%d/%m/%Y') AS data_analise, solic_alt_pedido.justificativa, solic_alt_pedido.status, pedido.id_usuario FROM solic_alt_pedido, pedido WHERE pedido.id = solic_alt_pedido.id_pedido AND solic_alt_pedido.id_setor = " . $id_setor . " ORDER BY solic_alt_pedido.id DESC LIMIT 200") or exit("Erro ao buscar solicitações de alteração de pedidos.");
+        $this->mysqli = NULL;
         $status = $label = "";
         $table = new Table('', '', array(), false);
 
@@ -764,19 +749,13 @@ class BuscaLTE extends Conexao {
         while ($solic = $query->fetch_object()) {
             $status = $array_status[$solic->status];
             $label = 'bg-' . $array_lb[$solic->status];
-            if ($solic->status == 2) {
-                $solic->data_analise = '--------------';
-            }
-            $solic->justificativa = $this->mysqli->real_escape_string($solic->justificativa);
-            $solic->justificativa = str_replace("\"", "'", $solic->justificativa);
+            $solic->justificativa = str_replace("\"", "\'", $solic->justificativa);
             if ($solic->id_usuario == $_SESSION['id']) {
                 $row = new Row();
                 $row->addColumn(new Column($solic->id_pedido));
                 $row->addColumn(new Column($solic->data_solicitacao));
-                $row->addColumn(new Column($solic->data_analise));
-
-                $btn = new Button('', 'btn btn-default', "viewCompl('" . $solic->justificativa . "')", "data-toggle=\"tooltip\"", 'Ver Justificativa', 'eye');
-                $row->addColumn(new Column($btn));
+                $row->addColumn(new Column(($solic->status == 2) ? '--------------' : $solic->data_analise));
+                $row->addColumn(new Column(new Button('', 'btn btn-default', "viewCompl('" . $solic->justificativa . "')", "data-toggle=\"tooltip\"", 'Ver Justificativa', 'eye')));
                 $row->addColumn(new Column(new Small('label ' . $label, $status)));
 
                 $table->addRow($row);
@@ -792,42 +771,30 @@ class BuscaLTE extends Conexao {
      * 	@return string
      */
     public function getSolicAdiSetor(int $id_setor): string {
-        $retorno = "";
         self::openConnection();
-        $query = $this->mysqli->query("SELECT id, DATE_FORMAT(data_solicitacao, '%d/%m/%Y') AS data_solicitacao, DATE_FORMAT(data_analise, '%d/%m/%Y') AS data_analise, valor_adiantado, justificativa, status FROM saldos_adiantados WHERE id_setor = " . $id_setor . " ORDER BY id DESC;") or exit("Erro ao buscar solicitações de adiantamento.");
-        $label = $status = "";
-        while ($solic = $query->fetch_object()) {
-            switch ($solic->status) {
-                case 0:
-                    $label = "bg-red";
-                    $status = "Reprovado";
-                    break;
-                case 1:
-                    $label = "bg-green";
-                    $status = "Aprovado";
-                    break;
-                case 2:
-                    $label = "bg-orange";
-                    $status = "Aberto";
-                    $solic->data_analise = "--------------";
-                    break;
-            }
-            $solic->justificativa = $this->mysqli->real_escape_string($solic->justificativa);
-            $solic->justificativa = str_replace("\"", "'", $solic->justificativa);
-            $solic->valor_adiantado = number_format($solic->valor_adiantado, 3, ',', '.');
-            $retorno .= "
-                <tr>
-                    <td>" . $solic->data_solicitacao . "</td>
-                    <td>" . $solic->data_analise . "</td>
-                    <td>R$ " . $solic->valor_adiantado . "</td>
-                    <td>
-                        <button onclick=\"viewCompl('" . $solic->justificativa . "');\" class=\"btn btn-default\" type=\"button\" title=\"Ver Justificativa\">Justificativa</button>
-                    </td>
-                    <td><small class=\"label " . $label . "\">" . $status . "</small></td>
-                </tr>";
-        }
+        $query = $this->mysqli->query("SELECT id, DATE_FORMAT(data_solicitacao, '%d/%m/%Y') AS data_solicitacao, DATE_FORMAT(data_analise, '%d/%m/%Y') AS data_analise, valor_adiantado, justificativa, status FROM saldos_adiantados WHERE id_setor = " . $id_setor . " ORDER BY id DESC LIMIT 200") or exit("Erro ao buscar solicitações de adiantamento.");
         $this->mysqli = NULL;
-        return $retorno;
+        $label = $status = "";
+        $array_status = ['Reprovado', 'Aprovado', 'Aberto'];
+        $array_lb = ['red', 'green', 'orange'];
+
+        $table = new Table('', '', [], false);
+        while ($solic = $query->fetch_object()) {
+            $status = $array_status[$solic->status];
+            $label = 'bg-' . $array_lb[$solic->status];
+            $solic->justificativa = str_replace("\"", "\'", $solic->justificativa);
+            $solic->valor_adiantado = number_format($solic->valor_adiantado, 3, ',', '.');
+
+            $row = new Row();
+            $row->addColumn(new Column($solic->data_solicitacao));
+            $row->addColumn(new Column(($solic->status == 2) ? '--------------' : $solic->data_analise));
+            $row->addColumn(new Column($solic->valor_adiantado));
+            $row->addColumn(new Column(new Button('', 'btn btn-default', "viewCompl('" . $solic->justificativa . "')", "data-toggle=\"tooltip\"", 'Ver Justificativa', 'eye')));
+            $row->addColumn(new Column(new Small('label ' . $label, $status)));
+
+            $table->addRow($row);
+        }
+        return $table;
     }
 
     /**
