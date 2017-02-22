@@ -803,42 +803,38 @@ class BuscaLTE extends Conexao {
      * @return string
      */
     public function getConteudoProcesso(string $busca): string {
-        $retorno = "";
-
         self::openConnection();
-        $query = $this->mysqli->query("SELECT id, id_item_processo, nome_fornecedor, cod_reduzido, complemento_item, replace(vl_unitario, ',', '.') AS vl_unitario, qt_contrato, qt_utilizado, vl_utilizado, qt_saldo, vl_saldo FROM itens WHERE num_processo LIKE '%{$busca}%' AND cancelado = 0;") or exit("Erro ao buscar o conteúdo dos processos.");
-
+        $query = $this->mysqli->query("SELECT id, id_item_processo, nome_fornecedor, cod_reduzido, complemento_item, replace(vl_unitario, ',', '.') AS vl_unitario, qt_contrato, qt_utilizado, vl_utilizado, qt_saldo, vl_saldo FROM itens WHERE num_processo LIKE '%" . $busca . "%' AND cancelado = 0") or exit("Erro ao buscar o conteúdo dos processos.");
+        $this->mysqli = NULL;
+        $table = new Table('', '', [], false);
         while ($item = $query->fetch_object()) {
-            //remove as aspas do complemento_item
-            $item->complemento_item = $this->mysqli->real_escape_string($item->complemento_item);
-            $item->complemento_item = str_replace("\"", "'", $item->complemento_item);
+            $item->complemento_item = str_replace("\"", "\'", $item->complemento_item);
             $btn = $input_qtd = '';
             if (!isset($_SESSION['editmode'])) {
-                $btn = "<button type=\"button\" class=\"btn btn-default\" onclick=\"checkItemPedido(" . $item->id . ", '" . $item->vl_unitario . "', " . $item->qt_saldo . ")\" data-toggle=\"tooltip\" title=\"Adicionar\"><span class=\"fa fa-plus\"></span></button>";
-                $input_qtd = "<td><input type=\"number\" id=\"qtd" . $item->id . "\" min=\"1\" max=\"" . $item->qt_saldo . "\"></td>";
+                $btn = new Button('', 'btn btn-default', "checkItemPedido(" . $item->id . ", '" . $item->vl_unitario . "', " . $item->qt_saldo . ")", "data-toggle=\"tooltip\"", 'Adicionar', 'plus');
+                $input_qtd = "<input type=\"number\" id=\"qtd" . $item->id . "\" min=\"1\" max=\"" . $item->qt_saldo . "\">";
             } else {
-                $btn = "<button type=\"button\" class=\"btn btn-default\" onclick=\"editaItem(" . $item->id . ")\" data-toggle=\"tooltip\" title=\"Editar Informações\"><span class=\"fa fa-pencil\"></span></button>";
+                $btn = new Button('', 'btn btn-default', "editaItem(" . $item->id . ")", "data-toggle=\"tooltip\"", 'Editar Informações', 'pencil');
             }
-            $retorno .= "
-                <tr>
-                    <td>" . $btn . "</td>
-                    <td>" . $item->nome_fornecedor . "</td>
-                    <td>" . $item->cod_reduzido . "</td>
-                    " . $input_qtd . "
-                    <td>
-                        <button type=\"button\" onclick=\"viewCompl('" . $item->complemento_item . "');\" class=\"btn btn-default\" data-toggle=\"tooltip\" title=\"Mais Detalhes\"><span class=\"fa fa-eye\"></span></button>
-                    </td>
-                    <td style=\"display: none;\">" . $item->complemento_item . "</td>
-                    <td>" . $item->vl_unitario . "</td>
-                    <td>" . $item->qt_saldo . "</td>
-                    <td>" . $item->qt_utilizado . "</td>
-                    <td>" . $item->vl_saldo . "</td>
-                    <td>" . $item->vl_utilizado . "</td>
-                    <td>" . $item->qt_contrato . "</td>
-                </tr>";
+            $row = new Row();
+            $row->addColumn(new Column($btn));
+            $row->addColumn(new Column($item->nome_fornecedor));
+            $row->addColumn(new Column($item->cod_reduzido));
+            if (!isset($_SESSION['editmode'])) {
+                $row->addColumn(new Column($input_qtd));
+            }
+            $row->addColumn(new Column(new Button('', 'btn btn-default', "viewCompl('" . $item->complemento_item . "')", "data-toggle=\"tooltip\"", 'Ver Detalhes', 'eye')));
+            $row->addColumn(new Column($item->complemento_item, 'none'));
+            $row->addColumn(new Column($item->vl_unitario));
+            $row->addColumn(new Column($item->qt_saldo));
+            $row->addColumn(new Column($item->qt_utilizado));
+            $row->addColumn(new Column($item->vl_saldo));
+            $row->addColumn(new Column($item->vl_utilizado));
+            $row->addColumn(new Column($item->qt_contrato));
+
+            $table->addRow($row);
         }
-        $this->mysqli = NULL;
-        return $retorno;
+        return $table;
     }
 
     /**

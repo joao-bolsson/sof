@@ -15,15 +15,24 @@ final class Column {
     private $content;
 
     /**
+     * Column's display.
+     * @var type String
+     */
+    private $display;
+
+    /**
      * Default construct.
      * @param string $content Column's content.
+     * @param string $display Column's dislay.
      */
-    public function __construct(string $content) {
+    public function __construct(string $content, string $display = '') {
         $this->content = $content;
+        $this->display = $display;
     }
 
     public function __toString() {
-        return "<td>" . $this->content . "</td>";
+        $display = (!empty($this->display)) ? " style=\"display: " . $this->display . ";\"" : '';
+        return "<td" . $display . ">" . $this->content . "</td>";
     }
 
 }
