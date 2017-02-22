@@ -932,45 +932,19 @@ class BuscaLTE extends Conexao {
     }
 
     /**
-     * Função para retornar o conteúdo de um pedido para edição
-     *
-     * @access public
-     * @return string
+     * Function that returns the content of request for edition.
+     * 
+     * @param int $id_pedido Request's id.
+     * @return string Rows with itens of $id_pedido param.
      */
     public function getConteudoPedido(int $id_pedido): string {
         $retorno = "";
         self::openConnection();
-        $query = $this->mysqli->query("SELECT itens.qt_contrato, itens.id AS id_itens, itens_pedido.qtd AS qtd_solicitada, itens_pedido.valor, itens.nome_fornecedor, itens.num_licitacao, itens.cod_reduzido, itens.complemento_item, replace(itens.vl_unitario, ',', '.') AS vl_unitario, itens.qt_saldo, itens.qt_contrato, itens.qt_utilizado, itens.vl_saldo, itens.vl_contrato, itens.vl_utilizado FROM itens_pedido, itens WHERE itens_pedido.id_pedido = {$id_pedido} AND itens_pedido.id_item = itens.id") or exit("Erro ao buscar o conteúdo do pedido.");
-        while ($item = $query->fetch_object()) {
-            $id_item = $item->id_itens;
-            $item->complemento_item = $this->mysqli->real_escape_string($item->complemento_item);
-            $item->complemento_item = str_replace("\"", "'", $item->complemento_item);
-            $retorno .= "
-                <tr id=\"row" . $id_item . "\">
-                    <td><button type=\"button\" class=\"btn btn-default\" onclick=\"removeTableRow(" . $id_item . ", '" . $item->valor . "');\" title=\"Remover\"><i class=\"fa fa-trash\"></i></button></td>
-                    <td>" . $item->cod_reduzido . "</td>
-                    <td>
-                        <button type=\"button\" class=\"btn btn-default\" onclick=\"viewCompl('" . $item->complemento_item . "');\"  title=\"Ver Complemento do Item\"><i class=\"fa fa-eye\"></i>
-                    </td>
-                    <td>R$ " . $item->vl_unitario . "</td>
-                    <td>" . $item->nome_fornecedor . "</td>
-                    <td>" . $item->num_licitacao . "</td>
-                    <td>" . $item->qtd_solicitada . "</td>
-                    <td>R$ " . $item->valor . "</td>
-                    <td>
-                        <input type=\"hidden\" name=\"id_item[]\" value=\"" . $id_item . "\">
-                        <input type=\"hidden\" name=\"qtd_solicitada[]\" value=\"" . $item->qtd_solicitada . "\">
-                        <input type=\"hidden\" name=\"qtd_disponivel[]\" value=\"" . $item->qt_saldo . "\">
-                        <input type=\"hidden\" name=\"qtd_contrato[]\" value=\"" . $item->qt_contrato . "\">
-                        <input type=\"hidden\" name=\"qtd_utilizado[]\" value=\"" . $item->qt_utilizado . "\">
-                        <input type=\"hidden\" name=\"vl_saldo[]\" value=\"" . $item->vl_saldo . "\">
-                        <input type=\"hidden\" name=\"vl_contrato[]\" value=\"" . $item->vl_contrato . "\">
-                        <input type=\"hidden\" name=\"vl_utilizado[]\" value=\"" . $item->vl_utilizado . "\">
-                        <input type=\"hidden\" name=\"valor[]\" value=\"" . $item->valor . "\">
-                    </td>
-                </tr>";
-        }
+        $query = $this->mysqli->query('SELECT id_item, qtd FROM itens_pedido WHERE id_pedido = ' . $id_pedido) or exit('Erro ao buscar o conteúdo do pedido');
         $this->mysqli = NULL;
+        while ($item = $query->fetch_object()) {
+            $retorno .= self::addItemPedido($item->id_item, $item->qtd);
+        }
         return $retorno;
     }
 
