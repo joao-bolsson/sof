@@ -954,36 +954,44 @@ class BuscaLTE extends Conexao {
      * @return string
      */
     public function getMeusPedidos(int $id_setor): string {
-        $retorno = "";
         self::openConnection();
-        $query = $this->mysqli->query("SELECT id, DATE_FORMAT(data_pedido, '%d/%m/%Y') AS data_pedido, prioridade, status, valor, id_usuario FROM pedido WHERE id_setor = " . $id_setor . " AND alteracao = 0 ORDER BY id DESC LIMIT 500;") or exit("Erro ao buscar os pedidos do setor.");
+        $query = $this->mysqli->query("SELECT id, DATE_FORMAT(data_pedido, '%d/%m/%Y') AS data_pedido, prioridade, status, valor, id_usuario FROM pedido WHERE id_setor = " . $id_setor . " AND alteracao = 0 ORDER BY id DESC LIMIT 500") or exit("Erro ao buscar os pedidos do setor.");
         $this->mysqli = NULL;
+
+        $table = new Table('', '', [], false);
         while ($pedido = $query->fetch_object()) {
             $empenho = self::verEmpenho($pedido->id);
             if ($empenho == 'EMPENHO SIAFI PENDENTE') {
                 $empenho = '';
             }
             $pedido->valor = number_format($pedido->valor, 3, ',', '.');
-            $btnSolicAlt = "";
-            if ($pedido->status == 2 || $pedido->status == 5 && $pedido->id_usuario == $_SESSION['id']) {
-                $btnSolicAlt = "<button type=\"button\" class=\"btn btn-default btn-sm\" onclick=\"solicAltPed(" . $pedido->id . ");\" data-toggle=\"tooltip\" title=\"Solicitar Alteração\"><i class=\"fa fa-wrench\"></i></button>";
-            }
-            $retorno .= "
-                <tr>
-                    <td>" . $pedido->id . "</td>
-                    <td>" . $pedido->data_pedido . "</td>
-                    <td>" . ARRAY_PRIORIDADE[$pedido->prioridade] . "</td>
-                    <td><small class=\"label bg-gray\">" . ARRAY_STATUS[$pedido->status] . "</small></td>
-                    <td>" . $empenho . "</td>
-                    <td>R$ " . $pedido->valor . "</td>
-                    <td>" . self::getFornecedor($pedido->id) . "</td>
-                    <td>
-                        " . $btnSolicAlt . "
-                        <button type=\"button\" class=\"btn btn-default btn-sm\" onclick=\"imprimir(" . $pedido->id . ");\" data-toggle=\"tooltip\" title=\"Imprimir\"><i class=\"fa fa-print\"></i></button>
-                    </td>
-                </tr>";
+
+            $row = new Row();
+
+            $row->addColumn(new Column($pedido->id));
+            $row->addColumn(new Column($pedido->data_pedido));
+            $row->addColumn(new Column(ARRAY_PRIORIDADE[$pedido->prioridade]));
+            $row->addColumn(new Column(new Small('label bg-gray', ARRAY_STATUS[$pedido->status])));
+            $row->addColumn(new Column($empenho));
+            $row->addColumn(new Column('R$ ' . $pedido->valor));
+            $row->addColumn(new Column(self::getFornecedor($pedido->id)));
+            $row->addColumn(new Column(self::buildButtonsMyRequests($pedido->id, $pedido->status, $pedido->id_usuario)));
+
+            $table->addRow($row);
         }
-        return $retorno;
+        return $table;
+    }
+
+    private static final function buildButtonsMyRequests(int $id, int $status, int $id_usuario): string {
+        $group = "<div class=\"btn-group\">";
+
+        $btnSolicAlt = ($status == 2 || $status == 5 && $id_usuario == $_SESSION['id']) ? new Button('', 'btn btn-default btn-sm', "solicAltPed(" . $id . ")", "data-toggle=\"tooltip\"", 'Solicitar Alteração', 'wrench') : '';
+
+        $btnPrint = new Button('', 'btn btn-default btn-sm', "imprimir(" . $id . ")", "data-toggle=\"tooltip\"", 'Imprimir', 'print');
+
+        $group .= $btnSolicAlt . $btnPrint . '</div>';
+
+        return $group;
     }
 
     /**

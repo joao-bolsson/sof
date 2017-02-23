@@ -1262,6 +1262,8 @@ function listPedidos() {
             $('#tbodyListPedidos').html(resposta);
             $('#listPedidos').modal('show');
         });
+    } else {
+        $('#listPedidos').modal('show');
     }
 }
 
