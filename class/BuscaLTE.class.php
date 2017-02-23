@@ -46,22 +46,21 @@ class BuscaLTE extends Conexao {
         return $obj;
     }
 
-    public function getOptionsContrato() {
+    /**
+     * @return string A row with contract options.
+     */
+    public function getOptionsContrato(): string {
         self::openConnection();
-        $query = $this->mysqli->query("SELECT id, nome FROM contrato_tipo;") or exit("Erro ao buscar opções de contrato.");
+        $query = $this->mysqli->query('SELECT id, nome FROM contrato_tipo') or exit('Erro ao buscar opções de contrato');
         $this->mysqli = NULL;
-        $retorno = "";
+        $row = new Row();
         while ($obj = $query->fetch_object()) {
-            $retorno .= "
-                <td>
-                    <div class=\"form-group\">
-                        <input type=\"radio\" name=\"tipoCont\" id=\"tipoCont" . $obj->id . "\" class=\"minimal\" value=\"" . $obj->id . "\">"
-                    . $obj->nome . "
-                    </div>
-                </td>";
+            $input = "<div class=\"form-group\">
+                        <input type=\"radio\" name=\"tipoCont\" id=\"tipoCont" . $obj->id . "\" class=\"minimal\" value=\"" . $obj->id . "\">&nbsp;" . $obj->nome . "</div>";
+            $row->addColumn(new Column($input));
         }
 
-        return $retorno;
+        return $row;
     }
 
     /**
