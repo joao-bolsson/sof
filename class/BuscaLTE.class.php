@@ -665,70 +665,77 @@ class BuscaLTE extends Conexao {
         return $table;
     }
 
+    private static final function buildButtonsRequestAnalysis(int $id, string $compl): string {
+        $btn_group = "
+            <div class=\"btn-group\">
+                <button type=\"button\" class=\"btn btn-default\" onclick=\"cancelaItem(" . $id . ");\" title=\"Item Cancelado\"><i id=\"icon-cancela-item" . $id . "\" class=\"text-red fa fa-close\"></i>
+                </button>
+                <button type=\"button\" class=\"btn btn-default\" onclick=\"editaItem(" . $id . ");\" title=\"Editar\"><i class=\"fa fa-pencil\"></i>
+                </button>
+                <button type=\"button\" class=\"btn btn-default\" onclick=\"viewCompl('" . $compl . "');\"  title=\"Ver Complemento do Item\"><i class=\"fa fa-file-text\"></i>
+                </button>
+            </div>";
+
+        return $btn_group;
+    }
+
     /**
      * Função para trazer as informações de um pedido a ser analisado.
      *
      * @return string
      */
     public function getItensPedidoAnalise(int $id_pedido): string {
-        $retorno = "";
         self::openConnection();
-        $query = $this->mysqli->query("SELECT itens.qt_contrato, itens.id AS id_itens, itens_pedido.qtd AS qtd_solicitada, itens_pedido.valor, itens.nome_fornecedor, itens.num_licitacao, itens.dt_inicio, itens.dt_fim, itens.cod_reduzido, itens.complemento_item, itens.vl_unitario, itens.qt_saldo, itens.cod_despesa, itens.descr_despesa, itens.num_contrato, itens.num_processo, itens.descr_mod_compra, itens.num_licitacao, itens.cgc_fornecedor, itens.num_extrato, itens.descricao, itens.qt_contrato, itens.vl_contrato, itens.qt_utilizado, itens.vl_utilizado, itens.qt_saldo, itens.vl_saldo, itens.seq_item_processo FROM itens_pedido, itens WHERE itens_pedido.id_pedido = {$id_pedido} AND itens_pedido.id_item = itens.id ORDER BY itens.seq_item_processo ASC;") or exit("Erro ao buscar os itens do pedido para análise.");
-        while ($item = $query->fetch_object()) {
-            if ($item->dt_fim == '') {
-                $item->dt_fim = "----------";
-            }
-            $item->complemento_item = $this->mysqli->real_escape_string($item->complemento_item);
-            $item->complemento_item = str_replace("\"", "'", $item->complemento_item);
-            $retorno .= "
-                <tr id=\"row_item" . $item->id_itens . "\">
-                    <td>
-                        <div class=\"btn-group\">
-                            <button type=\"button\" class=\"btn btn-default\" onclick=\"cancelaItem(" . $item->id_itens . ");\" title=\"Item Cancelado\"><i id=\"icon-cancela-item" . $item->id_itens . "\" class=\"text-red fa fa-close\"></i>
-                            </button>
-                            <button type=\"button\" class=\"btn btn-default\" onclick=\"editaItem(" . $item->id_itens . ");\" title=\"Editar\"><i class=\"fa fa-pencil\"></i>
-                            </button>
-                            <button type=\"button\" class=\"btn btn-default\" onclick=\"viewCompl('" . $item->complemento_item . "');\"  title=\"Ver Complemento do Item\"><i class=\"fa fa-file-text\"></i>
-                            </button>
-                        </div>
-                    </td>
-                    <td>" . $item->cod_despesa . "</td>
-                    <td>" . $item->descr_despesa . "</td>
-                    <td>" . $item->num_extrato . "</td>
-                    <td>" . $item->num_contrato . "</td>
-                    <td>" . $item->num_processo . "</td>
-                    <td>" . $item->descr_mod_compra . "</td>
-                    <td>" . $item->num_licitacao . "</td>
-                    <td>" . $item->dt_inicio . "</td>
-                    <td>" . $item->dt_fim . "</td>
-                    <td>" . $item->cgc_fornecedor . "</td>
-                    <td>" . $item->nome_fornecedor . "</td>
-                    <td>" . $item->cod_reduzido . "</td>
-                    <td>" . $item->seq_item_processo . "</td>
-                    <td>" . $item->descricao . "</td>
-                    <td>R$ " . $item->vl_unitario . "</td>
-                    <td>" . $item->qt_contrato . "</td>
-                    <td>" . $item->vl_contrato . "</td>
-                    <td>" . $item->qt_utilizado . "</td>
-                    <td>" . $item->vl_utilizado . "</td>
-                    <td>" . $item->qt_saldo . "</td>
-                    <td>" . $item->vl_saldo . "</td>
-                    <td>" . $item->qtd_solicitada . "</td>
-                    <td>R$ " . $item->valor . "</td>
-                    <td>
-                        <input type=\"hidden\" name=\"id_item[]\" value=\"" . $item->id_itens . "\">
-                        <input id=\"item_cancelado" . $item->id_itens . "\" type=\"hidden\" name=\"item_cancelado[]\" value=\"0\">
-                        <input type=\"hidden\" name=\"qtd_solicitada[]\" value=\"" . $item->qtd_solicitada . "\">
-                        <input type=\"hidden\" name=\"qt_saldo[]\" value=\"" . $item->qt_saldo . "\">
-                        <input type=\"hidden\" name=\"qt_utilizado[]\" value=\"" . $item->qt_utilizado . "\">
-                        <input type=\"hidden\" name=\"vl_saldo[]\" value=\"" . $item->vl_saldo . "\">
-                        <input type=\"hidden\" name=\"vl_utilizado[]\" value=\"" . $item->vl_utilizado . "\">
-                        <input type=\"hidden\" name=\"valor_item[]\" value=\"" . $item->valor . "\">
-                    </td>
-                </tr>";
-        }
+        $query = $this->mysqli->query('SELECT itens.qt_contrato, itens.id AS id_itens, itens_pedido.qtd AS qtd_solicitada, itens_pedido.valor, itens.nome_fornecedor, itens.num_licitacao, itens.dt_inicio, itens.dt_fim, itens.cod_reduzido, itens.complemento_item, itens.vl_unitario, itens.qt_saldo, itens.cod_despesa, itens.descr_despesa, itens.num_contrato, itens.num_processo, itens.descr_mod_compra, itens.num_licitacao, itens.cgc_fornecedor, itens.num_extrato, itens.descricao, itens.qt_contrato, itens.vl_contrato, itens.qt_utilizado, itens.vl_utilizado, itens.qt_saldo, itens.vl_saldo, itens.seq_item_processo FROM itens_pedido, itens WHERE itens_pedido.id_pedido = ' . $id_pedido . ' AND itens_pedido.id_item = itens.id ORDER BY itens.seq_item_processo ASC') or exit('Erro ao buscar os itens do pedido para análise');
         $this->mysqli = NULL;
-        return $retorno;
+
+        $table = new Table('', '', [], false);
+        while ($item = $query->fetch_object()) {
+            $item->complemento_item = str_replace("\"", "\'", $item->complemento_item);
+
+            $btn_group = self::buildButtonsRequestAnalysis($item->id_itens, $item->complemento_item);
+
+            $inputs = "
+                <input type=\"hidden\" name=\"id_item[]\" value=\"" . $item->id_itens . "\">
+                <input id=\"item_cancelado" . $item->id_itens . "\" type=\"hidden\" name=\"item_cancelado[]\" value=\"0\">
+                <input type=\"hidden\" name=\"qtd_solicitada[]\" value=\"" . $item->qtd_solicitada . "\">
+                <input type=\"hidden\" name=\"qt_saldo[]\" value=\"" . $item->qt_saldo . "\">
+                <input type=\"hidden\" name=\"qt_utilizado[]\" value=\"" . $item->qt_utilizado . "\">
+                <input type=\"hidden\" name=\"vl_saldo[]\" value=\"" . $item->vl_saldo . "\">
+                <input type=\"hidden\" name=\"vl_utilizado[]\" value=\"" . $item->vl_utilizado . "\">
+                <input type=\"hidden\" name=\"valor_item[]\" value=\"" . $item->valor . "\">";
+
+            $row = new Row('row_item' . $item->id_itens);
+
+            $row->addColumn(new Column($btn_group));
+            $row->addColumn(new Column($item->cod_despesa));
+            $row->addColumn(new Column($item->descr_despesa));
+            $row->addColumn(new Column($item->num_extrato));
+            $row->addColumn(new Column($item->num_contrato));
+            $row->addColumn(new Column($item->num_processo));
+            $row->addColumn(new Column($item->descr_mod_compra));
+            $row->addColumn(new Column($item->num_licitacao));
+            $row->addColumn(new Column($item->dt_inicio));
+            $row->addColumn(new Column(($item->dt_fim == '') ? '----------' : $item->dt_fim));
+            $row->addColumn(new Column($item->cgc_fornecedor));
+            $row->addColumn(new Column($item->nome_fornecedor));
+            $row->addColumn(new Column($item->cod_reduzido));
+            $row->addColumn(new Column($item->seq_item_processo));
+            $row->addColumn(new Column($item->descricao));
+            $row->addColumn(new Column('R$ ' . $item->vl_unitario));
+            $row->addColumn(new Column($item->qt_contrato));
+            $row->addColumn(new Column($item->vl_contrato));
+            $row->addColumn(new Column($item->qt_utilizado));
+            $row->addColumn(new Column($item->vl_utilizado));
+            $row->addColumn(new Column($item->qt_saldo));
+            $row->addColumn(new Column($item->vl_saldo));
+            $row->addColumn(new Column($item->qtd_solicitada));
+            $row->addColumn(new Column('R$ ' . $item->valor));
+            $row->addColumn(new Column($inputs));
+
+            $table->addRow($row);
+        }
+        return $table;
     }
 
     /**
