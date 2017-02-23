@@ -995,50 +995,46 @@ class BuscaLTE extends Conexao {
     }
 
     /**
-     * Retorna todos os processos existes no banco.
+     * Build rows with process in database.
      * 
-     * @param string $tela Se "recepcao" os processos são usadas para uma coisa se não, são usados para construir um pedido.
-     * @return string LInhas com os processos para colocar numa tabela.
+     * @param string $tela If 'recepcao' - add process in tables used by reception, else - search itens of process.
+     * @return string Rows with all process.
      */
     public function getProcessos(string $tela): string {
-        $retorno = "";
-        $sql = "SELECT DISTINCT num_processo FROM itens;";
-        $onclick = "pesquisarProcesso";
-        $title = "Pesquisar Processo";
-        $icon = "fa-search";
+        $sql = 'SELECT DISTINCT num_processo FROM itens';
+        $onclick = 'pesquisarProcesso';
+        $title = 'Pesquisar Processo';
+        $icon = 'search';
         $act = 'Pesquisar';
-        if ($tela == "recepcao") {
-            $sql = "SELECT DISTINCT num_processo FROM itens WHERE num_processo NOT IN (SELECT DISTINCT num_processo FROM processos);";
-            $onclick = "addProcesso";
-            $title = "Adicionar Processo";
-            $icon = "fa-plus";
+        if ($tela == 'recepcao') {
+            $sql = 'SELECT DISTINCT num_processo FROM itens WHERE num_processo NOT IN (SELECT DISTINCT num_processo FROM processos)';
+            $onclick = 'addProcesso';
+            $title = 'Adicionar Processo';
+            $icon = 'plus';
             $act = 'Adicionar';
         }
         self::openConnection();
-        $query = $this->mysqli->query($sql) or exit("Erro ao buscar os processos.");
+        $query = $this->mysqli->query($sql) or exit('Erro ao buscar os processos');
         $this->mysqli = NULL;
+        $table = new Table('', '', [], false);
         while ($processo = $query->fetch_object()) {
-            $retorno .= "
-                <tr>
-                    <td>" . $processo->num_processo . "</td>
-                    <td>
-                        <button type=\"button\" title=\"" . $title . "\" onclick=\"" . $onclick . "('" . $processo->num_processo . "', 0)\" class=\"btn btn-primary\"><i class=\"fa " . $icon . "\"></i> " . $act . "</button>
-                    </td>
-                </tr>";
+            $row = new Row();
+            $row->addColumn(new Column($processo->num_processo));
+            $row->addColumn(new Column(new Button('', 'btn btn-primary', $onclick . "('" . $processo->num_processo . "', 0)", "data-toggle=\"tooltip\"", $title, $icon)));
+
+            $table->addRow($row);
         }
-        return $retorno;
+        return $table;
     }
 
     private function getSetorTransf(int $id_lancamento) {
         self::openConnection();
         $query = $this->mysqli->query("SELECT id_setor, valor FROM saldos_lancamentos WHERE id = " . $id_lancamento) or exit("Erro ao buscar setor da transferência");
         $obj = $query->fetch_object();
-        if ($obj->valor < 0) { // pega o destino
-            $id_lancamento++;
-        } else {
-            $id_lancamento--;
-        }
-        $query_l = $this->mysqli->query("SELECT saldos_lancamentos.id_setor, setores.nome AS setor, saldos_lancamentos.valor FROM saldos_lancamentos, setores WHERE setores.id = saldos_lancamentos.id_setor AND saldos_lancamentos.id = " . $id_lancamento) or exit("Erro ao buscar nome do setor da transferência");
+
+        $id = ($obj->valor < 0) ? $id_lancamento + 1 : $id_lancamento - 1;
+
+        $query_l = $this->mysqli->query("SELECT saldos_lancamentos.id_setor, setores.nome AS setor, saldos_lancamentos.valor FROM saldos_lancamentos, setores WHERE setores.id = saldos_lancamentos.id_setor AND saldos_lancamentos.id = " . $id) or exit("Erro ao buscar nome do setor da transferência");
         $this->mysqli = NULL;
 
         $lancamento = $query_l->fetch_object();
@@ -1052,42 +1048,31 @@ class BuscaLTE extends Conexao {
      * 	@return string
      */
     public function getLancamentos(int $id_setor): string {
-        $retorno = "";
-        $where = "";
-        if ($id_setor != 0) {
-            $where = "AND saldos_lancamentos.id_setor = " . $id_setor;
-        }
+        $where = ($id_setor != 0) ? 'AND saldos_lancamentos.id_setor = ' . $id_setor : '';
+
         self::openConnection();
         $query = $this->mysqli->query("SELECT saldos_lancamentos.id, saldos_lancamentos.id_setor, DATE_FORMAT(saldos_lancamentos.data, '%d/%m/%Y') AS data, saldos_lancamentos.valor, saldo_categoria.nome AS categoria, saldo_categoria.id AS id_categoria FROM saldos_lancamentos, saldo_categoria WHERE saldos_lancamentos.categoria = saldo_categoria.id " . $where . " ORDER BY saldos_lancamentos.id DESC LIMIT 500;") or exit("Erro ao buscar informações dos lançamentos.");
         $this->mysqli = NULL;
-        $cor = '';
-        while ($lancamento = $query->fetch_object()) {
-            if ($lancamento->valor < 0) {
-                $cor = 'red';
-            } else {
-                $cor = 'green';
-            }
-            $setor_transf = '';
-            if ($lancamento->id_categoria == 3) { // transferencia
-                $setor_transf = self::getSetorTransf($lancamento->id);
-            }
 
-            $btn = '';
-            if ($_SESSION['id_setor'] == 2 && $lancamento->id_categoria != 4) {
-                $btn = "<button type=\"button\" data-toggle=\"tooltip\" title=\"Desfazer\" onclick=\"undoFreeMoney(" . $lancamento->id . ")\" class=\"btn btn-default\"><i class=\"fa fa-undo\"></i></button>";
-            }
+        $table = new Table('', '', [], false);
+        while ($lancamento = $query->fetch_object()) {
+            $cor = ($lancamento->valor < 0) ? 'red' : 'green';
+            $setor_transf = ($lancamento->id_categoria == 3) ? self::getSetorTransf($lancamento->id) : '';
+
+            $btn = ($_SESSION['id_setor'] == 2 && $lancamento->id_categoria != 4) ? new Button('', 'btn btn-default', "undoFreeMoney(" . $lancamento->id . ")", "data-toggle=\"tooltip\"", 'Desfazer', 'undo') : '';
             $lancamento->valor = number_format($lancamento->valor, 3, ',', '.');
-            $retorno .= "
-                <tr>
-                    <td>" . $btn . "</td>
-                    <td>" . ARRAY_SETORES[$lancamento->id_setor] . "</td>
-                    <td>" . $lancamento->data . "</td>
-                    <td style=\"color: " . $cor . ";\">R$ " . $lancamento->valor . "</td>
-                    <td>" . $lancamento->categoria . "</td>
-                    <td>" . $setor_transf . "</td>
-                </tr>";
+
+            $row = new Row();
+            $row->addColumn(new Column($btn));
+            $row->addColumn(new Column(ARRAY_SETORES[$lancamento->id_setor]));
+            $row->addColumn(new Column($lancamento->data));
+            $row->addColumn(new Column("<span style=\"color: " . $cor . ";\">" . 'R$ ' . $lancamento->valor . "</span>"));
+            $row->addColumn(new Column($lancamento->categoria));
+            $row->addColumn(new Column($setor_transf));
+
+            $table->addRow($row);
         }
-        return $retorno;
+        return $table;
     }
 
 }
