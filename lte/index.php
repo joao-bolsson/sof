@@ -220,7 +220,6 @@ if (isset($_SESSION['editmode'])) {
                                 </a>
                                 <ul class="treeview-menu">
                                     <li><a href="javascript:abreModal('#relPedidos');"><i class="fa fa-circle-o"></i> Pedidos</a></li>
-                                    <li><a href="javascript:listRelatorios();"><i class="fa fa-circle-o"></i> Lista de Pedidos</a></li>
                                     <li>
                                         <a href="javascript:relListUsers();"><i class="fa fa-circle-o"></i> Usuários
                                             <span class="pull-right-container">
@@ -1171,36 +1170,6 @@ if (isset($_SESSION['editmode'])) {
                                     <button class="btn btn-primary" type="submit" style="width: 100%;"><i class="fa fa-send"></i>&nbsp;Cadastrar</button>
                                 </div>
                             </form>
-                        </div>
-                    </div>
-                </div>
-                <div aria-hidden="true" class="modal fade" id="listRelatorios" role="dialog" tabindex="-1">
-                    <div class="modal-dialog" style="width: 80%;">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                                <h4 class="modal-title">Relatórios</h4>
-                            </div>
-                            <div class="modal-body">
-                                <table style="width: 100%;">
-                                    <?= $obj_Busca->getRadiosStatusRel(); ?>
-                                </table>
-                                <p id="relTotRow" style="display: none;"></p>
-                                <table id="tableListRelatorios" class="table table-bordered table-striped">
-                                    <thead>
-                                        <tr>
-                                            <th>Pedido</th>
-                                            <th>Data de Envio</th>
-                                            <th>Prioridade</th>
-                                            <th>Status</th>
-                                            <th>SIAFI</th>
-                                            <th>Valor</th>
-                                            <th>Opções</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody id="tbodyListRelatorios"></tbody>
-                                </table>
-                            </div>
                         </div>
                     </div>
                 </div>

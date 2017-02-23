@@ -25,19 +25,8 @@ $(function () {
     }
 
     for (var i = 2; i <= 10; i++) {
-        var element = document.getElementById('relStatus' + i);
-        if (element !== null) {
-            $('#relStatus' + i).iCheck({
-                checkboxClass: 'icheckbox_minimal-blue',
-                radioClass: 'iradio_minimal-blue'
-            });
-            $('#relStatus' + i).on('ifChecked', function () {
-                changeReport(this);
-            });
-        }
-
-// radios dos detalhes do pedido
-        element = document.getElementById('st' + i);
+        // radios dos detalhes do pedido
+        var element = document.getElementById('st' + i);
         if (element !== null) {
             $('#st' + i).iCheck({
                 checkboxClass: 'icheckbox_minimal-blue',
@@ -1179,10 +1168,6 @@ function listAdiantamentos() {
     $('#listAdiantamentos').modal('show');
 }
 
-function listRelatorios() {
-    $('#listRelatorios').modal('show');
-}
-
 function changeTipoLic(element) {
     var selected = element.value;
     if (selected == 3 || selected == 4 || selected == 2) { // Adesao, Compra Compartilhada ou Inexibilidade
@@ -1213,33 +1198,6 @@ function maybeDisableFields(flag) {
     document.getElementById('procOri').required = !flag;
     document.getElementById('gera').required = !flag;
     document.getElementById('ngera').required = !flag;
-}
-
-function changeReport(element) {
-    var st = element.value;
-    $.post('../php/buscaLTE.php', {
-        admin: 1,
-        form: 'listRelatorios',
-        status: st
-    }).done(function (resposta) {
-        if (document.getElementById('tbodyListRelatorios').innerHTML.length > 0) {
-            $('#tableListRelatorios').DataTable().destroy();
-        }
-        $('#tbodyListRelatorios').html(resposta);
-        iniDataTable('#tableListRelatorios');
-    });
-    refreshTot(st);
-}
-
-function refreshTot(status) {
-    $.post('../php/busca.php', {
-        admin: 1,
-        form: 'refreshTot',
-        status: status
-    }).done(function (resposta) {
-        $('#relTotRow').html(resposta);
-        document.getElementById('relTotRow').style.display = 'block';
-    });
 }
 
 function verProcessos(pedido) {

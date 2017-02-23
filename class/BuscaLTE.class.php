@@ -131,46 +131,6 @@ class BuscaLTE extends Conexao {
         return $retorno;
     }
 
-    /**
-     * 	Função para retornar uma lista de pedidos conforme o relatório.
-     *
-     * 	@param $status Status da lista de pedidos no relatório.
-     * 	@return Lista de pedidos conforme o solicitado.
-     */
-    public function getRelatorio(int $status): string {
-        $order = 'ORDER BY id DESC';
-        $alteracao = 'AND alteracao = 0';
-        if ($status == 3) {
-            // reprovado
-            $alteracao = 'AND alteracao = 1';
-        } else if ($status == 5) {
-            // aguarda orçamento
-            // por nível de prioridade e por montante (pedidos urgentes que somam até R$ 100.000)
-            $order = 'ORDER BY id DESC, prioridade DESC, valor DESC';
-        } else if ($status == 2) {
-            // em análise
-            $order = 'ORDER BY id DESC, prioridade DESC';
-        }
-        self::openConnection();
-        $query = $this->mysqli->query("SELECT id, DATE_FORMAT(data_pedido, '%d/%m/%Y') AS data_pedido, prioridade, status, valor FROM pedido WHERE status = " . $status . " " . $alteracao . " " . $order) or exit('Erro ao gerar relatório.');
-        $this->mysqli = NULL;
-        $table = new Table('', '', [], false);
-        while ($pedido = $query->fetch_object()) {
-            $pedido->valor = number_format($pedido->valor, 3, ',', '.');
-            $row = new Row();
-            $row->addColumn(new Column($pedido->id));
-            $row->addColumn(new Column($pedido->data_pedido));
-            $row->addColumn(new Column(ARRAY_PRIORIDADE[$pedido->prioridade]));
-            $row->addColumn(new Column(new Small('label pull-right bg-gray', ARRAY_STATUS[$pedido->status])));
-            $row->addColumn(new Column(self::verEmpenho($pedido->id)));
-            $row->addColumn(new Column("R$ " . $pedido->valor));
-            $row->addColumn(new Column(self::buildButtonsRel($status, $pedido->id)));
-
-            $table->addRow($row);
-        }
-        return $table;
-    }
-
     private static final function buildButtonsRel(int $status, int $id): string {
         $group = "<div class=\"btn-group\">";
 
@@ -180,37 +140,6 @@ class BuscaLTE extends Conexao {
 
         $group .= $print . $btnVerProcesso . '</div>';
         return $group;
-    }
-
-    /**
-     * 	Função para retornar os radios buttons para gerar relatórios por status.
-     *
-     * 	@return Colunas com alguns status.
-     */
-    public function getRadiosStatusRel(): string {
-        $retorno = "<tr>";
-        $i = 0;
-        $cont = 5;
-        $count = count(ARRAY_STATUS);
-
-        for ($j = 2; $j < $count; $j++) {
-            if ($i == $cont) {
-                $i = 0;
-                $retorno .= "</tr><tr>";
-            }
-            $retorno .= "
-            <td>
-                <div class=\"form-group\">
-                    <label>
-                        <input id=\"relStatus" . $j . "\" type=\"radio\" name=\"relatorio\" class=\"minimal\" value=\"" . $j . "\"/>
-                       " . ARRAY_STATUS[$j] . "
-                    </label>
-                </div>
-            </td>";
-            $i++;
-        }
-        $retorno .= "</tr>";
-        return $retorno;
     }
 
     /**
