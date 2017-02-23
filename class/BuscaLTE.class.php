@@ -131,17 +131,6 @@ class BuscaLTE extends Conexao {
         return $retorno;
     }
 
-    private static final function buildButtonsRel(int $status, int $id): string {
-        $group = "<div class=\"btn-group\">";
-
-        $print = new Button('', 'btn btn-primary', "imprimir(" . $id . ")", "data-toggle=\"tooltip\"", 'Imprimir', 'print');
-
-        $btnVerProcesso = ($status == 2) ? new Button('', 'btn btn-primary', "verProcessos(" . $id . ")", "data-toggle=\"tooltip\"", 'Ver Processos', 'eye') : '';
-
-        $group .= $print . $btnVerProcesso . '</div>';
-        return $group;
-    }
-
     /**
      * Função para trazer informação do fornecedor de um pedido.
      * @param int $id_pedido Id do pedido.

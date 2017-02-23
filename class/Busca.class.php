@@ -120,20 +120,6 @@ class Busca extends Conexao {
     }
 
     /**
-     * Função para retornar uma string para mostrar o total dos pedidos com determinado status.
-     * @param int $status status dos pedidos para somar.
-     * @return string String "Totalizando R$ x".
-     */
-    public function getTotalByStatus(int $status): string {
-        Busca::openConnection();
-        $query = $this->mysqli->query("SELECT sum(valor) AS total FROM pedido WHERE status = " . $status) or exit("Erro ao buscar o total pelo status.");
-        $this->mysqli = NULL;
-        $tot = $query->fetch_object();
-        $tot->total = number_format($tot->total, 3, ',', '.');
-        return "Totalizando R$ " . $tot->total;
-    }
-
-    /**
      * 	Função para retornar os processos que estão nos pedidos com suas datas de vencimento
      *
      * 	@param $pedido Id do pedido.
