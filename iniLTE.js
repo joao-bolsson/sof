@@ -148,6 +148,12 @@ $(function () {
     }
 
     $('#relPedidos').on('shown.bs.modal', function () {
+        $('.select2').select2();
+        $(".date").inputmask("dd/mm/yyyy", {"placeholder": "dd/mm/yyyy"});
+    });
+
+    $('#relLibOrc').on('shown.bs.modal', function () {
+        $('.select2').select2();
         $(".date").inputmask("dd/mm/yyyy", {"placeholder": "dd/mm/yyyy"});
     });
 
@@ -212,10 +218,6 @@ $(function () {
             selectAll(false);
         });
     }
-
-    $('#relPedidos').on('shown.bs.modal', function () {
-        $('.select2').select2();
-    });
 
 });
 

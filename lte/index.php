@@ -119,9 +119,6 @@ if (isset($_SESSION['editmode'])) {
                             <li>
                                 <a href="javascript:mostra('rowCadRP');">
                                     <i class="fa fa-database"></i> <span>Cadastrar Itens</span>
-                                    <span class="pull-right-container">
-                                        <small class="label pull-right bg-blue">novo</small>
-                                    </span>
                                 </a>
                             </li>
                         <?php endif; ?>
@@ -220,8 +217,9 @@ if (isset($_SESSION['editmode'])) {
                                 </a>
                                 <ul class="treeview-menu">
                                     <li><a href="javascript:abreModal('#relPedidos');"><i class="fa fa-circle-o"></i> Pedidos</a></li>
+                                    <li><a href="javascript:relListUsers();"><i class="fa fa-circle-o"></i> Usuários</a></li>
                                     <li>
-                                        <a href="javascript:relListUsers();"><i class="fa fa-circle-o"></i> Usuários
+                                        <a href="javascript:abreModal('#relLibOrc');"><i class="fa fa-circle-o"></i> Liberações Orçamentárias
                                             <span class="pull-right-container">
                                                 <small class="label pull-right bg-blue">novo</small>
                                             </span>
@@ -1173,6 +1171,64 @@ if (isset($_SESSION['editmode'])) {
                         </div>
                     </div>
                 </div>
+            <div aria-hidden="true" class="modal fade" id="relLibOrc" role="dialog" tabindex="-1">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                <h4 class="modal-title">Relatório de Liberações Orçamentárias</h4>
+                            </div>
+                            <form action="../admin/printRelatorio.php" method="post" target="_blank">
+                                <input type="hidden" name="tipo" value="liberacoes" />
+                                <input type="hidden" name="relatorio" value="1" />
+                                <div class="modal-body">
+                                    <div class="form-group">
+                                        <label>Setor</label>
+                                        <select class="form-control" name="setor" required>
+                                            <option value="0">Todos</option>
+                                            <?= $obj_Busca->getOptionsSetores(); ?>
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Prioridade</label>
+                                        <select class="form-control" name="prioridade" required>
+                                            <option value="0">Todas</option>
+                                            <?= $obj_Busca->getOptionsPrioridades(); ?>
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Status</label>
+                                        <select class="form-control select2" multiple="multiple" data-placeholder="Selecione" name="status[]" required>
+                                            <option value="0">Todos</option>
+                                            <?= $obj_Busca->getOptionsStatus(); ?>
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Data Início</label>
+                                        <div class="input-group">
+                                            <div class="input-group-addon">
+                                                <i class="fa fa-calendar"></i>
+                                            </div>
+                                            <input type="text" class="form-control date" name="dataI" required data-inputmask="'alias': 'dd/mm/yyyy'" data-mask>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Data Fim</label>
+                                        <div class="input-group">
+                                            <div class="input-group-addon">
+                                                <i class="fa fa-calendar"></i>
+                                            </div>
+                                            <input type="text" class="form-control date" name="dataF" required data-inputmask="'alias': 'dd/mm/yyyy'" data-mask>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="modal-footer">
+                                    <button class="btn btn-primary" type="submit" style="width: 100%;"><i class="fa fa-refresh"></i>&nbsp;Gerar</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
                 <div aria-hidden="true" class="modal fade" id="relPedidos" role="dialog" tabindex="-1">
                     <div class="modal-dialog">
                         <div class="modal-content">
@@ -1525,6 +1581,6 @@ if (isset($_SESSION['editmode'])) {
         <!-- PACE -->
         <script src="plugins/pace/pace.min.js"></script>
         <!-- page script -->
-        <script type="text/javascript" src="../iniLTE.min.js"></script>
+        <script type="text/javascript" src="../iniLTE.js"></script>
     </body>
 </html>
