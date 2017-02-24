@@ -222,6 +222,16 @@ class BuscaLTE extends Conexao {
         return $retorno;
     }
 
+    public function getOptionsCategoria(): string {
+        $retorno = "";
+        $count = count(ARRAY_CATEGORIA);
+
+        for ($i = 1; $i < $count; $i++) {
+            $retorno .= "<option value=\"" . $i . "\">" . ARRAY_CATEGORIA[$i] . "</option>";
+        }
+        return $retorno;
+    }
+
     /**
      * 	Função que retorna as options com os status de pedidos
      *
@@ -972,18 +982,18 @@ class BuscaLTE extends Conexao {
      * 	@return string
      */
     public function getLancamentos(int $id_setor): string {
-        $where = ($id_setor != 0) ? 'AND saldos_lancamentos.id_setor = ' . $id_setor : '';
+        $where = ($id_setor != 0) ? ' WHERE id_setor = ' . $id_setor : '';
 
         self::openConnection();
-        $query = $this->mysqli->query("SELECT saldos_lancamentos.id, saldos_lancamentos.id_setor, DATE_FORMAT(saldos_lancamentos.data, '%d/%m/%Y') AS data, saldos_lancamentos.valor, saldo_categoria.nome AS categoria, saldo_categoria.id AS id_categoria FROM saldos_lancamentos, saldo_categoria WHERE saldos_lancamentos.categoria = saldo_categoria.id " . $where . " ORDER BY saldos_lancamentos.id DESC LIMIT 500;") or exit("Erro ao buscar informações dos lançamentos.");
+        $query = $this->mysqli->query("SELECT id, id_setor, DATE_FORMAT(data, '%d/%m/%Y') AS data, valor, categoria FROM saldos_lancamentos" . $where . ' ORDER BY id DESC LIMIT 500') or exit('Erro ao buscar informações dos lançamentos');
         $this->mysqli = NULL;
 
         $table = new Table('', '', [], false);
         while ($lancamento = $query->fetch_object()) {
             $cor = ($lancamento->valor < 0) ? 'red' : 'green';
-            $setor_transf = ($lancamento->id_categoria == 3) ? self::getSetorTransf($lancamento->id) : '';
+            $setor_transf = ($lancamento->categoria == 3) ? self::getSetorTransf($lancamento->id) : '';
 
-            $btn = ($_SESSION['id_setor'] == 2 && $lancamento->id_categoria != 4) ? new Button('', 'btn btn-default', "undoFreeMoney(" . $lancamento->id . ")", "data-toggle=\"tooltip\"", 'Desfazer', 'undo') : '';
+            $btn = ($_SESSION['id_setor'] == 2 && $lancamento->categoria != 4) ? new Button('', 'btn btn-default', "undoFreeMoney(" . $lancamento->id . ")", "data-toggle=\"tooltip\"", 'Desfazer', 'undo') : '';
             $lancamento->valor = number_format($lancamento->valor, 3, ',', '.');
 
             $row = new Row();
@@ -991,7 +1001,7 @@ class BuscaLTE extends Conexao {
             $row->addColumn(new Column(ARRAY_SETORES[$lancamento->id_setor]));
             $row->addColumn(new Column($lancamento->data));
             $row->addColumn(new Column("<span style=\"color: " . $cor . ";\">" . 'R$ ' . $lancamento->valor . "</span>"));
-            $row->addColumn(new Column($lancamento->categoria));
+            $row->addColumn(new Column(ARRAY_CATEGORIA[$lancamento->categoria]));
             $row->addColumn(new Column($setor_transf));
 
             $table->addRow($row);

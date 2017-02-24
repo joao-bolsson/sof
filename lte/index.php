@@ -1190,17 +1190,9 @@ if (isset($_SESSION['editmode'])) {
                                         </select>
                                     </div>
                                     <div class="form-group">
-                                        <label>Prioridade</label>
-                                        <select class="form-control" name="prioridade" required>
-                                            <option value="0">Todas</option>
-                                            <?= $obj_Busca->getOptionsPrioridades(); ?>
-                                        </select>
-                                    </div>
-                                    <div class="form-group">
-                                        <label>Status</label>
-                                        <select class="form-control select2" multiple="multiple" data-placeholder="Selecione" name="status[]" required>
-                                            <option value="0">Todos</option>
-                                            <?= $obj_Busca->getOptionsStatus(); ?>
+                                        <label>Categoria</label>
+                                        <select class="form-control" name="categoria" required>
+                                            <?= $obj_Busca->getOptionsCategoria(); ?>
                                         </select>
                                     </div>
                                     <div class="form-group">
@@ -1581,6 +1573,6 @@ if (isset($_SESSION['editmode'])) {
         <!-- PACE -->
         <script src="plugins/pace/pace.min.js"></script>
         <!-- page script -->
-        <script type="text/javascript" src="../iniLTE.js"></script>
+        <script type="text/javascript" src="../iniLTE.min.js"></script>
     </body>
 </html>

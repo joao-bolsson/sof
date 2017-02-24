@@ -56,6 +56,13 @@ if (!is_null($type)) {
                 $html .= $obj_Print->getRelatorioPedidos($id_setor, $prioridade, $status, $dataI, $dataF);
                 break;
 
+            case 'liberacoes':
+                $id_setor = filter_input(INPUT_POST, 'setor');
+                $categoria = filter_input(INPUT_POST, 'categoria');
+                $dataI = filter_input(INPUT_POST, 'dataI');
+                $dataF = filter_input(INPUT_POST, 'dataF');
+                $html .= '';
+                break;
             default:
                 exit('Nenhum dado foi recebido para gerar relatório.');
                 break;

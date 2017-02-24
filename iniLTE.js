@@ -1063,13 +1063,8 @@ function listLancamentos(id_setor) {
 }
 
 function changeSetor(id_setor) {
-    var setor;
     var el = document.getElementById('selectSetor');
-    if (el !== null) {
-        setor = el.value;
-    } else {
-        setor = id_setor;
-    }
+    var setor = (el !== null) ? el.value : id_setor;
     $.post('../php/buscaLTE.php', {
         users: 1,
         form: 'listLancamentos',
