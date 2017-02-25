@@ -64,6 +64,10 @@ if (!is_null($admin) && isset($_SESSION['id_setor']) && ($_SESSION['id_setor'] =
             // se != 0 atualiza toda a tabela, se não, apenas a linha do pedido
             $id_pedido = filter_input(INPUT_POST, 'id_pedido');
 
+            $array_pedidos = filter_input(INPUT_POST, 'pedidos', FILTER_DEFAULT, FILTER_FORCE_ARRAY);
+            if (empty($array_pedidos)) {
+                $array_pedidos = [];
+            }
             $where = '';
 
             if ($limit1 < $limit2) {
@@ -74,7 +78,7 @@ if (!is_null($admin) && isset($_SESSION['id_setor']) && ($_SESSION['id_setor'] =
                 $where = 'AND id = ' . $id_pedido;
             }
 
-            echo $obj_Busca->getSolicitacoesAdmin($where);
+            echo $obj_Busca->getSolicitacoesAdmin($where, $array_pedidos);
             break;
 
         case 'tableSolicitacoesAdiantamento':

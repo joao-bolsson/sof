@@ -917,9 +917,7 @@ function loadChecks() {
         var id_e = 'checkPedRel' + id_pedido;
         var input = document.getElementById(id_e);
         if (input !== null) {
-            $('#' + id_e).on('ifCreated', function () {
-                $('#' + id_e).iCheck('destroy');
-            });
+            $('#' + id_e).iCheck('destroy');
             $('#' + id_e).iCheck({
                 checkboxClass: 'icheckbox_flat-blue',
                 radioClass: 'iradio_flat-blue'
@@ -936,19 +934,31 @@ function loadChecks() {
     }
 }
 
-function tableValidade() {
-    $('[id]').each(function () {
-        var $ids = $('[id=' + this.id + ']');
-        if ($ids.length > 1) {
-            $ids.not(':first').remove();
-        }
-    });
-}
-
 function loadMore() {
     $('button').blur();
     $('#loadMoreCustom').modal('hide');
     iniSolicitacoes(true);
+}
+
+function getIdsPedido() {
+    var element = document.getElementById('conteudoSolicitacoes');
+    var pedidos = [];
+    if (element === null) {
+        console.log('conteudoSolicitacoes nao existe');
+        return pedidos;
+    } else if (element.innerHTML.length == 0) {
+        console.log('tabela vazia');
+        return pedidos;
+    }
+    var rows = element.rows;
+    var len = rows.length;
+    console.log('rows: ' + len);
+    for (var i = 0; i < len; i++) {
+        var id = rows[i].id;
+        id = id.replace('rowPedido', '');
+        pedidos.push(id);
+    }
+    return pedidos;
 }
 
 function iniSolicitacoes(flag, id_pedido) {
@@ -957,6 +967,7 @@ function iniSolicitacoes(flag, id_pedido) {
     if (element === null) {
         return;
     }
+    document.getElementById('overlayLoad').style.display = 'block';
     var limit1 = 0, limit2 = 0;
     if (flag) {
         var input = document.getElementById('limit1');
@@ -969,22 +980,24 @@ function iniSolicitacoes(flag, id_pedido) {
     } else if (id_pedido == 0) {
         console.log('busca os últimos 100 pedidos');
     }
-    document.getElementById('overlayLoad').style.display = 'block';
+    if (element.innerHTML.length > 0) {
+        $('#tableSolicitacoes').DataTable().destroy();
+    }
+    var pedidos = getIdsPedido();
     $.post('../php/buscaLTE.php', {
         admin: 1,
         form: 'tableItensPedido',
         limit1: limit1,
         limit2: limit2,
-        id_pedido: id_pedido
+        id_pedido: id_pedido,
+        pedidos: pedidos
     }).done(function (resposta) {
-        if (element.innerHTML.length > 0) {
-            $('#tableSolicitacoes').DataTable().destroy();
+        if (resposta.length > 0) {
+            element.innerHTML += resposta;
+            loadChecks();
         }
-        element.innerHTML += resposta;
-        document.getElementById('overlayLoad').style.display = 'none';
-        tableValidade();
-        loadChecks();
         iniDataTable('#tableSolicitacoes');
+        document.getElementById('overlayLoad').style.display = 'none';
     });
 }
 

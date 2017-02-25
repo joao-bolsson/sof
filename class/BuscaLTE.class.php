@@ -537,7 +537,7 @@ class BuscaLTE extends Conexao {
      * @return string
      *
      */
-    public function getSolicitacoesAdmin(string $where = ''): string {
+    public function getSolicitacoesAdmin(string $where = '', array $pedidos = []): string {
         self::openConnection();
         $limit = 'LIMIT ' . LIMIT_MAX;
         $query = $this->mysqli->query("SELECT id, id_setor, DATE_FORMAT(data_pedido, '%d/%m/%Y') AS data_pedido, prioridade, status, valor, aprov_gerencia FROM pedido WHERE status <> 3 AND alteracao = 0 " . $where . " ORDER BY id DESC " . $limit) or exit("Erro ao buscar os pedidos que foram mandados ao SOF.");
@@ -545,13 +545,17 @@ class BuscaLTE extends Conexao {
 
         $table = new Table('', '', array(), false);
         while ($pedido = $query->fetch_object()) {
+            // determina se o pedido vai ser adicionado na tabela
             $flag = false;
-            if ($_SESSION['id_setor'] == 12) {
-                if ($pedido->status == 8) {
+
+            if (!in_array($pedido->id, $pedidos)) {
+                if ($_SESSION['id_setor'] == 12) {
+                    if ($pedido->status == 8) {
+                        $flag = true;
+                    }
+                } else {
                     $flag = true;
                 }
-            } else {
-                $flag = true;
             }
 
             if ($flag) {
