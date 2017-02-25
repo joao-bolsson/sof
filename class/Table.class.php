@@ -46,7 +46,7 @@ class Table {
      * @param array $headers Fields in <thead>, if empty: <thead> thead tag will is not build.
      * @param bool $build_body if true: the table must have the tag <tbody>, else - just its rows.
      */
-    public function __construct(string $id, string $class, array $headers, bool $build_body) {
+    public function __construct(string $id = '', string $class = '', array $headers = [], bool $build_body = false) {
         $this->rows = array();
         $this->id = $id;
         $this->class = $class;
@@ -67,7 +67,7 @@ class Table {
     public function __toString(): string {
         $table = "";
         $must_close = false;
-        if (!empty($this->id) || !empty($this->class)) {
+        if (!empty($this->id) || !empty($this->class) || $this->build_body) {
             $id = (!empty($this->id)) ? " id=\"" . $this->id . "\"" : '';
             $class = (!empty($this->class)) ? " class=\"" . $this->class . "\"" : '';
 
