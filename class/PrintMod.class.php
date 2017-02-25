@@ -710,55 +710,21 @@ class PrintMod extends Conexao {
     }
 
     /**
-     * 	Função que retorna um relatório para a recepção dos processos (ajustar)
-     *
-     * 	@return string
+     * @param int $tipo Tipo de processo.
+     * @return string Relatório com os processos.
      */
     public function getRelatorioProcessos(int $tipo): string {
         $retorno = '';
-        // tratando tipo == 0 primeiro, buscando TODOS os processos
-        $where = ($tipo != 0) ? 'AND processos.tipo = ' . $tipo : '';
+        $where = ($tipo != 0) ? ' WHERE id = ' . $tipo : '';
         self::openConnection();
-        if ($where == "") {
-            $query_proc = $this->mysqli->query("SELECT processos_tipo.id, processos_tipo.nome FROM processos_tipo;") or exit("Erro ao buscar os tipos de processo.");
-            while ($tipo_proc = $query_proc->fetch_object()) {
-                $query = $this->mysqli->query("SELECT processos.num_processo, processos_tipo.nome AS tipo, processos_tipo.id AS id_tipo, processos.estante, processos.prateleira, processos.entrada, processos.saida, processos.responsavel, processos.retorno, processos.obs FROM processos, processos_tipo WHERE processos.tipo = processos_tipo.id AND processos.tipo = {$tipo_proc->id} ORDER BY processos.tipo ASC;") or exit("Erro ao buscar os processos.");
-                if ($query->num_rows > 0) {
-                    $row = new Row();
-                    $row->addColumn(new Column('Tipo: ' . $tipo_proc->nome));
-                    $retorno .= "
-                        <fieldset class=\"preg\">
-                                <table>" . $row . "</table>
-                        </fieldset><br>";
-                    $table = new Table('', 'prod', ['Processo', 'Tipo', 'Estante', 'Prateleira', 'Entrada', 'Saída', 'Responsável', 'Retorno', 'Obs'], true);
-                    while ($processo = $query->fetch_object()) {
-                        $row = new Row();
-                        $row->addColumn(new Column($processo->num_processo));
-                        $row->addColumn(new Column($processo->tipo));
-                        $row->addColumn(new Column($processo->estante));
-                        $row->addColumn(new Column($processo->prateleira));
-                        $row->addColumn(new Column($processo->entrada));
-                        $row->addColumn(new Column($processo->saida));
-                        $row->addColumn(new Column($processo->responsavel));
-                        $row->addColumn(new Column($processo->retorno));
-                        $row->addColumn(new Column($processo->obs));
 
-                        $table->addRow($row);
-                    }
-                    $retorno .= $table . '<br>';
-                }
-            }
-        } else {
-            $query_proc = $this->mysqli->query('SELECT nome FROM processos_tipo WHERE id = ' . $tipo) or exit('Erro ao buscar os tipos de processo');
-            $tipo_proc = $query_proc->fetch_object();
-            $row = new Row();
-            $row->addColumn(new Column('Tipo: ' . $tipo_proc->nome));
-            $retorno .= "
-                <fieldset class=\"preg\">
-                    <table>" . $row . "</table>
-                </fieldset><br>";
-            $query = $this->mysqli->query('SELECT processos.num_processo, processos_tipo.nome AS tipo, processos_tipo.id AS id_tipo, processos.estante, processos.prateleira, processos.entrada, processos.saida, processos.responsavel, processos.retorno, processos.obs FROM processos, processos_tipo WHERE processos.tipo = processos_tipo.id ' . $where . ' ORDER BY processos.tipo ASC') or exit('Erro ao buscar os processos');
+        $query_proc = $this->mysqli->query('SELECT id, nome FROM processos_tipo' . $where) or exit('Erro ao buscar os tipos de processo');
+        while ($tipo_proc = $query_proc->fetch_object()) {
+            $query = $this->mysqli->query('SELECT processos.num_processo, processos_tipo.nome AS tipo, processos_tipo.id AS id_tipo, processos.estante, processos.prateleira, processos.entrada, processos.saida, processos.responsavel, processos.retorno, processos.obs FROM processos, processos_tipo WHERE processos.tipo = processos_tipo.id AND processos.tipo = ' . $tipo_proc->id . ' ORDER BY processos.tipo ASC') or exit('Erro ao buscar os processos');
             if ($query->num_rows > 0) {
+                $row = new Row();
+                $row->addColumn(new Column('Tipo: ' . $tipo_proc->nome));
+                $retorno .= "<fieldset class=\"preg\"><table>" . $row . "</table></fieldset><br>";
                 $table = new Table('', 'prod', ['Processo', 'Tipo', 'Estante', 'Prateleira', 'Entrada', 'Saída', 'Responsável', 'Retorno', 'Obs'], true);
                 while ($processo = $query->fetch_object()) {
                     $row = new Row();
@@ -774,9 +740,10 @@ class PrintMod extends Conexao {
 
                     $table->addRow($row);
                 }
+                $retorno .= $table . '<br>';
             }
-            $retorno .= $table . '<br>';
         }
+
         $this->mysqli = NULL;
         return $retorno;
     }
