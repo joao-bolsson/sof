@@ -1191,7 +1191,7 @@ if (isset($_SESSION['editmode'])) {
                                     </div>
                                     <div class="form-group">
                                         <label>Categoria</label>
-                                        <select class="form-control" name="categoria" required>
+                                        <select class="form-control select2" name="categoria[]" multiple="multiple" data-placeholder="Selecione" required>
                                             <?= $obj_Busca->getOptionsCategoria(); ?>
                                         </select>
                                     </div>

@@ -58,7 +58,7 @@ if (!is_null($type)) {
 
             case 'liberacoes':
                 $id_setor = filter_input(INPUT_POST, 'setor');
-                $categoria = filter_input(INPUT_POST, 'categoria');
+                $categoria = filter_input(INPUT_POST, 'categoria', FILTER_DEFAULT, FILTER_FORCE_ARRAY);
                 $dataI = filter_input(INPUT_POST, 'dataI');
                 $dataF = filter_input(INPUT_POST, 'dataF');
                 $html .= $obj_Print->getRelatorioLib($id_setor, $categoria, $dataI, $dataF);

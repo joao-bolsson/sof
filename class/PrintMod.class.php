@@ -522,7 +522,7 @@ class PrintMod extends Conexao {
         return $retorno;
     }
 
-    public function getRelatorioLib(int $id_setor, int $categoria, string $dataI, string $dataF): string {
+    public function getRelatorioLib(int $id_setor, array $categoria, string $dataI, string $dataF): string {
         $retorno = "
             <fieldset class=\"preg\">
                 <h5>DESCRIÇÃO DO RELATÓRIO</h5>
@@ -531,13 +531,22 @@ class PrintMod extends Conexao {
             </fieldset><br>";
 
         $where_setor = ($id_setor != 0) ? 'AND id_setor = ' . $id_setor : '';
-        $where_categoria = ' AND categoria = ' . $categoria;
+        $where_categoria = 'AND (';
+        
+        $len = count($categoria);
+        for ($i = 0; $i < $len; $i++) {
+            $where_categoria .= 'categoria = ' . $categoria[$i];
+            if ($i != $len -1) {
+                $where_categoria .= ' OR ';
+            }
+        }
+        $where_categoria .= ')';
         if (is_null($this->obj_Util)) {
             $this->obj_Util = new Util();
         }
         $dataIni = $this->obj_Util->dateFormat($dataI);
         $dataFim = $this->obj_Util->dateFormat($dataF);
-
+        
         self::openConnection();
         $query = $this->mysqli->query("SELECT id_setor, DATE_FORMAT(data, '%d/%m/%Y') AS data, valor, categoria FROM saldos_lancamentos WHERE data BETWEEN '" . $dataIni . "' AND '" . $dataFim . "' " . $where_setor . $where_categoria . " ORDER BY id ASC") or exit('Erro ao gerar relatório');
         $this->mysqli = NULL;
