@@ -539,10 +539,10 @@ class PrintMod extends Conexao {
      * 	@return string Retorna a interface de um documento pdf.
      */
     public function getRelatorioPedidos(int $id_setor, int $prioridade, array $status, string $dataI, string $dataF): string {
-        $retorno = "";
+        $retorno = '';
         $where_status = '';
-        $where_prioridade = "AND pedido.prioridade = " . $prioridade;
-        $where_setor = "AND pedido.id_setor = " . $id_setor;
+        $where_prioridade = ($prioridade != 0) ? 'AND pedido.prioridade = ' . $prioridade : '';
+        $where_setor = ($id_setor != 0) ? 'AND pedido.id_setor = ' . $id_setor : '';
 
         if (!in_array(0, $status)) {
             $len = count($status);
@@ -555,12 +555,6 @@ class PrintMod extends Conexao {
             }
             $where_status .= ") ";
         }
-        if ($prioridade == 0) {
-            $where_prioridade = '';
-        }
-        if ($id_setor == 0) {
-            $where_setor = '';
-        }
         if (is_null($this->obj_Util)) {
             $this->obj_Util = new Util();
         }
@@ -570,7 +564,7 @@ class PrintMod extends Conexao {
         $where_empenho = "";
         $tb_empenho = "";
         $empenho = "";
-        if ($status == 8) {
+        if (in_array(8, $status)) {
             $where_empenho = "AND pedido_empenho.id_pedido = pedido.id";
             $tb_empenho = "pedido_empenho, ";
             $empenho = ", pedido_empenho.empenho";
@@ -578,163 +572,127 @@ class PrintMod extends Conexao {
         self::openConnection();
         $query = $this->mysqli->query("SELECT pedido.id, pedido.id_setor, setores.nome AS setor, DATE_FORMAT(pedido.data_pedido, '%d/%m/%Y') AS data_pedido, prioridade.nome AS prioridade, status.nome AS status, pedido.valor {$empenho} FROM {$tb_empenho} setores, pedido, prioridade, status WHERE status.id = pedido.status {$where_setor} {$where_prioridade} {$where_empenho} AND prioridade.id = pedido.prioridade AND pedido.id_setor = setores.id {$where_status} AND pedido.data_pedido BETWEEN '{$dataIni}' AND '{$dataFim}' ORDER BY pedido.id ASC;") or exit("Erro ao buscar os pedidos com as especificações do usuário.");
 
-        $titulo = "Relatório de Pedidos por Setor e Nível de Prioridade";
-        if ($query) {
-            $thead = "
-                <th>Enviado em</th>
-                <th>Prioridade</th>
-                <th>Status</th>
-                <th>Valor</th>";
-            if ($status == 8) {
-                $titulo = "Relatório de Empenhos Enviados ao Ordenador";
-                $thead = "
-                    <th>Prioridade</th>
-                    <th>SIAFI</th>";
-            }
-            self::openConnection();
-            $query_tot = $this->mysqli->query("SELECT sum(pedido.valor) AS total FROM {$tb_empenho} pedido WHERE 1 > 0 {$where_setor} {$where_prioridade} {$where_empenho} AND pedido.alteracao = 0 {$where_status} AND pedido.data_pedido BETWEEN '{$dataIni}' AND '{$dataFim}';") or exit("Erro ao somar os pedidos.");
-            $this->mysqli = NULL;
-            $total = "R$ 0";
-            $tot = $query_tot->fetch_object();
-            if ($tot->total > 0) {
-                $total = "R$ " . number_format($tot->total, 3, ',', '.');
-            }
-            $retorno .= "
+        $titulo = 'Relatório de Pedidos por Setor e Nível de Prioridade';
+        $headers = ['Enviado em', 'Prioridade', 'Status', 'Valor'];
+        if (in_array(8, $status)) {
+            $titulo = 'Relatório de Empenhos Enviados ao Ordenador';
+            $headers = ['Prioridade', 'SIAFI'];
+        }
+        self::openConnection();
+        $query_tot = $this->mysqli->query("SELECT sum(pedido.valor) AS total FROM {$tb_empenho} pedido WHERE 1 > 0 {$where_setor} {$where_prioridade} {$where_empenho} AND pedido.alteracao = 0 {$where_status} AND pedido.data_pedido BETWEEN '{$dataIni}' AND '{$dataFim}';") or exit("Erro ao somar os pedidos.");
+        $this->mysqli = NULL;
+        $tot = $query_tot->fetch_object();
+        $total = ($tot->total > 0) ? 'R$ ' . number_format($tot->total, 3, ',', '.') : 'R$ 0';
+
+        $row = new Row();
+        $row->addColumn(new Column($query->num_rows . ' resultados encontrados'));
+        $row->addColumn(new Column('Totalizando ' . $total));
+        $retorno .= "
                 <fieldset class=\"preg\">
                     <h5>DESCRIÇÃO DO RELATÓRIO</h5>
                     <h6>" . $titulo . "</h6>
-                    <h6>Período de Emissão: {$dataI} à {$dataF}</h6>
+                    <h6>Período de Emissão: " . $dataI . " à " . $dataF . "</h6>
                 </fieldset><br>
                 <fieldset class=\"preg\">
-                    <table>
-                        <tr>
-                            <td>" . $query->num_rows . " resultados encontrados</td>
-                            <td>Totalizando " . $total . "</td>
-                        </tr>
-                    </table>
-                </fieldset>
-                <table class=\"prod\">
-                    <thead>
-                        <tr>
-                            <th>Pedido</th>
-                            <th>Fornecedor</th>
-                            <th>Setor</th>
-                            " . $thead . "
-                        </tr>
-                    </thead>
-                    <tbody>";
-            if (is_null($this->obj_Busca)) {
-                $this->obj_Busca = new BuscaLTE();
-            }
-
-            $array_sub_totais = [];
-            while ($pedido = $query->fetch_object()) {
-                $tbody = "";
-                if (!array_key_exists($pedido->id_setor, $array_sub_totais)) {
-                    $array_sub_totais[$pedido->id_setor] = 0;
-                }
-                $array_sub_totais[$pedido->id_setor] += $pedido->valor;
-                if ($status == 8) {
-                    $tbody = "
-                        <td>" . $pedido->prioridade . "</td>
-                        <td>" . $pedido->empenho . "</td>";
-                } else {
-                    $tbody = "
-                        <td>" . $pedido->data_pedido . "</td>
-                        <td>" . $pedido->prioridade . "</td>
-                        <td>" . $pedido->status . "</td>
-                        <td>R$ " . $pedido->valor . "</td>";
-                }
-                $retorno .= "
-                        <tr style=\"\">
-                            <td>" . $pedido->id . "</td>
-                            <td>" . $this->obj_Busca->getFornecedor($pedido->id) . "</td>
-                            <td>" . $pedido->setor . "</td>
-                            " . $tbody . "
-                        </tr>";
-            }
-            $retorno .= "<tbody></table>";
-
-            if ($_SESSION['id_setor'] == 2) {
-                $retorno .= "<br>
-                <h5>As porcentagens mostradas são em relação ao Total (pag. 1) deste Relatório.</h5>
-                <fieldset class=\"preg\">
-                    <h5>SUBTOTAIS POR SETOR</h5>
-                    <table class=\"prod\">
-                        <thead>
-                            <tr>
-                                <th>Setor</th>
-                                <th>Total</th>
-                                <th>Porcentagem</th>
-                            </tr>
-                        </thead>
-                        <tbody>";
-
-                $len = count(ARRAY_SETORES);
-
-                for ($k = 0; $k < $len; $k++) {
-                    if (array_key_exists($k, $array_sub_totais)) {
-                        $parcial = number_format($array_sub_totais[$k], 3, ',', '.');
-                        $porcentagem = number_format(($array_sub_totais[$k] * 100) / $tot->total, 3, ',', '.');
-                        $retorno .= "
-                        <tr>
-                            <td>" . ARRAY_SETORES[$k] . "</td>
-                            <td>" . $parcial . "</td>
-                            <td>" . $porcentagem . "%</td>
-                        </tr>";
-                    }
-                }
-                $retorno .= "</tbody></table></fieldset><br>";
-
-
-                $retorno .= "
-                <fieldset class=\"preg\">
-                    <h5>SUBTOTAIS POR GRUPO (beta)</h5>
-                    <table class=\"prod\">
-                        <thead>
-                            <tr>
-                                <th>Grupo</th>
-                                <th>Total</th>
-                                <th>Porcentagem</th>
-                            </tr>
-                        </thead>
-                        <tbody>";
-
-                self::openConnection();
-                $query_gr = $this->mysqli->query("SELECT pedido_grupo.id_grupo, setores_grupos.nome AS ng, pedido.valor {$empenho} FROM {$tb_empenho} setores, setores_grupos, pedido, prioridade, status, pedido_grupo WHERE setores_grupos.id = pedido_grupo.id_grupo AND pedido_grupo.id_pedido = pedido.id AND status.id = pedido.status {$where_setor} {$where_prioridade} {$where_empenho} AND prioridade.id = pedido.prioridade AND pedido.id_setor = setores.id {$where_status} AND pedido.data_pedido BETWEEN '{$dataIni}' AND '{$dataFim}'") or exit('Erro ao gerar subrelatorio de grupos');
-                $this->mysqli = NULL;
-
-                $array_gr = []; // guarda o somatorio do grupo
-                $gr_indexes = []; // guarda os indices do array de cima
-                $gr_names = []; // guarda o nome dos grupos
-                $k = 0;
-                while ($obj = $query_gr->fetch_object()) {
-                    $index = 'gr' . $obj->id_grupo;
-                    if (!array_key_exists($index, $array_gr)) {
-                        $array_gr[$index] = 0;
-                        $gr_indexes[$k] = $index;
-                        $gr_names[$index] = $obj->ng;
-                        $k++;
-                    }
-                    $array_gr[$index] += $obj->valor;
-                }
-
-                $count = count($gr_indexes);
-                for ($i = 0; $i < $count; $i++) {
-                    $parcial = number_format($array_gr[$gr_indexes[$i]], 3, ',', '.');
-                    $porcentagem = number_format(($array_gr[$gr_indexes[$i]] * 100) / $tot->total, 3, ',', '.');
-                    $retorno .= "
-                    <tr>
-                        <td>" . utf8_encode($gr_names[$gr_indexes[$i]]) . "</td>
-                        <td>" . $parcial . "</td>
-                        <td>" . $porcentagem . "%</td>
-                    </tr>";
-                }
-
-                $retorno .= "</tbody></table></fieldset><br>";
-            }
+                    <table>" . $row . "</table>
+                </fieldset>";
+        $th = ['Pedido', 'Fornecedor', 'Setor'];
+        $k = 3;
+        $len = count($headers);
+        for ($i = 0; $i < $len; $i++) {
+            $th[$k] = $headers[$i];
+            $k++;
         }
-        if ($status == 8) {
+        if (is_null($this->obj_Busca)) {
+            $this->obj_Busca = new BuscaLTE();
+        }
+
+        $array_sub_totais = [];
+        $table = new Table('', 'prod', $th, true);
+        while ($pedido = $query->fetch_object()) {
+            if (!array_key_exists($pedido->id_setor, $array_sub_totais)) {
+                $array_sub_totais[$pedido->id_setor] = 0;
+            }
+            $array_sub_totais[$pedido->id_setor] += $pedido->valor;
+
+            $row = new Row();
+            $row->addColumn(new Column($pedido->id));
+            $row->addColumn(new Column($this->obj_Busca->getFornecedor($pedido->id)));
+            $row->addColumn(new Column($pedido->setor));
+            if (in_array(8, $status)) {
+                $row->addColumn(new Column($pedido->prioridade));
+                $row->addColumn(new Column($pedido->empenho));
+            } else {
+                $row->addColumn(new Column($pedido->data_pedido));
+                $row->addColumn(new Column($pedido->prioridade));
+                $row->addColumn(new Column($pedido->status));
+                $row->addColumn(new Column('R$ ' . $pedido->valor));
+            }
+
+            $table->addRow($row);
+        }
+        $retorno .= $table;
+
+        if ($_SESSION['id_setor'] == 2) {
+            $retorno .= "<br><h5>As porcentagens mostradas são em relação ao Total (pag. 1) deste Relatório.</h5>
+                <fieldset class=\"preg\"><h5>SUBTOTAIS POR SETOR</h5>";
+
+            $len = count(ARRAY_SETORES);
+
+            $table = new Table('', 'prod', ['Setor', 'Total', 'Porcentagem'], true);
+            for ($k = 0; $k < $len; $k++) {
+                if (array_key_exists($k, $array_sub_totais)) {
+                    $parcial = number_format($array_sub_totais[$k], 3, ',', '.');
+                    $porcentagem = number_format(($array_sub_totais[$k] * 100) / $tot->total, 3, ',', '.');
+
+                    $row = new Row();
+                    $row->addColumn(new Column(ARRAY_SETORES[$k]));
+                    $row->addColumn(new Column($parcial));
+                    $row->addColumn(new Column($porcentagem . '%'));
+
+                    $table->addRow($row);
+                }
+            }
+            $retorno .= $table . '</fieldset><br>' . "<fieldset class=\"preg\"><h5>SUBTOTAIS POR GRUPO</h5>";
+
+            self::openConnection();
+            $query_gr = $this->mysqli->query("SELECT pedido_grupo.id_grupo, setores_grupos.nome AS ng, pedido.valor {$empenho} FROM {$tb_empenho} setores, setores_grupos, pedido, prioridade, status, pedido_grupo WHERE setores_grupos.id = pedido_grupo.id_grupo AND pedido_grupo.id_pedido = pedido.id AND status.id = pedido.status {$where_setor} {$where_prioridade} {$where_empenho} AND prioridade.id = pedido.prioridade AND pedido.id_setor = setores.id {$where_status} AND pedido.data_pedido BETWEEN '{$dataIni}' AND '{$dataFim}'") or exit('Erro ao gerar subrelatorio de grupos');
+            $this->mysqli = NULL;
+
+            $array_gr = []; // guarda o somatorio do grupo
+            $gr_indexes = []; // guarda os indices do array de cima
+            $gr_names = []; // guarda o nome dos grupos
+            $k = 0;
+            while ($obj = $query_gr->fetch_object()) {
+                $index = 'gr' . $obj->id_grupo;
+                if (!array_key_exists($index, $array_gr)) {
+                    $array_gr[$index] = 0;
+                    $gr_indexes[$k] = $index;
+                    $gr_names[$index] = $obj->ng;
+                    $k++;
+                }
+                $array_gr[$index] += $obj->valor;
+            }
+
+            $count = count($gr_indexes);
+
+            $table_gr = new Table('', 'prod', ['Grupo', 'Total', 'Porcentagem'], true);
+            for ($i = 0; $i < $count; $i++) {
+                $parcial = number_format($array_gr[$gr_indexes[$i]], 3, ',', '.');
+                $porcentagem = number_format(($array_gr[$gr_indexes[$i]] * 100) / $tot->total, 3, ',', '.');
+
+                $row = new Row();
+                $row->addColumn(new Column(utf8_encode($gr_names[$gr_indexes[$i]])));
+                $row->addColumn(new Column($parcial));
+                $row->addColumn(new Column($porcentagem . '%'));
+
+                $table_gr->addRow($row);
+            }
+
+            $retorno .= $table_gr . '</fieldset><br>';
+        }
+
+        if (in_array(8, $status)) {
             $retorno .= "
                 <br><br><br>
                 <h5 class=\"ass\" style=\"margin-right: 50%; margin-bottom: 0;\">
@@ -757,106 +715,67 @@ class PrintMod extends Conexao {
      * 	@return string
      */
     public function getRelatorioProcessos(int $tipo): string {
-        $retorno = "";
+        $retorno = '';
         // tratando tipo == 0 primeiro, buscando TODOS os processos
-        $where = "";
-        if ($tipo != 0) {
-            $where = "AND processos.tipo = " . $tipo;
-        }
+        $where = ($tipo != 0) ? 'AND processos.tipo = ' . $tipo : '';
         self::openConnection();
         if ($where == "") {
             $query_proc = $this->mysqli->query("SELECT processos_tipo.id, processos_tipo.nome FROM processos_tipo;") or exit("Erro ao buscar os tipos de processo.");
             while ($tipo_proc = $query_proc->fetch_object()) {
                 $query = $this->mysqli->query("SELECT processos.num_processo, processos_tipo.nome AS tipo, processos_tipo.id AS id_tipo, processos.estante, processos.prateleira, processos.entrada, processos.saida, processos.responsavel, processos.retorno, processos.obs FROM processos, processos_tipo WHERE processos.tipo = processos_tipo.id AND processos.tipo = {$tipo_proc->id} ORDER BY processos.tipo ASC;") or exit("Erro ao buscar os processos.");
                 if ($query->num_rows > 0) {
+                    $row = new Row();
+                    $row->addColumn(new Column('Tipo: ' . $tipo_proc->nome));
                     $retorno .= "
                         <fieldset class=\"preg\">
-                                <table>
-                                        <tr>
-                                            <td>Tipo: " . $tipo_proc->nome . "</td>
-                                        </tr>
-                                </table>
-                        </fieldset><br>
-                        <table class=\"prod\">
-                            <thead>
-                                <tr>
-                                    <th>Processo</th>
-                                    <th>Tipo</th>
-                                    <th>Estante</th>
-                                    <th>Prateleira</th>
-                                    <th>Entrada</th>
-                                    <th>Saída</th>
-                                    <th>Responsável</th>
-                                    <th>Retorno</th>
-                                    <th>Obs</th>
-                                </tr>
-                            </thead>
-                            <tbody>";
+                                <table>" . $row . "</table>
+                        </fieldset><br>";
+                    $table = new Table('', 'prod', ['Processo', 'Tipo', 'Estante', 'Prateleira', 'Entrada', 'Saída', 'Responsável', 'Retorno', 'Obs'], true);
                     while ($processo = $query->fetch_object()) {
-                        $retorno .= "
-                                <tr>
-                                    <td>" . $processo->num_processo . "</td>
-                                    <td>" . $processo->tipo . "</td>
-                                    <td>" . $processo->estante . "</td>
-                                    <td>" . $processo->prateleira . "</td>
-                                    <td>" . $processo->entrada . "</td>
-                                    <td>" . $processo->saida . "</td>
-                                    <td>" . $processo->responsavel . "</td>
-                                    <td>" . $processo->retorno . "</td>
-                                    <td>" . $processo->obs . "</td>
-                                </tr>";
+                        $row = new Row();
+                        $row->addColumn(new Column($processo->num_processo));
+                        $row->addColumn(new Column($processo->tipo));
+                        $row->addColumn(new Column($processo->estante));
+                        $row->addColumn(new Column($processo->prateleira));
+                        $row->addColumn(new Column($processo->entrada));
+                        $row->addColumn(new Column($processo->saida));
+                        $row->addColumn(new Column($processo->responsavel));
+                        $row->addColumn(new Column($processo->retorno));
+                        $row->addColumn(new Column($processo->obs));
+
+                        $table->addRow($row);
                     }
-                    $retorno .= "
-                            </tbody>
-                    </table><br>";
+                    $retorno .= $table . '<br>';
                 }
             }
         } else {
-            $query_proc = $this->mysqli->query("SELECT processos_tipo.nome FROM processos_tipo WHERE processos_tipo.id = {$tipo};") or exit("Erro ao buscar os tipos de processo.");
+            $query_proc = $this->mysqli->query('SELECT nome FROM processos_tipo WHERE id = ' . $tipo) or exit('Erro ao buscar os tipos de processo');
             $tipo_proc = $query_proc->fetch_object();
+            $row = new Row();
+            $row->addColumn(new Column('Tipo: ' . $tipo_proc->nome));
             $retorno .= "
                 <fieldset class=\"preg\">
-                    <table>
-                        <tr>
-                            <td>Tipo: " . $tipo_proc->nome . "</td>
-                        </tr>
-                    </table>
-                </fieldset><br>
-                <table class=\"prod\">
-                    <thead>
-                        <tr>
-                            <th>Processo</th>
-                            <th>Tipo</th>
-                            <th>Estante</th>
-                            <th>Prateleira</th>
-                            <th>Entrada</th>
-                            <th>Saída</th>
-                            <th>Responsável</th>
-                            <th>Retorno</th>
-                            <th>Obs</th>
-                        </tr>
-                    </thead>
-                    <tbody>";
-            $query = $this->mysqli->query("SELECT processos.num_processo, processos_tipo.nome AS tipo, processos_tipo.id AS id_tipo, processos.estante, processos.prateleira, processos.entrada, processos.saida, processos.responsavel, processos.retorno, processos.obs FROM processos, processos_tipo WHERE processos.tipo = processos_tipo.id {$where} ORDER BY processos.tipo ASC;") or exit("Erro ao buscar os processos.");
+                    <table>" . $row . "</table>
+                </fieldset><br>";
+            $query = $this->mysqli->query('SELECT processos.num_processo, processos_tipo.nome AS tipo, processos_tipo.id AS id_tipo, processos.estante, processos.prateleira, processos.entrada, processos.saida, processos.responsavel, processos.retorno, processos.obs FROM processos, processos_tipo WHERE processos.tipo = processos_tipo.id ' . $where . ' ORDER BY processos.tipo ASC') or exit('Erro ao buscar os processos');
             if ($query->num_rows > 0) {
+                $table = new Table('', 'prod', ['Processo', 'Tipo', 'Estante', 'Prateleira', 'Entrada', 'Saída', 'Responsável', 'Retorno', 'Obs'], true);
                 while ($processo = $query->fetch_object()) {
-                    $retorno .= "
-                        <tr>
-                            <td>" . $processo->num_processo . "</td>
-                            <td>" . $processo->tipo . "</td>
-                            <td>" . $processo->estante . "</td>
-                            <td>" . $processo->prateleira . "</td>
-                            <td>" . $processo->entrada . "</td>
-                            <td>" . $processo->saida . "</td>
-                            <td>" . $processo->responsavel . "</td>
-                            <td>" . $processo->retorno . "</td>
-                            <td>" . $processo->obs . "</td>
-                        </tr>";
+                    $row = new Row();
+                    $row->addColumn(new Column($processo->num_processo));
+                    $row->addColumn(new Column($processo->tipo));
+                    $row->addColumn(new Column($processo->estante));
+                    $row->addColumn(new Column($processo->prateleira));
+                    $row->addColumn(new Column($processo->entrada));
+                    $row->addColumn(new Column($processo->saida));
+                    $row->addColumn(new Column($processo->responsavel));
+                    $row->addColumn(new Column($processo->retorno));
+                    $row->addColumn(new Column($processo->obs));
+
+                    $table->addRow($row);
                 }
             }
-            $retorno .= "
-                    </tbody>
-            </table><br>";
+            $retorno .= $table . '<br>';
         }
         $this->mysqli = NULL;
         return $retorno;
