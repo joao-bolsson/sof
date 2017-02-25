@@ -228,11 +228,13 @@ if (isset($_SESSION['editmode'])) {
                                 </ul>
                             </li>
                         <?php endif; ?>
-                        <li>
-                            <a href="editmode.php">
-                                <i class="fa fa-pencil"></i> <span>Editar Itens</span>
-                            </a>
-                        </li>
+                        <?php if ($permissao->pedidos): ?>
+                            <li>
+                                <a href="editmode.php">
+                                    <i class="fa fa-pencil"></i> <span>Editar Itens</span>
+                                </a>
+                            </li>
+                        <?php endif; ?>
                         <?php if ($permissao->recepcao): ?>
                             <li>
                                 <a href="javascript:listProcessos('admin');">
@@ -1171,7 +1173,7 @@ if (isset($_SESSION['editmode'])) {
                         </div>
                     </div>
                 </div>
-            <div aria-hidden="true" class="modal fade" id="relLibOrc" role="dialog" tabindex="-1">
+                <div aria-hidden="true" class="modal fade" id="relLibOrc" role="dialog" tabindex="-1">
                     <div class="modal-dialog">
                         <div class="modal-content">
                             <div class="modal-header">

@@ -1812,12 +1812,13 @@ function editaItem(id_item) {
         document.getElementById('codDespesa').value = obj.cod_despesa;
         document.getElementById('codReduzido').value = obj.cod_reduzido;
         document.getElementById('dtFim').value = obj.dt_fim;
+        document.getElementById('descrDespesa').value = obj.descr_despesa;
         document.getElementById('seqItemProcesso').value = obj.seq_item_processo;
     });
 }
 
 function submitEditItem() {
-    var fields = ['idItem', 'compItem', 'vlUnitario', 'qtContrato', 'vlContrato', 'qtUtilizada', 'vlUtilizado', 'qtSaldo', 'vlSaldo', 'codDespesa', 'codReduzido', 'dtFim', 'seqItemProcesso'];
+    var fields = ['idItem', 'compItem', 'vlUnitario', 'qtContrato', 'vlContrato', 'qtUtilizada', 'vlUtilizado', 'qtSaldo', 'vlSaldo', 'codDespesa', 'codReduzido', 'dtFim', 'descrDespesa', 'seqItemProcesso'];
     var dados = [];
     for (var i = 0; i < fields.length; i++) {
         dados[i] = document.getElementById(fields[i]).value;
@@ -1829,7 +1830,7 @@ function submitEditItem() {
         dados: dados
     }).done(function (resposta) {
         if (resposta == 0) {
-            alert("Ocorreu um erro ao atualizar informações.");
+            alert('Ocorreu um erro ao atualizar informações');
         }
     });
     $('#infoItem').modal('hide');

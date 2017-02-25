@@ -9,7 +9,10 @@ ini_set('display_erros', true);
 error_reporting(E_ALL);
 
 session_start();
-if (!isset($_SESSION["id_setor"]) || $_SESSION["id_setor"] != 2) {
+include_once '../class/BuscaLTE.class.php';
+$obj_Busca = new BuscaLTE();
+$permissao = $obj_Busca->getPermissoes($_SESSION["id"]);
+if (!isset($_SESSION["id_setor"]) || $_SESSION["id_setor"] != 2 || !$permissao->pedidos) {
     header("Location: ../");
 }
 require_once '../defines.php';
@@ -236,13 +239,19 @@ if (!isset($_SESSION['editmode'])) {
                                         </td>
                                     </tr>
                                     <tr>
-                                        <td colspan="2">
+                                        <td>
                                             <div class="form-group">
                                                 <label>Valor Saldo</label>
                                                 <input class="form-control" id="vlSaldo" name="vl_saldo" type="number" step="0.001" required>
                                             </div>
                                         </td>
-                                        <td
+                                        <td>
+                                            <div class="form-group">
+                                                <label>Descrição Despesa</label>
+                                                <input class="form-control" id="descrDespesa" name="descr_despesa" type="text" maxlength="100" required>
+                                            </div>
+                                        </td>
+                                        <td>
                                             <div class="form-group">
                                                 <label>Seq Item Processo</label>
                                                 <input class="form-control" id="seqItemProcesso" name="seq_item_processo" type="text" maxlength="20" required>

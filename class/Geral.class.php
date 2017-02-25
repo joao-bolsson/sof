@@ -65,9 +65,9 @@ class Geral extends Conexao {
     public function editItemFactory($dados) {
         self::openConnection();
         if (empty($dados)) {
-            exit("Factory data is empty.");
+            exit('Factory data is empty');
         }
-        $this->mysqli->query("UPDATE itens SET cod_despesa = '" . $dados->codDespesa . "', cod_reduzido = '" . $dados->codReduzido . "', dt_fim = '" . $dados->dtFim . "', seq_item_processo = '" . $dados->seqItemProcesso . "' WHERE id = " . $dados->idItem . " LIMIT 1;") or exit("Erro ao atualizar informações do item: " . $this->mysqli->error);
+        $this->mysqli->query("UPDATE itens SET cod_despesa = '" . $dados->codDespesa . "', descr_despesa = '" . $dados->descrDespesa . "', cod_reduzido = '" . $dados->codReduzido . "', dt_fim = '" . $dados->dtFim . "', seq_item_processo = '" . $dados->seqItemProcesso . "' WHERE id = " . $dados->idItem . " LIMIT 1;") or exit("Erro ao atualizar informações do item: " . $this->mysqli->error);
         $this->mysqli = NULL;
     }
 
