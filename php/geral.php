@@ -115,6 +115,16 @@ if ($obj_Busca->isActive()) {
                     $saldos = !is_null(filter_input(INPUT_POST, 'saldos'));
                     $pedidos = !is_null(filter_input(INPUT_POST, 'pedidos'));
                     $recepcao = !is_null(filter_input(INPUT_POST, 'recepcao'));
+
+                    if ($recepcao) {
+                        $noticias = 0;
+                        $saldos = 0;
+                        $pedidos = 0;
+                    }
+
+                    if ($noticias || $saldos || $pedidos) {
+                        $recepcao = 0;
+                    }
                 }
 
                 $obj_Geral->cadPermissao($id_user, $noticias, $saldos, $pedidos, $recepcao);
