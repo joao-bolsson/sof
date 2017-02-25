@@ -9,9 +9,9 @@
 ini_set('display_erros', true);
 error_reporting(E_ALL);
 
-include_once 'Conexao.class.php';
-include_once 'Util.class.php';
-include_once 'BuscaLTE.class.php';
+spl_autoload_register(function (string $class_name) {
+    include_once $class_name . '.class.php';
+});
 
 require_once '../defines.php';
 
@@ -519,6 +519,41 @@ class PrintMod extends Conexao {
                 <h4 style=\"text-align: center\" class=\"ass\">Santa Maria, ___ de ___________________ de _____.</h4>";
         }
         $this->obj_Busca = NULL;
+        return $retorno;
+    }
+
+    public function getRelatorioLib(int $id_setor, int $categoria, string $dataI, string $dataF): string {
+        $retorno = "
+            <fieldset class=\"preg\">
+                <h5>DESCRIÇÃO DO RELATÓRIO</h5>
+                <h6>Relatório de Liberações Orçamentárias</h6>
+                <h6>Período de Emissão: " . $dataI . " à " . $dataF . "</h6>
+            </fieldset><br>";
+
+        $where_setor = ($id_setor != 0) ? 'AND id_setor = ' . $id_setor : '';
+        $where_categoria = ' AND categoria = ' . $categoria;
+        if (is_null($this->obj_Util)) {
+            $this->obj_Util = new Util();
+        }
+        $dataIni = $this->obj_Util->dateFormat($dataI);
+        $dataFim = $this->obj_Util->dateFormat($dataF);
+
+        self::openConnection();
+        $query = $this->mysqli->query("SELECT id_setor, DATE_FORMAT(data, '%d/%m/%Y') AS data, valor, categoria FROM saldos_lancamentos WHERE data BETWEEN '" . $dataIni . "' AND '" . $dataFim . "' " . $where_setor . $where_categoria . " ORDER BY id ASC") or exit('Erro ao gerar relatório');
+        $this->mysqli = NULL;
+
+        $table = new Table('', 'prod', ['Setor', 'Data', 'Valor', 'Categoria'], true);
+        while ($obj = $query->fetch_object()) {
+            $row = new Row();
+            $row->addColumn(new Column(ARRAY_SETORES[$obj->id_setor]));
+            $row->addColumn(new Column($obj->data));
+            $row->addColumn(new Column('R$ ' . number_format($obj->valor, 3, ',', '.')));
+            $row->addColumn(new Column(ucfirst(ARRAY_CATEGORIA[$obj->categoria])));
+
+            $table->addRow($row);
+        }
+
+        $retorno .= $table;
         return $retorno;
     }
 

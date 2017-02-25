@@ -61,7 +61,7 @@ if (!is_null($type)) {
                 $categoria = filter_input(INPUT_POST, 'categoria');
                 $dataI = filter_input(INPUT_POST, 'dataI');
                 $dataF = filter_input(INPUT_POST, 'dataF');
-                $html .= '';
+                $html .= $obj_Print->getRelatorioLib($id_setor, $categoria, $dataI, $dataF);
                 break;
             default:
                 exit('Nenhum dado foi recebido para gerar relatório.');
