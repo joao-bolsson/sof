@@ -9,8 +9,11 @@ ini_set('display_erros', true);
 error_reporting(E_ALL);
 
 session_start();
-include_once '../class/BuscaLTE.class.php';
+spl_autoload_register(function (string $class_name) {
+    include_once '../class/' . $class_name . '.class.php';
+});
 $obj_Busca = new BuscaLTE();
+$obj_Util = new Util();
 $permissao = $obj_Busca->getPermissoes($_SESSION["id"]);
 if (!isset($_SESSION["id_setor"]) || $_SESSION["id_setor"] != 2 || !$permissao->noticias) {
     header("Location: ../");
@@ -138,6 +141,8 @@ require_once '../defines.php';
                                 <h3 class="box-title">Adicionar Notícia</h3>
                             </div>
                             <form enctype="multipart/form-data" action="../php/geral.php" id="ajax_form" method="post" onreset="recarregaForm();">
+                                <input type="hidden" name="admin" value="1"/>
+                                <input type="hidden" name="form" value="novanoticia">
                                 <div class="box-body">
                                     <div class="alert alert-info alert-dismissible">
                                         <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
@@ -153,14 +158,19 @@ require_once '../defines.php';
                                     <input type="hidden" id="id_noticia" name="id_noticia" value="0"/>
                                     <input type="hidden" id="tabela" name="tabela" value="0"/>
                                     <div class="form-group">
+                                        <label>Postar em:</label>
+                                        <select id="pag" class="form-control" name="pag" required>
+                                            <?= $obj_Busca->getPostarEm(); ?>
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
                                         <label>Data de Publicação:</label>
                                         <div class="input-group date">
                                             <div class="input-group-addon">
                                                 <i class="fa fa-calendar"></i>
                                             </div>
                                             <input type="text" class="form-control pull-right" id="datepicker" required>
-                                        </div>
-                                        <!-- /.input group -->
+                                        </div><!-- /.input group -->
                                     </div>
                                 </div><!-- ./box-body -->
                                 <div class="box-footer">
@@ -190,6 +200,28 @@ require_once '../defines.php';
                 </div>
                 <!-- /.container -->
             </footer>
+            <div class="modal fade" id="listArquivos" role="dialog">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                            <h4 class="modal-title">Lista de Arquivos</h4>
+                        </div>
+                        <div class="modal-body">
+                            <table class="table table-bordered table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>Tipo</th>
+                                        <th>Nome</th>
+                                        <th>Opções</th>
+                                    </tr>
+                                </thead>
+                                <tbody><?= $obj_Util->getArquivosLTE(); ?></tbody>
+                            </table> 
+                        </div>
+                    </div>
+                </div>
+            </div>
             <div class="modal fade" id="myInfos" role="dialog">
                 <div class="modal-dialog" style="width: 40%;">
                     <div class="modal-content">
@@ -310,7 +342,7 @@ require_once '../defines.php';
         </script>
 
         <!-- page script -->
-        <script type="text/javascript" src="../iniLTE.min.js"></script>
+        <script type="text/javascript" src="../iniLTE.js"></script>
     </body>
 </html>
 

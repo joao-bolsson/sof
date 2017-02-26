@@ -222,6 +222,41 @@ class Util extends Conexao {
         $diretorio->close();
         return $retorno;
     }
+    
+    /**
+     * Função que exibe os arquivos no modal do admin, usada diretamente no index
+     *
+     * @access public
+     * @return string
+     */
+    public function getArquivosLTE(): string {
+        //declarando retorno
+        $retorno = "";
+        $pasta = '../uploads/';
+        $diretorio = dir($pasta);
+
+        while ($arquivo = $diretorio->read()) {
+            $tipo = pathinfo($pasta . $arquivo);
+            $label = 'gray';
+            if ($tipo["extension"] == "jpg" || $tipo["extension"] == "png" || $tipo["extension"] == "jpeg") {
+                $tipo = 'Imagem';
+                $label .= 'blue';
+            } else {
+                $tipo = "Documento";
+            }
+            if ($arquivo != "." && $arquivo != ".." && $tipo != "Imagem") {
+                //mostra apenas os documentos pdf e doc
+                $retorno .= "
+                    <tr>
+                        <td><small class=\"label bg-" . $label . "\">" . $tipo . "</small></td>
+                        <td><a href=\"" . $pasta . $arquivo . "\" target=\"_blank\">" . $arquivo . "</a></td>
+                        <td><button class=\"btn btn-default\" type=\"button\" onclick=\"delArquivo('" . $pasta . $arquivo . "');\" data-toggle=\"tooltip\" title=\"Excluir\"><i class=\"fa fa-trash\"></i></button></td>
+                    </tr>";
+            }
+        }
+        $diretorio->close();
+        return $retorno;
+    }
 
     /**
      * Função para adicionar novos inputs para adicionar arquivos

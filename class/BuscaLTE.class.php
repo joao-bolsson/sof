@@ -35,6 +35,22 @@ class BuscaLTE extends Conexao {
     }
 
     /**
+     * Função para escrever as opções para "Postar em " do painel administrativo
+     *
+     * @return string
+     */
+    public function getPostarEm(): string {
+        $retorno = "";
+        self::openConnection();
+        $query = $this->mysqli->query("SELECT id, nome FROM paginas_post;") or exit("Erro ao buscar as páginas para postagem.");
+        $this->mysqli = NULL;
+        while ($pagina = $query->fetch_object()) {
+            $retorno .= "<option id=\"op" . $pagina->id . "\" value=\"" . $pagina->id . "\">" . $pagina->nome . "</option>";
+        }
+        return $retorno;
+    }
+
+    /**
      * Retorna a quantidade de solicitações de adiantamento, alt pedidos e de pedidos em análise.
      * @return type Objeto com as quantidades de solicitações.
      */

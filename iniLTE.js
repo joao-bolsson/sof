@@ -221,6 +221,20 @@ $(function () {
 
 });
 
+function delArquivo(caminho) {
+    del = confirm("Este arquivo será excluído PERMANENTEMENTE do sistema! Estando impossibilitada a sua recuperação.");
+    if (del) {
+        $.post('../php/geral.php', {
+            admin: 1,
+            form: 'delArquivo',
+            caminhoDel: caminho
+        }, function (resposta) {
+            alert(resposta);
+            location.reload();
+        });
+    }
+}
+
 function relListUsers() {
     window.open("../admin/printRelatorio.php?relatorio=1&tipo=users");
 }
