@@ -1221,6 +1221,54 @@ function verProcessos(pedido) {
     });
 }
 
+function getIdsRequest() {
+    var element = document.getElementById('tbodyListPedidos');
+    var pedidos = [];
+    if (element === null) {
+        console.log('tbodyListPedidos nao existe');
+        return pedidos;
+    } else if (element.innerHTML.length == 0) {
+        console.log('tabela vazia');
+        return pedidos;
+    }
+    var rows = element.rows;
+    var len = rows.length;
+    for (var i = 0; i < len; i++) {
+        var id = rows[i].id;
+        id = id.replace('ped', '');
+        pedidos.push(id);
+    }
+    return pedidos;
+}
+
+function loadMoreRequests() {
+    var limit1 = 0, limit2 = 0;
+    var input = document.getElementById('limit1');
+    if (input !== null) {
+        limit1 = document.getElementById('limit1').value;
+        limit2 = document.getElementById('limit2').value;
+    }
+    var element = document.getElementById('tbodyListPedidos');
+    if (element.innerHTML.length > 0) {
+        $('#tableListPedidos').DataTable().destroy();
+    }
+    var pedidos = getIdsRequest();
+    $.post('../php/buscaLTE.php', {
+        users: 1,
+        form: 'listPedidos',
+        limit1: limit1,
+        limit2: limit2,
+        pedidos: pedidos
+    }).done(function (resposta) {
+        if (resposta.length > 0) {
+            element.innerHTML += resposta;
+        }
+        iniDataTable('#tableListPedidos');
+    });
+    $('button').blur();
+    $('#loadMoreCustom').modal('hide');
+}
+
 function listPedidos() {
     if (document.getElementById('tbodyListPedidos').innerHTML.length === 0) {
         $.post('../php/buscaLTE.php', {

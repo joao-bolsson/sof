@@ -654,6 +654,33 @@ $select_grupo = $obj_Busca->getOptionsGrupos($id_setor);
                     </div>
                 </div>
             </div>
+            <div aria-hidden="true" class="modal fade" id="loadMoreCustom" role="dialog" tabindex="-1">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                            <h4 class="modal-title">Carregar Pedidos</h4>
+                        </div>
+                        <form action="javascript:loadMoreRequests();" method="POST">
+                            <div class="modal-body">
+                                <small class="label bg-gray">Carrega todos os pedidos entre Limite 1 e Limite 2.</small>
+                                <div class="form-group">
+                                    <label>Limite 1</label>
+                                    <input type="number" class="form-control" id="limit1" name="limit1" step="1" min="0" required>
+                                </div>
+                                <div class="form-group">
+                                    <label>Limite 2</label>
+                                    <input type="number" class="form-control" id="limit2" name="limit2" step="1" min="0" required>
+                                </div>
+                                <small class="label bg-gray">Por motivos de segurança, serão retornados no máximo <?= LIMIT_MAX ?> resultados nesta consulta. ;)</small>
+                            </div>
+                            <div class="modal-footer">
+                                <button class="btn btn-primary" type="submit" style="width: 100%;"><i class="fa fa-cloud-download"></i>&nbsp;Carregar</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
             <div aria-hidden="true" class="modal fade" id="listPedidos" role="dialog" tabindex="-1">
                 <div class="modal-dialog" style="width: 90%">
                     <div class="modal-content">
@@ -662,6 +689,9 @@ $select_grupo = $obj_Busca->getOptionsGrupos($id_setor);
                             <h4 class="modal-title">Meus Pedidos</h4>
                         </div>
                         <div class="modal-body">
+                            <div class="margin">
+                                <button class="btn btn-primary" type="button" onclick="abreModal('#loadMoreCustom');" data-toggle="tooltip" title="Carregar mais pedidos"><i class="fa fa-cloud-download"></i>&nbsp;Carregar</button>
+                            </div>
                             <small class="label bg-gray">Essa tabela vai exibir no máximo <?= LIMIT_MAX ?> linhas. Você pode gerar relatório dos Pedidos do seu Setor ;)</small>
                             <table id="tableListPedidos" class="table table-bordered table-striped">
                                 <thead>

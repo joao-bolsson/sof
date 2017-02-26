@@ -893,32 +893,34 @@ class BuscaLTE extends Conexao {
      *
      * @return string
      */
-    public function getMeusPedidos(): string {
+    public function getMeusPedidos(string $where = '', array $pedidos = []): string {
         self::openConnection();
         $id_setor = $_SESSION['id_setor'];
-        $query = $this->mysqli->query("SELECT id, DATE_FORMAT(data_pedido, '%d/%m/%Y') AS data_pedido, prioridade, status, valor, id_usuario FROM pedido WHERE id_setor = " . $id_setor . ' AND alteracao = 0 ORDER BY id DESC LIMIT ' . LIMIT_MAX) or exit('Erro ao buscar os pedidos do setor');
+        $query = $this->mysqli->query("SELECT id, DATE_FORMAT(data_pedido, '%d/%m/%Y') AS data_pedido, prioridade, status, valor, id_usuario FROM pedido WHERE id_setor = " . $id_setor . ' AND alteracao = 0 ' . $where . ' ORDER BY id DESC LIMIT ' . LIMIT_MAX) or exit('Erro ao buscar os pedidos do setor');
         $this->mysqli = NULL;
 
         $table = new Table('', '', [], false);
         while ($pedido = $query->fetch_object()) {
-            $empenho = self::verEmpenho($pedido->id);
-            if ($empenho == 'EMPENHO SIAFI PENDENTE') {
-                $empenho = '';
+            if (!in_array($pedido->id, $pedidos)) {
+                $empenho = self::verEmpenho($pedido->id);
+                if ($empenho == 'EMPENHO SIAFI PENDENTE') {
+                    $empenho = '';
+                }
+                $pedido->valor = number_format($pedido->valor, 3, ',', '.');
+
+                $row = new Row('ped' . $pedido->id);
+
+                $row->addColumn(new Column($pedido->id));
+                $row->addColumn(new Column($pedido->data_pedido));
+                $row->addColumn(new Column(ARRAY_PRIORIDADE[$pedido->prioridade]));
+                $row->addColumn(new Column(new Small('label bg-gray', ARRAY_STATUS[$pedido->status])));
+                $row->addColumn(new Column($empenho));
+                $row->addColumn(new Column('R$ ' . $pedido->valor));
+                $row->addColumn(new Column(self::getFornecedor($pedido->id)));
+                $row->addColumn(new Column(self::buildButtonsMyRequests($pedido->id, $pedido->status, $pedido->id_usuario)));
+
+                $table->addRow($row);
             }
-            $pedido->valor = number_format($pedido->valor, 3, ',', '.');
-
-            $row = new Row();
-
-            $row->addColumn(new Column($pedido->id));
-            $row->addColumn(new Column($pedido->data_pedido));
-            $row->addColumn(new Column(ARRAY_PRIORIDADE[$pedido->prioridade]));
-            $row->addColumn(new Column(new Small('label bg-gray', ARRAY_STATUS[$pedido->status])));
-            $row->addColumn(new Column($empenho));
-            $row->addColumn(new Column('R$ ' . $pedido->valor));
-            $row->addColumn(new Column(self::getFornecedor($pedido->id)));
-            $row->addColumn(new Column(self::buildButtonsMyRequests($pedido->id, $pedido->status, $pedido->id_usuario)));
-
-            $table->addRow($row);
         }
         return $table;
     }

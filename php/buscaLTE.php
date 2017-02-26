@@ -106,7 +106,27 @@ if (!is_null($admin) && isset($_SESSION['id_setor']) && ($_SESSION['id_setor'] =
             break;
 
         case 'listPedidos':
-            echo $obj_Busca->getMeusPedidos();
+            $limit1 = filter_input(INPUT_POST, 'limit1');
+            $limit2 = filter_input(INPUT_POST, 'limit2');
+
+            $where = '';
+
+            if (!is_null($limit1) && !is_null($limit2)) {
+                if ($limit1 < $limit2) {
+                    $where = 'AND id > ' . $limit1 . ' AND id < ' . $limit2;
+                } else if ($limit1 > $limit2) {
+                    $where = 'AND id > ' . $limit2 . ' AND id < ' . $limit1;
+                } else if ($id_pedido != 0) {
+                    $where = 'AND id = ' . $id_pedido;
+                }
+            }
+
+            $array_pedidos = filter_input(INPUT_POST, 'pedidos', FILTER_DEFAULT, FILTER_FORCE_ARRAY);
+            if (empty($array_pedidos)) {
+                $array_pedidos = [];
+            }
+
+            echo $obj_Busca->getMeusPedidos($where, $array_pedidos);
             break;
 
         case 'listProcessos':

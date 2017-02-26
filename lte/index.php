@@ -796,7 +796,7 @@ if (isset($_SESSION['editmode'])) {
                         </div>
                         <form action="javascript:loadMore();" method="POST">
                             <div class="modal-body">
-                                <small class="label bg-gray">Carrega todos os pedidos entre Limite 1 e Limite 2. A consulta trás todos os pedidos entre tais limites, <br>independente do conteúdo que já estiver na tabela.</small>
+                                <small class="label bg-gray">Carrega todos os pedidos entre Limite 1 e Limite 2.</small>
                                 <div class="form-group">
                                     <label>Limite 1</label>
                                     <input type="number" class="form-control" id="limit1" name="limit1" step="1" min="0" required>
