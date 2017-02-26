@@ -9,7 +9,10 @@
 ini_set('display_erros', true);
 error_reporting(E_ALL);
 require_once 'phpmailer/PHPMailerAutoload.php';
-include_once 'Conexao.class.php';
+
+spl_autoload_register(function (string $class_name) {
+    include_once $class_name . '.class.php';
+});
 
 class Util extends Conexao {
 
@@ -222,7 +225,7 @@ class Util extends Conexao {
         $diretorio->close();
         return $retorno;
     }
-    
+
     /**
      * Função que exibe os arquivos no modal do admin, usada diretamente no index
      *
@@ -230,11 +233,10 @@ class Util extends Conexao {
      * @return string
      */
     public function getArquivosLTE(): string {
-        //declarando retorno
-        $retorno = "";
         $pasta = '../uploads/';
         $diretorio = dir($pasta);
 
+        $table = new Table('', '', [], false);
         while ($arquivo = $diretorio->read()) {
             $tipo = pathinfo($pasta . $arquivo);
             $label = 'gray';
@@ -244,18 +246,17 @@ class Util extends Conexao {
             } else {
                 $tipo = "Documento";
             }
-            if ($arquivo != "." && $arquivo != ".." && $tipo != "Imagem") {
-                //mostra apenas os documentos pdf e doc
-                $retorno .= "
-                    <tr>
-                        <td><small class=\"label bg-" . $label . "\">" . $tipo . "</small></td>
-                        <td><a href=\"" . $pasta . $arquivo . "\" target=\"_blank\">" . $arquivo . "</a></td>
-                        <td><button class=\"btn btn-default\" type=\"button\" onclick=\"delArquivo('" . $pasta . $arquivo . "');\" data-toggle=\"tooltip\" title=\"Excluir\"><i class=\"fa fa-trash\"></i></button></td>
-                    </tr>";
+            if ($arquivo != "." && $arquivo != ".." && $tipo != 'Imagem') {
+                $row = new Row();
+                $row->addColumn(new Column(new Small('label bg-' . $label, $tipo)));
+                $row->addColumn(new Column("<a href=\"" . $pasta . $arquivo . "\" target=\"_blank\">" . $arquivo . "</a>"));
+                $row->addColumn(new Column(new Button('', 'btn btn-default', "delArquivo('" . $pasta . $arquivo . "')", "data-toggle=\"tooltip\"", 'Excluir', 'trash')));
+                
+                $table->addRow($row);
             }
         }
         $diretorio->close();
-        return $retorno;
+        return $table;
     }
 
     /**

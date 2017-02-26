@@ -235,6 +235,68 @@ function delArquivo(caminho) {
     }
 }
 
+function carregaPostsPag(tabela) {
+    $.post('../php/buscaLTE.php', {
+        admin: 1,
+        form: 'carregaPostsPag',
+        tabela: tabela
+    }, function (resposta) {
+//        $('#tableNoticiasEditar').DataTable().destroy();
+        $('#contNoticiasEditar').html(resposta);
+//        iniDataTable('#tableNoticiasEditar');
+    });
+}
+
+function editaNoticia(id, tabela) {
+    document.getElementById("funcao").value = "editar";
+    document.getElementById("id_noticia").value = id;
+    document.getElementById("tabela").value = tabela;
+
+    $.post('../php/busca.php', {
+        admin: 1,
+        form: 'editarNoticia',
+        id: id
+    }, function (resposta) {
+        $('#txtnoticia').froalaEditor('destroy');
+        document.getElementById("txtnoticia").value = "";
+        $('#txtnoticia').froalaEditor({
+            language: 'pt_br',
+            charCounterCount: false,
+            heightMin: 100,
+            heightMax: 400,
+            // Set the image upload URL.
+            imageUploadURL: 'upload_image.php',
+            // Set the file upload URL.
+            fileUploadURL: 'upload_file.php',
+            // Set the image upload URL.
+            imageManagerLoadURL: 'load_images.php',
+            // Set the image delete URL.
+            imageManagerDeleteURL: 'delete_image.php',
+        });
+        $('#txtnoticia').froalaEditor('html.insert', resposta, true);
+        tabela = 'op' + document.getElementById('tabela').value;
+        document.getElementById(tabela).selected = true;
+        $('#listNoticias').modal('hide');
+    });
+}
+
+function excluirNoticia(id) {
+    var confirma = confirm("Essa notícia será desativada do sistema. Deseja continuar?");
+    if (confirma) {
+        $.post('../php/geral.php', {
+            admin: 1,
+            form: 'excluirNoticia',
+            id: id
+        }, function (resposta) {
+            if (!resposta) {
+                location.reload();
+            } else {
+                carregaPostsPag(resposta);
+            }
+        });
+    }
+}
+
 function relListUsers() {
     window.open("../admin/printRelatorio.php?relatorio=1&tipo=users");
 }

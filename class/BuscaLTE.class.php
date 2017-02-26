@@ -35,6 +35,61 @@ class BuscaLTE extends Conexao {
     }
 
     /**
+     * 	Função que retorna as 'tabs' com as ṕáginas das notícias para editar.
+     *
+     * 	@return string
+     */
+    public function getTabsNoticiasLTE(): string {
+        $retorno = "";
+        self::openConnection();
+        $query = $this->mysqli->query("SELECT id, tabela, nome FROM paginas_post") or exit("Erro ao buscar as abas de notícias para edição.");
+        $this->mysqli = NULL;
+        while ($pag = $query->fetch_object()) {
+            $retorno .= "
+                <td>
+                    <div class=\"radiobtn radiobtn-adv\">
+                        <label for=\"pag-" . $pag->tabela . "\">
+                            <input type=\"radio\" id=\"pag-" . $pag->tabela . "\" name=\"pag\" class=\"access-hide\" onclick=\"carregaPostsPag(" . $pag->id . ");\">" . $pag->nome . "
+                            <span class=\"radiobtn-circle\"></span><span class=\"radiobtn-circle-check\"></span>
+                        </label>
+                    </div>
+                </td>";
+        }
+        return $retorno;
+    }
+
+    /**
+     * 	Função para retornar a tabela de notícias de uma página para edição
+     *
+     * 	@return string
+     */
+    public function getNoticiasEditar(int $tabela): string {
+        self::openConnection();
+        $query = $this->mysqli->query("SELECT id, tabela, titulo, DATE_FORMAT(data, '%d/%m/%Y') AS data FROM postagens WHERE ativa = 1 AND tabela = " . $tabela . ' ORDER BY data ASC') or exit('Erro ao buscar as notícias para editar');
+        $this->mysqli = NULL;
+        $table = new Table('', '', [], false);
+        while ($postagem = $query->fetch_object()) {
+            if (is_null($this->obj_Util)) {
+                $this->obj_Util = new Util();
+            }
+            $btn_group = "<div class=\"btn-group\">";
+            $btn_group .= new Button('', 'btn btn-default btn-sm', "editaNoticia(" . $postagem->id . ", " . $postagem->tabela . ")", "data-toggle=\"tooltip\"", 'Editar', 'pencil');
+
+            $btn_group .= new Button('', 'btn btn-default btn-sm', "excluirNoticia(" . $postagem->id . ")", "data-toggle=\"tooltip\"", 'Excluir', 'trash');
+            $btn_group .= '</div>';
+
+            $row = new Row();
+
+            $row->addColumn(new Column($postagem->data));
+            $row->addColumn(new Column($postagem->titulo));
+            $row->addColumn(new Column($btn_group));
+
+            $table->addRow($row);
+        }
+        return $table;
+    }
+
+    /**
      * Função para escrever as opções para "Postar em " do painel administrativo
      *
      * @return string

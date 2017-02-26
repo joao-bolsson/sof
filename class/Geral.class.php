@@ -719,14 +719,14 @@ class Geral extends Conexao {
      *   Função para editar uma postagem.
      */
     public function editPost($data, $id, $postagem, $pag) {
-        Geral::openConnection();
+        self::openConnection();
         $postagem = $this->mysqli->real_escape_string($postagem);
 
         $inicio = strpos($postagem, "<h3");
         $fim = strpos($postagem, "</h3>");
         $titulo = strip_tags(substr($postagem, $inicio, $fim));
 
-        $update = $this->mysqli->query("UPDATE postagens SET tabela = {$pag}, titulo = '{$titulo}', data = '{$data}', postagem = '{$postagem}' WHERE id = {$id};") or exit("Erro ao atualizar postagem");
+        $this->mysqli->query("UPDATE postagens SET tabela = {$pag}, titulo = '{$titulo}', data = '{$data}', postagem = '{$postagem}' WHERE id = {$id};") or exit('Erro ao atualizar postagem: ' . $this->mysqli->error);
 
         $this->mysqli = NULL;
 

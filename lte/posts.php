@@ -169,7 +169,7 @@ require_once '../defines.php';
                                             <div class="input-group-addon">
                                                 <i class="fa fa-calendar"></i>
                                             </div>
-                                            <input type="text" class="form-control pull-right" id="datepicker" required>
+                                            <input type="text" class="form-control pull-right" id="data" name="data" required>
                                         </div><!-- /.input group -->
                                     </div>
                                 </div><!-- ./box-body -->
@@ -218,6 +218,33 @@ require_once '../defines.php';
                                 </thead>
                                 <tbody><?= $obj_Util->getArquivosLTE(); ?></tbody>
                             </table> 
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal fade" id="listNoticias" role="dialog">
+                <div class="modal-dialog modal-lg">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                            <h4 class="modal-title">Editar Notícia</h4>
+                        </div>
+                        <div class="modal-body">
+                            <table class="table">
+                                <tr>
+                                    <?= $obj_Busca->getTabsNoticiasLTE(); ?>
+                                </tr>
+                            </table>
+                            <table id="tableNoticiasEditar" class="table table-bordered table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>Título</th>
+                                        <th>Data de Publicação</th>
+                                        <th>Opções</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="contNoticiasEditar"></tbody>
+                            </table>
                         </div>
                     </div>
                 </div>
@@ -319,7 +346,7 @@ require_once '../defines.php';
         <script>
                                             $(function () {
                                                 //Date picker
-                                                $('#datepicker').datepicker({
+                                                $('#data').datepicker({
                                                     autoclose: true,
                                                     format: 'yyyy-mm-dd'
                                                 });
@@ -342,7 +369,7 @@ require_once '../defines.php';
         </script>
 
         <!-- page script -->
-        <script type="text/javascript" src="../iniLTE.js"></script>
+        <script type="text/javascript" src="../iniLTE.min.js"></script>
     </body>
 </html>
 
