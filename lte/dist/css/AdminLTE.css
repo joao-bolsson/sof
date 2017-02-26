@@ -1723,6 +1723,37 @@ a:focus {
 .overlay-wrapper .overlay.dark {
   background: rgba(0, 0, 0, 0.5);
 }
+
+.modal-body > .overlay,
+.overlay-wrapper > .overlay,
+.modal-body > .loading-img,
+.overlay-wrapper > .loading-img {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+.modal-body .overlay,
+.overlay-wrapper .overlay {
+  z-index: 50;
+  background: rgba(255, 255, 255, 0.7);
+  border-radius: 3px;
+}
+.modal-body .overlay > .fa,
+.overlay-wrapper .overlay > .fa {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  margin-left: -15px;
+  margin-top: -15px;
+  color: #000;
+  font-size: 30px;
+}
+.modal-body .overlay.dark,
+.overlay-wrapper .overlay.dark {
+  background: rgba(0, 0, 0, 0.5);
+}
 .box-header:before,
 .box-body:before,
 .box-footer:before,

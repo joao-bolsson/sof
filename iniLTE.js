@@ -1242,6 +1242,7 @@ function getIdsRequest() {
 }
 
 function loadMoreRequests() {
+    document.getElementById('overlayLoad').style.display = 'block';
     var limit1 = 0, limit2 = 0;
     var input = document.getElementById('limit1');
     if (input !== null) {
@@ -1267,6 +1268,7 @@ function loadMoreRequests() {
     });
     $('button').blur();
     $('#loadMoreCustom').modal('hide');
+    document.getElementById('overlayLoad').style.display = 'none';
 }
 
 function listPedidos() {

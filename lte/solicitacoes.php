@@ -689,6 +689,9 @@ $select_grupo = $obj_Busca->getOptionsGrupos($id_setor);
                             <h4 class="modal-title">Meus Pedidos</h4>
                         </div>
                         <div class="modal-body">
+                            <div id="overlayLoad" class="overlay" style="display: none;">
+                                <i class="fa fa-refresh fa-spin"></i>
+                            </div>
                             <div class="margin">
                                 <button class="btn btn-primary" type="button" onclick="abreModal('#loadMoreCustom');" data-toggle="tooltip" title="Carregar mais pedidos"><i class="fa fa-cloud-download"></i>&nbsp;Carregar</button>
                             </div>
