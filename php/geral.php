@@ -460,8 +460,12 @@ if ($obj_Busca->isActive()) {
 
             case 'delArquivo':
                 $file = filter_input(INPUT_POST, 'caminhoDel');
-                unlink($file);
-                echo "O arquivo foi excluído com sucesso! A seguir, esta página será recarregada";
+                $unlink = unlink($file);
+                if ($unlink == TRUE) {
+                    echo "O arquivo foi excluído com sucesso! A seguir, esta página será recarregada";
+                } else {
+                    echo "Falha ao excluir arquivo: " . $file;
+                }
                 break;
 
             // comentário

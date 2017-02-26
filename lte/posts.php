@@ -213,7 +213,6 @@ require_once '../defines.php';
                                     <tr>
                                         <th>Tipo</th>
                                         <th>Nome</th>
-                                        <th>Opções</th>
                                     </tr>
                                 </thead>
                                 <tbody><?= $obj_Util->getArquivosLTE(); ?></tbody>

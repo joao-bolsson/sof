@@ -239,19 +239,14 @@ class Util extends Conexao {
         $table = new Table('', '', [], false);
         while ($arquivo = $diretorio->read()) {
             $tipo = pathinfo($pasta . $arquivo);
-            $label = 'gray';
-            if ($tipo["extension"] == "jpg" || $tipo["extension"] == "png" || $tipo["extension"] == "jpeg") {
-                $tipo = 'Imagem';
-                $label .= 'blue';
-            } else {
-                $tipo = "Documento";
-            }
-            if ($arquivo != "." && $arquivo != ".." && $tipo != 'Imagem') {
+
+            $label = ($tipo["extension"] == "jpg" || $tipo["extension"] == "png" || $tipo["extension"] == "jpeg") ? 'blue' : 'gray';
+            $tipo_doc = ($tipo["extension"] == "jpg" || $tipo["extension"] == "png" || $tipo["extension"] == "jpeg") ? 'Imagem' : 'Documento';
+            if ($arquivo != "." && $arquivo != "..") {
                 $row = new Row();
-                $row->addColumn(new Column(new Small('label bg-' . $label, $tipo)));
+                $row->addColumn(new Column(new Small('label bg-' . $label, $tipo_doc)));
                 $row->addColumn(new Column("<a href=\"" . $pasta . $arquivo . "\" target=\"_blank\">" . $arquivo . "</a>"));
-                $row->addColumn(new Column(new Button('', 'btn btn-default', "delArquivo('" . $pasta . $arquivo . "')", "data-toggle=\"tooltip\"", 'Excluir', 'trash')));
-                
+
                 $table->addRow($row);
             }
         }
