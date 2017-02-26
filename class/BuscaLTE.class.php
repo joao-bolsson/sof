@@ -778,7 +778,7 @@ class BuscaLTE extends Conexao {
      */
     public function addItemPedido(int $id_item, int $qtd): string {
         self::openConnection();
-        $query = $this->mysqli->query("SELECT id, nome_fornecedor, num_licitacao, cod_reduzido, complemento_item, replace(vl_unitario, ',', '.') AS vl_unitario, qt_saldo, qt_contrato, qt_utilizado, vl_saldo, vl_contrato, vl_utilizado FROM itens WHERE id = " . $id_item) or exit("Erro ao buscar ");
+        $query = $this->mysqli->query("SELECT id, nome_fornecedor, num_processo, num_licitacao, cod_reduzido, complemento_item, replace(vl_unitario, ',', '.') AS vl_unitario, qt_saldo, qt_contrato, qt_utilizado, vl_saldo, vl_contrato, vl_utilizado FROM itens WHERE id = " . $id_item) or exit("Erro ao buscar ");
         $this->mysqli = NULL;
         $item = $query->fetch_object();
         $item->complemento_item = str_replace("\"", "\'", $item->complemento_item);
@@ -797,6 +797,7 @@ class BuscaLTE extends Conexao {
         $row = new Row('row' . $id_item);
 
         $row->addColumn(new Column(new Button('', 'btn btn-default', "removeTableRow(" . $id_item . ", '" . $valor . "')", "data-toggle=\"tooltip\"", 'Remover do Pedido', 'trash')));
+        $row->addColumn(new Column($item->num_processo));
         $row->addColumn(new Column($item->cod_reduzido));
         $row->addColumn(new Column(new Button('', 'btn btn-default', "viewCompl('" . $item->complemento_item . "')", "data-toggle=\"tooltip\"", 'Ver Complemento do Item', 'eye')));
         $row->addColumn(new Column('R$ ' . $item->vl_unitario));

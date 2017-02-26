@@ -238,6 +238,7 @@ $select_grupo = $obj_Busca->getOptionsGrupos($id_setor);
                                         <table class="table table-bordered table-striped">
                                             <thead>
                                             <th></th>
+                                            <th>NUM_PROCESSO</th>
                                             <th>COD_REDUZIDO</th>
                                             <th>COMPLEMENTO_ITEM</th>
                                             <th>VL_UNITARIO</th>
