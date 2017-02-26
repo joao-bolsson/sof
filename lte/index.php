@@ -213,18 +213,13 @@ if (isset($_SESSION['editmode'])) {
                                     <i class="fa fa-file-text"></i> <span>Relatórios</span>
                                     <span class="pull-right-container">
                                         <i class="fa fa-angle-left pull-right"></i>
+                                        <small class="label pull-right bg-blue">novo</small>
                                     </span>
                                 </a>
                                 <ul class="treeview-menu">
                                     <li><a href="javascript:abreModal('#relPedidos');"><i class="fa fa-circle-o"></i> Pedidos</a></li>
                                     <li><a href="javascript:relListUsers();"><i class="fa fa-circle-o"></i> Usuários</a></li>
-                                    <li>
-                                        <a href="javascript:abreModal('#relLibOrc');"><i class="fa fa-circle-o"></i> Liberações Orçamentárias
-                                            <span class="pull-right-container">
-                                                <small class="label pull-right bg-blue">novo</small>
-                                            </span>
-                                        </a>
-                                    </li>
+                                    <li><a href="javascript:abreModal('#relLibOrc');"><i class="fa fa-circle-o"></i> Liberações Orçamentárias</a></li>
                                 </ul>
                             </li>
                         <?php endif; ?>

@@ -498,7 +498,7 @@ class PrintMod extends Conexao {
             </fieldset><br>";
 
         $where_setor = ($id_setor != 0) ? 'AND id_setor = ' . $id_setor : '';
-        $where_categoria = 'AND (';
+        $where_categoria = ' AND (';
 
         $len = count($categoria);
         for ($i = 0; $i < $len; $i++) {
@@ -515,7 +515,7 @@ class PrintMod extends Conexao {
         $dataFim = $this->obj_Util->dateFormat($dataF);
 
         self::openConnection();
-        $query = $this->mysqli->query("SELECT id_setor, DATE_FORMAT(data, '%d/%m/%Y') AS data, valor, categoria FROM saldos_lancamentos WHERE data BETWEEN '" . $dataIni . "' AND '" . $dataFim . "' " . $where_setor . $where_categoria . " ORDER BY id ASC") or exit('Erro ao gerar relatório');
+        $query = $this->mysqli->query("SELECT id_setor, DATE_FORMAT(data, '%d/%m/%Y') AS data, valor, categoria FROM saldos_lancamentos WHERE data BETWEEN '" . $dataIni . "' AND '" . $dataFim . "' " . $where_setor . $where_categoria . " ORDER BY id ASC") or exit('Erro ao gerar relatório: ' . $this->mysqli->error);
         $this->mysqli = NULL;
 
         $table = new Table('', 'prod', ['Setor', 'Data', 'Valor', 'Categoria'], true);

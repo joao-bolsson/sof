@@ -674,9 +674,10 @@ class BuscaLTE extends Conexao {
      *
      * 	@return string
      */
-    public function getSolicAltPedidos(int $id_setor): string {
+    public function getSolicAltPedidos(): string {
         self::openConnection();
-        $query = $this->mysqli->query("SELECT solic_alt_pedido.id_pedido, DATE_FORMAT(solic_alt_pedido.data_solicitacao, '%d/%m/%Y') AS data_solicitacao, DATE_FORMAT(solic_alt_pedido.data_analise, '%d/%m/%Y') AS data_analise, solic_alt_pedido.justificativa, solic_alt_pedido.status, pedido.id_usuario FROM solic_alt_pedido, pedido WHERE pedido.id = solic_alt_pedido.id_pedido AND solic_alt_pedido.id_setor = " . $id_setor . " ORDER BY solic_alt_pedido.id DESC LIMIT 200") or exit("Erro ao buscar solicitações de alteração de pedidos.");
+        $id_setor = $_SESSION['id_setor'];
+        $query = $this->mysqli->query("SELECT solic_alt_pedido.id_pedido, DATE_FORMAT(solic_alt_pedido.data_solicitacao, '%d/%m/%Y') AS data_solicitacao, DATE_FORMAT(solic_alt_pedido.data_analise, '%d/%m/%Y') AS data_analise, solic_alt_pedido.justificativa, solic_alt_pedido.status, pedido.id_usuario FROM solic_alt_pedido, pedido WHERE pedido.id = solic_alt_pedido.id_pedido AND solic_alt_pedido.id_setor = " . $id_setor . ' ORDER BY solic_alt_pedido.id DESC LIMIT ' . LIMIT_MAX) or exit('Erro ao buscar solicitações de alteração de pedidos');
         $this->mysqli = NULL;
         $status = $label = "";
         $table = new Table('', '', array(), false);
@@ -699,7 +700,6 @@ class BuscaLTE extends Conexao {
                 $table->addRow($row);
             }
         }
-        $this->mysqli = NULL;
         return $table;
     }
 
@@ -708,9 +708,10 @@ class BuscaLTE extends Conexao {
      *
      * 	@return string
      */
-    public function getSolicAdiSetor(int $id_setor): string {
+    public function getSolicAdiSetor(): string {
         self::openConnection();
-        $query = $this->mysqli->query("SELECT id, DATE_FORMAT(data_solicitacao, '%d/%m/%Y') AS data_solicitacao, DATE_FORMAT(data_analise, '%d/%m/%Y') AS data_analise, valor_adiantado, justificativa, status FROM saldos_adiantados WHERE id_setor = " . $id_setor . " ORDER BY id DESC LIMIT 200") or exit("Erro ao buscar solicitações de adiantamento.");
+        $id_setor = $_SESSION['id_setor'];
+        $query = $this->mysqli->query("SELECT id, DATE_FORMAT(data_solicitacao, '%d/%m/%Y') AS data_solicitacao, DATE_FORMAT(data_analise, '%d/%m/%Y') AS data_analise, valor_adiantado, justificativa, status FROM saldos_adiantados WHERE id_setor = " . $id_setor . ' ORDER BY id DESC LIMIT ' . LIMIT_MAX) or exit("Erro ao buscar solicitações de adiantamento.");
         $this->mysqli = NULL;
         $label = $status = "";
         $array_status = ['Reprovado', 'Aprovado', 'Aberto'];
@@ -829,9 +830,10 @@ class BuscaLTE extends Conexao {
      *
      * @return string
      */
-    public function getRascunhos(int $id_setor): string {
+    public function getRascunhos(): string {
         self::openConnection();
-        $query = $this->mysqli->query("SELECT id, DATE_FORMAT(data_pedido, '%d/%m/%Y') AS data_pedido, pedido.valor, status, pedido.id_usuario FROM pedido WHERE id_setor = " . $id_setor . " AND alteracao = 1 ORDER BY id DESC LIMIT 500;") or exit("Erro ao buscar rascunhos do setor.");
+        $id_setor = $_SESSION['id_setor'];
+        $query = $this->mysqli->query("SELECT id, DATE_FORMAT(data_pedido, '%d/%m/%Y') AS data_pedido, pedido.valor, status, pedido.id_usuario FROM pedido WHERE id_setor = " . $id_setor . ' AND alteracao = 1 ORDER BY id DESC LIMIT ' . LIMIT_MAX) or exit("Erro ao buscar rascunhos do setor.");
         $this->mysqli = NULL;
 
         $table = new Table('', '', [], false);
@@ -891,9 +893,10 @@ class BuscaLTE extends Conexao {
      *
      * @return string
      */
-    public function getMeusPedidos(int $id_setor): string {
+    public function getMeusPedidos(): string {
         self::openConnection();
-        $query = $this->mysqli->query("SELECT id, DATE_FORMAT(data_pedido, '%d/%m/%Y') AS data_pedido, prioridade, status, valor, id_usuario FROM pedido WHERE id_setor = " . $id_setor . " AND alteracao = 0 ORDER BY id DESC LIMIT 500") or exit("Erro ao buscar os pedidos do setor.");
+        $id_setor = $_SESSION['id_setor'];
+        $query = $this->mysqli->query("SELECT id, DATE_FORMAT(data_pedido, '%d/%m/%Y') AS data_pedido, prioridade, status, valor, id_usuario FROM pedido WHERE id_setor = " . $id_setor . ' AND alteracao = 0 ORDER BY id DESC LIMIT ' . LIMIT_MAX) or exit('Erro ao buscar os pedidos do setor');
         $this->mysqli = NULL;
 
         $table = new Table('', '', [], false);
@@ -989,7 +992,7 @@ class BuscaLTE extends Conexao {
         $where = ($id_setor != 0) ? ' WHERE id_setor = ' . $id_setor : '';
 
         self::openConnection();
-        $query = $this->mysqli->query("SELECT id, id_setor, DATE_FORMAT(data, '%d/%m/%Y') AS data, valor, categoria FROM saldos_lancamentos" . $where . ' ORDER BY id DESC LIMIT 500') or exit('Erro ao buscar informações dos lançamentos');
+        $query = $this->mysqli->query("SELECT id, id_setor, DATE_FORMAT(data, '%d/%m/%Y') AS data, valor, categoria FROM saldos_lancamentos" . $where . ' ORDER BY id DESC LIMIT ' . LIMIT_MAX) or exit('Erro ao buscar informações dos lançamentos');
         $this->mysqli = NULL;
 
         $table = new Table('', '', [], false);

@@ -474,7 +474,6 @@ function iniDataTable(tabela) {
                 }
             }
         });
-        return;
     } else if (tabela == '#tableSolicitacoes') {
         $(tabela).DataTable({
             "destroy": true,
@@ -516,41 +515,42 @@ function iniDataTable(tabela) {
         $(tabela).on('page.dt', function () {
             selectAll(false);
         }).DataTable();
-        return;
-    }
-    $(tabela).DataTable({
-        "destroy": true,
-        "paging": true,
-        "lengthChange": true,
-        "searching": true,
-        "ordering": true,
-        "info": true,
-        "autoWidth": true,
-        language: {
-            "decimal": "",
-            "emptyTable": "Nenhum dado na tabela",
-            "info": "_MAX_ resultados encontrados",
-            "infoEmpty": "",
-            "infoFiltered": "",
-            "infoPostFix": "",
-            "thousands": ",",
-            "lengthMenu": "Monstrando _MENU_ entradas",
-            "loadingRecords": "Carregando...",
-            "processing": "Processando...",
-            "search": "Pesquisar:",
-            "zeroRecords": "Nenhum resultado encontrado",
-            "paginate": {
-                "first": "Primeiro",
-                "last": "Último",
-                "next": "Próximo",
-                "previous": "Anterior"
-            },
-            "aria": {
-                "sortAscending": ": activate to sort column ascending",
-                "sortDescending": ": activate to sort column descending"
+    } else {
+        $(tabela).DataTable({
+            "destroy": true,
+            "paging": true,
+            "lengthChange": true,
+            "searching": true,
+            "ordering": true,
+            "order": [[0, "desc"]],
+            "info": true,
+            "autoWidth": true,
+            language: {
+                "decimal": "",
+                "emptyTable": "Nenhum dado na tabela",
+                "info": "_MAX_ resultados encontrados",
+                "infoEmpty": "",
+                "infoFiltered": "",
+                "infoPostFix": "",
+                "thousands": ",",
+                "lengthMenu": "Monstrando _MENU_ entradas",
+                "loadingRecords": "Carregando...",
+                "processing": "Processando...",
+                "search": "Pesquisar:",
+                "zeroRecords": "Nenhum resultado encontrado",
+                "paginate": {
+                    "first": "Primeiro",
+                    "last": "Último",
+                    "next": "Próximo",
+                    "previous": "Anterior"
+                },
+                "aria": {
+                    "sortAscending": ": activate to sort column ascending",
+                    "sortDescending": ": activate to sort column descending"
+                }
             }
-        }
-    });
+        });
+    }
 }
 function changeTipoContr(element) {
     var val = element.value;

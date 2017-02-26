@@ -102,11 +102,11 @@ if (!is_null($admin) && isset($_SESSION['id_setor']) && ($_SESSION['id_setor'] =
             break;
 
         case 'listRascunhos':
-            echo $obj_Busca->getRascunhos($_SESSION['id_setor']);
+            echo $obj_Busca->getRascunhos();
             break;
 
         case 'listPedidos':
-            echo $obj_Busca->getMeusPedidos($_SESSION['id_setor']);
+            echo $obj_Busca->getMeusPedidos();
             break;
 
         case 'listProcessos':
@@ -114,11 +114,11 @@ if (!is_null($admin) && isset($_SESSION['id_setor']) && ($_SESSION['id_setor'] =
             break;
 
         case 'iniSolicAltPedSetor':
-            echo $obj_Busca->getSolicAltPedidos($_SESSION['id_setor']);
+            echo $obj_Busca->getSolicAltPedidos();
             break;
 
         case 'listAdiantamentos':
-            echo $obj_Busca->getSolicAdiSetor($_SESSION['id_setor']);
+            echo $obj_Busca->getSolicAdiSetor();
             break;
 
         case 'addItemPedido':
