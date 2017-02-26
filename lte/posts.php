@@ -38,6 +38,8 @@ require_once '../defines.php';
         <link rel="stylesheet" href="plugins/font-awesome-4.7.0/css/font-awesome.min.css">
         <!-- Ionicons -->
         <link rel="stylesheet" href="plugins/ionicons/css/ionicons.min.css">
+        <!-- iCheck for checkboxes and radio inputs -->
+        <link rel="stylesheet" href="plugins/iCheck/all.css">
         <!-- Theme style -->
         <link rel="stylesheet" href="dist/css/AdminLTE.min.css">
         <!-- AdminLTE Skins. Choose a skin from the css/skins
@@ -295,6 +297,8 @@ require_once '../defines.php';
         <script src="plugins/datepicker/bootstrap-datepicker.js"></script>
         <!-- SlimScroll -->
         <script src="plugins/slimScroll/jquery.slimscroll.min.js"></script>
+        <!-- iCheck 1.0.1 -->
+        <script src="plugins/iCheck/icheck.min.js"></script>
         <!-- FastClick -->
         <script src="plugins/fastclick/fastclick.js"></script>
         <!-- AdminLTE App -->
@@ -348,6 +352,15 @@ require_once '../defines.php';
                                                 $('#data').datepicker({
                                                     autoclose: true,
                                                     format: 'yyyy-mm-dd'
+                                                });
+
+                                                $('.minimal').iCheck({
+                                                    checkboxClass: 'icheckbox_flat-blue',
+                                                    radioClass: 'iradio_flat-blue'
+                                                });
+
+                                                $('.minimal').on('ifChecked', function () {
+                                                    loadPosts(this);
                                                 });
 
                                                 $('#txtnoticia').froalaEditor({

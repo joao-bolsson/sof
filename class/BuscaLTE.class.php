@@ -40,22 +40,20 @@ class BuscaLTE extends Conexao {
      * 	@return string
      */
     public function getTabsNoticiasLTE(): string {
-        $retorno = "";
         self::openConnection();
         $query = $this->mysqli->query("SELECT id, tabela, nome FROM paginas_post") or exit("Erro ao buscar as abas de notícias para edição.");
         $this->mysqli = NULL;
+        $row = new Row();
         while ($pag = $query->fetch_object()) {
-            $retorno .= "
-                <td>
-                    <div class=\"radiobtn radiobtn-adv\">
-                        <label for=\"pag-" . $pag->tabela . "\">
-                            <input type=\"radio\" id=\"pag-" . $pag->tabela . "\" name=\"pag\" class=\"access-hide\" onclick=\"carregaPostsPag(" . $pag->id . ");\">" . $pag->nome . "
-                            <span class=\"radiobtn-circle\"></span><span class=\"radiobtn-circle-check\"></span>
-                        </label>
-                    </div>
-                </td>";
+            $radio = "<div class=\"form-group\" style=\"display: inline-block;\">
+                    <label>
+                        <input id=\"pag" . $pag->id . "\" type=\"radio\" name=\"pag\" class=\"minimal\" onclick=\"carregaPostsPag(" . $pag->id . ")\"/>
+                        " . $pag->nome . "
+                    </label>
+                </div>";
+            $row->addColumn(new Column($radio));
         }
-        return $retorno;
+        return $row;
     }
 
     /**

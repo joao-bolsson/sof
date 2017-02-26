@@ -212,7 +212,7 @@ $(function () {
             radioClass: 'iradio_flat-blue'
         });
         $('#' + id_e).on('ifChecked', function () {
-            selectAll(true)
+            selectAll(true);
         });
         $('#' + id_e).on('ifUnchecked', function () {
             selectAll(false);
@@ -221,18 +221,12 @@ $(function () {
 
 });
 
-function delArquivo(caminho) {
-    del = confirm("Este arquivo será excluído PERMANENTEMENTE do sistema! Estando impossibilitada a sua recuperação.");
-    if (del) {
-        $.post('../php/geral.php', {
-            admin: 1,
-            form: 'delArquivo',
-            caminhoDel: caminho
-        }, function (resposta) {
-            alert(resposta);
-            location.reload();
-        });
+function loadPosts(element) {
+    if (element === null) {
+        return;
     }
+    var id = element.id.replace('pag', '');
+    carregaPostsPag(id);
 }
 
 function carregaPostsPag(tabela) {
@@ -241,9 +235,7 @@ function carregaPostsPag(tabela) {
         form: 'carregaPostsPag',
         tabela: tabela
     }, function (resposta) {
-//        $('#tableNoticiasEditar').DataTable().destroy();
         $('#contNoticiasEditar').html(resposta);
-//        iniDataTable('#tableNoticiasEditar');
     });
 }
 
