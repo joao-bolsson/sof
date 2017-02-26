@@ -231,6 +231,9 @@ require_once '../defines.php';
                             <h4 class="modal-title">Editar Notícia</h4>
                         </div>
                         <div class="modal-body">
+                            <div id="overlayLoad" class="overlay" style="display: none;">
+                                <i class="fa fa-refresh fa-spin"></i>
+                            </div>
                             <table class="table">
                                 <tr>
                                     <?= $obj_Busca->getTabsNoticiasLTE(); ?>

@@ -230,12 +230,14 @@ function loadPosts(element) {
 }
 
 function carregaPostsPag(tabela) {
+    document.getElementById('overlayLoad').style.display = 'block';
     $.post('../php/buscaLTE.php', {
         admin: 1,
         form: 'carregaPostsPag',
         tabela: tabela
     }, function (resposta) {
         $('#contNoticiasEditar').html(resposta);
+        document.getElementById('overlayLoad').style.display = 'none';
     });
 }
 
