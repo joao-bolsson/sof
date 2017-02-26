@@ -957,7 +957,7 @@ if (isset($_SESSION['editmode'])) {
                                                 <td colspan="2">
                                                     <div class="form-group">
                                                         <label>Observação</label>
-                                                        <textarea class="form-control" id="obs" name="obs" rows="2" required></textarea>
+                                                        <textarea class="form-control" id="obs" name="obs" rows="2"></textarea>
                                                     </div>
                                                 </td>
                                             </tr>

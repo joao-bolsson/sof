@@ -743,6 +743,21 @@ class PrintMod extends Conexao {
                 $retorno .= $table . '<br>';
             }
         }
+        $query_all = $this->mysqli->query('SELECT DISTINCT num_processo FROM itens WHERE num_processo NOT IN (SELECT DISTINCT num_processo FROM processos)') or exit('Erro ao buscar todos os processos.');
+        if ($query_all->num_rows > 0) {
+            $retorno .= "<fieldset class=\"preg\"><h5>Processos Não Cadastrados</h5></fieldset><br>";
+            $table = new Table('', 'prod', ['Processo', 'Tipo', 'Estante', 'Prateleira'], true);
+            while ($processo = $query_all->fetch_object()) {
+                $row = new Row();
+                $row->addColumn(new Column($processo->num_processo));
+                $row->addColumn(new Column('______________________'));
+                $row->addColumn(new Column('______________________'));
+                $row->addColumn(new Column('______________________'));
+
+                $table->addRow($row);
+            }
+            $retorno .= $table;
+        }
 
         $this->mysqli = NULL;
         return $retorno;
