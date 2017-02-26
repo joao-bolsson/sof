@@ -131,8 +131,12 @@ require_once '../defines.php';
                             <?= $_SESSION['nome_setor']; ?>
                         </h1>
                         <ol class="breadcrumb">
-                            <li><a href="index.php"><i class="fa fa-dashboard"></i> Início</a></li>
-                            <li class="active">Publicações</li>
+                            <?php if ($permissao->pedidos || $permissao->recepcao || $permissao->saldos): ?>
+                                <li><a href="index.php"><i class="fa fa-dashboard"></i> Início</a></li>
+                                <li class="active">Publicações</li>
+                            <?php else : ?>
+                                <li><a href="posts.php"><i class="fa fa-dashboard"></i> Publicações</a></li>
+                            <?php endif; ?>
                         </ol>
                     </section>
 

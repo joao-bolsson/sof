@@ -440,7 +440,7 @@ if ($obj_Busca->isActive()) {
                     $id_noticia = $obj_Geral->setPost($data, $postagem, $pag);
 
                     if ($id_noticia != 0) {
-                        header("Location: ../admin/");
+                        header("Location: ../lte/posts.php");
                     } else {
                         echo "Ocorreu um erro no servidor. Contate o administrador.";
                     }
@@ -449,7 +449,7 @@ if ($obj_Busca->isActive()) {
 
                     $editar = $obj_Geral->editPost($data, $id, $postagem, $pag);
                     if ($editar) {
-                        header("Location: ../admin/");
+                        header("Location: ../lte/posts.php");
                     } else {
                         echo "Ocorreu um erro no servidor. Contate o administrador.";
                     }

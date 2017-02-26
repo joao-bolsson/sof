@@ -282,11 +282,7 @@ function excluirNoticia(id) {
             form: 'excluirNoticia',
             id: id
         }, function (resposta) {
-            if (!resposta) {
-                location.reload();
-            } else {
-                carregaPostsPag(resposta);
-            }
+            location.reload();
         });
     }
 }
