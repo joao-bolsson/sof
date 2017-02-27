@@ -38,6 +38,11 @@ if (!is_null($filter)) {
 if (!is_null($admin) && isset($_SESSION['id_setor']) && ($_SESSION['id_setor'] == 2 || $_SESSION['id_setor'] == 12)) {
 
     switch ($form) {
+        
+        case 'carregaPostsPag':
+            $tabela = filter_input(INPUT_POST, 'tabela');
+            echo $obj_Busca->getNoticiasEditar($tabela);
+            break;
 
         case 'customRel':
             $pedidos = filter_input(INPUT_POST, 'pedidos', FILTER_DEFAULT, FILTER_FORCE_ARRAY);

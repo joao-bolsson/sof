@@ -115,6 +115,16 @@ if (isset($_SESSION['editmode'])) {
                     </div>
                     <!-- sidebar menu: : style can be found in sidebar.less -->
                     <ul class="sidebar-menu">
+                        <?php if ($permissao->noticias): ?>
+                            <li>
+                                <a href="posts.php">
+                                    <i class="fa fa-newspaper-o"></i> <span>Postar</span>
+                                    <span class="pull-right-container">
+                                        <small class="label pull-right bg-blue">novo</small>
+                                    </span>
+                                </a>
+                            </li>
+                        <?php endif; ?>
                         <?php if (!$permissao->recepcao): ?>
                             <li>
                                 <a href="javascript:mostra('rowCadRP');">

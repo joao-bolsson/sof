@@ -65,7 +65,7 @@ if (!isset($_SESSION["id_setor"]) || $_SESSION["id_setor"] == 0) {
 			<ul class="nav nav-list">
       <?php if ($btnAdmin): ?>
         <li>
-          <a class="btn btn-flat waves-attach waves-light" href="../admin/"><span class="text-white"><span class="icon">power_settings_new</span>ADMIN</span></a>
+          <a class="btn btn-flat waves-attach waves-light" href="../lte/"><span class="text-white"><span class="icon">power_settings_new</span>ADMIN</span></a>
         </li>
       <?php else: ?>
         <li class="active">

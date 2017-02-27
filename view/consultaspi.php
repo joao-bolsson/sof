@@ -57,7 +57,7 @@ $obj_Busca = new Busca();
       <ul class="nav nav-list">
       <?php if ($btnAdmin): ?>
         <li class="active">
-          <a class="btn btn-flat waves-attach waves-light" href="../admin/"><span class="text-white"><span class="icon">power_settings_new</span>ADMIN</span></a>
+          <a class="btn btn-flat waves-attach waves-light" href="../lte/"><span class="text-white"><span class="icon">power_settings_new</span>ADMIN</span></a>
         </li>
       <?php endif;?>
       <?php if ($btnLogin): ?>
