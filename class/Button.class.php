@@ -6,7 +6,7 @@
  * @author João Bolsson (joaovictorbolsson@gmail.com)
  * @since 2017, 21 Feb.
  */
-class Button {
+class Button implements Component {
 
     /**
      * Type of button, default: button
@@ -79,6 +79,10 @@ class Button {
         $button = "<button type=\"" . $this->type . "\"" . $class . $onclick . $attr . $title . ">" . $icon . "</button>";
 
         return $button;
+    }
+
+    public function addComponent(Component $c) {
+        // do nothing
     }
 
 }

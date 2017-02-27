@@ -541,13 +541,12 @@ class BuscaLTE extends Conexao {
     }
 
     private static final function buildButtonsSolicAdi(int $id): string {
-        $group = "<div class=\"btn-group\">";
+        $div = new Div('btn-group');
 
-        $btn_aprovar = new Button('', 'btn btn-default', "analisaAdi(" . $id . ", 1)", "data-toggle=\"tooltip\"", 'Aprovar', 'check');
-        $btn_reprovar = new Button('', 'btn btn-default', "analisaAdi(" . $id . ", 0)", "data-toggle=\"tooltip\"", 'Reprovar', 'trash');
+        $div->addComponent(new Button('', 'btn btn-default', "analisaAdi(" . $id . ", 1)", "data-toggle=\"tooltip\"", 'Aprovar', 'check'));
+        $div->addComponent(new Button('', 'btn btn-default', "analisaAdi(" . $id . ", 0)", "data-toggle=\"tooltip\"", 'Reprovar', 'trash'));
 
-        $group .= $btn_aprovar . $btn_reprovar . '</div>';
-        return $group;
+        return $div;
     }
 
     /**
@@ -573,31 +572,30 @@ class BuscaLTE extends Conexao {
      * @param int $id_setor Id do setor que fez o pedido.
      */
     private function buildButtons(int $id, int $status, int $id_setor): string {
-        $btnAnalisar = "<div class=\"btn-group\">";
+        $component = new Div('btn-group');
 
         if ($status != 3 && $status != 4) {
             if ($_SESSION['id_setor'] == 12) {
-                $btnAnalisar .= new Button('', 'btn btn-default', "enviaForn(" . $id . ")", "data-toggle=\"tooltip\"", 'Enviar ao Fornecedor', 'send');
+                $component->addComponent(new Button('', 'btn btn-default', "enviaForn(" . $id . ")", "data-toggle=\"tooltip\"", 'Enviar ao Fornecedor', 'send'));
             } else if ($status == 2) {
-                $btnAnalisar .= new Button('', 'btn btn-default', "analisarPedido(" . $id . ", " . $id_setor . ")", "data-toggle=\"tooltip\"", 'Analisar', 'pencil');
+                $component->addComponent(new Button('', 'btn btn-default', "analisarPedido(" . $id . ", " . $id_setor . ")", "data-toggle=\"tooltip\"", 'Analisar', 'pencil'));
             } else if ($status == 5) {
-                $btnAnalisar .= new Button('', 'btn btn-default', "cadFontes(" . $id . ")", "data-toggle=\"tooltip\"", 'Cadastrar Fontes', 'comment');
+                $component->addComponent(new Button('', 'btn btn-default', "cadFontes(" . $id . ")", "data-toggle=\"tooltip\"", 'Cadastrar Fontes', 'comment'));
             } else if ($status == 6) {
-                $btnAnalisar .= new Button('', 'btn btn-default', "cadEmpenho(" . $id . ")", "data-toggle=\"tooltip\"", 'Cadastrar Empenho', 'credit-card');
+                $component->addComponent(new Button('', 'btn btn-default', "cadEmpenho(" . $id . ")", "data-toggle=\"tooltip\"", 'Cadastrar Empenho', 'credit-card'));
             } else if ($status == 7) {
-                $btnAnalisar .= new Button('', 'btn btn-default', "enviaOrdenador(" . $id . ")", "data-toggle=\"tooltip\"", 'Enviar ao Ordenador', 'send');
+                $component->addComponent(new Button('', 'btn btn-default', "enviaOrdenador(" . $id . ")", "data-toggle=\"tooltip\"", 'Enviar ao Ordenador', 'send'));
             } else {
-                $btnAnalisar .= new Button('', 'btn btn-default', "getStatus(" . $id . ", " . $id_setor . ")", "data-toggle=\"tooltip\"", 'Alterar Status', 'wrench');
+                $component->addComponent(new Button('', 'btn btn-default', "getStatus(" . $id . ", " . $id_setor . ")", "data-toggle=\"tooltip\"", 'Alterar Status', 'wrench'));
             }
         }
 
         if (self::verEmpenho($id) != 'EMPENHO SIAFI PENDENTE' && $_SESSION['id_setor'] != 12 && $status > 6) {
-            $btnAnalisar .= new Button('', 'btn btn-default', "cadEmpenho(" . $id . ", '" . self::verEmpenho($id) . "', '" . self::verDataEmpenho($id) . "')", "data-toggle=\"tooltip\"", 'Cadastrar Empenho', 'credit-card');
+            $component->addComponent(new Button('', 'btn btn-default', "cadEmpenho(" . $id . ", '" . self::verEmpenho($id) . "', '" . self::verDataEmpenho($id) . "')", "data-toggle=\"tooltip\"", 'Cadastrar Empenho', 'credit-card'));
         }
 
-        $btnAnalisar .= new Button('', 'btn btn-default', "imprimir(" . $id . ")", "data-toggle=\"tooltip\"", 'Imprimir', 'print');
-        $btnAnalisar .= "</div>";
-        return $btnAnalisar;
+        $component->addComponent(new Button('', 'btn btn-default', "imprimir(" . $id . ")", "data-toggle=\"tooltip\"", 'Imprimir', 'print'));
+        return $component;
     }
 
     /**
@@ -633,10 +631,7 @@ class BuscaLTE extends Conexao {
                     $btnVerEmpenho = '';
                 }
                 $pedido->valor = number_format($pedido->valor, 3, ',', '.');
-                $aprovGerencia = '';
-                if ($pedido->aprov_gerencia) {
-                    $aprovGerencia = new Small('label pull-right bg-gray', 'A', "data-toggle=\"tooltip\"", 'Aprovado pela Gerência');
-                }
+                $aprovGerencia = ($pedido->aprov_gerencia) ? new Small('label pull-right bg-gray', 'A', "data-toggle=\"tooltip\"", 'Aprovado pela Gerência') : '';
 
                 $check_all = "
                 <div class=\"form-group\">
