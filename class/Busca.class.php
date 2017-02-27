@@ -402,30 +402,6 @@ class Busca extends Conexao {
     }
 
     /**
-     * 	Função para retornar a tabela de notícias de uma página para edição
-     *
-     * 	@return string
-     */
-    public function getNoticiasEditar(int $tabela): string {
-        $retorno = "";
-        Busca::openConnection();
-        $query = $this->mysqli->query("SELECT id, tabela, titulo, DATE_FORMAT(data, '%d/%m/%Y') AS data FROM postagens WHERE ativa = 1 AND tabela = " . $tabela . " ORDER BY data ASC;") or exit("Erro ao buscar as notícias para editar.");
-        $this->mysqli = NULL;
-        while ($postagem = $query->fetch_object()) {
-            $retorno .= "
-                <tr>
-                    <td>" . $postagem->data . "</td>
-                    <td>" . $postagem->titulo . "</td>
-                    <td>
-                        <button class=\"btn btn-default btn-sm\" style=\"text-transform: none !important;font-weight: bold;\" onclick=\"editaNoticia(" . $postagem->id . ", " . $postagem->tabela . ", '" . $postagem->data . "')\" title=\"Editar\"><span class=\"icon\">create</span></button>
-                        <button class=\"btn btn-default btn-sm\" style=\"text-transform: none !important;font-weight: bold;\" onclick=\"excluirNoticia(" . $postagem->id . ");\" title=\"Excluir\"><span class=\"icon\">delete</span></button>
-                    </td>
-                </tr>";
-        }
-        return $retorno;
-    }
-
-    /**
      * Função para buscar conteúdo de uma publicação para edição.
      *
      * @return string
@@ -436,22 +412,6 @@ class Busca extends Conexao {
         $this->mysqli = NULL;
         $publicacao = $query->fetch_object();
         return $publicacao->postagem;
-    }
-
-    /**
-     * Função para escrever as opções para "Postar em " do painel administrativo
-     *
-     * @return string
-     */
-    public function getPostarEm(): string {
-        $retorno = "";
-        Busca::openConnection();
-        $query = $this->mysqli->query("SELECT id, nome FROM paginas_post;") or exit("Erro ao buscar as páginas para postagem.");
-        $this->mysqli = NULL;
-        while ($pagina = $query->fetch_object()) {
-            $retorno .= "<option id=\"op" . $pagina->id . "\" value=\"" . $pagina->id . "\">" . $pagina->nome . "</option>";
-        }
-        return $retorno;
     }
 
     /**

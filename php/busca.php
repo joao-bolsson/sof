@@ -82,11 +82,6 @@ if (!is_null($admin) && isset($_SESSION['id_setor']) && ($_SESSION['id_setor'] =
             echo $obj_Busca->getPublicacaoEditar($id);
             break;
 
-        case 'carregaPostsPag':
-            $tabela = filter_input(INPUT_POST, 'tabela');
-            echo $obj_Busca->getNoticiasEditar($tabela);
-            break;
-
         case 'infoPedido':
             $id_pedido = filter_input(INPUT_POST, 'id_pedido');
             $id_setor = filter_input(INPUT_POST, 'id_setor');
