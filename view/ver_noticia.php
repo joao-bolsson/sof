@@ -4,25 +4,11 @@ session_start();
 ini_set('display_erros', true);
 error_reporting(E_ALL);
 
-//define se o botão de LOGIN deve ou não existir
-$btnLogin = true;
-//define se o botão de ADMIN deve ou não existir
-$btnAdmin = false;
-//define se o botão sair deve ou não existir
-$btnSair = false;
-$hrefSolicitacoes = "javascript:abreModal('#login');";
-if (!isset($_SESSION["id_setor"]) || $_SESSION["id_setor"] == 0) {
-    $_SESSION["id_setor"] = 0;
-} else {
-    //o botão admin deve existir
-    if ($_SESSION["id_setor"] == 2) {
-        $btnAdmin = true;
-    }
-    $hrefSolicitacoes = "../lte/solicitacoes.php";
-    $btnLogin = false;
-    $btnSair = true;
-}
-include_once '../class/Busca.class.php';
+spl_autoload_register(function (string $class_name) {
+    include_once '../class/' . $class_name . '.class.php';
+});
+
+$controller = new Controller();
 //instanciando classe de busca para popular o select de estados
 $obj_Busca = new Busca();
 $id = 0;
@@ -62,21 +48,7 @@ if (!isset($_SESSION["id_noticia"]) && !isset($_SESSION["pag"])) {
             </ul>
             <nav class="tab-nav pull-right ">
                 <ul class="nav nav-list">
-                    <?php if ($btnAdmin): ?>
-                        <li class="active">
-                            <a class="btn btn-flat waves-attach waves-light" href="../lte/"><span class="text-white"><span class="icon">power_settings_new</span>ADMIN</span></a>
-                        </li>
-                    <?php endif; ?>
-                    <?php if ($btnLogin): ?>
-                        <li class="active">
-                            <a class="btn btn-flat waves-attach waves-light" href="javascript:abreModal('#login');"><span class="text-white"><span class="icon">power_settings_new</span>LOGIN</span></a>
-                        </li>
-                    <?php endif; ?>
-                    <?php if ($btnSair): ?>
-                        <li>
-                            <a class="btn btn-flat waves-attach waves-light" href="../admin/sair.php"><span class="text-white"><span class="icon">undo</span>SAIR</span></a>
-                        </li>
-                    <?php endif; ?>
+                    <?= $controller->buttonsRight() ?>
                 </ul>
             </nav>
         </header>
@@ -106,7 +78,7 @@ if (!isset($_SESSION["id_noticia"]) && !isset($_SESSION["pag"])) {
                             <a class="collapsed waves-attach" data-toggle="collapse" href="#servicossof"><span class="text-black"><span class="icon">payment</span>SERVIÇOS DO SOF</a>
                             <ul class="menu-collapse collapse" id="servicossof">
                                 <li>
-                                    <a class="waves-attach" href="<?= $hrefSolicitacoes ?>">SOLICITAÇÕES DE EMPENHO</a>
+                                    <a class="waves-attach" href="<?= $controller->hrefSolic() ?>">SOLICITAÇÕES DE EMPENHO</a>
                                 </li>
                                 <li>
                                     <a class="waves-attach" href="consultaspi.php">SOLICITAÇÕES GERAIS</a>
@@ -201,12 +173,12 @@ if (!isset($_SESSION["id_noticia"]) && !isset($_SESSION["pag"])) {
                                         <a class="waves-attach" data-toggle="dropdown"><span class="text-white"><span class="icon">payments</span>SERVIÇOS SOF</span><span class="icon margin-left-sm">keyboard_arrow_down</span></a>
                                         <ul class="dropdown-menu nav">
                                             <li>
-                                                <a class="waves-attach" href="<?= $hrefSolicitacoes ?>">SOLICITAÇÕES DE EMPENHO</a>
+                                                <a class="waves-attach" href="<?= $controller->hrefSolic() ?>">SOLICITAÇÕES DE EMPENHO</a>
                                             </li>
                                             <li>
                                                 <a class="waves-attach" href="consultaspi.php">SOLICITAÇÕES GERAIS</a>
                                             <li>
-                                                <a class="waves-attach" href="<?= $hrefSolicitacoes ?>">Solicitações de Empenho</a>
+                                                <a class="waves-attach" href="<?= $controller->hrefSolic() ?>">Solicitações de Empenho</a>
                                             </li>
                                             <li>
                                                 <a class="waves-attach" href="consultaspi.php">Solicitações Gerais</a>
