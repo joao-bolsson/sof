@@ -51,4 +51,20 @@ class Controller {
         return $return;
     }
 
+    /**
+     * @return string Footer to docs to ordenator.
+     */
+    public static final function footerOrdenator(): string {
+        return "<br><br><br>
+        <h5 class=\"ass\" style=\"margin-right: 50%; margin-bottom: 0;\">
+        _______________________________________________<br>
+        RESPONSÁVEL PELA INFORMAÇÃO
+        </h5>
+        <h5 class=\"ass\" style=\"margin-left: 51%; margin-top: -32px;\">
+        _______________________________________________<br>
+        RESPONSÁVEL PELO RECEBIMENTO
+        </h5><br><br>
+        <h4 style=\"text-align: center\" class=\"ass\">Santa Maria, ___ de ___________________ de _____.</h4>";
+    }
+
 }

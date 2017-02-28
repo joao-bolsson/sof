@@ -80,19 +80,19 @@ class PrintMod extends Conexao {
                     </tr>
                 </table>
                 <p><b>Total do Pedido:</b> R$ " . $pedido->valor . "</p>
-                <p><b>Autor:</b> " . PrintMod::getUserName($pedido->id_usuario) . "</p>
+                <p><b>Autor:</b> " . self::getUserName($pedido->id_usuario) . "</p>
                 <table style=\"font-size: 8pt; margin: 5px;\">
                     <tr>
-                        <td style=\"text-align: left;\">" . PrintMod::getGrupoPedido($id_pedido) . "</td>
-                        <td style=\"text-align: right;\">" . PrintMod::getEmpenho($id_pedido) . "</td>
+                        <td style=\"text-align: left;\">" . self::getGrupoPedido($id_pedido) . "</td>
+                        <td style=\"text-align: right;\">" . self::getEmpenho($id_pedido) . "</td>
                     </tr>
                 </table>";
         $retorno .= ($pedido->aprov_gerencia) ? '<p><b>Aprovado Pela Gerência</b></p>' : '';
         $retorno .= "<p><b>Observação da Unidade Solicitante: </b></p>
                 <p style=\"font-weight: normal !important;\">	" . $pedido->obs . "</p>
             </fieldset><br>";
-        $retorno .= PrintMod::getTableFontes($id_pedido);
-        $retorno .= PrintMod::getTableLicitacao($id_pedido);
+        $retorno .= self::getTableFontes($id_pedido);
+        $retorno .= self::getTableLicitacao($id_pedido);
         return $retorno;
     }
 
@@ -321,21 +321,16 @@ class PrintMod extends Conexao {
      * @return string Relatório personalizado pelo SOF.
      */
     public function getRelPed(array $pedidos, int $status = 8) {
-        $retorno = "";
         if (empty($pedidos)) {
-            return $retorno;
+            return '';
         }
-
-        $where_status = "AND pedido.status = " . $status;
-        if ($status == 0) {
-            $where_status = '';
-        }
+        $retorno = '';
+        $where_status = ($status != 0) ? 'AND pedido.status = ' . $status : '';
         if ($status == 8) {
             $where_empenho = "AND pedido_empenho.id_pedido = pedido.id";
             $tb_empenho = "pedido_empenho, ";
             $empenho = ", pedido_empenho.empenho";
         }
-        self::openConnection();
 
         $where_pedidos = '(';
         $len = count($pedidos);
@@ -347,109 +342,81 @@ class PrintMod extends Conexao {
         }
         $where_pedidos .= ')';
 
+        self::openConnection();
         $query = $this->mysqli->query("SELECT pedido.id, setores.nome AS setor, DATE_FORMAT(pedido.data_pedido, '%d/%m/%Y') AS data_pedido, prioridade.nome AS prioridade, status.id AS id_status, status.nome AS status, pedido.valor " . $empenho . " FROM " . $tb_empenho . " setores, pedido, prioridade, status WHERE status.id = pedido.status " . $where_empenho . " AND prioridade.id = pedido.prioridade AND pedido.id_setor = setores.id " . $where_status . " AND " . $where_pedidos . " ORDER BY pedido.id ASC") or exit('Erro ao buscar os pedidos com as especificações do usuário');
 
-        $titulo = 'Relatório de Pedidos por Setor e Nível de Prioridade';
-        if ($query) {
-            $thead = "
-                <th>Enviado em</th>
-                <th>Prioridade</th>
-                <th>Status</th>
-                <th>Valor</th>";
-            if ($status == 8) {
-                $titulo = "Relatório de Empenhos Enviados ao Ordenador";
-                $thead = "
-                    <th>Prioridade</th>
-                    <th>SIAFI</th>";
-            }
-            self::openConnection();
-            $query_tot = $this->mysqli->query("SELECT sum(pedido.valor) AS total FROM {$tb_empenho} pedido WHERE 1 > 0 {$where_empenho} AND pedido.alteracao = 0 {$where_status};") or exit("Erro ao somar os pedidos.");
-            $this->mysqli = NULL;
-            $total = "R$ 0";
-            $tot = $query_tot->fetch_object();
-            if ($tot->total > 0) {
-                $total = "R$ " . number_format($tot->total, 3, ',', '.');
-            }
-            $retorno .= "
-                <fieldset class=\"preg\">
+        $titulo = ($status == 8) ? 'Relatório de Empenhos Enviados ao Ordenador' : 'Relatório de Pedidos por Setor e Nível de Prioridade';
+
+        $headers = ['Pedido', 'Fornecedor', 'Setor'];
+        $count = count($headers);
+
+        if ($status == 8) {
+            $headers[$count] = 'Prioridade';
+            $headers[$count + 1] = 'SIAFI';
+        } else {
+            $headers[$count] = 'Enviado em';
+            $headers[$count + 1] = 'Prioridade';
+            $headers[$count + 2] = 'Status';
+            $headers[$count + 3] = 'Valor';
+        }
+        $query_tot = $this->mysqli->query('SELECT sum(pedido.valor) AS total FROM ' . $tb_empenho . ' pedido WHERE 1 > 0 ' . $where_empenho . ' AND pedido.alteracao = 0 ' . $where_status) or exit('Erro ao somar os pedidos');
+        $this->mysqli = NULL;
+        $tot = $query_tot->fetch_object();
+        $total = ($tot->total > 0) ? 'R$ ' . number_format($tot->total, 3, ',', '.') : 'R$ 0';
+        $retorno .= "<fieldset class=\"preg\">
                     <h5>DESCRIÇÃO DO RELATÓRIO</h5>
                     <h6>" . $titulo . "</h6>
-                    <h6>Pedidos selecionados pelo SOF</h6>
-                </fieldset><br>";
-            $sub_header = "
-                <fieldset class=\"preg\">
-                    <table>
-                        <tr>
-                            <td>" . count($pedidos) . " selecionados</td>
-                            <td>Totalizando " . $total . "</td>
-                        </tr>
-                    </table>
-                </fieldset>";
-            $table_pedidos = "
-                <table class=\"prod\">
-                    <thead>
-                        <tr>
-                            <th>Pedido</th>
-                            <th>Fornecedor</th>
-                            <th>Setor</th>
-                            " . $thead . "
-                        </tr>
-                    </thead>
-                    <tbody>";
-            if (is_null($this->obj_Busca)) {
-                $this->obj_Busca = new BuscaLTE();
-            }
-            $flag = false;
-            $i = 0;
-            while ($pedido = $query->fetch_object()) {
-                $tbody = '';
-                if ($pedido->id_status != 8) {
-                    $flag = true;
-                    break;
-                } else {
-                    $i++;
-                }
-                if ($status == 8) {
-                    $tbody = "
-                        <td>" . $pedido->prioridade . "</td>
-                        <td>" . $pedido->empenho . "</td>";
-                } else {
-                    $tbody = "
-                        <td>" . $pedido->data_pedido . "</td>
-                        <td>" . $pedido->prioridade . "</td>
-                        <td>" . $pedido->status . "</td>
-                        <td>R$ " . $pedido->valor . "</td>";
-                }
-                $table_pedidos .= "
-                        <tr>
-                            <td>" . $pedido->id . "</td>
-                            <td>" . $this->obj_Busca->getFornecedor($pedido->id) . "</td>
-                            <td>" . $pedido->setor . "</td>
-                            " . $tbody . "
-                        </tr>";
-            }
-            $table_pedidos .= "<tbody></table>";
-            if ($query->num_rows > 0 && !$flag && $i == count($pedidos)) {
-                $retorno .= $sub_header . $table_pedidos;
-            } else {
-                $retorno .= 'RELATÓRIO INVÁLIDO: Essa versão suporta apenas pedidos com status de Enviado ao Ordenador.';
-                $flag = true;
-            }
+                    <h6>Pedidos selecionados pelo SOF</h6></fieldset><br>";
+
+        $row = new Row();
+        $row->addColumn(new Column(count($pedidos) . ' selecionados'));
+        $row->addColumn(new Column('Totalizando ' . $total));
+        
+        $sub_header = "<fieldset class=\"preg\"><table>" . $row . "</table></fieldset>";
+        
+        $table = new Table('', 'prod', $headers, true);
+
+        if (is_null($this->obj_Busca)) {
+            $this->obj_Busca = new BuscaLTE();
         }
-        if ($status == 8 && !$flag && $i == count($pedidos)) {
-            $retorno .= "
-                <br><br><br>
-                <h5 class=\"ass\" style=\"margin-right: 50%; margin-bottom: 0;\">
-                _______________________________________________<br>
-                RESPONSÁVEL PELA INFORMAÇÃO
-                </h5>
-                <h5 class=\"ass\" style=\"margin-left: 51%; margin-top: -32px;\">
-                _______________________________________________<br>
-                RESPONSÁVEL PELO RECEBIMENTO
-                </h5><br><br>
-                <h4 style=\"text-align: center\" class=\"ass\">Santa Maria, ___ de ___________________ de _____.</h4>";
+        $flag = false;
+        $i = 0;
+        while ($pedido = $query->fetch_object()) {
+            if ($pedido->id_status != 8) {
+                $flag = true;
+                break;
+            } else {
+                $i++;
+            }
+
+            $row = new Row();
+            $row->addColumn(new Column($pedido->id));
+            $row->addColumn(new Column($this->obj_Busca->getFornecedor($pedido->id)));
+            $row->addColumn(new Column($pedido->setor));
+
+            if ($status == 8) {
+                $row->addColumn(new Column($pedido->prioridade));
+                $row->addColumn(new Column($pedido->empenho));
+            } else {
+                $row->addColumn(new Column($pedido->data_pedido));
+                $row->addColumn(new Column($pedido->prioridade));
+                $row->addColumn(new Column($pedido->status));
+                $row->addColumn(new Column('R$ ' . $pedido->valor));
+            }
+
+            $table->addRow($row);
         }
         $this->obj_Busca = NULL;
+        if ($query->num_rows > 0 && !$flag && $i == count($pedidos)) {
+            $retorno .= $sub_header . $table;
+        } else {
+            $retorno .= 'RELATÓRIO INVÁLIDO: Essa versão suporta apenas pedidos com status de Enviado ao Ordenador.';
+            $flag = true;
+        }
+
+        if ($status == 8 && !$flag && $i == count($pedidos)) {
+            $retorno .= Controller::footerOrdenator();
+        }
         return $retorno;
     }
 
@@ -655,17 +622,7 @@ class PrintMod extends Conexao {
         }
 
         if (in_array(8, $status)) {
-            $retorno .= "
-                <br><br><br>
-                <h5 class=\"ass\" style=\"margin-right: 50%; margin-bottom: 0;\">
-                _______________________________________________<br>
-                RESPONSÁVEL PELA INFORMAÇÃO
-                </h5>
-                <h5 class=\"ass\" style=\"margin-left: 51%; margin-top: -32px;\">
-                _______________________________________________<br>
-                RESPONSÁVEL PELO RECEBIMENTO
-                </h5><br><br>
-                <h4 style=\"text-align: center\" class=\"ass\">Santa Maria, ___ de ___________________ de _____.</h4>";
+            $retorno .= Controller::footerOrdenator();
         }
         $this->obj_Busca = NULL;
         return $retorno;
