@@ -1,5 +1,19 @@
 ## CHANGELOG ##
 
+#### v2.1.7 - 28/02/2017 ####
+- Limita o carregamento de pedidos dos setores em 'Meus Pedidos'
+- Corrige erro ao enviar e-mail
+- Corrige bug da seleção de pedidos após o carregamento de pedidos na tabela principal do SOF
+- Adiciona campo "Descrição da Despesa" na edição de itens
+- Retira janela "Relatório" de pedidos que apresentava uma tabela (desuso)
+- Complementa o relatório de processos da recepção
+- Corrige bug da impressão de pedidos env. ao ord. após a seleção prévia pelo SOF na tabela principal.
+- Melhora o cadastro de usuário (permissão de repepção exclui as outras 3 e vice-versa)
+- Nova interface para publicação de notícias (altera a página inicial após o login)
+- Implementa status de carregameto dentro das janelas (carregamento dos meus pedidos)
+- Mostra o número do processo nos itens de um rascunho
+- Melhoria de funções e implementação de novas classes para a construção da interface
+
 #### v2.1.6 - 18/02/2017 ####
 - Cadastro de itens de RP manualmente
 - Atualização da biblioteca de geração de pdf (5.7 -> 6.1.0)
