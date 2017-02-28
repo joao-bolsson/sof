@@ -38,29 +38,21 @@ class PrintMod extends Conexao {
                     <h5>DESCRIÇÃO DO RELATÓRIO</h5>
                     <h6>Relatório de Usuários Cadastrados no Sistema</h6>
                 </fieldset><br>
-            <fieldset>
-                <table class=\"prod\">
-                    <thead>
-                        <tr>
-                            <th>Nome</th>
-                            <th>Login</th>
-                            <th>Setor</th>
-                            <th>E-mail</th>
-                        </tr>
-                    </thead>
-                    <tbody>";
+            <fieldset>";
+
+        $table = new Table('', 'prod', ['Nome', 'Login', 'Setor', 'E-mail'], true);
 
         while ($user = $query->fetch_object()) {
-            $retorno .= " 
-            <tr>
-                <td>" . $user->nome . "</td>
-                <td>" . $user->login . "</td>
-                <td>" . ARRAY_SETORES[$user->id_setor] . "</td>
-                <td>" . $user->email . "</td>
-            </tr>";
+            $row = new Row();
+            $row->addColumn(new Column($user->nome));
+            $row->addColumn(new Column($user->login));
+            $row->addColumn(new Column(ARRAY_SETORES[$user->id_setor]));
+            $row->addColumn(new Column($user->email));
+
+            $table->addRow($row);
         }
 
-        $retorno .= "</tbody></table></fieldset>";
+        $retorno .= $table . '</fieldset>';
 
         return $retorno;
     }
@@ -72,13 +64,10 @@ class PrintMod extends Conexao {
      */
     public function getHeader(int $id_pedido): string {
         self::openConnection();
-        $query = $this->mysqli->query("SELECT pedido.id, DATE_FORMAT(pedido.data_pedido, '%d/%m/%Y') AS data_pedido, EXTRACT(YEAR FROM pedido.data_pedido) AS ano, mes.sigla_mes AS ref_mes, status.nome AS status, pedido.valor AS valor, pedido.obs, pedido.pedido_contrato, prioridade.nome AS prioridade, pedido.aprov_gerencia, pedido.id_usuario FROM prioridade, pedido, mes, status WHERE pedido.prioridade = prioridade.id AND status.id = pedido.status AND pedido.id = {$id_pedido} AND mes.id = pedido.ref_mes;") or exit("Erro ao formar o cabeçalho do pedido.");
+        $query = $this->mysqli->query("SELECT pedido.id, DATE_FORMAT(pedido.data_pedido, '%d/%m/%Y') AS data_pedido, EXTRACT(YEAR FROM pedido.data_pedido) AS ano, mes.sigla_mes AS ref_mes, status.nome AS status, pedido.valor AS valor, pedido.obs, pedido.pedido_contrato, prioridade.nome AS prioridade, pedido.aprov_gerencia, pedido.id_usuario FROM prioridade, pedido, mes, status WHERE pedido.prioridade = prioridade.id AND status.id = pedido.status AND pedido.id = " . $id_pedido . ' AND mes.id = pedido.ref_mes') or exit('Erro ao formar o cabeçalho do pedido');
         $this->mysqli = NULL;
         $pedido = $query->fetch_object();
-        $lblPedido = "Pedido";
-        if ($pedido->pedido_contrato) {
-            $lblPedido = "Pedido de Contrato";
-        }
+        $lblPedido = ($pedido->pedido_contrato) ? 'Pedido de Contrato' : 'Pedido';
         $pedido->valor = number_format($pedido->valor, 3, ',', '.');
         $retorno = "
             <fieldset>
@@ -98,9 +87,7 @@ class PrintMod extends Conexao {
                         <td style=\"text-align: right;\">" . PrintMod::getEmpenho($id_pedido) . "</td>
                     </tr>
                 </table>";
-        if ($pedido->aprov_gerencia) {
-            $retorno .= "<p><b>Aprovado Pela Gerência</b></p>";
-        }
+        $retorno .= ($pedido->aprov_gerencia) ? '<p><b>Aprovado Pela Gerência</b></p>' : '';
         $retorno .= "<p><b>Observação da Unidade Solicitante: </b></p>
                 <p style=\"font-weight: normal !important;\">	" . $pedido->obs . "</p>
             </fieldset><br>";
@@ -120,50 +107,35 @@ class PrintMod extends Conexao {
     }
 
     private function getTableLicitacao(int $id_pedido): string {
-        $retorno = "<fieldset>
-                <h5>PEDIDO SEM LICITAÇÃO</h5>
-                </fieldset><br>";
+        $retorno = "<fieldset><h5>PEDIDO SEM LICITAÇÃO</h5></fieldset><br>";
 
         self::openConnection();
-        $query = $this->mysqli->query("SELECT licitacao.tipo AS id_tipo, licitacao_tipo.nome AS tipo, licitacao.numero, licitacao.uasg, licitacao.processo_original, licitacao.gera_contrato FROM licitacao, licitacao_tipo WHERE licitacao_tipo.id = licitacao.tipo AND licitacao.id_pedido = {$id_pedido};") or exit("Erro ao buscar licitação do pedido.");
+        $query = $this->mysqli->query("SELECT licitacao.tipo AS id_tipo, licitacao_tipo.nome AS tipo, licitacao.numero, licitacao.uasg, licitacao.processo_original, licitacao.gera_contrato FROM licitacao, licitacao_tipo WHERE licitacao_tipo.id = licitacao.tipo AND licitacao.id_pedido = " . $id_pedido . ' LIMIT 1') or exit('Erro ao buscar licitação do pedido');
         $this->mysqli = NULL;
-        if ($query->num_rows == 1) {
+        if ($query->num_rows > 0) {
             $obj = $query->fetch_object();
-            $thead = "";
-            $tbody = "";
+
+            $header = ['Tipo de Licitação', 'Número'];
             if ($obj->id_tipo == 3 || $obj->id_tipo == 4 || $obj->id_tipo == 2) {
-                $gera = "Gera Contrato";
-                if ($obj->gera_contrato == 0) {
-                    $gera = "Não Gera Contrato";
-                }
-                $thead = "
-                    <th>UASG</th>
-                    <th>Processo Original</th>
-                    <th>Contrato</th>";
-                $tbody = "
-                    <td>" . $obj->uasg . "</td>
-                    <td>" . $obj->processo_original . "</td>
-                    <td>" . $gera . "</td>";
+                $i = count($header);
+                $header[$i] = 'UASG';
+                $header[$i + 1] = 'Processo Original';
+                $header[$i + 2] = 'Contrato';
             }
-            $retorno = "
-                <fieldset class=\"preg\">
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>Tipo de Licitação</th>
-                                <th>Número</th>
-                                " . $thead . "
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>" . $obj->tipo . "</td>
-                                <td>" . $obj->numero . "</td>
-                                " . $tbody . "
-                            </tr>
-                        </tbody>
-                    </table>
-                </fieldset><br>";
+            $table = new Table('', '', $header, true);
+            $row = new Row();
+            $row->addColumn(new Column($obj->tipo));
+            $row->addColumn(new Column($obj->numero));
+
+            if (count($header) > 2) {
+                $gera = ($obj->gera_contrato == 0) ? 'Não Gera Contrato' : 'Gera Contrato';
+                $row->addColumn(new Column($obj->uasg));
+                $row->addColumn(new Column($obj->processo_original));
+                $row->addColumn(new Column($gera));
+            }
+
+            $table->addRow($row);
+            $retorno = "<fieldset class=\"preg\">" . $table . '</fieldset><br>';
         }
 
         return $retorno;
@@ -192,10 +164,7 @@ class PrintMod extends Conexao {
 
             $retorno = "<fieldset class = \"preg\">" . $table . '</fieldset><br>';
         } else {
-            $retorno = '
-                <fieldset>
-                    <h5>PEDIDO AGUARDA FONTE DE RECURSO</h5>
-                </fieldset><br>';
+            $retorno = '<fieldset><h5>PEDIDO AGUARDA FONTE DE RECURSO</h5></fieldset><br>';
         }
 
         return $retorno;
@@ -204,25 +173,25 @@ class PrintMod extends Conexao {
     private function getEmpenho(int $id_pedido): string {
         self::openConnection();
 
-        $query = $this->mysqli->query("SELECT contrato_tipo.nome, pedido_contrato.siafi FROM contrato_tipo, pedido_contrato WHERE pedido_contrato.id_tipo = contrato_tipo.id AND pedido_contrato.id_pedido = {$id_pedido};") or exit("Erro ao buscar o contrato do pedido.");
+        $query = $this->mysqli->query('SELECT contrato_tipo.nome, pedido_contrato.siafi FROM contrato_tipo, pedido_contrato WHERE pedido_contrato.id_tipo = contrato_tipo.id AND pedido_contrato.id_pedido = ' . $id_pedido) or exit('Erro ao buscar o contrato do pedido');
         $this->mysqli = NULL;
-        $retorno = "";
+        $retorno = '';
         if ($query->num_rows > 0) {
             $obj = $query->fetch_object();
-            $retorno = "<b>Tipo:</b> " . $obj->nome . " <input type=\"text\" value=\"" . $obj->siafi . "\"/>";
+            $retorno = '<b>Tipo:</b> ' . $obj->nome . " <input type=\"text\" value=\"" . $obj->siafi . "\"/>";
         }
         return $retorno;
     }
 
     private function getGrupoPedido(int $id_pedido): string {
         self::openConnection();
-        $query = $this->mysqli->query("SELECT setores_grupos.nome, pedido_grupo.id_pedido FROM setores_grupos, pedido_grupo WHERE pedido_grupo.id_grupo = setores_grupos.id AND pedido_grupo.id_pedido = {$id_pedido};") or exit("Erro ao buscar grupo do pedido.");
+        $query = $this->mysqli->query('SELECT setores_grupos.nome, pedido_grupo.id_pedido FROM setores_grupos, pedido_grupo WHERE pedido_grupo.id_grupo = setores_grupos.id AND pedido_grupo.id_pedido = ' . $id_pedido) or exit('Erro ao buscar grupo do pedido');
         $this->mysqli = NULL;
-        $retorno = "";
+        $retorno = '';
         if ($query->num_rows > 0) {
             $obj = $query->fetch_object();
             $obj->nome = utf8_encode($obj->nome);
-            $retorno = "<b>Grupo:</b> " . $obj->nome;
+            $retorno = '<b>Grupo:</b> ' . $obj->nome;
         }
         return $retorno;
     }
@@ -236,7 +205,7 @@ class PrintMod extends Conexao {
         $retorno = '';
         // PRIMEIRO FAZEMOS O CABEÇALHO REFERENTE AO NUM_LICITACAO
         self::openConnection();
-        $query_ini = $this->mysqli->query("SELECT DISTINCT itens.num_licitacao, itens.num_processo, itens.dt_inicio, itens.dt_fim FROM itens_pedido, itens WHERE itens.id = itens_pedido.id_item AND itens_pedido.id_pedido = {$id_pedido};") or exit("Erro ao buscar itens do pedido.");
+        $query_ini = $this->mysqli->query('SELECT DISTINCT itens.num_licitacao, itens.num_processo, itens.dt_inicio, itens.dt_fim FROM itens_pedido, itens WHERE itens.id = itens_pedido.id_item AND itens_pedido.id_pedido = ' . $id_pedido) or exit('Erro ao buscar itens do pedido');
         while ($licitacao = $query_ini->fetch_object()) {
             $row = new Row();
             $row->addColumn(new Column('Licitação: ' . $licitacao->num_licitacao));
@@ -255,6 +224,7 @@ class PrintMod extends Conexao {
             while ($fornecedor = $query_forn->fetch_object()) {
                 $fornecedor->nome_fornecedor = substr($fornecedor->nome_fornecedor, 0, 40);
                 $fornecedor->nome_fornecedor = strtoupper($fornecedor->nome_fornecedor);
+                $fornecedor->nome_fornecedor = utf8_encode($fornecedor->nome_fornecedor);
                 $retorno .= "
                     <fieldset style=\"border-bottom: 1px solid black; padding: 5px;\">
                         <table>
@@ -308,20 +278,14 @@ class PrintMod extends Conexao {
             $row->addColumn(new Column('Data Empenho: ' . $empenho->data));
             $row->addColumn(new Column('Empenho: ' . $empenho->empenho));
 
-            $retorno = "
-                <fieldset class=\"preg\">
-                    <table>" . $row . "</table>
-                </fieldset>";
+            $retorno = "<fieldset class=\"preg\"><table>" . $row . "</table></fieldset>";
         } else {
             $row = new Row();
             $row->addColumn(new Column('Empenho: EMPENHO SIAFI PENDENTE'));
-            $retorno = "
-                <fieldset class=\"preg\">
-                    <table>" . $row . "</table>
-                </fieldset>";
+            $retorno = "<fieldset class=\"preg\"><table>" . $row . "</table></fieldset>";
         }
 
-        $query = $this->mysqli->query("SELECT DATE_FORMAT(comentarios.data_coment, '%d/%m/%Y') AS data_coment, comentarios.comentario FROM comentarios, prioridade WHERE prioridade.id = comentarios.prioridade AND comentarios.id_pedido = {$id_pedido};") or exit("Erro ao buscar os comentários do pedido.");
+        $query = $this->mysqli->query("SELECT DATE_FORMAT(comentarios.data_coment, '%d/%m/%Y') AS data_coment, comentarios.comentario FROM comentarios, prioridade WHERE prioridade.id = comentarios.prioridade AND comentarios.id_pedido = " . $id_pedido) or exit('Erro ao buscar os comentários do pedido');
         $this->mysqli = NULL;
         if ($query->num_rows > 0) {
             while ($comentario = $query->fetch_object()) {
@@ -344,7 +308,7 @@ class PrintMod extends Conexao {
      */
     public function getSetorPedido(int $id_pedido): int {
         self::openConnection();
-        $query = $this->mysqli->query("SELECT id_setor FROM pedido WHERE id = {$id_pedido};") or exit("Erro ao buscar o id do setor do pedido.");
+        $query = $this->mysqli->query('SELECT id_setor FROM pedido WHERE id = ' . $id_pedido) or exit('Erro ao buscar o id do setor do pedido');
         $this->mysqli = NULL;
         $obj = $query->fetch_object();
         return $obj->id_setor;
@@ -383,9 +347,9 @@ class PrintMod extends Conexao {
         }
         $where_pedidos .= ')';
 
-        $query = $this->mysqli->query("SELECT pedido.id, setores.nome AS setor, DATE_FORMAT(pedido.data_pedido, '%d/%m/%Y') AS data_pedido, prioridade.nome AS prioridade, status.id AS id_status, status.nome AS status, pedido.valor {$empenho} FROM {$tb_empenho} setores, pedido, prioridade, status WHERE status.id = pedido.status {$where_empenho} AND prioridade.id = pedido.prioridade AND pedido.id_setor = setores.id {$where_status} AND {$where_pedidos} ORDER BY pedido.id ASC;") or exit("Erro ao buscar os pedidos com as especificações do usuário.");
+        $query = $this->mysqli->query("SELECT pedido.id, setores.nome AS setor, DATE_FORMAT(pedido.data_pedido, '%d/%m/%Y') AS data_pedido, prioridade.nome AS prioridade, status.id AS id_status, status.nome AS status, pedido.valor " . $empenho . " FROM " . $tb_empenho . " setores, pedido, prioridade, status WHERE status.id = pedido.status " . $where_empenho . " AND prioridade.id = pedido.prioridade AND pedido.id_setor = setores.id " . $where_status . " AND " . $where_pedidos . " ORDER BY pedido.id ASC") or exit('Erro ao buscar os pedidos com as especificações do usuário');
 
-        $titulo = "Relatório de Pedidos por Setor e Nível de Prioridade";
+        $titulo = 'Relatório de Pedidos por Setor e Nível de Prioridade';
         if ($query) {
             $thead = "
                 <th>Enviado em</th>
@@ -490,12 +454,10 @@ class PrintMod extends Conexao {
     }
 
     public function getRelatorioLib(int $id_setor, array $categoria, string $dataI, string $dataF): string {
-        $retorno = "
-            <fieldset class=\"preg\">
+        $retorno = "<fieldset class=\"preg\">
                 <h5>DESCRIÇÃO DO RELATÓRIO</h5>
                 <h6>Relatório de Liberações Orçamentárias</h6>
-                <h6>Período de Emissão: " . $dataI . " à " . $dataF . "</h6>
-            </fieldset><br>";
+                <h6>Período de Emissão: " . $dataI . " à " . $dataF . "</h6></fieldset><br>";
 
         $where_setor = ($id_setor != 0) ? 'AND id_setor = ' . $id_setor : '';
         $where_categoria = ' AND (';
