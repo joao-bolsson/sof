@@ -12,8 +12,9 @@
 ini_set('display_erros', true);
 error_reporting(E_ALL);
 
-include_once 'Conexao.class.php';
-include_once 'Util.class.php';
+spl_autoload_register(function (string $class_name) {
+    include_once $class_name . '.class.php';
+});
 
 require_once '../defines.php';
 
@@ -34,6 +35,75 @@ class BuscaLTE extends Conexao {
     }
 
     /**
+     * 	Função que retorna as 'tabs' com as ṕáginas das notícias para editar.
+     *
+     * 	@return string
+     */
+    public function getTabsNoticiasLTE(): string {
+        self::openConnection();
+        $query = $this->mysqli->query("SELECT id, tabela, nome FROM paginas_post") or exit("Erro ao buscar as abas de notícias para edição.");
+        $this->mysqli = NULL;
+        $row = new Row();
+        while ($pag = $query->fetch_object()) {
+            $radio = "<div class=\"form-group\" style=\"display: inline-block;\">
+                    <label>
+                        <input id=\"pag" . $pag->id . "\" type=\"radio\" name=\"pag\" class=\"minimal\" onclick=\"carregaPostsPag(" . $pag->id . ")\"/>
+                        " . $pag->nome . "
+                    </label>
+                </div>";
+            $row->addColumn(new Column($radio));
+        }
+        return $row;
+    }
+
+    /**
+     * 	Função para retornar a tabela de notícias de uma página para edição
+     *
+     * 	@return string
+     */
+    public function getNoticiasEditar(int $tabela): string {
+        self::openConnection();
+        $query = $this->mysqli->query("SELECT id, tabela, titulo, DATE_FORMAT(data, '%d/%m/%Y') AS data FROM postagens WHERE ativa = 1 AND tabela = " . $tabela . ' ORDER BY data ASC') or exit('Erro ao buscar as notícias para editar');
+        $this->mysqli = NULL;
+        $table = new Table('', '', [], false);
+        while ($postagem = $query->fetch_object()) {
+            if (is_null($this->obj_Util)) {
+                $this->obj_Util = new Util();
+            }
+            $btn_group = "<div class=\"btn-group\">";
+            $btn_group .= new Button('', BTN_DEFAULT . ' btn-sm', "editaNoticia(" . $postagem->id . ", " . $postagem->tabela . ")", "data-toggle=\"tooltip\"", 'Editar', 'pencil');
+
+            $btn_group .= new Button('', BTN_DEFAULT . ' btn-sm', "excluirNoticia(" . $postagem->id . ")", "data-toggle=\"tooltip\"", 'Excluir', 'trash');
+            $btn_group .= '</div>';
+
+            $row = new Row();
+
+            $row->addColumn(new Column($postagem->data));
+            $row->addColumn(new Column($postagem->titulo));
+            $row->addColumn(new Column($btn_group));
+
+            $table->addRow($row);
+        }
+        return $table;
+    }
+
+    /**
+     * Função para escrever as opções para "Postar em " do painel administrativo
+     *
+     * @return string
+     */
+    public function getPostarEm(): string {
+        $retorno = "";
+        self::openConnection();
+        $query = $this->mysqli->query("SELECT id, nome FROM paginas_post;") or exit("Erro ao buscar as páginas para postagem.");
+        $this->mysqli = NULL;
+        while ($pagina = $query->fetch_object()) {
+            $retorno .= "<option id=\"op" . $pagina->id . "\" value=\"" . $pagina->id . "\">" . $pagina->nome . "</option>";
+        }
+        return $retorno;
+    }
+
+    /**
      * Retorna a quantidade de solicitações de adiantamento, alt pedidos e de pedidos em análise.
      * @return type Objeto com as quantidades de solicitações.
      */
@@ -45,22 +115,21 @@ class BuscaLTE extends Conexao {
         return $obj;
     }
 
-    public function getOptionsContrato() {
+    /**
+     * @return string A row with contract options.
+     */
+    public function getOptionsContrato(): string {
         self::openConnection();
-        $query = $this->mysqli->query("SELECT id, nome FROM contrato_tipo;") or exit("Erro ao buscar opções de contrato.");
+        $query = $this->mysqli->query('SELECT id, nome FROM contrato_tipo') or exit('Erro ao buscar opções de contrato');
         $this->mysqli = NULL;
-        $retorno = "";
+        $row = new Row();
         while ($obj = $query->fetch_object()) {
-            $retorno .= "
-                <td>
-                    <div class=\"form-group\">
-                        <input type=\"radio\" name=\"tipoCont\" id=\"tipoCont" . $obj->id . "\" class=\"minimal\" value=\"" . $obj->id . "\">"
-                    . $obj->nome . "
-                    </div>
-                </td>";
+            $input = "<div class=\"form-group\">
+                        <input type=\"radio\" name=\"tipoCont\" id=\"tipoCont" . $obj->id . "\" class=\"minimal\" value=\"" . $obj->id . "\">&nbsp;" . $obj->nome . "</div>";
+            $row->addColumn(new Column($input));
         }
 
-        return $retorno;
+        return $row;
     }
 
     /**
@@ -128,89 +197,6 @@ class BuscaLTE extends Conexao {
             $i++;
         }
 
-        return $retorno;
-    }
-
-    /**
-     * 	Função para retornar uma lista de pedidos conforme o relatório.
-     *
-     * 	@param $status Status da lista de pedidos no relatório.
-     * 	@return Lista de pedidos conforme o solicitado.
-     */
-    public function getRelatorio(int $status): string {
-        $retorno = '';
-        $order = 'ORDER BY id DESC';
-        $alteracao = 'AND alteracao = 0';
-        if ($status == 3) {
-            // reprovado
-            $alteracao = 'AND alteracao = 1';
-        } else if ($status == 5) {
-            // aguarda orçamento
-            // por nível de prioridade e por montante (pedidos urgentes que somam até R$ 100.000)
-            $order = 'ORDER BY id DESC, prioridade DESC, valor DESC';
-        } else if ($status == 2) {
-            // em análise
-            $order = 'ORDER BY id DESC, prioridade DESC';
-        }
-        self::openConnection();
-        $query = $this->mysqli->query("SELECT id, DATE_FORMAT(data_pedido, '%d/%m/%Y') AS data_pedido, prioridade, status, valor FROM pedido WHERE status = " . $status . " " . $alteracao . " " . $order) or exit('Erro ao gerar relatório.');
-        $this->mysqli = NULL;
-        while ($pedido = $query->fetch_object()) {
-            $empenho = self::verEmpenho($pedido->id);
-            $btnVerProcesso = "";
-            if ($status == 2) {
-                // em análise
-                // por ordem descrecente do término do processo
-                // botão para os processos presentes no pedido e suas datas
-                $btnVerProcesso = "
-                    <button type=\"button\" class=\"btn btn-primary\" onclick=\"verProcessos(" . $pedido->id . ");\" title=\"Ver Processos\"><i class=\"fa fa-eye\"></i></button>";
-            }
-            $pedido->valor = number_format($pedido->valor, 3, ',', '.');
-            $retorno .= "
-                <tr>
-                    <td>" . $pedido->id . "</td>
-                    <td>" . $pedido->data_pedido . "</td>
-                    <td>" . ARRAY_PRIORIDADE[$pedido->prioridade] . "</td>
-                    <td><small class=\"label pull-right bg-gray\">" . ARRAY_STATUS[$pedido->status] . "</small></td>
-                    <td>" . $empenho . "</td>
-                    <td>R$ " . $pedido->valor . "</td>
-                    <td>
-                        <button type=\"button\" class=\"btn btn-primary\" onclick=\"imprimir(" . $pedido->id . ");\" title=\"Imprimir\"><i class=\"fa fa-print\"></i></button>
-                            " . $btnVerProcesso . "
-                    </td>
-                </tr>";
-        }
-        return $retorno;
-    }
-
-    /**
-     * 	Função para retornar os radios buttons para gerar relatórios por status.
-     *
-     * 	@return Colunas com alguns status.
-     */
-    public function getRadiosStatusRel(): string {
-        $retorno = "<tr>";
-        $i = 0;
-        $cont = 5;
-        $count = count(ARRAY_STATUS);
-
-        for ($j = 2; $j < $count; $j++) {
-            if ($i == $cont) {
-                $i = 0;
-                $retorno .= "</tr><tr>";
-            }
-            $retorno .= "
-            <td>
-                <div class=\"form-group\">
-                    <label>
-                        <input id=\"relStatus" . $j . "\" type=\"radio\" name=\"relatorio\" class=\"minimal\" value=\"" . $j . "\"/>
-                       " . ARRAY_STATUS[$j] . "
-                    </label>
-                </div>
-            </td>";
-            $i++;
-        }
-        $retorno .= "</tr>";
         return $retorno;
     }
 
@@ -305,6 +291,16 @@ class BuscaLTE extends Conexao {
         return $retorno;
     }
 
+    public function getOptionsCategoria(): string {
+        $retorno = "";
+        $count = count(ARRAY_CATEGORIA);
+
+        for ($i = 1; $i < $count; $i++) {
+            $retorno .= "<option value=\"" . $i . "\">" . ARRAY_CATEGORIA[$i] . "</option>";
+        }
+        return $retorno;
+    }
+
     /**
      * 	Função que retorna as options com os status de pedidos
      *
@@ -384,18 +380,17 @@ class BuscaLTE extends Conexao {
      * 	@return Opções de prioridades para os pedidos.
      */
     public function getPrioridades(): string {
-        $retorno = "";
         $count = count(ARRAY_PRIORIDADE);
 
+        $row = new Row();
         for ($i = 1; $i < $count; $i++) {
-            $retorno .= "
-                <td>
-                    <div class=\"form-group\">
+            $form_group = "<div class=\"form-group\">
                         <input type=\"radio\" name=\"st\" id=\"st" . ARRAY_PRIORIDADE[$i] . "\" class=\"minimal\" value=\"" . $i . "\"> " . ARRAY_PRIORIDADE[$i] . "
-                    </div>
-                </td>";
+                    </div>";
+
+            $row->addColumn(new Column($form_group));
         }
-        return $retorno;
+        return $row;
     }
 
     /**
@@ -404,34 +399,29 @@ class BuscaLTE extends Conexao {
      *   @return string
      */
     public function getTabelaRecepcao(): string {
-        $retorno = "";
         self::openConnection();
         $query = $this->mysqli->query("SELECT processos.id, processos.num_processo, processos_tipo.nome as tipo, processos.estante, processos.prateleira, processos.entrada, processos.saida, processos.responsavel, processos.retorno, processos.obs FROM processos, processos_tipo WHERE processos.tipo = processos_tipo.id ORDER BY id ASC;") or exit("Erro ao formar a tabela da recepção.");
-        while ($processo = $query->fetch_object()) {
-            $processo->obs = $this->mysqli->real_escape_string($processo->obs);
-            $processo->obs = str_replace("\"", "'", $processo->obs);
-            $retorno .= "
-                <tr>
-                    <td>
-                    <div class=\"btn-group\">
-                        <button type=\"button\" class=\"btn btn-default\" onclick=\"addProcesso('', " . $processo->id . ")\"><i class=\"fa fa-pencil\"></i></button>
-                    </div>
-                    </td>
-                    <td>" . $processo->num_processo . "</td>
-                    <td>" . $processo->tipo . "</td>
-                    <td>" . $processo->estante . "</td>
-                    <td>" . $processo->prateleira . "</td>
-                    <td>" . $processo->entrada . "</td>
-                    <td>" . $processo->saida . "</td>
-<td>" . $processo->responsavel . "</td>
-                    <td>" . $processo->retorno . "</td>
-                    <td>
-                        <button onclick=\"viewCompl('" . $processo->obs . "');\" class=\"btn btn-default\" type=\"button\" title=\"Ver Observação\">OBS</button>
-                    </td>
-                </tr>";
-        }
         $this->mysqli = NULL;
-        return $retorno;
+        $table = new Table('', '', [], false);
+        while ($processo = $query->fetch_object()) {
+            $processo->obs = str_replace("\"", "\'", $processo->obs);
+
+            $row = new Row();
+            $div = new Div('btn-group');
+            $div->addComponent(new Button('', BTN_DEFAULT, "addProcesso('', " . $processo->id . ")", "data-toggle=\"tooltip\"", 'Editar', 'pencil'));
+            $row->addColumn(new Column($div));
+            $row->addColumn(new Column($processo->num_processo));
+            $row->addColumn(new Column($processo->tipo));
+            $row->addColumn(new Column($processo->estante));
+            $row->addColumn(new Column($processo->prateleira));
+            $row->addColumn(new Column($processo->entrada));
+            $row->addColumn(new Column($processo->saida));
+            $row->addColumn(new Column($processo->responsavel));
+            $row->addColumn(new Column($processo->retorno));
+            $row->addColumn(new Column(new Button('', BTN_DEFAULT, "viewCompl('" . $processo->obs . "')", "data-toggle=\"tooltip\"", 'Ver Observação', 'eye')));
+            $table->addRow($row);
+        }
+        return $table;
     }
 
     /**
@@ -470,54 +460,47 @@ class BuscaLTE extends Conexao {
         return $obj_permissoes;
     }
 
+    private static final function buildButtonsSolicAltPedAdmin(int $id, int $id_pedido): string {
+        $group = "<div class=\"btn-group\">";
+        $btn_aprovar = new Button('', BTN_DEFAULT, "analisaSolicAlt(" . $id . ", " . $id_pedido . ", 1)", "data-toggle=\"tooltip\"", 'Aprovar', 'check');
+        $btn_reprovar = new Button('', BTN_DEFAULT, "analisaSolicAlt(" . $id . ", " . $id_pedido . ", 0)", "data-toggle=\"tooltip\"", 'Reprovar', 'trash');
+
+        $group .= $btn_aprovar . $btn_reprovar . '</div>';
+        return $group;
+    }
+
     /**
      * 	Função que retorna a tabela com as solicitações de alteração de pedidos	para o SOF analisar
      *
      * 	@return string
      */
     public function getAdminSolicAltPedidos(int $st): string {
-        $retorno = "";
         self::openConnection();
-        $query = $this->mysqli->query("SELECT solic_alt_pedido.id, solic_alt_pedido.id_pedido, setores.nome, DATE_FORMAT(solic_alt_pedido.data_solicitacao, '%d/%m/%Y') AS data_solicitacao, DATE_FORMAT(solic_alt_pedido.data_analise, '%d/%m/%Y') AS data_analise, solic_alt_pedido.justificativa, solic_alt_pedido.status FROM solic_alt_pedido, setores WHERE solic_alt_pedido.id_setor = setores.id AND solic_alt_pedido.status = {$st} ORDER BY solic_alt_pedido.id DESC;") or exit("Erro ao buscar as solicitações de alteração de pedidos enviados ao SOF.");
-        $status = $label = "";
-        while ($solic = $query->fetch_object()) {
-            switch ($solic->status) {
-                case 0:
-                    $status = 'Reprovado';
-                    $label = 'red';
-                    break;
-                case 1:
-                    $status = 'Aprovado';
-                    $label = 'green';
-                    break;
-                default:
-                    $status = 'Aberto';
-                    $label = 'orange';
-                    $solic->data_analise = '--------------';
-                    break;
-            }
-            $btn_aprovar = $btn_reprovar = "";
-            if ($st == 2) {
-                $btn_aprovar = "<button class=\"btn btn-default\" type=\"button\" title=\"Aprovar\" onclick=\"analisaSolicAlt(" . $solic->id . ", " . $solic->id_pedido . ", 1)\"><i class=\"fa fa-check\"></i></button>";
-                $btn_reprovar = "<button class=\"btn btn-default\" type=\"button\" title=\"Reprovar\" onclick=\"analisaSolicAlt(" . $solic->id . ", " . $solic->id_pedido . ", 0)\"><i class=\"fa fa-trash\"></i></button>";
-            }
-            $solic->justificativa = $this->mysqli->real_escape_string($solic->justificativa);
-            $solic->justificativa = str_replace("\"", "'", $solic->justificativa);
-            $retorno .= "
-                <tr>
-                    <td>" . $btn_aprovar . $btn_reprovar . "</td>
-                    <td>" . $solic->id_pedido . "</td>
-                    <td>" . $solic->nome . "</td>
-                    <td>" . $solic->data_solicitacao . "</td>
-                    <td>" . $solic->data_analise . "</td>
-                    <td>
-                        <button onclick=\"viewCompl('" . $solic->justificativa . "')\" class=\"btn btn-sm btn-primary\" type=\"button\" title=\"Ver Justificativa\">JUSTIFICATIVA</button>
-                    </td>
-                    <td><small class=\"label pull-right bg-" . $label . "\">" . $status . "</small></td>
-                </tr>";
-        }
+        $query = $this->mysqli->query("SELECT solic_alt_pedido.id, solic_alt_pedido.id_pedido, setores.nome, DATE_FORMAT(solic_alt_pedido.data_solicitacao, '%d/%m/%Y') AS data_solicitacao, DATE_FORMAT(solic_alt_pedido.data_analise, '%d/%m/%Y') AS data_analise, solic_alt_pedido.justificativa, solic_alt_pedido.status FROM solic_alt_pedido, setores WHERE solic_alt_pedido.id_setor = setores.id AND solic_alt_pedido.status = " . $st . " ORDER BY solic_alt_pedido.id DESC LIMIT 200") or exit("Erro ao buscar as solicitações de alteração de pedidos enviados ao SOF.");
         $this->mysqli = NULL;
-        return $retorno;
+
+        $array_status = ['Reprovado', 'Aprovado', 'Aberto'];
+        $array_lb = ['red', 'green', 'orange'];
+
+        $status = $array_status[$st];
+        $label = 'bg-' . $array_lb[$st];
+
+        $table = new Table('', '', array(), false);
+        while ($solic = $query->fetch_object()) {
+            $btn_group = ($st == 2) ? self::buildButtonsSolicAltPedAdmin($solic->id, $solic->id_pedido) : '';
+            $solic->justificativa = str_replace("\"", "\'", $solic->justificativa);
+
+            $row = new Row();
+            $row->addColumn(new Column($btn_group));
+            $row->addColumn(new Column($solic->id_pedido));
+            $row->addColumn(new Column($solic->nome));
+            $row->addColumn(new Column($solic->data_solicitacao));
+            $row->addColumn(new Column(($st == 2) ? '--------------' : $solic->data_analise));
+            $row->addColumn(new Column(new Button('', 'btn btn-sm btn-primary', "viewCompl('" . $solic->justificativa . "')", "data-toggle=\"tooltip\"", 'Ver Justificativa', 'eye')));
+            $row->addColumn(new Column(new Small('label pull-right ' . $label, $status)));
+            $table->addRow($row);
+        }
+        return $table;
     }
 
     /**
@@ -528,53 +511,43 @@ class BuscaLTE extends Conexao {
      */
     public function getSolicAdiantamentos(int $st): string {
         self::openConnection();
-        $query = $this->mysqli->query("SELECT saldos_adiantados.id, setores.nome, DATE_FORMAT(saldos_adiantados.data_solicitacao, '%d/%m/%Y') AS data_solicitacao, DATE_FORMAT(saldos_adiantados.data_analise, '%d/%m/%Y') AS data_analise, saldos_adiantados.valor_adiantado, saldos_adiantados.justificativa FROM saldos_adiantados, setores WHERE saldos_adiantados.id_setor = setores.id AND saldos_adiantados.status = {$st} ORDER BY saldos_adiantados.data_solicitacao DESC;") or exit("Erro ao buscar solicitações de adiantamento.");
-        $retorno = "";
-        $status = $label = "";
-        switch ($st) {
-            case 0:
-                $status = 'Reprovado';
-                $label = 'red';
-                break;
-            case 1:
-                $status = 'Aprovado';
-                $label = 'green';
-                break;
-            case 2:
-                $status = 'Aberto';
-                $label = 'orange';
-                break;
-            default:
-                break;
-        }
+        $query = $this->mysqli->query("SELECT saldos_adiantados.id, setores.nome, DATE_FORMAT(saldos_adiantados.data_solicitacao, '%d/%m/%Y') AS data_solicitacao, DATE_FORMAT(saldos_adiantados.data_analise, '%d/%m/%Y') AS data_analise, saldos_adiantados.valor_adiantado, saldos_adiantados.justificativa FROM saldos_adiantados, setores WHERE saldos_adiantados.id_setor = setores.id AND saldos_adiantados.status = " . $st . " ORDER BY saldos_adiantados.data_solicitacao DESC LIMIT 200") or exit("Erro ao buscar solicitações de adiantamento.");
+        $this->mysqli = NULL;
+        $array_status = ['Reprovado', 'Aprovado', 'Aberto'];
+        $array_lb = ['red', 'green', 'orange'];
+
+        $status = $array_status[$st];
+        $label = $array_lb[$st];
+
+        $table = new Table('', '', [], false);
         if ($query) {
             while ($solic = $query->fetch_object()) {
-                $btn_aprovar = $btn_reprovar = "";
-                if ($st == 2) {
-                    // em análise / aberto
-                    $solic->data_analise = "---------------";
-                    $btn_aprovar = "<button class=\"btn btn-default\" type=\"button\" title=\"Aprovar\" onclick=\"analisaAdi(" . $solic->id . ", 1)\"><i class=\"fa fa-check\"></i></button>";
-                    $btn_reprovar = "<button class=\"btn btn-default\" type=\"button\" title=\"Reprovar\" onclick=\"javascript:analisaAdi(" . $solic->id . ", 0)\"><i class=\"fa fa-trash\"></i></button>";
-                }
-                $solic->justificativa = $this->mysqli->real_escape_string($solic->justificativa);
-                $solic->justificativa = str_replace("\"", "'", $solic->justificativa);
+                $btn_group = ($st == 2) ? self::buildButtonsSolicAdi($solic->id) : '';
+                $solic->justificativa = str_replace("\"", "\'", $solic->justificativa);
                 $solic->valor_adiantado = number_format($solic->valor_adiantado, 3, ',', '.');
-                $retorno .= "
-                    <tr>
-                        <td>" . $btn_aprovar . $btn_reprovar . "</td>
-                        <td>" . $solic->nome . "</td>
-                        <td>" . $solic->data_solicitacao . "</td>
-                        <td>" . $solic->data_analise . "</td>
-                        <td>R$ " . $solic->valor_adiantado . "</td>
-                        <td>
-                            <button onclick=\"viewCompl('" . $solic->justificativa . "');\" class=\"btn btn-sm btn-primary\" type=\"button\" title=\"Ver Justificativa\">JUSTIFICATIVA</button>
-                        </td>
-                        <td><small class=\"label pull-right bg-" . $label . "\">" . $status . "</small></td>
-                    </tr>";
+
+                $row = new Row();
+                $row->addColumn(new Column($btn_group));
+                $row->addColumn(new Column($solic->nome));
+                $row->addColumn(new Column($solic->data_solicitacao));
+                $row->addColumn(new Column(($st == 2) ? '---------------' : $solic->data_analise));
+                $row->addColumn(new Column($solic->valor_adiantado));
+                $row->addColumn(new Column(new Button('', 'btn btn-sm btn-primary', "viewCompl('" . $solic->justificativa . "')", "data-toggle=\"tooltip\"", 'Ver Justificativa', 'eye')));
+                $row->addColumn(new Column(new Small('label pull-right bg-' . $label, $status)));
+
+                $table->addRow($row);
             }
         }
-        $this->mysqli = NULL;
-        return $retorno;
+        return $table;
+    }
+
+    private static final function buildButtonsSolicAdi(int $id): string {
+        $div = new Div('btn-group');
+
+        $div->addComponent(new Button('', BTN_DEFAULT, "analisaAdi(" . $id . ", 1)", "data-toggle=\"tooltip\"", 'Aprovar', 'check'));
+        $div->addComponent(new Button('', BTN_DEFAULT, "analisaAdi(" . $id . ", 0)", "data-toggle=\"tooltip\"", 'Reprovar', 'trash'));
+
+        return $div;
     }
 
     /**
@@ -594,83 +567,112 @@ class BuscaLTE extends Conexao {
     }
 
     /**
+     * Constroi os botoes para a análise.
+     * @param int $id Id do pedido.
+     * @param int $status Status atual do pedido.
+     * @param int $id_setor Id do setor que fez o pedido.
+     */
+    private function buildButtons(int $id, int $status, int $id_setor): string {
+        $component = new Div('btn-group');
+
+        if ($status != 3 && $status != 4) {
+            if ($_SESSION['id_setor'] == 12) {
+                $component->addComponent(new Button('', BTN_DEFAULT, "enviaForn(" . $id . ")", "data-toggle=\"tooltip\"", 'Enviar ao Fornecedor', 'send'));
+            } else if ($status == 2) {
+                $component->addComponent(new Button('', BTN_DEFAULT, "analisarPedido(" . $id . ", " . $id_setor . ")", "data-toggle=\"tooltip\"", 'Analisar', 'pencil'));
+            } else if ($status == 5) {
+                $component->addComponent(new Button('', BTN_DEFAULT, "cadFontes(" . $id . ")", "data-toggle=\"tooltip\"", 'Cadastrar Fontes', 'comment'));
+            } else if ($status == 6) {
+                $component->addComponent(new Button('', BTN_DEFAULT, "cadEmpenho(" . $id . ")", "data-toggle=\"tooltip\"", 'Cadastrar Empenho', 'credit-card'));
+            } else if ($status == 7) {
+                $component->addComponent(new Button('', BTN_DEFAULT, "enviaOrdenador(" . $id . ")", "data-toggle=\"tooltip\"", 'Enviar ao Ordenador', 'send'));
+            } else {
+                $component->addComponent(new Button('', BTN_DEFAULT, "getStatus(" . $id . ", " . $id_setor . ")", "data-toggle=\"tooltip\"", 'Alterar Status', 'wrench'));
+            }
+        }
+
+        if (self::verEmpenho($id) != 'EMPENHO SIAFI PENDENTE' && $_SESSION['id_setor'] != 12 && $status > 6) {
+            $component->addComponent(new Button('', BTN_DEFAULT, "cadEmpenho(" . $id . ", '" . self::verEmpenho($id) . "', '" . self::verDataEmpenho($id) . "')", "data-toggle=\"tooltip\"", 'Cadastrar Empenho', 'credit-card'));
+        }
+
+        $component->addComponent(new Button('', BTN_DEFAULT, "imprimir(" . $id . ")", "data-toggle=\"tooltip\"", 'Imprimir', 'print'));
+        return $component;
+    }
+
+    /**
      * Função para retornar as solicitações para o SOF.
      *
      * @return string
      *
      */
-    public function getSolicitacoesAdmin(string $where = ''): string {
-        $retorno = "";
+    public function getSolicitacoesAdmin(string $where = '', array $pedidos = []): string {
         self::openConnection();
         $limit = 'LIMIT ' . LIMIT_MAX;
         $query = $this->mysqli->query("SELECT id, id_setor, DATE_FORMAT(data_pedido, '%d/%m/%Y') AS data_pedido, prioridade, status, valor, aprov_gerencia FROM pedido WHERE status <> 3 AND alteracao = 0 " . $where . " ORDER BY id DESC " . $limit) or exit("Erro ao buscar os pedidos que foram mandados ao SOF.");
         $this->mysqli = NULL;
+
+        $table = new Table('', '', array(), false);
         while ($pedido = $query->fetch_object()) {
-            $btnAnalisar = "";
+            // determina se o pedido vai ser adicionado na tabela
+            $flag = false;
 
-            if ($pedido->status != 3 && $pedido->status != 4) {
+            if (!in_array($pedido->id, $pedidos)) {
                 if ($_SESSION['id_setor'] == 12) {
-                    $btnAnalisar = "<button type=\"button\" class=\"btn btn-default\" onclick=\"enviaForn(" . $pedido->id . ");\" data-toggle=\"tooltip\" title=\"Enviar ao Fornecedor\"><i class=\"fa fa-send\"></i></button>";
-                } else if ($pedido->status == 2) {
-                    $btnAnalisar = "<button type=\"button\" class=\"btn btn-default\" onclick=\"analisarPedido(" . $pedido->id . ", " . $pedido->id_setor . ");\" data-toggle=\"tooltip\" title=\"Analisar\"><i class=\"fa fa-pencil\"></i></button>";
-                } else if ($pedido->status == 5) {
-                    $btnAnalisar = "<button type=\"button\" class=\"btn btn-default\" onclick=\"cadFontes(" . $pedido->id . ");\" data-toggle=\"tooltip\" title=\"Cadastrar Fontes\"><i class=\"fa fa-comment\"></i></button>";
-                } else if ($pedido->status == 6) {
-                    $btnAnalisar = "<button type=\"button\" class=\"btn btn-default\" onclick=\"cadEmpenho(" . $pedido->id . ");\" data-toggle=\"tooltip\" title=\"Cadastrar Empenho\"><i class=\"fa fa-credit-card\"></i></button>";
-                } else if ($pedido->status == 7) {
-                    $btnAnalisar = "<button type=\"button\" class=\"btn btn-default\" onclick=\"enviaOrdenador(" . $pedido->id . ");\" data-toggle=\"tooltip\" title=\"Enviar ao Ordenador\"><i class=\"fa fa-send\"></i></button>";
+                    if ($pedido->status == 8) {
+                        $flag = true;
+                    }
                 } else {
-                    $btnAnalisar = "<button type=\"button\" class=\"btn btn-default\" onclick=\"getStatus(" . $pedido->id . ", " . $pedido->id_setor . ");\" data-toggle=\"tooltip\" title=\"Alterar Status\"><i class=\"fa fa-wrench\"></i></button>";
+                    $flag = true;
                 }
-            }
-            $btnVerEmpenho = self::verEmpenho($pedido->id);
-            if ($btnVerEmpenho == 'EMPENHO SIAFI PENDENTE') {
-                $btnVerEmpenho = '';
-            } else if ($_SESSION['id_setor'] != 12 && $pedido->status > 6) {
-                $btnAnalisar .= "<button type=\"button\" class=\"btn btn-default\" onclick=\"cadEmpenho(" . $pedido->id . ", '" . self::verEmpenho($pedido->id) . "', '" . self::verDataEmpenho($pedido->id) . "');\" data-toggle=\"tooltip\" title=\"Cadastrar Empenho\"><i class=\"fa fa-credit-card\"></i></button>";
-            }
-            $pedido->valor = number_format($pedido->valor, 3, ',', '.');
-            $aprovGerencia = '';
-            if ($pedido->aprov_gerencia) {
-                $aprovGerencia = "<small class=\"label pull-right bg-gray\" data-toggle=\"tooltip\" title=\"Aprovado pela Gerência\">A</small>";
             }
 
-            $linha = "
-                <tr id=\"rowPedido" . $pedido->id . "\">
-                    <td>
-                        <div class=\"form-group\">
-                            <input type=\"checkbox\" name=\"checkPedRel\" id=\"checkPedRel" . $pedido->id . "\" value=\"" . $pedido->id . "\">
-                        </div>
-                        " . $aprovGerencia . "
-                    </td>
-                    <td>
-                        <div class=\"btn-group\">
-                            " . $btnAnalisar . "
-                            <button type=\"button\" class=\"btn btn-default\" onclick=\"imprimir(" . $pedido->id . ");\" data-toggle=\"tooltip\" title=\"Imprimir\"><i class=\"fa fa-print\"></i></button>
-                        </div>
-                    </td>
-                    <td>" . $pedido->id . "</td>
-                    <td>" . ARRAY_SETORES[$pedido->id_setor] . "</td>
-                    <td>" . $pedido->data_pedido . "</td>
-                    <td>" . ARRAY_PRIORIDADE[$pedido->prioridade] . "</td>
-                    <td>" . ARRAY_STATUS[$pedido->status] . "</td>
-                    <td>R$ " . $pedido->valor . "</td>
-                    <td>
-                        " . $btnVerEmpenho . "
-                    </td>
-                    <td>
-                    " . self::getFornecedor($pedido->id) . "
-                    </td>
-                </tr>";
-            if ($_SESSION['id_setor'] == 12) {
-                if ($pedido->status == 8) {
-                    $retorno .= $linha;
+            if ($flag) {
+                $btnVerEmpenho = self::verEmpenho($pedido->id);
+                if ($btnVerEmpenho == 'EMPENHO SIAFI PENDENTE') {
+                    $btnVerEmpenho = '';
                 }
-            } else {
-                $retorno .= $linha;
+                $pedido->valor = number_format($pedido->valor, 3, ',', '.');
+                $aprovGerencia = ($pedido->aprov_gerencia) ? new Small('label pull-right bg-gray', 'A', "data-toggle=\"tooltip\"", 'Aprovado pela Gerência') : '';
+
+                $check_all = "
+                <div class=\"form-group\">
+                    <input type=\"checkbox\" name=\"checkPedRel\" id=\"checkPedRel" . $pedido->id . "\" value=\"" . $pedido->id . "\">
+                </div>
+                " . $aprovGerencia . "";
+
+                $buttons = self::buildButtons($pedido->id, $pedido->status, $pedido->id_setor);
+
+                $row = new Row('rowPedido' . $pedido->id);
+
+                $row->addColumn(new Column($check_all));
+                $row->addColumn(new Column($buttons));
+                $row->addColumn(new Column($pedido->id));
+                $row->addColumn(new Column(ARRAY_SETORES[$pedido->id_setor]));
+                $row->addColumn(new Column($pedido->data_pedido));
+                $row->addColumn(new Column(ARRAY_PRIORIDADE[$pedido->prioridade]));
+                $row->addColumn(new Column(ARRAY_STATUS[$pedido->status]));
+                $row->addColumn(new Column("R$ " . $pedido->valor));
+                $row->addColumn(new Column($btnVerEmpenho));
+                $row->addColumn(new Column(self::getFornecedor($pedido->id)));
+
+                $table->addRow($row);
             }
         }
-        return $retorno;
+        return $table;
+    }
+
+    private static final function buildButtonsRequestAnalysis(int $id, string $compl): string {
+        $btn_group = "
+            <div class=\"btn-group\">
+                <button type=\"button\" class=\"btn btn-default\" onclick=\"cancelaItem(" . $id . ");\" title=\"Item Cancelado\"><i id=\"icon-cancela-item" . $id . "\" class=\"text-red fa fa-close\"></i>
+                </button>
+                <button type=\"button\" class=\"btn btn-default\" onclick=\"editaItem(" . $id . ");\" title=\"Editar\"><i class=\"fa fa-pencil\"></i>
+                </button>
+                <button type=\"button\" class=\"btn btn-default\" onclick=\"viewCompl('" . $compl . "');\"  title=\"Ver Complemento do Item\"><i class=\"fa fa-file-text\"></i>
+                </button>
+            </div>";
+
+        return $btn_group;
     }
 
     /**
@@ -679,64 +681,57 @@ class BuscaLTE extends Conexao {
      * @return string
      */
     public function getItensPedidoAnalise(int $id_pedido): string {
-        $retorno = "";
         self::openConnection();
-        $query = $this->mysqli->query("SELECT itens.qt_contrato, itens.id AS id_itens, itens_pedido.qtd AS qtd_solicitada, itens_pedido.valor, itens.nome_fornecedor, itens.num_licitacao, itens.dt_inicio, itens.dt_fim, itens.cod_reduzido, itens.complemento_item, itens.vl_unitario, itens.qt_saldo, itens.cod_despesa, itens.descr_despesa, itens.num_contrato, itens.num_processo, itens.descr_mod_compra, itens.num_licitacao, itens.cgc_fornecedor, itens.num_extrato, itens.descricao, itens.qt_contrato, itens.vl_contrato, itens.qt_utilizado, itens.vl_utilizado, itens.qt_saldo, itens.vl_saldo, itens.seq_item_processo FROM itens_pedido, itens WHERE itens_pedido.id_pedido = {$id_pedido} AND itens_pedido.id_item = itens.id ORDER BY itens.seq_item_processo ASC;") or exit("Erro ao buscar os itens do pedido para análise.");
-        while ($item = $query->fetch_object()) {
-            if ($item->dt_fim == '') {
-                $item->dt_fim = "----------";
-            }
-            $item->complemento_item = $this->mysqli->real_escape_string($item->complemento_item);
-            $item->complemento_item = str_replace("\"", "'", $item->complemento_item);
-            $retorno .= "
-                <tr id=\"row_item" . $item->id_itens . "\">
-                    <td>
-                        <div class=\"btn-group\">
-                            <button type=\"button\" class=\"btn btn-default\" onclick=\"cancelaItem(" . $item->id_itens . ");\" title=\"Item Cancelado\"><i id=\"icon-cancela-item" . $item->id_itens . "\" class=\"text-red fa fa-close\"></i>
-                            </button>
-                            <button type=\"button\" class=\"btn btn-default\" onclick=\"editaItem(" . $item->id_itens . ");\" title=\"Editar\"><i class=\"fa fa-pencil\"></i>
-                            </button>
-                            <button type=\"button\" class=\"btn btn-default\" onclick=\"viewCompl('" . $item->complemento_item . "');\"  title=\"Ver Complemento do Item\"><i class=\"fa fa-file-text\"></i>
-                            </button>
-                        </div>
-                    </td>
-                    <td>" . $item->cod_despesa . "</td>
-                    <td>" . $item->descr_despesa . "</td>
-                    <td>" . $item->num_extrato . "</td>
-                    <td>" . $item->num_contrato . "</td>
-                    <td>" . $item->num_processo . "</td>
-                    <td>" . $item->descr_mod_compra . "</td>
-                    <td>" . $item->num_licitacao . "</td>
-                    <td>" . $item->dt_inicio . "</td>
-                    <td>" . $item->dt_fim . "</td>
-                    <td>" . $item->cgc_fornecedor . "</td>
-                    <td>" . $item->nome_fornecedor . "</td>
-                    <td>" . $item->cod_reduzido . "</td>
-                    <td>" . $item->seq_item_processo . "</td>
-                    <td>" . $item->descricao . "</td>
-                    <td>R$ " . $item->vl_unitario . "</td>
-                    <td>" . $item->qt_contrato . "</td>
-                    <td>" . $item->vl_contrato . "</td>
-                    <td>" . $item->qt_utilizado . "</td>
-                    <td>" . $item->vl_utilizado . "</td>
-                    <td>" . $item->qt_saldo . "</td>
-                    <td>" . $item->vl_saldo . "</td>
-                    <td>" . $item->qtd_solicitada . "</td>
-                    <td>R$ " . $item->valor . "</td>
-                    <td>
-                        <input type=\"hidden\" name=\"id_item[]\" value=\"" . $item->id_itens . "\">
-                        <input id=\"item_cancelado" . $item->id_itens . "\" type=\"hidden\" name=\"item_cancelado[]\" value=\"0\">
-                        <input type=\"hidden\" name=\"qtd_solicitada[]\" value=\"" . $item->qtd_solicitada . "\">
-                        <input type=\"hidden\" name=\"qt_saldo[]\" value=\"" . $item->qt_saldo . "\">
-                        <input type=\"hidden\" name=\"qt_utilizado[]\" value=\"" . $item->qt_utilizado . "\">
-                        <input type=\"hidden\" name=\"vl_saldo[]\" value=\"" . $item->vl_saldo . "\">
-                        <input type=\"hidden\" name=\"vl_utilizado[]\" value=\"" . $item->vl_utilizado . "\">
-                        <input type=\"hidden\" name=\"valor_item[]\" value=\"" . $item->valor . "\">
-                    </td>
-                </tr>";
-        }
+        $query = $this->mysqli->query('SELECT itens.qt_contrato, itens.id AS id_itens, itens_pedido.qtd AS qtd_solicitada, itens_pedido.valor, itens.nome_fornecedor, itens.num_licitacao, itens.dt_inicio, itens.dt_fim, itens.cod_reduzido, itens.complemento_item, itens.vl_unitario, itens.qt_saldo, itens.cod_despesa, itens.descr_despesa, itens.num_contrato, itens.num_processo, itens.descr_mod_compra, itens.num_licitacao, itens.cgc_fornecedor, itens.num_extrato, itens.descricao, itens.qt_contrato, itens.vl_contrato, itens.qt_utilizado, itens.vl_utilizado, itens.qt_saldo, itens.vl_saldo, itens.seq_item_processo FROM itens_pedido, itens WHERE itens_pedido.id_pedido = ' . $id_pedido . ' AND itens_pedido.id_item = itens.id ORDER BY itens.seq_item_processo ASC') or exit('Erro ao buscar os itens do pedido para análise');
         $this->mysqli = NULL;
-        return $retorno;
+
+        $table = new Table('', '', [], false);
+        while ($item = $query->fetch_object()) {
+            $item->complemento_item = str_replace("\"", "\'", $item->complemento_item);
+
+            $btn_group = self::buildButtonsRequestAnalysis($item->id_itens, $item->complemento_item);
+
+            $inputs = "
+                <input type=\"hidden\" name=\"id_item[]\" value=\"" . $item->id_itens . "\">
+                <input id=\"item_cancelado" . $item->id_itens . "\" type=\"hidden\" name=\"item_cancelado[]\" value=\"0\">
+                <input type=\"hidden\" name=\"qtd_solicitada[]\" value=\"" . $item->qtd_solicitada . "\">
+                <input type=\"hidden\" name=\"qt_saldo[]\" value=\"" . $item->qt_saldo . "\">
+                <input type=\"hidden\" name=\"qt_utilizado[]\" value=\"" . $item->qt_utilizado . "\">
+                <input type=\"hidden\" name=\"vl_saldo[]\" value=\"" . $item->vl_saldo . "\">
+                <input type=\"hidden\" name=\"vl_utilizado[]\" value=\"" . $item->vl_utilizado . "\">
+                <input type=\"hidden\" name=\"valor_item[]\" value=\"" . $item->valor . "\">";
+
+            $row = new Row('row_item' . $item->id_itens);
+
+            $row->addColumn(new Column($btn_group));
+            $row->addColumn(new Column($item->cod_despesa));
+            $row->addColumn(new Column($item->descr_despesa));
+            $row->addColumn(new Column($item->num_extrato));
+            $row->addColumn(new Column($item->num_contrato));
+            $row->addColumn(new Column($item->num_processo));
+            $row->addColumn(new Column($item->descr_mod_compra));
+            $row->addColumn(new Column($item->num_licitacao));
+            $row->addColumn(new Column($item->dt_inicio));
+            $row->addColumn(new Column(($item->dt_fim == '') ? '----------' : $item->dt_fim));
+            $row->addColumn(new Column($item->cgc_fornecedor));
+            $row->addColumn(new Column($item->nome_fornecedor));
+            $row->addColumn(new Column($item->cod_reduzido));
+            $row->addColumn(new Column($item->seq_item_processo));
+            $row->addColumn(new Column($item->descricao));
+            $row->addColumn(new Column('R$ ' . $item->vl_unitario));
+            $row->addColumn(new Column($item->qt_contrato));
+            $row->addColumn(new Column($item->vl_contrato));
+            $row->addColumn(new Column($item->qt_utilizado));
+            $row->addColumn(new Column($item->vl_utilizado));
+            $row->addColumn(new Column($item->qt_saldo));
+            $row->addColumn(new Column($item->vl_saldo));
+            $row->addColumn(new Column($item->qtd_solicitada));
+            $row->addColumn(new Column('R$ ' . $item->valor));
+            $row->addColumn(new Column($inputs));
+
+            $table->addRow($row);
+        }
+        return $table;
     }
 
     /**
@@ -744,44 +739,33 @@ class BuscaLTE extends Conexao {
      *
      * 	@return string
      */
-    public function getSolicAltPedidos(int $id_setor): string {
-        $retorno = "";
+    public function getSolicAltPedidos(): string {
         self::openConnection();
-        $query = $this->mysqli->query("SELECT solic_alt_pedido.id_pedido, DATE_FORMAT(solic_alt_pedido.data_solicitacao, '%d/%m/%Y') AS data_solicitacao, DATE_FORMAT(solic_alt_pedido.data_analise, '%d/%m/%Y') AS data_analise, solic_alt_pedido.justificativa, solic_alt_pedido.status, pedido.id_usuario FROM solic_alt_pedido, pedido WHERE pedido.id = solic_alt_pedido.id_pedido AND solic_alt_pedido.id_setor = {$id_setor} ORDER BY solic_alt_pedido.id DESC;") or exit("Erro ao buscar solicitações de alteração de pedidos.");
+        $id_setor = $_SESSION['id_setor'];
+        $query = $this->mysqli->query("SELECT solic_alt_pedido.id_pedido, DATE_FORMAT(solic_alt_pedido.data_solicitacao, '%d/%m/%Y') AS data_solicitacao, DATE_FORMAT(solic_alt_pedido.data_analise, '%d/%m/%Y') AS data_analise, solic_alt_pedido.justificativa, solic_alt_pedido.status, pedido.id_usuario FROM solic_alt_pedido, pedido WHERE pedido.id = solic_alt_pedido.id_pedido AND solic_alt_pedido.id_setor = " . $id_setor . ' ORDER BY solic_alt_pedido.id DESC LIMIT ' . LIMIT_MAX) or exit('Erro ao buscar solicitações de alteração de pedidos');
+        $this->mysqli = NULL;
         $status = $label = "";
+        $table = new Table('', '', array(), false);
+
+        $array_status = ['Reprovado', 'Aprovado', 'Aberto'];
+        $array_lb = ['red', 'green', 'orange'];
+
         while ($solic = $query->fetch_object()) {
-            switch ($solic->status) {
-                case 0:
-                    $status = "Reprovado";
-                    $label = "bg-red";
-                    break;
-                case 1:
-                    $status = "Aprovado";
-                    $label = "bg-green";
-                    break;
-                default:
-                    $status = "Aberto";
-                    $label = "bg-orange";
-                    $solic->data_analise = "--------------";
-                    break;
-            }
-            $solic->justificativa = $this->mysqli->real_escape_string($solic->justificativa);
-            $solic->justificativa = str_replace("\"", "'", $solic->justificativa);
+            $status = $array_status[$solic->status];
+            $label = 'bg-' . $array_lb[$solic->status];
+            $solic->justificativa = str_replace("\"", "\'", $solic->justificativa);
             if ($solic->id_usuario == $_SESSION['id']) {
-                $retorno .= "
-                <tr>
-                    <td>" . $solic->id_pedido . "</td>
-                    <td>" . $solic->data_solicitacao . "</td>
-                    <td>" . $solic->data_analise . "</td>
-                    <td>
-                        <button onclick=\"viewCompl('" . $solic->justificativa . "');\" class=\"btn btn-default\" type=\"button\" title=\"Ver Justificativa\">JUSTIFICATIVA</button>
-                    </td>
-                    <td><small class=\"label " . $label . "\">" . $status . "</small></td>
-                </tr>";
+                $row = new Row();
+                $row->addColumn(new Column($solic->id_pedido));
+                $row->addColumn(new Column($solic->data_solicitacao));
+                $row->addColumn(new Column(($solic->status == 2) ? '--------------' : $solic->data_analise));
+                $row->addColumn(new Column(new Button('', BTN_DEFAULT, "viewCompl('" . $solic->justificativa . "')", "data-toggle=\"tooltip\"", 'Ver Justificativa', 'eye')));
+                $row->addColumn(new Column(new Small('label ' . $label, $status)));
+
+                $table->addRow($row);
             }
         }
-        $this->mysqli = NULL;
-        return $retorno;
+        return $table;
     }
 
     /**
@@ -789,43 +773,32 @@ class BuscaLTE extends Conexao {
      *
      * 	@return string
      */
-    public function getSolicAdiSetor(int $id_setor): string {
-        $retorno = "";
+    public function getSolicAdiSetor(): string {
         self::openConnection();
-        $query = $this->mysqli->query("SELECT id, DATE_FORMAT(data_solicitacao, '%d/%m/%Y') AS data_solicitacao, DATE_FORMAT(data_analise, '%d/%m/%Y') AS data_analise, valor_adiantado, justificativa, status FROM saldos_adiantados WHERE id_setor = " . $id_setor . " ORDER BY id DESC;") or exit("Erro ao buscar solicitações de adiantamento.");
-        $label = $status = "";
-        while ($solic = $query->fetch_object()) {
-            switch ($solic->status) {
-                case 0:
-                    $label = "bg-red";
-                    $status = "Reprovado";
-                    break;
-                case 1:
-                    $label = "bg-green";
-                    $status = "Aprovado";
-                    break;
-                case 2:
-                    $label = "bg-orange";
-                    $status = "Aberto";
-                    $solic->data_analise = "--------------";
-                    break;
-            }
-            $solic->justificativa = $this->mysqli->real_escape_string($solic->justificativa);
-            $solic->justificativa = str_replace("\"", "'", $solic->justificativa);
-            $solic->valor_adiantado = number_format($solic->valor_adiantado, 3, ',', '.');
-            $retorno .= "
-                <tr>
-                    <td>" . $solic->data_solicitacao . "</td>
-                    <td>" . $solic->data_analise . "</td>
-                    <td>R$ " . $solic->valor_adiantado . "</td>
-                    <td>
-                        <button onclick=\"viewCompl('" . $solic->justificativa . "');\" class=\"btn btn-default\" type=\"button\" title=\"Ver Justificativa\">Justificativa</button>
-                    </td>
-                    <td><small class=\"label " . $label . "\">" . $status . "</small></td>
-                </tr>";
-        }
+        $id_setor = $_SESSION['id_setor'];
+        $query = $this->mysqli->query("SELECT id, DATE_FORMAT(data_solicitacao, '%d/%m/%Y') AS data_solicitacao, DATE_FORMAT(data_analise, '%d/%m/%Y') AS data_analise, valor_adiantado, justificativa, status FROM saldos_adiantados WHERE id_setor = " . $id_setor . ' ORDER BY id DESC LIMIT ' . LIMIT_MAX) or exit("Erro ao buscar solicitações de adiantamento.");
         $this->mysqli = NULL;
-        return $retorno;
+        $label = $status = "";
+        $array_status = ['Reprovado', 'Aprovado', 'Aberto'];
+        $array_lb = ['red', 'green', 'orange'];
+
+        $table = new Table('', '', [], false);
+        while ($solic = $query->fetch_object()) {
+            $status = $array_status[$solic->status];
+            $label = 'bg-' . $array_lb[$solic->status];
+            $solic->justificativa = str_replace("\"", "\'", $solic->justificativa);
+            $solic->valor_adiantado = number_format($solic->valor_adiantado, 3, ',', '.');
+
+            $row = new Row();
+            $row->addColumn(new Column($solic->data_solicitacao));
+            $row->addColumn(new Column(($solic->status == 2) ? '--------------' : $solic->data_analise));
+            $row->addColumn(new Column($solic->valor_adiantado));
+            $row->addColumn(new Column(new Button('', BTN_DEFAULT, "viewCompl('" . $solic->justificativa . "')", "data-toggle=\"tooltip\"", 'Ver Justificativa', 'eye')));
+            $row->addColumn(new Column(new Small('label ' . $label, $status)));
+
+            $table->addRow($row);
+        }
+        return $table;
     }
 
     /**
@@ -834,42 +807,33 @@ class BuscaLTE extends Conexao {
      * @return string
      */
     public function getConteudoProcesso(string $busca): string {
-        $retorno = "";
-
         self::openConnection();
-        $query = $this->mysqli->query("SELECT id, id_item_processo, nome_fornecedor, cod_reduzido, complemento_item, replace(vl_unitario, ',', '.') AS vl_unitario, qt_contrato, qt_utilizado, vl_utilizado, qt_saldo, vl_saldo FROM itens WHERE num_processo LIKE '%{$busca}%' AND cancelado = 0;") or exit("Erro ao buscar o conteúdo dos processos.");
-
-        while ($item = $query->fetch_object()) {
-            //remove as aspas do complemento_item
-            $item->complemento_item = $this->mysqli->real_escape_string($item->complemento_item);
-            $item->complemento_item = str_replace("\"", "'", $item->complemento_item);
-            $btn = $input_qtd = '';
-            if (!isset($_SESSION['editmode'])) {
-                $btn = "<button type=\"button\" class=\"btn btn-default\" onclick=\"checkItemPedido(" . $item->id . ", '" . $item->vl_unitario . "', " . $item->qt_saldo . ")\" data-toggle=\"tooltip\" title=\"Adicionar\"><span class=\"fa fa-plus\"></span></button>";
-                $input_qtd = "<td><input type=\"number\" id=\"qtd" . $item->id . "\" min=\"1\" max=\"" . $item->qt_saldo . "\"></td>";
-            } else {
-                $btn = "<button type=\"button\" class=\"btn btn-default\" onclick=\"editaItem(" . $item->id . ")\" data-toggle=\"tooltip\" title=\"Editar Informações\"><span class=\"fa fa-pencil\"></span></button>";
-            }
-            $retorno .= "
-                <tr>
-                    <td>" . $btn . "</td>
-                    <td>" . $item->nome_fornecedor . "</td>
-                    <td>" . $item->cod_reduzido . "</td>
-                    " . $input_qtd . "
-                    <td>
-                        <button type=\"button\" onclick=\"viewCompl('" . $item->complemento_item . "');\" class=\"btn btn-default\" data-toggle=\"tooltip\" title=\"Mais Detalhes\"><span class=\"fa fa-eye\"></span></button>
-                    </td>
-                    <td style=\"display: none;\">" . $item->complemento_item . "</td>
-                    <td>" . $item->vl_unitario . "</td>
-                    <td>" . $item->qt_saldo . "</td>
-                    <td>" . $item->qt_utilizado . "</td>
-                    <td>" . $item->vl_saldo . "</td>
-                    <td>" . $item->vl_utilizado . "</td>
-                    <td>" . $item->qt_contrato . "</td>
-                </tr>";
-        }
+        $query = $this->mysqli->query("SELECT id, id_item_processo, nome_fornecedor, cod_reduzido, complemento_item, replace(vl_unitario, ',', '.') AS vl_unitario, qt_contrato, qt_utilizado, vl_utilizado, qt_saldo, vl_saldo FROM itens WHERE num_processo LIKE '%" . $busca . "%' AND cancelado = 0") or exit("Erro ao buscar o conteúdo dos processos.");
         $this->mysqli = NULL;
-        return $retorno;
+        $table = new Table('', '', [], false);
+        while ($item = $query->fetch_object()) {
+            $item->complemento_item = str_replace("\"", "\'", $item->complemento_item);
+            $btn = (!isset($_SESSION['editmode'])) ? new Button('', BTN_DEFAULT, "checkItemPedido(" . $item->id . ", '" . $item->vl_unitario . "', " . $item->qt_saldo . ")", "data-toggle=\"tooltip\"", 'Adicionar', 'plus') : new Button('', BTN_DEFAULT, "editaItem(" . $item->id . ")", "data-toggle=\"tooltip\"", 'Editar Informações', 'pencil');
+            $input_qtd = (!isset($_SESSION['editmode'])) ? "<input type=\"number\" id=\"qtd" . $item->id . "\" min=\"1\" max=\"" . $item->qt_saldo . "\">" : '';
+            $row = new Row();
+            $row->addColumn(new Column($btn));
+            $row->addColumn(new Column($item->nome_fornecedor));
+            $row->addColumn(new Column($item->cod_reduzido));
+            if (!isset($_SESSION['editmode'])) {
+                $row->addColumn(new Column($input_qtd));
+            }
+            $row->addColumn(new Column(new Button('', BTN_DEFAULT, "viewCompl('" . $item->complemento_item . "')", "data-toggle=\"tooltip\"", 'Ver Detalhes', 'eye')));
+            $row->addColumn(new Column($item->complemento_item, 'none'));
+            $row->addColumn(new Column($item->vl_unitario));
+            $row->addColumn(new Column($item->qt_saldo));
+            $row->addColumn(new Column($item->qt_utilizado));
+            $row->addColumn(new Column($item->vl_saldo));
+            $row->addColumn(new Column($item->vl_utilizado));
+            $row->addColumn(new Column($item->qt_contrato));
+
+            $table->addRow($row);
+        }
+        return $table;
     }
 
     /**
@@ -879,37 +843,52 @@ class BuscaLTE extends Conexao {
      */
     public function addItemPedido(int $id_item, int $qtd): string {
         self::openConnection();
-        $query = $this->mysqli->query("SELECT id, nome_fornecedor, num_licitacao, cod_reduzido, complemento_item, replace(vl_unitario, ',', '.') AS vl_unitario, qt_saldo, qt_contrato, qt_utilizado, vl_saldo, vl_contrato, vl_utilizado FROM itens WHERE id = " . $id_item) or exit("Erro ao buscar ");
-        $item = $query->fetch_object();
-        $item->complemento_item = $this->mysqli->real_escape_string($item->complemento_item);
-        $item->complemento_item = str_replace("\"", "'", $item->complemento_item);
-        $valor = $qtd * $item->vl_unitario;
-        $retorno = "
-            <tr id=\"row" . $id_item . "\">
-                <td><button type=\"button\" class=\"btn btn-default\" onclick=\"removeTableRow(" . $id_item . ", '" . $valor . "')\"><span class=\"fa fa-trash\"></span></a></td>
-                <td>" . $item->cod_reduzido . "</td>
-                <td>
-                    <button onclick=\"viewCompl('" . $item->complemento_item . "');\" class=\"btn btn-default\" type=\"button\" title=\"Ver Complemento do Item\"><span class=\"fa fa-eye\"></span></button>
-                </td>
-                <td>R$ " . $item->vl_unitario . "</td>
-                <td>" . $item->nome_fornecedor . "</td>
-                <td>" . $item->num_licitacao . "</td>
-                <td>" . $qtd . "</td>
-                <td>R$ " . $valor . "</td>
-                <td>
-                    <input class=\"classItens\" type=\"hidden\" name=\"id_item[]\" value=\"" . $id_item . "\">
-                    <input type=\"hidden\" name=\"qtd_solicitada[]\" value=\"" . $qtd . "\">
-                    <input type=\"hidden\" name=\"qtd_disponivel[]\" value=\"" . $item->qt_saldo . "\">
-                    <input type=\"hidden\" name=\"qtd_contrato[]\" value=\"" . $item->qt_contrato . "\">
-                    <input type=\"hidden\" name=\"qtd_utilizado[]\" value=\"" . $item->qt_utilizado . "\">
-                    <input type=\"hidden\" name=\"vl_saldo[]\" value=\"" . $item->vl_saldo . "\">
-                    <input type=\"hidden\" name=\"vl_contrato[]\" value=\"" . $item->vl_contrato . "\">
-                    <input type=\"hidden\" name=\"vl_utilizado[]\" value=\"" . $item->vl_utilizado . "\">
-                    <input type=\"hidden\" name=\"valor[]\" value=\"" . $valor . "\">
-                </td>
-            </tr>";
+        $query = $this->mysqli->query("SELECT id, nome_fornecedor, num_processo, num_licitacao, cod_reduzido, complemento_item, replace(vl_unitario, ',', '.') AS vl_unitario, qt_saldo, qt_contrato, qt_utilizado, vl_saldo, vl_contrato, vl_utilizado FROM itens WHERE id = " . $id_item) or exit("Erro ao buscar ");
         $this->mysqli = NULL;
-        return $retorno;
+        $item = $query->fetch_object();
+        $item->complemento_item = str_replace("\"", "\'", $item->complemento_item);
+        $valor = $qtd * $item->vl_unitario;
+
+        $inputs = "<input class=\"classItens\" type=\"hidden\" name=\"id_item[]\" value=\"" . $id_item . "\">
+                   <input type=\"hidden\" name=\"qtd_solicitada[]\" value=\"" . $qtd . "\">
+                   <input type=\"hidden\" name=\"qtd_disponivel[]\" value=\"" . $item->qt_saldo . "\">
+                   <input type=\"hidden\" name=\"qtd_contrato[]\" value=\"" . $item->qt_contrato . "\">
+                   <input type=\"hidden\" name=\"qtd_utilizado[]\" value=\"" . $item->qt_utilizado . "\">
+                   <input type=\"hidden\" name=\"vl_saldo[]\" value=\"" . $item->vl_saldo . "\">
+                   <input type=\"hidden\" name=\"vl_contrato[]\" value=\"" . $item->vl_contrato . "\">
+                   <input type=\"hidden\" name=\"vl_utilizado[]\" value=\"" . $item->vl_utilizado . "\">
+                   <input type=\"hidden\" name=\"valor[]\" value=\"" . $valor . "\">";
+
+        $row = new Row('row' . $id_item);
+
+        $row->addColumn(new Column(new Button('', BTN_DEFAULT, "removeTableRow(" . $id_item . ", '" . $valor . "')", "data-toggle=\"tooltip\"", 'Remover do Pedido', 'trash')));
+        $row->addColumn(new Column($item->num_processo));
+        $row->addColumn(new Column($item->cod_reduzido));
+        $row->addColumn(new Column(new Button('', BTN_DEFAULT, "viewCompl('" . $item->complemento_item . "')", "data-toggle=\"tooltip\"", 'Ver Complemento do Item', 'eye')));
+        $row->addColumn(new Column('R$ ' . $item->vl_unitario));
+        $row->addColumn(new Column($item->nome_fornecedor));
+        $row->addColumn(new Column($item->num_licitacao));
+        $row->addColumn(new Column($qtd));
+        $row->addColumn(new Column('R$ ' . $valor));
+        $row->addColumn(new Column($inputs));
+
+        return $row;
+    }
+
+    private static final function buildButtonsDraft(int $id_usuario, int $id): string {
+        $group = "<div class=\"btn-group\">";
+
+        $btnEdit = $btnDel = '';
+        if ($id_usuario == $_SESSION['id']) {
+            $btnEdit = new Button('', BTN_DEFAULT . ' btn-sm', "editaPedido(" . $id . ")", "data-toggle=\"tooltip\"", 'Editar', 'pencil');
+
+            $btnDel = new Button('', BTN_DEFAULT . ' btn-sm', "deletePedido(" . $id . ")", "data-toggle=\"tooltip\"", 'Excluir', 'trash');
+        }
+
+        $btnPrint = new Button('', BTN_DEFAULT . ' btn-sm', "imprimir(" . $id . ")", "data-toggle=\"tooltip\"", 'Imprimir', 'print');
+
+        $group .= $btnEdit . $btnPrint . $btnDel . '</div>';
+        return $group;
     }
 
     /**
@@ -917,34 +896,26 @@ class BuscaLTE extends Conexao {
      *
      * @return string
      */
-    public function getRascunhos(int $id_setor): string {
-        $retorno = "";
+    public function getRascunhos(): string {
         self::openConnection();
-        $query = $this->mysqli->query("SELECT id, DATE_FORMAT(data_pedido, '%d/%m/%Y') AS data_pedido, pedido.valor, status, pedido.id_usuario FROM pedido WHERE id_setor = " . $id_setor . " AND alteracao = 1 ORDER BY id DESC LIMIT 500;") or exit("Erro ao buscar rascunhos do setor.");
+        $id_setor = $_SESSION['id_setor'];
+        $query = $this->mysqli->query("SELECT id, DATE_FORMAT(data_pedido, '%d/%m/%Y') AS data_pedido, pedido.valor, status, pedido.id_usuario FROM pedido WHERE id_setor = " . $id_setor . ' AND alteracao = 1 ORDER BY id DESC LIMIT ' . LIMIT_MAX) or exit("Erro ao buscar rascunhos do setor.");
         $this->mysqli = NULL;
 
+        $table = new Table('', '', [], false);
         while ($rascunho = $query->fetch_object()) {
             $rascunho->valor = number_format($rascunho->valor, 3, ',', '.');
-            $btnEdit = '';
-            $btnDel = '';
-            if ($rascunho->id_usuario == $_SESSION['id']) {
-                $btnEdit = "<button type=\"button\" class=\"btn btn-default btn-sm\" onclick=\"editaPedido(" . $rascunho->id . ");\" data-toggle=\"tooltip\" title=\"Editar\"><i class=\"fa fa-pencil\"></i></button>";
-                $btnDel = "<button type=\"button\" class=\"btn btn-default btn-sm\" onclick=\"deletePedido(" . $rascunho->id . ");\" data-toggle=\"tooltip\" title=\"Excluir\"><i class=\"fa fa-trash\"></i></button>";
-            }
-            $retorno .= "
-                <tr>
-                    <td>" . $rascunho->id . "</td>
-                    <td><small class=\"label bg-gray\">" . ARRAY_STATUS[$rascunho->status] . "</small></td>
-                    <td>" . $rascunho->data_pedido . "</td>
-                    <td>R$ " . $rascunho->valor . "</td>
-                    <td>
-                        " . $btnEdit . "
-                        <button type=\"button\" class=\"btn btn-default btn-sm\" onclick=\"imprimir(" . $rascunho->id . ");\" data-toggle=\"tooltip\" title=\"Imprimir\"><i class=\"fa fa-print\"></i></button>
-                        " . $btnDel . "
-                    </td>
-                </tr>";
+
+            $row = new Row();
+            $row->addColumn(new Column($rascunho->id));
+            $row->addColumn(new Column(new Small('label bg-gray', ARRAY_STATUS[$rascunho->status])));
+            $row->addColumn(new Column($rascunho->data_pedido));
+            $row->addColumn(new Column('R$ ' . $rascunho->valor));
+            $row->addColumn(new Column(self::buildButtonsDraft($rascunho->id_usuario, $rascunho->id)));
+
+            $table->addRow($row);
         }
-        return $retorno;
+        return $table;
     }
 
     /**
@@ -967,45 +938,19 @@ class BuscaLTE extends Conexao {
     }
 
     /**
-     * Função para retornar o conteúdo de um pedido para edição
-     *
-     * @access public
-     * @return string
+     * Function that returns the content of request for edition.
+     * 
+     * @param int $id_pedido Request's id.
+     * @return string Rows with itens of $id_pedido param.
      */
     public function getConteudoPedido(int $id_pedido): string {
         $retorno = "";
         self::openConnection();
-        $query = $this->mysqli->query("SELECT itens.qt_contrato, itens.id AS id_itens, itens_pedido.qtd AS qtd_solicitada, itens_pedido.valor, itens.nome_fornecedor, itens.num_licitacao, itens.cod_reduzido, itens.complemento_item, replace(itens.vl_unitario, ',', '.') AS vl_unitario, itens.qt_saldo, itens.qt_contrato, itens.qt_utilizado, itens.vl_saldo, itens.vl_contrato, itens.vl_utilizado FROM itens_pedido, itens WHERE itens_pedido.id_pedido = {$id_pedido} AND itens_pedido.id_item = itens.id") or exit("Erro ao buscar o conteúdo do pedido.");
-        while ($item = $query->fetch_object()) {
-            $id_item = $item->id_itens;
-            $item->complemento_item = $this->mysqli->real_escape_string($item->complemento_item);
-            $item->complemento_item = str_replace("\"", "'", $item->complemento_item);
-            $retorno .= "
-                <tr id=\"row" . $id_item . "\">
-                    <td><button type=\"button\" class=\"btn btn-default\" onclick=\"removeTableRow(" . $id_item . ", '" . $item->valor . "');\" title=\"Remover\"><i class=\"fa fa-trash\"></i></button></td>
-                    <td>" . $item->cod_reduzido . "</td>
-                    <td>
-                        <button type=\"button\" class=\"btn btn-default\" onclick=\"viewCompl('" . $item->complemento_item . "');\"  title=\"Ver Complemento do Item\"><i class=\"fa fa-eye\"></i>
-                    </td>
-                    <td>R$ " . $item->vl_unitario . "</td>
-                    <td>" . $item->nome_fornecedor . "</td>
-                    <td>" . $item->num_licitacao . "</td>
-                    <td>" . $item->qtd_solicitada . "</td>
-                    <td>R$ " . $item->valor . "</td>
-                    <td>
-                        <input type=\"hidden\" name=\"id_item[]\" value=\"" . $id_item . "\">
-                        <input type=\"hidden\" name=\"qtd_solicitada[]\" value=\"" . $item->qtd_solicitada . "\">
-                        <input type=\"hidden\" name=\"qtd_disponivel[]\" value=\"" . $item->qt_saldo . "\">
-                        <input type=\"hidden\" name=\"qtd_contrato[]\" value=\"" . $item->qt_contrato . "\">
-                        <input type=\"hidden\" name=\"qtd_utilizado[]\" value=\"" . $item->qt_utilizado . "\">
-                        <input type=\"hidden\" name=\"vl_saldo[]\" value=\"" . $item->vl_saldo . "\">
-                        <input type=\"hidden\" name=\"vl_contrato[]\" value=\"" . $item->vl_contrato . "\">
-                        <input type=\"hidden\" name=\"vl_utilizado[]\" value=\"" . $item->vl_utilizado . "\">
-                        <input type=\"hidden\" name=\"valor[]\" value=\"" . $item->valor . "\">
-                    </td>
-                </tr>";
-        }
+        $query = $this->mysqli->query('SELECT id_item, qtd FROM itens_pedido WHERE id_pedido = ' . $id_pedido) or exit('Erro ao buscar o conteúdo do pedido');
         $this->mysqli = NULL;
+        while ($item = $query->fetch_object()) {
+            $retorno .= self::addItemPedido($item->id_item, $item->qtd);
+        }
         return $retorno;
     }
 
@@ -1014,84 +959,91 @@ class BuscaLTE extends Conexao {
      *
      * @return string
      */
-    public function getMeusPedidos(int $id_setor): string {
-        $retorno = "";
+    public function getMeusPedidos(string $where = '', array $pedidos = []): string {
         self::openConnection();
-        $query = $this->mysqli->query("SELECT id, DATE_FORMAT(data_pedido, '%d/%m/%Y') AS data_pedido, prioridade, status, valor, id_usuario FROM pedido WHERE id_setor = " . $id_setor . " AND alteracao = 0 ORDER BY id DESC LIMIT 500;") or exit("Erro ao buscar os pedidos do setor.");
+        $id_setor = $_SESSION['id_setor'];
+        $query = $this->mysqli->query("SELECT id, DATE_FORMAT(data_pedido, '%d/%m/%Y') AS data_pedido, prioridade, status, valor, id_usuario FROM pedido WHERE id_setor = " . $id_setor . ' AND alteracao = 0 ' . $where . ' ORDER BY id DESC LIMIT ' . LIMIT_MAX) or exit('Erro ao buscar os pedidos do setor');
         $this->mysqli = NULL;
+
+        $table = new Table('', '', [], false);
         while ($pedido = $query->fetch_object()) {
-            $empenho = self::verEmpenho($pedido->id);
-            if ($empenho == 'EMPENHO SIAFI PENDENTE') {
-                $empenho = '';
+            if (!in_array($pedido->id, $pedidos)) {
+                $empenho = self::verEmpenho($pedido->id);
+                if ($empenho == 'EMPENHO SIAFI PENDENTE') {
+                    $empenho = '';
+                }
+                $pedido->valor = number_format($pedido->valor, 3, ',', '.');
+
+                $row = new Row('ped' . $pedido->id);
+
+                $row->addColumn(new Column($pedido->id));
+                $row->addColumn(new Column($pedido->data_pedido));
+                $row->addColumn(new Column(ARRAY_PRIORIDADE[$pedido->prioridade]));
+                $row->addColumn(new Column(new Small('label bg-gray', ARRAY_STATUS[$pedido->status])));
+                $row->addColumn(new Column($empenho));
+                $row->addColumn(new Column('R$ ' . $pedido->valor));
+                $row->addColumn(new Column(self::getFornecedor($pedido->id)));
+                $row->addColumn(new Column(self::buildButtonsMyRequests($pedido->id, $pedido->status, $pedido->id_usuario)));
+
+                $table->addRow($row);
             }
-            $pedido->valor = number_format($pedido->valor, 3, ',', '.');
-            $btnSolicAlt = "";
-            if ($pedido->status == 2 || $pedido->status == 5 && $pedido->id_usuario == $_SESSION['id']) {
-                $btnSolicAlt = "<button type=\"button\" class=\"btn btn-default btn-sm\" onclick=\"solicAltPed(" . $pedido->id . ");\" data-toggle=\"tooltip\" title=\"Solicitar Alteração\"><i class=\"fa fa-wrench\"></i></button>";
-            }
-            $retorno .= "
-                <tr>
-                    <td>" . $pedido->id . "</td>
-                    <td>" . $pedido->data_pedido . "</td>
-                    <td>" . ARRAY_PRIORIDADE[$pedido->prioridade] . "</td>
-                    <td><small class=\"label bg-gray\">" . ARRAY_STATUS[$pedido->status] . "</small></td>
-                    <td>" . $empenho . "</td>
-                    <td>R$ " . $pedido->valor . "</td>
-                    <td>" . self::getFornecedor($pedido->id) . "</td>
-                    <td>
-                        " . $btnSolicAlt . "
-                        <button type=\"button\" class=\"btn btn-default btn-sm\" onclick=\"imprimir(" . $pedido->id . ");\" data-toggle=\"tooltip\" title=\"Imprimir\"><i class=\"fa fa-print\"></i></button>
-                    </td>
-                </tr>";
         }
-        return $retorno;
+        return $table;
+    }
+
+    private static final function buildButtonsMyRequests(int $id, int $status, int $id_usuario): string {
+        $group = "<div class=\"btn-group\">";
+
+        $btnSolicAlt = ($status == 2 || $status == 5 && $id_usuario == $_SESSION['id']) ? new Button('', BTN_DEFAULT . ' btn-sm', "solicAltPed(" . $id . ")", "data-toggle=\"tooltip\"", 'Solicitar Alteração', 'wrench') : '';
+
+        $btnPrint = new Button('', BTN_DEFAULT . ' btn-sm', "imprimir(" . $id . ")", "data-toggle=\"tooltip\"", 'Imprimir', 'print');
+
+        $group .= $btnSolicAlt . $btnPrint . '</div>';
+
+        return $group;
     }
 
     /**
-     * Retorna todos os processos existes no banco.
+     * Build rows with process in database.
      * 
-     * @param string $tela Se "recepcao" os processos são usadas para uma coisa se não, são usados para construir um pedido.
-     * @return string LInhas com os processos para colocar numa tabela.
+     * @param string $tela If 'recepcao' - add process in tables used by reception, else - search itens of process.
+     * @return string Rows with all process.
      */
     public function getProcessos(string $tela): string {
-        $retorno = "";
-        $sql = "SELECT DISTINCT num_processo FROM itens;";
-        $onclick = "pesquisarProcesso";
-        $title = "Pesquisar Processo";
-        $icon = "fa-search";
+        $sql = 'SELECT DISTINCT num_processo FROM itens';
+        $onclick = 'pesquisarProcesso';
+        $title = 'Pesquisar Processo';
+        $icon = 'search';
         $act = 'Pesquisar';
-        if ($tela == "recepcao") {
-            $sql = "SELECT DISTINCT num_processo FROM itens WHERE num_processo NOT IN (SELECT DISTINCT num_processo FROM processos);";
-            $onclick = "addProcesso";
-            $title = "Adicionar Processo";
-            $icon = "fa-plus";
+        if ($tela == 'recepcao') {
+            $sql = 'SELECT DISTINCT num_processo FROM itens WHERE num_processo NOT IN (SELECT DISTINCT num_processo FROM processos)';
+            $onclick = 'addProcesso';
+            $title = 'Adicionar Processo';
+            $icon = 'plus';
             $act = 'Adicionar';
         }
         self::openConnection();
-        $query = $this->mysqli->query($sql) or exit("Erro ao buscar os processos.");
+        $query = $this->mysqli->query($sql) or exit('Erro ao buscar os processos');
         $this->mysqli = NULL;
+        $table = new Table('', '', [], false);
         while ($processo = $query->fetch_object()) {
-            $retorno .= "
-                <tr>
-                    <td>" . $processo->num_processo . "</td>
-                    <td>
-                        <button type=\"button\" title=\"" . $title . "\" onclick=\"" . $onclick . "('" . $processo->num_processo . "', 0)\" class=\"btn btn-primary\"><i class=\"fa " . $icon . "\"></i> " . $act . "</button>
-                    </td>
-                </tr>";
+            $row = new Row();
+            $row->addColumn(new Column($processo->num_processo));
+            $row->addColumn(new Column(new Button('', 'btn btn-primary', $onclick . "('" . $processo->num_processo . "', 0)", "data-toggle=\"tooltip\"", $title, $icon)));
+
+            $table->addRow($row);
         }
-        return $retorno;
+        return $table;
     }
 
     private function getSetorTransf(int $id_lancamento) {
         self::openConnection();
         $query = $this->mysqli->query("SELECT id_setor, valor FROM saldos_lancamentos WHERE id = " . $id_lancamento) or exit("Erro ao buscar setor da transferência");
         $obj = $query->fetch_object();
-        if ($obj->valor < 0) { // pega o destino
-            $id_lancamento++;
-        } else {
-            $id_lancamento--;
-        }
-        $query_l = $this->mysqli->query("SELECT saldos_lancamentos.id_setor, setores.nome AS setor, saldos_lancamentos.valor FROM saldos_lancamentos, setores WHERE setores.id = saldos_lancamentos.id_setor AND saldos_lancamentos.id = " . $id_lancamento) or exit("Erro ao buscar nome do setor da transferência");
+
+        $id = ($obj->valor < 0) ? $id_lancamento + 1 : $id_lancamento - 1;
+
+        $query_l = $this->mysqli->query("SELECT saldos_lancamentos.id_setor, setores.nome AS setor, saldos_lancamentos.valor FROM saldos_lancamentos, setores WHERE setores.id = saldos_lancamentos.id_setor AND saldos_lancamentos.id = " . $id) or exit("Erro ao buscar nome do setor da transferência");
         $this->mysqli = NULL;
 
         $lancamento = $query_l->fetch_object();
@@ -1105,42 +1057,31 @@ class BuscaLTE extends Conexao {
      * 	@return string
      */
     public function getLancamentos(int $id_setor): string {
-        $retorno = "";
-        $where = "";
-        if ($id_setor != 0) {
-            $where = "AND saldos_lancamentos.id_setor = " . $id_setor;
-        }
-        self::openConnection();
-        $query = $this->mysqli->query("SELECT saldos_lancamentos.id, saldos_lancamentos.id_setor, DATE_FORMAT(saldos_lancamentos.data, '%d/%m/%Y') AS data, saldos_lancamentos.valor, saldo_categoria.nome AS categoria, saldo_categoria.id AS id_categoria FROM saldos_lancamentos, saldo_categoria WHERE saldos_lancamentos.categoria = saldo_categoria.id " . $where . " ORDER BY saldos_lancamentos.id DESC LIMIT 500;") or exit("Erro ao buscar informações dos lançamentos.");
-        $this->mysqli = NULL;
-        $cor = '';
-        while ($lancamento = $query->fetch_object()) {
-            if ($lancamento->valor < 0) {
-                $cor = 'red';
-            } else {
-                $cor = 'green';
-            }
-            $setor_transf = '';
-            if ($lancamento->id_categoria == 3) { // transferencia
-                $setor_transf = self::getSetorTransf($lancamento->id);
-            }
+        $where = ($id_setor != 0) ? ' WHERE id_setor = ' . $id_setor : '';
 
-            $btn = '';
-            if ($_SESSION['id_setor'] == 2 && $lancamento->id_categoria != 4) {
-                $btn = "<button type=\"button\" data-toggle=\"tooltip\" title=\"Desfazer\" onclick=\"undoFreeMoney(" . $lancamento->id . ")\" class=\"btn btn-default\"><i class=\"fa fa-undo\"></i></button>";
-            }
+        self::openConnection();
+        $query = $this->mysqli->query("SELECT id, id_setor, DATE_FORMAT(data, '%d/%m/%Y') AS data, valor, categoria FROM saldos_lancamentos" . $where . ' ORDER BY id DESC LIMIT ' . LIMIT_MAX) or exit('Erro ao buscar informações dos lançamentos');
+        $this->mysqli = NULL;
+
+        $table = new Table('', '', [], false);
+        while ($lancamento = $query->fetch_object()) {
+            $cor = ($lancamento->valor < 0) ? 'red' : 'green';
+            $setor_transf = ($lancamento->categoria == 3) ? self::getSetorTransf($lancamento->id) : '';
+
+            $btn = ($_SESSION['id_setor'] == 2 && $lancamento->categoria != 4) ? new Button('', BTN_DEFAULT, "undoFreeMoney(" . $lancamento->id . ")", "data-toggle=\"tooltip\"", 'Desfazer', 'undo') : '';
             $lancamento->valor = number_format($lancamento->valor, 3, ',', '.');
-            $retorno .= "
-                <tr>
-                    <td>" . $btn . "</td>
-                    <td>" . ARRAY_SETORES[$lancamento->id_setor] . "</td>
-                    <td>" . $lancamento->data . "</td>
-                    <td style=\"color: " . $cor . ";\">R$ " . $lancamento->valor . "</td>
-                    <td>" . $lancamento->categoria . "</td>
-                    <td>" . $setor_transf . "</td>
-                </tr>";
+
+            $row = new Row();
+            $row->addColumn(new Column($btn));
+            $row->addColumn(new Column(ARRAY_SETORES[$lancamento->id_setor]));
+            $row->addColumn(new Column($lancamento->data));
+            $row->addColumn(new Column("<span style=\"color: " . $cor . ";\">" . 'R$ ' . $lancamento->valor . "</span>"));
+            $row->addColumn(new Column(ARRAY_CATEGORIA[$lancamento->categoria]));
+            $row->addColumn(new Column($setor_transf));
+
+            $table->addRow($row);
         }
-        return $retorno;
+        return $table;
     }
 
 }

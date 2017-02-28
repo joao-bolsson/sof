@@ -115,13 +115,20 @@ if (isset($_SESSION['editmode'])) {
                     </div>
                     <!-- sidebar menu: : style can be found in sidebar.less -->
                     <ul class="sidebar-menu">
+                        <?php if ($permissao->noticias): ?>
+                            <li>
+                                <a href="posts.php">
+                                    <i class="fa fa-newspaper-o"></i> <span>Postar</span>
+                                    <span class="pull-right-container">
+                                        <small class="label pull-right bg-blue">novo</small>
+                                    </span>
+                                </a>
+                            </li>
+                        <?php endif; ?>
                         <?php if (!$permissao->recepcao): ?>
                             <li>
                                 <a href="javascript:mostra('rowCadRP');">
                                     <i class="fa fa-database"></i> <span>Cadastrar Itens</span>
-                                    <span class="pull-right-container">
-                                        <small class="label pull-right bg-blue">novo</small>
-                                    </span>
                                 </a>
                             </li>
                         <?php endif; ?>
@@ -216,26 +223,23 @@ if (isset($_SESSION['editmode'])) {
                                     <i class="fa fa-file-text"></i> <span>Relatórios</span>
                                     <span class="pull-right-container">
                                         <i class="fa fa-angle-left pull-right"></i>
+                                        <small class="label pull-right bg-blue">novo</small>
                                     </span>
                                 </a>
                                 <ul class="treeview-menu">
                                     <li><a href="javascript:abreModal('#relPedidos');"><i class="fa fa-circle-o"></i> Pedidos</a></li>
-                                    <li><a href="javascript:listRelatorios();"><i class="fa fa-circle-o"></i> Lista de Pedidos</a></li>
-                                    <li>
-                                        <a href="javascript:relListUsers();"><i class="fa fa-circle-o"></i> Usuários
-                                            <span class="pull-right-container">
-                                                <small class="label pull-right bg-blue">novo</small>
-                                            </span>
-                                        </a>
-                                    </li>
+                                    <li><a href="javascript:relListUsers();"><i class="fa fa-circle-o"></i> Usuários</a></li>
+                                    <li><a href="javascript:abreModal('#relLibOrc');"><i class="fa fa-circle-o"></i> Liberações Orçamentárias</a></li>
                                 </ul>
                             </li>
                         <?php endif; ?>
-                        <li>
-                            <a href="editmode.php">
-                                <i class="fa fa-pencil"></i> <span>Editar Itens</span>
-                            </a>
-                        </li>
+                        <?php if ($permissao->pedidos): ?>
+                            <li>
+                                <a href="editmode.php">
+                                    <i class="fa fa-pencil"></i> <span>Editar Itens</span>
+                                </a>
+                            </li>
+                        <?php endif; ?>
                         <?php if ($permissao->recepcao): ?>
                             <li>
                                 <a href="javascript:listProcessos('admin');">
@@ -276,7 +280,7 @@ if (isset($_SESSION['editmode'])) {
                     <?php if ($permissao->recepcao): ?>
                         <div class="row">
                             <div class="col-xs-12">
-                                <div class="box">
+                                <div class="box box-primary">
                                     <div class="box-header">
                                         <h3 class="box-title">Processos</h3>
                                         <div class="box-tools pull-right">
@@ -285,7 +289,9 @@ if (isset($_SESSION['editmode'])) {
                                         </div>
                                     </div><!-- /.box-header -->
                                     <div class="box-body">
-                                        <a href="javascript:addProcesso(' ', 0);"><i class="fa fa-plus"></i>Adicionar Processo</a>
+                                        <div class="margin">
+                                            <button class="btn btn-primary" type="button" onclick="addProcesso(' ', 0)"><i class="fa fa-plus"></i>&nbsp;Adicionar Processo</button>
+                                        </div>
                                         <table class="table stripe" id="tableRecepcao" style="width: 100%;">
                                             <thead>
                                                 <tr>
@@ -800,7 +806,7 @@ if (isset($_SESSION['editmode'])) {
                         </div>
                         <form action="javascript:loadMore();" method="POST">
                             <div class="modal-body">
-                                <small class="label bg-gray">Carrega todos os pedidos entre Limite 1 e Limite 2. A consulta trás todos os pedidos entre tais limites, <br>independente do conteúdo que já estiver na tabela.</small>
+                                <small class="label bg-gray">Carrega todos os pedidos entre Limite 1 e Limite 2.</small>
                                 <div class="form-group">
                                     <label>Limite 1</label>
                                     <input type="number" class="form-control" id="limit1" name="limit1" step="1" min="0" required>
@@ -815,6 +821,27 @@ if (isset($_SESSION['editmode'])) {
                                 <button class="btn btn-primary" type="submit" style="width: 100%;"><i class="fa fa-cloud-download"></i>&nbsp;Carregar</button>
                             </div>
                         </form>
+                    </div>
+                </div>
+            </div>
+            <div aria-hidden="true" class="modal fade" id="listProcessos" role="dialog" tabindex="-1">
+                <div class="modal-dialog" style="width: 60%;">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                            <h4 class="modal-title">Processos Atendidos pelo SOF</h4>
+                        </div>
+                        <div class="modal-body">
+                            <table id="tableListProcessos" class="table table-bordered table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>Número do Processo</th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+                                <tbody id="tbodyListProcessos"></tbody>
+                            </table>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -840,27 +867,6 @@ if (isset($_SESSION['editmode'])) {
                                     </div>
                                 </div>
                             </form>
-                        </div>
-                    </div>
-                </div>
-                <div aria-hidden="true" class="modal fade" id="listProcessos" role="dialog" tabindex="-1">
-                    <div class="modal-dialog" style="width: 60%;">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                                <h4 class="modal-title">Processos Atendidos pelo SOF</h4>
-                            </div>
-                            <div class="modal-body">
-                                <table id="tableListProcessos" class="table table-bordered table-striped">
-                                    <thead>
-                                        <tr>
-                                            <th>Número do Processo</th>
-                                            <th></th>
-                                        </tr>
-                                    </thead>
-                                    <tbody id="tbodyListProcessos"></tbody>
-                                </table>
-                            </div>
                         </div>
                     </div>
                 </div>
@@ -961,7 +967,7 @@ if (isset($_SESSION['editmode'])) {
                                                 <td colspan="2">
                                                     <div class="form-group">
                                                         <label>Observação</label>
-                                                        <textarea class="form-control" id="obs" name="obs" rows="2" required></textarea>
+                                                        <textarea class="form-control" id="obs" name="obs" rows="2"></textarea>
                                                     </div>
                                                 </td>
                                             </tr>
@@ -1172,33 +1178,53 @@ if (isset($_SESSION['editmode'])) {
                         </div>
                     </div>
                 </div>
-                <div aria-hidden="true" class="modal fade" id="listRelatorios" role="dialog" tabindex="-1">
-                    <div class="modal-dialog" style="width: 80%;">
+                <div aria-hidden="true" class="modal fade" id="relLibOrc" role="dialog" tabindex="-1">
+                    <div class="modal-dialog">
                         <div class="modal-content">
                             <div class="modal-header">
                                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                                <h4 class="modal-title">Relatórios</h4>
+                                <h4 class="modal-title">Relatório de Liberações Orçamentárias</h4>
                             </div>
-                            <div class="modal-body">
-                                <table style="width: 100%;">
-                                    <?= $obj_Busca->getRadiosStatusRel(); ?>
-                                </table>
-                                <p id="relTotRow" style="display: none;"></p>
-                                <table id="tableListRelatorios" class="table table-bordered table-striped">
-                                    <thead>
-                                        <tr>
-                                            <th>Pedido</th>
-                                            <th>Data de Envio</th>
-                                            <th>Prioridade</th>
-                                            <th>Status</th>
-                                            <th>SIAFI</th>
-                                            <th>Valor</th>
-                                            <th>Opções</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody id="tbodyListRelatorios"></tbody>
-                                </table>
-                            </div>
+                            <form action="../admin/printRelatorio.php" method="post" target="_blank">
+                                <input type="hidden" name="tipo" value="liberacoes" />
+                                <input type="hidden" name="relatorio" value="1" />
+                                <div class="modal-body">
+                                    <div class="form-group">
+                                        <label>Setor</label>
+                                        <select class="form-control" name="setor" required>
+                                            <option value="0">Todos</option>
+                                            <?= $obj_Busca->getOptionsSetores(); ?>
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Categoria</label>
+                                        <select class="form-control select2" name="categoria[]" multiple="multiple" data-placeholder="Selecione" required>
+                                            <?= $obj_Busca->getOptionsCategoria(); ?>
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Data Início</label>
+                                        <div class="input-group">
+                                            <div class="input-group-addon">
+                                                <i class="fa fa-calendar"></i>
+                                            </div>
+                                            <input type="text" class="form-control date" name="dataI" required data-inputmask="'alias': 'dd/mm/yyyy'" data-mask>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Data Fim</label>
+                                        <div class="input-group">
+                                            <div class="input-group-addon">
+                                                <i class="fa fa-calendar"></i>
+                                            </div>
+                                            <input type="text" class="form-control date" name="dataF" required data-inputmask="'alias': 'dd/mm/yyyy'" data-mask>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="modal-footer">
+                                    <button class="btn btn-primary" type="submit" style="width: 100%;"><i class="fa fa-refresh"></i>&nbsp;Gerar</button>
+                                </div>
+                            </form>
                         </div>
                     </div>
                 </div>

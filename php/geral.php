@@ -115,6 +115,16 @@ if ($obj_Busca->isActive()) {
                     $saldos = !is_null(filter_input(INPUT_POST, 'saldos'));
                     $pedidos = !is_null(filter_input(INPUT_POST, 'pedidos'));
                     $recepcao = !is_null(filter_input(INPUT_POST, 'recepcao'));
+
+                    if ($recepcao) {
+                        $noticias = 0;
+                        $saldos = 0;
+                        $pedidos = 0;
+                    }
+
+                    if ($noticias || $saldos || $pedidos) {
+                        $recepcao = 0;
+                    }
                 }
 
                 $obj_Geral->cadPermissao($id_user, $noticias, $saldos, $pedidos, $recepcao);
@@ -430,7 +440,7 @@ if ($obj_Busca->isActive()) {
                     $id_noticia = $obj_Geral->setPost($data, $postagem, $pag);
 
                     if ($id_noticia != 0) {
-                        header("Location: ../admin/");
+                        header("Location: ../lte/posts.php");
                     } else {
                         echo "Ocorreu um erro no servidor. Contate o administrador.";
                     }
@@ -439,7 +449,7 @@ if ($obj_Busca->isActive()) {
 
                     $editar = $obj_Geral->editPost($data, $id, $postagem, $pag);
                     if ($editar) {
-                        header("Location: ../admin/");
+                        header("Location: ../lte/posts.php");
                     } else {
                         echo "Ocorreu um erro no servidor. Contate o administrador.";
                     }
@@ -450,8 +460,12 @@ if ($obj_Busca->isActive()) {
 
             case 'delArquivo':
                 $file = filter_input(INPUT_POST, 'caminhoDel');
-                unlink($file);
-                echo "O arquivo foi excluído com sucesso! A seguir, esta página será recarregada";
+                $unlink = unlink($file);
+                if ($unlink == TRUE) {
+                    echo "O arquivo foi excluído com sucesso! A seguir, esta página será recarregada";
+                } else {
+                    echo "Falha ao excluir arquivo: " . $file;
+                }
                 break;
 
             // comentário

@@ -40,11 +40,6 @@ if (!is_null($admin) && isset($_SESSION['id_setor']) && ($_SESSION['id_setor'] =
 
     switch ($form) {
 
-        case 'refreshTot':
-            $status = filter_input(INPUT_POST, 'status');
-            echo $obj_Busca->getTotalByStatus($status);
-            break;
-
         case 'verProcessos':
             $id_pedido = filter_input(INPUT_POST, 'id_pedido');
             echo $obj_Busca->getProcessosPedido($id_pedido);
@@ -85,11 +80,6 @@ if (!is_null($admin) && isset($_SESSION['id_setor']) && ($_SESSION['id_setor'] =
         case 'editarNoticia':
             $id = filter_input(INPUT_POST, 'id');
             echo $obj_Busca->getPublicacaoEditar($id);
-            break;
-
-        case 'carregaPostsPag':
-            $tabela = filter_input(INPUT_POST, 'tabela');
-            echo $obj_Busca->getNoticiasEditar($tabela);
             break;
 
         case 'infoPedido':

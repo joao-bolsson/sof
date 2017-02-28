@@ -9,7 +9,10 @@
 ini_set('display_erros', true);
 error_reporting(E_ALL);
 require_once 'phpmailer/PHPMailerAutoload.php';
-include_once 'Conexao.class.php';
+
+spl_autoload_register(function (string $class_name) {
+    include_once $class_name . '.class.php';
+});
 
 class Util extends Conexao {
 
@@ -221,6 +224,34 @@ class Util extends Conexao {
         }
         $diretorio->close();
         return $retorno;
+    }
+
+    /**
+     * Função que exibe os arquivos no modal do admin, usada diretamente no index
+     *
+     * @access public
+     * @return string
+     */
+    public function getArquivosLTE(): string {
+        $pasta = '../uploads/';
+        $diretorio = dir($pasta);
+
+        $table = new Table('', '', [], false);
+        while ($arquivo = $diretorio->read()) {
+            $tipo = pathinfo($pasta . $arquivo);
+
+            $label = ($tipo["extension"] == "jpg" || $tipo["extension"] == "png" || $tipo["extension"] == "jpeg") ? 'blue' : 'gray';
+            $tipo_doc = ($tipo["extension"] == "jpg" || $tipo["extension"] == "png" || $tipo["extension"] == "jpeg") ? 'Imagem' : 'Documento';
+            if ($arquivo != "." && $arquivo != "..") {
+                $row = new Row();
+                $row->addColumn(new Column(new Small('label bg-' . $label, $tipo_doc)));
+                $row->addColumn(new Column("<a href=\"" . $pasta . $arquivo . "\" target=\"_blank\">" . $arquivo . "</a>"));
+
+                $table->addRow($row);
+            }
+        }
+        $diretorio->close();
+        return $table;
     }
 
     /**

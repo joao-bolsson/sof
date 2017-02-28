@@ -10,8 +10,9 @@
 ini_set('display_erros', true);
 error_reporting(E_ALL);
 
-include_once 'Conexao.class.php';
-include_once 'Util.class.php';
+spl_autoload_register(function (string $class_name) {
+    include_once $class_name . '.class.php';
+});
 
 class Busca extends Conexao {
 
@@ -48,43 +49,6 @@ class Busca extends Conexao {
         return $array;
     }
 
-    public function testValores() {
-        Busca::openConnection();
-
-        $query_ped = $this->mysqli->query("SELECT pedido.id, pedido.id_setor, pedido.valor, saldo_setor.saldo FROM pedido, saldo_setor WHERE saldo_setor.id_setor = pedido.id_setor;");
-        while ($pedido = $query_ped->fetch_object()) {
-            $query = $this->mysqli->query("SELECT sum(valor) AS soma FROM itens_pedido WHERE itens_pedido.id_pedido = " . $pedido->id . ";");
-            $obj = $query->fetch_object();
-            $novo_saldo = $pedido->saldo;
-            if ($obj->soma != $pedido->valor) {
-                if ($obj->soma == NULL) {
-                    echo "sem itens<br>";
-                    $obj->soma = 0;
-                    $novo_saldo += $pedido->valor;
-                } else if ($obj->soma < $pedido->valor) {
-                    echo "soma < valor<br>";
-                    $dif = $pedido->valor - $obj->soma;
-                    $novo_saldo += $dif;
-                } else if ($obj->soma > $pedido->valor) {
-                    echo "soma > valor<br>";
-                    $dif = $obj->soma - $pedido->valor;
-                    $novo_saldo -= $dif;
-                }
-                if ($obj->soma == 0 && $pedido->valor == 0) {
-                    echo "soma zero, valor zero <br>";
-                } else {
-                    $this->mysqli->query("UPDATE pedido SET valor = {$obj->soma} WHERE id = {$pedido->id};");
-                    echo "atualiza valor do pedido {$pedido->id} <br>";
-                }
-            }
-            if ($novo_saldo != $pedido->saldo) {
-                $this->mysqli->query("UPDATE saldo_setor SET saldo = {$novo_saldo} WHERE id_setor = {$pedido->id_setor};");
-                echo "atualiza saldo do setor {$pedido->id_setor} <br>";
-            }
-        }
-        $this->mysqli = NULL;
-    }
-
     public function getInfoContrato(int $id_pedido) {
         Busca::openConnection();
         $query = $this->mysqli->query("SELECT pedido.pedido_contrato, pedido_contrato.id_tipo, pedido_contrato.siafi FROM pedido, pedido_contrato WHERE pedido.id = pedido_contrato.id_pedido AND pedido.id = {$id_pedido};") or exit("Erro ao buscar informações do contrato.");
@@ -119,38 +83,24 @@ class Busca extends Conexao {
     }
 
     /**
-     * Função para retornar uma string para mostrar o total dos pedidos com determinado status.
-     * @param int $status status dos pedidos para somar.
-     * @return string String "Totalizando R$ x".
-     */
-    public function getTotalByStatus(int $status): string {
-        Busca::openConnection();
-        $query = $this->mysqli->query("SELECT sum(valor) AS total FROM pedido WHERE status = " . $status) or exit("Erro ao buscar o total pelo status.");
-        $this->mysqli = NULL;
-        $tot = $query->fetch_object();
-        $tot->total = number_format($tot->total, 3, ',', '.');
-        return "Totalizando R$ " . $tot->total;
-    }
-
-    /**
      * 	Função para retornar os processos que estão nos pedidos com suas datas de vencimento
      *
      * 	@param $pedido Id do pedido.
      * 	@return Uma tabela com os processos e as informações dele.
      */
     public function getProcessosPedido(int $pedido): string {
-        Busca::openConnection();
+        self::openConnection();
         $query = $this->mysqli->query("SELECT DISTINCT itens.num_processo, itens.dt_fim FROM itens, itens_pedido WHERE itens_pedido.id_pedido = " . $pedido . " AND itens_pedido.id_item = itens.id;") or exit("Erro ao buscar os processos do pedido.");
         $this->mysqli = NULL;
-        $retorno = "";
+        $table = new Table('', '', array(), false);
         while ($processo = $query->fetch_object()) {
-            $retorno .= "
-                <tr>
-                    <td>" . $processo->num_processo . "</td>
-                    <td>" . $processo->dt_fim . "</td>
-                </tr>";
+            $row = new Row();
+            $row->addColumn(new Column($processo->num_processo));
+            $row->addColumn(new Column($processo->dt_fim));
+
+            $table->addRow($row);
         }
-        return $retorno;
+        return $table;
     }
 
     /**
@@ -159,23 +109,25 @@ class Busca extends Conexao {
      * 	@return string Linhas para uma tabela mostrar os problemas.
      */
     public function getProblemas(): string {
-        Busca::openConnection();
+        self::openConnection();
         $query = $this->mysqli->query("SELECT setores.nome AS setor, problemas.assunto, problemas.descricao FROM setores, problemas WHERE setores.id = problemas.id_setor ORDER BY problemas.id DESC;") or exit("Erro ao buscar os problemas.");
-        $retorno = "";
+        $table = new Table('', '', array(), false);
+
         while ($problema = $query->fetch_object()) {
             $problema->descricao = $this->mysqli->real_escape_string($problema->descricao);
             $problema->descricao = str_replace("\"", "'", $problema->descricao);
-            $retorno .= "
-                <tr>
-                    <td>" . $problema->setor . "</td>
-                    <td>" . $problema->assunto . "</td>
-                    <td>
-                        <button onclick=\"viewCompl('" . $problema->descricao . "');\" class=\"btn btn-default\" type=\"button\" data-toggle=\"tooltip\" title=\"Ver Descrição Informada\">Descrição</button>
-                    </td>
-                </tr>";
+
+            $btn = "<button onclick=\"viewCompl('" . $problema->descricao . "');\" class=\"btn btn-default\" type=\"button\" data-toggle=\"tooltip\" title=\"Ver Descrição Informada\">Descrição</button>";
+
+            $row = new Row();
+            $row->addColumn(new Column($problema->setor));
+            $row->addColumn(new Column($problema->assunto));
+            $row->addColumn(new Column($btn));
+
+            $table->addRow($row);
         }
         $this->mysqli = NULL;
-        return $retorno;
+        return $table;
     }
 
     /**
@@ -185,8 +137,8 @@ class Busca extends Conexao {
      * 	@return object
      */
     public function getInfoItem($id_item) {
-        Busca::openConnection();
-        $query = $this->mysqli->query("SELECT cod_despesa, cod_reduzido, dt_fim, complemento_item, replace(vl_unitario, ',', '.') AS vl_unitario, qt_contrato, replace(vl_contrato, ',', '.') AS vl_contrato, qt_utilizado, replace(vl_utilizado, ',', '.') AS vl_utilizado, qt_saldo, replace(vl_saldo, ',', '.') AS vl_saldo, seq_item_processo FROM itens WHERE id = " . $id_item) or exit("Erro ao buscar informações do item.");
+        self::openConnection();
+        $query = $this->mysqli->query("SELECT cod_despesa, descr_despesa, cod_reduzido, dt_fim, complemento_item, replace(vl_unitario, ',', '.') AS vl_unitario, qt_contrato, replace(vl_contrato, ',', '.') AS vl_contrato, qt_utilizado, replace(vl_utilizado, ',', '.') AS vl_utilizado, qt_saldo, replace(vl_saldo, ',', '.') AS vl_saldo, seq_item_processo FROM itens WHERE id = " . $id_item) or exit('Erro ao buscar informações do item');
         $this->mysqli = NULL;
         $obj = $query->fetch_object();
         return json_encode($obj);
@@ -450,30 +402,6 @@ class Busca extends Conexao {
     }
 
     /**
-     * 	Função para retornar a tabela de notícias de uma página para edição
-     *
-     * 	@return string
-     */
-    public function getNoticiasEditar(int $tabela): string {
-        $retorno = "";
-        Busca::openConnection();
-        $query = $this->mysqli->query("SELECT id, tabela, titulo, DATE_FORMAT(data, '%d/%m/%Y') AS data FROM postagens WHERE ativa = 1 AND tabela = " . $tabela . " ORDER BY data ASC;") or exit("Erro ao buscar as notícias para editar.");
-        $this->mysqli = NULL;
-        while ($postagem = $query->fetch_object()) {
-            $retorno .= "
-                <tr>
-                    <td>" . $postagem->data . "</td>
-                    <td>" . $postagem->titulo . "</td>
-                    <td>
-                        <button class=\"btn btn-default btn-sm\" style=\"text-transform: none !important;font-weight: bold;\" onclick=\"editaNoticia(" . $postagem->id . ", " . $postagem->tabela . ", '" . $postagem->data . "')\" title=\"Editar\"><span class=\"icon\">create</span></button>
-                        <button class=\"btn btn-default btn-sm\" style=\"text-transform: none !important;font-weight: bold;\" onclick=\"excluirNoticia(" . $postagem->id . ");\" title=\"Excluir\"><span class=\"icon\">delete</span></button>
-                    </td>
-                </tr>";
-        }
-        return $retorno;
-    }
-
-    /**
      * Função para buscar conteúdo de uma publicação para edição.
      *
      * @return string
@@ -484,22 +412,6 @@ class Busca extends Conexao {
         $this->mysqli = NULL;
         $publicacao = $query->fetch_object();
         return $publicacao->postagem;
-    }
-
-    /**
-     * Função para escrever as opções para "Postar em " do painel administrativo
-     *
-     * @return string
-     */
-    public function getPostarEm(): string {
-        $retorno = "";
-        Busca::openConnection();
-        $query = $this->mysqli->query("SELECT id, nome FROM paginas_post;") or exit("Erro ao buscar as páginas para postagem.");
-        $this->mysqli = NULL;
-        while ($pagina = $query->fetch_object()) {
-            $retorno .= "<option id=\"op" . $pagina->id . "\" value=\"" . $pagina->id . "\">" . $pagina->nome . "</option>";
-        }
-        return $retorno;
     }
 
     /**

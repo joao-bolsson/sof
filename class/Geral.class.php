@@ -65,9 +65,9 @@ class Geral extends Conexao {
     public function editItemFactory($dados) {
         self::openConnection();
         if (empty($dados)) {
-            exit("Factory data is empty.");
+            exit('Factory data is empty');
         }
-        $this->mysqli->query("UPDATE itens SET cod_despesa = '" . $dados->codDespesa . "', cod_reduzido = '" . $dados->codReduzido . "', dt_fim = '" . $dados->dtFim . "', seq_item_processo = '" . $dados->seqItemProcesso . "' WHERE id = " . $dados->idItem . " LIMIT 1;") or exit("Erro ao atualizar informações do item: " . $this->mysqli->error);
+        $this->mysqli->query("UPDATE itens SET cod_despesa = '" . $dados->codDespesa . "', descr_despesa = '" . $dados->descrDespesa . "', cod_reduzido = '" . $dados->codReduzido . "', dt_fim = '" . $dados->dtFim . "', seq_item_processo = '" . $dados->seqItemProcesso . "' WHERE id = " . $dados->idItem . " LIMIT 1;") or exit("Erro ao atualizar informações do item: " . $this->mysqli->error);
         $this->mysqli = NULL;
     }
 
@@ -719,14 +719,14 @@ class Geral extends Conexao {
      *   Função para editar uma postagem.
      */
     public function editPost($data, $id, $postagem, $pag) {
-        Geral::openConnection();
+        self::openConnection();
         $postagem = $this->mysqli->real_escape_string($postagem);
 
         $inicio = strpos($postagem, "<h3");
         $fim = strpos($postagem, "</h3>");
         $titulo = strip_tags(substr($postagem, $inicio, $fim));
 
-        $update = $this->mysqli->query("UPDATE postagens SET tabela = {$pag}, titulo = '{$titulo}', data = '{$data}', postagem = '{$postagem}' WHERE id = {$id};") or exit("Erro ao atualizar postagem");
+        $this->mysqli->query("UPDATE postagens SET tabela = {$pag}, titulo = '{$titulo}', data = '{$data}', postagem = '{$postagem}' WHERE id = {$id};") or exit('Erro ao atualizar postagem: ' . $this->mysqli->error);
 
         $this->mysqli = NULL;
 

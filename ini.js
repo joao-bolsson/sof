@@ -84,19 +84,6 @@ function altInfoUser() {
     });
 }
 
-function carregaPostsPag(tabela) {
-    document.getElementById('loader');
-    $.post('../php/busca.php', {
-        admin: 1,
-        form: 'carregaPostsPag',
-        tabela: tabela
-    }, function (resposta) {
-        $('#tableNoticiasEditar').DataTable().destroy();
-        document.getElementById('contNoticiasEditar').innerHTML = resposta;
-        iniDataTable('#tableNoticiasEditar');
-    });
-}
-
 function login() {
     var user = document.getElementById("user").value;
     var senha = document.getElementById("senha").value;
@@ -174,73 +161,8 @@ function dropTile(id) {
     document.getElementById('qtd-arquivos').value = parseInt(qtd) - 1;
 }
 
-function delArquivo(caminho) {
-    del = confirm("Este arquivo será excluído PERMANENTEMENTE do sistema! Estando impossibilitada a sua recuperação.");
-    if (del) {
-        $.post('../php/geral.php', {
-            admin: 1,
-            form: 'delArquivo',
-            caminhoDel: caminho
-        }, function (resposta) {
-            alert(resposta);
-            window.location.href = "index.php";
-        });
-    }
-}
-
-function editaNoticia(id, tabela, data) {
-    document.getElementById("funcao").value = "editar";
-    document.getElementById("id_noticia").value = id;
-    document.getElementById("tabela").value = tabela;
-    document.getElementById("data").value = data;
-
-    $.post('../php/busca.php', {
-        admin: 1,
-        form: 'editarNoticia',
-        id: id
-    }, function (resposta) {
-        $('#txtnoticia').froalaEditor('destroy');
-        document.getElementById("txtnoticia").value = "";
-        $('#txtnoticia').froalaEditor({
-            language: 'pt_br',
-            charCounterCount: false,
-            heightMin: 100,
-            heightMax: 400,
-            // Set the image upload URL.
-            imageUploadURL: 'upload_image.php',
-            // Set the file upload URL.
-            fileUploadURL: 'upload_file.php',
-            // Set the image upload URL.
-            imageManagerLoadURL: 'load_images.php',
-            // Set the image delete URL.
-            imageManagerDeleteURL: 'delete_image.php',
-        });
-        $('#txtnoticia').froalaEditor('html.insert', resposta, true);
-        tabela = "op" + document.getElementById("tabela").value;
-        document.getElementById(tabela).selected = true;
-        $('#listNoticias').modal('hide');
-    });
-}
-
 function recarregaForm() {
     document.getElementById("funcao").value = "novanoticia";
     document.getElementById("id_noticia").value = 0;
     document.getElementById("tabela").value = 0;
-}
-
-function excluirNoticia(id) {
-    var confirma = confirm("Essa notícia será desativada do sistema. Deseja continuar?");
-    if (confirma) {
-        $.post('../php/geral.php', {
-            admin: 1,
-            form: 'excluirNoticia',
-            id: id
-        }, function (resposta) {
-            if (!resposta) {
-                window.location.href = "../";
-            } else {
-                carregaPostsPag(resposta);
-            }
-        });
-    }
 }

@@ -38,15 +38,15 @@ if (!is_null($filter)) {
 if (!is_null($admin) && isset($_SESSION['id_setor']) && ($_SESSION['id_setor'] == 2 || $_SESSION['id_setor'] == 12)) {
 
     switch ($form) {
+        
+        case 'carregaPostsPag':
+            $tabela = filter_input(INPUT_POST, 'tabela');
+            echo $obj_Busca->getNoticiasEditar($tabela);
+            break;
 
         case 'customRel':
             $pedidos = filter_input(INPUT_POST, 'pedidos', FILTER_DEFAULT, FILTER_FORCE_ARRAY);
             $_SESSION['pedidosRel'] = $pedidos;
-            break;
-
-        case 'listRelatorios':
-            $status = filter_input(INPUT_POST, 'status');
-            echo $obj_Busca->getRelatorio($status);
             break;
 
         case 'listProcessos':
@@ -62,15 +62,19 @@ if (!is_null($admin) && isset($_SESSION['id_setor']) && ($_SESSION['id_setor'] =
             echo $obj_Busca->getAdminSolicAltPedidos($status);
             break;
 
-        case 'tableItensPedido':            
+        case 'tableItensPedido':
             $limit1 = filter_input(INPUT_POST, 'limit1');
             $limit2 = filter_input(INPUT_POST, 'limit2');
-            
+
             // se != 0 atualiza toda a tabela, se não, apenas a linha do pedido
             $id_pedido = filter_input(INPUT_POST, 'id_pedido');
-            
+
+            $array_pedidos = filter_input(INPUT_POST, 'pedidos', FILTER_DEFAULT, FILTER_FORCE_ARRAY);
+            if (empty($array_pedidos)) {
+                $array_pedidos = [];
+            }
             $where = '';
-            
+
             if ($limit1 < $limit2) {
                 $where = 'AND id > ' . $limit1 . ' AND id < ' . $limit2;
             } else if ($limit1 > $limit2) {
@@ -78,8 +82,8 @@ if (!is_null($admin) && isset($_SESSION['id_setor']) && ($_SESSION['id_setor'] =
             } else if ($id_pedido != 0) {
                 $where = 'AND id = ' . $id_pedido;
             }
-            
-            echo $obj_Busca->getSolicitacoesAdmin($where);
+
+            echo $obj_Busca->getSolicitacoesAdmin($where, $array_pedidos);
             break;
 
         case 'tableSolicitacoesAdiantamento':
@@ -103,11 +107,31 @@ if (!is_null($admin) && isset($_SESSION['id_setor']) && ($_SESSION['id_setor'] =
             break;
 
         case 'listRascunhos':
-            echo $obj_Busca->getRascunhos($_SESSION['id_setor']);
+            echo $obj_Busca->getRascunhos();
             break;
 
         case 'listPedidos':
-            echo $obj_Busca->getMeusPedidos($_SESSION['id_setor']);
+            $limit1 = filter_input(INPUT_POST, 'limit1');
+            $limit2 = filter_input(INPUT_POST, 'limit2');
+
+            $where = '';
+
+            if (!is_null($limit1) && !is_null($limit2)) {
+                if ($limit1 < $limit2) {
+                    $where = 'AND id > ' . $limit1 . ' AND id < ' . $limit2;
+                } else if ($limit1 > $limit2) {
+                    $where = 'AND id > ' . $limit2 . ' AND id < ' . $limit1;
+                } else if ($id_pedido != 0) {
+                    $where = 'AND id = ' . $id_pedido;
+                }
+            }
+
+            $array_pedidos = filter_input(INPUT_POST, 'pedidos', FILTER_DEFAULT, FILTER_FORCE_ARRAY);
+            if (empty($array_pedidos)) {
+                $array_pedidos = [];
+            }
+
+            echo $obj_Busca->getMeusPedidos($where, $array_pedidos);
             break;
 
         case 'listProcessos':
@@ -115,11 +139,11 @@ if (!is_null($admin) && isset($_SESSION['id_setor']) && ($_SESSION['id_setor'] =
             break;
 
         case 'iniSolicAltPedSetor':
-            echo $obj_Busca->getSolicAltPedidos($_SESSION['id_setor']);
+            echo $obj_Busca->getSolicAltPedidos();
             break;
 
         case 'listAdiantamentos':
-            echo $obj_Busca->getSolicAdiSetor($_SESSION['id_setor']);
+            echo $obj_Busca->getSolicAdiSetor();
             break;
 
         case 'addItemPedido':

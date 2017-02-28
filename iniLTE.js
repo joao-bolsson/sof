@@ -25,19 +25,8 @@ $(function () {
     }
 
     for (var i = 2; i <= 10; i++) {
-        var element = document.getElementById('relStatus' + i);
-        if (element !== null) {
-            $('#relStatus' + i).iCheck({
-                checkboxClass: 'icheckbox_minimal-blue',
-                radioClass: 'iradio_minimal-blue'
-            });
-            $('#relStatus' + i).on('ifChecked', function () {
-                changeReport(this);
-            });
-        }
-
-// radios dos detalhes do pedido
-        element = document.getElementById('st' + i);
+        // radios dos detalhes do pedido
+        var element = document.getElementById('st' + i);
         if (element !== null) {
             $('#st' + i).iCheck({
                 checkboxClass: 'icheckbox_minimal-blue',
@@ -159,6 +148,12 @@ $(function () {
     }
 
     $('#relPedidos').on('shown.bs.modal', function () {
+        $('.select2').select2();
+        $(".date").inputmask("dd/mm/yyyy", {"placeholder": "dd/mm/yyyy"});
+    });
+
+    $('#relLibOrc').on('shown.bs.modal', function () {
+        $('.select2').select2();
         $(".date").inputmask("dd/mm/yyyy", {"placeholder": "dd/mm/yyyy"});
     });
 
@@ -217,18 +212,80 @@ $(function () {
             radioClass: 'iradio_flat-blue'
         });
         $('#' + id_e).on('ifChecked', function () {
-            selectAll(true)
+            selectAll(true);
         });
         $('#' + id_e).on('ifUnchecked', function () {
             selectAll(false);
         });
     }
 
-    $('#relPedidos').on('shown.bs.modal', function () {
-        $('.select2').select2();
-    });
-
 });
+
+function loadPosts(element) {
+    if (element === null) {
+        return;
+    }
+    var id = element.id.replace('pag', '');
+    carregaPostsPag(id);
+}
+
+function carregaPostsPag(tabela) {
+    document.getElementById('overlayLoad').style.display = 'block';
+    $.post('../php/buscaLTE.php', {
+        admin: 1,
+        form: 'carregaPostsPag',
+        tabela: tabela
+    }, function (resposta) {
+        $('#contNoticiasEditar').html(resposta);
+        document.getElementById('overlayLoad').style.display = 'none';
+    });
+}
+
+function editaNoticia(id, tabela) {
+    document.getElementById("funcao").value = "editar";
+    document.getElementById("id_noticia").value = id;
+    document.getElementById("tabela").value = tabela;
+
+    $.post('../php/busca.php', {
+        admin: 1,
+        form: 'editarNoticia',
+        id: id
+    }, function (resposta) {
+        $('#txtnoticia').froalaEditor('destroy');
+        document.getElementById("txtnoticia").value = "";
+        $('#txtnoticia').froalaEditor({
+            language: 'pt_br',
+            charCounterCount: false,
+            heightMin: 100,
+            heightMax: 400,
+            // Set the image upload URL.
+            imageUploadURL: 'upload_image.php',
+            // Set the file upload URL.
+            fileUploadURL: 'upload_file.php',
+            // Set the image upload URL.
+            imageManagerLoadURL: 'load_images.php',
+            // Set the image delete URL.
+            imageManagerDeleteURL: 'delete_image.php',
+        });
+        $('#txtnoticia').froalaEditor('html.insert', resposta, true);
+        tabela = 'op' + document.getElementById('tabela').value;
+        document.getElementById(tabela).selected = true;
+        $('#listNoticias').modal('hide');
+    });
+}
+
+function excluirNoticia(id) {
+    var confirma = confirm("Essa notícia será desativada do sistema. Deseja continuar?");
+    if (confirma) {
+        $.post('../php/geral.php', {
+            admin: 1,
+            form: 'excluirNoticia',
+            id: id
+        }, function (resposta) {
+            location.reload();
+        });
+    }
+}
 
 function relListUsers() {
     window.open("../admin/printRelatorio.php?relatorio=1&tipo=users");
@@ -483,7 +540,6 @@ function iniDataTable(tabela) {
                 }
             }
         });
-        return;
     } else if (tabela == '#tableSolicitacoes') {
         $(tabela).DataTable({
             "destroy": true,
@@ -525,41 +581,42 @@ function iniDataTable(tabela) {
         $(tabela).on('page.dt', function () {
             selectAll(false);
         }).DataTable();
-        return;
-    }
-    $(tabela).DataTable({
-        "destroy": true,
-        "paging": true,
-        "lengthChange": true,
-        "searching": true,
-        "ordering": true,
-        "info": true,
-        "autoWidth": true,
-        language: {
-            "decimal": "",
-            "emptyTable": "Nenhum dado na tabela",
-            "info": "_MAX_ resultados encontrados",
-            "infoEmpty": "",
-            "infoFiltered": "",
-            "infoPostFix": "",
-            "thousands": ",",
-            "lengthMenu": "Monstrando _MENU_ entradas",
-            "loadingRecords": "Carregando...",
-            "processing": "Processando...",
-            "search": "Pesquisar:",
-            "zeroRecords": "Nenhum resultado encontrado",
-            "paginate": {
-                "first": "Primeiro",
-                "last": "Último",
-                "next": "Próximo",
-                "previous": "Anterior"
-            },
-            "aria": {
-                "sortAscending": ": activate to sort column ascending",
-                "sortDescending": ": activate to sort column descending"
+    } else {
+        $(tabela).DataTable({
+            "destroy": true,
+            "paging": true,
+            "lengthChange": true,
+            "searching": true,
+            "ordering": true,
+            "order": [[0, "desc"]],
+            "info": true,
+            "autoWidth": true,
+            language: {
+                "decimal": "",
+                "emptyTable": "Nenhum dado na tabela",
+                "info": "_MAX_ resultados encontrados",
+                "infoEmpty": "",
+                "infoFiltered": "",
+                "infoPostFix": "",
+                "thousands": ",",
+                "lengthMenu": "Monstrando _MENU_ entradas",
+                "loadingRecords": "Carregando...",
+                "processing": "Processando...",
+                "search": "Pesquisar:",
+                "zeroRecords": "Nenhum resultado encontrado",
+                "paginate": {
+                    "first": "Primeiro",
+                    "last": "Último",
+                    "next": "Próximo",
+                    "previous": "Anterior"
+                },
+                "aria": {
+                    "sortAscending": ": activate to sort column ascending",
+                    "sortDescending": ": activate to sort column descending"
+                }
             }
-        }
-    });
+        });
+    }
 }
 function changeTipoContr(element) {
     var val = element.value;
@@ -926,9 +983,7 @@ function loadChecks() {
         var id_e = 'checkPedRel' + id_pedido;
         var input = document.getElementById(id_e);
         if (input !== null) {
-            $('#' + id_e).on('ifCreated', function () {
-                $('#' + id_e).iCheck('destroy');
-            });
+            $('#' + id_e).iCheck('destroy');
             $('#' + id_e).iCheck({
                 checkboxClass: 'icheckbox_flat-blue',
                 radioClass: 'iradio_flat-blue'
@@ -945,19 +1000,31 @@ function loadChecks() {
     }
 }
 
-function tableValidade() {
-    $('[id]').each(function () {
-        var $ids = $('[id=' + this.id + ']');
-        if ($ids.length > 1) {
-            $ids.not(':first').remove();
-        }
-    });
-}
-
 function loadMore() {
     $('button').blur();
     $('#loadMoreCustom').modal('hide');
     iniSolicitacoes(true);
+}
+
+function getIdsPedido() {
+    var element = document.getElementById('conteudoSolicitacoes');
+    var pedidos = [];
+    if (element === null) {
+        console.log('conteudoSolicitacoes nao existe');
+        return pedidos;
+    } else if (element.innerHTML.length == 0) {
+        console.log('tabela vazia');
+        return pedidos;
+    }
+    var rows = element.rows;
+    var len = rows.length;
+    console.log('rows: ' + len);
+    for (var i = 0; i < len; i++) {
+        var id = rows[i].id;
+        id = id.replace('rowPedido', '');
+        pedidos.push(id);
+    }
+    return pedidos;
 }
 
 function iniSolicitacoes(flag, id_pedido) {
@@ -966,6 +1033,7 @@ function iniSolicitacoes(flag, id_pedido) {
     if (element === null) {
         return;
     }
+    document.getElementById('overlayLoad').style.display = 'block';
     var limit1 = 0, limit2 = 0;
     if (flag) {
         var input = document.getElementById('limit1');
@@ -978,22 +1046,24 @@ function iniSolicitacoes(flag, id_pedido) {
     } else if (id_pedido == 0) {
         console.log('busca os últimos 100 pedidos');
     }
-    document.getElementById('overlayLoad').style.display = 'block';
+    if (element.innerHTML.length > 0) {
+        $('#tableSolicitacoes').DataTable().destroy();
+    }
+    var pedidos = getIdsPedido();
     $.post('../php/buscaLTE.php', {
         admin: 1,
         form: 'tableItensPedido',
         limit1: limit1,
         limit2: limit2,
-        id_pedido: id_pedido
+        id_pedido: id_pedido,
+        pedidos: pedidos
     }).done(function (resposta) {
-        if (element.innerHTML.length > 0) {
-            $('#tableSolicitacoes').DataTable().destroy();
+        if (resposta.length > 0) {
+            element.innerHTML += resposta;
+            loadChecks();
         }
-        element.innerHTML += resposta;
-        document.getElementById('overlayLoad').style.display = 'none';
-        tableValidade();
-        loadChecks();
         iniDataTable('#tableSolicitacoes');
+        document.getElementById('overlayLoad').style.display = 'none';
     });
 }
 
@@ -1072,13 +1142,8 @@ function listLancamentos(id_setor) {
 }
 
 function changeSetor(id_setor) {
-    var setor;
     var el = document.getElementById('selectSetor');
-    if (el !== null) {
-        setor = el.value;
-    } else {
-        setor = id_setor;
-    }
+    var setor = (el !== null) ? el.value : id_setor;
     $.post('../php/buscaLTE.php', {
         users: 1,
         form: 'listLancamentos',
@@ -1179,10 +1244,6 @@ function listAdiantamentos() {
     $('#listAdiantamentos').modal('show');
 }
 
-function listRelatorios() {
-    $('#listRelatorios').modal('show');
-}
-
 function changeTipoLic(element) {
     var selected = element.value;
     if (selected == 3 || selected == 4 || selected == 2) { // Adesao, Compra Compartilhada ou Inexibilidade
@@ -1215,33 +1276,6 @@ function maybeDisableFields(flag) {
     document.getElementById('ngera').required = !flag;
 }
 
-function changeReport(element) {
-    var st = element.value;
-    $.post('../php/buscaLTE.php', {
-        admin: 1,
-        form: 'listRelatorios',
-        status: st
-    }).done(function (resposta) {
-        if (document.getElementById('tbodyListRelatorios').innerHTML.length > 0) {
-            $('#tableListRelatorios').DataTable().destroy();
-        }
-        $('#tbodyListRelatorios').html(resposta);
-        iniDataTable('#tableListRelatorios');
-    });
-    refreshTot(st);
-}
-
-function refreshTot(status) {
-    $.post('../php/busca.php', {
-        admin: 1,
-        form: 'refreshTot',
-        status: status
-    }).done(function (resposta) {
-        $('#relTotRow').html(resposta);
-        document.getElementById('relTotRow').style.display = 'block';
-    });
-}
-
 function verProcessos(pedido) {
     $.post('../php/busca.php', {
         admin: 1,
@@ -1253,6 +1287,56 @@ function verProcessos(pedido) {
     });
 }
 
+function getIdsRequest() {
+    var element = document.getElementById('tbodyListPedidos');
+    var pedidos = [];
+    if (element === null) {
+        console.log('tbodyListPedidos nao existe');
+        return pedidos;
+    } else if (element.innerHTML.length == 0) {
+        console.log('tabela vazia');
+        return pedidos;
+    }
+    var rows = element.rows;
+    var len = rows.length;
+    for (var i = 0; i < len; i++) {
+        var id = rows[i].id;
+        id = id.replace('ped', '');
+        pedidos.push(id);
+    }
+    return pedidos;
+}
+
+function loadMoreRequests() {
+    document.getElementById('overlayLoad').style.display = 'block';
+    var limit1 = 0, limit2 = 0;
+    var input = document.getElementById('limit1');
+    if (input !== null) {
+        limit1 = document.getElementById('limit1').value;
+        limit2 = document.getElementById('limit2').value;
+    }
+    var element = document.getElementById('tbodyListPedidos');
+    if (element.innerHTML.length > 0) {
+        $('#tableListPedidos').DataTable().destroy();
+    }
+    var pedidos = getIdsRequest();
+    $.post('../php/buscaLTE.php', {
+        users: 1,
+        form: 'listPedidos',
+        limit1: limit1,
+        limit2: limit2,
+        pedidos: pedidos
+    }).done(function (resposta) {
+        if (resposta.length > 0) {
+            element.innerHTML += resposta;
+        }
+        iniDataTable('#tableListPedidos');
+    });
+    $('button').blur();
+    $('#loadMoreCustom').modal('hide');
+    document.getElementById('overlayLoad').style.display = 'none';
+}
+
 function listPedidos() {
     if (document.getElementById('tbodyListPedidos').innerHTML.length === 0) {
         $.post('../php/buscaLTE.php', {
@@ -1262,6 +1346,8 @@ function listPedidos() {
             $('#tbodyListPedidos').html(resposta);
             $('#listPedidos').modal('show');
         });
+    } else {
+        $('#listPedidos').modal('show');
     }
 }
 
@@ -1855,12 +1941,13 @@ function editaItem(id_item) {
         document.getElementById('codDespesa').value = obj.cod_despesa;
         document.getElementById('codReduzido').value = obj.cod_reduzido;
         document.getElementById('dtFim').value = obj.dt_fim;
+        document.getElementById('descrDespesa').value = obj.descr_despesa;
         document.getElementById('seqItemProcesso').value = obj.seq_item_processo;
     });
 }
 
 function submitEditItem() {
-    var fields = ['idItem', 'compItem', 'vlUnitario', 'qtContrato', 'vlContrato', 'qtUtilizada', 'vlUtilizado', 'qtSaldo', 'vlSaldo', 'codDespesa', 'codReduzido', 'dtFim', 'seqItemProcesso'];
+    var fields = ['idItem', 'compItem', 'vlUnitario', 'qtContrato', 'vlContrato', 'qtUtilizada', 'vlUtilizado', 'qtSaldo', 'vlSaldo', 'codDespesa', 'codReduzido', 'dtFim', 'descrDespesa', 'seqItemProcesso'];
     var dados = [];
     for (var i = 0; i < fields.length; i++) {
         dados[i] = document.getElementById(fields[i]).value;
@@ -1872,7 +1959,7 @@ function submitEditItem() {
         dados: dados
     }).done(function (resposta) {
         if (resposta == 0) {
-            alert("Ocorreu um erro ao atualizar informações.");
+            alert('Ocorreu um erro ao atualizar informações');
         }
     });
     $('#infoItem').modal('hide');

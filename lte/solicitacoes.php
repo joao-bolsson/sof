@@ -121,13 +121,18 @@ $select_grupo = $obj_Busca->getOptionsGrupos($id_setor);
                                 <i class="fa fa-user"></i> <span>Alterar Usuário</span>
                             </a>
                         </li>
-                        <li>
-                            <a href="javascript:abreModal('#relPedidos');">
-                                <i class="fa fa-bar-chart"></i> <span>Relatório</span>
+                        <li class="treeview">
+                            <a href="#">
+                                <i class="fa fa-bar-chart"></i> <span>Relatórios</span>
                                 <span class="pull-right-container">
+                                    <i class="fa fa-angle-left pull-right"></i>
                                     <small class="label pull-right bg-blue">novo</small>
                                 </span>
                             </a>
+                            <ul class="treeview-menu">
+                                <li><a href="javascript:abreModal('#relPedidos');"><i class="fa fa-circle-o"></i> Pedidos</a></li>
+                                <li><a href="javascript:abreModal('#relLibOrc');"><i class="fa fa-circle-o"></i> Liberações Orçamentárias</a></li>
+                            </ul>
                         </li>
                         <li>
                             <a href="javascript:listRascunhos();">
@@ -182,7 +187,7 @@ $select_grupo = $obj_Busca->getOptionsGrupos($id_setor);
                 <section class="content">
                     <div class="row">
                         <div class="col-xs-12">
-                            <div class="box">
+                            <div class="box box-primary">
                                 <div class="box-header">
                                     <h3 class="box-title">Itens do Processo: <span id="numProc">--------------------</span></h3>
                                     <div class="box-tools pull-right">
@@ -217,7 +222,7 @@ $select_grupo = $obj_Busca->getOptionsGrupos($id_setor);
                     </div><!-- /.row -->
                     <div class="row">
                         <div class="col-xs-12">
-                            <div class="box">
+                            <div class="box box-primary">
                                 <div class="box-header">
                                     <h3 class="box-title">Pedido | SALDO <span id="text_saldo_total">R$ <?= number_format($saldo_total, 3, ',', '.'); ?></span></h3>
                                     <div class="box-tools pull-right">
@@ -233,6 +238,7 @@ $select_grupo = $obj_Busca->getOptionsGrupos($id_setor);
                                         <table class="table table-bordered table-striped">
                                             <thead>
                                             <th></th>
+                                            <th>NUM_PROCESSO</th>
                                             <th>COD_REDUZIDO</th>
                                             <th>COMPLEMENTO_ITEM</th>
                                             <th>VL_UNITARIO</th>
@@ -349,6 +355,55 @@ $select_grupo = $obj_Busca->getOptionsGrupos($id_setor);
                 <strong>Copyright © 2016-2017 <a href="https://github.com/joao-bolsson">João Bolsson</a>.</strong> All rights
                 reserved.
             </footer>
+            <div aria-hidden="true" class="modal fade" id="relLibOrc" role="dialog" tabindex="-1">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                            <h4 class="modal-title">Relatório de Liberações Orçamentárias</h4>
+                        </div>
+                        <form action="../admin/printRelatorio.php" method="post" target="_blank">
+                            <input type="hidden" name="tipo" value="liberacoes" />
+                            <input type="hidden" name="relatorio" value="1" />
+                            <div class="modal-body">
+                                <div class="form-group">
+                                    <label>Setor</label>
+                                    <select class="form-control" name="setor" required>
+                                        <option value="<?= $_SESSION['id_setor'] ?>"><?= ARRAY_SETORES[$_SESSION['id_setor']] ?></option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label>Categoria</label>
+                                    <select class="form-control select2" name="categoria[]" multiple="multiple" data-placeholder="Selecione" required>
+                                        <?= $obj_Busca->getOptionsCategoria(); ?>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label>Data Início</label>
+                                    <div class="input-group">
+                                        <div class="input-group-addon">
+                                            <i class="fa fa-calendar"></i>
+                                        </div>
+                                        <input type="text" class="form-control date" name="dataI" required data-inputmask="'alias': 'dd/mm/yyyy'" data-mask>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label>Data Fim</label>
+                                    <div class="input-group">
+                                        <div class="input-group-addon">
+                                            <i class="fa fa-calendar"></i>
+                                        </div>
+                                        <input type="text" class="form-control date" name="dataF" required data-inputmask="'alias': 'dd/mm/yyyy'" data-mask>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button class="btn btn-primary" type="submit" style="width: 100%;"><i class="fa fa-refresh"></i>&nbsp;Gerar</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
             <div aria-hidden="true" class="modal fade" id="relPedidos" role="dialog" tabindex="-1">
                 <div class="modal-dialog">
                     <div class="modal-content">
@@ -526,10 +581,11 @@ $select_grupo = $obj_Busca->getOptionsGrupos($id_setor);
                             <table class="table table-bordered table-striped">
                                 <tr>
                                     <td>Saldo Disponível</td>
-                                    <td>R$ <?= $saldo_total ?></td>
+                                    <td>R$ <?= number_format($saldo_total, 3, ',', '.') ?></td>
                                 </tr>
                                 <?= $pedidos_em_analise ?>
                             </table>
+                            <small class="label bg-gray">Essa tabela vai exibir no máximo <?= LIMIT_MAX ?> linhas. Você pode gerar relatório das Liberações Orçamentárias do seu Setor ;)</small>
                             <table id="tableListLancamentos" class="table table-bordered table-striped">
                                 <thead>
                                     <tr>
@@ -599,6 +655,33 @@ $select_grupo = $obj_Busca->getOptionsGrupos($id_setor);
                     </div>
                 </div>
             </div>
+            <div aria-hidden="true" class="modal fade" id="loadMoreCustom" role="dialog" tabindex="-1">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                            <h4 class="modal-title">Carregar Pedidos</h4>
+                        </div>
+                        <form action="javascript:loadMoreRequests();" method="POST">
+                            <div class="modal-body">
+                                <small class="label bg-gray">Carrega todos os pedidos entre Limite 1 e Limite 2.</small>
+                                <div class="form-group">
+                                    <label>Limite 1</label>
+                                    <input type="number" class="form-control" id="limit1" name="limit1" step="1" min="0" required>
+                                </div>
+                                <div class="form-group">
+                                    <label>Limite 2</label>
+                                    <input type="number" class="form-control" id="limit2" name="limit2" step="1" min="0" required>
+                                </div>
+                                <small class="label bg-gray">Por motivos de segurança, serão retornados no máximo <?= LIMIT_MAX ?> resultados nesta consulta. ;)</small>
+                            </div>
+                            <div class="modal-footer">
+                                <button class="btn btn-primary" type="submit" style="width: 100%;"><i class="fa fa-cloud-download"></i>&nbsp;Carregar</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
             <div aria-hidden="true" class="modal fade" id="listPedidos" role="dialog" tabindex="-1">
                 <div class="modal-dialog" style="width: 90%">
                     <div class="modal-content">
@@ -607,6 +690,13 @@ $select_grupo = $obj_Busca->getOptionsGrupos($id_setor);
                             <h4 class="modal-title">Meus Pedidos</h4>
                         </div>
                         <div class="modal-body">
+                            <div id="overlayLoad" class="overlay" style="display: none;">
+                                <i class="fa fa-refresh fa-spin"></i>
+                            </div>
+                            <div class="margin">
+                                <button class="btn btn-primary" type="button" onclick="abreModal('#loadMoreCustom');" data-toggle="tooltip" title="Carregar mais pedidos"><i class="fa fa-cloud-download"></i>&nbsp;Carregar</button>
+                            </div>
+                            <small class="label bg-gray">Essa tabela vai exibir no máximo <?= LIMIT_MAX ?> linhas. Você pode gerar relatório dos Pedidos do seu Setor ;)</small>
                             <table id="tableListPedidos" class="table table-bordered table-striped">
                                 <thead>
                                     <tr>
@@ -634,6 +724,7 @@ $select_grupo = $obj_Busca->getOptionsGrupos($id_setor);
                             <h4 class="modal-title">Rascunhos</h4>
                         </div>
                         <div class="modal-body">
+                            <small class="label bg-gray">Essa tabela vai exibir no máximo <?= LIMIT_MAX ?> linhas. Para exibir alguma linha que não está sendo mostrada, é necessário excluir algum Rascunho. ;)</small>
                             <table id="tableListRascunhos" class="table table-bordered table-striped">
                                 <thead>
                                     <tr>
