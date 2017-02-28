@@ -15,3 +15,5 @@ defined('ARRAY_CATEGORIA') or define('ARRAY_CATEGORIA', $obj_Busca->getArrayDefi
 defined('LIMIT_MAX') or define('LIMIT_MAX', 100);
 
 defined('MPDF_PATH') or define('MPDF_PATH', '../pdf');
+
+defined('BTN_DEFAULT') or define('BTN_DEFAULT', 'btn btn-default');

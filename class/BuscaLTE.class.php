@@ -71,9 +71,9 @@ class BuscaLTE extends Conexao {
                 $this->obj_Util = new Util();
             }
             $btn_group = "<div class=\"btn-group\">";
-            $btn_group .= new Button('', 'btn btn-default btn-sm', "editaNoticia(" . $postagem->id . ", " . $postagem->tabela . ")", "data-toggle=\"tooltip\"", 'Editar', 'pencil');
+            $btn_group .= new Button('', BTN_DEFAULT . ' btn-sm', "editaNoticia(" . $postagem->id . ", " . $postagem->tabela . ")", "data-toggle=\"tooltip\"", 'Editar', 'pencil');
 
-            $btn_group .= new Button('', 'btn btn-default btn-sm', "excluirNoticia(" . $postagem->id . ")", "data-toggle=\"tooltip\"", 'Excluir', 'trash');
+            $btn_group .= new Button('', BTN_DEFAULT . ' btn-sm', "excluirNoticia(" . $postagem->id . ")", "data-toggle=\"tooltip\"", 'Excluir', 'trash');
             $btn_group .= '</div>';
 
             $row = new Row();
@@ -407,8 +407,9 @@ class BuscaLTE extends Conexao {
             $processo->obs = str_replace("\"", "\'", $processo->obs);
 
             $row = new Row();
-            $btn = new Button('', 'btn btn-default', "addProcesso('', " . $processo->id . ")", "data-toggle=\"tooltip\"", 'Editar', 'pencil');
-            $row->addColumn(new Column("<div class=\"btn-group\">" . $btn . '</div>'));
+            $div = new Div('btn-group');
+            $div->addComponent(new Button('', BTN_DEFAULT, "addProcesso('', " . $processo->id . ")", "data-toggle=\"tooltip\"", 'Editar', 'pencil'));
+            $row->addColumn(new Column($div));
             $row->addColumn(new Column($processo->num_processo));
             $row->addColumn(new Column($processo->tipo));
             $row->addColumn(new Column($processo->estante));
@@ -417,7 +418,7 @@ class BuscaLTE extends Conexao {
             $row->addColumn(new Column($processo->saida));
             $row->addColumn(new Column($processo->responsavel));
             $row->addColumn(new Column($processo->retorno));
-            $row->addColumn(new Column(new Button('', 'btn btn-default', "viewCompl('" . $processo->obs . "')", "data-toggle=\"tooltip\"", 'Ver Observação', 'eye')));
+            $row->addColumn(new Column(new Button('', BTN_DEFAULT, "viewCompl('" . $processo->obs . "')", "data-toggle=\"tooltip\"", 'Ver Observação', 'eye')));
             $table->addRow($row);
         }
         return $table;
@@ -461,8 +462,8 @@ class BuscaLTE extends Conexao {
 
     private static final function buildButtonsSolicAltPedAdmin(int $id, int $id_pedido): string {
         $group = "<div class=\"btn-group\">";
-        $btn_aprovar = new Button('', 'btn btn-default', "analisaSolicAlt(" . $id . ", " . $id_pedido . ", 1)", "data-toggle=\"tooltip\"", 'Aprovar', 'check');
-        $btn_reprovar = new Button('', 'btn btn-default', "analisaSolicAlt(" . $id . ", " . $id_pedido . ", 0)", "data-toggle=\"tooltip\"", 'Reprovar', 'trash');
+        $btn_aprovar = new Button('', BTN_DEFAULT, "analisaSolicAlt(" . $id . ", " . $id_pedido . ", 1)", "data-toggle=\"tooltip\"", 'Aprovar', 'check');
+        $btn_reprovar = new Button('', BTN_DEFAULT, "analisaSolicAlt(" . $id . ", " . $id_pedido . ", 0)", "data-toggle=\"tooltip\"", 'Reprovar', 'trash');
 
         $group .= $btn_aprovar . $btn_reprovar . '</div>';
         return $group;
@@ -543,8 +544,8 @@ class BuscaLTE extends Conexao {
     private static final function buildButtonsSolicAdi(int $id): string {
         $div = new Div('btn-group');
 
-        $div->addComponent(new Button('', 'btn btn-default', "analisaAdi(" . $id . ", 1)", "data-toggle=\"tooltip\"", 'Aprovar', 'check'));
-        $div->addComponent(new Button('', 'btn btn-default', "analisaAdi(" . $id . ", 0)", "data-toggle=\"tooltip\"", 'Reprovar', 'trash'));
+        $div->addComponent(new Button('', BTN_DEFAULT, "analisaAdi(" . $id . ", 1)", "data-toggle=\"tooltip\"", 'Aprovar', 'check'));
+        $div->addComponent(new Button('', BTN_DEFAULT, "analisaAdi(" . $id . ", 0)", "data-toggle=\"tooltip\"", 'Reprovar', 'trash'));
 
         return $div;
     }
@@ -576,25 +577,25 @@ class BuscaLTE extends Conexao {
 
         if ($status != 3 && $status != 4) {
             if ($_SESSION['id_setor'] == 12) {
-                $component->addComponent(new Button('', 'btn btn-default', "enviaForn(" . $id . ")", "data-toggle=\"tooltip\"", 'Enviar ao Fornecedor', 'send'));
+                $component->addComponent(new Button('', BTN_DEFAULT, "enviaForn(" . $id . ")", "data-toggle=\"tooltip\"", 'Enviar ao Fornecedor', 'send'));
             } else if ($status == 2) {
-                $component->addComponent(new Button('', 'btn btn-default', "analisarPedido(" . $id . ", " . $id_setor . ")", "data-toggle=\"tooltip\"", 'Analisar', 'pencil'));
+                $component->addComponent(new Button('', BTN_DEFAULT, "analisarPedido(" . $id . ", " . $id_setor . ")", "data-toggle=\"tooltip\"", 'Analisar', 'pencil'));
             } else if ($status == 5) {
-                $component->addComponent(new Button('', 'btn btn-default', "cadFontes(" . $id . ")", "data-toggle=\"tooltip\"", 'Cadastrar Fontes', 'comment'));
+                $component->addComponent(new Button('', BTN_DEFAULT, "cadFontes(" . $id . ")", "data-toggle=\"tooltip\"", 'Cadastrar Fontes', 'comment'));
             } else if ($status == 6) {
-                $component->addComponent(new Button('', 'btn btn-default', "cadEmpenho(" . $id . ")", "data-toggle=\"tooltip\"", 'Cadastrar Empenho', 'credit-card'));
+                $component->addComponent(new Button('', BTN_DEFAULT, "cadEmpenho(" . $id . ")", "data-toggle=\"tooltip\"", 'Cadastrar Empenho', 'credit-card'));
             } else if ($status == 7) {
-                $component->addComponent(new Button('', 'btn btn-default', "enviaOrdenador(" . $id . ")", "data-toggle=\"tooltip\"", 'Enviar ao Ordenador', 'send'));
+                $component->addComponent(new Button('', BTN_DEFAULT, "enviaOrdenador(" . $id . ")", "data-toggle=\"tooltip\"", 'Enviar ao Ordenador', 'send'));
             } else {
-                $component->addComponent(new Button('', 'btn btn-default', "getStatus(" . $id . ", " . $id_setor . ")", "data-toggle=\"tooltip\"", 'Alterar Status', 'wrench'));
+                $component->addComponent(new Button('', BTN_DEFAULT, "getStatus(" . $id . ", " . $id_setor . ")", "data-toggle=\"tooltip\"", 'Alterar Status', 'wrench'));
             }
         }
 
         if (self::verEmpenho($id) != 'EMPENHO SIAFI PENDENTE' && $_SESSION['id_setor'] != 12 && $status > 6) {
-            $component->addComponent(new Button('', 'btn btn-default', "cadEmpenho(" . $id . ", '" . self::verEmpenho($id) . "', '" . self::verDataEmpenho($id) . "')", "data-toggle=\"tooltip\"", 'Cadastrar Empenho', 'credit-card'));
+            $component->addComponent(new Button('', BTN_DEFAULT, "cadEmpenho(" . $id . ", '" . self::verEmpenho($id) . "', '" . self::verDataEmpenho($id) . "')", "data-toggle=\"tooltip\"", 'Cadastrar Empenho', 'credit-card'));
         }
 
-        $component->addComponent(new Button('', 'btn btn-default', "imprimir(" . $id . ")", "data-toggle=\"tooltip\"", 'Imprimir', 'print'));
+        $component->addComponent(new Button('', BTN_DEFAULT, "imprimir(" . $id . ")", "data-toggle=\"tooltip\"", 'Imprimir', 'print'));
         return $component;
     }
 
@@ -758,7 +759,7 @@ class BuscaLTE extends Conexao {
                 $row->addColumn(new Column($solic->id_pedido));
                 $row->addColumn(new Column($solic->data_solicitacao));
                 $row->addColumn(new Column(($solic->status == 2) ? '--------------' : $solic->data_analise));
-                $row->addColumn(new Column(new Button('', 'btn btn-default', "viewCompl('" . $solic->justificativa . "')", "data-toggle=\"tooltip\"", 'Ver Justificativa', 'eye')));
+                $row->addColumn(new Column(new Button('', BTN_DEFAULT, "viewCompl('" . $solic->justificativa . "')", "data-toggle=\"tooltip\"", 'Ver Justificativa', 'eye')));
                 $row->addColumn(new Column(new Small('label ' . $label, $status)));
 
                 $table->addRow($row);
@@ -792,7 +793,7 @@ class BuscaLTE extends Conexao {
             $row->addColumn(new Column($solic->data_solicitacao));
             $row->addColumn(new Column(($solic->status == 2) ? '--------------' : $solic->data_analise));
             $row->addColumn(new Column($solic->valor_adiantado));
-            $row->addColumn(new Column(new Button('', 'btn btn-default', "viewCompl('" . $solic->justificativa . "')", "data-toggle=\"tooltip\"", 'Ver Justificativa', 'eye')));
+            $row->addColumn(new Column(new Button('', BTN_DEFAULT, "viewCompl('" . $solic->justificativa . "')", "data-toggle=\"tooltip\"", 'Ver Justificativa', 'eye')));
             $row->addColumn(new Column(new Small('label ' . $label, $status)));
 
             $table->addRow($row);
@@ -812,7 +813,7 @@ class BuscaLTE extends Conexao {
         $table = new Table('', '', [], false);
         while ($item = $query->fetch_object()) {
             $item->complemento_item = str_replace("\"", "\'", $item->complemento_item);
-            $btn = (!isset($_SESSION['editmode'])) ? new Button('', 'btn btn-default', "checkItemPedido(" . $item->id . ", '" . $item->vl_unitario . "', " . $item->qt_saldo . ")", "data-toggle=\"tooltip\"", 'Adicionar', 'plus') : new Button('', 'btn btn-default', "editaItem(" . $item->id . ")", "data-toggle=\"tooltip\"", 'Editar Informações', 'pencil');
+            $btn = (!isset($_SESSION['editmode'])) ? new Button('', BTN_DEFAULT, "checkItemPedido(" . $item->id . ", '" . $item->vl_unitario . "', " . $item->qt_saldo . ")", "data-toggle=\"tooltip\"", 'Adicionar', 'plus') : new Button('', BTN_DEFAULT, "editaItem(" . $item->id . ")", "data-toggle=\"tooltip\"", 'Editar Informações', 'pencil');
             $input_qtd = (!isset($_SESSION['editmode'])) ? "<input type=\"number\" id=\"qtd" . $item->id . "\" min=\"1\" max=\"" . $item->qt_saldo . "\">" : '';
             $row = new Row();
             $row->addColumn(new Column($btn));
@@ -821,7 +822,7 @@ class BuscaLTE extends Conexao {
             if (!isset($_SESSION['editmode'])) {
                 $row->addColumn(new Column($input_qtd));
             }
-            $row->addColumn(new Column(new Button('', 'btn btn-default', "viewCompl('" . $item->complemento_item . "')", "data-toggle=\"tooltip\"", 'Ver Detalhes', 'eye')));
+            $row->addColumn(new Column(new Button('', BTN_DEFAULT, "viewCompl('" . $item->complemento_item . "')", "data-toggle=\"tooltip\"", 'Ver Detalhes', 'eye')));
             $row->addColumn(new Column($item->complemento_item, 'none'));
             $row->addColumn(new Column($item->vl_unitario));
             $row->addColumn(new Column($item->qt_saldo));
@@ -860,10 +861,10 @@ class BuscaLTE extends Conexao {
 
         $row = new Row('row' . $id_item);
 
-        $row->addColumn(new Column(new Button('', 'btn btn-default', "removeTableRow(" . $id_item . ", '" . $valor . "')", "data-toggle=\"tooltip\"", 'Remover do Pedido', 'trash')));
+        $row->addColumn(new Column(new Button('', BTN_DEFAULT, "removeTableRow(" . $id_item . ", '" . $valor . "')", "data-toggle=\"tooltip\"", 'Remover do Pedido', 'trash')));
         $row->addColumn(new Column($item->num_processo));
         $row->addColumn(new Column($item->cod_reduzido));
-        $row->addColumn(new Column(new Button('', 'btn btn-default', "viewCompl('" . $item->complemento_item . "')", "data-toggle=\"tooltip\"", 'Ver Complemento do Item', 'eye')));
+        $row->addColumn(new Column(new Button('', BTN_DEFAULT, "viewCompl('" . $item->complemento_item . "')", "data-toggle=\"tooltip\"", 'Ver Complemento do Item', 'eye')));
         $row->addColumn(new Column('R$ ' . $item->vl_unitario));
         $row->addColumn(new Column($item->nome_fornecedor));
         $row->addColumn(new Column($item->num_licitacao));
@@ -879,12 +880,12 @@ class BuscaLTE extends Conexao {
 
         $btnEdit = $btnDel = '';
         if ($id_usuario == $_SESSION['id']) {
-            $btnEdit = new Button('', 'btn btn-default btn-sm', "editaPedido(" . $id . ")", "data-toggle=\"tooltip\"", 'Editar', 'pencil');
+            $btnEdit = new Button('', BTN_DEFAULT . ' btn-sm', "editaPedido(" . $id . ")", "data-toggle=\"tooltip\"", 'Editar', 'pencil');
 
-            $btnDel = new Button('', 'btn btn-default btn-sm', "deletePedido(" . $id . ")", "data-toggle=\"tooltip\"", 'Excluir', 'trash');
+            $btnDel = new Button('', BTN_DEFAULT . ' btn-sm', "deletePedido(" . $id . ")", "data-toggle=\"tooltip\"", 'Excluir', 'trash');
         }
 
-        $btnPrint = new Button('', 'btn btn-default btn-sm', "imprimir(" . $id . ")", "data-toggle=\"tooltip\"", 'Imprimir', 'print');
+        $btnPrint = new Button('', BTN_DEFAULT . ' btn-sm', "imprimir(" . $id . ")", "data-toggle=\"tooltip\"", 'Imprimir', 'print');
 
         $group .= $btnEdit . $btnPrint . $btnDel . '</div>';
         return $group;
@@ -993,9 +994,9 @@ class BuscaLTE extends Conexao {
     private static final function buildButtonsMyRequests(int $id, int $status, int $id_usuario): string {
         $group = "<div class=\"btn-group\">";
 
-        $btnSolicAlt = ($status == 2 || $status == 5 && $id_usuario == $_SESSION['id']) ? new Button('', 'btn btn-default btn-sm', "solicAltPed(" . $id . ")", "data-toggle=\"tooltip\"", 'Solicitar Alteração', 'wrench') : '';
+        $btnSolicAlt = ($status == 2 || $status == 5 && $id_usuario == $_SESSION['id']) ? new Button('', BTN_DEFAULT . ' btn-sm', "solicAltPed(" . $id . ")", "data-toggle=\"tooltip\"", 'Solicitar Alteração', 'wrench') : '';
 
-        $btnPrint = new Button('', 'btn btn-default btn-sm', "imprimir(" . $id . ")", "data-toggle=\"tooltip\"", 'Imprimir', 'print');
+        $btnPrint = new Button('', BTN_DEFAULT . ' btn-sm', "imprimir(" . $id . ")", "data-toggle=\"tooltip\"", 'Imprimir', 'print');
 
         $group .= $btnSolicAlt . $btnPrint . '</div>';
 
@@ -1067,7 +1068,7 @@ class BuscaLTE extends Conexao {
             $cor = ($lancamento->valor < 0) ? 'red' : 'green';
             $setor_transf = ($lancamento->categoria == 3) ? self::getSetorTransf($lancamento->id) : '';
 
-            $btn = ($_SESSION['id_setor'] == 2 && $lancamento->categoria != 4) ? new Button('', 'btn btn-default', "undoFreeMoney(" . $lancamento->id . ")", "data-toggle=\"tooltip\"", 'Desfazer', 'undo') : '';
+            $btn = ($_SESSION['id_setor'] == 2 && $lancamento->categoria != 4) ? new Button('', BTN_DEFAULT, "undoFreeMoney(" . $lancamento->id . ")", "data-toggle=\"tooltip\"", 'Desfazer', 'undo') : '';
             $lancamento->valor = number_format($lancamento->valor, 3, ',', '.');
 
             $row = new Row();
