@@ -13,6 +13,7 @@
 - Implementa status de carregameto dentro das janelas (carregamento dos meus pedidos)
 - Mostra o número do processo nos itens de um rascunho
 - Melhoria de funções e implementação de novas classes para a construção da interface
+- Relatório das liberações orçamentárias, disponível para o SOF e para os demais setores.
 
 #### v2.1.6 - 18/02/2017 ####
 - Cadastro de itens de RP manualmente
