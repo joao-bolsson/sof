@@ -25,10 +25,9 @@ session_start();
 
 require_once '../defines.php';
 
-include_once '../class/Geral.class.php';
-include_once '../class/Busca.class.php';
-include_once '../class/Util.class.php';
-include_once '../class/Login.class.php';
+spl_autoload_register(function (string $class_name) {
+    include_once '../class/' . $class_name . '.class.php';
+});
 
 $obj_Busca = Busca::getInstance();
 
@@ -36,7 +35,7 @@ if ($obj_Busca->isActive()) {
 
     $obj_Geral = new Geral();
     $obj_Util = new Util();
-    $obj_Login = new Login();
+    $obj_Login = Login::getInstance();
 
     $admin = filter_input(INPUT_POST, "admin");
     $users = filter_input(INPUT_POST, "users");

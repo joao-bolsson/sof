@@ -5,14 +5,15 @@ error_reporting(E_ALL);
 
 session_start();
 
-include_once '../class/Login.class.php';
-include_once '../class/Busca.class.php';
+spl_autoload_register(function (string $class_name) {
+    include_once '../class/' . $class_name . '.class.php';
+});
 
 $obj_Busca = Busca::getInstance();
 if (!$obj_Busca->isActive()) {
     echo "desativado";
 } else {
-    $obj_Login = new Login();
+    $obj_Login = Login::getInstance();
 
     $login = filter_input(INPUT_POST, 'login');
     $senha = filter_input(INPUT_POST, 'senha');
