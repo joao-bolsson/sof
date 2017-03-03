@@ -16,7 +16,7 @@ spl_autoload_register(function (string $class_name) {
     include_once $class_name . '.class.php';
 });
 
-class Geral {
+final class Geral {
 
     private $mysqli;
     private static $INSTANCE;

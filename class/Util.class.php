@@ -14,7 +14,7 @@ spl_autoload_register(function (string $class_name) {
     include_once $class_name . '.class.php';
 });
 
-class Util {
+final class Util {
 
     public $mail;
     private $mysqli;

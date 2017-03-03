@@ -9,7 +9,7 @@
 ini_set('display_erros', true);
 error_reporting(E_ALL);
 
-class Conexao {
+final class Conexao {
 
     private $servidor, $usuario, $senha, $banco;
     private static $INSTANCE;
@@ -35,7 +35,7 @@ class Conexao {
      *
      * @access public
      */
-    final public function getConexao() {
+    public function getConexao() {
         $mysqli = new MySQLi($this->servidor, $this->usuario, $this->senha, $this->banco, 0, '/var/run/mysqld/mysqld.sock');
 
         /*
