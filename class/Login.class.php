@@ -22,7 +22,7 @@ class Login extends Conexao {
 
     function __construct($tabela = 'usuario', $campoID = 'id', $campoNome = 'nome', $campoLogin = 'login', $campoSenha = 'senha', $campoSetor = 'id_setor', $campoEmail = 'email') {
 
-        $this->obj_Busca = new Busca();
+        $this->obj_Busca = Busca::getInstance();
         //chama o método contrutor da classe Conexao
         parent::__construct();
 

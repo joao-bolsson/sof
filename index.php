@@ -12,7 +12,7 @@ session_start();
 
 include_once 'class/Busca.class.php';
 //instanciando classe de busca para popular o select de estados
-$obj_Busca = new Busca();
+$obj_Busca = Busca::getInstance();
 
 if (!isset($_SESSION['slide1'])) {
     $_SESSION['slide1'] = $obj_Busca->getSlide(1);

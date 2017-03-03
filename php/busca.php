@@ -24,7 +24,7 @@ session_start();
 include_once '../class/Busca.class.php';
 include_once '../class/Util.class.php';
 //instanciando classe de busca
-$obj_Busca = new Busca();
+$obj_Busca = Busca::getInstance();
 
 $admin = filter_input(INPUT_POST, "admin");
 $users = filter_input(INPUT_POST, "users");

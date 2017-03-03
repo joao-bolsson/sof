@@ -8,7 +8,7 @@ session_start();
 include_once '../class/Login.class.php';
 include_once '../class/Busca.class.php';
 
-$obj_Busca = new Busca();
+$obj_Busca = Busca::getInstance();
 if (!$obj_Busca->isActive()) {
     echo "desativado";
 } else {

@@ -30,7 +30,7 @@ include_once '../class/Busca.class.php';
 include_once '../class/Util.class.php';
 include_once '../class/Login.class.php';
 
-$obj_Busca = new Busca();
+$obj_Busca = Busca::getInstance();
 
 if ($obj_Busca->isActive()) {
 

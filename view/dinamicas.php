@@ -10,7 +10,7 @@ spl_autoload_register(function (string $class_name) {
 
 $controller = new Controller();
 //instanciando classe de busca para popular o select de estados
-$obj_Busca = new Busca();
+$obj_Busca = Busca::getInstance();
 $id = 0;
 if (isset($_SESSION["id_dinamicas"])) {
     $id = $_SESSION["id_dinamicas"];

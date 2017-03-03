@@ -22,7 +22,7 @@ class Geral extends Conexao {
     function __construct() {
         //chama o método contrutor da classe Conexao
         parent::__construct();
-        $this->obj_Busca = new Busca();
+        $this->obj_Busca = Busca::getInstance();
     }
 
     private function openConnection() {

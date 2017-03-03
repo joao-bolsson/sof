@@ -14,19 +14,25 @@ spl_autoload_register(function (string $class_name) {
     include_once $class_name . '.class.php';
 });
 
-class Busca extends Conexao {
+class Busca {
 
     private $mysqli, $obj_Util;
+    private static $INSTANCE;
 
-    function __construct() {
-        //chama o método contrutor da classe Conexao
-        parent::__construct();
+    public static function getInstance(): Busca {
+        if (empty(self::$INSTANCE)) {
+            self::$INSTANCE = new Busca();
+        }
+        return self::$INSTANCE;
+    }
+
+    private function __construct() {
         $this->obj_Util = new Util();
     }
 
     private function openConnection() {
         if (is_null($this->mysqli)) {
-            $this->mysqli = parent::getConexao();
+            $this->mysqli = Conexao::getInstance()->getConexao();
         }
     }
 
