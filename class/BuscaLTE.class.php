@@ -20,7 +20,7 @@ require_once '../defines.php';
 
 final class BuscaLTE {
 
-    private $mysqli, $obj_Util;
+    private $mysqli;
     private static $INSTANCE;
 
     public static function getInstance(): BuscaLTE {
@@ -31,7 +31,7 @@ final class BuscaLTE {
     }
 
     private function __construct() {
-        $this->obj_Util = Util::getInstance();
+        // empty
     }
 
     private function openConnection() {
@@ -73,9 +73,6 @@ final class BuscaLTE {
         $this->mysqli = NULL;
         $table = new Table('', '', [], false);
         while ($postagem = $query->fetch_object()) {
-            if (is_null($this->obj_Util)) {
-                $this->obj_Util = Util::getInstance();
-            }
             $btn_group = "<div class=\"btn-group\">";
             $btn_group .= new Button('', BTN_DEFAULT . ' btn-sm', "editaNoticia(" . $postagem->id . ", " . $postagem->tabela . ")", "data-toggle=\"tooltip\"", 'Editar', 'pencil');
 
