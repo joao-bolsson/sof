@@ -13,7 +13,7 @@ if (isset($_SESSION['imprimirPedido']) && $_SESSION['imprimirPedido'] && $_SESSI
     require_once '../defines.php';
     require_once MPDF_PATH . '/vendor/autoload.php';
 
-    $obj_Print = new PrintMod();
+    $obj_Print = PrintMod::getInstance();
 
     $id_setor = $obj_Print->getSetorPedido($id_pedido);
 

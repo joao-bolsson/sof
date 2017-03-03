@@ -15,17 +15,25 @@ spl_autoload_register(function (string $class_name) {
 
 require_once '../defines.php';
 
-class PrintMod extends Conexao {
+final class PrintMod {
 
     private $mysqli, $obj_Util, $obj_Busca;
+    private static $INSTANCE;
 
-    public function __construct() {
-        parent::__construct();
+    public static function getInstance(): PrintMod {
+        if (empty(self::$INSTANCE)) {
+            self::$INSTANCE = new PrintMod();
+        }
+        return self::$INSTANCE;
+    }
+
+    private function __construct() {
+        // empty
     }
 
     private function openConnection() {
         if (is_null($this->mysqli)) {
-            $this->mysqli = parent::getConexao();
+            $this->mysqli = Conexao::getInstance()->getConexao();
         }
     }
 
@@ -371,9 +379,9 @@ class PrintMod extends Conexao {
         $row = new Row();
         $row->addColumn(new Column(count($pedidos) . ' selecionados'));
         $row->addColumn(new Column('Totalizando ' . $total));
-        
+
         $sub_header = "<fieldset class=\"preg\"><table>" . $row . "</table></fieldset>";
-        
+
         $table = new Table('', 'prod', $headers, true);
 
         if (is_null($this->obj_Busca)) {

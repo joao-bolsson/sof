@@ -9,7 +9,7 @@ include_once '../class/PrintMod.class.php';
 require_once '../defines.php';
 require_once MPDF_PATH . '/vendor/autoload.php';
 
-$obj_Print = new PrintMod();
+$obj_Print = PrintMod::getInstance();
 
 $mpdf = new mPDF();
 date_default_timezone_set('America/Sao_Paulo');
