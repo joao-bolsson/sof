@@ -33,7 +33,7 @@ $obj_Busca = Busca::getInstance();
 
 if ($obj_Busca->isActive()) {
 
-    $obj_Geral = new Geral();
+    $obj_Geral = Geral::getInstance();
     $obj_Util = Util::getInstance();
     $obj_Login = Login::getInstance();
 
