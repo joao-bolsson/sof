@@ -23,7 +23,7 @@ $valor = filter_input(INPUT_POST, 'valor');
 include_once '../class/Util.class.php';
 require_once '../defines.php';
 require_once MPDF_PATH . '/vendor/autoload.php';
-$obj_Util = new Util();
+$obj_Util = Util::getInstance();
 
 $html_style = "
 <style type=\"text/css\">

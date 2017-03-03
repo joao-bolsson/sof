@@ -18,19 +18,25 @@ spl_autoload_register(function (string $class_name) {
 
 require_once '../defines.php';
 
-class BuscaLTE extends Conexao {
+final class BuscaLTE {
 
-    private $mysqli, $obj_Util;
+    private $mysqli;
+    private static $INSTANCE;
 
-    function __construct() {
-        //chama o método contrutor da classe Conexao
-        parent::__construct();
-        $this->obj_Util = new Util();
+    public static function getInstance(): BuscaLTE {
+        if (empty(self::$INSTANCE)) {
+            self::$INSTANCE = new BuscaLTE();
+        }
+        return self::$INSTANCE;
+    }
+
+    private function __construct() {
+        // empty
     }
 
     private function openConnection() {
-        if (is_null($this->mysqli)) {
-            $this->mysqli = parent::getConexao();
+        if (is_null($this->mysqli)) {-
+            $this->mysqli = Conexao::getInstance()->getConexao();
         }
     }
 
@@ -67,9 +73,6 @@ class BuscaLTE extends Conexao {
         $this->mysqli = NULL;
         $table = new Table('', '', [], false);
         while ($postagem = $query->fetch_object()) {
-            if (is_null($this->obj_Util)) {
-                $this->obj_Util = new Util();
-            }
             $btn_group = "<div class=\"btn-group\">";
             $btn_group .= new Button('', BTN_DEFAULT . ' btn-sm', "editaNoticia(" . $postagem->id . ", " . $postagem->tabela . ")", "data-toggle=\"tooltip\"", 'Editar', 'pencil');
 

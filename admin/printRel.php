@@ -12,7 +12,7 @@ if (isset($_SESSION["relatorioProcessos"]) && $_SESSION["relatorioProcessos"] &&
     require_once MPDF_PATH . '/vendor/autoload.php';
 
     $tipo = $_SESSION["relatorioTipo"];
-    $obj_Print = new PrintMod();
+    $obj_Print = PrintMod::getInstance();
 
     $html_style = "<link rel=\"stylesheet\" type=\"text/css\" href=\"../relatorios.css\"/>";
 

@@ -14,7 +14,7 @@ spl_autoload_register(function (string $class_name) {
     include_once $class_name . '.class.php';
 });
 
-class Util extends Conexao {
+final class Util {
 
     public $mail;
     private $mysqli;
@@ -49,12 +49,16 @@ class Util extends Conexao {
     private $id_unidade = 28;
     private $ano_orcamento = 29;
     private $seq_item_processo = 32;
+    private static $INSTANCE;
 
-    function __construct() {
-        //chama o método contrutor da classe Conexao
-        parent::__construct();
-        $this->mysqli = parent::getConexao();
+    public static function getInstance(): Util {
+        if (empty(self::$INSTANCE)) {
+            self::$INSTANCE = new Util();
+        }
+        return self::$INSTANCE;
+    }
 
+    private function __construct() {
         $this->mail = new PHPMailer();
         $this->mail->isSMTP();
         $this->mail->SMTPDebug = 0;
@@ -78,10 +82,17 @@ class Util extends Conexao {
         );
     }
 
+    private function openConnection() {
+        if (is_null($this->mysqli)) {
+            $this->mysqli = Conexao::getInstance()->getConexao();
+        }
+    }
+
     public function readFile(string $tmp_name): array {
-        $array = array();
+        $array = [];
         $i = 0;
         if (($handle = fopen($tmp_name, "r")) !== FALSE) {
+            self::openConnection();
             while (($data = fgetcsv($handle, 1000, "	")) !== FALSE) {
                 if ($data[$this->id_item_processo] != "ID_ITEM_PROCESSO") {
                     for ($c = 0; $c < count($data); $c++) {

@@ -9,12 +9,19 @@
 ini_set('display_erros', true);
 error_reporting(E_ALL);
 
-class Conexao {
+final class Conexao {
 
     private $servidor, $usuario, $senha, $banco;
-    private $mysqli;
+    private static $INSTANCE;
 
-    function __construct($servidor = "localhost", $usuario = "root", $senha = "j:03984082037@[]ccufsm", $banco = "sof") {
+    public static function getInstance(): Conexao {
+        if (empty(self::$INSTANCE)) {
+            self::$INSTANCE = new Conexao();
+        }
+        return self::$INSTANCE;
+    }
+
+    private function __construct($servidor = "localhost", $usuario = "root", $senha = "j:03984082037@[]ccufsm", $banco = "sof") {
 
         //definindo variaveis
         $this->servidor = $servidor;
@@ -28,7 +35,7 @@ class Conexao {
      *
      * @access public
      */
-    final public function getConexao() {
+    public function getConexao() {
         $mysqli = new MySQLi($this->servidor, $this->usuario, $this->senha, $this->banco, 0, '/var/run/mysqld/mysqld.sock');
 
         /*

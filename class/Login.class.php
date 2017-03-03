@@ -9,22 +9,28 @@
 ini_set('display_erros', true);
 error_reporting(E_ALL);
 
-//incluindo a classe de conexao
-include_once 'Conexao.class.php';
-include_once 'Busca.class.php';
+spl_autoload_register(function (string $class_name) {
+    include_once $class_name . '.class.php';
+});
 
-class Login extends Conexao {
+final class Login {
 
     //variáveis usadas para armazenar os campos a serem consultas no banco
     private $tabela, $campoID, $campoNome, $campoLogin, $campoSenha, $campoEmail, $campoSetor;
     //variáveis usadas como objetos da classe Conexao
     private $obj_Busca, $mysqli;
+    private static $INSTANCE;
 
-    function __construct($tabela = 'usuario', $campoID = 'id', $campoNome = 'nome', $campoLogin = 'login', $campoSenha = 'senha', $campoSetor = 'id_setor', $campoEmail = 'email') {
+    public static function getInstance(): Login {
+        if (empty(self::$INSTANCE)) {
+            self::$INSTANCE = new Login();
+        }
+        return self::$INSTANCE;
+    }
 
-        $this->obj_Busca = new Busca();
-        //chama o método contrutor da classe Conexao
-        parent::__construct();
+    private function __construct($tabela = 'usuario', $campoID = 'id', $campoNome = 'nome', $campoLogin = 'login', $campoSenha = 'senha', $campoSetor = 'id_setor', $campoEmail = 'email') {
+
+        $this->obj_Busca = Busca::getInstance();
 
         //atribuindo valores as variáveis dos campos
         $this->tabela = $tabela;
@@ -36,15 +42,19 @@ class Login extends Conexao {
         $this->campoEmail = $campoEmail;
     }
 
+    private function openConnection() {
+        if (is_null($this->mysqli)) {
+            $this->mysqli = Conexao::getInstance()->getConexao();
+        }
+    }
+
     /**
      * Seleciona o nome do setor do usuário.
      * @param int $id_setor Id do setor
      * @return string Nome do setor
      */
     private function getNomeSetor(int $id_setor): string {
-        if (is_null($this->mysqli)) {
-            $this->mysqli = parent::getConexao();
-        }
+        self::openConnection();
         $query = $this->mysqli->query("SELECT setores.nome FROM setores WHERE setores.id = " . $id_setor . " LIMIT 1;") or exit("Erro ao buscar o nome do setor do usuário.");
         $this->mysqli = NULL;
         $obj = $query->fetch_object();
@@ -61,10 +71,8 @@ class Login extends Conexao {
      * @return string
      *
      */
-    final public function login(string $login, string $senha, $retorno = 0): string {
-        if (is_null($this->mysqli)) {
-            $this->mysqli = parent::getConexao();
-        }
+    public function login(string $login, string $senha, $retorno = 0): string {
+        self::openConnection();
         //escapando caracteres especiais para evitar SQL Injections
         $login = $this->mysqli->real_escape_string($login);
         //fazendo a consulta
@@ -102,10 +110,8 @@ class Login extends Conexao {
      * Função para trocar de um usuário para outro durante uma sessão.
      * @param int $id_user Id do usuário futuro.
      */
-    final public function changeUser(int $id_user) {
-        if (is_null($this->mysqli)) {
-            $this->mysqli = parent::getConexao();
-        }
+    public function changeUser(int $id_user) {
+        self::openConnection();
         $query = $this->mysqli->query("SELECT {$this->campoNome}, {$this->campoLogin}, {$this->campoEmail}, {$this->campoSetor} FROM {$this->tabela} WHERE {$this->campoID} = {$id_user} LIMIT 1;") or exit("Erro ao buscar usuário.");
         $this->mysqli = NULL;
         session_unset();

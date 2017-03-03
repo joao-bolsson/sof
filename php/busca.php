@@ -24,7 +24,7 @@ session_start();
 include_once '../class/Busca.class.php';
 include_once '../class/Util.class.php';
 //instanciando classe de busca
-$obj_Busca = new Busca();
+$obj_Busca = Busca::getInstance();
 
 $admin = filter_input(INPUT_POST, "admin");
 $users = filter_input(INPUT_POST, "users");
@@ -170,7 +170,7 @@ if (!is_null($admin) && isset($_SESSION['id_setor']) && ($_SESSION['id_setor'] =
 
         case 'addInputsArquivo':
             $qtd = filter_input(INPUT_POST, 'qtd');
-            $obj_Util = new Util();
+            $obj_Util = Util::getInstance();
             echo $obj_Util->setInputsArquivo($qtd);
             break;
         default:

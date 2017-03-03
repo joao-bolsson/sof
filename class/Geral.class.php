@@ -12,22 +12,29 @@ error_reporting(E_ALL);
 
 require_once '../defines.php';
 
-include_once 'Conexao.class.php';
-include_once 'Busca.class.php';
+spl_autoload_register(function (string $class_name) {
+    include_once $class_name . '.class.php';
+});
 
-class Geral extends Conexao {
+final class Geral {
 
     private $mysqli;
+    private static $INSTANCE;
 
-    function __construct() {
-        //chama o método contrutor da classe Conexao
-        parent::__construct();
-        $this->obj_Busca = new Busca();
+    public static function getInstance(): Geral {
+        if (empty(self::$INSTANCE)) {
+            self::$INSTANCE = new Geral();
+        }
+        return self::$INSTANCE;
+    }
+
+    private function __construct() {
+        $this->obj_Busca = Busca::getInstance();
     }
 
     private function openConnection() {
         if (is_null($this->mysqli)) {
-            $this->mysqli = parent::getConexao();
+            $this->mysqli = Conexao::getInstance()->getConexao();
         }
     }
 

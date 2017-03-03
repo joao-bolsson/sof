@@ -2,7 +2,7 @@
 
 include_once 'class/Busca.class.php';
 
-$obj_Busca = new Busca();
+$obj_Busca = Busca::getInstance();
 
 defined('SALT') or define('SALT', '$1$j:[]bols$');
 defined('VERSION') or define('VERSION', '2.1.7');

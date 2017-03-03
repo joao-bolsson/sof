@@ -15,17 +15,25 @@ spl_autoload_register(function (string $class_name) {
 
 require_once '../defines.php';
 
-class PrintMod extends Conexao {
+final class PrintMod {
 
     private $mysqli, $obj_Util, $obj_Busca;
+    private static $INSTANCE;
 
-    public function __construct() {
-        parent::__construct();
+    public static function getInstance(): PrintMod {
+        if (empty(self::$INSTANCE)) {
+            self::$INSTANCE = new PrintMod();
+        }
+        return self::$INSTANCE;
+    }
+
+    private function __construct() {
+        // empty
     }
 
     private function openConnection() {
         if (is_null($this->mysqli)) {
-            $this->mysqli = parent::getConexao();
+            $this->mysqli = Conexao::getInstance()->getConexao();
         }
     }
 
@@ -371,13 +379,13 @@ class PrintMod extends Conexao {
         $row = new Row();
         $row->addColumn(new Column(count($pedidos) . ' selecionados'));
         $row->addColumn(new Column('Totalizando ' . $total));
-        
+
         $sub_header = "<fieldset class=\"preg\"><table>" . $row . "</table></fieldset>";
-        
+
         $table = new Table('', 'prod', $headers, true);
 
         if (is_null($this->obj_Busca)) {
-            $this->obj_Busca = new BuscaLTE();
+            $this->obj_Busca = BuscaLTE::getInstance();
         }
         $flag = false;
         $i = 0;
@@ -438,7 +446,7 @@ class PrintMod extends Conexao {
         }
         $where_categoria .= ')';
         if (is_null($this->obj_Util)) {
-            $this->obj_Util = new Util();
+            $this->obj_Util = Util::getInstance();
         }
         $dataIni = $this->obj_Util->dateFormat($dataI);
         $dataFim = $this->obj_Util->dateFormat($dataF);
@@ -485,7 +493,7 @@ class PrintMod extends Conexao {
             $where_status .= ") ";
         }
         if (is_null($this->obj_Util)) {
-            $this->obj_Util = new Util();
+            $this->obj_Util = Util::getInstance();
         }
         $dataIni = $this->obj_Util->dateFormat($dataI);
         $dataFim = $this->obj_Util->dateFormat($dataF);
@@ -533,7 +541,7 @@ class PrintMod extends Conexao {
             $k++;
         }
         if (is_null($this->obj_Busca)) {
-            $this->obj_Busca = new BuscaLTE();
+            $this->obj_Busca = BuscaLTE::getInstance();
         }
 
         $array_sub_totais = [];
