@@ -34,7 +34,7 @@ $obj_Busca = Busca::getInstance();
 if ($obj_Busca->isActive()) {
 
     $obj_Geral = new Geral();
-    $obj_Util = new Util();
+    $obj_Util = Util::getInstance();
     $obj_Login = Login::getInstance();
 
     $admin = filter_input(INPUT_POST, "admin");
@@ -98,7 +98,7 @@ if ($obj_Busca->isActive()) {
                 }
 
                 if (is_null($obj_Util)) {
-                    $obj_Util = new Util();
+                    $obj_Util = Util::getInstance();
                 }
                 $senha = $obj_Util->criaSenha();
 

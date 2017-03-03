@@ -31,7 +31,7 @@ final class BuscaLTE {
     }
 
     private function __construct() {
-        $this->obj_Util = new Util();
+        $this->obj_Util = Util::getInstance();
     }
 
     private function openConnection() {
@@ -74,7 +74,7 @@ final class BuscaLTE {
         $table = new Table('', '', [], false);
         while ($postagem = $query->fetch_object()) {
             if (is_null($this->obj_Util)) {
-                $this->obj_Util = new Util();
+                $this->obj_Util = Util::getInstance();
             }
             $btn_group = "<div class=\"btn-group\">";
             $btn_group .= new Button('', BTN_DEFAULT . ' btn-sm', "editaNoticia(" . $postagem->id . ", " . $postagem->tabela . ")", "data-toggle=\"tooltip\"", 'Editar', 'pencil');

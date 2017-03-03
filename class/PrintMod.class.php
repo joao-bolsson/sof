@@ -446,7 +446,7 @@ final class PrintMod {
         }
         $where_categoria .= ')';
         if (is_null($this->obj_Util)) {
-            $this->obj_Util = new Util();
+            $this->obj_Util = Util::getInstance();
         }
         $dataIni = $this->obj_Util->dateFormat($dataI);
         $dataFim = $this->obj_Util->dateFormat($dataF);
@@ -493,7 +493,7 @@ final class PrintMod {
             $where_status .= ") ";
         }
         if (is_null($this->obj_Util)) {
-            $this->obj_Util = new Util();
+            $this->obj_Util = Util::getInstance();
         }
         $dataIni = $this->obj_Util->dateFormat($dataI);
         $dataFim = $this->obj_Util->dateFormat($dataF);

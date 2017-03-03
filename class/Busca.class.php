@@ -27,7 +27,7 @@ class Busca {
     }
 
     private function __construct() {
-        $this->obj_Util = new Util();
+        $this->obj_Util = Util::getInstance();
     }
 
     private function openConnection() {
