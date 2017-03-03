@@ -377,7 +377,7 @@ class PrintMod extends Conexao {
         $table = new Table('', 'prod', $headers, true);
 
         if (is_null($this->obj_Busca)) {
-            $this->obj_Busca = new BuscaLTE();
+            $this->obj_Busca = BuscaLTE::getInstance();
         }
         $flag = false;
         $i = 0;
@@ -533,7 +533,7 @@ class PrintMod extends Conexao {
             $k++;
         }
         if (is_null($this->obj_Busca)) {
-            $this->obj_Busca = new BuscaLTE();
+            $this->obj_Busca = BuscaLTE::getInstance();
         }
 
         $array_sub_totais = [];

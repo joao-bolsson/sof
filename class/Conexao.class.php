@@ -13,6 +13,14 @@ class Conexao {
 
     private $servidor, $usuario, $senha, $banco;
     private $mysqli;
+    private static $INSTANCE;
+
+    public static function getInstance(): Conexao {
+        if (empty(self::$INSTANCE)) {
+            self::$INSTANCE = new Conexao();
+        }
+        return self::$INSTANCE;
+    }
 
     function __construct($servidor = "localhost", $usuario = "root", $senha = "j:03984082037@[]ccufsm", $banco = "sof") {
 

@@ -12,10 +12,12 @@ session_start();
 if (!isset($_SESSION["id_setor"]) || $_SESSION["id_setor"] != 2) {
     header("Location: ../");
 }
-include_once '../class/BuscaLTE.class.php';
+spl_autoload_register(function (string $class_name) {
+    include_once '../class/' . $class_name . '.class.php';
+});
 require_once '../defines.php';
 //instanciando classe de busca para popular o select de estados
-$obj_Busca = new BuscaLTE();
+$obj_Busca = BuscaLTE::getInstance();
 $permissao = $obj_Busca->getPermissoes($_SESSION["id"]);
 
 $count = $obj_Busca->getCountSolic();

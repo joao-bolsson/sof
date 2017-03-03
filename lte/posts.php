@@ -12,7 +12,7 @@ session_start();
 spl_autoload_register(function (string $class_name) {
     include_once '../class/' . $class_name . '.class.php';
 });
-$obj_Busca = new BuscaLTE();
+$obj_Busca = BuscaLTE::getInstance();
 $obj_Util = new Util();
 $permissao = $obj_Busca->getPermissoes($_SESSION["id"]);
 if (!isset($_SESSION["id_setor"]) || $_SESSION["id_setor"] != 2 || !$permissao->noticias) {

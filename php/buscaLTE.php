@@ -21,9 +21,10 @@ ini_set('display_erros', true);
 error_reporting(E_ALL);
 
 session_start();
-include_once '../class/BuscaLTE.class.php';
-include_once '../class/Util.class.php';
-$obj_Busca = new BuscaLTE();
+spl_autoload_register(function (string $class_name) {
+    include_once '../class/' . $class_name . '.class.php';
+});
+$obj_Busca = BuscaLTE::getInstance();
 
 $admin = filter_input(INPUT_POST, "admin");
 $users = filter_input(INPUT_POST, "users");

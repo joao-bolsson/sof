@@ -12,10 +12,12 @@ error_reporting(E_ALL);
 if (!isset($_SESSION["id"]) || $_SESSION['id_setor'] == 12) {
     header("Location: ../");
 }
-include_once '../class/BuscaLTE.class.php';
+spl_autoload_register(function (string $class_name) {
+    include_once '../class/' . $class_name . '.class.php';
+});
 require_once '../defines.php';
 //instanciando classe de busca para popular o select de estados
-$obj_Busca = new BuscaLTE();
+$obj_Busca = BuscaLTE::getInstance();
 $id_setor = $_SESSION["id_setor"];
 $saldo_total = $obj_Busca->getSaldo($id_setor);
 $pedidos_em_analise = $obj_Busca->getPedidosAnalise($id_setor);
