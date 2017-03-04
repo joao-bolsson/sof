@@ -5,6 +5,19 @@
  * @since 2017, 04 Mar.
  */
 
+$(function () {
+    $('#relRegister').on('shown.bs.modal', function () {
+        $('#reservation').daterangepicker({
+            locale: {
+                format: 'DD/MM/YYYY',
+                applyLabel: 'Aplicar',
+                cancelLabel: 'Cancelar'
+            },
+            language: 'pt-BR'
+        });
+    });
+});
+
 /**
  * Function that refreshs the page.
  */

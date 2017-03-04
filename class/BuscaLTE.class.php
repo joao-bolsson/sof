@@ -181,9 +181,9 @@ final class BuscaLTE {
     /**
      * @return string Lista de usuários cadastrados.
      */
-    public function getUsers(bool $users = false): string {
+    public function getUsers(bool $users = false, int $id_setor = 0): string {
         $this->openConnection();
-        $where = '';
+        $where = ($id_setor != 0) ? 'WHERE id_setor = ' . $id_setor : '';
 
         if ($users) {
             $where = "WHERE login = 'uapublico'";

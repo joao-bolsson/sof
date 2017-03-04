@@ -29,16 +29,14 @@ require_once '../defines.php';
         <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
         <!-- Bootstrap 3.3.6 -->
         <link rel="stylesheet" href="bootstrap/css/bootstrap.min.css">
-        <!-- bootstrap datepicker -->
-        <link rel="stylesheet" href="plugins/datepicker/datepicker3.css">
+        <!-- daterange picker -->
+        <link rel="stylesheet" href="plugins/daterangepicker/daterangepicker.css">
         <!-- DataTables -->
         <link rel="stylesheet" href="plugins/datatables/dataTables.bootstrap.css">
         <!-- Font Awesome -->
         <link rel="stylesheet" href="plugins/font-awesome-4.7.0/css/font-awesome.min.css">
         <!-- Ionicons -->
         <link rel="stylesheet" href="plugins/ionicons/css/ionicons.min.css">
-        <!-- iCheck for checkboxes and radio inputs -->
-        <link rel="stylesheet" href="plugins/iCheck/all.css">
         <!-- Theme style -->
         <link rel="stylesheet" href="dist/css/AdminLTE.min.css">
         <!-- AdminLTE Skins. Choose a skin from the css/skins
@@ -70,6 +68,12 @@ require_once '../defines.php';
                             <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-collapse">
                                 <i class="fa fa-bars"></i>
                             </button>
+                        </div>
+
+                        <div class="collapse navbar-collapse pull-left" id="navbar-collapse">
+                            <ul class="nav navbar-nav">
+                                <li><a href="javascript:abreModal('#relRegister');"><i class="fa fa-file-text"></i> Relatório</a></li>
+                            </ul>
                         </div>
 
                         <!-- Navbar Right Menu -->
@@ -156,6 +160,41 @@ require_once '../defines.php';
                 </div>
                 <!-- /.container -->
             </footer>
+            <div class="modal fade" id="relRegister" role="dialog">
+                <div class="modal-dialog" style="width: 40%;">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                            <h4 class="modal-title">Relatório</h4>
+                        </div>
+                        <form action="../admin/printRelatorio.php" method="post">
+                            <input type="hidden" name="relatorio" value="1"/>
+                            <input type="hidden" name="tipo" value="hora"/>
+                            <div class="modal-body">
+                                <div class="form-group">
+                                    <label>Usuário</label>
+                                    <select id="userA" class="form-control" name="user" required>
+                                        <?= $obj_Busca->getUsers(false, $_SESSION['id_setor']); ?>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label>Período:</label>
+                                    <div class="input-group">
+                                        <div class="input-group-addon">
+                                            <i class="fa fa-calendar"></i>
+                                        </div>
+                                        <input type="text" class="form-control pull-right" id="reservation" name="periodo" required>
+                                    </div>
+                                    <!-- /.input group -->
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button class="btn btn-primary" type="submit" style="width: 100%;"><i class="fa fa-print"></i>&nbsp;Gerar Relatório</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
             <div class="modal fade" id="myInfos" role="dialog">
                 <div class="modal-dialog" style="width: 40%;">
                     <div class="modal-content">
@@ -199,12 +238,11 @@ require_once '../defines.php';
         <script src="plugins/datatables/dataTables.bootstrap.min.js"></script>
         <!-- Bootstrap 3.3.6 -->
         <script src="bootstrap/js/bootstrap.min.js"></script>
-        <!-- bootstrap datepicker -->
-        <script src="plugins/datepicker/bootstrap-datepicker.js"></script>
+        <!-- date-range-picker -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.11.2/moment.min.js"></script>
+        <script src="plugins/daterangepicker/daterangepicker.js"></script>
         <!-- SlimScroll -->
         <script src="plugins/slimScroll/jquery.slimscroll.min.js"></script>
-        <!-- iCheck 1.0.1 -->
-        <script src="plugins/iCheck/icheck.min.js"></script>
         <!-- FastClick -->
         <script src="plugins/fastclick/fastclick.js"></script>
         <!-- AdminLTE App -->
