@@ -40,18 +40,43 @@ final class BuscaLTE {
         }
     }
 
+    /**
+     * Gets an array with information of the last register of user.
+     * @param int $status If 1 - last register is a log in, else if a log out.
+     * @param int $id_user Id of the user to format last register.
+     * @return arrayArray with 'date' and 'time' of last register of the user.
+     */
+    private function formatTimeLast(int $status, int $id_user): array {
+        $column = ($status == 1) ? 'entrada' : 'saida';
+        $this->openConnection();
+
+        $id_last = Busca::getInstance()->getLastRegister($id_user);
+        $query = $this->mysqli->query("SELECT DATE_FORMAT(" . $column . ", '%d/%m/%Y') AS date, DATE_FORMAT(" . $column . ", '%H:%m:%s') AS time FROM usuario_hora WHERE id = " . $id_last) or exit('Erro ao buscar data e hora do último registro: ' . $this->mysqli->error);
+        $this->mysqli = NULL;
+
+        $array = $query->fetch_array();
+        return $array;
+    }
+
     public function refreshTableHora(): string {
         $this->openConnection();
         $query = $this->mysqli->query('SELECT id_usuario, entrada, saida FROM usuario_hora') or exit('Erro ao atualizar tabela: ' . $this->mysqli->error);
 
         $table = new Table('', '', [], false);
 
+        $info = !Busca::getInstance()->getInfoTime();
+        $status = ($info == 1) ? 'Entrada' : 'Saída';
+        $color = ($info == 1) ? 'green' : 'red';
+
         while ($obj = $query->fetch_object()) {
             $row = new Row();
             $row->addColumn(new Column(Util::getInstance()->getUserName($obj->id_usuario)));
-            $row->addColumn(new Column(Util::getInstance()->getUserName($obj->id_usuario)));
-            $row->addColumn(new Column(Util::getInstance()->getUserName($obj->id_usuario)));
-            $row->addColumn(new Column(Util::getInstance()->getUserName($obj->id_usuario)));
+            $row->addColumn(new Column(new Small('label bg-' . $color, $status)));
+            $array = $this->formatTimeLast($info, $obj->id_usuario);
+            $row->addColumn(new Column($array['time']));
+            $row->addColumn(new Column($array['date']));
+
+            $table->addRow($row);
         }
 
         $this->mysqli = NULL;

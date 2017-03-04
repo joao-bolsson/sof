@@ -40,3 +40,23 @@ function refreshTable() {
     });
 }
 
+/**
+ * Function that register a log in or out
+ */
+function pointRegister(in_out) {
+    document.getElementById('overlayLoad').style.display = 'block';
+    console.log(in_out);
+    $.post('../php/geral.php', {
+        admin: 1,
+        form: 'pointRegister',
+        log: in_out
+    }, function (resposta) {
+        console.log(resposta);
+        if (resposta == '') {
+            refreshTable();
+        } else {
+            alert(resposta);
+        }
+    });
+}
+

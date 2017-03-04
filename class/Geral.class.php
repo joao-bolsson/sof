@@ -38,6 +38,20 @@ final class Geral {
         }
     }
 
+    public function pointRegister(int $log) {
+        $this->openConnection();
+        $id_usuario = $_SESSION['id'];
+        if ($log == 1) {
+            // entrada
+            $this->mysqli->query('INSERT INTO usuario_hora VALUES(NULL, ' . $id_usuario . ', NOW(), NULL, NULL)') or exit('Erro ao inserir entrada: ' . $$this->mysqli->error);
+        } else {
+            // saída
+            $id_last = Busca::getInstance()->getLastRegister();
+            $this->mysqli->query('UPDATE usuario_hora SET saida = NOW() WHERE id = ' . $id_last) or exit('Erro ao registrar saida: ' . $this->mysqli->error);
+        }
+        $this->mysqli = NULL;
+    }
+
     /**
      * 
      * @param array $dados Informações que serão inseridas na tabela de itens.

@@ -37,24 +37,37 @@ final class Busca {
     }
 
     /**
-     * Verify ifuser must make an in or out.
-     * @return int If 1 - in, else - out.
+     * * Gets the id of last register of the user specified by param
+     * if return NULL, means the user doesn't have a register.
+     * @param int $id Id of user.
+     * @return int int Id of last register in usuario_hora.
      */
-    public function getInfoTime(): int {
+    public function getLastRegister(int $id = 0) {
         $this->openConnection();
-        $id_usuario = $_SESSION['id'];
+        $id_usuario = ($id == 0) ? $_SESSION['id'] : $id;
         $query_id = $this->mysqli->query('SELECT max(id) AS id FROM usuario_hora WHERE id_usuario = ' . $id_usuario) or exit('Erro ao consultar ultimo registro do usuário: ' . $this->mysqli->error);
 
         $obj = $query_id->fetch_object();
 
+        return $obj->id;
+    }
+
+    /**
+     * Verify ifuser must make an in or out.
+     * @return int If 1 - in, else - out.
+     */
+    public function getInfoTime(): int {
+        $id_last = $this->getLastRegister();
+
         $return = NULL;
 
-        if ($obj->id == NULL) {
+        if ($id_last == NULL) {
             // fazer uma entrada
             $return = 1;
         } else {
+            $this->openConnection();
             // verifica se ele deve fazer uma entrada ou uma saida
-            $query = $this->mysqli->query('SELECT horas FROM usuario_hora WHERE id = ' . $obj->id) or exit('Erro ao verificar proximo registro do usuario: ' . $this->mysqli->error);
+            $query = $this->mysqli->query('SELECT horas FROM usuario_hora WHERE id = ' . $id_last) or exit('Erro ao verificar proximo registro do usuario: ' . $this->mysqli->error);
 
             $obj = $query->fetch_object();
 
@@ -69,7 +82,7 @@ final class Busca {
 
         $this->mysqli = NULL;
 
-        if ($return == NULL) {
+        if ($return === NULL) {
             exit('Erro: return is NULL (getInfoTime)');
         }
         return $return;

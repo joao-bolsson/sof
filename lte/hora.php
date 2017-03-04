@@ -122,8 +122,8 @@ require_once '../defines.php';
                             </div>
                             <div class="box-body">
                                 <div class="margin">
-                                    <button id="btnIn" class="btn btn-primary" type="button" onclick="pointRegister()"><i class="fa fa-sign-in"></i>&nbsp;Entrada</button>
-                                    <button id="btnOut" class="btn btn-danger" type="button" onclick="pointRegister()"><i class="fa fa-sign-out"></i>&nbsp;Saída</button>
+                                    <button id="btnIn" class="btn btn-primary" type="button" onclick="pointRegister(1)"><i class="fa fa-sign-in"></i>&nbsp;Entrada</button>
+                                    <button id="btnOut" class="btn btn-danger" type="button" onclick="pointRegister(0)"><i class="fa fa-sign-out"></i>&nbsp;Saída</button>
                                 </div>
                                 <table class="table table-bordered table-striped">
                                     <thead>
@@ -216,7 +216,7 @@ require_once '../defines.php';
 
         <!-- page script -->
         <script type="text/javascript" src="../iniLTE.min.js"></script>
-        <script type="text/javascript" src="../hora.js"></script>
+        <script type="text/javascript" src="../hora.min.js"></script>
     </body>
 </html>
 
