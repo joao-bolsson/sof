@@ -21,7 +21,7 @@ function refreshPage() {
             document.getElementById('btnIn').disabled = true;
             document.getElementById('btnOut').disabled = false;
         }
-        console.log('refreshing this page');
+        console.log('refreshing this page: ' + resposta);
         refreshTable();
     });
 }

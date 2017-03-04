@@ -48,6 +48,9 @@ final class Geral {
             // saída
             $id_last = Busca::getInstance()->getLastRegister();
             $this->mysqli->query('UPDATE usuario_hora SET saida = NOW() WHERE id = ' . $id_last) or exit('Erro ao registrar saida: ' . $this->mysqli->error);
+            // atualiza horas realizadas
+            $horas = Util::getInstance()->getTimeDiffHora($id_last);
+            $this->mysqli->query('UPDATE usuario_hora SET horas = ' . $horas . ' WHERE id = ' . $id_last) or exit('Erro ao registrar horas: ' . $this->mysqli->error);
         }
         $this->mysqli = NULL;
     }

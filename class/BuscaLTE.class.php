@@ -60,7 +60,7 @@ final class BuscaLTE {
 
     public function refreshTableHora(): string {
         $this->openConnection();
-        $query = $this->mysqli->query('SELECT id_usuario, entrada, saida FROM usuario_hora') or exit('Erro ao atualizar tabela: ' . $this->mysqli->error);
+        $query = $this->mysqli->query('SELECT DISTINCT usuario_hora.id_usuario, usuario.nome FROM usuario_hora, usuario WHERE usuario_hora.id_usuario = usuario.id ORDER BY usuario.nome ASC') or exit('Erro ao atualizar tabela: ' . $this->mysqli->error);
 
         $table = new Table('', '', [], false);
 
@@ -70,7 +70,7 @@ final class BuscaLTE {
             $color = ($info == 1) ? 'green' : 'red';
 
             $row = new Row();
-            $row->addColumn(new Column(Util::getInstance()->getUserName($obj->id_usuario)));
+            $row->addColumn(new Column($obj->nome));
             $row->addColumn(new Column(new Small('label bg-' . $color, $status)));
             $array = $this->formatTimeLast($info, $obj->id_usuario);
             $row->addColumn(new Column($array['time']));

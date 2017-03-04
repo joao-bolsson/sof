@@ -89,6 +89,26 @@ final class Util {
     }
 
     /**
+     * @param int $id_last Register's id.
+     * @return float Hours between in and out of register $id_last
+     */
+    public function getTimeDiffHora(int $id_last): float {
+        $this->openConnection();
+        $query = $this->mysqli->query("SELECT TIMESTAMPDIFF(SECOND, entrada, saida) as seconds FROM usuario_hora WHERE id = " . $id_last) or exit('Erro ao calcular periodo decorrido entre a entrada e saida: ' . $this->mysqli->error);
+        $this->mysqli = NULL;
+
+        $obj = $query->fetch_object();
+        $horas = 0;
+        if ($obj->seconds == NULL) {
+            exit('TIMEDIFF is NULL');
+        } else {
+            $horas = $obj->seconds / 3600;
+        }
+
+        return $horas;
+    }
+
+    /**
      * Gets the user's name from id.
      * @param int $id_user User's id.
      * @return string User's name.

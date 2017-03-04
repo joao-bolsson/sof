@@ -67,11 +67,11 @@ final class Busca {
         } else {
             $this->openConnection();
             // verifica se ele deve fazer uma entrada ou uma saida
-            $query = $this->mysqli->query('SELECT horas FROM usuario_hora WHERE id = ' . $id_last) or exit('Erro ao verificar proximo registro do usuario: ' . $this->mysqli->error);
+            $query = $this->mysqli->query('SELECT saida FROM usuario_hora WHERE id = ' . $id_last) or exit('Erro ao verificar proximo registro do usuario: ' . $this->mysqli->error);
 
             $obj = $query->fetch_object();
 
-            if ($obj->horas == NULL) {
+            if ($obj->saida == NULL) {
                 // fazer uma saida
                 $return = 0;
             } else {
