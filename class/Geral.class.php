@@ -44,7 +44,7 @@ final class Geral {
      * @param array $campos Campos da coluna no banco que deverão ser abastecidos
      */
     public function cadItensRP(array $dados, array $campos) {
-        self::openConnection();
+        $this->openConnection();
         if (empty($dados)) {
             exit("Nenhum dado foi recebido para o cadastro");
         }
@@ -70,7 +70,7 @@ final class Geral {
     }
 
     public function editItemFactory($dados) {
-        self::openConnection();
+        $this->openConnection();
         if (empty($dados)) {
             exit('Factory data is empty');
         }
@@ -83,7 +83,7 @@ final class Geral {
      * @param int $id_lancamento Id do lançamento.
      */
     public function undoFreeMoney(int $id_lancamento) {
-        Geral::openConnection();
+        $this->openConnection();
         // seleciona os dados da liberação
         $query = $this->mysqli->query("SELECT saldos_lancamentos.id_setor, saldos_lancamentos.data, saldos_lancamentos.valor, saldos_lancamentos.categoria, saldo_setor.saldo FROM saldos_lancamentos, saldo_setor WHERE saldo_setor.id_setor = saldos_lancamentos.id_setor AND saldos_lancamentos.id = " . $id_lancamento) or exit("Erro ao buscar os dados da liberação. " . $this->mysqli->error);
 
@@ -95,7 +95,7 @@ final class Geral {
         }
         $novo_saldo = $obj->saldo;
         if ($obj->categoria == 3) { // transferencia
-            Geral::undoTransf($id_lancamento);
+            $this->undoTransf($id_lancamento);
             return;
         } else {
             $novo_saldo -= $obj->valor;
@@ -113,14 +113,14 @@ final class Geral {
     }
 
     private function updateSaldosUndoTransf(int $id_ori, int $id_dest, string $saldo_ori, string $saldo_dest) {
-        Geral::openConnection();
+        $this->openConnection();
         $this->mysqli->query("UPDATE saldo_setor SET saldo = '" . $saldo_ori . "' WHERE id_setor = " . $id_ori) or exit("Erro ao atualizar o saldo do setor.");
         $this->mysqli->query("UPDATE saldo_setor SET saldo = '" . $saldo_dest . "' WHERE id_setor = " . $id_dest) or exit("Erro ao atualizar o saldo do setor.");
         // nao fecha a conexao aqui
     }
 
     private function undoTransf(int $id_lancamento) {
-        Geral::openConnection();
+        $this->openConnection();
 
         // seleciona os dados da liberação
         $query = $this->mysqli->query("SELECT saldos_lancamentos.id_setor, saldos_lancamentos.data, saldos_lancamentos.valor, saldos_lancamentos.categoria, saldo_setor.saldo FROM saldos_lancamentos, saldo_setor WHERE saldo_setor.id_setor = saldos_lancamentos.id_setor AND saldos_lancamentos.id = " . $id_lancamento) or exit("Erro ao buscar os dados da liberação. " . $this->mysqli->error);
@@ -155,7 +155,7 @@ final class Geral {
         }
 
         if ($id_ori != $id_dest) {
-            Geral::updateSaldosUndoTransf($id_ori, $id_dest, $saldo_ori, $saldo_dest);
+            $this->updateSaldosUndoTransf($id_ori, $id_dest, $saldo_ori, $saldo_dest);
             // apaga registros
             $this->mysqli->query("DELETE FROM saldos_lancamentos WHERE saldos_lancamentos.id = " . $id_lancamentoA . "  OR saldos_lancamentos.id = " . $id_lancamentoB) or exit("Erro ao remover registros.");
             $this->mysqli->query("DELETE FROM saldos_transferidos WHERE saldos_transferidos.id_setor_ori = " . $id_ori . " AND saldos_transferidos.id_setor_dest = " . $id_dest . " AND saldos_transferidos.valor = '" . $valor . "' LIMIT 1;");
@@ -168,7 +168,7 @@ final class Geral {
         if (empty($pedidos)) {
             return;
         }
-        Geral::openConnection();
+        $this->openConnection();
 
         $where = '';
         $len = count($pedidos);
@@ -184,7 +184,7 @@ final class Geral {
     }
 
     public function insertPedContr(int $id_pedido, int $id_tipo, string $siafi) {
-        Geral::openConnection();
+        $this->openConnection();
         $query = $this->mysqli->query("SELECT id_tipo FROM pedido_contrato WHERE id_pedido = {$id_pedido};") or exit("Erro ao definir se o pedido existe ou não.");
         $sql = "INSERT INTO pedido_contrato VALUES({$id_pedido}, {$id_tipo}, '{$siafi}');";
         if ($query->num_rows > 0) {
@@ -204,7 +204,7 @@ final class Geral {
      */
     public function cadUser(string $nome, string $login, string $email, int $setor, string $senha): int {
         $senha_crp = crypt($senha, SALT);
-        Geral::openConnection();
+        $this->openConnection();
         $this->mysqli->query("INSERT INTO usuario VALUES(NULL, '{$nome}', '{$login}', '{$senha_crp}', {$setor}, '{$email}');") or exit("Erro ao inserir o usuário no banco." . $this->mysqli->error);
         $id = $this->mysqli->insert_id;
         $this->mysqli = NULL;
@@ -213,13 +213,13 @@ final class Geral {
     }
 
     public function cadPermissao(int $usuario, int $noticias, int $saldos, int $pedidos, int $recepcao) {
-        Geral::openConnection();
+        $this->openConnection();
         $this->mysqli->query("INSERT INTO usuario_permissoes VALUES({$usuario}, {$noticias}, {$saldos}, {$pedidos}, {$recepcao});") or exit("Erro ao cadastrar permissões do usuário.");
         $this->mysqli = NULL;
     }
 
     private function registraLog(int $id_pedido, int $status) {
-        Geral::openConnection();
+        $this->openConnection();
         $hoje = date('Y-m-d');
         // não deixa ter vários logs com o mesmo status na mesma data
         $query = $this->mysqli->query("SELECT pedido_log_status.id_status FROM pedido_log_status WHERE data = '{$hoje}' AND pedido_log_status.id_status = {$status} AND pedido_log_status.id_pedido = {$id_pedido};") or exit("Erro ao verificar log de status.");
@@ -236,7 +236,7 @@ final class Geral {
      * @param int $grupo id do grupo para inserir ao pedido.
      */
     public function insertGrupoPedido(int $pedido, int $grupo, bool $existe) {
-        Geral::openConnection();
+        $this->openConnection();
         $sql = "INSERT INTO pedido_grupo VALUES({$pedido}, {$grupo});";
         if ($existe) {
             $sql = "UPDATE pedido_grupo SET id_grupo = {$grupo} WHERE id_pedido = {$pedido} LIMIT 1;";
@@ -251,7 +251,7 @@ final class Geral {
      * 	@param $id_pedido Id do pedido.
      */
     public function enviaFornecedor(int $id_pedido) {
-        Geral::openConnection();
+        $this->openConnection();
         $this->mysqli->query("UPDATE pedido SET status = 9 WHERE id = {$id_pedido};") or exit("Erro ao atualizar o status do pedido.");
         $this->registraLog($id_pedido, 9);
         $this->mysqli = NULL;
@@ -263,7 +263,7 @@ final class Geral {
      * 	@return if success - true, else false.
      */
     public function enviaOrdenador(int $id_pedido): bool {
-        Geral::openConnection();
+        $this->openConnection();
         $this->mysqli->query("UPDATE pedido SET status = '8' WHERE id = {$id_pedido};") or exit("Erro ao atualizar o status do pedido.");
         $this->registraLog($id_pedido, 8);
         $this->mysqli = NULL;
@@ -276,7 +276,7 @@ final class Geral {
      * 	@return If inserts all datas - true, else false.
      */
     public function cadastraFontes(int $id_pedido, string $fonte, string $ptres, string $plano): bool {
-        Geral::openConnection();
+        $this->openConnection();
         $fonte = $this->mysqli->real_escape_string($fonte);
         $ptres = $this->mysqli->real_escape_string($ptres);
         $plano = $this->mysqli->real_escape_string($plano);
@@ -295,7 +295,7 @@ final class Geral {
      * 	Função para resetar o sistema para o estado orinal
      */
     public function resetSystem() {
-        Geral::openConnection();
+        $this->openConnection();
         // DELETE
         $this->mysqli->query("DELETE FROM comentarios;") or exit("Erro ao remover os comentários");
         $this->mysqli->query("DELETE FROM itens_pedido;") or exit("Erro ao remover os itens dos pedidos");
@@ -340,7 +340,7 @@ final class Geral {
      * 	Função para os usuários relatarem problemas no site.
      */
     public function insereProblema(int $id_setor, string $assunto, string $descricao) {
-        Geral::openConnection();
+        $this->openConnection();
         $assunto = $this->mysqli->real_escape_string($assunto);
         $descricao = $this->mysqli->real_escape_string($descricao);
         $sql = "INSERT INTO problemas VALUES(NULL, " . $id_setor . ", '" . $assunto . "', '" . $descricao . "');";
@@ -355,7 +355,7 @@ final class Geral {
      * 	@return bool
      */
     public function editItem($dados) {
-        Geral::openConnection();
+        $this->openConnection();
         $query_qtd = $this->mysqli->query("SELECT sum(itens_pedido.qtd) AS soma FROM itens_pedido where itens_pedido.id_item = {$dados->idItem};") or exit("Erro ao buscar o valor total desse item utilizado nos pedidos.");
         if ($query_qtd->num_rows > 0) {
             $obj_qtd = $query_qtd->fetch_object();
@@ -401,7 +401,7 @@ final class Geral {
      * 	@return bool
      */
     public function altStatus($id_pedido, $id_setor, $comentario, $status): bool {
-        Geral::openConnection();
+        $this->openConnection();
         $this->mysqli->query("UPDATE pedido SET status = {$status} WHERE id = {$id_pedido};") or exit("Erro ao atualizar o pedido.");
         $query = $this->mysqli->query("SELECT pedido.prioridade, pedido.valor FROM pedido WHERE id = {$id_pedido};") or exit("Erro ao buscar as informações do pedido.");
         $obj = $query->fetch_object();
@@ -423,7 +423,7 @@ final class Geral {
      * 	@return bool
      */
     public function cadastraEmpenho(int $id_pedido, string $empenho, string $data): bool {
-        Geral::openConnection();
+        $this->openConnection();
         $empenho = $this->mysqli->real_escape_string($empenho);
         // verifica se o pedido ja não possui empenho
         $query_check = $this->mysqli->query("SELECT pedido_empenho.id FROM pedido_empenho WHERE pedido_empenho.id_pedido = {$id_pedido};") or exit("Erro ao buscar informações do empenho.");
@@ -453,7 +453,7 @@ final class Geral {
      * 	@return bool
      */
     public function transfereSaldo($ori, $dest, $valor, $just): bool {
-        Geral::openConnection();
+        $this->openConnection();
         $valor = number_format($valor, 3, '.', '');
         $saldo_ori = '0';
         // selecionando o saldo do setor origem
@@ -501,7 +501,7 @@ final class Geral {
      * 	Função para cadastrar novo tipo de processo.
      */
     public function newTypeProcess(string $tipo): bool {
-        Geral::openConnection();
+        $this->openConnection();
         $tipo = $this->mysqli->real_escape_string($tipo);
         $this->mysqli->query("INSERT INTO processos_tipo VALUES(NULL, '{$tipo}');") or exit("Erro ao inserir um novo tipo de processo.");
         $this->mysqli = NULL;
@@ -516,7 +516,7 @@ final class Geral {
      * 	@return bool
      */
     public function updateProcesso($dados): bool {
-        Geral::openConnection();
+        $this->openConnection();
         for ($i = 0; $i < count($dados); $i++) {
             $dados[$i] = trim($dados[$i]);
             if ($dados[$i] == "") {
@@ -538,7 +538,7 @@ final class Geral {
      * 	Função que importa itens por SQL.
      */
     public function importaItens(array $array_sql): bool {
-        Geral::openConnection();
+        $this->openConnection();
         $len = count($array_sql);
         for ($i = 0; $i < $len; $i++) {
             $query = $array_sql[$i];
@@ -552,7 +552,7 @@ final class Geral {
      *  Função para dar update numa senha de acordo com o email.
      */
     public function resetSenha(string $email, string $senha) {
-        Geral::openConnection();
+        $this->openConnection();
         // evita SQL Injections
         $email = $this->mysqli->real_escape_string($email);
         // verificando se o e-mail consta no sistema
@@ -573,7 +573,7 @@ final class Geral {
      * 	Função usada para o usuário alterar a sua senha
      */
     public function altInfoUser($id_user, $nome, $email, $novaSenha, $senhaAtual): bool {
-        Geral::openConnection();
+        $this->openConnection();
         $query_exe = $this->mysqli->query("SELECT senha FROM usuario WHERE id = {$id_user};") or exit("Erro ao buscar a senha do usuário.");
         $usuario = $query_exe->fetch_object();
         if (crypt($senhaAtual, $usuario->senha) == $usuario->senha) {
@@ -599,7 +599,7 @@ final class Geral {
      * 	Função que analisa as solicitações de alteração de pedido.
      */
     public function analisaSolicAlt(int $id_solic, int $id_pedido, int $acao): bool {
-        Geral::openConnection();
+        $this->openConnection();
         $hoje = date('Y-m-d');
         $this->mysqli->query("UPDATE solic_alt_pedido SET data_analise = '{$hoje}', status = {$acao} WHERE id = {$id_solic};") or exit("Erro ao atualizar as informações da solicitação de alteração de pedido.");
         if ($acao) {
@@ -615,7 +615,7 @@ final class Geral {
      * 	@return Uma mesagem expressando o resultado da solicitação.
      */
     public function solicAltPedido(int $id_pedido, int $id_setor, string $justificativa): string {
-        Geral::openConnection();
+        $this->openConnection();
         $hoje = date('Y-m-d');
         $justificativa = $this->mysqli->real_escape_string($justificativa);
         $this->mysqli->query("INSERT INTO solic_alt_pedido VALUES(NULL, {$id_pedido}, {$id_setor}, '{$hoje}', NULL, '{$justificativa}', 2);") or exit("Não foi possível fazer essa solicitação. Contate o administrador.");
@@ -631,7 +631,7 @@ final class Geral {
      * 	@param $saldo_atual Comment.
      */
     public function liberaSaldo($id_setor, $valor, $saldo_atual): bool {
-        Geral::openConnection();
+        $this->openConnection();
         $saldo = $saldo_atual + $valor;
         $saldo = number_format($saldo, 3, '.', '');
         $verifica = $this->mysqli->query("SELECT saldo_setor.id FROM saldo_setor WHERE saldo_setor.id_setor = {$id_setor};") or exit("Erro ao buscar informações do saldo do setor.");
@@ -657,7 +657,7 @@ final class Geral {
      * 	@return bool
      */
     public function analisaAdi(int $id, int $acao): bool {
-        Geral::openConnection();
+        $this->openConnection();
         $hoje = date('Y-m-d');
 
         $this->mysqli->query("UPDATE saldos_adiantados SET data_analise = '{$hoje}', status = {$acao} WHERE id = {$id};") or exit("Erro ao atualizar informações dos saldos adiantados.");
@@ -680,7 +680,7 @@ final class Geral {
      * 	Função para enviar um pedido de adiantamento de saldo para o SOF.
      */
     public function solicitaAdiantamento(int $id_setor, string $valor, string $justificativa): bool {
-        Geral::openConnection();
+        $this->openConnection();
         $valor = $this->mysqli->real_escape_string($valor);
         $justificativa = $this->mysqli->real_escape_string($justificativa);
         $hoje = date('Y-m-d');
@@ -695,7 +695,7 @@ final class Geral {
      *   Função para alterar a senha de um usuário.
      */
     public function updateSenha($id_user, $senha): bool {
-        Geral::openConnection();
+        $this->openConnection();
         $update = $this->mysqli->query("UPDATE usuario SET senha = '{$senha}' WHERE id = {$id_user}") or exit("Erro ao atualizar os dados do usuário.");
         $this->mysqli = NULL;
         return true;
@@ -705,7 +705,7 @@ final class Geral {
      * Função para inserir postagem.
      */
     public function setPost($data, $postagem, $pag) {
-        Geral::openConnection();
+        $this->openConnection();
 
         $data = $this->mysqli->real_escape_string($data);
         $postagem = $this->mysqli->real_escape_string($postagem);
@@ -726,7 +726,7 @@ final class Geral {
      *   Função para editar uma postagem.
      */
     public function editPost($data, $id, $postagem, $pag) {
-        self::openConnection();
+        $this->openConnection();
         $postagem = $this->mysqli->real_escape_string($postagem);
 
         $inicio = strpos($postagem, "<h3");
@@ -744,7 +744,7 @@ final class Geral {
      *   Função para excluir uma publicação a publicação não é totalmente excluída, apenas o sistema passará a não mostrá-la.
      */
     public function excluirNoticia(int $id) {
-        Geral::openConnection();
+        $this->openConnection();
         $id = $this->mysqli->real_escape_string($id);
 
         $this->mysqli->query("UPDATE postagens SET ativa = 0 WHERE id = {$id};") or exit("Erro ao atualizar postagem");
@@ -782,7 +782,7 @@ final class Geral {
             $query = "UPDATE licitacao SET tipo = {$tipo}, numero = '{$numero}', uasg = '{$uasg}', processo_original = '{$procOri}', gera_contrato = {$geraContrato} WHERE id = {$idLic};";
         }
 
-        Geral::openConnection();
+        $this->openConnection();
         $this->mysqli->query($query) or exit("Ocorreu um erro no cadastro da licitação. Contate o administrador.");
         $this->mysqli = NULL;
         return true;
@@ -800,7 +800,7 @@ final class Geral {
      */
     public function insertPedido($id_user, $id_setor, $id_item, $qtd_solicitada, $qtd_disponivel, $qtd_contrato, $qtd_utilizado, $vl_saldo, $vl_contrato, $vl_utilizado, $valor, $total_pedido, $saldo_total, $prioridade, $obs, &$pedido, $pedido_contrato) {
 
-        Geral::openConnection();
+        $this->openConnection();
         $obs = $this->mysqli->real_escape_string($obs);
         $hoje = date('Y-m-d');
         $mes = date("n");
@@ -864,7 +864,7 @@ final class Geral {
      * 	@return bool
      */
     public function pedidoAnalisado($id_pedido, $fase, $prioridade, $id_item, $item_cancelado, $qtd_solicitada, $qt_saldo, $qt_utilizado, $vl_saldo, $vl_utilizado, $valor_item, $saldo_setor, $total_pedido, $comentario) {
-        Geral::openConnection();
+        $this->openConnection();
         $query = $this->mysqli->query("SELECT id_setor FROM pedido WHERE id = {$id_pedido};") or exit("Erro ao buscar o setor que fez o pedido.");
         // selecionando o id do setor que fez o pedido
         $obj_id = $query->fetch_object();
@@ -925,7 +925,7 @@ final class Geral {
      * 	Função para deletar um pedido (rascunhos).
      */
     public function deletePedido(int $id_pedido): string {
-        Geral::openConnection();
+        $this->openConnection();
         $this->mysqli->query("DELETE FROM licitacao WHERE licitacao.id_pedido = {$id_pedido};") or exit("Erro ao remover o grupo do pedido");
         $this->mysqli->query("DELETE FROM pedido_contrato WHERE pedido_contrato.id_pedido = {$id_pedido};") or exit("Erro ao remover o grupo do pedido");
         $this->mysqli->query("DELETE FROM pedido_grupo WHERE pedido_grupo.id_pedido = {$id_pedido};") or exit("Erro ao remover o grupo do pedido");

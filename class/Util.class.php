@@ -88,11 +88,26 @@ final class Util {
         }
     }
 
+    /**
+     * Gets the user's name from id.
+     * @param int $id_user User's id.
+     * @return string User's name.
+     */
+    public function getUserName(int $id_user): string {
+        $this->openConnection();
+
+        $query = $this->mysqli->query("SELECT usuario.nome FROM usuario WHERE usuario.id = " . $id_user) or exit("Erro ao buscar o nome do usuario do pedido");
+        $obj = $query->fetch_object();
+
+        $this->mysqli = NULL;
+        return $obj->nome;
+    }
+
     public function readFile(string $tmp_name): array {
         $array = [];
         $i = 0;
         if (($handle = fopen($tmp_name, "r")) !== FALSE) {
-            self::openConnection();
+            $this->openConnection();
             while (($data = fgetcsv($handle, 1000, "	")) !== FALSE) {
                 if ($data[$this->id_item_processo] != "ID_ITEM_PROCESSO") {
                     for ($c = 0; $c < count($data); $c++) {

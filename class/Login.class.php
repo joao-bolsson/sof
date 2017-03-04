@@ -54,7 +54,7 @@ final class Login {
      * @return string Nome do setor
      */
     private function getNomeSetor(int $id_setor): string {
-        self::openConnection();
+        $this->openConnection();
         $query = $this->mysqli->query("SELECT setores.nome FROM setores WHERE setores.id = " . $id_setor . " LIMIT 1;") or exit("Erro ao buscar o nome do setor do usuário.");
         $this->mysqli = NULL;
         $obj = $query->fetch_object();
@@ -72,7 +72,7 @@ final class Login {
      *
      */
     public function login(string $login, string $senha, $retorno = 0): string {
-        self::openConnection();
+        $this->openConnection();
         //escapando caracteres especiais para evitar SQL Injections
         $login = $this->mysqli->real_escape_string($login);
         //fazendo a consulta
@@ -111,7 +111,7 @@ final class Login {
      * @param int $id_user Id do usuário futuro.
      */
     public function changeUser(int $id_user) {
-        self::openConnection();
+        $this->openConnection();
         $query = $this->mysqli->query("SELECT {$this->campoNome}, {$this->campoLogin}, {$this->campoEmail}, {$this->campoSetor} FROM {$this->tabela} WHERE {$this->campoID} = {$id_user} LIMIT 1;") or exit("Erro ao buscar usuário.");
         $this->mysqli = NULL;
         session_unset();
