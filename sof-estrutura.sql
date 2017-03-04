@@ -262,7 +262,8 @@ CREATE TABLE `usuario_hora` (
   `id_usuario` int(10) UNSIGNED NOT NULL,
   `entrada` datetime NOT NULL,
   `saida` datetime DEFAULT NULL,
-  `horas` float UNSIGNED DEFAULT NULL
+  `horas` float UNSIGNED DEFAULT NULL,
+  `ip` varchar(20) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 CREATE TABLE `usuario_permissoes` (
@@ -455,7 +456,7 @@ ALTER TABLE `status`
 ALTER TABLE `usuario`
   MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=31;
 ALTER TABLE `usuario_hora`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 ALTER TABLE `comentarios`
   ADD CONSTRAINT `comentarios_ibfk_1` FOREIGN KEY (`id_pedido`) REFERENCES `pedido` (`id`),

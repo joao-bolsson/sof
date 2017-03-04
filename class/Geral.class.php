@@ -42,8 +42,9 @@ final class Geral {
         $this->openConnection();
         $id_usuario = $_SESSION['id'];
         if ($log == 1) {
+            $ip = filter_input(INPUT_SERVER, 'REMOTE_ADDR');
             // entrada
-            $this->mysqli->query('INSERT INTO usuario_hora VALUES(NULL, ' . $id_usuario . ', NOW(), NULL, NULL)') or exit('Erro ao inserir entrada: ' . $$this->mysqli->error);
+            $this->mysqli->query('INSERT INTO usuario_hora VALUES(NULL, ' . $id_usuario . ", NOW(), NULL, NULL, '" . $ip . "')") or exit('Erro ao inserir entrada: ' . $$this->mysqli->error);
         } else {
             // saída
             $id_last = Busca::getInstance()->getLastRegister();
