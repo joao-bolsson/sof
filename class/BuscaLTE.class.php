@@ -51,7 +51,7 @@ final class BuscaLTE {
         $this->openConnection();
 
         $id_last = Busca::getInstance()->getLastRegister($id_user);
-        $query = $this->mysqli->query("SELECT DATE_FORMAT(" . $column . ", '%d/%m/%Y') AS date, DATE_FORMAT(" . $column . ", '%H:%m:%s') AS time FROM usuario_hora WHERE id = " . $id_last) or exit('Erro ao buscar data e hora do último registro: ' . $this->mysqli->error);
+        $query = $this->mysqli->query("SELECT DATE_FORMAT(" . $column . ", '%d/%m/%Y') AS date, DATE_FORMAT(" . $column . ", '%H:%i:%s') AS time FROM usuario_hora WHERE id = " . $id_last) or exit('Erro ao buscar data e hora do último registro: ' . $this->mysqli->error);
         $this->mysqli = NULL;
 
         $array = $query->fetch_array();
@@ -64,11 +64,11 @@ final class BuscaLTE {
 
         $table = new Table('', '', [], false);
 
-        $info = !Busca::getInstance()->getInfoTime();
-        $status = ($info == 1) ? 'Entrada' : 'Saída';
-        $color = ($info == 1) ? 'green' : 'red';
-
         while ($obj = $query->fetch_object()) {
+            $info = !Busca::getInstance()->getInfoTime($obj->id_usuario);
+            $status = ($info == 1) ? 'Entrada' : 'Saída';
+            $color = ($info == 1) ? 'green' : 'red';
+
             $row = new Row();
             $row->addColumn(new Column(Util::getInstance()->getUserName($obj->id_usuario)));
             $row->addColumn(new Column(new Small('label bg-' . $color, $status)));

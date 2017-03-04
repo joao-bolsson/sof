@@ -53,7 +53,7 @@ function pointRegister(in_out) {
     }, function (resposta) {
         console.log(resposta);
         if (resposta == '') {
-            refreshTable();
+            refreshPage();
         } else {
             alert(resposta);
         }

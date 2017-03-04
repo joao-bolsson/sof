@@ -56,8 +56,8 @@ final class Busca {
      * Verify ifuser must make an in or out.
      * @return int If 1 - in, else - out.
      */
-    public function getInfoTime(): int {
-        $id_last = $this->getLastRegister();
+    public function getInfoTime(int $id_usuario = 0): int {
+        $id_last = $this->getLastRegister($id_usuario);
 
         $return = NULL;
 
