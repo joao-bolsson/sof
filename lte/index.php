@@ -117,17 +117,22 @@ if (isset($_SESSION['editmode'])) {
                     </div>
                     <!-- sidebar menu: : style can be found in sidebar.less -->
                     <ul class="sidebar-menu">
+                        <li>
+                            <a href="hora.php">
+                                <i class="fa fa-clock-o"></i> <span>Ponto Eletrônico</span>
+                                <span class="pull-right-container">
+                                    <small class="label pull-right bg-blue">novo</small>
+                                </span>
+                            </a>
+                        </li>
                         <?php if ($permissao->noticias): ?>
                             <li>
                                 <a href="posts.php">
                                     <i class="fa fa-newspaper-o"></i> <span>Postar</span>
-                                    <span class="pull-right-container">
-                                        <small class="label pull-right bg-blue">novo</small>
-                                    </span>
                                 </a>
                             </li>
                         <?php endif; ?>
-                        <?php if (!$permissao->recepcao): ?>
+                        <?php if ($permissao->pedidos): ?>
                             <li>
                                 <a href="javascript:mostra('rowCadRP');">
                                     <i class="fa fa-database"></i> <span>Cadastrar Itens</span>
@@ -223,10 +228,6 @@ if (isset($_SESSION['editmode'])) {
                             <li class="treeview">
                                 <a href="#">
                                     <i class="fa fa-file-text"></i> <span>Relatórios</span>
-                                    <span class="pull-right-container">
-                                        <i class="fa fa-angle-left pull-right"></i>
-                                        <small class="label pull-right bg-blue">novo</small>
-                                    </span>
                                 </a>
                                 <ul class="treeview-menu">
                                     <li><a href="javascript:abreModal('#relPedidos');"><i class="fa fa-circle-o"></i> Pedidos</a></li>
@@ -433,7 +434,7 @@ if (isset($_SESSION['editmode'])) {
                                 </div><!-- /.box -->
                             </div><!-- /.col -->
                         </div><!-- /.row -->
-                        <?php if (!$permissao->recepcao): ?>
+                        <?php if ($permissao->pedidos): ?>
                             <div id="rowCadRP" class="row" style="display: none;">
                                 <div class="col-xs-12">
                                     <div class="box box-primary">
