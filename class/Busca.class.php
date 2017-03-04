@@ -37,6 +37,45 @@ final class Busca {
     }
 
     /**
+     * Verify ifuser must make an in or out.
+     * @return int If 1 - in, else - out.
+     */
+    public function getInfoTime(): int {
+        $this->openConnection();
+        $id_usuario = $_SESSION['id'];
+        $query_id = $this->mysqli->query('SELECT max(id) AS id FROM usuario_hora WHERE id_usuario = ' . $id_usuario) or exit('Erro ao consultar ultimo registro do usuário: ' . $this->mysqli->error);
+
+        $obj = $query_id->fetch_object();
+
+        $return = NULL;
+
+        if ($obj->id == NULL) {
+            // fazer uma entrada
+            $return = 1;
+        } else {
+            // verifica se ele deve fazer uma entrada ou uma saida
+            $query = $this->mysqli->query('SELECT horas FROM usuario_hora WHERE id = ' . $obj->id) or exit('Erro ao verificar proximo registro do usuario: ' . $this->mysqli->error);
+
+            $obj = $query->fetch_object();
+
+            if ($obj->horas == NULL) {
+                // fazer uma saida
+                $return = 0;
+            } else {
+                // fazer uma entrada
+                $return = 1;
+            }
+        }
+
+        $this->mysqli = NULL;
+
+        if ($return == NULL) {
+            exit('Erro: return is NULL (getInfoTime)');
+        }
+        return $return;
+    }
+
+    /**
      * É importante que tabela selecionada tenha id e nome como colunas.
      * @param string $table tabel mysql
      * @return array array com a coluna nome da table

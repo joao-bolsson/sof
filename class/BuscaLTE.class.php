@@ -39,6 +39,14 @@ final class BuscaLTE {
             $this->mysqli = Conexao::getInstance()->getConexao();
         }
     }
+    
+    public function refreshTableHora():string {
+        $this->openConnection();
+        $retorno = '';
+        
+        $this->mysqli = NULL;
+        return $retorno;
+    }
 
     /**
      * 	Função que retorna as 'tabs' com as ṕáginas das notícias para editar.

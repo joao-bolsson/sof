@@ -17,31 +17,6 @@ CREATE TABLE `comentarios` (
   `comentario` text NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
-CREATE TABLE `contrato` (
-  `id` int(10) UNSIGNED NOT NULL,
-  `num_contrato` varchar(20) DEFAULT NULL,
-  `cnpj_fornecedor` varchar(20) DEFAULT NULL,
-  `nome_fornecedor` varchar(30) DEFAULT NULL,
-  `num_processo` varchar(30) DEFAULT NULL,
-  `objeto_contrato` varchar(30) DEFAULT NULL,
-  `num_licitacao` varchar(30) DEFAULT NULL,
-  `empenho_inicial` varchar(20) DEFAULT NULL,
-  `tipo_garantia` varchar(30) DEFAULT NULL,
-  `vigencia_garantia` varchar(30) DEFAULT NULL,
-  `dt_inicio_contrato` date DEFAULT NULL,
-  `dt_fim_contrato` date DEFAULT NULL,
-  `prorrogacao_contrato` varchar(20) DEFAULT NULL,
-  `gestor_contrato` varchar(30) DEFAULT NULL,
-  `alteracao_gestor` varchar(30) DEFAULT NULL,
-  `aditivo_contrato` varchar(30) DEFAULT NULL,
-  `percentual_aditamento` varchar(30) DEFAULT NULL,
-  `adendo_contrato` varchar(30) DEFAULT NULL,
-  `valor_total_contrato` varchar(30) DEFAULT NULL,
-  `descr_mod_compra` varchar(30) DEFAULT NULL,
-  `tipo_contrato` varchar(30) DEFAULT NULL,
-  `setor_solicitante` varchar(30) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
 CREATE TABLE `contrato_tipo` (
   `id` tinyint(3) UNSIGNED NOT NULL,
   `nome` varchar(20) NOT NULL
@@ -82,21 +57,6 @@ CREATE TABLE `itens` (
   `cancelado` tinyint(1) NOT NULL,
   `chave` varchar(50) DEFAULT NULL,
   `seq_item_processo` varchar(20) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
-CREATE TABLE `itens_contrato` (
-  `id` int(10) UNSIGNED NOT NULL,
-  `id_contrato` int(10) UNSIGNED NOT NULL,
-  `item` varchar(30) DEFAULT NULL,
-  `descricao_item` varchar(30) DEFAULT NULL,
-  `nat_desp_sub_element` varchar(30) DEFAULT NULL,
-  `cod_produto` varchar(30) DEFAULT NULL,
-  `vl_unitario_item_contrato` varchar(30) DEFAULT NULL,
-  `qt_item_contrato` int(10) UNSIGNED DEFAULT NULL,
-  `valor_total_item_contrato` varchar(30) DEFAULT NULL,
-  `qt_utilizada_item` int(10) UNSIGNED DEFAULT NULL,
-  `qt_saldo_item` int(10) UNSIGNED DEFAULT NULL,
-  `vl_saldo_item` varchar(30) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 CREATE TABLE `itens_pedido` (
@@ -151,7 +111,7 @@ CREATE TABLE `pedido` (
 CREATE TABLE `pedido_contrato` (
   `id_pedido` int(10) UNSIGNED NOT NULL,
   `id_tipo` tinyint(3) UNSIGNED NOT NULL,
-  `siafi` varchar(10) NOT NULL
+  `siafi` varchar(10) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 CREATE TABLE `pedido_empenho` (
@@ -297,6 +257,14 @@ CREATE TABLE `usuario` (
   `email` varchar(40) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
+CREATE TABLE `usuario_hora` (
+  `id` int(10) UNSIGNED NOT NULL,
+  `id_usuario` int(10) UNSIGNED NOT NULL,
+  `entrada` datetime NOT NULL,
+  `saida` datetime DEFAULT NULL,
+  `horas` float UNSIGNED DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
 CREATE TABLE `usuario_permissoes` (
   `id_usuario` int(10) UNSIGNED NOT NULL,
   `noticias` tinyint(1) NOT NULL,
@@ -312,19 +280,12 @@ ALTER TABLE `comentarios`
   ADD KEY `status` (`status`),
   ADD KEY `prioridade` (`prioridade`);
 
-ALTER TABLE `contrato`
-  ADD PRIMARY KEY (`id`);
-
 ALTER TABLE `contrato_tipo`
   ADD PRIMARY KEY (`id`);
 
 ALTER TABLE `itens`
   ADD PRIMARY KEY (`id`),
   ADD UNIQUE KEY `chave` (`chave`);
-
-ALTER TABLE `itens_contrato`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `id_contrato` (`id_contrato`);
 
 ALTER TABLE `itens_pedido`
   ADD PRIMARY KEY (`id`),
@@ -333,8 +294,7 @@ ALTER TABLE `itens_pedido`
 
 ALTER TABLE `licitacao`
   ADD PRIMARY KEY (`id`),
-  ADD KEY `id_pedido` (`id_pedido`),
-  ADD KEY `tipo` (`tipo`);
+  ADD KEY `id_pedido` (`id_pedido`);
 
 ALTER TABLE `licitacao_tipo`
   ADD PRIMARY KEY (`id`);
@@ -370,7 +330,7 @@ ALTER TABLE `pedido_grupo`
   ADD KEY `id_grupo` (`id_grupo`);
 
 ALTER TABLE `pedido_log_status`
-  ADD UNIQUE KEY `chave_log` (`chave`),
+  ADD UNIQUE KEY `chave` (`chave`),
   ADD KEY `id_pedido` (`id_pedido`),
   ADD KEY `id_status` (`id_status`);
 
@@ -430,28 +390,28 @@ ALTER TABLE `status`
 
 ALTER TABLE `usuario`
   ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `email` (`email`),
   ADD UNIQUE KEY `login` (`login`),
+  ADD UNIQUE KEY `email` (`email`),
   ADD KEY `id_setor` (`id_setor`);
+
+ALTER TABLE `usuario_hora`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `id_usuario` (`id_usuario`);
 
 ALTER TABLE `usuario_permissoes`
   ADD UNIQUE KEY `id_usuario` (`id_usuario`);
 
 
 ALTER TABLE `comentarios`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
-ALTER TABLE `contrato`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=166;
 ALTER TABLE `contrato_tipo`
   MODIFY `id` tinyint(3) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 ALTER TABLE `itens`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3926;
-ALTER TABLE `itens_contrato`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=30942;
 ALTER TABLE `itens_pedido`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=386;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1730;
 ALTER TABLE `licitacao`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=148;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=737;
 ALTER TABLE `licitacao_tipo`
   MODIFY `id` tinyint(3) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 ALTER TABLE `mes`
@@ -459,57 +419,55 @@ ALTER TABLE `mes`
 ALTER TABLE `paginas_post`
   MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 ALTER TABLE `pedido`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=149;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=737;
 ALTER TABLE `pedido_empenho`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=33;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=309;
 ALTER TABLE `pedido_fonte`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=91;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=379;
 ALTER TABLE `postagens`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=45;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=47;
 ALTER TABLE `prioridade`
   MODIFY `id` int(1) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 ALTER TABLE `problemas`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 ALTER TABLE `processos`
   MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 ALTER TABLE `processos_tipo`
-  MODIFY `id` int(1) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
+  MODIFY `id` int(1) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 ALTER TABLE `saldos_adiantados`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 ALTER TABLE `saldos_lancamentos`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=150;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=453;
 ALTER TABLE `saldos_transferidos`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=29;
 ALTER TABLE `saldo_categoria`
   MODIFY `id` int(1) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 ALTER TABLE `saldo_setor`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
 ALTER TABLE `setores`
   MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
 ALTER TABLE `setores_grupos`
   MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=93;
 ALTER TABLE `solic_alt_pedido`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 ALTER TABLE `status`
   MODIFY `id` int(1) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 ALTER TABLE `usuario`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=25;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=31;
+ALTER TABLE `usuario_hora`
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
 
 ALTER TABLE `comentarios`
   ADD CONSTRAINT `comentarios_ibfk_1` FOREIGN KEY (`id_pedido`) REFERENCES `pedido` (`id`),
   ADD CONSTRAINT `comentarios_ibfk_2` FOREIGN KEY (`status`) REFERENCES `status` (`id`),
   ADD CONSTRAINT `comentarios_ibfk_3` FOREIGN KEY (`prioridade`) REFERENCES `prioridade` (`id`);
 
-ALTER TABLE `itens_contrato`
-  ADD CONSTRAINT `itens_contrato_ibfk_1` FOREIGN KEY (`id_contrato`) REFERENCES `contrato` (`id`);
-
 ALTER TABLE `itens_pedido`
   ADD CONSTRAINT `itens_pedido_ibfk_1` FOREIGN KEY (`id_pedido`) REFERENCES `pedido` (`id`),
   ADD CONSTRAINT `itens_pedido_ibfk_2` FOREIGN KEY (`id_item`) REFERENCES `itens` (`id`);
 
 ALTER TABLE `licitacao`
-  ADD CONSTRAINT `licitacao_ibfk_1` FOREIGN KEY (`id_pedido`) REFERENCES `pedido` (`id`),
-  ADD CONSTRAINT `licitacao_ibfk_2` FOREIGN KEY (`tipo`) REFERENCES `licitacao_tipo` (`id`);
+  ADD CONSTRAINT `licitacao_ibfk_1` FOREIGN KEY (`id_pedido`) REFERENCES `pedido` (`id`);
 
 ALTER TABLE `pedido`
   ADD CONSTRAINT `pedido_ibfk_1` FOREIGN KEY (`id_setor`) REFERENCES `setores` (`id`),
@@ -568,6 +526,9 @@ ALTER TABLE `solic_alt_pedido`
 
 ALTER TABLE `usuario`
   ADD CONSTRAINT `usuario_ibfk_1` FOREIGN KEY (`id_setor`) REFERENCES `setores` (`id`);
+
+ALTER TABLE `usuario_hora`
+  ADD CONSTRAINT `usuario_hora_ibfk_1` FOREIGN KEY (`id_usuario`) REFERENCES `usuario` (`id`);
 
 ALTER TABLE `usuario_permissoes`
   ADD CONSTRAINT `usuario_permissoes_ibfk_1` FOREIGN KEY (`id_usuario`) REFERENCES `usuario` (`id`);

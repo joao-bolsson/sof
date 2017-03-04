@@ -59,7 +59,7 @@ require_once '../defines.php';
         <![endif]-->
     </head>
     <!-- ADD THE CLASS layout-top-nav TO REMOVE THE SIDEBAR. -->
-    <body class="hold-transition skin-blue layout-top-nav">
+    <body class="hold-transition skin-blue layout-top-nav" onload="refreshPage()">
         <div class="wrapper">
 
             <header class="main-header">
@@ -114,13 +114,16 @@ require_once '../defines.php';
                     <!-- Main content -->
                     <section class="content">
                         <div class="box box-primary">
+                            <div id="overlayLoad" class="overlay" style="display: none;">
+                                <i class="fa fa-refresh fa-spin"></i>
+                            </div>
                             <div class="box-header with-border">
                                 <h3 class="box-title">Ponto Eletrônico</h3>
                             </div>
                             <div class="box-body">
                                 <div class="margin">
-                                    <button class="btn btn-primary" type="button" onclick="pointRegister()"><i class="fa fa-sign-in"></i>&nbsp;Entrada</button>
-                                    <button class="btn btn-danger" type="button" onclick="pointRegister()"><i class="fa fa-sign-out"></i>&nbsp;Saída</button>
+                                    <button id="btnIn" class="btn btn-primary" type="button" onclick="pointRegister()"><i class="fa fa-sign-in"></i>&nbsp;Entrada</button>
+                                    <button id="btnOut" class="btn btn-danger" type="button" onclick="pointRegister()"><i class="fa fa-sign-out"></i>&nbsp;Saída</button>
                                 </div>
                                 <table class="table table-bordered table-striped">
                                     <thead>
@@ -131,7 +134,7 @@ require_once '../defines.php';
                                             <th>Data</th>
                                         </tr>
                                     </thead>
-                                    <tbody></tbody>
+                                    <tbody id="tboodyHora"></tbody>
                                 </table>
                             </div><!-- ./box-body -->
                         </div>
@@ -213,6 +216,7 @@ require_once '../defines.php';
 
         <!-- page script -->
         <script type="text/javascript" src="../iniLTE.min.js"></script>
+        <script type="text/javascript" src="../hora.js"></script>
     </body>
 </html>
 
