@@ -38,6 +38,24 @@ final class Geral {
         }
     }
 
+    public function editLog(int $id, string $entrada, string $saida) {
+        $this->openConnection();
+
+        $dateTimeE = DateTime::createFromFormat('d/m/Y H:i:s', $entrada);
+        $in = $dateTimeE->format('Y-m-d H:i:s');
+
+        $dateTimeS = DateTime::createFromFormat('d/m/Y H:i:s', $saida);
+        $out = $dateTimeS->format('Y-m-d H:i:s');
+
+        $this->mysqli->query("UPDATE usuario_hora SET entrada = '" . $in . "', saida = '" . $out . "' WHERE id = " . $id) or exit('Erro: ' . $this->mysqli->error);
+
+        // atualiza horas realizadas
+        $horas = Util::getInstance()->getTimeDiffHora($id);
+        $this->mysqli->query('UPDATE usuario_hora SET horas = ' . $horas . ' WHERE id = ' . $id) or exit('Erro ao registrar horas: ' . $this->mysqli->error);
+
+        $this->mysqli = NULL;
+    }
+
     public function pointRegister(int $log) {
         $this->openConnection();
         $id_usuario = $_SESSION['id'];

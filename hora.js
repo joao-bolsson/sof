@@ -25,8 +25,18 @@ $(function () {
  * Function called to edit a log.
  */
 function editLog(id) {
-    console.log('Editar: ' + id);
-    $('#editLog').modal();
+    $.post('../php/busca.php', {
+        admin: 1,
+        form: 'editLog',
+        id: id
+    }, function (resposta) {
+        document.getElementById('idLog').value = id;
+        var obj = jQuery.parseJSON(resposta);
+        document.getElementById('nomeEdit').value = obj.nome;
+        document.getElementById('entradaEdit').value = obj.entrada;
+        document.getElementById('saidaEdit').value = obj.saida;
+        $('#editLog').modal();
+    });
 }
 
 /**

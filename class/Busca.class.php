@@ -36,6 +36,18 @@ final class Busca {
         }
     }
 
+    public function getInfoLog(int $id) {
+        $this->openConnection();
+
+        $query = $this->mysqli->query("SELECT usuario.nome, DATE_FORMAT(entrada, '%d/%m/%Y %H:%i:%s') AS entrada, DATE_FORMAT(saida, '%d/%m/%Y %H:%i:%s') AS saida FROM usuario_hora, usuario WHERE usuario_hora.id_usuario = usuario.id AND usuario_hora.id = " . $id) or exit('Erro ao buscar informações do log.');
+
+        $this->mysqli = NULL;
+
+        $obj = $query->fetch_object();
+        $obj->saida = ($obj->saida == NULL) ? date('d/m/Y H:i:s') : $obj->saida;
+        return json_encode($obj);
+    }
+
     /**
      * * Gets the id of last register of the user specified by param
      * if return NULL, means the user doesn't have a register.
