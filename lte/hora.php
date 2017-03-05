@@ -159,8 +159,7 @@ require_once '../defines.php';
                     <div class="pull-right hidden-xs">
                         <b>Version</b> <?= VERSION ?>
                     </div>
-                    <strong>Copyright © 2016-2017 <a href="https://github.com/joao-bolsson">João Bolsson</a>.</strong> All rights
-                    reserved.
+                    <?= COPYRIGHT ?>
                 </div>
                 <!-- /.container -->
             </footer>
