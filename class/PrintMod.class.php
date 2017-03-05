@@ -51,7 +51,7 @@ final class PrintMod {
 
         $query = $this->mysqli->query("SELECT ip, DATE_FORMAT(entrada, '%d/%m/%Y %H:%i:%s') AS entrada, DATE_FORMAT(saida, '%d/%m/%Y %H:%i:%s') AS saida, horas FROM usuario_hora WHERE (entrada BETWEEN '" . $dataI . "' AND '" . $dataF . "') AND id_usuario = " . $id_usuario) or exit('Erro ao consultar relação de horários.');
 
-        $totHoras = Util::getInstance()->getTotHoras($id_usuario, $periodo);
+        $totHoras = number_format(Util::getInstance()->getTotHoras($id_usuario, $periodo), 3, ',', '.');
         $info = (Util::getInstance()->isCurrentLoggedIn($id_usuario)) ? '<h6>Usuário possui uma saída pendente, a última entrada não foi contabilizada no total.</h6>' : '';
         $retorno = "
             <fieldset class=\"preg\">
@@ -70,7 +70,7 @@ final class PrintMod {
             $row->addColumn(new Column($obj->ip));
             $row->addColumn(new Column($obj->entrada));
             $obj->saida = ($obj->saida == NULL) ? '--------------------' : $obj->saida;
-            $obj->horas = ($obj->horas == NULL) ? '--------------------' : $obj->horas;
+            $obj->horas = ($obj->horas == NULL) ? '--------------------' : number_format($obj->horas, 3, ',', '.');
             $row->addColumn(new Column($obj->saida));
             $row->addColumn(new Column($obj->horas));
             $table->addRow($row);
