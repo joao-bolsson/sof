@@ -327,9 +327,8 @@ final class BuscaLTE {
      */
     public function verEmpenho(int $id_pedido): string {
         $retorno = '';
-        $this->openConnection();
-        $query = $this->mysqli->query("SELECT empenho FROM pedido_empenho WHERE id_pedido = " . $id_pedido) or exit("Erro so ver empenho.");
-        $this->mysqli = NULL;
+        $query = Query::getInstance()->exe('SELECT empenho FROM pedido_empenho WHERE id_pedido = ' . $id_pedido);
+
         if ($query->num_rows < 1) {
             $retorno = 'EMPENHO SIAFI PENDENTE';
         } else {
@@ -684,10 +683,8 @@ final class BuscaLTE {
      *
      */
     public function getSolicitacoesAdmin(string $where = '', array $pedidos = []): string {
-        $this->openConnection();
-        $limit = 'LIMIT ' . LIMIT_MAX;
-        $query = $this->mysqli->query("SELECT id, id_setor, DATE_FORMAT(data_pedido, '%d/%m/%Y') AS data_pedido, prioridade, status, valor, aprov_gerencia FROM pedido WHERE status <> 3 AND alteracao = 0 " . $where . " ORDER BY id DESC " . $limit) or exit("Erro ao buscar os pedidos que foram mandados ao SOF.");
-        $this->mysqli = NULL;
+        $sql = "SELECT id, id_setor, DATE_FORMAT(data_pedido, '%d/%m/%Y') AS data_pedido, prioridade, status, valor, aprov_gerencia FROM pedido WHERE status <> 3 AND alteracao = 0 " . $where . ' ORDER BY id DESC LIMIT ' . LIMIT_MAX;
+        $query = Query::getInstance()->exe($sql);
 
         $table = new Table('', '', array(), false);
         while ($pedido = $query->fetch_object()) {
