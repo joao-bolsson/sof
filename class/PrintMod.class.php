@@ -37,6 +37,49 @@ final class PrintMod {
         }
     }
 
+    /**
+     * @param int $id_usuario Id do usuario
+     * @param string $periodo Período no formato 03/03/2017 - 05/04/2017
+     * @return string Relatório dos registros do usuário.
+     */
+    public function relatorioHora(int $id_usuario, string $periodo): string {
+        $array = explode(' - ', $periodo);
+        $dataI = Util::getInstance()->dateFormat($array[0]);
+        $dataF = Util::getInstance()->dateFormat($array[1]);
+
+        $this->openConnection();
+
+        $query = $this->mysqli->query("SELECT ip, DATE_FORMAT(entrada, '%d/%m/%Y %H:%i:%s') AS entrada, DATE_FORMAT(saida, '%d/%m/%Y %H:%i:%s') AS saida, horas FROM usuario_hora WHERE (entrada BETWEEN '" . $dataI . "' AND '" . $dataF . "') AND id_usuario = " . $id_usuario) or exit('Erro ao consultar relação de horários.');
+
+        $totHoras = Util::getInstance()->getTotHoras($id_usuario, $periodo);
+        $info = (Util::getInstance()->isCurrentLoggedIn($id_usuario)) ? '<h6>Usuário possui uma saída pendente, a última entrada não foi contabilizada no total.</h6>' : '';
+        $retorno = "
+            <fieldset class=\"preg\">
+                    <h5>DESCRIÇÃO DO RELATÓRIO</h5>
+                    <h6>Relatório de Horários: Usuário " . Util::getInstance()->getUserName($id_usuario) . "
+                         | Período: " . $periodo . "</h6>
+                    <h6>Total de Horas: " . $totHoras . "</h6>
+                    " . $info . "
+                </fieldset><br>";
+
+        $retorno .= "<fieldset class=\"preg\">";
+
+        $table = new Table('', 'prod', ['IP', 'Entrada', 'Saída', 'Horas'], true);
+        while ($obj = $query->fetch_object()) {
+            $row = new Row();
+            $row->addColumn(new Column($obj->ip));
+            $row->addColumn(new Column($obj->entrada));
+            $obj->saida = ($obj->saida == NULL) ? '--------------------' : $obj->saida;
+            $obj->horas = ($obj->horas == NULL) ? '--------------------' : $obj->horas;
+            $row->addColumn(new Column($obj->saida));
+            $row->addColumn(new Column($obj->horas));
+            $table->addRow($row);
+        }
+
+        $retorno .= $table . '</fieldset>';
+        return $retorno;
+    }
+
     public function getRelUsers(): string {
         $this->openConnection();
         $query = $this->mysqli->query('SELECT nome, login, id_setor, email FROM usuario ORDER BY nome ASC') or exit('Erro ao buscar usuários.');

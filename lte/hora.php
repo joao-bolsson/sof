@@ -167,13 +167,13 @@ require_once '../defines.php';
                             <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                             <h4 class="modal-title">Relatório</h4>
                         </div>
-                        <form action="../admin/printRelatorio.php" method="post">
+                        <form action="../admin/printRelatorio.php" method="post" target="_blank">
                             <input type="hidden" name="relatorio" value="1"/>
                             <input type="hidden" name="tipo" value="hora"/>
                             <div class="modal-body">
                                 <div class="form-group">
                                     <label>Usuário</label>
-                                    <select id="userA" class="form-control" name="user" required>
+                                    <select class="form-control" name="user" required>
                                         <?= $obj_Busca->getUsers(false, $_SESSION['id_setor']); ?>
                                     </select>
                                 </div>

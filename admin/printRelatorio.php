@@ -63,6 +63,13 @@ if (!is_null($type)) {
                 $dataF = filter_input(INPUT_POST, 'dataF');
                 $html .= $obj_Print->getRelatorioLib($id_setor, $categoria, $dataI, $dataF);
                 break;
+
+            case 'hora':
+                $id_usuario = filter_input(INPUT_POST, 'user');
+                $periodo = filter_input(INPUT_POST, 'periodo');
+
+                $html .= $obj_Print->relatorioHora($id_usuario, $periodo);
+                break;
             default:
                 exit('Nenhum dado foi recebido para gerar relatório.');
                 break;

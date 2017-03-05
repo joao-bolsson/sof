@@ -89,6 +89,37 @@ final class Util {
     }
 
     /**
+     * @param int $id_usuario User's id
+     * @param string $periodo Date range like 03/03/2017 - 05/04/2017
+     * @return float Hours report of the user in $periodo (may be NULL)
+     */
+    public function getTotHoras(int $id_usuario, string $periodo): float {
+        $array = explode(' - ', $periodo);
+        $dataI = $this->dateFormat($array[0]);
+        $dataF = $this->dateFormat($array[1]);
+
+        $this->openConnection();
+        $query = $this->mysqli->query("SELECT sum(horas) AS total FROM usuario_hora WHERE (entrada BETWEEN '" . $dataI . "' AND '" . $dataF . "') AND id_usuario = " . $id_usuario . ' LIMIT 1') or exit('Erro: ' . $this->mysqli->error);
+        $this->mysqli = NULL;
+        $obj = $query->fetch_object();
+        $obj->total = ($obj->total == NULL) ? 0 : $obj->total;
+        return $obj->total;
+    }
+
+    /**
+     * @param int $id_usuario User's id
+     * @return bool Any 'saida' of user is NULL - true, else false.
+     */
+    public function isCurrentLoggedIn(int $id_usuario): bool {
+        $this->openConnection();
+
+        $query = $this->mysqli->query('SELECT saida FROM usuario_hora WHERE id_usuario = ' . $id_usuario . ' AND saida IS NULL;') or exit('Erro: ' . $this->mysqli->error);
+        $this->mysqli = NULL;
+
+        return ($query->num_rows > 0);
+    }
+
+    /**
      * @param int $id_last Register's id.
      * @return float Hours between in and out of register $id_last
      */
