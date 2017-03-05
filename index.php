@@ -25,8 +25,13 @@ if (!isset($_SESSION['slide2'])) {
 if (isset($_SESSION['id_setor']) && $_SESSION['id_setor'] == 12) {
     header('Location: lte/apoio.php');
 } else if (isset($_SESSION["admin"])) {
-    //redireciona para a página do admin
-    header('Location: lte/');
+    $permissao = $obj_Busca->getPermissoes($_SESSION["id"]);
+    if ($permissao->pedidos || $permissao->saldos || $permissao->noticias || $permissao->recepcao) {
+        //redireciona para a página do admin
+        header('Location: lte/');
+    } else {
+        header('Location: lte/hora.php');
+    }
 } else if (isset($_SESSION["id_setor"]) && $_SESSION["id_setor"] != 0) {
     header("Location: lte/solicitacoes.php");
 } else {
