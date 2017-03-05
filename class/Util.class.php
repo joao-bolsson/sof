@@ -88,11 +88,77 @@ final class Util {
         }
     }
 
+    /**
+     * @param int $id_usuario User's id
+     * @param string $periodo Date range like 03/03/2017 - 05/04/2017
+     * @return float Hours report of the user in $periodo (may be NULL)
+     */
+    public function getTotHoras(int $id_usuario, string $periodo): float {
+        $array = explode(' - ', $periodo);
+        $dataI = $this->dateFormat($array[0]);
+        $dataF = $this->dateFormat($array[1]);
+
+        $this->openConnection();
+        $query = $this->mysqli->query("SELECT sum(horas) AS total FROM usuario_hora WHERE (entrada BETWEEN '" . $dataI . "' AND '" . $dataF . "') AND id_usuario = " . $id_usuario . ' LIMIT 1') or exit('Erro: ' . $this->mysqli->error);
+        $this->mysqli = NULL;
+        $obj = $query->fetch_object();
+        $obj->total = ($obj->total == NULL) ? 0 : $obj->total;
+        return $obj->total;
+    }
+
+    /**
+     * @param int $id_usuario User's id
+     * @return bool Any 'saida' of user is NULL - true, else false.
+     */
+    public function isCurrentLoggedIn(int $id_usuario): bool {
+        $this->openConnection();
+
+        $query = $this->mysqli->query('SELECT saida FROM usuario_hora WHERE id_usuario = ' . $id_usuario . ' AND saida IS NULL;') or exit('Erro: ' . $this->mysqli->error);
+        $this->mysqli = NULL;
+
+        return ($query->num_rows > 0);
+    }
+
+    /**
+     * @param int $id_last Register's id.
+     * @return float Hours between in and out of register $id_last
+     */
+    public function getTimeDiffHora(int $id_last): float {
+        $this->openConnection();
+        $query = $this->mysqli->query("SELECT TIMESTAMPDIFF(SECOND, entrada, saida) as seconds FROM usuario_hora WHERE id = " . $id_last) or exit('Erro ao calcular periodo decorrido entre a entrada e saida: ' . $this->mysqli->error);
+        $this->mysqli = NULL;
+
+        $obj = $query->fetch_object();
+        $horas = 0;
+        if ($obj->seconds == NULL) {
+            exit('TIMEDIFF is NULL');
+        } else {
+            $horas = $obj->seconds / 3600;
+        }
+
+        return $horas;
+    }
+
+    /**
+     * Gets the user's name from id.
+     * @param int $id_user User's id.
+     * @return string User's name.
+     */
+    public function getUserName(int $id_user): string {
+        $this->openConnection();
+
+        $query = $this->mysqli->query("SELECT usuario.nome FROM usuario WHERE usuario.id = " . $id_user) or exit("Erro ao buscar o nome do usuario do pedido");
+        $obj = $query->fetch_object();
+
+        $this->mysqli = NULL;
+        return $obj->nome;
+    }
+
     public function readFile(string $tmp_name): array {
         $array = [];
         $i = 0;
         if (($handle = fopen($tmp_name, "r")) !== FALSE) {
-            self::openConnection();
+            $this->openConnection();
             while (($data = fgetcsv($handle, 1000, "	")) !== FALSE) {
                 if ($data[$this->id_item_processo] != "ID_ITEM_PROCESSO") {
                     for ($c = 0; $c < count($data); $c++) {

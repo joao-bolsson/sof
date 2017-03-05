@@ -40,6 +40,14 @@ if (!is_null($admin) && isset($_SESSION['id_setor']) && ($_SESSION['id_setor'] =
 
     switch ($form) {
         
+        case 'loadAdminTable':
+            echo $obj_Busca->loadAdminTable();
+            break;
+
+        case 'refreshTableHora':
+            echo $obj_Busca->refreshTableHora();
+            break;
+
         case 'carregaPostsPag':
             $tabela = filter_input(INPUT_POST, 'tabela');
             echo $obj_Busca->getNoticiasEditar($tabela);

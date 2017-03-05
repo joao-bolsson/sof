@@ -37,8 +37,51 @@ final class PrintMod {
         }
     }
 
+    /**
+     * @param int $id_usuario Id do usuario
+     * @param string $periodo Período no formato 03/03/2017 - 05/04/2017
+     * @return string Relatório dos registros do usuário.
+     */
+    public function relatorioHora(int $id_usuario, string $periodo): string {
+        $array = explode(' - ', $periodo);
+        $dataI = Util::getInstance()->dateFormat($array[0]);
+        $dataF = Util::getInstance()->dateFormat($array[1]);
+
+        $this->openConnection();
+
+        $query = $this->mysqli->query("SELECT ip, DATE_FORMAT(entrada, '%d/%m/%Y %H:%i:%s') AS entrada, DATE_FORMAT(saida, '%d/%m/%Y %H:%i:%s') AS saida, horas FROM usuario_hora WHERE (entrada BETWEEN '" . $dataI . "' AND '" . $dataF . "') AND id_usuario = " . $id_usuario) or exit('Erro ao consultar relação de horários.');
+
+        $totHoras = number_format(Util::getInstance()->getTotHoras($id_usuario, $periodo), 3, ',', '.');
+        $info = (Util::getInstance()->isCurrentLoggedIn($id_usuario)) ? '<h6>Usuário possui uma saída pendente, a última entrada não foi contabilizada no total.</h6>' : '';
+        $retorno = "
+            <fieldset class=\"preg\">
+                    <h5>DESCRIÇÃO DO RELATÓRIO</h5>
+                    <h6>Relatório de Horários: Usuário " . Util::getInstance()->getUserName($id_usuario) . "
+                         | Período: " . $periodo . "</h6>
+                    <h6>Total de Horas: " . $totHoras . "</h6>
+                    " . $info . "
+                </fieldset><br>";
+
+        $retorno .= "<fieldset class=\"preg\">";
+
+        $table = new Table('', 'prod', ['IP', 'Entrada', 'Saída', 'Horas'], true);
+        while ($obj = $query->fetch_object()) {
+            $row = new Row();
+            $row->addColumn(new Column($obj->ip));
+            $row->addColumn(new Column($obj->entrada));
+            $obj->saida = ($obj->saida == NULL) ? '--------------------' : $obj->saida;
+            $obj->horas = ($obj->horas == NULL) ? '--------------------' : number_format($obj->horas, 3, ',', '.');
+            $row->addColumn(new Column($obj->saida));
+            $row->addColumn(new Column($obj->horas));
+            $table->addRow($row);
+        }
+
+        $retorno .= $table . '</fieldset>';
+        return $retorno;
+    }
+
     public function getRelUsers(): string {
-        self::openConnection();
+        $this->openConnection();
         $query = $this->mysqli->query('SELECT nome, login, id_setor, email FROM usuario ORDER BY nome ASC') or exit('Erro ao buscar usuários.');
         $this->mysqli = NULL;
         $retorno = "
@@ -71,7 +114,7 @@ final class PrintMod {
      * @return string
      */
     public function getHeader(int $id_pedido): string {
-        self::openConnection();
+        $this->openConnection();
         $query = $this->mysqli->query("SELECT pedido.id, DATE_FORMAT(pedido.data_pedido, '%d/%m/%Y') AS data_pedido, EXTRACT(YEAR FROM pedido.data_pedido) AS ano, mes.sigla_mes AS ref_mes, status.nome AS status, pedido.valor AS valor, pedido.obs, pedido.pedido_contrato, prioridade.nome AS prioridade, pedido.aprov_gerencia, pedido.id_usuario FROM prioridade, pedido, mes, status WHERE pedido.prioridade = prioridade.id AND status.id = pedido.status AND pedido.id = " . $id_pedido . ' AND mes.id = pedido.ref_mes') or exit('Erro ao formar o cabeçalho do pedido');
         $this->mysqli = NULL;
         $pedido = $query->fetch_object();
@@ -88,36 +131,26 @@ final class PrintMod {
                     </tr>
                 </table>
                 <p><b>Total do Pedido:</b> R$ " . $pedido->valor . "</p>
-                <p><b>Autor:</b> " . self::getUserName($pedido->id_usuario) . "</p>
+                <p><b>Autor:</b> " . Util::getInstance()->getUserName($pedido->id_usuario) . "</p>
                 <table style=\"font-size: 8pt; margin: 5px;\">
                     <tr>
-                        <td style=\"text-align: left;\">" . self::getGrupoPedido($id_pedido) . "</td>
-                        <td style=\"text-align: right;\">" . self::getEmpenho($id_pedido) . "</td>
+                        <td style=\"text-align: left;\">" . $this->getGrupoPedido($id_pedido) . "</td>
+                        <td style=\"text-align: right;\">" . $this->getEmpenho($id_pedido) . "</td>
                     </tr>
                 </table>";
         $retorno .= ($pedido->aprov_gerencia) ? '<p><b>Aprovado Pela Gerência</b></p>' : '';
         $retorno .= "<p><b>Observação da Unidade Solicitante: </b></p>
                 <p style=\"font-weight: normal !important;\">	" . $pedido->obs . "</p>
             </fieldset><br>";
-        $retorno .= self::getTableFontes($id_pedido);
-        $retorno .= self::getTableLicitacao($id_pedido);
+        $retorno .= $this->getTableFontes($id_pedido);
+        $retorno .= $this->getTableLicitacao($id_pedido);
         return $retorno;
-    }
-
-    private function getUserName(int $id_user) {
-        self::openConnection();
-
-        $query = $this->mysqli->query("SELECT usuario.nome FROM usuario WHERE usuario.id = " . $id_user) or exit("Erro ao buscar o nome do usuario do pedido");
-        $obj = $query->fetch_object();
-
-        $this->mysqli = NULL;
-        return $obj->nome;
     }
 
     private function getTableLicitacao(int $id_pedido): string {
         $retorno = "<fieldset><h5>PEDIDO SEM LICITAÇÃO</h5></fieldset><br>";
 
-        self::openConnection();
+        $this->openConnection();
         $query = $this->mysqli->query("SELECT licitacao.tipo AS id_tipo, licitacao_tipo.nome AS tipo, licitacao.numero, licitacao.uasg, licitacao.processo_original, licitacao.gera_contrato FROM licitacao, licitacao_tipo WHERE licitacao_tipo.id = licitacao.tipo AND licitacao.id_pedido = " . $id_pedido . ' LIMIT 1') or exit('Erro ao buscar licitação do pedido');
         $this->mysqli = NULL;
         if ($query->num_rows > 0) {
@@ -157,7 +190,7 @@ final class PrintMod {
      */
     public function getTableFontes(int $id_pedido): string {
         $retorno = '';
-        self::openConnection();
+        $this->openConnection();
         $query = $this->mysqli->query('SELECT fonte_recurso, ptres, plano_interno FROM pedido_fonte WHERE id_pedido = ' . $id_pedido) or exit('Erro ao buscar fontes do pedido');
         $this->mysqli = NULL;
         if ($query->num_rows > 0) {
@@ -179,7 +212,7 @@ final class PrintMod {
     }
 
     private function getEmpenho(int $id_pedido): string {
-        self::openConnection();
+        $this->openConnection();
 
         $query = $this->mysqli->query('SELECT contrato_tipo.nome, pedido_contrato.siafi FROM contrato_tipo, pedido_contrato WHERE pedido_contrato.id_tipo = contrato_tipo.id AND pedido_contrato.id_pedido = ' . $id_pedido) or exit('Erro ao buscar o contrato do pedido');
         $this->mysqli = NULL;
@@ -192,7 +225,7 @@ final class PrintMod {
     }
 
     private function getGrupoPedido(int $id_pedido): string {
-        self::openConnection();
+        $this->openConnection();
         $query = $this->mysqli->query('SELECT setores_grupos.nome, pedido_grupo.id_pedido FROM setores_grupos, pedido_grupo WHERE pedido_grupo.id_grupo = setores_grupos.id AND pedido_grupo.id_pedido = ' . $id_pedido) or exit('Erro ao buscar grupo do pedido');
         $this->mysqli = NULL;
         $retorno = '';
@@ -212,7 +245,7 @@ final class PrintMod {
     public function getContentPedido(int $id_pedido): string {
         $retorno = '';
         // PRIMEIRO FAZEMOS O CABEÇALHO REFERENTE AO NUM_LICITACAO
-        self::openConnection();
+        $this->openConnection();
         $query_ini = $this->mysqli->query('SELECT DISTINCT itens.num_licitacao, itens.num_processo, itens.dt_inicio, itens.dt_fim FROM itens_pedido, itens WHERE itens.id = itens_pedido.id_item AND itens_pedido.id_pedido = ' . $id_pedido) or exit('Erro ao buscar itens do pedido');
         while ($licitacao = $query_ini->fetch_object()) {
             $row = new Row();
@@ -278,7 +311,7 @@ final class PrintMod {
      */
     public function getComentarios(int $id_pedido): string {
         $retorno = "";
-        self::openConnection();
+        $this->openConnection();
         $query_emp = $this->mysqli->query("SELECT pedido_empenho.empenho, DATE_FORMAT(pedido_empenho.data, '%d/%m/%Y') AS data FROM pedido_empenho WHERE pedido_empenho.id_pedido = {$id_pedido};") or exit("Erro ao mostrar o empenho do pedido nos comentários.");
         if ($query_emp->num_rows > 0) {
             $empenho = $query_emp->fetch_object();
@@ -315,7 +348,7 @@ final class PrintMod {
      * 	@return Id do setor que fez o pedido.
      */
     public function getSetorPedido(int $id_pedido): int {
-        self::openConnection();
+        $this->openConnection();
         $query = $this->mysqli->query('SELECT id_setor FROM pedido WHERE id = ' . $id_pedido) or exit('Erro ao buscar o id do setor do pedido');
         $this->mysqli = NULL;
         $obj = $query->fetch_object();
@@ -350,7 +383,7 @@ final class PrintMod {
         }
         $where_pedidos .= ')';
 
-        self::openConnection();
+        $this->openConnection();
         $query = $this->mysqli->query("SELECT pedido.id, setores.nome AS setor, DATE_FORMAT(pedido.data_pedido, '%d/%m/%Y') AS data_pedido, prioridade.nome AS prioridade, status.id AS id_status, status.nome AS status, pedido.valor " . $empenho . " FROM " . $tb_empenho . " setores, pedido, prioridade, status WHERE status.id = pedido.status " . $where_empenho . " AND prioridade.id = pedido.prioridade AND pedido.id_setor = setores.id " . $where_status . " AND " . $where_pedidos . " ORDER BY pedido.id ASC") or exit('Erro ao buscar os pedidos com as especificações do usuário');
 
         $titulo = ($status == 8) ? 'Relatório de Empenhos Enviados ao Ordenador' : 'Relatório de Pedidos por Setor e Nível de Prioridade';
@@ -451,7 +484,7 @@ final class PrintMod {
         $dataIni = $this->obj_Util->dateFormat($dataI);
         $dataFim = $this->obj_Util->dateFormat($dataF);
 
-        self::openConnection();
+        $this->openConnection();
         $query = $this->mysqli->query("SELECT id_setor, DATE_FORMAT(data, '%d/%m/%Y') AS data, valor, categoria FROM saldos_lancamentos WHERE data BETWEEN '" . $dataIni . "' AND '" . $dataFim . "' " . $where_setor . $where_categoria . " ORDER BY id ASC") or exit('Erro ao gerar relatório: ' . $this->mysqli->error);
         $this->mysqli = NULL;
 
@@ -506,7 +539,7 @@ final class PrintMod {
             $tb_empenho = "pedido_empenho, ";
             $empenho = ", pedido_empenho.empenho";
         }
-        self::openConnection();
+        $this->openConnection();
         $query = $this->mysqli->query("SELECT pedido.id, pedido.id_setor, setores.nome AS setor, DATE_FORMAT(pedido.data_pedido, '%d/%m/%Y') AS data_pedido, prioridade.nome AS prioridade, status.nome AS status, pedido.valor {$empenho} FROM {$tb_empenho} setores, pedido, prioridade, status WHERE status.id = pedido.status {$where_setor} {$where_prioridade} {$where_empenho} AND prioridade.id = pedido.prioridade AND pedido.id_setor = setores.id {$where_status} AND pedido.data_pedido BETWEEN '{$dataIni}' AND '{$dataFim}' ORDER BY pedido.id ASC;") or exit("Erro ao buscar os pedidos com as especificações do usuário.");
 
         $titulo = 'Relatório de Pedidos por Setor e Nível de Prioridade';
@@ -515,7 +548,7 @@ final class PrintMod {
             $titulo = 'Relatório de Empenhos Enviados ao Ordenador';
             $headers = ['Prioridade', 'SIAFI'];
         }
-        self::openConnection();
+        $this->openConnection();
         $query_tot = $this->mysqli->query("SELECT sum(pedido.valor) AS total FROM {$tb_empenho} pedido WHERE 1 > 0 {$where_setor} {$where_prioridade} {$where_empenho} AND pedido.alteracao = 0 {$where_status} AND pedido.data_pedido BETWEEN '{$dataIni}' AND '{$dataFim}';") or exit("Erro ao somar os pedidos.");
         $this->mysqli = NULL;
         $tot = $query_tot->fetch_object();
@@ -592,7 +625,7 @@ final class PrintMod {
             }
             $retorno .= $table . '</fieldset><br>' . "<fieldset class=\"preg\"><h5>SUBTOTAIS POR GRUPO</h5>";
 
-            self::openConnection();
+            $this->openConnection();
             $query_gr = $this->mysqli->query("SELECT pedido_grupo.id_grupo, setores_grupos.nome AS ng, pedido.valor {$empenho} FROM {$tb_empenho} setores, setores_grupos, pedido, prioridade, status, pedido_grupo WHERE setores_grupos.id = pedido_grupo.id_grupo AND pedido_grupo.id_pedido = pedido.id AND status.id = pedido.status {$where_setor} {$where_prioridade} {$where_empenho} AND prioridade.id = pedido.prioridade AND pedido.id_setor = setores.id {$where_status} AND pedido.data_pedido BETWEEN '{$dataIni}' AND '{$dataFim}'") or exit('Erro ao gerar subrelatorio de grupos');
             $this->mysqli = NULL;
 
@@ -643,7 +676,7 @@ final class PrintMod {
     public function getRelatorioProcessos(int $tipo): string {
         $retorno = '';
         $where = ($tipo != 0) ? ' WHERE id = ' . $tipo : '';
-        self::openConnection();
+        $this->openConnection();
 
         $query_proc = $this->mysqli->query('SELECT id, nome FROM processos_tipo' . $where) or exit('Erro ao buscar os tipos de processo');
         while ($tipo_proc = $query_proc->fetch_object()) {

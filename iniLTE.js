@@ -242,6 +242,7 @@ function carregaPostsPag(tabela) {
 }
 
 function editaNoticia(id, tabela) {
+    document.getElementById('overlayLoadBox').style.display = 'block';
     document.getElementById("funcao").value = "editar";
     document.getElementById("id_noticia").value = id;
     document.getElementById("tabela").value = tabela;
@@ -271,6 +272,7 @@ function editaNoticia(id, tabela) {
         tabela = 'op' + document.getElementById('tabela').value;
         document.getElementById(tabela).selected = true;
         $('#listNoticias').modal('hide');
+        document.getElementById('overlayLoadBox').style.display = 'none';
     });
 }
 

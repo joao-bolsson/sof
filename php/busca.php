@@ -40,6 +40,15 @@ if (!is_null($admin) && isset($_SESSION['id_setor']) && ($_SESSION['id_setor'] =
 
     switch ($form) {
 
+        case 'editLog':
+            $id = filter_input(INPUT_POST, 'id');
+            echo $obj_Busca->getInfoLog($id);
+            break;
+
+        case 'consultaHora':
+            echo $obj_Busca->getInfoTime();
+            break;
+
         case 'verProcessos':
             $id_pedido = filter_input(INPUT_POST, 'id_pedido');
             echo $obj_Busca->getProcessosPedido($id_pedido);
