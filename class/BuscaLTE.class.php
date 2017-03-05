@@ -58,6 +58,38 @@ final class BuscaLTE {
         return $array;
     }
 
+    private static final function buildButtonsAdminTool(int $id_log): string {
+        $div = "<div class=\"btn-group\">";
+
+        $div .= new Button('', 'btn btn-default btn-sm', "editLog(" . $id_log . ")", "data-toggle = \"tooltip\"", 'Editar', 'pencil');
+
+        $div .= '</div>';
+        return $div;
+    }
+
+    /**
+     * @return string Table of administration tool.
+     */
+    public function loadAdminTable(): string {
+        $this->openConnection();
+        $query = $this->mysqli->query("SELECT usuario_hora.id, usuario.nome, DATE_FORMAT(entrada, '%d/%m/%Y %H:%i:%s') AS entrada, DATE_FORMAT(saida, '%d/%m/%Y %H:%i:%s') AS saida FROM usuario_hora, usuario WHERE usuario.id = usuario_hora.id_usuario ORDER BY usuario_hora.id DESC LIMIT " . LIMIT_LOGS) or exit('Erro: ' . $this->mysqli->error);
+        $this->mysqli = NULL;
+
+        $table = new Table('', '', [], false);
+        while ($obj = $query->fetch_object()) {
+            $row = new Row();
+            $row->addColumn(new Column($obj->nome));
+            $row->addColumn(new Column($obj->entrada));
+            $obj->saida = ($obj->saida == NULL) ? '--------------------' : $obj->saida;
+            $row->addColumn(new Column($obj->saida));
+            $row->addColumn(new Column(self::buildButtonsAdminTool($obj->id)));
+
+            $table->addRow($row);
+        }
+
+        return $table;
+    }
+
     public function refreshTableHora(): string {
         $this->openConnection();
         $query = $this->mysqli->query('SELECT DISTINCT usuario_hora.id_usuario, usuario.nome FROM usuario_hora, usuario WHERE usuario_hora.id_usuario = usuario.id ORDER BY usuario.nome ASC') or exit('Erro ao atualizar tabela: ' . $this->mysqli->error);

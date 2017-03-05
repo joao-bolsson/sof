@@ -16,7 +16,32 @@ $(function () {
             language: 'pt-BR'
         });
     });
+    $('#registerAdmin').on('shown.bs.modal', function () {
+        loadAdminTable();
+    });
 });
+
+/**
+ * Function called to edit a log.
+ */
+function editLog(id) {
+    console.log('Editar: ' + id);
+    $('#editLog').modal();
+}
+
+/**
+ * Load table of admin tool
+ */
+function loadAdminTable() {
+    document.getElementById('overlayLoadAdmin').style.display = 'block';
+    $.post('../php/buscaLTE.php', {
+        admin: 1,
+        form: 'loadAdminTable'
+    }, function (resposta) {
+        $('#tbodyAdminTool').html(resposta);
+        document.getElementById('overlayLoadAdmin').style.display = 'none';
+    });
+}
 
 /**
  * Function that refreshs the page.

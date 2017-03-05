@@ -49,6 +49,10 @@ if ($obj_Busca->isActive()) {
 
     if (!is_null($admin) && isset($_SESSION["id_setor"]) && ($_SESSION["id_setor"] == 2 || $_SESSION["id_setor"] == 12)) {
         switch ($form) {
+            
+            case 'editLog':
+                echo "Função não definida";
+                break;
 
             case 'pointRegister':
                 $log = filter_input(INPUT_POST, 'log');

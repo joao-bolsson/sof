@@ -39,6 +39,10 @@ if (!is_null($filter)) {
 if (!is_null($admin) && isset($_SESSION['id_setor']) && ($_SESSION['id_setor'] == 2 || $_SESSION['id_setor'] == 12)) {
 
     switch ($form) {
+        
+        case 'loadAdminTable':
+            echo $obj_Busca->loadAdminTable();
+            break;
 
         case 'refreshTableHora':
             echo $obj_Busca->refreshTableHora();

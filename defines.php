@@ -13,6 +13,7 @@ defined('ARRAY_SETORES') or define('ARRAY_SETORES', $obj_Busca->getArrayDefines(
 defined('ARRAY_CATEGORIA') or define('ARRAY_CATEGORIA', $obj_Busca->getArrayDefines('saldo_categoria'));
 
 defined('LIMIT_MAX') or define('LIMIT_MAX', 100);
+defined('LIMIT_LOGS') or define('LIMIT_LOGS', 50);
 
 defined('MPDF_PATH') or define('MPDF_PATH', '../pdf');
 

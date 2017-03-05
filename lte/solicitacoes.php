@@ -126,10 +126,6 @@ $select_grupo = $obj_Busca->getOptionsGrupos($id_setor);
                         <li class="treeview">
                             <a href="#">
                                 <i class="fa fa-bar-chart"></i> <span>Relatórios</span>
-                                <span class="pull-right-container">
-                                    <i class="fa fa-angle-left pull-right"></i>
-                                    <small class="label pull-right bg-blue">novo</small>
-                                </span>
                             </a>
                             <ul class="treeview-menu">
                                 <li><a href="javascript:abreModal('#relPedidos');"><i class="fa fa-circle-o"></i> Pedidos</a></li>
