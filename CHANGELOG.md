@@ -1,5 +1,11 @@
 ## CHANGELOG ##
 
+#### v2.1.8 - 05/03/2017 ####
+- Implementação de ponto eletrônico (beta)
+- Evolução da arquitetura (padrão singleton na maioria das classes)
+- Melhoria de funções e organização de código
+- Revisão
+
 #### v2.1.7 - 28/02/2017 ####
 - Limita o carregamento de pedidos dos setores em 'Meus Pedidos'
 - Corrige erro ao enviar e-mail

@@ -74,7 +74,11 @@ if (!isset($_SESSION['editmode'])) {
 
                         <div class="collapse navbar-collapse pull-left" id="navbar-collapse">
                             <ul class="nav navbar-nav">
-                                <li><a href="javascript:listProcessos('users');">Processos</a></li>
+                                <li>
+                                    <a href="javascript:listProcessos('users');">
+                                        <i class="fa fa-tags"></i> Processos
+                                    </a>
+                                </li>
                             </ul>
                         </div>
 
@@ -155,8 +159,7 @@ if (!isset($_SESSION['editmode'])) {
                     <div class="pull-right hidden-xs">
                         <b>Version</b> <?= VERSION ?>
                     </div>
-                    <strong>Copyright © 2016-2017 <a href="https://github.com/joao-bolsson">João Bolsson</a>.</strong> All rights
-                    reserved.
+                    <?= COPYRIGHT ?>
                 </div>
                 <!-- /.container -->
             </footer>

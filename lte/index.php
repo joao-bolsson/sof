@@ -798,7 +798,7 @@ if (isset($_SESSION['editmode'])) {
                 <div class="pull-right hidden-xs">
                     <b>Version</b> <?= VERSION ?>
                 </div>
-                <strong>Copyright © 2016-2017 <a href="https://github.com/joao-bolsson">João Bolsson</a>.</strong> All rights reserved.
+                <?= COPYRIGHT ?>
             </footer>
             <div aria-hidden="true" class="modal fade" id="loadMoreCustom" role="dialog" tabindex="-1">
                 <div class="modal-dialog">
