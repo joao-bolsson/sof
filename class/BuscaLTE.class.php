@@ -211,13 +211,11 @@ final class BuscaLTE {
      * @return string Options dentro de um <select> com os grupos de um setor.
      */
     public function getOptionsGrupos(int $id_setor): string {
-        $query = Query::getInstance()->exe("SELECT id, nome FROM setores_grupos WHERE id_setor = " . $id_setor);
-        $retorno = "";
-        if ($query->num_rows >= 1) {
-            $retorno = "";
+        $query = Query::getInstance()->exe('SELECT id, nome FROM setores_grupos WHERE id_setor = ' . $id_setor);
+        $retorno = '';
+        if ($query->num_rows > 0) {
             while ($obj = $query->fetch_object()) {
-                $obj->nome = utf8_encode($obj->nome);
-                $retorno .= "<option value=\"" . $obj->id . "\">" . $obj->nome . "</option>";
+                $retorno .= "<option value=\"" . $obj->id . "\">" . utf8_encode($obj->nome) . '</option>';
             }
         }
         return $retorno;
@@ -287,35 +285,16 @@ final class BuscaLTE {
     }
 
     /**
-     * 	Função que retornar o empenho de um pedido
-     *
-     * 	@param $id_pedido Id do pedido.
-     * 	@return string
-     */
-    public function verEmpenho(int $id_pedido): string {
-        $retorno = '';
-        $query = Query::getInstance()->exe('SELECT empenho FROM pedido_empenho WHERE id_pedido = ' . $id_pedido);
-
-        if ($query->num_rows < 1) {
-            $retorno = 'EMPENHO SIAFI PENDENTE';
-        } else {
-            $obj = $query->fetch_object();
-            $retorno = $obj->empenho;
-        }
-        return $retorno;
-    }
-
-    /**
      * 	Função que retorna as options com os setores cadastrados no sistema
      *
      * 	@return string
      */
     public function getOptionsSetores(): string {
-        $retorno = "";
+        $retorno = '';
         $count = count(ARRAY_SETORES);
 
         for ($i = 2; $i < $count; $i++) {
-            $retorno .= "<option value=\"" . $i . "\">" . ARRAY_SETORES[$i] . "</option>";
+            $retorno .= "<option value=\"" . $i . "\">" . ARRAY_SETORES[$i] . '</option>';
         }
         return $retorno;
     }
@@ -326,21 +305,21 @@ final class BuscaLTE {
      * 	@return string
      */
     public function getOptionsPrioridades(): string {
-        $retorno = "";
+        $retorno = '';
         $count = count(ARRAY_PRIORIDADE);
 
         for ($i = 1; $i < $count - 1; $i++) {
-            $retorno .= "<option value=\"" . $i . "\">" . ARRAY_PRIORIDADE[$i] . "</option>";
+            $retorno .= "<option value=\"" . $i . "\">" . ARRAY_PRIORIDADE[$i] . '</option>';
         }
         return $retorno;
     }
 
     public function getOptionsCategoria(): string {
-        $retorno = "";
+        $retorno = '';
         $count = count(ARRAY_CATEGORIA);
 
         for ($i = 1; $i < $count; $i++) {
-            $retorno .= "<option value=\"" . $i . "\">" . ARRAY_CATEGORIA[$i] . "</option>";
+            $retorno .= "<option value=\"" . $i . "\">" . ARRAY_CATEGORIA[$i] . '</option>';
         }
         return $retorno;
     }
@@ -351,10 +330,10 @@ final class BuscaLTE {
      * 	@return string
      */
     public function getOptionsStatus(): string {
-        $retorno = "";
+        $retorno = '';
         $count = count(ARRAY_STATUS);
         for ($i = 2; $i < $count; $i++) {
-            $retorno .= "<option value=\"" . $i . "\">" . ARRAY_STATUS[$i] . "</option>";
+            $retorno .= "<option value=\"" . $i . "\">" . ARRAY_STATUS[$i] . '</option>';
         }
         return $retorno;
     }
@@ -368,7 +347,7 @@ final class BuscaLTE {
         $retorno = '';
         $query = Query::getInstance()->exe('SELECT id, nome FROM processos_tipo');
         while ($tipo = $query->fetch_object()) {
-            $retorno .= "<option value=\"" . $tipo->id . "\">" . $tipo->nome . "</option>";
+            $retorno .= "<option value=\"" . $tipo->id . "\">" . $tipo->nome . '</option>';
         }
         return $retorno;
     }
@@ -380,7 +359,7 @@ final class BuscaLTE {
      * 	@return Se o pedido é um rascunho - true, senão false.
      */
     public function getRequestDraft(int $id_pedido): bool {
-        $query = Query::getInstance()->exe("SELECT prioridade FROM pedido WHERE id = " . $id_pedido);
+        $query = Query::getInstance()->exe('SELECT prioridade FROM pedido WHERE id = ' . $id_pedido);
         $obj = $query->fetch_object();
         return ARRAY_PRIORIDADE[$obj->prioridade] == 'Rascunho';
     }
@@ -392,14 +371,14 @@ final class BuscaLTE {
      * 	@return string
      */
     public function getStatus(int $cont): string {
-        $retorno = "<tr>";
+        $retorno = '<tr>';
         $i = 0;
         $count = count(ARRAY_STATUS);
 
         for ($j = 2; $j < $count; $j++) {
             if ($i == $cont) {
                 $i = 0;
-                $retorno .= "</tr><tr>";
+                $retorno .= '</tr><tr>';
             }
             $retorno .= "
                 <td>
@@ -410,7 +389,7 @@ final class BuscaLTE {
                 </td>";
             $i++;
         }
-        $retorno .= "</tr>";
+        $retorno .= '</tr>';
         return $retorno;
     }
 
@@ -489,7 +468,7 @@ final class BuscaLTE {
      * 	@return JSON com as permissões do usuário no sistema.
      */
     public function getPermissoes(int $id_user) {
-        $query = Query::getInstance()->exe("SELECT noticias, saldos, pedidos, recepcao FROM usuario_permissoes WHERE id_usuario = " . $id_user);
+        $query = Query::getInstance()->exe('SELECT noticias, saldos, pedidos, recepcao FROM usuario_permissoes WHERE id_usuario = ' . $id_user);
         $obj_permissoes = $query->fetch_object();
         return $obj_permissoes;
     }
@@ -619,8 +598,8 @@ final class BuscaLTE {
             }
         }
 
-        if ($this->verEmpenho($id) != 'EMPENHO SIAFI PENDENTE' && $_SESSION['id_setor'] != 12 && $status > 6) {
-            $component->addComponent(new Button('', BTN_DEFAULT, "cadEmpenho(" . $id . ", '" . $this->verEmpenho($id) . "', '" . $this->verDataEmpenho($id) . "')", "data-toggle=\"tooltip\"", 'Cadastrar Empenho', 'credit-card'));
+        if (Busca::getInstance()->verEmpenho($id) != 'EMPENHO SIAFI PENDENTE' && $_SESSION['id_setor'] != 12 && $status > 6) {
+            $component->addComponent(new Button('', BTN_DEFAULT, "cadEmpenho(" . $id . ", '" . Busca::getInstance()->verEmpenho($id) . "', '" . $this->verDataEmpenho($id) . "')", "data-toggle=\"tooltip\"", 'Cadastrar Empenho', 'credit-card'));
         }
 
         $component->addComponent(new Button('', BTN_DEFAULT, "imprimir(" . $id . ")", "data-toggle=\"tooltip\"", 'Imprimir', 'print'));
@@ -652,7 +631,7 @@ final class BuscaLTE {
             }
 
             if ($flag) {
-                $btnVerEmpenho = $this->verEmpenho($pedido->id);
+                $btnVerEmpenho = Busca::getInstance()->verEmpenho($pedido->id);
                 if ($btnVerEmpenho == 'EMPENHO SIAFI PENDENTE') {
                     $btnVerEmpenho = '';
                 }
@@ -932,22 +911,6 @@ final class BuscaLTE {
     }
 
     /**
-     * 	Função que retorna o saldo dispónível do setor.
-     *
-     * 	@return string
-     */
-    public function getSaldo(int $id_setor): string {
-        $query = Query::getInstance()->exe('SELECT saldo FROM saldo_setor WHERE id_setor = ' . $id_setor);
-        if ($query->num_rows < 1) {
-            Query::getInstance()->exe("INSERT INTO saldo_setor VALUES(NULL, " . $id_setor . ", '0.000');");
-            return '0.000';
-        }
-        $obj = $query->fetch_object();
-        $saldo = number_format($obj->saldo, 3, '.', '');
-        return $saldo;
-    }
-
-    /**
      * Function that returns the content of request for edition.
      * 
      * @param int $id_pedido Request's id.
@@ -974,7 +937,7 @@ final class BuscaLTE {
         $table = new Table('', '', [], false);
         while ($pedido = $query->fetch_object()) {
             if (!in_array($pedido->id, $pedidos)) {
-                $empenho = $this->verEmpenho($pedido->id);
+                $empenho = Busca::getInstance()->verEmpenho($pedido->id);
                 if ($empenho == 'EMPENHO SIAFI PENDENTE') {
                     $empenho = '';
                 }

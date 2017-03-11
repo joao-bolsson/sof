@@ -271,7 +271,7 @@ if (isset($_SESSION['editmode'])) {
                 <section class="content-header">
                     <h1>
                         <?= $_SESSION['nome_setor']; ?>
-                        <small>Saldo: R$ <?= number_format($obj_Busca->getSaldo($_SESSION['id_setor']), 3, ',', '.'); ?></small>
+                        <small>Saldo: R$ <?= number_format(Busca::getInstance()->getSaldo($_SESSION['id_setor']), 3, ',', '.'); ?></small>
                     </h1>
                     <ol class="breadcrumb">
                         <li><a href="#"><i class="fa fa-dashboard"></i> Início</a></li>

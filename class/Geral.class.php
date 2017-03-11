@@ -28,7 +28,7 @@ final class Geral {
     }
 
     private function __construct() {
-        $this->obj_Busca = Busca::getInstance();
+        // empty
     }
 
     public function editLog(int $id, string $entrada, string $saida) {
@@ -572,7 +572,7 @@ final class Geral {
         }
         Query::getInstance()->exe("UPDATE saldo_setor SET saldo = '{$saldo}' WHERE id_setor = " . $id_setor);
         if ($id_setor != 2) {
-            $saldo_sof = $this->obj_Busca->getSaldo(2) - $valor;
+            $saldo_sof = Busca::getInstance()->getSaldo(2) - $valor;
             $saldo_sof = number_format($saldo_sof, 3, '.', '');
             Query::getInstance()->exe("UPDATE saldo_setor SET saldo = '{$saldo_sof}' WHERE id_setor = 2;");
         }
