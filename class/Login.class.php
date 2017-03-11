@@ -17,8 +17,6 @@ final class Login {
 
     //variáveis usadas para armazenar os campos a serem consultas no banco
     private $tabela, $campoID, $campoNome, $campoLogin, $campoSenha, $campoEmail, $campoSetor;
-    //variáveis usadas como objetos da classe Conexao
-    private $obj_Busca, $mysqli;
     private static $INSTANCE;
 
     public static function getInstance(): Login {
@@ -30,8 +28,6 @@ final class Login {
 
     private function __construct($tabela = 'usuario', $campoID = 'id', $campoNome = 'nome', $campoLogin = 'login', $campoSenha = 'senha', $campoSetor = 'id_setor', $campoEmail = 'email') {
 
-        $this->obj_Busca = Busca::getInstance();
-
         //atribuindo valores as variáveis dos campos
         $this->tabela = $tabela;
         $this->campoID = $campoID;
@@ -42,21 +38,13 @@ final class Login {
         $this->campoEmail = $campoEmail;
     }
 
-    private function openConnection() {
-        if (is_null($this->mysqli)) {
-            $this->mysqli = Conexao::getInstance()->getConexao();
-        }
-    }
-
     /**
      * Seleciona o nome do setor do usuário.
      * @param int $id_setor Id do setor
      * @return string Nome do setor
      */
     private function getNomeSetor(int $id_setor): string {
-        $this->openConnection();
-        $query = $this->mysqli->query("SELECT setores.nome FROM setores WHERE setores.id = " . $id_setor . " LIMIT 1;") or exit("Erro ao buscar o nome do setor do usuário.");
-        $this->mysqli = NULL;
+        $query = Query::getInstance()->exe('SELECT nome FROM setores WHERE id = ' . $id_setor . ' LIMIT 1');
         $obj = $query->fetch_object();
         return $obj->nome;
     }
@@ -72,18 +60,15 @@ final class Login {
      *
      */
     public function login(string $login, string $senha, $retorno = 0): string {
-        $this->openConnection();
         //escapando caracteres especiais para evitar SQL Injections
-        $login = $this->mysqli->real_escape_string($login);
+        $login = Query::getInstance()->real_escape_string($login);
         //fazendo a consulta
-        $query = $this->mysqli->query("SELECT {$this->campoID}, {$this->campoNome}, {$this->campoSenha}, {$this->campoEmail}, {$this->campoSetor} FROM {$this->tabela}
-            WHERE BINARY {$this->campoLogin} = '{$login}'
-            LIMIT 1");
+        $query = Query::getInstance()->exe("SELECT {$this->campoID}, {$this->campoNome}, {$this->campoSenha}, {$this->campoEmail}, {$this->campoSetor} FROM {$this->tabela} WHERE BINARY {$this->campoLogin} = '{$login}' LIMIT 1");
 
         if ($query->num_rows > 0) {
             //colocando o retorno da query em um objeto
             $usuario = $query->fetch_object();
-            $senha = $this->mysqli->real_escape_string($senha);
+            $senha = Query::getInstance()->real_escape_string($senha);
 
             // verificando a senha com o php e não mysql
             if (crypt($senha, $usuario->{$this->campoSenha}) == $usuario->{$this->campoSenha}) {
@@ -96,13 +81,12 @@ final class Login {
                 $_SESSION['nome_setor'] = Login::getNomeSetor($usuario->{$this->campoSetor});
 
                 //definindo os slides para evitar recarregamentos desnecessários
-                $_SESSION["slide1"] = $this->obj_Busca->getSlide(1);
-                $_SESSION["slide2"] = $this->obj_Busca->getSlide(2);
+                $_SESSION["slide1"] = Busca::getInstance()->getSlide(1);
+                $_SESSION["slide2"] = Busca::getInstance()->getSlide(2);
 
                 $retorno = $usuario->{$this->campoSetor};
             }
         }
-        $this->mysqli = NULL;
         return $retorno;
     }
 
@@ -111,9 +95,7 @@ final class Login {
      * @param int $id_user Id do usuário futuro.
      */
     public function changeUser(int $id_user) {
-        $this->openConnection();
-        $query = $this->mysqli->query("SELECT {$this->campoNome}, {$this->campoLogin}, {$this->campoEmail}, {$this->campoSetor} FROM {$this->tabela} WHERE {$this->campoID} = {$id_user} LIMIT 1;") or exit("Erro ao buscar usuário.");
-        $this->mysqli = NULL;
+        $query = Query::getInstance()->exe("SELECT {$this->campoNome}, {$this->campoLogin}, {$this->campoEmail}, {$this->campoSetor} FROM {$this->tabela} WHERE {$this->campoID} = {$id_user} LIMIT 1") or exit("Erro ao buscar usuário.");
         session_unset();
         session_destroy();
         session_start();

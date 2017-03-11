@@ -17,7 +17,6 @@ spl_autoload_register(function (string $class_name) {
 final class Util {
 
     public $mail;
-    private $mysqli;
     private $id_item_processo = 0;
     private $id_item_contrato = 1;
     private $cod_despesa = 2;
@@ -82,12 +81,6 @@ final class Util {
         );
     }
 
-    private function openConnection() {
-        if (is_null($this->mysqli)) {
-            $this->mysqli = Conexao::getInstance()->getConexao();
-        }
-    }
-
     /**
      * @param int $id_usuario User's id
      * @param string $periodo Date range like 03/03/2017 - 05/04/2017
@@ -98,9 +91,7 @@ final class Util {
         $dataI = $this->dateFormat($array[0]);
         $dataF = $this->dateFormat($array[1]);
 
-        $this->openConnection();
-        $query = $this->mysqli->query("SELECT sum(horas) AS total FROM usuario_hora WHERE (entrada BETWEEN '" . $dataI . "' AND '" . $dataF . "') AND id_usuario = " . $id_usuario . ' LIMIT 1') or exit('Erro: ' . $this->mysqli->error);
-        $this->mysqli = NULL;
+        $query = Query::getInstance()->exe("SELECT sum(horas) AS total FROM usuario_hora WHERE (entrada BETWEEN '" . $dataI . "' AND '" . $dataF . "') AND id_usuario = " . $id_usuario . ' LIMIT 1');
         $obj = $query->fetch_object();
         $obj->total = ($obj->total == NULL) ? 0 : $obj->total;
         return $obj->total;
@@ -111,10 +102,7 @@ final class Util {
      * @return bool Any 'saida' of user is NULL - true, else false.
      */
     public function isCurrentLoggedIn(int $id_usuario): bool {
-        $this->openConnection();
-
-        $query = $this->mysqli->query('SELECT saida FROM usuario_hora WHERE id_usuario = ' . $id_usuario . ' AND saida IS NULL;') or exit('Erro: ' . $this->mysqli->error);
-        $this->mysqli = NULL;
+        $query = Query::getInstance()->exe('SELECT saida FROM usuario_hora WHERE id_usuario = ' . $id_usuario . ' AND saida IS NULL;');
 
         return ($query->num_rows > 0);
     }
@@ -124,9 +112,7 @@ final class Util {
      * @return float Hours between in and out of register $id_last
      */
     public function getTimeDiffHora(int $id_last): float {
-        $this->openConnection();
-        $query = $this->mysqli->query("SELECT TIMESTAMPDIFF(SECOND, entrada, saida) as seconds FROM usuario_hora WHERE id = " . $id_last) or exit('Erro ao calcular periodo decorrido entre a entrada e saida: ' . $this->mysqli->error);
-        $this->mysqli = NULL;
+        $query = Query::getInstance()->exe("SELECT TIMESTAMPDIFF(SECOND, entrada, saida) as seconds FROM usuario_hora WHERE id = " . $id_last);
 
         $obj = $query->fetch_object();
         $horas = 0;
@@ -145,12 +131,9 @@ final class Util {
      * @return string User's name.
      */
     public function getUserName(int $id_user): string {
-        $this->openConnection();
-
-        $query = $this->mysqli->query("SELECT usuario.nome FROM usuario WHERE usuario.id = " . $id_user) or exit("Erro ao buscar o nome do usuario do pedido");
+        $query = Query::getInstance()->exe("SELECT usuario.nome FROM usuario WHERE usuario.id = " . $id_user);
         $obj = $query->fetch_object();
 
-        $this->mysqli = NULL;
         return $obj->nome;
     }
 
@@ -158,12 +141,11 @@ final class Util {
         $array = [];
         $i = 0;
         if (($handle = fopen($tmp_name, "r")) !== FALSE) {
-            $this->openConnection();
             while (($data = fgetcsv($handle, 1000, "	")) !== FALSE) {
                 if ($data[$this->id_item_processo] != "ID_ITEM_PROCESSO") {
                     for ($c = 0; $c < count($data); $c++) {
                         $data[$c] = str_replace("\"", "'", $data[$c]);
-                        $data[$c] = $this->mysqli->real_escape_string($data[$c]);
+                        $data[$c] = Query::getInstance()->real_escape_string($data[$c]);
                     }
                     $array[$i] = $data;
                     $i++;
