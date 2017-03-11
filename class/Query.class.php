@@ -22,6 +22,12 @@ class Query {
     private $mysqli;
 
     /**
+     * Insert id of INSERT INTO result of Query.
+     * @var int
+     */
+    private $insert_id;
+
+    /**
      * Store the only instance of this class to all the application.
      * @var Query
      */
@@ -53,8 +59,18 @@ class Query {
 
         $query = $this->mysqli->query($sql) or exit('Erro: ' . $this->mysqli->error);
 
+        $this->insert_id = $this->mysqli->insert_id;
+
         $this->mysqli = NULL;
         return $query;
+    }
+
+    /**
+     * Gets the insert id of previous query executed, maybe NULL.
+     * @return int
+     */
+    public function getInsertId() {
+        return $this->insert_id;
     }
 
 }
