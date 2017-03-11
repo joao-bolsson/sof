@@ -18,7 +18,6 @@ spl_autoload_register(function (string $class_name) {
 
 final class Geral {
 
-    private $mysqli;
     private static $INSTANCE;
 
     public static function getInstance(): Geral {
@@ -30,12 +29,6 @@ final class Geral {
 
     private function __construct() {
         $this->obj_Busca = Busca::getInstance();
-    }
-
-    private function openConnection() {
-        if (is_null($this->mysqli)) {
-            $this->mysqli = Conexao::getInstance()->getConexao();
-        }
     }
 
     public function editLog(int $id, string $entrada, string $saida) {
@@ -79,11 +72,10 @@ final class Geral {
         }
         $fields = $insert_dados = '(';
 
-        $this->openConnection();
         $len = count($campos);
         for ($i = 0; $i < $len; $i++) {
             $fields .= $campos[$i];
-            $aux = $this->mysqli->real_escape_string($dados[$campos[$i]]);
+            $aux = Query::getInstance()->real_escape_string($dados[$campos[$i]]);
             $info = str_replace("\"", "'", $aux);
             $insert_dados .= "\"" . $info . "\"";
             if ($i != $len - 1) {
@@ -91,7 +83,6 @@ final class Geral {
                 $insert_dados .= ', ';
             }
         }
-        $this->mysqli = NULL;
         $fields .= ')';
         $insert_dados .= ')';
 
@@ -277,11 +268,9 @@ final class Geral {
      * 	@return If inserts all datas - true, else false.
      */
     public function cadastraFontes(int $id_pedido, string $fonte, string $ptres, string $plano): bool {
-        $this->openConnection();
-        $fonte = $this->mysqli->real_escape_string($fonte);
-        $ptres = $this->mysqli->real_escape_string($ptres);
-        $plano = $this->mysqli->real_escape_string($plano);
-        $this->mysqli = NULL;
+        $fonte = Query::getInstance()->real_escape_string($fonte);
+        $ptres = Query::getInstance()->real_escape_string($ptres);
+        $plano = Query::getInstance()->real_escape_string($plano);
 
         $fonte = str_replace("\"", "'", $fonte);
         $ptres = str_replace("\"", "'", $ptres);
@@ -313,10 +302,8 @@ final class Geral {
      * 	Função para os usuários relatarem problemas no site.
      */
     public function insereProblema(int $id_setor, string $assunto, string $descricao) {
-        $this->openConnection();
-        $assunto = $this->mysqli->real_escape_string($assunto);
-        $descricao = $this->mysqli->real_escape_string($descricao);
-        $this->mysqli = NULL;
+        $assunto = Query::getInstance()->real_escape_string($assunto);
+        $descricao = Query::getInstance()->real_escape_string($descricao);
 
         Query::getInstance()->exe("INSERT INTO problemas VALUES(NULL, " . $id_setor . ", '" . $assunto . "', '" . $descricao . "');");
     }
@@ -336,9 +323,7 @@ final class Geral {
                 return false;
             }
         }
-        $this->openConnection();
-        $dados->compItem = $this->mysqli->real_escape_string($dados->compItem);
-        $this->mysqli = NULL;
+        $dados->compItem = Query::getInstance()->real_escape_string($dados->compItem);
         Query::getInstance()->exe("UPDATE itens SET itens.complemento_item = '{$dados->compItem}', itens.vl_unitario = '{$dados->vlUnitario}', itens.qt_contrato = {$dados->qtContrato}, itens.qt_utilizado = {$dados->qtUtilizada}, itens.vl_utilizado = '{$dados->vlUtilizado}', itens.qt_saldo = {$dados->qtSaldo}, itens.vl_saldo = '{$dados->vlSaldo}' WHERE itens.id = " . $dados->idItem);
 
         // seleciona infos dos pedidos que contém o item editado e que não passaram da análise
@@ -378,9 +363,7 @@ final class Geral {
         $this->registraLog($id_pedido, $status);
         $hoje = date('Y-m-d');
         if (strlen($comentario) > 0) {
-            $this->openConnection();
-            $comentario = $this->mysqli->real_escape_string($comentario);
-            $this->mysqli = NULL;
+            $comentario = Query::getInstance()->real_escape_string($comentario);
             Query::getInstance()->exe("INSERT INTO comentarios VALUES(NULL, {$id_pedido}, '{$hoje}', {$obj->prioridade}, {$status}, '{$obj->valor}', '{$comentario}');");
         }
         return true;
@@ -394,9 +377,7 @@ final class Geral {
      * 	@return bool
      */
     public function cadastraEmpenho(int $id_pedido, string $empenho, string $data): bool {
-        $this->openConnection();
-        $empenho = $this->mysqli->real_escape_string($empenho);
-        $this->mysqli = NULL;
+        $empenho = Query::getInstance()->real_escape_string($empenho);
         // verifica se o pedido ja não possui empenho
         $query_check = Query::getInstance()->exe('SELECT id FROM pedido_empenho WHERE id_pedido = ' . $id_pedido);
         $sql = "";
@@ -440,9 +421,7 @@ final class Geral {
         }
         $valor = number_format($valor, 3, '.', '');
         // registrando a transferência
-        $this->openConnection();
-        $justificativa = $this->mysqli->real_escape_string($justificativa);
-        $this->mysqli = NULL;
+        $justificativa = Query::getInstance()->real_escape_string($justificativa);
         Query::getInstance()->exe("INSERT INTO saldos_transferidos VALUES(NULL, {$ori}, {$dest}, '{$valor}', '{$justificativa}');");
         // registrando na tabela de lançamentos
         $hoje = date('Y-m-d');
@@ -471,9 +450,7 @@ final class Geral {
      * 	Função para cadastrar novo tipo de processo.
      */
     public function newTypeProcess(string $tipo): bool {
-        $this->openConnection();
-        $tipo = $this->mysqli->real_escape_string($tipo);
-        $this->mysqli = NULL;
+        $tipo = Query::getInstance()->real_escape_string($tipo);
         Query::getInstance()->exe("INSERT INTO processos_tipo VALUES(NULL, '{$tipo}');");
         return true;
     }
@@ -486,15 +463,13 @@ final class Geral {
      * 	@return bool
      */
     public function updateProcesso($dados): bool {
-        $this->openConnection();
         for ($i = 0; $i < count($dados); $i++) {
             $dados[$i] = trim($dados[$i]);
             if ($dados[$i] == "") {
                 $dados[$i] = "----------";
             }
-            $dados[$i] = $this->mysqli->real_escape_string($dados[$i]);
+            $dados[$i] = Query::getInstance()->real_escape_string($dados[$i]);
         }
-        $this->mysqli = NULL;
         if ($dados[0] == 0) {
             // INSERT
             Query::getInstance()->exe("INSERT INTO processos VALUES(NULL, '{$dados[1]}', '{$dados[2]}', '{$dados[3]}', '{$dados[4]}', '{$dados[5]}', '{$dados[6]}', '{$dados[7]}', '{$dados[8]}', '{$dados[9]}');");
@@ -520,10 +495,8 @@ final class Geral {
      *  Função para dar update numa senha de acordo com o email.
      */
     public function resetSenha(string $email, string $senha) {
-        $this->openConnection();
         // evita SQL Injections
-        $email = $this->mysqli->real_escape_string($email);
-        $this->mysqli = NULL;
+        $email = Query::getInstance()->real_escape_string($email);
         // verificando se o e-mail consta no sistema
         $query_email = Query::getInstance()->exe("SELECT id FROM usuario WHERE email = '{$email}' LIMIT 1;");
         if ($query_email->num_rows == 1) {
@@ -543,10 +516,8 @@ final class Geral {
         $query_exe = Query::getInstance()->exe('SELECT senha FROM usuario WHERE id = ' . $id_user);
         $usuario = $query_exe->fetch_object();
         if (crypt($senhaAtual, $usuario->senha) == $usuario->senha) {
-            $this->openConnection();
-            $nome = $this->mysqli->real_escape_string($nome);
-            $email = $this->mysqli->real_escape_string($email);
-            $this->mysqli = NULL;
+            $nome = Query::getInstance()->real_escape_string($nome);
+            $email = Query::getInstance()->real_escape_string($email);
             $novaSenha = crypt($novaSenha, SALT);
             Query::getInstance()->exe("UPDATE usuario SET nome = '{$nome}', email = '{$email}', senha = '{$novaSenha}' WHERE id = " . $id_user);
             $_SESSION["nome"] = $nome;
@@ -579,10 +550,8 @@ final class Geral {
      * 	@return Uma mesagem expressando o resultado da solicitação.
      */
     public function solicAltPedido(int $id_pedido, int $id_setor, string $justificativa): string {
-        $this->openConnection();
         $hoje = date('Y-m-d');
-        $justificativa = $this->mysqli->real_escape_string($justificativa);
-        $this->mysqli = NULL;
+        $justificativa = Query::getInstance()->real_escape_string($justificativa);
         Query::getInstance()->exe("INSERT INTO solic_alt_pedido VALUES(NULL, {$id_pedido}, {$id_setor}, '{$hoje}', NULL, '{$justificativa}', 2);");
         return "Sua solicitação será análisada. Caso seja aprovada, seu pedido estará na sessão 'Rascunhos'";
     }
@@ -639,10 +608,8 @@ final class Geral {
      * 	Função para enviar um pedido de adiantamento de saldo para o SOF.
      */
     public function solicitaAdiantamento(int $id_setor, string $valor, string $justificativa): bool {
-        $this->openConnection();
-        $valor = $this->mysqli->real_escape_string($valor);
-        $justificativa = $this->mysqli->real_escape_string($justificativa);
-        $this->mysqli = NULL;
+        $valor = Query::getInstance()->real_escape_string($valor);
+        $justificativa = Query::getInstance()->real_escape_string($justificativa);
         $hoje = date('Y-m-d');
         $valor = number_format($valor, 3, '.', '');
         $insere = Query::getInstance()->exe("INSERT INTO saldos_adiantados VALUES(NULL, {$id_setor}, '{$hoje}', NULL, '{$valor}', '{$justificativa}', 2);");
@@ -661,12 +628,9 @@ final class Geral {
      * Função para inserir postagem.
      */
     public function setPost($data, $postagem, $pag) {
-        $this->openConnection();
-
-        $data = $this->mysqli->real_escape_string($data);
-        $postagem = $this->mysqli->real_escape_string($postagem);
-        $pag = $this->mysqli->real_escape_string($pag);
-        $this->mysqli = NULL;
+        $data = Query::getInstance()->real_escape_string($data);
+        $postagem = Query::getInstance()->real_escape_string($postagem);
+        $pag = Query::getInstance()->real_escape_string($pag);
 
         $inicio = strpos($postagem, "<h3");
         $fim = strpos($postagem, "</h3>");
@@ -681,9 +645,7 @@ final class Geral {
      *   Função para editar uma postagem.
      */
     public function editPost($data, $id, $postagem, $pag) {
-        $this->openConnection();
-        $postagem = $this->mysqli->real_escape_string($postagem);
-        $this->mysqli = NULL;
+        $postagem = Query::getInstance()->real_escape_string($postagem);
 
         $inicio = strpos($postagem, "<h3");
         $fim = strpos($postagem, "</h3>");
@@ -698,9 +660,7 @@ final class Geral {
      *   Função para excluir uma publicação a publicação não é totalmente excluída, apenas o sistema passará a não mostrá-la.
      */
     public function excluirNoticia(int $id) {
-        $this->openConnection();
-        $id = $this->mysqli->real_escape_string($id);
-        $this->mysqli = NULL;
+        $id = Query::getInstance()->real_escape_string($id);
 
         Query::getInstance()->exe('UPDATE postagens SET ativa = 0 WHERE id = ' . $id);
         $query = Query::getInstance()->exe('SELECT postagens.tabela FROM postagens WHERE postagens.id = ' . $id);
@@ -752,9 +712,7 @@ final class Geral {
      */
     public function insertPedido($id_user, $id_setor, $id_item, $qtd_solicitada, $qtd_disponivel, $qtd_contrato, $qtd_utilizado, $vl_saldo, $vl_contrato, $vl_utilizado, $valor, $total_pedido, $saldo_total, $prioridade, $obs, &$pedido, $pedido_contrato) {
 
-        $this->openConnection();
-        $obs = $this->mysqli->real_escape_string($obs);
-        $this->mysqli = NULL;
+        $obs = Query::getInstance()->real_escape_string($obs);
         $hoje = date('Y-m-d');
         $mes = date("n");
 
@@ -862,10 +820,8 @@ final class Geral {
         Query::getInstance()->exe("UPDATE pedido SET status = " . $fase . ", prioridade = " . $prioridade . ", alteracao = " . $alteracao . " WHERE id = " . $id_pedido);
         $this->registraLog($id_pedido, $fase);
         if (strlen($comentario) > 0) {
-            $this->openConnection();
             // inserindo comentário da análise
-            $comentario = $this->mysqli->real_escape_string($comentario);
-            $this->mysqli = NULL;
+            $comentario = Query::getInstance()->real_escape_string($comentario);
             $query_vl = Query::getInstance()->exe("SELECT valor FROM pedido WHERE id = " . $id_pedido);
             $obj_tot = $query_vl->fetch_object();
             Query::getInstance()->exe("INSERT INTO comentarios VALUES(NULL, {$id_pedido}, '{$hoje}', {$prioridade}, {$fase}, '{$obj_tot->valor}', '{$comentario}');");
