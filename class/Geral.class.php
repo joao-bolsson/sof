@@ -192,10 +192,10 @@ final class Geral {
     }
 
     public function insertPedContr(int $id_pedido, int $id_tipo, string $siafi) {
-        $query = Query::getInstance()->exe("SELECT id_tipo FROM pedido_contrato WHERE id_pedido = {$id_pedido};");
+        $query = Query::getInstance()->exe('SELECT id_tipo FROM pedido_contrato WHERE id_pedido = ' . $id_pedido);
         $sql = "INSERT INTO pedido_contrato VALUES({$id_pedido}, {$id_tipo}, '{$siafi}');";
         if ($query->num_rows > 0) {
-            $sql = "UPDATE pedido_contrato SET id_tipo = $id_tipo, siafi = '{$siafi}' WHERE id_pedido = {$id_pedido};";
+            $sql = "UPDATE pedido_contrato SET id_tipo = $id_tipo, siafi = '{$siafi}' WHERE id_pedido = " . $id_pedido;
         }
         Query::getInstance()->exe($sql);
     }
@@ -220,17 +220,6 @@ final class Geral {
         Query::getInstance()->exe("INSERT INTO usuario_permissoes VALUES({$usuario}, {$noticias}, {$saldos}, {$pedidos}, {$recepcao});");
     }
 
-    private function registraLog(int $id_pedido, int $status) {
-        $hoje = date('Y-m-d');
-        // não deixa ter vários logs com o mesmo status na mesma data
-        $query = Query::getInstance()->exe("SELECT pedido_log_status.id_status FROM pedido_log_status WHERE data = '{$hoje}' AND pedido_log_status.id_status = {$status} AND pedido_log_status.id_pedido = {$id_pedido};");
-        if ($query->num_rows < 1) {
-            $chave = $id_pedido . $status . $hoje;
-            Query::getInstance()->exe("INSERT INTO pedido_log_status VALUES({$id_pedido}, {$status}, '{$hoje}', '{$chave}');");
-        }
-        // NÃO FECHA CONEXÃO AQUI
-    }
-
     /**
      * Insere um grupo ao pedido.
      * @param int $pedido Id do pedido.
@@ -248,7 +237,6 @@ final class Geral {
      */
     public function enviaFornecedor(int $id_pedido) {
         Query::getInstance()->exe('UPDATE pedido SET status = 9 WHERE id = ' . $id_pedido);
-        $this->registraLog($id_pedido, 9);
     }
 
     /**
@@ -258,7 +246,6 @@ final class Geral {
      */
     public function enviaOrdenador(int $id_pedido): bool {
         Query::getInstance()->exe('UPDATE pedido SET status = 8 WHERE id = ' . $id_pedido);
-        $this->registraLog($id_pedido, 8);
         return true;
     }
 
@@ -278,7 +265,6 @@ final class Geral {
         Query::getInstance()->exe("INSERT INTO pedido_fonte VALUES(NULL, {$id_pedido}, \"{$fonte}\", \"{$ptres}\", \"{$plano}\");");
 
         Query::getInstance()->exe('UPDATE pedido SET status = 6 WHERE id = ' . $id_pedido);
-        $this->registraLog($id_pedido, 6);
         return true;
     }
 
@@ -360,7 +346,6 @@ final class Geral {
         Query::getInstance()->exe("UPDATE pedido SET status = {$status} WHERE id = " . $id_pedido);
         $query = Query::getInstance()->exe("SELECT pedido.prioridade, pedido.valor FROM pedido WHERE id = " . $id_pedido);
         $obj = $query->fetch_object();
-        $this->registraLog($id_pedido, $status);
         $hoje = date('Y-m-d');
         if (strlen($comentario) > 0) {
             $comentario = Query::getInstance()->real_escape_string($comentario);
@@ -386,7 +371,6 @@ final class Geral {
             $sql = "INSERT INTO pedido_empenho VALUES(NULL, {$id_pedido}, '{$empenho}', '{$data}');";
             // mudando status do pedido
             Query::getInstance()->exe('UPDATE pedido SET status = 7 WHERE id = ' . $id_pedido);
-            $this->registraLog($id_pedido, 7);
         } else {
             // alterando empenho
             $sql = "UPDATE pedido_empenho SET pedido_empenho.empenho = '{$empenho}', pedido_empenho.data = '{$data}' WHERE pedido_empenho.id_pedido = " . $id_pedido;
@@ -503,7 +487,7 @@ final class Geral {
             $id = $query_email->fetch_object()->id;
             // criptografando a senha
             $senha = crypt($senha, SALT);
-            Query::getInstance()->exe("UPDATE usuario SET senha = '{$senha}' WHERE id = {$id};");
+            Query::getInstance()->exe("UPDATE usuario SET senha = '{$senha}' WHERE id = " . $id);
             return "Sucesso";
         }
         return false;
@@ -540,7 +524,6 @@ final class Geral {
         Query::getInstance()->exe("UPDATE solic_alt_pedido SET data_analise = '{$hoje}', status = {$acao} WHERE id = " . $id_solic);
         if ($acao) {
             Query::getInstance()->exe("UPDATE pedido SET alteracao = {$acao}, prioridade = 5, status = 1 WHERE id = " . $id_pedido);
-            $this->registraLog($id_pedido, 1);
         }
         return true;
     }
@@ -722,7 +705,6 @@ final class Geral {
                 //inserindo os dados iniciais do pedido
                 $query_pedido = Query::getInstance()->exe("INSERT INTO pedido VALUES(NULL, {$id_setor}, {$id_user}, '{$hoje}', '{$mes}', 1, {$prioridade}, 1, '{$total_pedido}', '{$obs}', {$pedido_contrato}, 0);");
                 $pedido = Query::getInstance()->getInsertId();
-                $this->registraLog($pedido, 1);
             } else {
                 //remover resgistros antigos do rascunho
                 Query::getInstance()->exe("DELETE FROM itens_pedido WHERE id_pedido = " . $pedido);
@@ -740,11 +722,9 @@ final class Geral {
                 //inserindo os dados iniciais do pedido
                 $query_pedido = Query::getInstance()->exe("INSERT INTO pedido VALUES(NULL, {$id_setor}, {$id_user}, '{$hoje}', '{$mes}', 0, {$prioridade}, 2, '{$total_pedido}', '{$obs}', {$pedido_contrato}, 0);");
                 $pedido = Query::getInstance()->getInsertId();
-                $this->registraLog($pedido, 2);
             } else {
                 // atualizando pedido
                 Query::getInstance()->exe("UPDATE pedido SET data_pedido = '{$hoje}', ref_mes = {$mes}, alteracao = 0, prioridade = {$prioridade}, status = 2, valor = '{$total_pedido}', obs = '{$obs}', pedido_contrato = {$pedido_contrato}, aprov_gerencia = 0 WHERE id = " . $pedido);
-                $this->registraLog($pedido, 2);
             }
             //remover resgistros antigos do pedido
             Query::getInstance()->exe("DELETE FROM itens_pedido WHERE id_pedido = " . $pedido);
@@ -818,7 +798,6 @@ final class Geral {
             Query::getInstance()->exe("UPDATE saldo_setor SET saldo = '{$saldo_setor}' WHERE id_setor = {$id_setor};");
         }
         Query::getInstance()->exe("UPDATE pedido SET status = " . $fase . ", prioridade = " . $prioridade . ", alteracao = " . $alteracao . " WHERE id = " . $id_pedido);
-        $this->registraLog($id_pedido, $fase);
         if (strlen($comentario) > 0) {
             // inserindo comentário da análise
             $comentario = Query::getInstance()->real_escape_string($comentario);
