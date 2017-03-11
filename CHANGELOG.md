@@ -1,5 +1,10 @@
 ## CHANGELOG ##
 
+#### v2.1.9 - 11/03/2017 ####
+- Implementação de classe Query para executar as consultas no banco
+- Correção de bugs e aprimoramento de funções
+- Exclusão de código duplicado
+
 #### v2.1.8 - 05/03/2017 ####
 - Implementação de ponto eletrônico (beta)
 - Evolução da arquitetura (padrão singleton na maioria das classes)
