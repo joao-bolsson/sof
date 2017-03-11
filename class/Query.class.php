@@ -66,6 +66,20 @@ class Query {
     }
 
     /**
+     * Uses mysqli::real_escape_string to escape a string.
+     * @link http://php.net/manual/pt_BR/mysqli.real-escape-string.php
+     * @param string $string String to escape.
+     * @return string A escaped string.
+     */
+    public function real_escape_string(string $string): string {
+        $this->openConnection();
+        $escaped = $this->mysqli->real_escape_string($string);
+        $this->mysqli = NULL;
+
+        return $escaped;
+    }
+
+    /**
      * Gets the insert id of previous query executed, maybe NULL.
      * @return int
      */

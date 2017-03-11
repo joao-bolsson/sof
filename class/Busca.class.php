@@ -16,7 +16,6 @@ spl_autoload_register(function (string $class_name) {
 
 final class Busca {
 
-    private $mysqli;
     private static $INSTANCE;
 
     public static function getInstance(): Busca {
@@ -28,12 +27,6 @@ final class Busca {
 
     private function __construct() {
         // empty
-    }
-
-    private function openConnection() {
-        if (is_null($this->mysqli)) {
-            $this->mysqli = Conexao::getInstance()->getConexao();
-        }
     }
 
     public function getInfoLog(int $id) {
@@ -163,9 +156,8 @@ final class Busca {
         $query = Query::getInstance()->exe('SELECT setores.nome AS setor, problemas.assunto, problemas.descricao FROM setores, problemas WHERE setores.id = problemas.id_setor ORDER BY problemas.id DESC');
         $table = new Table('', '', array(), false);
 
-        $this->openConnection();
         while ($problema = $query->fetch_object()) {
-            $problema->descricao = $this->mysqli->real_escape_string($problema->descricao);
+            $problema->descricao = Query::getInstance()->real_escape_string($problema->descricao);
             $problema->descricao = str_replace("\"", "'", $problema->descricao);
 
             $btn = "<button onclick=\"viewCompl('" . $problema->descricao . "');\" class=\"btn btn-default\" type=\"button\" data-toggle=\"tooltip\" title=\"Ver Descrição Informada\">Descrição</button>";
@@ -177,7 +169,6 @@ final class Busca {
 
             $table->addRow($row);
         }
-        $this->mysqli = NULL;
         return $table;
     }
 
@@ -351,12 +342,9 @@ final class Busca {
      * @return Publicações com o título parecido com $busca.
      */
     public function pesquisar(string $busca): string {
-        $retorno = "";
+        $retorno = '';
         $busca = htmlentities($busca);
-        //escapando string especiais para evitar SQL Injections
-        $this->openConnection();
-        $busca = $this->mysqli->real_escape_string($busca);
-        $this->mysqli = NULL;
+        $busca = Query::getInstance()->real_escape_string($busca);
         $retorno = "
             <div class=\"card\">
                 <div class=\"card-main\">
