@@ -371,7 +371,7 @@ final class PrintMod {
             $headers[$count + 2] = 'Status';
             $headers[$count + 3] = 'Valor';
         }
-        $query_tot = Query::getInstance()->exe('SELECT sum(pedido.valor) AS total FROM ' . $tb_empenho . ' pedido WHERE 1 > 0 ' . $where_empenho . ' AND pedido.alteracao = 0 ' . $where_status);
+        $query_tot = Query::getInstance()->exe('SELECT sum(pedido.valor) AS total FROM ' . $tb_empenho . ' pedido WHERE 1 > 0 ' . $where_empenho . ' AND pedido.alteracao = 0 ' . $where_status . ' AND ' . $where_pedidos);
         $tot = $query_tot->fetch_object();
         $total = ($tot->total > 0) ? 'R$ ' . number_format($tot->total, 3, ',', '.') : 'R$ 0';
         $retorno .= "<fieldset class=\"preg\">
