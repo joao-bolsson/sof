@@ -117,7 +117,7 @@ final class Geral {
             $novo_saldo -= $obj->valor;
         }
 
-        if ($novo_saldo != $obj->saldo && $novo_saldo >= 0 && $obj->categoria != 3) {
+        if ($novo_saldo != $obj->saldo && $obj->categoria != 3) {
             // apaga registros
             Query::getInstance()->exe("DELETE FROM saldos_lancamentos WHERE saldos_lancamentos.id = " . $id_lancamento);
             if ($obj->categoria == 2) {
@@ -405,7 +405,7 @@ final class Geral {
         }
         $valor = number_format($valor, 3, '.', '');
         // registrando a transferência
-        $justificativa = Query::getInstance()->real_escape_string($justificativa);
+        $justificativa = Query::getInstance()->real_escape_string($just);
         Query::getInstance()->exe("INSERT INTO saldos_transferidos VALUES(NULL, {$ori}, {$dest}, '{$valor}', '{$justificativa}');");
         // registrando na tabela de lançamentos
         $hoje = date('Y-m-d');
