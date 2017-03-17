@@ -205,12 +205,12 @@ final class PrintMod {
     }
 
     private function getGrupoPedido(int $id_pedido): string {
-        $query = Query::getInstance()->exe('SELECT setores_grupos.nome, pedido_grupo.id_pedido FROM setores_grupos, pedido_grupo WHERE pedido_grupo.id_grupo = setores_grupos.id AND pedido_grupo.id_pedido = ' . $id_pedido);
+        $query = Query::getInstance()->exe('SELECT setores_grupos.nome, setores_grupos.cod, pedido_grupo.id_pedido FROM setores_grupos, pedido_grupo WHERE pedido_grupo.id_grupo = setores_grupos.id AND pedido_grupo.id_pedido = ' . $id_pedido);
         $retorno = '';
         if ($query->num_rows > 0) {
             $obj = $query->fetch_object();
             $obj->nome = utf8_encode($obj->nome);
-            $retorno = '<b>Grupo:</b> ' . $obj->nome;
+            $retorno = '<b>Grupo:</b> ' . $obj->nome . '&nbsp;&nbsp;&nbsp;<b>Cod: </b>'.$obj->cod;
         }
         return $retorno;
     }
@@ -234,7 +234,7 @@ final class PrintMod {
                 <fieldset class=\"preg\">
                     <table>" . $row . "</table>
                 </fieldset><br>";
-            $query_forn = Query::getInstance()->exe('SELECT DISTINCT itens.cgc_fornecedor, itens.nome_fornecedor, itens.num_contrato FROM itens, itens_pedido WHERE itens.id = itens_pedido.id_item AND itens_pedido.id_pedido = ' . $id_pedido . ' AND itens.num_licitacao = ' . $licitacao->num_licitacao) or exit('Erro ao buscar fornecedores do pedido');
+            $query_forn = Query::getInstance()->exe('SELECT DISTINCT itens.cgc_fornecedor, itens.nome_fornecedor, itens.num_contrato FROM itens, itens_pedido WHERE itens.id = itens_pedido.id_item AND itens_pedido.id_pedido = ' . $id_pedido . ' AND itens.num_licitacao = ' . $licitacao->num_licitacao);
 
             // -------------------------------------------------------------------------
             //                FORNECEDORES REFERENTES À LICITAÇÃO
@@ -256,7 +256,7 @@ final class PrintMod {
                 // ----------------------------------------------------------------------
                 //                  ITENS REFERENTES AOS FORNECEDORES
                 // ----------------------------------------------------------------------
-                $query_itens = Query::getInstance()->exe("SELECT itens.cod_reduzido, itens.cod_despesa, itens.seq_item_processo, itens.complemento_item, itens.vl_unitario, itens_pedido.qtd, itens_pedido.valor FROM itens, itens_pedido WHERE itens.id = itens_pedido.id_item AND itens_pedido.id_pedido = " . $id_pedido . " AND itens.cgc_fornecedor = '" . $fornecedor->cgc_fornecedor . "' ORDER BY CAST(itens.seq_item_processo AS UNSIGNED) ASC") or exit('Erro ao buscar os itens dos fornecedores do pedido');
+                $query_itens = Query::getInstance()->exe("SELECT itens.cod_reduzido, itens.cod_despesa, itens.seq_item_processo, itens.complemento_item, itens.vl_unitario, itens_pedido.qtd, itens_pedido.valor FROM itens, itens_pedido WHERE itens.id = itens_pedido.id_item AND itens_pedido.id_pedido = " . $id_pedido . " AND itens.cgc_fornecedor = '" . $fornecedor->cgc_fornecedor . "' ORDER BY CAST(itens.seq_item_processo AS UNSIGNED) ASC");
 
                 $table = new Table('', 'prod', ['Código', 'Item', 'Natureza', 'Descrição', 'Quantidade', 'Valor Unitário', 'Valor Total'], true);
                 while ($item = $query_itens->fetch_object()) {
@@ -627,7 +627,7 @@ final class PrintMod {
 
         $query_proc = Query::getInstance()->exe('SELECT id, nome FROM processos_tipo' . $where);
         while ($tipo_proc = $query_proc->fetch_object()) {
-            $query = Query::getInstance()->exe('SELECT processos.num_processo, processos_tipo.nome AS tipo, processos_tipo.id AS id_tipo, processos.estante, processos.prateleira, processos.entrada, processos.saida, processos.responsavel, processos.retorno, processos.obs FROM processos, processos_tipo WHERE processos.tipo = processos_tipo.id AND processos.tipo = ' . $tipo_proc->id . ' ORDER BY processos.tipo ASC') or exit('Erro ao buscar os processos');
+            $query = Query::getInstance()->exe('SELECT processos.num_processo, processos_tipo.nome AS tipo, processos_tipo.id AS id_tipo, processos.estante, processos.prateleira, processos.entrada, processos.saida, processos.responsavel, processos.retorno, processos.obs FROM processos, processos_tipo WHERE processos.tipo = processos_tipo.id AND processos.tipo = ' . $tipo_proc->id . ' ORDER BY processos.tipo ASC');
             if ($query->num_rows > 0) {
                 $row = new Row();
                 $row->addColumn(new Column('Tipo: ' . $tipo_proc->nome));
