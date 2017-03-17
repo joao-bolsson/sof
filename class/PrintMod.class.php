@@ -256,7 +256,7 @@ final class PrintMod {
                 // ----------------------------------------------------------------------
                 //                  ITENS REFERENTES AOS FORNECEDORES
                 // ----------------------------------------------------------------------
-                $query_itens = Query::getInstance()->exe("SELECT itens.cod_reduzido, itens.cod_despesa, itens.seq_item_processo, itens.complemento_item, itens.vl_unitario, itens_pedido.qtd, itens_pedido.valor FROM itens, itens_pedido WHERE itens.id = itens_pedido.id_item AND itens_pedido.id_pedido = " . $id_pedido . " AND itens.cgc_fornecedor = '" . $fornecedor->cgc_fornecedor . "'") or exit('Erro ao buscar os itens dos fornecedores do pedido');
+                $query_itens = Query::getInstance()->exe("SELECT itens.cod_reduzido, itens.cod_despesa, itens.seq_item_processo, itens.complemento_item, itens.vl_unitario, itens_pedido.qtd, itens_pedido.valor FROM itens, itens_pedido WHERE itens.id = itens_pedido.id_item AND itens_pedido.id_pedido = " . $id_pedido . " AND itens.cgc_fornecedor = '" . $fornecedor->cgc_fornecedor . "' ORDER BY CAST(itens.seq_item_processo AS UNSIGNED) ASC") or exit('Erro ao buscar os itens dos fornecedores do pedido');
 
                 $table = new Table('', 'prod', ['Código', 'Item', 'Natureza', 'Descrição', 'Quantidade', 'Valor Unitário', 'Valor Total'], true);
                 while ($item = $query_itens->fetch_object()) {
