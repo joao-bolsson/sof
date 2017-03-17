@@ -120,9 +120,6 @@ if (isset($_SESSION['editmode'])) {
                         <li>
                             <a href="hora.php">
                                 <i class="fa fa-clock-o"></i> <span>Ponto Eletrônico</span>
-                                <span class="pull-right-container">
-                                    <small class="label pull-right bg-blue">novo</small>
-                                </span>
                             </a>
                         </li>
                         <?php if ($permissao->noticias): ?>

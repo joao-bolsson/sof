@@ -3,11 +3,11 @@
 /**
  *  Classe com as funções de busca utilizadas principalmente pelo arquivo php/busca.php
  *  qualquer função que RETORNE dados do banco, devem ser feitas nesta classe
- * 
+ *
  *  Usada para a nova aparência da parte administrativa do SOF.
  *
- *  @author João Bolsson (joaovictorbolsson@gmail.com).
- *  @since 2017, 15 Jan.
+ * @author João Bolsson (joaovictorbolsson@gmail.com).
+ * @since 2017, 15 Jan.
  */
 ini_set('display_erros', true);
 error_reporting(E_ALL);
@@ -18,7 +18,8 @@ spl_autoload_register(function (string $class_name) {
 
 require_once '../defines.php';
 
-final class BuscaLTE {
+final class BuscaLTE
+{
 
     private static $INSTANCE;
 
@@ -103,9 +104,9 @@ final class BuscaLTE {
     }
 
     /**
-     * 	Função que retorna as 'tabs' com as ṕáginas das notícias para editar.
+     *    Função que retorna as 'tabs' com as ṕáginas das notícias para editar.
      *
-     * 	@return string
+     * @return string
      */
     public function getTabsNoticiasLTE(): string {
         $query = Query::getInstance()->exe('SELECT id, tabela, nome FROM paginas_post');
@@ -123,9 +124,9 @@ final class BuscaLTE {
     }
 
     /**
-     * 	Função para retornar a tabela de notícias de uma página para edição
+     *    Função para retornar a tabela de notícias de uma página para edição
      *
-     * 	@return string
+     * @return string
      */
     public function getNoticiasEditar(int $tabela): string {
         $query = Query::getInstance()->exe("SELECT id, tabela, titulo, DATE_FORMAT(data, '%d/%m/%Y') AS data FROM postagens WHERE ativa = 1 AND tabela = " . $tabela . ' ORDER BY data ASC');
@@ -206,7 +207,7 @@ final class BuscaLTE {
     }
 
     /**
-     * 
+     *
      * @param int $id_setor Id do setor para retornar os grupos.
      * @return string Options dentro de um <select> com os grupos de um setor.
      */
@@ -215,7 +216,7 @@ final class BuscaLTE {
         $retorno = '';
         if ($query->num_rows > 0) {
             while ($obj = $query->fetch_object()) {
-                $retorno .= "<option value=\"" . $obj->id . "\">" . utf8_encode($obj->nome) . '</option>';
+                $retorno .= "<option value=\"" . $obj->id . "\">" . utf8_encode($obj->nome) . '&nbsp;(' . $obj->cod . ')' . '</option>';
             }
         }
         return $retorno;
@@ -263,10 +264,10 @@ final class BuscaLTE {
     }
 
     /**
-     * 	Função que retorna os pedidos em análise e o total deles
+     *    Função que retorna os pedidos em análise e o total deles
      *
-     * 	@param $id_setor id do setor
-     * 	@return string
+     * @param $id_setor id do setor
+     * @return string
      */
     public function getPedidosAnalise(int $id_setor): string {
         $retorno = '';
@@ -285,9 +286,9 @@ final class BuscaLTE {
     }
 
     /**
-     * 	Função que retorna as options com os setores cadastrados no sistema
+     *    Função que retorna as options com os setores cadastrados no sistema
      *
-     * 	@return string
+     * @return string
      */
     public function getOptionsSetores(): string {
         $retorno = '';
@@ -300,9 +301,9 @@ final class BuscaLTE {
     }
 
     /**
-     * 	Função que retornar as options com as prioridades existentes no sistemas para os pedidos
+     *    Função que retornar as options com as prioridades existentes no sistemas para os pedidos
      *
-     * 	@return string
+     * @return string
      */
     public function getOptionsPrioridades(): string {
         $retorno = '';
@@ -325,9 +326,9 @@ final class BuscaLTE {
     }
 
     /**
-     * 	Função que retorna as options com os status de pedidos
+     *    Função que retorna as options com os status de pedidos
      *
-     * 	@return string
+     * @return string
      */
     public function getOptionsStatus(): string {
         $retorno = '';
@@ -339,9 +340,9 @@ final class BuscaLTE {
     }
 
     /**
-     * 	Função que retorna as options para tipo de processos para o cadastro de novos processos.
+     *    Função que retorna as options para tipo de processos para o cadastro de novos processos.
      *
-     * 	@return string
+     * @return string
      */
     public function getTiposProcessos(): string {
         $retorno = '';
@@ -353,10 +354,10 @@ final class BuscaLTE {
     }
 
     /**
-     * 	Função que retornar se um pedido é ou não rascunho.
+     *    Função que retornar se um pedido é ou não rascunho.
      *
-     * 	@param $id_pedido id do pedido.
-     * 	@return Se o pedido é um rascunho - true, senão false.
+     * @param $id_pedido id do pedido.
+     * @return Se o pedido é um rascunho - true, senão false.
      */
     public function getRequestDraft(int $id_pedido): bool {
         $query = Query::getInstance()->exe('SELECT prioridade FROM pedido WHERE id = ' . $id_pedido);
@@ -365,10 +366,10 @@ final class BuscaLTE {
     }
 
     /**
-     * 	Função que constroi os radioBtn da análise dos pedidos.
+     *    Função que constroi os radioBtn da análise dos pedidos.
      *
-     * 	@param $cont Número de radioBtn por linha.
-     * 	@return string
+     * @param $cont Número de radioBtn por linha.
+     * @return string
      */
     public function getStatus(int $cont): string {
         $retorno = '<tr>';
@@ -394,9 +395,9 @@ final class BuscaLTE {
     }
 
     /**
-     * 	Função que retornar os radioBtn das prioridades dos pedidos.
+     *    Função que retornar os radioBtn das prioridades dos pedidos.
      *
-     * 	@return Opções de prioridades para os pedidos.
+     * @return Opções de prioridades para os pedidos.
      */
     public function getPrioridades(): string {
         $count = count(ARRAY_PRIORIDADE);
@@ -415,10 +416,10 @@ final class BuscaLTE {
     /**
      *   Função utilizada para retornar a tabela dos processos da recepção.
      *
-     *   @return string
+     * @return string
      */
     public function getTabelaRecepcao(): string {
-        $query = Query::getInstance()->exe('SELECT processos.id, processos.num_processo, processos_tipo.nome as tipo, processos.estante, processos.prateleira, processos.entrada, processos.saida, processos.responsavel, processos.retorno, processos.obs FROM processos, processos_tipo WHERE processos.tipo = processos_tipo.id ORDER BY id ASC');
+        $query = Query::getInstance()->exe('SELECT processos.id, processos.num_processo, processos_tipo.nome AS tipo, processos.estante, processos.prateleira, processos.entrada, processos.saida, processos.responsavel, processos.retorno, processos.obs FROM processos, processos_tipo WHERE processos.tipo = processos_tipo.id ORDER BY id ASC');
         $table = new Table('', '', [], false);
         while ($processo = $query->fetch_object()) {
             $processo->obs = str_replace("\"", "\'", $processo->obs);
@@ -463,9 +464,9 @@ final class BuscaLTE {
     }
 
     /**
-     * 	Função que retorna as permissões do usuário.
+     *    Função que retorna as permissões do usuário.
      *
-     * 	@return JSON com as permissões do usuário no sistema.
+     * @return JSON com as permissões do usuário no sistema.
      */
     public function getPermissoes(int $id_user) {
         $query = Query::getInstance()->exe('SELECT noticias, saldos, pedidos, recepcao FROM usuario_permissoes WHERE id_usuario = ' . $id_user);
@@ -483,9 +484,9 @@ final class BuscaLTE {
     }
 
     /**
-     * 	Função que retorna a tabela com as solicitações de alteração de pedidos	para o SOF analisar
+     *    Função que retorna a tabela com as solicitações de alteração de pedidos    para o SOF analisar
      *
-     * 	@return string
+     * @return string
      */
     public function getAdminSolicAltPedidos(int $st): string {
         $query = Query::getInstance()->exe("SELECT solic_alt_pedido.id, solic_alt_pedido.id_pedido, setores.nome, DATE_FORMAT(solic_alt_pedido.data_solicitacao, '%d/%m/%Y') AS data_solicitacao, DATE_FORMAT(solic_alt_pedido.data_analise, '%d/%m/%Y') AS data_analise, solic_alt_pedido.justificativa, solic_alt_pedido.status FROM solic_alt_pedido, setores WHERE solic_alt_pedido.id_setor = setores.id AND solic_alt_pedido.status = " . $st . " ORDER BY solic_alt_pedido.id DESC LIMIT 200");
@@ -515,10 +516,10 @@ final class BuscaLTE {
     }
 
     /**
-     * 	Função que retorna as solicitações de adiantamentos de saldos enviadas ao SOF para análise.
+     *    Função que retorna as solicitações de adiantamentos de saldos enviadas ao SOF para análise.
      *
-     * 	@param $st Status
-     * 	@return string
+     * @param $st Status
+     * @return string
      */
     public function getSolicAdiantamentos(int $st): string {
         $query = Query::getInstance()->exe("SELECT saldos_adiantados.id, setores.nome, DATE_FORMAT(saldos_adiantados.data_solicitacao, '%d/%m/%Y') AS data_solicitacao, DATE_FORMAT(saldos_adiantados.data_analise, '%d/%m/%Y') AS data_analise, saldos_adiantados.valor_adiantado, saldos_adiantados.justificativa FROM saldos_adiantados, setores WHERE saldos_adiantados.id_setor = setores.id AND saldos_adiantados.status = " . $st . " ORDER BY saldos_adiantados.data_solicitacao DESC LIMIT 200");
@@ -737,9 +738,9 @@ final class BuscaLTE {
     }
 
     /**
-     * 	Função que retorna uma tabela com as solicitações de alteração de pedidos
+     *    Função que retorna uma tabela com as solicitações de alteração de pedidos
      *
-     * 	@return string
+     * @return string
      */
     public function getSolicAltPedidos(): string {
         $id_setor = $_SESSION['id_setor'];
@@ -769,9 +770,9 @@ final class BuscaLTE {
     }
 
     /**
-     * 	Função que retorna as solicitações de adiantamento de saldos do setor
+     *    Função que retorna as solicitações de adiantamento de saldos do setor
      *
-     * 	@return string
+     * @return string
      */
     public function getSolicAdiSetor(): string {
         $id_setor = $_SESSION['id_setor'];
@@ -912,7 +913,7 @@ final class BuscaLTE {
 
     /**
      * Function that returns the content of request for edition.
-     * 
+     *
      * @param int $id_pedido Request's id.
      * @return string Rows with itens of $id_pedido param.
      */
@@ -974,7 +975,7 @@ final class BuscaLTE {
 
     /**
      * Build rows with process in database.
-     * 
+     *
      * @param string $tela If 'recepcao' - add process in tables used by reception, else - search itens of process.
      * @return string Rows with all process.
      */
@@ -1016,10 +1017,10 @@ final class BuscaLTE {
     }
 
     /**
-     * 	Função que retorna a tabela com os lançamentos de saldos pelo SOF
+     *    Função que retorna a tabela com os lançamentos de saldos pelo SOF
      *
-     * 	@param $id_setor id do setor
-     * 	@return string
+     * @param $id_setor id do setor
+     * @return string
      */
     public function getLancamentos(int $id_setor): string {
         $where = ($id_setor != 0) ? ' WHERE id_setor = ' . $id_setor : '';
