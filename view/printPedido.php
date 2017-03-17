@@ -45,7 +45,7 @@ if (isset($_SESSION['imprimirPedido']) && $_SESSION['imprimirPedido'] && $_SESSI
             <h5>COMENTÁRIOS DO SOF</h5>
         </fieldset><br>";
     $html_rel .= $obj_Print->getComentarios($id_pedido);
-    $html = $html_style . $html_header . $html_table_itens . $html_itens . $html_rel . "</body>";
+    $html = $html_style . $html_header . $html_itens . $html_rel . "</body>";
     $mpdf = new mPDF();
     date_default_timezone_set('America/Sao_Paulo');
     //definimos o tipo de exibicao
