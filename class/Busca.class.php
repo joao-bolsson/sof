@@ -147,7 +147,7 @@ final class Busca {
     /**
      *    Função para retornar os processos que estão nos pedidos com suas datas de vencimento
      *
-     * @param $pedido int Id do pedido.
+     * @param int $pedido Id do pedido.
      * @return string Uma tabela com os processos e as informações dele.
      */
     public function getProcessosPedido(int $pedido): string {
@@ -191,7 +191,7 @@ final class Busca {
     /**
      * Function that returns informations of an item to possible edition.
      *
-     * @param $id_item int Item's id in the table items.
+     * @param int $id_item Item's id in the table items.
      * @return string
      */
     public function getInfoItem($id_item): string {
@@ -203,7 +203,7 @@ final class Busca {
     /**
      *    Função que retornar o empenho de um pedido
      *
-     * @param $id_pedido int Id do pedido.
+     * @param int $id_pedido Id do pedido.
      * @return string
      */
     public function verEmpenho(int $id_pedido): string {
@@ -233,7 +233,7 @@ final class Busca {
     }
 
     /**
-     * @param $id_setor int Sector's id.
+     * @param int $id_setor Sector's id.
      * @return string Sector's name.
      */
     public function getSetorNome(int $id_setor): string {
@@ -245,7 +245,7 @@ final class Busca {
     /**
      * Function used to returns the informations of a process clicked in the reception's table.
      *
-     * @param $id_processo int Process's id.
+     * @param int $id_processo Process's id.
      * @return string Process's informations.
      */
     public function getInfoProcesso(int $id_processo): string {
@@ -257,7 +257,7 @@ final class Busca {
     /**
      * Function that returns the user's permissions.
      *
-     * @param $id_user int User's id.
+     * @param int $id_user User's id.
      * @return object Object with user's permissions in system.
      */
     public function getPermissoes(int $id_user) {
@@ -269,7 +269,7 @@ final class Busca {
     /**
      * Function that returns the news details.
      *
-     * @param $id int News id.
+     * @param int $id News id.
      * @return string News information.
      */
     public function getInfoNoticia(int $id): string {
@@ -281,7 +281,7 @@ final class Busca {
     /**
      * Function to show a table with all posts of a certain page.
      *
-     * @param $tabela string Filter by table's name.
+     * @param string $tabela Filter by table's name.
      * @return string
      */
     public function getPostagens(string $tabela): string {
@@ -301,7 +301,7 @@ final class Busca {
     /**
      * Função para popular os slides na página inicial
      *
-     * @param $slide (1 ou 2)-> o primeiro mostra as últimas notícias e o segundo aleatórias
+     * @param int $slide (1 ou 2)-> o primeiro mostra as últimas notícias e o segundo aleatórias
      * @return string
      */
     public function getSlide(int $slide): string {
@@ -358,7 +358,7 @@ final class Busca {
     /**
      * Function to search a news.
      *
-     * @param $busca string Title to search.
+     * @param string $busca Title to search.
      * @return string News with the title similar to $busca.
      */
     public function pesquisar(string $busca): string {

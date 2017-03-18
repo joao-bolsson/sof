@@ -297,7 +297,7 @@ final class Geral {
     /**
      * Function to edit information of an item
      *
-     * @param $data object Object with the informations to edition.
+     * @param object $data Object with the informations to edition.
      * @return bool
      */
     public function editItem($data): bool {
@@ -335,10 +335,10 @@ final class Geral {
     /**
      *    Função para alterar somente o status do pedido
      *
-     * @param $id_pedido int Id do pedido
-     * @param $id_setor int Id do setor que fez o pedido
-     * @param $comentario string Comentário do SOF.
-     * @param $status int Novo status do pedido
+     * @param int $id_pedido Id do pedido
+     * @param int $id_setor Id do setor que fez o pedido
+     * @param string $comentario Comentário do SOF.
+     * @param int $status Novo status do pedido
      * @return bool
      */
     public function altStatus(int $id_pedido, int $id_setor, string $comentario, int $status): bool {
@@ -356,8 +356,8 @@ final class Geral {
     /**
      *    Função que cadastra o empenho de um pedido.
      *
-     * @param $id_pedido int Id do pedido.
-     * @param $empenho string Empenho a ser cadastrado.
+     * @param int $id_pedido Id do pedido.
+     * @param string $empenho Empenho a ser cadastrado.
      * @return bool
      */
     public function cadastraEmpenho(int $id_pedido, string $empenho, string $data): bool {
@@ -381,10 +381,10 @@ final class Geral {
     /**
      *    Função que transfere um valor do saldo de um setor para outro
      *
-     * @param $ori int Setor de origem do saldo.
-     * @param $dest int Setor de destino do saldo.
-     * @param $valor float Valor que será transferido.
-     * @param $just string Justificativa da transferência.
+     * @param int $ori Setor de origem do saldo.
+     * @param int $dest Setor de destino do saldo.
+     * @param float $valor Valor que será transferido.
+     * @param string $just Justificativa da transferência.
      * @return bool
      */
     public function transfereSaldo(int $ori, int $dest, float $valor, string $just): bool {
@@ -441,7 +441,7 @@ final class Geral {
     /**
      *    Função para cadastrar/editar um processo
      *
-     * @param $dados array É um array que contém os dados do processo
+     * @param array $dados É um array que contém os dados do processo
      * @param $dados ["id_processo"] contém o id do processo, se for 0 então é para adc, se não dar update
      * @return bool
      */
@@ -541,9 +541,9 @@ final class Geral {
     /**
      *    Função para liberação de saldo de um setor
      *
-     * @param $id_setor int Comment.
-     * @param $valor float Comment.
-     * @param $saldo_atual float Comment.
+     * @param int $id_setor.
+     * @param float $valor.
+     * @param float $saldo_atual.
      * @return bool
      */
     public function liberaSaldo(int $id_setor, float $valor, float $saldo_atual): bool {
@@ -567,7 +567,8 @@ final class Geral {
     /**
      *    Função para aprovar uma solicitação de adiantamento
      *
-     * @param $acao 0 -> reprovado | 1 -> aprovado
+     * @param int $id
+     * @param int $acao 0 -> reprovado | 1 -> aprovado
      * @return bool
      */
     public function analisaAdi(int $id, int $acao): bool {
@@ -687,10 +688,10 @@ final class Geral {
      *   Função para enviar um pedido ao SOF
      *
      * @access public
-     * @param $id_item array Array com os ids dos itens do pedido.
-     * @param $qtd array Array com as quantidades dos itens do pedido.
-     * @param $valor array Array com os valores dos itens do pedido.
-     * @param $pedido int Id do pedido. Se 0, pedido novo, senão editando rascunho ou enviando ao SOF.
+     * @param array $id_item  Array com os ids dos itens do pedido.
+     * @param array $qtd Array com as quantidades dos itens do pedido.
+     * @param array $valor Array com os valores dos itens do pedido.
+     * @param int $pedido Id do pedido. Se 0, pedido novo, senão editando rascunho ou enviando ao SOF.
      * @return bool
      */
     public function insertPedido($id_user, $id_setor, $id_item, $qtd_solicitada, $qtd_disponivel, $qtd_contrato, $qtd_utilizado, $vl_saldo, $vl_contrato, $vl_utilizado, $valor, $total_pedido, $saldo_total, $prioridade, $obs, &$pedido, $pedido_contrato) {

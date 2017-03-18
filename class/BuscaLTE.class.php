@@ -265,7 +265,7 @@ final class BuscaLTE {
     /**
      *    Função que retorna os pedidos em análise e o total deles
      *
-     * @param $id_setor int id do setor
+     * @param int $id_setor id do setor
      * @return string
      */
     public function getPedidosAnalise(int $id_setor): string {
@@ -355,7 +355,7 @@ final class BuscaLTE {
     /**
      *    Função que retornar se um pedido é ou não rascunho.
      *
-     * @param $id_pedido int id do pedido.
+     * @param int $id_pedido id do pedido.
      * @return bool Se o pedido é um rascunho - true, senão false.
      */
     public function getRequestDraft(int $id_pedido): bool {
@@ -367,7 +367,7 @@ final class BuscaLTE {
     /**
      *    Função que constroi os radioBtn da análise dos pedidos.
      *
-     * @param $cont int Número de radioBtn por linha.
+     * @param int $cont Número de radioBtn por linha.
      * @return string
      */
     public function getStatus(int $cont): string {
@@ -465,7 +465,7 @@ final class BuscaLTE {
     /**
      * Function that returns the User's permissions.
      *
-     * @param $id_user int User's id
+     * @param int $id_user User's id
      * @return object JSON with the user's permissions in system.
      */
     public function getPermissoes(int $id_user) {
@@ -518,7 +518,7 @@ final class BuscaLTE {
     /**
      *    Função que retorna as solicitações de adiantamentos de saldos enviadas ao SOF para análise.
      *
-     * @param $st int Status
+     * @param int $st Status
      * @return string
      */
     public function getSolicAdiantamentos(int $st): string {
@@ -579,6 +579,7 @@ final class BuscaLTE {
      * @param int $id Id do pedido.
      * @param int $status Status atual do pedido.
      * @param int $id_setor Id do setor que fez o pedido.
+     * @return string
      */
     private function buildButtons(int $id, int $status, int $id_setor): string {
         $component = new Div('btn-group');
@@ -1015,7 +1016,7 @@ final class BuscaLTE {
     /**
      *    Função que retorna a tabela com os lançamentos de saldos pelo SOF
      *
-     * @param $id_setor int id do setor
+     * @param int $id_setor id do setor
      * @return string
      */
     public function getLancamentos(int $id_setor): string {

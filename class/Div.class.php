@@ -10,13 +10,13 @@ class Div implements Component {
 
     /**
      * Div's class.
-     * @var type string
+     * @var string
      */
     private $class;
 
     /**
      * Array with components inside <div></div>
-     * @var type array
+     * @var array
      */
     private $components;
 

@@ -163,6 +163,7 @@ final class Util {
     /**
      * Function that prepare data to import to table itens.
      * @param array $data Array with data to import.
+     * @return array
      */
     public function prepareImport(array $data): array {
         $array_sql = array();
@@ -194,10 +195,16 @@ final class Util {
     }
 
     /**
-     * 	Função que envia um email
+     * Function to send an e-mail
      *
-     * 	@access public
-     * 	@return bool
+     * @param string $from
+     * @param string $nome_from
+     * @param string $para
+     * @param string $nome_para
+     * @param string $assunto
+     * @param string $altBody
+     * @param string $body
+     * @return bool
      */
     final public function preparaEmail(string $from, string $nome_from, string $para, string $nome_para, string $assunto, string $altBody, string $body) {
         $this->mail->setFrom($from, $nome_from);

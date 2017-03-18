@@ -10,43 +10,43 @@ class Button implements Component {
 
     /**
      * Type of button, default: button
-     * @var type String
+     * @var string
      */
     private $type;
 
     /**
      * Class css of this button.
-     * @var type String
+     * @var string
      */
     private $class;
 
     /**
      * Method onclick of this button
-     * @var type String
+     * @var string
      */
     private $onclick;
 
     /**
      * Others attributes of <button></button>
-     * @var type String
+     * @var string
      */
     private $attr;
 
     /**
      * Title of this button.
-     * @var type String
+     * @var string
      */
     private $title;
 
     /**
      * Button's icon.
-     * @var type String
+     * @var string
      */
     private $icon;
 
     /**
      * Button's HTML representation.
-     * 
+     *
      * @param string $type Button's type.
      * @param string $class Button's class.
      * @param string $onclick Method onclick of this button.

@@ -10,13 +10,13 @@ final class Column {
 
     /**
      * Column's content.
-     * @var type String
+     * @var string
      */
     private $content;
 
     /**
      * Column's display.
-     * @var type String
+     * @var string
      */
     private $display;
 

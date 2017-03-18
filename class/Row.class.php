@@ -10,18 +10,18 @@ final class Row {
 
     /**
      * Array with columns in this row.
-     * @var type Array of Columns
+     * @var array of Columns
      */
     private $columns;
 
     /**
      * Row's id.
-     * @var type String
+     * @var string
      */
     private $id;
 
     /**
-     * Default contructor.
+     * Default construct.
      * @param string $id Row's id.
      */
     public function __construct(string $id = '') {

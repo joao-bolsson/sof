@@ -10,37 +10,37 @@ class Table {
 
     /**
      * Rows in this table.
-     * @var type Array of Rows
+     * @var array of Rows
      */
     private $rows;
 
     /**
      * Table's id.
-     * @var type String
+     * @var string
      */
     private $id;
 
     /**
      * Classes of this table.
-     * @var type String
+     * @var string
      */
     private $class;
 
     /**
      * Strings array with the header's fields.
-     * @var type Array of Strings
+     * @var array of Strings
      */
     private $headers;
 
     /**
      * Flag that determine if <tbody></tbody> must be build or just its content.
-     * @var type Bool
+     * @var bool
      */
     private $build_body;
 
     /**
      * Default construct.
-     * 
+     *
      * @param string $id <table> id.
      * @param string $class <table> class.
      * @param array $headers Fields in <thead>, if empty: <thead> thead tag will is not build.
@@ -56,7 +56,7 @@ class Table {
 
     /**
      * Add a Row element in this table.
-     * 
+     *
      * @param Row $row Row in this table.
      */
     public function addRow(Row $row) {

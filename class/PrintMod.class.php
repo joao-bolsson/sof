@@ -15,21 +15,18 @@ spl_autoload_register(function (string $class_name) {
 
 require_once '../defines.php';
 
-final class PrintMod
-{
+final class PrintMod {
 
     private static $INSTANCE;
 
-    public static function getInstance(): PrintMod
-    {
+    public static function getInstance(): PrintMod {
         if (empty(self::$INSTANCE)) {
             self::$INSTANCE = new PrintMod();
         }
         return self::$INSTANCE;
     }
 
-    private function __construct()
-    {
+    private function __construct() {
         // empty
     }
 
@@ -38,8 +35,7 @@ final class PrintMod
      * @param string $periodo Período no formato 03/03/2017 - 05/04/2017
      * @return string Relatório dos registros do usuário.
      */
-    public function relatorioHora(int $id_usuario, string $periodo): string
-    {
+    public function relatorioHora(int $id_usuario, string $periodo): string {
         $array = explode(' - ', $periodo);
         $dataI = Util::getInstance()->dateFormat($array[0]);
         $dataF = Util::getInstance()->dateFormat($array[1]);
@@ -75,8 +71,7 @@ final class PrintMod
         return $retorno;
     }
 
-    public function getRelUsers(): string
-    {
+    public function getRelUsers(): string {
         $query = Query::getInstance()->exe('SELECT nome, login, id_setor, email FROM usuario ORDER BY nome ASC');
         $retorno = "
             <fieldset class=\"preg\">
@@ -107,8 +102,7 @@ final class PrintMod
      *
      * @return string
      */
-    public function getHeader(int $id_pedido): string
-    {
+    public function getHeader(int $id_pedido): string {
         $query = Query::getInstance()->exe("SELECT pedido.id, DATE_FORMAT(pedido.data_pedido, '%d/%m/%Y') AS data_pedido, EXTRACT(YEAR FROM pedido.data_pedido) AS ano, mes.sigla_mes AS ref_mes, status.nome AS status, pedido.valor AS valor, pedido.obs, pedido.pedido_contrato, prioridade.nome AS prioridade, pedido.aprov_gerencia, pedido.id_usuario FROM prioridade, pedido, mes, status WHERE pedido.prioridade = prioridade.id AND status.id = pedido.status AND pedido.id = " . $id_pedido . ' AND mes.id = pedido.ref_mes');
         $pedido = $query->fetch_object();
         $lblPedido = ($pedido->pedido_contrato) ? 'Pedido de Contrato' : 'Pedido';
@@ -140,8 +134,7 @@ final class PrintMod
         return $retorno;
     }
 
-    private function getTableLicitacao(int $id_pedido): string
-    {
+    private function getTableLicitacao(int $id_pedido): string {
         $retorno = "<fieldset><h5>PEDIDO SEM LICITAÇÃO</h5></fieldset><br>";
 
         $query = Query::getInstance()->exe("SELECT licitacao.tipo AS id_tipo, licitacao_tipo.nome AS tipo, licitacao.numero, licitacao.uasg, licitacao.processo_original, licitacao.gera_contrato FROM licitacao, licitacao_tipo WHERE licitacao_tipo.id = licitacao.tipo AND licitacao.id_pedido = " . $id_pedido . ' LIMIT 1');
@@ -177,11 +170,10 @@ final class PrintMod
     /**
      *    Função para retornar as fontes de recurso de um pedido (impressão).
      *
-     * @param $id_pedido Id do pedido.
-     * @return Fontes de recurso.
+     * @param $id_pedido int Id do pedido.
+     * @return string Fontes de recurso.
      */
-    public function getTableFontes(int $id_pedido): string
-    {
+    public function getTableFontes(int $id_pedido): string {
         $retorno = '';
         $query = Query::getInstance()->exe('SELECT fonte_recurso, ptres, plano_interno FROM pedido_fonte WHERE id_pedido = ' . $id_pedido);
         if ($query->num_rows > 0) {
@@ -202,8 +194,7 @@ final class PrintMod
         return $retorno;
     }
 
-    private function getEmpenho(int $id_pedido): string
-    {
+    private function getEmpenho(int $id_pedido): string {
         $query = Query::getInstance()->exe('SELECT contrato_tipo.nome, pedido_contrato.siafi FROM contrato_tipo, pedido_contrato WHERE pedido_contrato.id_tipo = contrato_tipo.id AND pedido_contrato.id_pedido = ' . $id_pedido);
         $retorno = '';
         if ($query->num_rows > 0) {
@@ -213,8 +204,7 @@ final class PrintMod
         return $retorno;
     }
 
-    private function getGrupoPedido(int $id_pedido): string
-    {
+    private function getGrupoPedido(int $id_pedido): string {
         $query = Query::getInstance()->exe('SELECT setores_grupos.nome, pedido_grupo.id_pedido FROM setores_grupos, pedido_grupo WHERE pedido_grupo.id_grupo = setores_grupos.id AND pedido_grupo.id_pedido = ' . $id_pedido);
         $retorno = '';
         if ($query->num_rows > 0) {
@@ -230,8 +220,7 @@ final class PrintMod
      *
      * @return string
      */
-    public function getContentPedido(int $id_pedido): string
-    {
+    public function getContentPedido(int $id_pedido): string {
         $retorno = '';
         // PRIMEIRO FAZEMOS O CABEÇALHO REFERENTE AO NUM_LICITACAO
         $query_ini = Query::getInstance()->exe('SELECT DISTINCT itens.num_licitacao, itens.num_processo, itens.dt_inicio, itens.dt_fim FROM itens_pedido, itens WHERE itens.id = itens_pedido.id_item AND itens_pedido.id_pedido = ' . $id_pedido);
@@ -292,12 +281,12 @@ final class PrintMod
     }
 
     /**
-     *    Função para retornar os comentários de um pedido.
+     * Function to returns the request comments.
      *
-     * @return Comentários do SOF em um pedido (Print).
+     * @param $id_pedido int Request id.
+     * @return string SOF comments in request.
      */
-    public function getComentarios(int $id_pedido): string
-    {
+    public function getComentarios(int $id_pedido): string {
         $retorno = "";
         $query_emp = Query::getInstance()->exe("SELECT pedido_empenho.empenho, DATE_FORMAT(pedido_empenho.data, '%d/%m/%Y') AS data FROM pedido_empenho WHERE pedido_empenho.id_pedido = " . $id_pedido);
         if ($query_emp->num_rows > 0) {
@@ -330,11 +319,10 @@ final class PrintMod
     /**
      *    Função que retornar o id do setor do pedido.
      *
-     * @param $id_pedido Id do pedido.
-     * @return Id do setor que fez o pedido.
+     * @param $id_pedido int Id do pedido.
+     * @return int Id do setor que fez o pedido.
      */
-    public function getSetorPedido(int $id_pedido): int
-    {
+    public function getSetorPedido(int $id_pedido): int {
         $query = Query::getInstance()->exe('SELECT id_setor FROM pedido WHERE id = ' . $id_pedido);
         $obj = $query->fetch_object();
         return $obj->id_setor;
@@ -346,13 +334,13 @@ final class PrintMod
      * @param int $status Status dos pedidos (default = 8)
      * @return string Relatório personalizado pelo SOF.
      */
-    public function getRelPed(array $pedidos, int $status = 8)
-    {
+    public function getRelPed(array $pedidos, int $status = 8) {
         if (empty($pedidos)) {
             return '';
         }
         $retorno = '';
         $where_status = ($status != 0) ? 'AND pedido.status = ' . $status : '';
+        $empenho = $tb_empenho = $where_empenho = "";
         if ($status == 8) {
             $where_empenho = "AND pedido_empenho.id_pedido = pedido.id";
             $tb_empenho = "pedido_empenho, ";
@@ -441,8 +429,7 @@ final class PrintMod
         return $retorno;
     }
 
-    public function getRelatorioLib(int $id_setor, array $categoria, string $dataI, string $dataF): string
-    {
+    public function getRelatorioLib(int $id_setor, array $categoria, string $dataI, string $dataF): string {
         $retorno = "<fieldset class=\"preg\">
                 <h5>DESCRIÇÃO DO RELATÓRIO</h5>
                 <h6>Relatório de Liberações Orçamentárias</h6>
@@ -484,8 +471,7 @@ final class PrintMod
      *
      * @return string Retorna a interface de um documento pdf.
      */
-    public function getRelatorioPedidos(int $id_setor, int $prioridade, array $status, string $dataI, string $dataF): string
-    {
+    public function getRelatorioPedidos(int $id_setor, int $prioridade, array $status, string $dataI, string $dataF): string {
         $retorno = '';
         $where_status = '';
         $where_prioridade = ($prioridade != 0) ? 'AND pedido.prioridade = ' . $prioridade : '';
@@ -637,8 +623,7 @@ final class PrintMod
      * @param int $tipo Tipo de processo.
      * @return string Relatório com os processos.
      */
-    public function getRelatorioProcessos(int $tipo): string
-    {
+    public function getRelatorioProcessos(int $tipo): string {
         $retorno = '';
         $where = ($tipo != 0) ? ' WHERE id = ' . $tipo : '';
 
