@@ -6,7 +6,7 @@
  * 	@author João Bolsson
  * 	@since 2016, 05 Sep
  */
-ini_set('display_erros', true);
+ini_set('display_errors', true);
 error_reporting(E_ALL);
 require_once 'phpmailer/PHPMailerAutoload.php';
 

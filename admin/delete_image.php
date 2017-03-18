@@ -1,5 +1,5 @@
 <?php
-ini_set('display_erros', true);
+ini_set('display_errors', true);
 error_reporting(E_ALL);
 
 if (!isset($_SESSION["id_setor"]) || $_SESSION["id_setor"] != 2) {

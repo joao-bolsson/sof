@@ -7,7 +7,7 @@
  *  @author João Bolsson (joaovictorbolsson@gmail.com).
  *  @since 2016, 16 Mar.
  */
-ini_set('display_erros', true);
+ini_set('display_errors', true);
 error_reporting(E_ALL);
 
 require_once '../defines.php';

@@ -18,7 +18,7 @@
  * 	@since Version 1.0
  *
  */
-ini_set('display_erros', true);
+ini_set('display_errors', true);
 error_reporting(E_ALL);
 
 session_start();

@@ -4,10 +4,10 @@
  *  Classe com as funções de busca utilizadas principalmente pelo arquivo php/busca.php
  *  qualquer função que RETORNE dados do banco, devem ser feitas nesta classe
  *
- *  @author João Bolsson (joaovictorbolsson@gmail.com).
- *  @since 2016, 16 Mar.
+ * @author João Bolsson (joaovictorbolsson@gmail.com).
+ * @since 2016, 16 Mar.
  */
-ini_set('display_erros', true);
+ini_set('display_errors', true);
 error_reporting(E_ALL);
 
 spl_autoload_register(function (string $class_name) {
@@ -129,10 +129,10 @@ final class Busca {
     }
 
     /**
-     * 	Função para retornar os processos que estão nos pedidos com suas datas de vencimento
+     *    Função para retornar os processos que estão nos pedidos com suas datas de vencimento
      *
-     * 	@param $pedido Id do pedido.
-     * 	@return Uma tabela com os processos e as informações dele.
+     * @param $pedido Id do pedido.
+     * @return Uma tabela com os processos e as informações dele.
      */
     public function getProcessosPedido(int $pedido): string {
         $query = Query::getInstance()->exe('SELECT DISTINCT itens.num_processo, itens.dt_fim FROM itens, itens_pedido WHERE itens_pedido.id_pedido = ' . $pedido . ' AND itens_pedido.id_item = itens.id');
@@ -148,9 +148,9 @@ final class Busca {
     }
 
     /**
-     * 	Função para retornar os problemas relatados
+     *    Função para retornar os problemas relatados
      *
-     * 	@return string Linhas para uma tabela mostrar os problemas.
+     * @return string Linhas para uma tabela mostrar os problemas.
      */
     public function getProblemas(): string {
         $query = Query::getInstance()->exe('SELECT setores.nome AS setor, problemas.assunto, problemas.descricao FROM setores, problemas WHERE setores.id = problemas.id_setor ORDER BY problemas.id DESC');
@@ -173,10 +173,10 @@ final class Busca {
     }
 
     /**
-     * 	Função que que retorna informações de um item para possível edição
+     *    Função que que retorna informações de um item para possível edição
      *
-     * 	@param Id do item da tbela itens
-     * 	@return object
+     * @param Id do item da tbela itens
+     * @return object
      */
     public function getInfoItem($id_item) {
         $query = Query::getInstance()->exe("SELECT cod_despesa, descr_despesa, cod_reduzido, dt_fim, complemento_item, replace(vl_unitario, ',', '.') AS vl_unitario, qt_contrato, replace(vl_contrato, ',', '.') AS vl_contrato, qt_utilizado, replace(vl_utilizado, ',', '.') AS vl_utilizado, qt_saldo, replace(vl_saldo, ',', '.') AS vl_saldo, seq_item_processo FROM itens WHERE id = " . $id_item);
@@ -185,10 +185,10 @@ final class Busca {
     }
 
     /**
-     * 	Função que retornar o empenho de um pedido
+     *    Função que retornar o empenho de um pedido
      *
-     * 	@param $id_pedido Id do pedido.
-     * 	@return string
+     * @param $id_pedido Id do pedido.
+     * @return string
      */
     public function verEmpenho(int $id_pedido): string {
         $retorno = '';
@@ -229,7 +229,7 @@ final class Busca {
     /**
      *   Função utilizada para retornar as informações de um processo clicado da tabela da recepção.
      *
-     *   @return Informações do processo.
+     * @return Informações do processo.
      */
     public function getInfoProcesso(int $id_processo): string {
         $query = Query::getInstance()->exe('SELECT num_processo, tipo, estante, prateleira, entrada, saida, responsavel, retorno, obs FROM processos WHERE id = ' . $id_processo);
@@ -238,9 +238,9 @@ final class Busca {
     }
 
     /**
-     * 	Função que retorna as permissões do usuário.
+     *    Função que retorna as permissões do usuário.
      *
-     * 	@return JSON com as permissões do usuário no sistema.
+     * @return JSON com as permissões do usuário no sistema.
      */
     public function getPermissoes(int $id_user) {
         $query = Query::getInstance()->exe('SELECT noticias, saldos, pedidos, recepcao FROM usuario_permissoes WHERE id_usuario = ' . $id_user);
@@ -391,9 +391,9 @@ final class Busca {
     }
 
     /**
-     * 	Função que retorna as 'tabs' com as ṕáginas das notícias para editar.
+     *    Função que retorna as 'tabs' com as ṕáginas das notícias para editar.
      *
-     * 	@return string
+     * @return string
      */
     public function getTabsNoticias(): string {
         $retorno = "";
@@ -426,7 +426,7 @@ final class Busca {
     /**
      * Função para trazer o restante das informações para analisar o pedido:
      *               saldo, total, prioridade, fase, etc.
-     *   
+     *
      * @return string
      */
     public function getInfoPedidoAnalise(int $id_pedido, int $id_setor): string {
@@ -436,9 +436,9 @@ final class Busca {
     }
 
     /**
-     * 	Função que retorna o saldo dispónível do setor.
+     *    Função que retorna o saldo dispónível do setor.
      *
-     * 	@return string
+     * @return string
      */
     public function getSaldo(int $id_setor): string {
         $query = Query::getInstance()->exe('SELECT saldo FROM saldo_setor WHERE id_setor = ' . $id_setor);

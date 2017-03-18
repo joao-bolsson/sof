@@ -1,6 +1,6 @@
 <?php
 
-ini_set('display_erros', true);
+ini_set('display_errors', true);
 error_reporting(E_ALL);
 
 spl_autoload_register(function (string $class_name) {
@@ -16,7 +16,7 @@ spl_autoload_register(function (string $class_name) {
 class Query {
 
     /**
-     * Variable usued to executes a query, for example.
+     * Variable used to executes a query, for example.
      * @var MySQLi
      */
     private $mysqli;
@@ -51,8 +51,9 @@ class Query {
     }
 
     /**
-     * Executes a query in openned connection.
+     * Executes a query in open connection.'
      * @param string $sql A SQL command to execute.
+     * @return mixed If success will return a mysqli_result object, else - FALSE.
      */
     public function exe(string $sql) {
         $this->openConnection();

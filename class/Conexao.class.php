@@ -6,7 +6,7 @@
  * @author João Bolsson
  * @since 2016, 16 Mar
  */
-ini_set('display_erros', true);
+ini_set('display_errors', true);
 error_reporting(E_ALL);
 
 final class Conexao {
