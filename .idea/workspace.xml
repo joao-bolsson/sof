@@ -5,53 +5,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="55e8fb27-4c76-4f1f-929e-354eea3f19e5" name="Default" comment="">
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.gitignore" afterPath="$PROJECT_DIR$/.gitignore" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/admin/delete_image.php" afterPath="$PROJECT_DIR$/admin/delete_image.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/admin/index.php" afterPath="$PROJECT_DIR$/admin/index.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/admin/load_images.php" afterPath="$PROJECT_DIR$/admin/load_images.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/admin/printRel.php" afterPath="$PROJECT_DIR$/admin/printRel.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/admin/printRelatorio.php" afterPath="$PROJECT_DIR$/admin/printRelatorio.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/admin/sair.php" afterPath="$PROJECT_DIR$/admin/sair.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/admin/upload_file.php" afterPath="$PROJECT_DIR$/admin/upload_file.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/admin/upload_image.php" afterPath="$PROJECT_DIR$/admin/upload_image.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/class/Busca.class.php" afterPath="$PROJECT_DIR$/class/Busca.class.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/class/BuscaLTE.class.php" afterPath="$PROJECT_DIR$/class/BuscaLTE.class.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/class/Conexao.class.php" afterPath="$PROJECT_DIR$/class/Conexao.class.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/class/Geral.class.php" afterPath="$PROJECT_DIR$/class/Geral.class.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/class/Login.class.php" afterPath="$PROJECT_DIR$/class/Login.class.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/class/PrintMod.class.php" afterPath="$PROJECT_DIR$/class/PrintMod.class.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/class/Query.class.php" afterPath="$PROJECT_DIR$/class/Query.class.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/class/Util.class.php" afterPath="$PROJECT_DIR$/class/Util.class.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/index.php" afterPath="$PROJECT_DIR$/index.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/lte/apoio.php" afterPath="$PROJECT_DIR$/lte/apoio.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/lte/editmode.php" afterPath="$PROJECT_DIR$/lte/editmode.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/lte/hora.php" afterPath="$PROJECT_DIR$/lte/hora.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/lte/index.php" afterPath="$PROJECT_DIR$/lte/index.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/lte/posts.php" afterPath="$PROJECT_DIR$/lte/posts.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/lte/solicitacoes.php" afterPath="$PROJECT_DIR$/lte/solicitacoes.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/php/busca.php" afterPath="$PROJECT_DIR$/php/busca.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/php/buscaLTE.php" afterPath="$PROJECT_DIR$/php/buscaLTE.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/php/geral.php" afterPath="$PROJECT_DIR$/php/geral.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/php/login.php" afterPath="$PROJECT_DIR$/php/login.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/view/boaspraticas.php" afterPath="$PROJECT_DIR$/view/boaspraticas.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/view/comemoracoes.php" afterPath="$PROJECT_DIR$/view/comemoracoes.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/view/consultaspe.php" afterPath="$PROJECT_DIR$/view/consultaspe.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/view/consultaspi.php" afterPath="$PROJECT_DIR$/view/consultaspi.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/view/dinamicas.php" afterPath="$PROJECT_DIR$/view/dinamicas.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/view/faleconosco.php" afterPath="$PROJECT_DIR$/view/faleconosco.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/view/index.php" afterPath="$PROJECT_DIR$/view/index.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/view/linksexternos.php" afterPath="$PROJECT_DIR$/view/linksexternos.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/view/linksinternos.php" afterPath="$PROJECT_DIR$/view/linksinternos.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/view/noticia.php" afterPath="$PROJECT_DIR$/view/noticia.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/view/printPedido.php" afterPath="$PROJECT_DIR$/view/printPedido.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/view/printSolicTax.php" afterPath="$PROJECT_DIR$/view/printSolicTax.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/view/recepcao.php" afterPath="$PROJECT_DIR$/view/recepcao.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/view/rel1.php" afterPath="$PROJECT_DIR$/view/rel1.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/view/relatorios.php" afterPath="$PROJECT_DIR$/view/relatorios.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/view/sof.php" afterPath="$PROJECT_DIR$/view/sof.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/view/tutoriais.php" afterPath="$PROJECT_DIR$/view/tutoriais.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/view/unidades.php" afterPath="$PROJECT_DIR$/view/unidades.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/view/ver_noticia.php" afterPath="$PROJECT_DIR$/view/ver_noticia.php" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -99,11 +54,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="Busca.class.php" pinned="false" current-in-tab="true">
+      <file leaf-file-name="Busca.class.php" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/class/Busca.class.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="720">
-              <caret line="38" column="0" lean-forward="true" selection-start-line="38" selection-start-column="0" selection-end-line="38" selection-end-column="0" />
+            <state relative-caret-position="198">
+              <caret line="11" column="0" lean-forward="true" selection-start-line="11" selection-start-column="0" selection-end-line="11" selection-end-column="0" />
               <folding>
                 <marker date="1489804861432" expanded="true" signature="804:1020" ph="SELECT usuar... usuario_hora" />
                 <marker date="1489804861432" expanded="true" signature="1588:1646" ph="SELECT max(i... usuario_hora" />
@@ -153,6 +108,16 @@
           </provider>
         </entry>
       </file>
+      <file leaf-file-name=".gitignore" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/.gitignore">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="36">
+              <caret line="2" column="6" lean-forward="false" selection-start-line="2" selection-start-column="6" selection-end-line="2" selection-end-column="6" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
     </leaf>
   </component>
   <component name="FindInProjectRecents">
@@ -189,6 +154,7 @@
         <option value="$PROJECT_DIR$/admin/index.php" />
         <option value="$PROJECT_DIR$/class/Query.class.php" />
         <option value="$PROJECT_DIR$/class/Busca.class.php" />
+        <option value="$PROJECT_DIR$/.gitignore" />
       </list>
     </option>
   </component>
@@ -293,20 +259,6 @@
             </PATH_ELEMENT>
             <PATH_ELEMENT>
               <option name="myItemId" value="lte" />
-              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="sof" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="sof" />
-              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="class" />
               <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
             </PATH_ELEMENT>
           </PATH>
@@ -439,12 +391,12 @@
       <workItem from="1489801479326" duration="90000" />
       <workItem from="1489803575035" duration="798000" />
       <workItem from="1489804459862" duration="11000" />
-      <workItem from="1489804487165" duration="392000" />
+      <workItem from="1489804487165" duration="519000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="13539000" />
+    <option name="totallyTimeSpent" value="13666000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -1602,8 +1554,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/class/Busca.class.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="720">
-          <caret line="38" column="0" lean-forward="true" selection-start-line="38" selection-start-column="0" selection-end-line="38" selection-end-column="0" />
+        <state relative-caret-position="198">
+          <caret line="11" column="0" lean-forward="true" selection-start-line="11" selection-start-column="0" selection-end-line="11" selection-end-column="0" />
           <folding>
             <marker date="1489804861432" expanded="true" signature="804:1020" ph="SELECT usuar... usuario_hora" />
             <marker date="1489804861432" expanded="true" signature="1588:1646" ph="SELECT max(i... usuario_hora" />
@@ -1649,6 +1601,14 @@
             <marker date="1489804861432" expanded="true" signature="18947:19087" ph="SELECT saldo... saldo_setor" />
             <marker date="1489804861432" expanded="true" signature="19284:19381" ph="SELECT id, t... licitacao" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/.gitignore">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="36">
+          <caret line="2" column="6" lean-forward="false" selection-start-line="2" selection-start-column="6" selection-end-line="2" selection-end-column="6" />
+          <folding />
         </state>
       </provider>
     </entry>
