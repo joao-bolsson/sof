@@ -136,9 +136,9 @@ $(function () {
         $('body').data('fv_open_modals', $('body').data('fv_open_modals') + 1);
         $(this).css('z-index', 1040 + (10 * $('body').data('fv_open_modals')));
         $('.modal-backdrop').not('.fv-modal-stack')
-                .css('z-index', 1039 + (10 * $('body').data('fv_open_modals')));
+            .css('z-index', 1039 + (10 * $('body').data('fv_open_modals')));
         $('.modal-backdrop').not('fv-modal-stack')
-                .addClass('fv-modal-stack');
+            .addClass('fv-modal-stack');
     });
     var checkPedContr = document.getElementById("checkPedContr");
     if (checkPedContr !== null) {
@@ -1714,7 +1714,7 @@ function login() {
 
 function btnPesquisa() {
     if (document.getElementById("pesquisa").style.display == "" ||
-            document.getElementById("pesquisa").style.display == "none") {
+        document.getElementById("pesquisa").style.display == "none") {
         $("#pesquisa").slideDown(200);
     } else {
         $("#pesquisa").slideUp(200);
@@ -1961,7 +1961,7 @@ function submitEditItem() {
         dados: dados
     }).done(function (resposta) {
         if (resposta == 0) {
-            alert('Ocorreu um erro ao atualizar informações');
+            alert('Conflito: a nova quantidade do contrato ou a nova quantidade utilizada são menores que a quantidade utilizada pelos pedidos desse item. A edição não foi concluída');
         }
     });
     $('#infoItem').modal('hide');

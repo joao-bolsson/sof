@@ -18,8 +18,7 @@ spl_autoload_register(function (string $class_name) {
 
 require_once '../defines.php';
 
-final class BuscaLTE
-{
+final class BuscaLTE {
 
     private static $INSTANCE;
 
@@ -38,7 +37,7 @@ final class BuscaLTE
      * Gets an array with information of the last register of user.
      * @param int $status If 1 - last register is a log in, else if a log out.
      * @param int $id_user Id of the user to format last register.
-     * @return arrayArray with 'date' and 'time' of last register of the user.
+     * @return array with 'date' and 'time' of last register of the user.
      */
     private function formatTimeLast(int $status, int $id_user): array {
         $column = ($status == 1) ? 'entrada' : 'saida';
@@ -165,7 +164,7 @@ final class BuscaLTE
 
     /**
      * Retorna a quantidade de solicitações de adiantamento, alt pedidos e de pedidos em análise.
-     * @return type Objeto com as quantidades de solicitações.
+     * @return object Objeto com as quantidades de solicitações.
      */
     public function getCountSolic() {
         $query = Query::getInstance()->exe('SELECT count(saldos_adiantados.id) AS solic_adi, (SELECT count(solic_alt_pedido.id) FROM solic_alt_pedido WHERE solic_alt_pedido.status = 2) AS solic_alt, (SELECT count(pedido.id) FROM pedido WHERE pedido.status = 2) AS solic_ped FROM saldos_adiantados WHERE saldos_adiantados.status = 2');
@@ -212,7 +211,7 @@ final class BuscaLTE
      * @return string Options dentro de um <select> com os grupos de um setor.
      */
     public function getOptionsGrupos(int $id_setor): string {
-        $query = Query::getInstance()->exe('SELECT id, nome FROM setores_grupos WHERE id_setor = ' . $id_setor);
+        $query = Query::getInstance()->exe('SELECT id, nome, cod FROM setores_grupos WHERE id_setor = ' . $id_setor);
         $retorno = '';
         if ($query->num_rows > 0) {
             while ($obj = $query->fetch_object()) {
@@ -266,7 +265,7 @@ final class BuscaLTE
     /**
      *    Função que retorna os pedidos em análise e o total deles
      *
-     * @param $id_setor id do setor
+     * @param $id_setor int id do setor
      * @return string
      */
     public function getPedidosAnalise(int $id_setor): string {
@@ -356,8 +355,8 @@ final class BuscaLTE
     /**
      *    Função que retornar se um pedido é ou não rascunho.
      *
-     * @param $id_pedido id do pedido.
-     * @return Se o pedido é um rascunho - true, senão false.
+     * @param $id_pedido int id do pedido.
+     * @return bool Se o pedido é um rascunho - true, senão false.
      */
     public function getRequestDraft(int $id_pedido): bool {
         $query = Query::getInstance()->exe('SELECT prioridade FROM pedido WHERE id = ' . $id_pedido);
@@ -368,7 +367,7 @@ final class BuscaLTE
     /**
      *    Função que constroi os radioBtn da análise dos pedidos.
      *
-     * @param $cont Número de radioBtn por linha.
+     * @param $cont int Número de radioBtn por linha.
      * @return string
      */
     public function getStatus(int $cont): string {
@@ -397,7 +396,7 @@ final class BuscaLTE
     /**
      *    Função que retornar os radioBtn das prioridades dos pedidos.
      *
-     * @return Opções de prioridades para os pedidos.
+     * @return string Opções de prioridades para os pedidos.
      */
     public function getPrioridades(): string {
         $count = count(ARRAY_PRIORIDADE);
@@ -464,9 +463,10 @@ final class BuscaLTE
     }
 
     /**
-     *    Função que retorna as permissões do usuário.
+     * Function that returns the User's permissions.
      *
-     * @return JSON com as permissões do usuário no sistema.
+     * @param $id_user int User's id
+     * @return object JSON with the user's permissions in system.
      */
     public function getPermissoes(int $id_user) {
         $query = Query::getInstance()->exe('SELECT noticias, saldos, pedidos, recepcao FROM usuario_permissoes WHERE id_usuario = ' . $id_user);
@@ -518,7 +518,7 @@ final class BuscaLTE
     /**
      *    Função que retorna as solicitações de adiantamentos de saldos enviadas ao SOF para análise.
      *
-     * @param $st Status
+     * @param $st int Status
      * @return string
      */
     public function getSolicAdiantamentos(int $st): string {
@@ -745,7 +745,6 @@ final class BuscaLTE
     public function getSolicAltPedidos(): string {
         $id_setor = $_SESSION['id_setor'];
         $query = Query::getInstance()->exe("SELECT solic_alt_pedido.id_pedido, DATE_FORMAT(solic_alt_pedido.data_solicitacao, '%d/%m/%Y') AS data_solicitacao, DATE_FORMAT(solic_alt_pedido.data_analise, '%d/%m/%Y') AS data_analise, solic_alt_pedido.justificativa, solic_alt_pedido.status, pedido.id_usuario FROM solic_alt_pedido, pedido WHERE pedido.id = solic_alt_pedido.id_pedido AND solic_alt_pedido.id_setor = " . $id_setor . ' ORDER BY solic_alt_pedido.id DESC LIMIT ' . LIMIT_MAX);
-        $status = $label = "";
         $table = new Table('', '', array(), false);
 
         $array_status = ['Reprovado', 'Aprovado', 'Aberto'];
@@ -777,7 +776,6 @@ final class BuscaLTE
     public function getSolicAdiSetor(): string {
         $id_setor = $_SESSION['id_setor'];
         $query = Query::getInstance()->exe("SELECT id, DATE_FORMAT(data_solicitacao, '%d/%m/%Y') AS data_solicitacao, DATE_FORMAT(data_analise, '%d/%m/%Y') AS data_analise, valor_adiantado, justificativa, status FROM saldos_adiantados WHERE id_setor = " . $id_setor . ' ORDER BY id DESC LIMIT ' . LIMIT_MAX);
-        $label = $status = "";
         $array_status = ['Reprovado', 'Aprovado', 'Aberto'];
         $array_lb = ['red', 'green', 'orange'];
 
@@ -984,13 +982,11 @@ final class BuscaLTE
         $onclick = 'pesquisarProcesso';
         $title = 'Pesquisar Processo';
         $icon = 'search';
-        $act = 'Pesquisar';
         if ($tela == 'recepcao') {
             $sql = 'SELECT DISTINCT num_processo FROM itens WHERE num_processo NOT IN (SELECT DISTINCT num_processo FROM processos)';
             $onclick = 'addProcesso';
             $title = 'Adicionar Processo';
             $icon = 'plus';
-            $act = 'Adicionar';
         }
         $query = Query::getInstance()->exe($sql);
         $table = new Table('', '', [], false);
@@ -1019,7 +1015,7 @@ final class BuscaLTE
     /**
      *    Função que retorna a tabela com os lançamentos de saldos pelo SOF
      *
-     * @param $id_setor id do setor
+     * @param $id_setor int id do setor
      * @return string
      */
     public function getLancamentos(int $id_setor): string {

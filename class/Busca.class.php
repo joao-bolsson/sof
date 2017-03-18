@@ -29,6 +29,22 @@ final class Busca {
         // empty
     }
 
+
+    public function scanDataBase() {
+        $query = Query::getInstance()->exe("SELECT id, valor FROM pedido;");
+
+        while ($obj = $query->fetch_object()) {
+            $ped = Query::getInstance()->exe("SELECT sum(valor) AS soma FROM itens_pedido WHERE id_pedido = " . $obj->id);
+            $obj_ped = $ped->fetch_object();
+            $total = number_format($obj->valor, 3, '.', '');
+            $sum = number_format($obj_ped->soma, 3, '.', '');
+            if ($total != $sum) {
+                echo "Pedido " . $obj->id . ": " . $total . " -> " . $sum . "<br>";
+            }
+        }
+    }
+
+
     public function getInfoLog(int $id) {
         $query = Query::getInstance()->exe("SELECT usuario.nome, DATE_FORMAT(entrada, '%d/%m/%Y %H:%i:%s') AS entrada, DATE_FORMAT(saida, '%d/%m/%Y %H:%i:%s') AS saida FROM usuario_hora, usuario WHERE usuario_hora.id_usuario = usuario.id AND usuario_hora.id = " . $id);
 
@@ -131,8 +147,8 @@ final class Busca {
     /**
      *    Função para retornar os processos que estão nos pedidos com suas datas de vencimento
      *
-     * @param $pedido Id do pedido.
-     * @return Uma tabela com os processos e as informações dele.
+     * @param $pedido int Id do pedido.
+     * @return string Uma tabela com os processos e as informações dele.
      */
     public function getProcessosPedido(int $pedido): string {
         $query = Query::getInstance()->exe('SELECT DISTINCT itens.num_processo, itens.dt_fim FROM itens, itens_pedido WHERE itens_pedido.id_pedido = ' . $pedido . ' AND itens_pedido.id_item = itens.id');
@@ -173,12 +189,12 @@ final class Busca {
     }
 
     /**
-     *    Função que que retorna informações de um item para possível edição
+     * Function that returns informations of an item to possible edition.
      *
-     * @param Id do item da tbela itens
-     * @return object
+     * @param $id_item int Item's id in the table items.
+     * @return string
      */
-    public function getInfoItem($id_item) {
+    public function getInfoItem($id_item): string {
         $query = Query::getInstance()->exe("SELECT cod_despesa, descr_despesa, cod_reduzido, dt_fim, complemento_item, replace(vl_unitario, ',', '.') AS vl_unitario, qt_contrato, replace(vl_contrato, ',', '.') AS vl_contrato, qt_utilizado, replace(vl_utilizado, ',', '.') AS vl_utilizado, qt_saldo, replace(vl_saldo, ',', '.') AS vl_saldo, seq_item_processo FROM itens WHERE id = " . $id_item);
         $obj = $query->fetch_object();
         return json_encode($obj);
@@ -187,7 +203,7 @@ final class Busca {
     /**
      *    Função que retornar o empenho de um pedido
      *
-     * @param $id_pedido Id do pedido.
+     * @param $id_pedido int Id do pedido.
      * @return string
      */
     public function verEmpenho(int $id_pedido): string {
@@ -217,8 +233,8 @@ final class Busca {
     }
 
     /**
-     * Retorna o nome do setor.
-     * @param int $id_setor id do setor.
+     * @param $id_setor int Sector's id.
+     * @return string Sector's name.
      */
     public function getSetorNome(int $id_setor): string {
         $query = Query::getInstance()->exe('SELECT nome FROM setores WHERE id = ' . $id_setor);
@@ -227,9 +243,10 @@ final class Busca {
     }
 
     /**
-     *   Função utilizada para retornar as informações de um processo clicado da tabela da recepção.
+     * Function used to returns the informations of a process clicked in the reception's table.
      *
-     * @return Informações do processo.
+     * @param $id_processo int Process's id.
+     * @return string Process's informations.
      */
     public function getInfoProcesso(int $id_processo): string {
         $query = Query::getInstance()->exe('SELECT num_processo, tipo, estante, prateleira, entrada, saida, responsavel, retorno, obs FROM processos WHERE id = ' . $id_processo);
@@ -238,9 +255,10 @@ final class Busca {
     }
 
     /**
-     *    Função que retorna as permissões do usuário.
+     * Function that returns the user's permissions.
      *
-     * @return JSON com as permissões do usuário no sistema.
+     * @param $id_user int User's id.
+     * @return object Object with user's permissions in system.
      */
     public function getPermissoes(int $id_user) {
         $query = Query::getInstance()->exe('SELECT noticias, saldos, pedidos, recepcao FROM usuario_permissoes WHERE id_usuario = ' . $id_user);
@@ -249,9 +267,10 @@ final class Busca {
     }
 
     /**
-     * Função que busca os detalhes de uma notícia completa.
+     * Function that returns the news details.
      *
-     * @return Informação da postagem.
+     * @param $id int News id.
+     * @return string News information.
      */
     public function getInfoNoticia(int $id): string {
         $query = Query::getInstance()->exe('SELECT postagem FROM postagens WHERE id = ' . $id);
@@ -260,9 +279,9 @@ final class Busca {
     }
 
     /**
-     * Função para mostrar uma tabela com todas as publicações de certa página
+     * Function to show a table with all posts of a certain page.
      *
-     * @param $tabela -> filtra por nome da tabela
+     * @param $tabela string Filter by table's name.
      * @return string
      */
     public function getPostagens(string $tabela): string {
@@ -337,12 +356,12 @@ final class Busca {
     }
 
     /**
-     * Função para pesquisar alguma publicação.
+     * Function to search a news.
      *
-     * @return Publicações com o título parecido com $busca.
+     * @param $busca string Title to search.
+     * @return string News with the title similar to $busca.
      */
     public function pesquisar(string $busca): string {
-        $retorno = '';
         $busca = htmlentities($busca);
         $busca = Query::getInstance()->real_escape_string($busca);
         $retorno = "
