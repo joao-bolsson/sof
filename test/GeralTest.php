@@ -10,10 +10,6 @@ use PHPUnit\Framework\TestCase;
  */
 class GeralTest extends TestCase {
 
-    public function setUp() {
-        // empty
-    }
-
     /**
      * Tests the requests total with its sum of items values.
      */
@@ -29,7 +25,4 @@ class GeralTest extends TestCase {
         }
     }
 
-    public function tearDown() {
-        // empty
-    }
 }

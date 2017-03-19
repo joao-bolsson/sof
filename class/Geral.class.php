@@ -45,6 +45,19 @@ final class Geral {
         }
     }
 
+    /**
+     * Update the requests value according its items values.
+     * @param array $req Array with requests to be updated.
+     */
+    private function updateRequests(array $req) {
+        $len = count($req);
+        for ($i = 0; $i < $len; $i++) {
+            $request = $req[$i];
+            $obj = Query::getInstance()->exe("SELECT round(sum(valor), 3) AS sum FROM itens_pedido WHERE id_pedido =  " . $request)->fetch_object();
+            Query::getInstance()->exe("UPDATE pedido SET valor = '" . $obj->sum . "' WHERE id = " . $request);
+        }
+    }
+
     public function editLog(int $id, string $entrada, string $saida) {
         $dateTimeE = DateTime::createFromFormat('d/m/Y H:i:s', $entrada);
         $in = $dateTimeE->format('Y-m-d H:i:s');
@@ -329,6 +342,8 @@ final class Geral {
         // seleciona infos dos pedidos que contém o item editado e que não passaram da análise
         $query = Query::getInstance()->exe("SELECT itens_pedido.id_pedido, itens_pedido.qtd, itens_pedido.valor AS valor_item, pedido.id_setor, pedido.valor AS valor_pedido, saldo_setor.saldo FROM itens_pedido, pedido, saldo_setor WHERE saldo_setor.id_setor = pedido.id_setor AND itens_pedido.id_item = {$data->idItem} AND itens_pedido.id_pedido = pedido.id AND pedido.status <= 2;");
 
+        $pedidos = [];
+        $i = 0;
         while ($obj = $query->fetch_object()) {
             $valorItem = $obj->qtd * $data->vlUnitario;
             Query::getInstance()->exe("UPDATE itens_pedido SET itens_pedido.valor = '{$valorItem}' WHERE itens_pedido.id_item = {$data->idItem} AND itens_pedido.id_pedido = " . $obj->id_pedido);
@@ -337,12 +352,10 @@ final class Geral {
             $saldo_setor = number_format($saldo_setor, 3, '.', '');
             // alterando o saldo do setor
             Query::getInstance()->exe("UPDATE saldo_setor SET saldo_setor.saldo = '{$saldo_setor}' WHERE saldo_setor.id_setor = " . $obj->id_setor);
-            $valorPedido = $obj->valor_pedido - $obj->valor_item;
-            $valorPedido += $valorItem;
-            $valorPedido = number_format($valorPedido, 3, '.', '');
-            // alterando o valor total do pedido
-            Query::getInstance()->exe("UPDATE pedido SET pedido.valor = '{$valorPedido}' WHERE pedido.id = " . $obj->id_pedido);
+
+            $pedidos[$i++] = $obj->id_pedido;
         }
+        $this->updateRequests($pedidos);
         return true;
     }
 
@@ -757,6 +770,7 @@ final class Geral {
                 Query::getInstance()->exe("UPDATE itens SET qt_saldo = {$qtd_disponivel[$i]}, qt_utilizado = {$qtd_utilizado[$i]}, vl_saldo = '{$vl_saldo[$i]}', vl_utilizado = '{$vl_utilizado[$i]}' WHERE id = {$id_item[$i]};");
             }
         }
+        $this->updateRequests([$pedido]);
         return true;
     }
 
