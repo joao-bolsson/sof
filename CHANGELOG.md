@@ -1,5 +1,14 @@
 ## CHANGELOG ##
 
+#### v2.1.10 - 19/03/2017 ####
+- Implementa testes com PHPUnit
+- Corrige bug do somatório no relatório de pedidos selecionados pelo SOF
+- Corrige bug do valor total de pedidos (problema na edição de itens)
+- Relatório para os setores de todos os pedidos que já tem SIAFI
+- Seq item em ordem crescente no pedido impresso
+- Exibe o código do grupo no painel Grupo nas solicitações de empenho
+- Corrige bug ao desfazer liberação e realizar transferência
+
 #### v2.1.9 - 11/03/2017 ####
 - Implementação de classe Query para executar as consultas no banco
 - Correção de bugs e aprimoramento de funções
