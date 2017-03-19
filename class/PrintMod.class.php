@@ -98,8 +98,9 @@ final class PrintMod {
     }
 
     /**
-     * Função para retornar o cabeçalho do pdf do pedido.
+     * Function that returns request header to put in PDF document.
      *
+     * @param int $id_pedido
      * @return string
      */
     public function getHeader(int $id_pedido): string {
@@ -218,6 +219,7 @@ final class PrintMod {
     /**
      * Função para retornar o pedido para um relátório separando-o por licitação e fornecedor
      *
+     * @param int $id_pedido
      * @return string
      */
     public function getContentPedido(int $id_pedido): string {

@@ -5,7 +5,7 @@ include_once 'class/Busca.class.php';
 $obj_Busca = Busca::getInstance();
 
 defined('SALT') or define('SALT', '$1$j:[]bols$');
-defined('VERSION') or define('VERSION', '2.1.9');
+defined('VERSION') or define('VERSION', '2.1.10');
 defined('COPYRIGHT') or define('COPYRIGHT', "<strong>Copyright © 2016-2017 <a href=\"https://github.com/joao-bolsson\">João Bolsson</a>.</strong> All rights reserved.");
 
 defined('ARRAY_STATUS') or define('ARRAY_STATUS', $obj_Busca->getArrayDefines('status'));

@@ -125,6 +125,7 @@ final class BuscaLTE {
     /**
      *    Função para retornar a tabela de notícias de uma página para edição
      *
+     * @param int $tabela
      * @return string
      */
     public function getNoticiasEditar(int $tabela): string {
@@ -188,6 +189,8 @@ final class BuscaLTE {
     }
 
     /**
+     * @param bool $users
+     * @param int $id_setor
      * @return string Lista de usuários cadastrados.
      */
     public function getUsers(bool $users = false, int $id_setor = 0): string {
@@ -488,6 +491,7 @@ final class BuscaLTE {
     /**
      *    Função que retorna a tabela com as solicitações de alteração de pedidos    para o SOF analisar
      *
+     * @param int $st
      * @return string
      */
     public function getAdminSolicAltPedidos(int $st): string {
@@ -613,8 +617,9 @@ final class BuscaLTE {
     /**
      * Função para retornar as solicitações para o SOF.
      *
+     * @param string $where
+     * @param array $pedidos
      * @return string
-     *
      */
     public function getSolicitacoesAdmin(string $where = '', array $pedidos = []): string {
         $query = Query::getInstance()->exe("SELECT id, id_setor, DATE_FORMAT(data_pedido, '%d/%m/%Y') AS data_pedido, prioridade, status, valor, aprov_gerencia FROM pedido WHERE status <> 3 AND alteracao = 0 " . $where . ' ORDER BY id DESC LIMIT ' . LIMIT_MAX);
@@ -686,6 +691,7 @@ final class BuscaLTE {
     /**
      * Função para trazer as informações de um pedido a ser analisado.
      *
+     * @param int $id_pedido
      * @return string
      */
     public function getItensPedidoAnalise(int $id_pedido): string {
@@ -804,6 +810,7 @@ final class BuscaLTE {
     /**
      * Função para mostrar os itens de um processo pesquisado no menu solicitações.
      *
+     * @param string $busca
      * @return string
      */
     public function getConteudoProcesso(string $busca): string {
@@ -837,6 +844,8 @@ final class BuscaLTE {
     /**
      * Função para trazer a linha do item anexado ao pedido
      *
+     * @param int $id_item
+     * @param int $qtd
      * @return string
      */
     public function addItemPedido(int $id_item, int $qtd): string {
@@ -930,6 +939,8 @@ final class BuscaLTE {
     /**
      * Função para o setor acompanhar o andamento do seu pedido.
      *
+     * @param string $where
+     * @param array $pedidos
      * @return string
      */
     public function getMeusPedidos(string $where = '', array $pedidos = []): string {
