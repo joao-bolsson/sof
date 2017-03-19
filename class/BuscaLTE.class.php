@@ -270,16 +270,18 @@ final class BuscaLTE {
      */
     public function getPedidosAnalise(int $id_setor): string {
         $retorno = '';
-        $query = Query::getInstance()->exe('SELECT sum(valor) AS soma FROM pedido WHERE id_setor = ' . $id_setor . ' AND status = 2');
-        if ($query->num_rows > 0) {
-            $obj = $query->fetch_object();
-            $soma = number_format($obj->soma, 3, ',', '.');
-            if ($soma > 0) {
-                $retorno = "
+        $query = Query::getInstance()->exe('SELECT valor FROM pedido WHERE id_setor = ' . $id_setor . ' AND status = 2');
+        $soma = $cont = 0;
+        while ($ped = $query->fetch_object()) {
+            $soma += $ped->valor;
+            $cont++;
+        }
+        if ($soma > 0) {
+            $soma = number_format($soma, 3, ',', '.');
+            $retorno = "
                 <tr>
-                    <td colspan=\"2\">Você tem " . $query->num_rows . " pedido(s) em análise no total de R$ " . $soma . "</td>
+                    <td colspan=\"2\">Você tem " . $cont . " pedido(s) em análise no total de R$ " . $soma . "</td>
                 </tr>";
-            }
         }
         return $retorno;
     }
@@ -1029,7 +1031,7 @@ final class BuscaLTE {
             $cor = ($lancamento->valor < 0) ? 'red' : 'green';
             $setor_transf = ($lancamento->categoria == 3) ? $this->getSetorTransf($lancamento->id) : '';
 
-            $btn = ($_SESSION['id_setor'] == 2 && $lancamento->categoria != 4) ? new Button('', BTN_DEFAULT, "undoFreeMoney(" . $lancamento->id . ")", "data-toggle=\"tooltip\"", 'Desfazer', 'undo') : '';
+            $btn = ($_SESSION['id_setor'] == 2 && $lancamento->categoria != 4 && $lancamento->categoria != 2) ? new Button('', BTN_DEFAULT, "undoFreeMoney(" . $lancamento->id . ")", "data-toggle=\"tooltip\"", 'Desfazer', 'undo') : '';
             $lancamento->valor = number_format($lancamento->valor, 3, ',', '.');
 
             $row = new Row();
