@@ -413,8 +413,13 @@ $select_grupo = $obj_Busca->getOptionsGrupos($id_setor);
                             <input type="hidden" name="relatorio" value="1" />
                             <div class="modal-body">
                                 <div class="form-group">
+                                    <input class="minimal" id="checkSaifi" name="checkSaifi" type="checkbox">
+                                    Contém SIAFI
+                                </div>
+                                <div class="form-group">
                                     <label>Setor</label>
                                     <select class="form-control" name="setor" required>
+                                        <option value="0">Todos</option>
                                         <option value="<?= $_SESSION['id_setor'] ?>"><?= ARRAY_SETORES[$_SESSION['id_setor']] ?></option>
                                     </select>
                                 </div>

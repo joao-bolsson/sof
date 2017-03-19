@@ -94,6 +94,14 @@ $(function () {
         $('#ngera').iCheck('disable');
     }
 
+    element = document.getElementById('checkSaifi');
+    if (element !== null) {
+        $('#checkSaifi').iCheck({
+            checkboxClass: 'icheckbox_minimal-blue',
+            radioClass: 'iradio_minimal-blue'
+        });
+    }
+
 // numero de permissoes
     var perm_count = 4;
     for (var i = 1; i <= perm_count; i++) {

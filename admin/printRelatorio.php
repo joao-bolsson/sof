@@ -53,7 +53,8 @@ if (!is_null($type)) {
                 $status = filter_input(INPUT_POST, 'status', FILTER_DEFAULT, FILTER_FORCE_ARRAY);
                 $dataI = filter_input(INPUT_POST, 'dataI');
                 $dataF = filter_input(INPUT_POST, 'dataF');
-                $html .= $obj_Print->getRelatorioPedidos($id_setor, $prioridade, $status, $dataI, $dataF);
+                $checkSaifi = !empty(filter_input(INPUT_POST, 'checkSaifi'));
+                $html .= $obj_Print->getRelatorioPedidos($id_setor, $prioridade, $status, $dataI, $dataF, $checkSaifi);
                 break;
 
             case 'liberacoes':

@@ -467,11 +467,17 @@ final class PrintMod {
     }
 
     /**
-     *    Função que retonar o relatorio de pedidos.
+     * Function that returns the requests report.
      *
-     * @return string Retorna a interface de um documento pdf.
+     * @param int $id_setor
+     * @param int $prioridade
+     * @param array $status
+     * @param string $dataI
+     * @param string $dataF
+     * @param bool $checkSaifi
+     * @return string Content of PDF document
      */
-    public function getRelatorioPedidos(int $id_setor, int $prioridade, array $status, string $dataI, string $dataF): string {
+    public function getRelatorioPedidos(int $id_setor, int $prioridade, array $status, string $dataI, string $dataF, bool $checkSaifi): string {
         $retorno = '';
         $where_status = '';
         $where_prioridade = ($prioridade != 0) ? 'AND pedido.prioridade = ' . $prioridade : '';
@@ -490,15 +496,18 @@ final class PrintMod {
         }
         $dataIni = Util::getInstance()->dateFormat($dataI);
         $dataFim = Util::getInstance()->dateFormat($dataF);
-        $where_empenho = "";
-        $tb_empenho = "";
-        $empenho = "";
-        if (in_array(8, $status)) {
+        $where_empenho = $tb_empenho = $empenho = "";
+        if (in_array(8, $status) || $checkSaifi) {
             $where_empenho = "AND pedido_empenho.id_pedido = pedido.id";
             $tb_empenho = "pedido_empenho, ";
             $empenho = ", pedido_empenho.empenho";
         }
-        $query = Query::getInstance()->exe("SELECT pedido.id, pedido.id_setor, setores.nome AS setor, DATE_FORMAT(pedido.data_pedido, '%d/%m/%Y') AS data_pedido, prioridade.nome AS prioridade, status.nome AS status, pedido.valor {$empenho} FROM {$tb_empenho} setores, pedido, prioridade, status WHERE status.id = pedido.status {$where_setor} {$where_prioridade} {$where_empenho} AND prioridade.id = pedido.prioridade AND pedido.id_setor = setores.id {$where_status} AND pedido.data_pedido BETWEEN '{$dataIni}' AND '{$dataFim}' ORDER BY pedido.id ASC;");
+
+        // retorna o total de pedidos com os parâmetros (LIMIT para mostrar)
+        $obj_count = Query::getInstance()->exe("SELECT COUNT(pedido.id) AS total FROM {$tb_empenho} setores, pedido, prioridade, status WHERE status.id = pedido.status {$where_setor} {$where_prioridade} {$where_empenho} AND prioridade.id = pedido.prioridade AND pedido.id_setor = setores.id {$where_status} AND pedido.data_pedido BETWEEN '{$dataIni}' AND '{$dataFim}'")->fetch_object();
+        $num_rows = $obj_count->total;
+
+        $query = Query::getInstance()->exe("SELECT pedido.id, pedido.id_setor, setores.nome AS setor, DATE_FORMAT(pedido.data_pedido, '%d/%m/%Y') AS data_pedido, prioridade.nome AS prioridade, status.nome AS status, pedido.valor {$empenho} FROM {$tb_empenho} setores, pedido, prioridade, status WHERE status.id = pedido.status {$where_setor} {$where_prioridade} {$where_empenho} AND prioridade.id = pedido.prioridade AND pedido.id_setor = setores.id {$where_status} AND pedido.data_pedido BETWEEN '{$dataIni}' AND '{$dataFim}' ORDER BY pedido.id DESC LIMIT " . LIMIT_REQ_REPORT);
 
         $titulo = 'Relatório de Pedidos por Setor e Nível de Prioridade';
         $headers = ['Enviado em', 'Prioridade', 'Status', 'Valor'];
@@ -511,7 +520,8 @@ final class PrintMod {
         $total = ($tot->total > 0) ? 'R$ ' . number_format($tot->total, 3, ',', '.') : 'R$ 0';
 
         $row = new Row();
-        $row->addColumn(new Column($query->num_rows . ' resultados encontrados'));
+        $row->addColumn(new Column($num_rows . ' resultados encontrados'));
+        $row->addColumn(new Column('Mostrando ' . $query->num_rows));
         $row->addColumn(new Column('Totalizando ' . $total));
         $retorno .= "
                 <fieldset class=\"preg\">
