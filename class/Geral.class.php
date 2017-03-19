@@ -31,6 +31,20 @@ final class Geral {
         // empty
     }
 
+    public function scanDataBase() {
+        $query = Query::getInstance()->exe("SELECT id, valor FROM pedido;");
+
+        while ($obj = $query->fetch_object()) {
+            $ped = Query::getInstance()->exe("SELECT sum(valor) AS soma FROM itens_pedido WHERE id_pedido = " . $obj->id);
+            $obj_ped = $ped->fetch_object();
+            $total = number_format($obj->valor, 3, '.', '');
+            $sum = number_format($obj_ped->soma, 3, '.', '');
+            if ($total != $sum) {
+                Query::getInstance()->exe("UPDATE pedido SET valor = '" . $sum . "' WHERE id = " . $obj->id);
+            }
+        }
+    }
+
     public function editLog(int $id, string $entrada, string $saida) {
         $dateTimeE = DateTime::createFromFormat('d/m/Y H:i:s', $entrada);
         $in = $dateTimeE->format('Y-m-d H:i:s');
@@ -541,9 +555,9 @@ final class Geral {
     /**
      *    Função para liberação de saldo de um setor
      *
-     * @param int $id_setor.
-     * @param float $valor.
-     * @param float $saldo_atual.
+     * @param int $id_setor .
+     * @param float $valor .
+     * @param float $saldo_atual .
      * @return bool
      */
     public function liberaSaldo(int $id_setor, float $valor, float $saldo_atual): bool {
@@ -688,7 +702,7 @@ final class Geral {
      *   Função para enviar um pedido ao SOF
      *
      * @access public
-     * @param array $id_item  Array com os ids dos itens do pedido.
+     * @param array $id_item Array com os ids dos itens do pedido.
      * @param array $qtd Array com as quantidades dos itens do pedido.
      * @param array $valor Array com os valores dos itens do pedido.
      * @param int $pedido Id do pedido. Se 0, pedido novo, senão editando rascunho ou enviando ao SOF.

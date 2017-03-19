@@ -1031,7 +1031,7 @@ final class BuscaLTE {
             $cor = ($lancamento->valor < 0) ? 'red' : 'green';
             $setor_transf = ($lancamento->categoria == 3) ? $this->getSetorTransf($lancamento->id) : '';
 
-            $btn = ($_SESSION['id_setor'] == 2 && $lancamento->categoria != 4) ? new Button('', BTN_DEFAULT, "undoFreeMoney(" . $lancamento->id . ")", "data-toggle=\"tooltip\"", 'Desfazer', 'undo') : '';
+            $btn = ($_SESSION['id_setor'] == 2 && $lancamento->categoria != 4 && $lancamento->categoria != 2) ? new Button('', BTN_DEFAULT, "undoFreeMoney(" . $lancamento->id . ")", "data-toggle=\"tooltip\"", 'Desfazer', 'undo') : '';
             $lancamento->valor = number_format($lancamento->valor, 3, ',', '.');
 
             $row = new Row();
