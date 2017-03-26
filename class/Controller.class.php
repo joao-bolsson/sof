@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Controls what must be visible in ../view/*
+ * Controller of active session in application.
  *
  * @author João Bolsson (joaovictorbolsson@gmail.com)
  * @since 2017, 26 Feb.
@@ -9,9 +9,24 @@
 class Controller {
 
     /**
+     * @var Controller
+     */
+    private static $INSTANCE;
+
+    /**
+     * @return Controller The controller of this session.
+     */
+    public static function getInstance(): Controller {
+        if (empty(self::$INSTANCE)) {
+            self::$INSTANCE = new Controller();
+        }
+        return self::$INSTANCE;
+    }
+
+    /**
      * Default construct.
      */
-    public function __construct() {
+    private function __construct() {
         if (!isset($_SESSION['id_setor'])) {
             $_SESSION['id_setor'] = 0;
         }

@@ -58,6 +58,7 @@ class Query {
     public function exe(string $sql) {
         $this->openConnection();
 
+        error_log('[' . date("d/m/Y H:i:s ") . "] Executando query: " . $sql . "\n", 3, "../log/info.log");
         $query = $this->mysqli->query($sql) or exit('Erro: ' . $this->mysqli->error);
 
         $this->insert_id = $this->mysqli->insert_id;

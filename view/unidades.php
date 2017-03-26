@@ -8,7 +8,7 @@ spl_autoload_register(function (string $class_name) {
     include_once '../class/' . $class_name . '.class.php';
 });
 
-$controller = new Controller();
+$controller = Controller::getInstance();
 //instanciando classe de busca para popular o select de estados
 $obj_Busca = Busca::getInstance();
 ?>
@@ -391,9 +391,9 @@ $obj_Busca = Busca::getInstance();
         </div>
     </div>
     <!--
-  
+
         MODAIS UNIDADES DE PROGRAMAÇÃO ORÇAMENTÁRIA E FINANCEIRA
-  
+
     -->
     <div aria-hidden="true" class="modal fade" id="progApresentacao" role="dialog" tabindex="-1">
         <div class="modal-dialog">
@@ -553,11 +553,11 @@ $obj_Busca = Busca::getInstance();
         </div>
     </div>
     <!--
-  
-  
+
+
     MODAIS UNIDADE DE LIQUIDAÇÃO E PAGAMENTO DA DESPESA
-  
-  
+
+
     -->
     <div aria-hidden="true" class="modal fade" id="liqApresentacao" role="dialog" tabindex="-1">
         <div class="modal-dialog">
