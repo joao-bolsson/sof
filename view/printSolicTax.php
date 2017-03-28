@@ -23,7 +23,6 @@ $valor = filter_input(INPUT_POST, 'valor');
 include_once '../class/Util.class.php';
 require_once '../defines.php';
 require_once MPDF_PATH . '/vendor/autoload.php';
-$obj_Util = Util::getInstance();
 
 $html_style = "
 <style type=\"text/css\">
@@ -88,7 +87,7 @@ $html_header = "
   </p>
   <hr/>";
 
-$date = new DateTime($obj_Util->dateFormat($dataF));
+$date = new DateTime(Util::dateFormat($dataF));
 $date->add(new DateInterval('P15D'));
 $data_prox = $date->format('d/m/Y');
 $html = "

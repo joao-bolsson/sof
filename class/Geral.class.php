@@ -62,7 +62,7 @@ final class Geral {
         Query::getInstance()->exe("UPDATE usuario_hora SET entrada = '" . $in . "', saida = '" . $out . "' WHERE id = " . $id);
 
         // atualiza horas realizadas
-        $horas = Util::getInstance()->getTimeDiffHora($id);
+        $horas = Util::getTimeDiffHora($id);
         Query::getInstance()->exe('UPDATE usuario_hora SET horas = ' . $horas . ' WHERE id = ' . $id);
     }
 
@@ -77,7 +77,7 @@ final class Geral {
             $id_last = Busca::getLastRegister();
             Query::getInstance()->exe('UPDATE usuario_hora SET saida = NOW() WHERE id = ' . $id_last);
             // atualiza horas realizadas
-            $horas = Util::getInstance()->getTimeDiffHora($id_last);
+            $horas = Util::getTimeDiffHora($id_last);
             Query::getInstance()->exe('UPDATE usuario_hora SET horas = ' . $horas . ' WHERE id = ' . $id_last);
         }
     }

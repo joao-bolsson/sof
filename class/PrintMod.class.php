@@ -31,17 +31,17 @@ final class PrintMod {
      */
     public static function relatorioHora(int $id_usuario, string $periodo): string {
         $array = explode(' - ', $periodo);
-        $dataI = Util::getInstance()->dateFormat($array[0]);
-        $dataF = Util::getInstance()->dateFormat($array[1]);
+        $dataI = Util::dateFormat($array[0]);
+        $dataF = Util::dateFormat($array[1]);
 
         $query = Query::getInstance()->exe("SELECT ip, DATE_FORMAT(entrada, '%d/%m/%Y %H:%i:%s') AS entrada, DATE_FORMAT(saida, '%d/%m/%Y %H:%i:%s') AS saida, horas FROM usuario_hora WHERE (entrada BETWEEN '" . $dataI . "' AND '" . $dataF . "') AND id_usuario = " . $id_usuario);
 
-        $totHoras = number_format(Util::getInstance()->getTotHoras($id_usuario, $periodo), 3, ',', '.');
-        $info = (Util::getInstance()->isCurrentLoggedIn($id_usuario)) ? '<h6>Usuário possui uma saída pendente, a última entrada não foi contabilizada no total.</h6>' : '';
+        $totHoras = number_format(Util::getTotHoras($id_usuario, $periodo), 3, ',', '.');
+        $info = (Util::isCurrentLoggedIn($id_usuario)) ? '<h6>Usuário possui uma saída pendente, a última entrada não foi contabilizada no total.</h6>' : '';
         $retorno = "
             <fieldset class=\"preg\">
                     <h5>DESCRIÇÃO DO RELATÓRIO</h5>
-                    <h6>Relatório de Horários: Usuário " . Util::getInstance()->getUserName($id_usuario) . "
+                    <h6>Relatório de Horários: Usuário " . Util::getUserName($id_usuario) . "
                          | Período: " . $periodo . "</h6>
                     <h6>Total de Horas: " . $totHoras . "</h6>
                     " . $info . "
@@ -113,7 +113,7 @@ final class PrintMod {
                     </tr>
                 </table>
                 <p><b>Total do Pedido:</b> R$ " . $pedido->valor . "</p>
-                <p><b>Autor:</b> " . Util::getInstance()->getUserName($pedido->id_usuario) . "</p>
+                <p><b>Autor:</b> " . Util::getUserName($pedido->id_usuario) . "</p>
                 <table style=\"font-size: 8pt; margin: 5px;\">
                     <tr>
                         <td style=\"text-align: left;\">" . self::getGrupoPedido($id_pedido) . "</td>
@@ -442,8 +442,8 @@ final class PrintMod {
             }
         }
         $where_categoria .= ')';
-        $dataIni = Util::getInstance()->dateFormat($dataI);
-        $dataFim = Util::getInstance()->dateFormat($dataF);
+        $dataIni = Util::dateFormat($dataI);
+        $dataFim = Util::dateFormat($dataF);
 
         $query = Query::getInstance()->exe("SELECT id_setor, DATE_FORMAT(data, '%d/%m/%Y') AS data, valor, categoria FROM saldos_lancamentos WHERE data BETWEEN '" . $dataIni . "' AND '" . $dataFim . "' " . $where_setor . $where_categoria . ' ORDER BY id ASC');
 
@@ -490,8 +490,8 @@ final class PrintMod {
             }
             $where_status .= ") ";
         }
-        $dataIni = Util::getInstance()->dateFormat($dataI);
-        $dataFim = Util::getInstance()->dateFormat($dataF);
+        $dataIni = Util::dateFormat($dataI);
+        $dataFim = Util::dateFormat($dataF);
         $where_empenho = $tb_empenho = $empenho = "";
         if (in_array(8, $status) || $checkSaifi) {
             $where_empenho = "AND pedido_empenho.id_pedido = pedido.id";

@@ -12,7 +12,6 @@ session_start();
 spl_autoload_register(function (string $class_name) {
     include_once '../class/' . $class_name . '.class.php';
 });
-$obj_Util = Util::getInstance();
 $permissao = BuscaLTE::getPermissoes($_SESSION["id"]);
 if (!isset($_SESSION["id_setor"]) || $_SESSION["id_setor"] != 2 || !$permissao->noticias) {
     header("Location: ../");
@@ -222,7 +221,7 @@ require_once '../defines.php';
                                         <th>Nome</th>
                                     </tr>
                                 </thead>
-                                <tbody><?= $obj_Util->getArquivosLTE(); ?></tbody>
+                                <tbody><?= Util::getArquivosLTE(); ?></tbody>
                             </table>
                         </div>
                     </div>

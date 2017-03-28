@@ -110,7 +110,7 @@ if (Busca::isActive()) {
                 if (is_null($obj_Util)) {
                     $obj_Util = Util::getInstance();
                 }
-                $senha = $obj_Util->criaSenha();
+                $senha = Util::criaSenha();
 
                 $id_user = Geral::cadUser($nome, $login, $email, $setor, $senha);
 
@@ -219,7 +219,7 @@ if (Busca::isActive()) {
             case 'enviaEmpenho':
                 $id_pedido = filter_input(INPUT_POST, 'id_pedido');
                 $empenho = filter_input(INPUT_POST, 'empenho');
-                $data = $obj_Util->dateFormat(filter_input(INPUT_POST, 'data'));
+                $data = Util::dateFormat(filter_input(INPUT_POST, 'data'));
                 echo $cadastra = Geral::cadastraEmpenho($id_pedido, $empenho, $data);
                 break;
             // comentário
@@ -641,7 +641,7 @@ if (Busca::isActive()) {
                     $email = $input;
                 }
                 // gera uma senha aleatória (sem criptografia)
-                $senha = $obj_Util->criaSenha();
+                $senha = Util::criaSenha();
 
                 $reset = Geral::resetSenha($email, $senha);
 

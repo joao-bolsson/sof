@@ -177,8 +177,7 @@ if (!is_null($admin) && isset($_SESSION['id_setor']) && ($_SESSION['id_setor'] =
 
         case 'addInputsArquivo':
             $qtd = filter_input(INPUT_POST, 'qtd');
-            $obj_Util = Util::getInstance();
-            echo $obj_Util->setInputsArquivo($qtd);
+            echo Util::setInputsArquivo($qtd);
             break;
         default:
             // remove all session variables
