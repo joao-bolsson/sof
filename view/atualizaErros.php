@@ -7,4 +7,4 @@ session_start();
 
 include_once '../class/Geral.class.php';
 
-Geral::getInstance()->scanDataBase();
+Geral::scanDataBase();

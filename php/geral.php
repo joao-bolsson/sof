@@ -29,9 +29,7 @@ spl_autoload_register(function (string $class_name) {
     include_once '../class/' . $class_name . '.class.php';
 });
 
-if (BuscaisActive()) {
-
-    $obj_Geral = Geral::getInstance();
+if (Busca::isActive()) {
     $obj_Util = Util::getInstance();
     $obj_Login = Login::getInstance();
 
@@ -53,13 +51,13 @@ if (BuscaisActive()) {
                 $entrada = filter_input(INPUT_POST, 'entrada');
                 $saida = filter_input(INPUT_POST, 'saida');
 
-                $obj_Geral->editLog($id, $entrada, $saida);
+                Geral::editLog($id, $entrada, $saida);
                 header('Location: ../lte/hora.php');
                 break;
 
             case 'pointRegister':
                 $log = filter_input(INPUT_POST, 'log');
-                echo $obj_Geral->pointRegister($log);
+                Geral::pointRegister($log);
                 break;
 
             case 'cadItens':
@@ -82,20 +80,20 @@ if (BuscaisActive()) {
                     }
                 }
                 $dados['chave'] = $dados['num_processo'] . '#' . $dados['cod_reduzido'] . '#' . $dados['seq_item_processo'];
-                $obj_Geral->cadItensRP($dados, $array_names);
+                Geral::cadItensRP($dados, $array_names);
 
                 break;
 
             case 'undoFreeMoney':
                 $id_lancamento = filter_input(INPUT_POST, 'id_lancamento');
                 if (!empty($id_lancamento)) {
-                    $obj_Geral->undoFreeMoney($id_lancamento);
+                    Geral::undoFreeMoney($id_lancamento);
                 }
                 break;
 
             case 'aprovaGeren':
                 $pedidos = filter_input(INPUT_POST, 'pedidos', FILTER_DEFAULT, FILTER_FORCE_ARRAY);
-                echo $obj_Geral->aprovaGerencia($pedidos);
+                Geral::aprovaGerencia($pedidos);
                 break;
 
             case 'addUser':
@@ -114,7 +112,7 @@ if (BuscaisActive()) {
                 }
                 $senha = $obj_Util->criaSenha();
 
-                $id_user = $obj_Geral->cadUser($nome, $login, $email, $setor, $senha);
+                $id_user = Geral::cadUser($nome, $login, $email, $setor, $senha);
 
                 $noticias = 0;
                 $saldos = 0;
@@ -138,7 +136,7 @@ if (BuscaisActive()) {
                     }
                 }
 
-                $obj_Geral->cadPermissao($id_user, $noticias, $saldos, $pedidos, $recepcao);
+                Geral::cadPermissao($id_user, $noticias, $saldos, $pedidos, $recepcao);
 
                 $from = $obj_Util->mail->Username;
                 $nome_from = utf8_decode("Setor de Orçamento e Finanças do HUSM");
@@ -171,7 +169,7 @@ if (BuscaisActive()) {
                 if (empty($id)) {
                     break;
                 }
-                $obj_Geral->enviaFornecedor($id);
+                Geral::enviaFornecedor($id);
                 break;
 
             case 'enviaOrdenador':
@@ -179,18 +177,18 @@ if (BuscaisActive()) {
                 if (empty($id_pedido)) {
                     break;
                 }
-                echo $obj_Geral->enviaOrdenador($id_pedido);
+                echo Geral::enviaOrdenador($id_pedido);
                 break;
             case 'enviaFontes':
                 $id_pedido = filter_input(INPUT_POST, 'id_pedido');
                 $fonte = filter_input(INPUT_POST, 'fonte');
                 $ptres = filter_input(INPUT_POST, 'ptres');
                 $plano = filter_input(INPUT_POST, 'plano');
-                echo $obj_Geral->cadastraFontes($id_pedido, $fonte, $ptres, $plano);
+                echo Geral::cadastraFontes($id_pedido, $fonte, $ptres, $plano);
                 break;
             case 'resetSystem':
                 if ($_SESSION['login'] == 'joao') {
-                    $obj_Geral->resetSystem();
+                    Geral::resetSystem();
                 }
                 break;
             // comment.
@@ -207,9 +205,9 @@ if (BuscaisActive()) {
                 unset($fields);
                 unset($dados);
                 unset($array_dados);
-                $success = $obj_Geral->editItem($obj_dados);
+                $success = Geral::editItem($obj_dados);
                 if ($success) {
-                    $obj_Geral->editItemFactory($obj_dados);
+                    Geral::editItemFactory($obj_dados);
                     echo 1;
                 } else {
                     echo 0;
@@ -222,7 +220,7 @@ if (BuscaisActive()) {
                 $id_pedido = filter_input(INPUT_POST, 'id_pedido');
                 $empenho = filter_input(INPUT_POST, 'empenho');
                 $data = $obj_Util->dateFormat(filter_input(INPUT_POST, 'data'));
-                echo $cadastra = $obj_Geral->cadastraEmpenho($id_pedido, $empenho, $data);
+                echo $cadastra = Geral::cadastraEmpenho($id_pedido, $empenho, $data);
                 break;
             // comentário
             case 'transfereSaldo':
@@ -230,7 +228,7 @@ if (BuscaisActive()) {
                 $dest = filter_input(INPUT_POST, 'dest');
                 $valor = filter_input(INPUT_POST, 'valor');
                 $just = filter_input(INPUT_POST, 'just');
-                echo $transfere = $obj_Geral->transfereSaldo($ori, $dest, $valor, $just);
+                echo $transfere = Geral::transfereSaldo($ori, $dest, $valor, $just);
 
                 break;
             // comentário
@@ -241,7 +239,7 @@ if (BuscaisActive()) {
                     header("Location: ../lte/");
                     break;
                 }
-                $cadastra = $obj_Geral->newTypeProcess($tipo);
+                $cadastra = Geral::newTypeProcess($tipo);
                 if (!$cadastra) {
                     // remove all session variables
                     session_unset();
@@ -255,7 +253,7 @@ if (BuscaisActive()) {
             case 'recepcao':
                 // array com os dados
                 $dados = filter_input(INPUT_POST, 'dados', FILTER_DEFAULT, FILTER_FORCE_ARRAY);
-                $update = $obj_Geral->updateProcesso($dados);
+                $update = Geral::updateProcesso($dados);
 
                 if ($update) {
                     echo "true";
@@ -316,7 +314,7 @@ if (BuscaisActive()) {
                 // prepara a importação dos itens (insert)
                 $array_sql = $obj_Util->prepareImport($dados);
                 unset($dados);
-                $insert = $obj_Geral->importaItens($array_sql);
+                $insert = Geral::importaItens($array_sql);
                 unset($array_sql);
                 if ($insert) {
                     header("Location: ../lte/");
@@ -332,7 +330,7 @@ if (BuscaisActive()) {
                 $id_pedido = filter_input(INPUT_POST, 'id_pedido');
                 $acao = filter_input(INPUT_POST, 'acao');
 
-                $analisa = $obj_Geral->analisaSolicAlt($id_solic, $id_pedido, $acao);
+                $analisa = Geral::analisaSolicAlt($id_solic, $id_pedido, $acao);
                 echo $analisa;
                 break;
             // comment.
@@ -342,10 +340,10 @@ if (BuscaisActive()) {
                 $id_setor = filter_input(INPUT_POST, 'id_setor');
                 $comentario = filter_input(INPUT_POST, 'comentario');
                 $status = filter_input(INPUT_POST, 'fase');
-                $analisado = $obj_Geral->altStatus($id_pedido, $id_setor, $comentario, $status);
+                $analisado = Geral::altStatus($id_pedido, $id_setor, $comentario, $status);
                 $excluir = filter_input(INPUT_POST, 'excluir');
                 if (!empty($excluir) && $status == 3) {
-                    $obj_Geral->deletePedido($id_pedido);
+                    Geral::deletePedido($id_pedido);
                 }
                 if ($analisado) {
                     header("Location: ../lte/");
@@ -380,11 +378,11 @@ if (BuscaisActive()) {
 
                 $comentario = filter_input(INPUT_POST, 'comentario');
 
-                $analisado = $obj_Geral->pedidoAnalisado($id_pedido, $fase, $prioridade, $id_item, $item_cancelado, $qtd_solicitada, $qt_saldo, $qt_utilizado, $vl_saldo, $vl_utilizado, $valor_item, $saldo_setor, $total_pedido, $comentario);
+                $analisado = Geral::pedidoAnalisado($id_pedido, $fase, $prioridade, $id_item, $item_cancelado, $qtd_solicitada, $qt_saldo, $qt_utilizado, $vl_saldo, $vl_utilizado, $valor_item, $saldo_setor, $total_pedido, $comentario);
 
                 $excluir = filter_input(INPUT_POST, 'excluir');
                 if (!empty($excluir) && $fase == 3) {
-                    $obj_Geral->deletePedido($id_pedido);
+                    Geral::deletePedido($id_pedido);
                 }
                 if ($analisado) {
                     header("Location: ../lte/");
@@ -401,7 +399,7 @@ if (BuscaisActive()) {
 
                 $saldo_atual = Busca::getSaldo($id_setor);
 
-                $libera = $obj_Geral->liberaSaldo($id_setor, $valor, $saldo_atual);
+                $libera = Geral::liberaSaldo($id_setor, $valor, $saldo_atual);
 
                 if ($libera) {
                     echo true;
@@ -416,7 +414,7 @@ if (BuscaisActive()) {
             case 'aprovaAdi':
                 $id = filter_input(INPUT_POST, 'id');
                 $acao = filter_input(INPUT_POST, 'acao');
-                $aprova = $obj_Geral->analisaAdi($id, $acao);
+                $aprova = Geral::analisaAdi($id, $acao);
                 if (!$aprova) {
                     echo "Ocorreu um erro no servidor. Contate o administrador";
                 }
@@ -430,7 +428,7 @@ if (BuscaisActive()) {
                 //encritpando a senha
                 $senha = crypt($input_senha, SALT);
                 //alterando no banco
-                $update = $obj_Geral->updateSenha($id_user, $senha);
+                $update = Geral::updateSenha($id_user, $senha);
                 if ($update) {
                     echo true;
                 } else {
@@ -448,7 +446,7 @@ if (BuscaisActive()) {
 
                 //verificando se o usuário está publicando ou editando notícia
                 if ($funcao == "novanoticia") {
-                    $id_noticia = $obj_Geral->setPost($data, $postagem, $pag);
+                    $id_noticia = Geral::setPost($data, $postagem, $pag);
 
                     if ($id_noticia != 0) {
                         header("Location: ../lte/posts.php");
@@ -458,7 +456,7 @@ if (BuscaisActive()) {
                 } else {
                     $id = filter_input(INPUT_POST, 'id_noticia');
 
-                    $editar = $obj_Geral->editPost($data, $id, $postagem, $pag);
+                    $editar = Geral::editPost($data, $id, $postagem, $pag);
                     if ($editar) {
                         header("Location: ../lte/posts.php");
                     } else {
@@ -483,7 +481,7 @@ if (BuscaisActive()) {
 
             case 'excluirNoticia':
                 $id = filter_input(INPUT_POST, 'id');
-                echo $obj_Geral->excluirNoticia($id);
+                echo Geral::excluirNoticia($id);
                 break;
 
             default:
@@ -505,13 +503,13 @@ if (BuscaisActive()) {
                 $descricao = filter_input(INPUT_POST, 'descr');
                 $id_setor = $_SESSION['id_setor'];
                 $pag = filter_input(INPUT_POST, 'pag'); // like lte/solicitacoes.php
-                $obj_Geral->insereProblema($id_setor, $assunto, $descricao);
+                Geral::insereProblema($id_setor, $assunto, $descricao);
                 header('Location: ../' . $pag);
                 break;
 
             case 'deletePedido':
                 $id_pedido = filter_input(INPUT_POST, 'id_pedido');
-                echo $delete = $obj_Geral->deletePedido($id_pedido);
+                echo $delete = Geral::deletePedido($id_pedido);
                 break;
             // redefinindo informações do usuário
             case 'infoUser':
@@ -521,7 +519,7 @@ if (BuscaisActive()) {
                 $novaSenha = filter_input(INPUT_POST, 'novaSenha');
                 $senhaAtual = filter_input(INPUT_POST, 'senhaAtual');
 
-                $redefini = $obj_Geral->altInfoUser($id_user, $nome, $email, $novaSenha, $senhaAtual);
+                $redefini = Geral::altInfoUser($id_user, $nome, $email, $novaSenha, $senhaAtual);
                 echo $redefini;
                 break;
 
@@ -532,7 +530,7 @@ if (BuscaisActive()) {
                 $justificativa = filter_input(INPUT_POST, 'justificativa');
                 $id_setor = $_SESSION["id_setor"];
 
-                $solicita = $obj_Geral->solicAltPedido($id_pedido, $id_setor, $justificativa);
+                $solicita = Geral::solicAltPedido($id_pedido, $id_setor, $justificativa);
                 echo $solicita;
                 break;
             case 'adiantamento':
@@ -540,7 +538,7 @@ if (BuscaisActive()) {
                 $justificativa = filter_input(INPUT_POST, 'justificativa');
                 $id_setor = $_SESSION["id_setor"];
 
-                $envia = $obj_Geral->solicitaAdiantamento($id_setor, $valor, $justificativa);
+                $envia = Geral::solicitaAdiantamento($id_setor, $valor, $justificativa);
                 if ($envia) {
                     header("Location: ../lte/solicitacoes.php");
                 } else {
@@ -587,7 +585,7 @@ if (BuscaisActive()) {
                     $pedido_contrato = 1;
                 }
 
-                $obj_Geral->insertPedido($id_user, $id_setor, $id_item, $qtd_solicitada, $qtd_disponivel, $qtd_contrato, $qtd_utilizado, $vl_saldo, $vl_contrato, $vl_utilizado, $valor, $total_pedido, $saldo_total, $prioridade, $obs, $pedido, $pedido_contrato);
+                Geral::insertPedido($id_user, $id_setor, $id_item, $qtd_solicitada, $qtd_disponivel, $qtd_contrato, $qtd_utilizado, $vl_saldo, $vl_contrato, $vl_utilizado, $valor, $total_pedido, $saldo_total, $prioridade, $obs, $pedido, $pedido_contrato);
 
                 // licitação
                 $idLic = filter_input(INPUT_POST, 'idLic');
@@ -604,11 +602,11 @@ if (BuscaisActive()) {
                     $geraContrato = 0;
                 }
 
-                $obj_Geral->insertLicitacao($numero, $uasg, $procOri, $tipo, $pedido, $idLic, $geraContrato);
+                Geral::insertLicitacao($numero, $uasg, $procOri, $tipo, $pedido, $idLic, $geraContrato);
 
                 $grupo = filter_input(INPUT_POST, 'grupo');
                 if (!empty($grupo)) {
-                    $obj_Geral->insertGrupoPedido($pedido, $grupo, $pedido_existe);
+                    Geral::insertGrupoPedido($pedido, $grupo, $pedido_existe);
                 }
 
                 // pedido de contrato
@@ -624,7 +622,7 @@ if (BuscaisActive()) {
                         exit("Pedido inserido. Erro ao ler o SIAFI.");
                     }
                 }
-                $obj_Geral->insertPedContr($pedido, $tipo_cont, $siafi);
+                Geral::insertPedContr($pedido, $tipo_cont, $siafi);
 
                 header("Location: ../lte/solicitacoes.php");
                 break;
@@ -645,7 +643,7 @@ if (BuscaisActive()) {
                 // gera uma senha aleatória (sem criptografia)
                 $senha = $obj_Util->criaSenha();
 
-                $reset = $obj_Geral->resetSenha($email, $senha);
+                $reset = Geral::resetSenha($email, $senha);
 
                 if ($reset == "Sucesso") {
                     $from = $obj_Util->mail->Username;
