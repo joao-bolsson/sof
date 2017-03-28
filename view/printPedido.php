@@ -13,9 +13,7 @@ if (isset($_SESSION['imprimirPedido']) && $_SESSION['imprimirPedido'] && $_SESSI
     require_once '../defines.php';
     require_once MPDF_PATH . '/vendor/autoload.php';
 
-    $obj_Print = PrintMod::getInstance();
-
-    $id_setor = $obj_Print->getSetorPedido($id_pedido);
+    $id_setor = PrintMod::getSetorPedido($id_pedido);
 
     $html_style = "
         <link rel=\"stylesheet\" type=\"text/css\" href=\"../relatorios.css\"/>
@@ -33,18 +31,18 @@ if (isset($_SESSION['imprimirPedido']) && $_SESSION['imprimirPedido'] && $_SESSI
             <img src=\"" . $img . "\"/>
           </p>
           <hr/>";
-    $html_header .= $obj_Print->getHeader($id_pedido);
+    $html_header .= PrintMod::getHeader($id_pedido);
     $html_itens = "
         <fieldset>
             <h5>DESCRIÇÃO DO PEDIDO</h5>
         </fieldset><br>";
-    $html_itens .= $obj_Print->getContentPedido($id_pedido);
+    $html_itens .= PrintMod::getContentPedido($id_pedido);
 
     $html_rel = "
         <fieldset>
             <h5>COMENTÁRIOS DO SOF</h5>
         </fieldset><br>";
-    $html_rel .= $obj_Print->getComentarios($id_pedido);
+    $html_rel .= PrintMod::getComentarios($id_pedido);
     $html = $html_style . $html_header . $html_itens . $html_rel . "</body>";
     $mpdf = new mPDF();
     date_default_timezone_set('America/Sao_Paulo');
@@ -59,7 +57,7 @@ if (isset($_SESSION['imprimirPedido']) && $_SESSION['imprimirPedido'] && $_SESSI
     $data = date('j/m/Y  H:i');
     //definimos oque vai conter no rodape do pdf
     $mpdf->SetFooter($data . '||Página {PAGENO}/{nb}');
-    //e escreve todo conteudo html vindo de nossa página html em nosso arquivo
+    //e escreve o conteudo html vindo de nossa página html em nosso arquivo
     $mpdf->WriteHTML($html);
     //fechamos nossa instancia ao pdf
     $mpdf->Output();

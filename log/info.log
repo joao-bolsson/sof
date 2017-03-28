@@ -1,0 +1,1215 @@
+[28/03/2017 18:22:50 ] Executando query: SELECT ativo FROM sistema LIMIT 1
+[28/03/2017 18:22:50 ] Executando query: SELECT id, nome, senha, email, id_setor FROM usuario WHERE BINARY login = 'joao' LIMIT 1
+[28/03/2017 18:22:50 ] Executando query: SELECT nome FROM setores WHERE id = 2 LIMIT 1
+[28/03/2017 18:22:50 ] Executando query: SELECT postagens.id, postagens.postagem, DATE_FORMAT(postagens.data, '%d/%m/%Y') AS data, paginas_post.tabela, postagens.titulo FROM postagens, paginas_post WHERE postagens.tabela = paginas_post.id AND postagens.ativa = 1 ORDER BY postagens.data DESC LIMIT 5
+[28/03/2017 18:22:50 ] Executando query: SELECT postagens.id, postagens.postagem, DATE_FORMAT(postagens.data, '%d/%m/%Y') AS data, paginas_post.tabela, postagens.titulo FROM postagens, paginas_post WHERE postagens.tabela = paginas_post.id AND postagens.ativa = 1 ORDER BY rand() LIMIT 5
+[28/03/2017 18:22:50 ] Executando query: SELECT * FROM status
+[28/03/2017 18:22:50 ] Executando query: SELECT * FROM prioridade
+[28/03/2017 18:22:50 ] Executando query: SELECT * FROM setores
+[28/03/2017 18:22:50 ] Executando query: SELECT * FROM saldo_categoria
+[28/03/2017 18:22:51 ] Executando query: SELECT noticias, saldos, pedidos, recepcao FROM usuario_permissoes WHERE id_usuario = 1
+[28/03/2017 18:22:51 ] Executando query: SELECT count(saldos_adiantados.id) AS solic_adi, (SELECT count(solic_alt_pedido.id) FROM solic_alt_pedido WHERE solic_alt_pedido.status = 2) AS solic_alt, (SELECT count(pedido.id) FROM pedido WHERE pedido.status = 2) AS solic_ped FROM saldos_adiantados WHERE saldos_adiantados.status = 2
+[28/03/2017 18:22:51 ] Executando query: SELECT saldo FROM saldo_setor WHERE id_setor = 2
+[28/03/2017 18:22:51 ] Executando query: SELECT id, nome, id_setor FROM usuario  ORDER BY nome ASC
+[28/03/2017 18:22:51 ] Executando query: SELECT column_name AS nome FROM information_schema.columns WHERE table_name = 'usuario_permissoes' AND column_name <> 'id_usuario'
+[28/03/2017 18:22:52 ] Executando query: SELECT noticias, saldos, pedidos, recepcao FROM usuario_permissoes WHERE id_usuario = 1
+[28/03/2017 18:22:52 ] Executando query: SELECT * FROM status
+[28/03/2017 18:22:52 ] Executando query: SELECT * FROM prioridade
+[28/03/2017 18:22:52 ] Executando query: SELECT * FROM setores
+[28/03/2017 18:22:52 ] Executando query: SELECT * FROM saldo_categoria
+[28/03/2017 18:22:52 ] Executando query: SELECT id, id_setor, DATE_FORMAT(data_pedido, '%d/%m/%Y') AS data_pedido, prioridade, status, valor, aprov_gerencia FROM pedido WHERE status <> 3 AND alteracao = 0  ORDER BY id DESC LIMIT 100
+[28/03/2017 18:22:52 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1169
+[28/03/2017 18:22:52 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1169
+[28/03/2017 18:22:52 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1169
+[28/03/2017 18:22:52 ] Executando query: SELECT DATE_FORMAT(data, '%d/%m/%Y') AS data FROM pedido_empenho WHERE id_pedido = 1169 LIMIT 1
+[28/03/2017 18:22:52 ] Executando query: SELECT itens.nome_fornecedor FROM itens, itens_pedido WHERE itens_pedido.id_item = itens.id AND itens_pedido.id_pedido = 1169 LIMIT 1
+[28/03/2017 18:22:52 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1168
+[28/03/2017 18:22:52 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1168
+[28/03/2017 18:22:52 ] Executando query: SELECT itens.nome_fornecedor FROM itens, itens_pedido WHERE itens_pedido.id_item = itens.id AND itens_pedido.id_pedido = 1168 LIMIT 1
+[28/03/2017 18:22:52 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1167
+[28/03/2017 18:22:52 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1167
+[28/03/2017 18:22:52 ] Executando query: SELECT itens.nome_fornecedor FROM itens, itens_pedido WHERE itens_pedido.id_item = itens.id AND itens_pedido.id_pedido = 1167 LIMIT 1
+[28/03/2017 18:22:52 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1166
+[28/03/2017 18:22:52 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1166
+[28/03/2017 18:22:52 ] Executando query: SELECT itens.nome_fornecedor FROM itens, itens_pedido WHERE itens_pedido.id_item = itens.id AND itens_pedido.id_pedido = 1166 LIMIT 1
+[28/03/2017 18:22:52 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1164
+[28/03/2017 18:22:52 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1164
+[28/03/2017 18:22:52 ] Executando query: SELECT itens.nome_fornecedor FROM itens, itens_pedido WHERE itens_pedido.id_item = itens.id AND itens_pedido.id_pedido = 1164 LIMIT 1
+[28/03/2017 18:22:52 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1163
+[28/03/2017 18:22:52 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1163
+[28/03/2017 18:22:52 ] Executando query: SELECT itens.nome_fornecedor FROM itens, itens_pedido WHERE itens_pedido.id_item = itens.id AND itens_pedido.id_pedido = 1163 LIMIT 1
+[28/03/2017 18:22:52 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1162
+[28/03/2017 18:22:52 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1162
+[28/03/2017 18:22:52 ] Executando query: SELECT itens.nome_fornecedor FROM itens, itens_pedido WHERE itens_pedido.id_item = itens.id AND itens_pedido.id_pedido = 1162 LIMIT 1
+[28/03/2017 18:22:52 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1161
+[28/03/2017 18:22:52 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1161
+[28/03/2017 18:22:52 ] Executando query: SELECT itens.nome_fornecedor FROM itens, itens_pedido WHERE itens_pedido.id_item = itens.id AND itens_pedido.id_pedido = 1161 LIMIT 1
+[28/03/2017 18:22:52 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1160
+[28/03/2017 18:22:52 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1160
+[28/03/2017 18:22:52 ] Executando query: SELECT itens.nome_fornecedor FROM itens, itens_pedido WHERE itens_pedido.id_item = itens.id AND itens_pedido.id_pedido = 1160 LIMIT 1
+[28/03/2017 18:22:52 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1159
+[28/03/2017 18:22:52 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1159
+[28/03/2017 18:22:52 ] Executando query: SELECT itens.nome_fornecedor FROM itens, itens_pedido WHERE itens_pedido.id_item = itens.id AND itens_pedido.id_pedido = 1159 LIMIT 1
+[28/03/2017 18:22:52 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1158
+[28/03/2017 18:22:52 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1158
+[28/03/2017 18:22:52 ] Executando query: SELECT itens.nome_fornecedor FROM itens, itens_pedido WHERE itens_pedido.id_item = itens.id AND itens_pedido.id_pedido = 1158 LIMIT 1
+[28/03/2017 18:22:52 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1157
+[28/03/2017 18:22:52 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1157
+[28/03/2017 18:22:52 ] Executando query: SELECT itens.nome_fornecedor FROM itens, itens_pedido WHERE itens_pedido.id_item = itens.id AND itens_pedido.id_pedido = 1157 LIMIT 1
+[28/03/2017 18:22:52 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1156
+[28/03/2017 18:22:52 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1156
+[28/03/2017 18:22:52 ] Executando query: SELECT itens.nome_fornecedor FROM itens, itens_pedido WHERE itens_pedido.id_item = itens.id AND itens_pedido.id_pedido = 1156 LIMIT 1
+[28/03/2017 18:22:52 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1155
+[28/03/2017 18:22:52 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1155
+[28/03/2017 18:22:52 ] Executando query: SELECT itens.nome_fornecedor FROM itens, itens_pedido WHERE itens_pedido.id_item = itens.id AND itens_pedido.id_pedido = 1155 LIMIT 1
+[28/03/2017 18:22:52 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1154
+[28/03/2017 18:22:52 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1154
+[28/03/2017 18:22:52 ] Executando query: SELECT itens.nome_fornecedor FROM itens, itens_pedido WHERE itens_pedido.id_item = itens.id AND itens_pedido.id_pedido = 1154 LIMIT 1
+[28/03/2017 18:22:52 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1153
+[28/03/2017 18:22:52 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1153
+[28/03/2017 18:22:52 ] Executando query: SELECT itens.nome_fornecedor FROM itens, itens_pedido WHERE itens_pedido.id_item = itens.id AND itens_pedido.id_pedido = 1153 LIMIT 1
+[28/03/2017 18:22:52 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1152
+[28/03/2017 18:22:52 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1152
+[28/03/2017 18:22:52 ] Executando query: SELECT itens.nome_fornecedor FROM itens, itens_pedido WHERE itens_pedido.id_item = itens.id AND itens_pedido.id_pedido = 1152 LIMIT 1
+[28/03/2017 18:22:52 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1151
+[28/03/2017 18:22:52 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1151
+[28/03/2017 18:22:52 ] Executando query: SELECT itens.nome_fornecedor FROM itens, itens_pedido WHERE itens_pedido.id_item = itens.id AND itens_pedido.id_pedido = 1151 LIMIT 1
+[28/03/2017 18:22:52 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1150
+[28/03/2017 18:22:52 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1150
+[28/03/2017 18:22:52 ] Executando query: SELECT itens.nome_fornecedor FROM itens, itens_pedido WHERE itens_pedido.id_item = itens.id AND itens_pedido.id_pedido = 1150 LIMIT 1
+[28/03/2017 18:22:52 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1149
+[28/03/2017 18:22:52 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1149
+[28/03/2017 18:22:52 ] Executando query: SELECT itens.nome_fornecedor FROM itens, itens_pedido WHERE itens_pedido.id_item = itens.id AND itens_pedido.id_pedido = 1149 LIMIT 1
+[28/03/2017 18:22:52 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1148
+[28/03/2017 18:22:52 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1148
+[28/03/2017 18:22:52 ] Executando query: SELECT itens.nome_fornecedor FROM itens, itens_pedido WHERE itens_pedido.id_item = itens.id AND itens_pedido.id_pedido = 1148 LIMIT 1
+[28/03/2017 18:22:52 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1147
+[28/03/2017 18:22:52 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1147
+[28/03/2017 18:22:52 ] Executando query: SELECT itens.nome_fornecedor FROM itens, itens_pedido WHERE itens_pedido.id_item = itens.id AND itens_pedido.id_pedido = 1147 LIMIT 1
+[28/03/2017 18:22:52 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1146
+[28/03/2017 18:22:52 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1146
+[28/03/2017 18:22:52 ] Executando query: SELECT itens.nome_fornecedor FROM itens, itens_pedido WHERE itens_pedido.id_item = itens.id AND itens_pedido.id_pedido = 1146 LIMIT 1
+[28/03/2017 18:22:52 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1145
+[28/03/2017 18:22:52 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1145
+[28/03/2017 18:22:52 ] Executando query: SELECT itens.nome_fornecedor FROM itens, itens_pedido WHERE itens_pedido.id_item = itens.id AND itens_pedido.id_pedido = 1145 LIMIT 1
+[28/03/2017 18:22:52 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1144
+[28/03/2017 18:22:52 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1144
+[28/03/2017 18:22:52 ] Executando query: SELECT itens.nome_fornecedor FROM itens, itens_pedido WHERE itens_pedido.id_item = itens.id AND itens_pedido.id_pedido = 1144 LIMIT 1
+[28/03/2017 18:22:52 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1143
+[28/03/2017 18:22:52 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1143
+[28/03/2017 18:22:52 ] Executando query: SELECT itens.nome_fornecedor FROM itens, itens_pedido WHERE itens_pedido.id_item = itens.id AND itens_pedido.id_pedido = 1143 LIMIT 1
+[28/03/2017 18:22:52 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1139
+[28/03/2017 18:22:52 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1139
+[28/03/2017 18:22:52 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1139
+[28/03/2017 18:22:52 ] Executando query: SELECT DATE_FORMAT(data, '%d/%m/%Y') AS data FROM pedido_empenho WHERE id_pedido = 1139 LIMIT 1
+[28/03/2017 18:22:52 ] Executando query: SELECT itens.nome_fornecedor FROM itens, itens_pedido WHERE itens_pedido.id_item = itens.id AND itens_pedido.id_pedido = 1139 LIMIT 1
+[28/03/2017 18:22:52 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1138
+[28/03/2017 18:22:52 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1138
+[28/03/2017 18:22:52 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1138
+[28/03/2017 18:22:52 ] Executando query: SELECT DATE_FORMAT(data, '%d/%m/%Y') AS data FROM pedido_empenho WHERE id_pedido = 1138 LIMIT 1
+[28/03/2017 18:22:52 ] Executando query: SELECT itens.nome_fornecedor FROM itens, itens_pedido WHERE itens_pedido.id_item = itens.id AND itens_pedido.id_pedido = 1138 LIMIT 1
+[28/03/2017 18:22:52 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1137
+[28/03/2017 18:22:52 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1137
+[28/03/2017 18:22:52 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1137
+[28/03/2017 18:22:52 ] Executando query: SELECT DATE_FORMAT(data, '%d/%m/%Y') AS data FROM pedido_empenho WHERE id_pedido = 1137 LIMIT 1
+[28/03/2017 18:22:52 ] Executando query: SELECT itens.nome_fornecedor FROM itens, itens_pedido WHERE itens_pedido.id_item = itens.id AND itens_pedido.id_pedido = 1137 LIMIT 1
+[28/03/2017 18:22:52 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1136
+[28/03/2017 18:22:52 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1136
+[28/03/2017 18:22:52 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1136
+[28/03/2017 18:22:52 ] Executando query: SELECT DATE_FORMAT(data, '%d/%m/%Y') AS data FROM pedido_empenho WHERE id_pedido = 1136 LIMIT 1
+[28/03/2017 18:22:52 ] Executando query: SELECT itens.nome_fornecedor FROM itens, itens_pedido WHERE itens_pedido.id_item = itens.id AND itens_pedido.id_pedido = 1136 LIMIT 1
+[28/03/2017 18:22:52 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1135
+[28/03/2017 18:22:52 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1135
+[28/03/2017 18:22:52 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1135
+[28/03/2017 18:22:52 ] Executando query: SELECT DATE_FORMAT(data, '%d/%m/%Y') AS data FROM pedido_empenho WHERE id_pedido = 1135 LIMIT 1
+[28/03/2017 18:22:52 ] Executando query: SELECT itens.nome_fornecedor FROM itens, itens_pedido WHERE itens_pedido.id_item = itens.id AND itens_pedido.id_pedido = 1135 LIMIT 1
+[28/03/2017 18:22:52 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1134
+[28/03/2017 18:22:52 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1134
+[28/03/2017 18:22:52 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1134
+[28/03/2017 18:22:52 ] Executando query: SELECT DATE_FORMAT(data, '%d/%m/%Y') AS data FROM pedido_empenho WHERE id_pedido = 1134 LIMIT 1
+[28/03/2017 18:22:52 ] Executando query: SELECT itens.nome_fornecedor FROM itens, itens_pedido WHERE itens_pedido.id_item = itens.id AND itens_pedido.id_pedido = 1134 LIMIT 1
+[28/03/2017 18:22:52 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1132
+[28/03/2017 18:22:52 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1132
+[28/03/2017 18:22:52 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1132
+[28/03/2017 18:22:52 ] Executando query: SELECT DATE_FORMAT(data, '%d/%m/%Y') AS data FROM pedido_empenho WHERE id_pedido = 1132 LIMIT 1
+[28/03/2017 18:22:52 ] Executando query: SELECT itens.nome_fornecedor FROM itens, itens_pedido WHERE itens_pedido.id_item = itens.id AND itens_pedido.id_pedido = 1132 LIMIT 1
+[28/03/2017 18:22:52 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1131
+[28/03/2017 18:22:52 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1131
+[28/03/2017 18:22:52 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1131
+[28/03/2017 18:22:52 ] Executando query: SELECT DATE_FORMAT(data, '%d/%m/%Y') AS data FROM pedido_empenho WHERE id_pedido = 1131 LIMIT 1
+[28/03/2017 18:22:52 ] Executando query: SELECT itens.nome_fornecedor FROM itens, itens_pedido WHERE itens_pedido.id_item = itens.id AND itens_pedido.id_pedido = 1131 LIMIT 1
+[28/03/2017 18:22:52 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1130
+[28/03/2017 18:22:52 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1130
+[28/03/2017 18:22:52 ] Executando query: SELECT itens.nome_fornecedor FROM itens, itens_pedido WHERE itens_pedido.id_item = itens.id AND itens_pedido.id_pedido = 1130 LIMIT 1
+[28/03/2017 18:22:52 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1129
+[28/03/2017 18:22:52 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1129
+[28/03/2017 18:22:52 ] Executando query: SELECT itens.nome_fornecedor FROM itens, itens_pedido WHERE itens_pedido.id_item = itens.id AND itens_pedido.id_pedido = 1129 LIMIT 1
+[28/03/2017 18:22:52 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1128
+[28/03/2017 18:22:52 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1128
+[28/03/2017 18:22:52 ] Executando query: SELECT itens.nome_fornecedor FROM itens, itens_pedido WHERE itens_pedido.id_item = itens.id AND itens_pedido.id_pedido = 1128 LIMIT 1
+[28/03/2017 18:22:52 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1127
+[28/03/2017 18:22:52 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1127
+[28/03/2017 18:22:52 ] Executando query: SELECT itens.nome_fornecedor FROM itens, itens_pedido WHERE itens_pedido.id_item = itens.id AND itens_pedido.id_pedido = 1127 LIMIT 1
+[28/03/2017 18:22:52 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1126
+[28/03/2017 18:22:52 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1126
+[28/03/2017 18:22:52 ] Executando query: SELECT itens.nome_fornecedor FROM itens, itens_pedido WHERE itens_pedido.id_item = itens.id AND itens_pedido.id_pedido = 1126 LIMIT 1
+[28/03/2017 18:22:52 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1125
+[28/03/2017 18:22:52 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1125
+[28/03/2017 18:22:52 ] Executando query: SELECT itens.nome_fornecedor FROM itens, itens_pedido WHERE itens_pedido.id_item = itens.id AND itens_pedido.id_pedido = 1125 LIMIT 1
+[28/03/2017 18:22:52 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1124
+[28/03/2017 18:22:52 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1124
+[28/03/2017 18:22:52 ] Executando query: SELECT itens.nome_fornecedor FROM itens, itens_pedido WHERE itens_pedido.id_item = itens.id AND itens_pedido.id_pedido = 1124 LIMIT 1
+[28/03/2017 18:22:52 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1123
+[28/03/2017 18:22:52 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1123
+[28/03/2017 18:22:52 ] Executando query: SELECT itens.nome_fornecedor FROM itens, itens_pedido WHERE itens_pedido.id_item = itens.id AND itens_pedido.id_pedido = 1123 LIMIT 1
+[28/03/2017 18:22:52 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1122
+[28/03/2017 18:22:52 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1122
+[28/03/2017 18:22:52 ] Executando query: SELECT itens.nome_fornecedor FROM itens, itens_pedido WHERE itens_pedido.id_item = itens.id AND itens_pedido.id_pedido = 1122 LIMIT 1
+[28/03/2017 18:22:52 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1121
+[28/03/2017 18:22:52 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1121
+[28/03/2017 18:22:52 ] Executando query: SELECT itens.nome_fornecedor FROM itens, itens_pedido WHERE itens_pedido.id_item = itens.id AND itens_pedido.id_pedido = 1121 LIMIT 1
+[28/03/2017 18:22:52 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1120
+[28/03/2017 18:22:52 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1120
+[28/03/2017 18:22:52 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1120
+[28/03/2017 18:22:52 ] Executando query: SELECT DATE_FORMAT(data, '%d/%m/%Y') AS data FROM pedido_empenho WHERE id_pedido = 1120 LIMIT 1
+[28/03/2017 18:22:52 ] Executando query: SELECT itens.nome_fornecedor FROM itens, itens_pedido WHERE itens_pedido.id_item = itens.id AND itens_pedido.id_pedido = 1120 LIMIT 1
+[28/03/2017 18:22:52 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1119
+[28/03/2017 18:22:52 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1119
+[28/03/2017 18:22:52 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1119
+[28/03/2017 18:22:52 ] Executando query: SELECT DATE_FORMAT(data, '%d/%m/%Y') AS data FROM pedido_empenho WHERE id_pedido = 1119 LIMIT 1
+[28/03/2017 18:22:52 ] Executando query: SELECT itens.nome_fornecedor FROM itens, itens_pedido WHERE itens_pedido.id_item = itens.id AND itens_pedido.id_pedido = 1119 LIMIT 1
+[28/03/2017 18:22:52 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1118
+[28/03/2017 18:22:52 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1118
+[28/03/2017 18:22:52 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1118
+[28/03/2017 18:22:52 ] Executando query: SELECT DATE_FORMAT(data, '%d/%m/%Y') AS data FROM pedido_empenho WHERE id_pedido = 1118 LIMIT 1
+[28/03/2017 18:22:52 ] Executando query: SELECT itens.nome_fornecedor FROM itens, itens_pedido WHERE itens_pedido.id_item = itens.id AND itens_pedido.id_pedido = 1118 LIMIT 1
+[28/03/2017 18:22:52 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1117
+[28/03/2017 18:22:52 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1117
+[28/03/2017 18:22:52 ] Executando query: SELECT itens.nome_fornecedor FROM itens, itens_pedido WHERE itens_pedido.id_item = itens.id AND itens_pedido.id_pedido = 1117 LIMIT 1
+[28/03/2017 18:22:52 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1116
+[28/03/2017 18:22:52 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1116
+[28/03/2017 18:22:52 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1116
+[28/03/2017 18:22:52 ] Executando query: SELECT DATE_FORMAT(data, '%d/%m/%Y') AS data FROM pedido_empenho WHERE id_pedido = 1116 LIMIT 1
+[28/03/2017 18:22:52 ] Executando query: SELECT itens.nome_fornecedor FROM itens, itens_pedido WHERE itens_pedido.id_item = itens.id AND itens_pedido.id_pedido = 1116 LIMIT 1
+[28/03/2017 18:22:52 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1115
+[28/03/2017 18:22:52 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1115
+[28/03/2017 18:22:52 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1115
+[28/03/2017 18:22:52 ] Executando query: SELECT DATE_FORMAT(data, '%d/%m/%Y') AS data FROM pedido_empenho WHERE id_pedido = 1115 LIMIT 1
+[28/03/2017 18:22:52 ] Executando query: SELECT itens.nome_fornecedor FROM itens, itens_pedido WHERE itens_pedido.id_item = itens.id AND itens_pedido.id_pedido = 1115 LIMIT 1
+[28/03/2017 18:22:52 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1114
+[28/03/2017 18:22:52 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1114
+[28/03/2017 18:22:52 ] Executando query: SELECT itens.nome_fornecedor FROM itens, itens_pedido WHERE itens_pedido.id_item = itens.id AND itens_pedido.id_pedido = 1114 LIMIT 1
+[28/03/2017 18:22:52 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1113
+[28/03/2017 18:22:52 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1113
+[28/03/2017 18:22:52 ] Executando query: SELECT itens.nome_fornecedor FROM itens, itens_pedido WHERE itens_pedido.id_item = itens.id AND itens_pedido.id_pedido = 1113 LIMIT 1
+[28/03/2017 18:22:52 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1112
+[28/03/2017 18:22:52 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1112
+[28/03/2017 18:22:52 ] Executando query: SELECT itens.nome_fornecedor FROM itens, itens_pedido WHERE itens_pedido.id_item = itens.id AND itens_pedido.id_pedido = 1112 LIMIT 1
+[28/03/2017 18:22:52 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1111
+[28/03/2017 18:22:52 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1111
+[28/03/2017 18:22:52 ] Executando query: SELECT itens.nome_fornecedor FROM itens, itens_pedido WHERE itens_pedido.id_item = itens.id AND itens_pedido.id_pedido = 1111 LIMIT 1
+[28/03/2017 18:22:52 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1110
+[28/03/2017 18:22:52 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1110
+[28/03/2017 18:22:52 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1110
+[28/03/2017 18:22:52 ] Executando query: SELECT DATE_FORMAT(data, '%d/%m/%Y') AS data FROM pedido_empenho WHERE id_pedido = 1110 LIMIT 1
+[28/03/2017 18:22:52 ] Executando query: SELECT itens.nome_fornecedor FROM itens, itens_pedido WHERE itens_pedido.id_item = itens.id AND itens_pedido.id_pedido = 1110 LIMIT 1
+[28/03/2017 18:22:52 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1109
+[28/03/2017 18:22:52 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1109
+[28/03/2017 18:22:52 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1109
+[28/03/2017 18:22:52 ] Executando query: SELECT DATE_FORMAT(data, '%d/%m/%Y') AS data FROM pedido_empenho WHERE id_pedido = 1109 LIMIT 1
+[28/03/2017 18:22:52 ] Executando query: SELECT itens.nome_fornecedor FROM itens, itens_pedido WHERE itens_pedido.id_item = itens.id AND itens_pedido.id_pedido = 1109 LIMIT 1
+[28/03/2017 18:22:52 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1108
+[28/03/2017 18:22:52 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1108
+[28/03/2017 18:22:52 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1108
+[28/03/2017 18:22:52 ] Executando query: SELECT DATE_FORMAT(data, '%d/%m/%Y') AS data FROM pedido_empenho WHERE id_pedido = 1108 LIMIT 1
+[28/03/2017 18:22:52 ] Executando query: SELECT itens.nome_fornecedor FROM itens, itens_pedido WHERE itens_pedido.id_item = itens.id AND itens_pedido.id_pedido = 1108 LIMIT 1
+[28/03/2017 18:22:52 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1107
+[28/03/2017 18:22:52 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1107
+[28/03/2017 18:22:52 ] Executando query: SELECT itens.nome_fornecedor FROM itens, itens_pedido WHERE itens_pedido.id_item = itens.id AND itens_pedido.id_pedido = 1107 LIMIT 1
+[28/03/2017 18:22:52 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1106
+[28/03/2017 18:22:52 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1106
+[28/03/2017 18:22:52 ] Executando query: SELECT itens.nome_fornecedor FROM itens, itens_pedido WHERE itens_pedido.id_item = itens.id AND itens_pedido.id_pedido = 1106 LIMIT 1
+[28/03/2017 18:22:52 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1105
+[28/03/2017 18:22:52 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1105
+[28/03/2017 18:22:52 ] Executando query: SELECT itens.nome_fornecedor FROM itens, itens_pedido WHERE itens_pedido.id_item = itens.id AND itens_pedido.id_pedido = 1105 LIMIT 1
+[28/03/2017 18:22:52 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1104
+[28/03/2017 18:22:52 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1104
+[28/03/2017 18:22:52 ] Executando query: SELECT itens.nome_fornecedor FROM itens, itens_pedido WHERE itens_pedido.id_item = itens.id AND itens_pedido.id_pedido = 1104 LIMIT 1
+[28/03/2017 18:22:52 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1103
+[28/03/2017 18:22:52 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1103
+[28/03/2017 18:22:52 ] Executando query: SELECT itens.nome_fornecedor FROM itens, itens_pedido WHERE itens_pedido.id_item = itens.id AND itens_pedido.id_pedido = 1103 LIMIT 1
+[28/03/2017 18:22:52 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1102
+[28/03/2017 18:22:52 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1102
+[28/03/2017 18:22:52 ] Executando query: SELECT itens.nome_fornecedor FROM itens, itens_pedido WHERE itens_pedido.id_item = itens.id AND itens_pedido.id_pedido = 1102 LIMIT 1
+[28/03/2017 18:22:52 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1101
+[28/03/2017 18:22:52 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1101
+[28/03/2017 18:22:52 ] Executando query: SELECT itens.nome_fornecedor FROM itens, itens_pedido WHERE itens_pedido.id_item = itens.id AND itens_pedido.id_pedido = 1101 LIMIT 1
+[28/03/2017 18:22:52 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1100
+[28/03/2017 18:22:52 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1100
+[28/03/2017 18:22:52 ] Executando query: SELECT itens.nome_fornecedor FROM itens, itens_pedido WHERE itens_pedido.id_item = itens.id AND itens_pedido.id_pedido = 1100 LIMIT 1
+[28/03/2017 18:22:52 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1099
+[28/03/2017 18:22:52 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1099
+[28/03/2017 18:22:52 ] Executando query: SELECT itens.nome_fornecedor FROM itens, itens_pedido WHERE itens_pedido.id_item = itens.id AND itens_pedido.id_pedido = 1099 LIMIT 1
+[28/03/2017 18:22:52 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1098
+[28/03/2017 18:22:52 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1098
+[28/03/2017 18:22:52 ] Executando query: SELECT itens.nome_fornecedor FROM itens, itens_pedido WHERE itens_pedido.id_item = itens.id AND itens_pedido.id_pedido = 1098 LIMIT 1
+[28/03/2017 18:22:52 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1097
+[28/03/2017 18:22:52 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1097
+[28/03/2017 18:22:52 ] Executando query: SELECT itens.nome_fornecedor FROM itens, itens_pedido WHERE itens_pedido.id_item = itens.id AND itens_pedido.id_pedido = 1097 LIMIT 1
+[28/03/2017 18:22:52 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1096
+[28/03/2017 18:22:52 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1096
+[28/03/2017 18:22:52 ] Executando query: SELECT itens.nome_fornecedor FROM itens, itens_pedido WHERE itens_pedido.id_item = itens.id AND itens_pedido.id_pedido = 1096 LIMIT 1
+[28/03/2017 18:22:52 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1095
+[28/03/2017 18:22:52 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1095
+[28/03/2017 18:22:52 ] Executando query: SELECT itens.nome_fornecedor FROM itens, itens_pedido WHERE itens_pedido.id_item = itens.id AND itens_pedido.id_pedido = 1095 LIMIT 1
+[28/03/2017 18:22:52 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1094
+[28/03/2017 18:22:52 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1094
+[28/03/2017 18:22:52 ] Executando query: SELECT itens.nome_fornecedor FROM itens, itens_pedido WHERE itens_pedido.id_item = itens.id AND itens_pedido.id_pedido = 1094 LIMIT 1
+[28/03/2017 18:22:52 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1093
+[28/03/2017 18:22:52 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1093
+[28/03/2017 18:22:52 ] Executando query: SELECT itens.nome_fornecedor FROM itens, itens_pedido WHERE itens_pedido.id_item = itens.id AND itens_pedido.id_pedido = 1093 LIMIT 1
+[28/03/2017 18:22:52 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1092
+[28/03/2017 18:22:52 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1092
+[28/03/2017 18:22:52 ] Executando query: SELECT itens.nome_fornecedor FROM itens, itens_pedido WHERE itens_pedido.id_item = itens.id AND itens_pedido.id_pedido = 1092 LIMIT 1
+[28/03/2017 18:22:52 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1091
+[28/03/2017 18:22:52 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1091
+[28/03/2017 18:22:52 ] Executando query: SELECT itens.nome_fornecedor FROM itens, itens_pedido WHERE itens_pedido.id_item = itens.id AND itens_pedido.id_pedido = 1091 LIMIT 1
+[28/03/2017 18:22:52 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1090
+[28/03/2017 18:22:52 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1090
+[28/03/2017 18:22:52 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1090
+[28/03/2017 18:22:52 ] Executando query: SELECT DATE_FORMAT(data, '%d/%m/%Y') AS data FROM pedido_empenho WHERE id_pedido = 1090 LIMIT 1
+[28/03/2017 18:22:52 ] Executando query: SELECT itens.nome_fornecedor FROM itens, itens_pedido WHERE itens_pedido.id_item = itens.id AND itens_pedido.id_pedido = 1090 LIMIT 1
+[28/03/2017 18:22:52 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1089
+[28/03/2017 18:22:52 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1089
+[28/03/2017 18:22:52 ] Executando query: SELECT itens.nome_fornecedor FROM itens, itens_pedido WHERE itens_pedido.id_item = itens.id AND itens_pedido.id_pedido = 1089 LIMIT 1
+[28/03/2017 18:22:52 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1088
+[28/03/2017 18:22:52 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1088
+[28/03/2017 18:22:52 ] Executando query: SELECT itens.nome_fornecedor FROM itens, itens_pedido WHERE itens_pedido.id_item = itens.id AND itens_pedido.id_pedido = 1088 LIMIT 1
+[28/03/2017 18:22:52 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1087
+[28/03/2017 18:22:52 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1087
+[28/03/2017 18:22:52 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1087
+[28/03/2017 18:22:52 ] Executando query: SELECT DATE_FORMAT(data, '%d/%m/%Y') AS data FROM pedido_empenho WHERE id_pedido = 1087 LIMIT 1
+[28/03/2017 18:22:52 ] Executando query: SELECT itens.nome_fornecedor FROM itens, itens_pedido WHERE itens_pedido.id_item = itens.id AND itens_pedido.id_pedido = 1087 LIMIT 1
+[28/03/2017 18:22:52 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1086
+[28/03/2017 18:22:52 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1086
+[28/03/2017 18:22:52 ] Executando query: SELECT itens.nome_fornecedor FROM itens, itens_pedido WHERE itens_pedido.id_item = itens.id AND itens_pedido.id_pedido = 1086 LIMIT 1
+[28/03/2017 18:22:52 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1085
+[28/03/2017 18:22:52 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1085
+[28/03/2017 18:22:52 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1085
+[28/03/2017 18:22:52 ] Executando query: SELECT DATE_FORMAT(data, '%d/%m/%Y') AS data FROM pedido_empenho WHERE id_pedido = 1085 LIMIT 1
+[28/03/2017 18:22:52 ] Executando query: SELECT itens.nome_fornecedor FROM itens, itens_pedido WHERE itens_pedido.id_item = itens.id AND itens_pedido.id_pedido = 1085 LIMIT 1
+[28/03/2017 18:22:52 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1084
+[28/03/2017 18:22:52 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1084
+[28/03/2017 18:22:52 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1084
+[28/03/2017 18:22:52 ] Executando query: SELECT DATE_FORMAT(data, '%d/%m/%Y') AS data FROM pedido_empenho WHERE id_pedido = 1084 LIMIT 1
+[28/03/2017 18:22:52 ] Executando query: SELECT itens.nome_fornecedor FROM itens, itens_pedido WHERE itens_pedido.id_item = itens.id AND itens_pedido.id_pedido = 1084 LIMIT 1
+[28/03/2017 18:22:52 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1083
+[28/03/2017 18:22:52 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1083
+[28/03/2017 18:22:52 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1083
+[28/03/2017 18:22:52 ] Executando query: SELECT DATE_FORMAT(data, '%d/%m/%Y') AS data FROM pedido_empenho WHERE id_pedido = 1083 LIMIT 1
+[28/03/2017 18:22:52 ] Executando query: SELECT itens.nome_fornecedor FROM itens, itens_pedido WHERE itens_pedido.id_item = itens.id AND itens_pedido.id_pedido = 1083 LIMIT 1
+[28/03/2017 18:22:52 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1082
+[28/03/2017 18:22:52 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1082
+[28/03/2017 18:22:52 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1082
+[28/03/2017 18:22:52 ] Executando query: SELECT DATE_FORMAT(data, '%d/%m/%Y') AS data FROM pedido_empenho WHERE id_pedido = 1082 LIMIT 1
+[28/03/2017 18:22:52 ] Executando query: SELECT itens.nome_fornecedor FROM itens, itens_pedido WHERE itens_pedido.id_item = itens.id AND itens_pedido.id_pedido = 1082 LIMIT 1
+[28/03/2017 18:22:52 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1081
+[28/03/2017 18:22:52 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1081
+[28/03/2017 18:22:52 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1081
+[28/03/2017 18:22:52 ] Executando query: SELECT DATE_FORMAT(data, '%d/%m/%Y') AS data FROM pedido_empenho WHERE id_pedido = 1081 LIMIT 1
+[28/03/2017 18:22:52 ] Executando query: SELECT itens.nome_fornecedor FROM itens, itens_pedido WHERE itens_pedido.id_item = itens.id AND itens_pedido.id_pedido = 1081 LIMIT 1
+[28/03/2017 18:22:52 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1080
+[28/03/2017 18:22:52 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1080
+[28/03/2017 18:22:52 ] Executando query: SELECT itens.nome_fornecedor FROM itens, itens_pedido WHERE itens_pedido.id_item = itens.id AND itens_pedido.id_pedido = 1080 LIMIT 1
+[28/03/2017 18:22:52 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1079
+[28/03/2017 18:22:52 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1079
+[28/03/2017 18:22:52 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1079
+[28/03/2017 18:22:52 ] Executando query: SELECT DATE_FORMAT(data, '%d/%m/%Y') AS data FROM pedido_empenho WHERE id_pedido = 1079 LIMIT 1
+[28/03/2017 18:22:52 ] Executando query: SELECT itens.nome_fornecedor FROM itens, itens_pedido WHERE itens_pedido.id_item = itens.id AND itens_pedido.id_pedido = 1079 LIMIT 1
+[28/03/2017 18:22:52 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1078
+[28/03/2017 18:22:52 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1078
+[28/03/2017 18:22:52 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1078
+[28/03/2017 18:22:52 ] Executando query: SELECT DATE_FORMAT(data, '%d/%m/%Y') AS data FROM pedido_empenho WHERE id_pedido = 1078 LIMIT 1
+[28/03/2017 18:22:52 ] Executando query: SELECT itens.nome_fornecedor FROM itens, itens_pedido WHERE itens_pedido.id_item = itens.id AND itens_pedido.id_pedido = 1078 LIMIT 1
+[28/03/2017 18:22:52 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1077
+[28/03/2017 18:22:52 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1077
+[28/03/2017 18:22:52 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1077
+[28/03/2017 18:22:52 ] Executando query: SELECT DATE_FORMAT(data, '%d/%m/%Y') AS data FROM pedido_empenho WHERE id_pedido = 1077 LIMIT 1
+[28/03/2017 18:22:52 ] Executando query: SELECT itens.nome_fornecedor FROM itens, itens_pedido WHERE itens_pedido.id_item = itens.id AND itens_pedido.id_pedido = 1077 LIMIT 1
+[28/03/2017 18:22:52 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1076
+[28/03/2017 18:22:52 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1076
+[28/03/2017 18:22:52 ] Executando query: SELECT itens.nome_fornecedor FROM itens, itens_pedido WHERE itens_pedido.id_item = itens.id AND itens_pedido.id_pedido = 1076 LIMIT 1
+[28/03/2017 18:22:52 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1075
+[28/03/2017 18:22:52 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1075
+[28/03/2017 18:22:52 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1075
+[28/03/2017 18:22:52 ] Executando query: SELECT DATE_FORMAT(data, '%d/%m/%Y') AS data FROM pedido_empenho WHERE id_pedido = 1075 LIMIT 1
+[28/03/2017 18:22:52 ] Executando query: SELECT itens.nome_fornecedor FROM itens, itens_pedido WHERE itens_pedido.id_item = itens.id AND itens_pedido.id_pedido = 1075 LIMIT 1
+[28/03/2017 18:22:52 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1074
+[28/03/2017 18:22:52 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1074
+[28/03/2017 18:22:52 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1074
+[28/03/2017 18:22:52 ] Executando query: SELECT DATE_FORMAT(data, '%d/%m/%Y') AS data FROM pedido_empenho WHERE id_pedido = 1074 LIMIT 1
+[28/03/2017 18:22:52 ] Executando query: SELECT itens.nome_fornecedor FROM itens, itens_pedido WHERE itens_pedido.id_item = itens.id AND itens_pedido.id_pedido = 1074 LIMIT 1
+[28/03/2017 18:22:52 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1073
+[28/03/2017 18:22:52 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1073
+[28/03/2017 18:22:52 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1073
+[28/03/2017 18:22:52 ] Executando query: SELECT DATE_FORMAT(data, '%d/%m/%Y') AS data FROM pedido_empenho WHERE id_pedido = 1073 LIMIT 1
+[28/03/2017 18:22:52 ] Executando query: SELECT itens.nome_fornecedor FROM itens, itens_pedido WHERE itens_pedido.id_item = itens.id AND itens_pedido.id_pedido = 1073 LIMIT 1
+[28/03/2017 18:22:52 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1072
+[28/03/2017 18:22:52 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1072
+[28/03/2017 18:22:52 ] Executando query: SELECT itens.nome_fornecedor FROM itens, itens_pedido WHERE itens_pedido.id_item = itens.id AND itens_pedido.id_pedido = 1072 LIMIT 1
+[28/03/2017 18:22:52 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1071
+[28/03/2017 18:22:52 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1071
+[28/03/2017 18:22:52 ] Executando query: SELECT itens.nome_fornecedor FROM itens, itens_pedido WHERE itens_pedido.id_item = itens.id AND itens_pedido.id_pedido = 1071 LIMIT 1
+[28/03/2017 18:22:52 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1070
+[28/03/2017 18:22:52 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1070
+[28/03/2017 18:22:52 ] Executando query: SELECT itens.nome_fornecedor FROM itens, itens_pedido WHERE itens_pedido.id_item = itens.id AND itens_pedido.id_pedido = 1070 LIMIT 1
+[28/03/2017 18:22:52 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1069
+[28/03/2017 18:22:52 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1069
+[28/03/2017 18:22:52 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1069
+[28/03/2017 18:22:52 ] Executando query: SELECT DATE_FORMAT(data, '%d/%m/%Y') AS data FROM pedido_empenho WHERE id_pedido = 1069 LIMIT 1
+[28/03/2017 18:22:52 ] Executando query: SELECT itens.nome_fornecedor FROM itens, itens_pedido WHERE itens_pedido.id_item = itens.id AND itens_pedido.id_pedido = 1069 LIMIT 1
+[28/03/2017 18:22:52 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1068
+[28/03/2017 18:22:52 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1068
+[28/03/2017 18:22:52 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1068
+[28/03/2017 18:22:52 ] Executando query: SELECT DATE_FORMAT(data, '%d/%m/%Y') AS data FROM pedido_empenho WHERE id_pedido = 1068 LIMIT 1
+[28/03/2017 18:22:52 ] Executando query: SELECT itens.nome_fornecedor FROM itens, itens_pedido WHERE itens_pedido.id_item = itens.id AND itens_pedido.id_pedido = 1068 LIMIT 1
+[28/03/2017 18:22:52 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1066
+[28/03/2017 18:22:52 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1066
+[28/03/2017 18:22:52 ] Executando query: SELECT itens.nome_fornecedor FROM itens, itens_pedido WHERE itens_pedido.id_item = itens.id AND itens_pedido.id_pedido = 1066 LIMIT 1
+[28/03/2017 18:22:52 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1065
+[28/03/2017 18:22:52 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1065
+[28/03/2017 18:22:52 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1065
+[28/03/2017 18:22:52 ] Executando query: SELECT DATE_FORMAT(data, '%d/%m/%Y') AS data FROM pedido_empenho WHERE id_pedido = 1065 LIMIT 1
+[28/03/2017 18:22:52 ] Executando query: SELECT itens.nome_fornecedor FROM itens, itens_pedido WHERE itens_pedido.id_item = itens.id AND itens_pedido.id_pedido = 1065 LIMIT 1
+[28/03/2017 18:22:52 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1064
+[28/03/2017 18:22:52 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1064
+[28/03/2017 18:22:52 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1064
+[28/03/2017 18:22:52 ] Executando query: SELECT DATE_FORMAT(data, '%d/%m/%Y') AS data FROM pedido_empenho WHERE id_pedido = 1064 LIMIT 1
+[28/03/2017 18:22:52 ] Executando query: SELECT itens.nome_fornecedor FROM itens, itens_pedido WHERE itens_pedido.id_item = itens.id AND itens_pedido.id_pedido = 1064 LIMIT 1
+[28/03/2017 18:22:52 ] Executando query: SELECT saldo FROM saldo_setor WHERE id_setor = 2
+[28/03/2017 18:22:54 ] Executando query: SELECT * FROM status
+[28/03/2017 18:22:54 ] Executando query: SELECT * FROM prioridade
+[28/03/2017 18:22:54 ] Executando query: SELECT * FROM setores
+[28/03/2017 18:22:54 ] Executando query: SELECT * FROM saldo_categoria
+[28/03/2017 18:22:54 ] Executando query: SELECT prioridade FROM pedido WHERE id = 1169
+[28/03/2017 18:22:54 ] Executando query: SELECT * FROM status
+[28/03/2017 18:22:54 ] Executando query: SELECT * FROM prioridade
+[28/03/2017 18:22:54 ] Executando query: SELECT * FROM setores
+[28/03/2017 18:22:54 ] Executando query: SELECT * FROM saldo_categoria
+[28/03/2017 18:22:54 ] Executando query: SELECT id_setor FROM pedido WHERE id = 1169
+[28/03/2017 18:22:54 ] Executando query: SELECT pedido.id, DATE_FORMAT(pedido.data_pedido, '%d/%m/%Y') AS data_pedido, EXTRACT(YEAR FROM pedido.data_pedido) AS ano, mes.sigla_mes AS ref_mes, status.nome AS status, pedido.valor AS valor, pedido.obs, pedido.pedido_contrato, prioridade.nome AS prioridade, pedido.aprov_gerencia, pedido.id_usuario FROM prioridade, pedido, mes, status WHERE pedido.prioridade = prioridade.id AND status.id = pedido.status AND pedido.id = 1169 AND mes.id = pedido.ref_mes
+[28/03/2017 18:22:54 ] Executando query: SELECT usuario.nome FROM usuario WHERE usuario.id = 15
+[28/03/2017 18:22:54 ] Executando query: SELECT setores_grupos.nome, pedido_grupo.id_pedido FROM setores_grupos, pedido_grupo WHERE pedido_grupo.id_grupo = setores_grupos.id AND pedido_grupo.id_pedido = 1169
+[28/03/2017 18:22:54 ] Executando query: SELECT contrato_tipo.nome, pedido_contrato.siafi FROM contrato_tipo, pedido_contrato WHERE pedido_contrato.id_tipo = contrato_tipo.id AND pedido_contrato.id_pedido = 1169
+[28/03/2017 18:22:54 ] Executando query: SELECT fonte_recurso, ptres, plano_interno FROM pedido_fonte WHERE id_pedido = 1169
+[28/03/2017 18:22:54 ] Executando query: SELECT licitacao.tipo AS id_tipo, licitacao_tipo.nome AS tipo, licitacao.numero, licitacao.uasg, licitacao.processo_original, licitacao.gera_contrato FROM licitacao, licitacao_tipo WHERE licitacao_tipo.id = licitacao.tipo AND licitacao.id_pedido = 1169 LIMIT 1
+[28/03/2017 18:22:54 ] Executando query: SELECT DISTINCT itens.num_licitacao, itens.num_processo, itens.dt_inicio, itens.dt_fim FROM itens_pedido, itens WHERE itens.id = itens_pedido.id_item AND itens_pedido.id_pedido = 1169
+[28/03/2017 18:22:54 ] Executando query: SELECT DISTINCT itens.cgc_fornecedor, itens.nome_fornecedor, itens.num_contrato FROM itens, itens_pedido WHERE itens.id = itens_pedido.id_item AND itens_pedido.id_pedido = 1169 AND itens.num_licitacao = 164
+[28/03/2017 18:22:54 ] Executando query: SELECT itens.cod_reduzido, itens.cod_despesa, itens.seq_item_processo, itens.complemento_item, itens.vl_unitario, itens_pedido.qtd, itens_pedido.valor FROM itens, itens_pedido WHERE itens.id = itens_pedido.id_item AND itens_pedido.id_pedido = 1169 AND itens.cgc_fornecedor = '00986846000142' ORDER BY CAST(itens.seq_item_processo AS UNSIGNED) ASC
+[28/03/2017 18:22:54 ] Executando query: SELECT pedido_empenho.empenho, DATE_FORMAT(pedido_empenho.data, '%d/%m/%Y') AS data FROM pedido_empenho WHERE pedido_empenho.id_pedido = 1169
+[28/03/2017 18:22:54 ] Executando query: SELECT DATE_FORMAT(comentarios.data_coment, '%d/%m/%Y') AS data_coment, comentarios.comentario FROM comentarios, prioridade WHERE prioridade.id = comentarios.prioridade AND comentarios.id_pedido = 1169
+[28/03/2017 18:23:51 ] Executando query: SELECT * FROM status
+[28/03/2017 18:23:51 ] Executando query: SELECT * FROM prioridade
+[28/03/2017 18:23:51 ] Executando query: SELECT * FROM setores
+[28/03/2017 18:23:51 ] Executando query: SELECT * FROM saldo_categoria
+[28/03/2017 18:23:51 ] Executando query: SELECT id_setor FROM pedido WHERE id = 1169
+[28/03/2017 18:23:51 ] Executando query: SELECT pedido.id, DATE_FORMAT(pedido.data_pedido, '%d/%m/%Y') AS data_pedido, EXTRACT(YEAR FROM pedido.data_pedido) AS ano, mes.sigla_mes AS ref_mes, status.nome AS status, pedido.valor AS valor, pedido.obs, pedido.pedido_contrato, prioridade.nome AS prioridade, pedido.aprov_gerencia, pedido.id_usuario FROM prioridade, pedido, mes, status WHERE pedido.prioridade = prioridade.id AND status.id = pedido.status AND pedido.id = 1169 AND mes.id = pedido.ref_mes
+[28/03/2017 18:23:51 ] Executando query: SELECT usuario.nome FROM usuario WHERE usuario.id = 15
+[28/03/2017 18:23:51 ] Executando query: SELECT setores_grupos.nome, pedido_grupo.id_pedido FROM setores_grupos, pedido_grupo WHERE pedido_grupo.id_grupo = setores_grupos.id AND pedido_grupo.id_pedido = 1169
+[28/03/2017 18:23:51 ] Executando query: SELECT contrato_tipo.nome, pedido_contrato.siafi FROM contrato_tipo, pedido_contrato WHERE pedido_contrato.id_tipo = contrato_tipo.id AND pedido_contrato.id_pedido = 1169
+[28/03/2017 18:23:51 ] Executando query: SELECT fonte_recurso, ptres, plano_interno FROM pedido_fonte WHERE id_pedido = 1169
+[28/03/2017 18:23:51 ] Executando query: SELECT licitacao.tipo AS id_tipo, licitacao_tipo.nome AS tipo, licitacao.numero, licitacao.uasg, licitacao.processo_original, licitacao.gera_contrato FROM licitacao, licitacao_tipo WHERE licitacao_tipo.id = licitacao.tipo AND licitacao.id_pedido = 1169 LIMIT 1
+[28/03/2017 18:23:51 ] Executando query: SELECT DISTINCT itens.num_licitacao, itens.num_processo, itens.dt_inicio, itens.dt_fim FROM itens_pedido, itens WHERE itens.id = itens_pedido.id_item AND itens_pedido.id_pedido = 1169
+[28/03/2017 18:23:51 ] Executando query: SELECT DISTINCT itens.cgc_fornecedor, itens.nome_fornecedor, itens.num_contrato FROM itens, itens_pedido WHERE itens.id = itens_pedido.id_item AND itens_pedido.id_pedido = 1169 AND itens.num_licitacao = 164
+[28/03/2017 18:23:51 ] Executando query: SELECT itens.cod_reduzido, itens.cod_despesa, itens.seq_item_processo, itens.complemento_item, itens.vl_unitario, itens_pedido.qtd, itens_pedido.valor FROM itens, itens_pedido WHERE itens.id = itens_pedido.id_item AND itens_pedido.id_pedido = 1169 AND itens.cgc_fornecedor = '00986846000142' ORDER BY CAST(itens.seq_item_processo AS UNSIGNED) ASC
+[28/03/2017 18:23:51 ] Executando query: SELECT pedido_empenho.empenho, DATE_FORMAT(pedido_empenho.data, '%d/%m/%Y') AS data FROM pedido_empenho WHERE pedido_empenho.id_pedido = 1169
+[28/03/2017 18:23:51 ] Executando query: SELECT DATE_FORMAT(comentarios.data_coment, '%d/%m/%Y') AS data_coment, comentarios.comentario FROM comentarios, prioridade WHERE prioridade.id = comentarios.prioridade AND comentarios.id_pedido = 1169
+[28/03/2017 18:24:07 ] Executando query: SELECT * FROM status
+[28/03/2017 18:24:07 ] Executando query: SELECT * FROM prioridade
+[28/03/2017 18:24:07 ] Executando query: SELECT * FROM setores
+[28/03/2017 18:24:07 ] Executando query: SELECT * FROM saldo_categoria
+[28/03/2017 18:24:07 ] Executando query: SELECT noticias, saldos, pedidos, recepcao FROM usuario_permissoes WHERE id_usuario = 1
+[28/03/2017 18:24:07 ] Executando query: SELECT count(saldos_adiantados.id) AS solic_adi, (SELECT count(solic_alt_pedido.id) FROM solic_alt_pedido WHERE solic_alt_pedido.status = 2) AS solic_alt, (SELECT count(pedido.id) FROM pedido WHERE pedido.status = 2) AS solic_ped FROM saldos_adiantados WHERE saldos_adiantados.status = 2
+[28/03/2017 18:24:07 ] Executando query: SELECT saldo FROM saldo_setor WHERE id_setor = 2
+[28/03/2017 18:24:07 ] Executando query: SELECT id, nome, id_setor FROM usuario  ORDER BY nome ASC
+[28/03/2017 18:24:07 ] Executando query: SELECT column_name AS nome FROM information_schema.columns WHERE table_name = 'usuario_permissoes' AND column_name <> 'id_usuario'
+[28/03/2017 18:24:09 ] Executando query: SELECT noticias, saldos, pedidos, recepcao FROM usuario_permissoes WHERE id_usuario = 1
+[28/03/2017 18:24:09 ] Executando query: SELECT * FROM status
+[28/03/2017 18:24:09 ] Executando query: SELECT * FROM prioridade
+[28/03/2017 18:24:09 ] Executando query: SELECT * FROM setores
+[28/03/2017 18:24:09 ] Executando query: SELECT * FROM saldo_categoria
+[28/03/2017 18:24:09 ] Executando query: SELECT id, id_setor, DATE_FORMAT(data_pedido, '%d/%m/%Y') AS data_pedido, prioridade, status, valor, aprov_gerencia FROM pedido WHERE status <> 3 AND alteracao = 0  ORDER BY id DESC LIMIT 100
+[28/03/2017 18:24:09 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1169
+[28/03/2017 18:24:09 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1169
+[28/03/2017 18:24:09 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1169
+[28/03/2017 18:24:09 ] Executando query: SELECT DATE_FORMAT(data, '%d/%m/%Y') AS data FROM pedido_empenho WHERE id_pedido = 1169 LIMIT 1
+[28/03/2017 18:24:09 ] Executando query: SELECT itens.nome_fornecedor FROM itens, itens_pedido WHERE itens_pedido.id_item = itens.id AND itens_pedido.id_pedido = 1169 LIMIT 1
+[28/03/2017 18:24:09 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1168
+[28/03/2017 18:24:09 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1168
+[28/03/2017 18:24:09 ] Executando query: SELECT itens.nome_fornecedor FROM itens, itens_pedido WHERE itens_pedido.id_item = itens.id AND itens_pedido.id_pedido = 1168 LIMIT 1
+[28/03/2017 18:24:09 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1167
+[28/03/2017 18:24:09 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1167
+[28/03/2017 18:24:09 ] Executando query: SELECT itens.nome_fornecedor FROM itens, itens_pedido WHERE itens_pedido.id_item = itens.id AND itens_pedido.id_pedido = 1167 LIMIT 1
+[28/03/2017 18:24:09 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1166
+[28/03/2017 18:24:09 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1166
+[28/03/2017 18:24:09 ] Executando query: SELECT itens.nome_fornecedor FROM itens, itens_pedido WHERE itens_pedido.id_item = itens.id AND itens_pedido.id_pedido = 1166 LIMIT 1
+[28/03/2017 18:24:09 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1164
+[28/03/2017 18:24:09 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1164
+[28/03/2017 18:24:09 ] Executando query: SELECT itens.nome_fornecedor FROM itens, itens_pedido WHERE itens_pedido.id_item = itens.id AND itens_pedido.id_pedido = 1164 LIMIT 1
+[28/03/2017 18:24:09 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1163
+[28/03/2017 18:24:09 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1163
+[28/03/2017 18:24:09 ] Executando query: SELECT itens.nome_fornecedor FROM itens, itens_pedido WHERE itens_pedido.id_item = itens.id AND itens_pedido.id_pedido = 1163 LIMIT 1
+[28/03/2017 18:24:09 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1162
+[28/03/2017 18:24:09 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1162
+[28/03/2017 18:24:09 ] Executando query: SELECT itens.nome_fornecedor FROM itens, itens_pedido WHERE itens_pedido.id_item = itens.id AND itens_pedido.id_pedido = 1162 LIMIT 1
+[28/03/2017 18:24:09 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1161
+[28/03/2017 18:24:09 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1161
+[28/03/2017 18:24:09 ] Executando query: SELECT itens.nome_fornecedor FROM itens, itens_pedido WHERE itens_pedido.id_item = itens.id AND itens_pedido.id_pedido = 1161 LIMIT 1
+[28/03/2017 18:24:09 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1160
+[28/03/2017 18:24:09 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1160
+[28/03/2017 18:24:09 ] Executando query: SELECT itens.nome_fornecedor FROM itens, itens_pedido WHERE itens_pedido.id_item = itens.id AND itens_pedido.id_pedido = 1160 LIMIT 1
+[28/03/2017 18:24:09 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1159
+[28/03/2017 18:24:09 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1159
+[28/03/2017 18:24:09 ] Executando query: SELECT itens.nome_fornecedor FROM itens, itens_pedido WHERE itens_pedido.id_item = itens.id AND itens_pedido.id_pedido = 1159 LIMIT 1
+[28/03/2017 18:24:09 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1158
+[28/03/2017 18:24:09 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1158
+[28/03/2017 18:24:09 ] Executando query: SELECT itens.nome_fornecedor FROM itens, itens_pedido WHERE itens_pedido.id_item = itens.id AND itens_pedido.id_pedido = 1158 LIMIT 1
+[28/03/2017 18:24:09 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1157
+[28/03/2017 18:24:09 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1157
+[28/03/2017 18:24:09 ] Executando query: SELECT itens.nome_fornecedor FROM itens, itens_pedido WHERE itens_pedido.id_item = itens.id AND itens_pedido.id_pedido = 1157 LIMIT 1
+[28/03/2017 18:24:09 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1156
+[28/03/2017 18:24:09 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1156
+[28/03/2017 18:24:09 ] Executando query: SELECT itens.nome_fornecedor FROM itens, itens_pedido WHERE itens_pedido.id_item = itens.id AND itens_pedido.id_pedido = 1156 LIMIT 1
+[28/03/2017 18:24:09 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1155
+[28/03/2017 18:24:09 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1155
+[28/03/2017 18:24:09 ] Executando query: SELECT itens.nome_fornecedor FROM itens, itens_pedido WHERE itens_pedido.id_item = itens.id AND itens_pedido.id_pedido = 1155 LIMIT 1
+[28/03/2017 18:24:09 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1154
+[28/03/2017 18:24:09 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1154
+[28/03/2017 18:24:09 ] Executando query: SELECT itens.nome_fornecedor FROM itens, itens_pedido WHERE itens_pedido.id_item = itens.id AND itens_pedido.id_pedido = 1154 LIMIT 1
+[28/03/2017 18:24:09 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1153
+[28/03/2017 18:24:09 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1153
+[28/03/2017 18:24:09 ] Executando query: SELECT itens.nome_fornecedor FROM itens, itens_pedido WHERE itens_pedido.id_item = itens.id AND itens_pedido.id_pedido = 1153 LIMIT 1
+[28/03/2017 18:24:09 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1152
+[28/03/2017 18:24:09 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1152
+[28/03/2017 18:24:09 ] Executando query: SELECT itens.nome_fornecedor FROM itens, itens_pedido WHERE itens_pedido.id_item = itens.id AND itens_pedido.id_pedido = 1152 LIMIT 1
+[28/03/2017 18:24:09 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1151
+[28/03/2017 18:24:09 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1151
+[28/03/2017 18:24:09 ] Executando query: SELECT itens.nome_fornecedor FROM itens, itens_pedido WHERE itens_pedido.id_item = itens.id AND itens_pedido.id_pedido = 1151 LIMIT 1
+[28/03/2017 18:24:09 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1150
+[28/03/2017 18:24:09 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1150
+[28/03/2017 18:24:09 ] Executando query: SELECT itens.nome_fornecedor FROM itens, itens_pedido WHERE itens_pedido.id_item = itens.id AND itens_pedido.id_pedido = 1150 LIMIT 1
+[28/03/2017 18:24:09 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1149
+[28/03/2017 18:24:09 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1149
+[28/03/2017 18:24:09 ] Executando query: SELECT itens.nome_fornecedor FROM itens, itens_pedido WHERE itens_pedido.id_item = itens.id AND itens_pedido.id_pedido = 1149 LIMIT 1
+[28/03/2017 18:24:09 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1148
+[28/03/2017 18:24:09 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1148
+[28/03/2017 18:24:09 ] Executando query: SELECT itens.nome_fornecedor FROM itens, itens_pedido WHERE itens_pedido.id_item = itens.id AND itens_pedido.id_pedido = 1148 LIMIT 1
+[28/03/2017 18:24:09 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1147
+[28/03/2017 18:24:09 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1147
+[28/03/2017 18:24:09 ] Executando query: SELECT itens.nome_fornecedor FROM itens, itens_pedido WHERE itens_pedido.id_item = itens.id AND itens_pedido.id_pedido = 1147 LIMIT 1
+[28/03/2017 18:24:09 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1146
+[28/03/2017 18:24:09 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1146
+[28/03/2017 18:24:09 ] Executando query: SELECT itens.nome_fornecedor FROM itens, itens_pedido WHERE itens_pedido.id_item = itens.id AND itens_pedido.id_pedido = 1146 LIMIT 1
+[28/03/2017 18:24:09 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1145
+[28/03/2017 18:24:09 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1145
+[28/03/2017 18:24:09 ] Executando query: SELECT itens.nome_fornecedor FROM itens, itens_pedido WHERE itens_pedido.id_item = itens.id AND itens_pedido.id_pedido = 1145 LIMIT 1
+[28/03/2017 18:24:09 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1144
+[28/03/2017 18:24:09 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1144
+[28/03/2017 18:24:09 ] Executando query: SELECT itens.nome_fornecedor FROM itens, itens_pedido WHERE itens_pedido.id_item = itens.id AND itens_pedido.id_pedido = 1144 LIMIT 1
+[28/03/2017 18:24:09 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1143
+[28/03/2017 18:24:09 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1143
+[28/03/2017 18:24:09 ] Executando query: SELECT itens.nome_fornecedor FROM itens, itens_pedido WHERE itens_pedido.id_item = itens.id AND itens_pedido.id_pedido = 1143 LIMIT 1
+[28/03/2017 18:24:09 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1139
+[28/03/2017 18:24:09 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1139
+[28/03/2017 18:24:09 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1139
+[28/03/2017 18:24:09 ] Executando query: SELECT DATE_FORMAT(data, '%d/%m/%Y') AS data FROM pedido_empenho WHERE id_pedido = 1139 LIMIT 1
+[28/03/2017 18:24:09 ] Executando query: SELECT itens.nome_fornecedor FROM itens, itens_pedido WHERE itens_pedido.id_item = itens.id AND itens_pedido.id_pedido = 1139 LIMIT 1
+[28/03/2017 18:24:09 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1138
+[28/03/2017 18:24:09 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1138
+[28/03/2017 18:24:09 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1138
+[28/03/2017 18:24:09 ] Executando query: SELECT DATE_FORMAT(data, '%d/%m/%Y') AS data FROM pedido_empenho WHERE id_pedido = 1138 LIMIT 1
+[28/03/2017 18:24:09 ] Executando query: SELECT itens.nome_fornecedor FROM itens, itens_pedido WHERE itens_pedido.id_item = itens.id AND itens_pedido.id_pedido = 1138 LIMIT 1
+[28/03/2017 18:24:09 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1137
+[28/03/2017 18:24:09 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1137
+[28/03/2017 18:24:09 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1137
+[28/03/2017 18:24:09 ] Executando query: SELECT DATE_FORMAT(data, '%d/%m/%Y') AS data FROM pedido_empenho WHERE id_pedido = 1137 LIMIT 1
+[28/03/2017 18:24:09 ] Executando query: SELECT itens.nome_fornecedor FROM itens, itens_pedido WHERE itens_pedido.id_item = itens.id AND itens_pedido.id_pedido = 1137 LIMIT 1
+[28/03/2017 18:24:09 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1136
+[28/03/2017 18:24:09 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1136
+[28/03/2017 18:24:09 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1136
+[28/03/2017 18:24:09 ] Executando query: SELECT DATE_FORMAT(data, '%d/%m/%Y') AS data FROM pedido_empenho WHERE id_pedido = 1136 LIMIT 1
+[28/03/2017 18:24:09 ] Executando query: SELECT itens.nome_fornecedor FROM itens, itens_pedido WHERE itens_pedido.id_item = itens.id AND itens_pedido.id_pedido = 1136 LIMIT 1
+[28/03/2017 18:24:09 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1135
+[28/03/2017 18:24:09 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1135
+[28/03/2017 18:24:09 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1135
+[28/03/2017 18:24:09 ] Executando query: SELECT DATE_FORMAT(data, '%d/%m/%Y') AS data FROM pedido_empenho WHERE id_pedido = 1135 LIMIT 1
+[28/03/2017 18:24:09 ] Executando query: SELECT itens.nome_fornecedor FROM itens, itens_pedido WHERE itens_pedido.id_item = itens.id AND itens_pedido.id_pedido = 1135 LIMIT 1
+[28/03/2017 18:24:09 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1134
+[28/03/2017 18:24:09 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1134
+[28/03/2017 18:24:09 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1134
+[28/03/2017 18:24:09 ] Executando query: SELECT DATE_FORMAT(data, '%d/%m/%Y') AS data FROM pedido_empenho WHERE id_pedido = 1134 LIMIT 1
+[28/03/2017 18:24:09 ] Executando query: SELECT itens.nome_fornecedor FROM itens, itens_pedido WHERE itens_pedido.id_item = itens.id AND itens_pedido.id_pedido = 1134 LIMIT 1
+[28/03/2017 18:24:09 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1132
+[28/03/2017 18:24:09 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1132
+[28/03/2017 18:24:09 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1132
+[28/03/2017 18:24:09 ] Executando query: SELECT DATE_FORMAT(data, '%d/%m/%Y') AS data FROM pedido_empenho WHERE id_pedido = 1132 LIMIT 1
+[28/03/2017 18:24:09 ] Executando query: SELECT itens.nome_fornecedor FROM itens, itens_pedido WHERE itens_pedido.id_item = itens.id AND itens_pedido.id_pedido = 1132 LIMIT 1
+[28/03/2017 18:24:09 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1131
+[28/03/2017 18:24:09 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1131
+[28/03/2017 18:24:09 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1131
+[28/03/2017 18:24:09 ] Executando query: SELECT DATE_FORMAT(data, '%d/%m/%Y') AS data FROM pedido_empenho WHERE id_pedido = 1131 LIMIT 1
+[28/03/2017 18:24:09 ] Executando query: SELECT itens.nome_fornecedor FROM itens, itens_pedido WHERE itens_pedido.id_item = itens.id AND itens_pedido.id_pedido = 1131 LIMIT 1
+[28/03/2017 18:24:09 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1130
+[28/03/2017 18:24:09 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1130
+[28/03/2017 18:24:09 ] Executando query: SELECT itens.nome_fornecedor FROM itens, itens_pedido WHERE itens_pedido.id_item = itens.id AND itens_pedido.id_pedido = 1130 LIMIT 1
+[28/03/2017 18:24:09 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1129
+[28/03/2017 18:24:09 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1129
+[28/03/2017 18:24:09 ] Executando query: SELECT itens.nome_fornecedor FROM itens, itens_pedido WHERE itens_pedido.id_item = itens.id AND itens_pedido.id_pedido = 1129 LIMIT 1
+[28/03/2017 18:24:09 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1128
+[28/03/2017 18:24:09 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1128
+[28/03/2017 18:24:09 ] Executando query: SELECT itens.nome_fornecedor FROM itens, itens_pedido WHERE itens_pedido.id_item = itens.id AND itens_pedido.id_pedido = 1128 LIMIT 1
+[28/03/2017 18:24:09 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1127
+[28/03/2017 18:24:09 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1127
+[28/03/2017 18:24:09 ] Executando query: SELECT itens.nome_fornecedor FROM itens, itens_pedido WHERE itens_pedido.id_item = itens.id AND itens_pedido.id_pedido = 1127 LIMIT 1
+[28/03/2017 18:24:09 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1126
+[28/03/2017 18:24:09 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1126
+[28/03/2017 18:24:09 ] Executando query: SELECT itens.nome_fornecedor FROM itens, itens_pedido WHERE itens_pedido.id_item = itens.id AND itens_pedido.id_pedido = 1126 LIMIT 1
+[28/03/2017 18:24:09 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1125
+[28/03/2017 18:24:09 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1125
+[28/03/2017 18:24:09 ] Executando query: SELECT itens.nome_fornecedor FROM itens, itens_pedido WHERE itens_pedido.id_item = itens.id AND itens_pedido.id_pedido = 1125 LIMIT 1
+[28/03/2017 18:24:09 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1124
+[28/03/2017 18:24:09 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1124
+[28/03/2017 18:24:09 ] Executando query: SELECT itens.nome_fornecedor FROM itens, itens_pedido WHERE itens_pedido.id_item = itens.id AND itens_pedido.id_pedido = 1124 LIMIT 1
+[28/03/2017 18:24:09 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1123
+[28/03/2017 18:24:09 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1123
+[28/03/2017 18:24:09 ] Executando query: SELECT itens.nome_fornecedor FROM itens, itens_pedido WHERE itens_pedido.id_item = itens.id AND itens_pedido.id_pedido = 1123 LIMIT 1
+[28/03/2017 18:24:09 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1122
+[28/03/2017 18:24:09 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1122
+[28/03/2017 18:24:09 ] Executando query: SELECT itens.nome_fornecedor FROM itens, itens_pedido WHERE itens_pedido.id_item = itens.id AND itens_pedido.id_pedido = 1122 LIMIT 1
+[28/03/2017 18:24:09 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1121
+[28/03/2017 18:24:09 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1121
+[28/03/2017 18:24:09 ] Executando query: SELECT itens.nome_fornecedor FROM itens, itens_pedido WHERE itens_pedido.id_item = itens.id AND itens_pedido.id_pedido = 1121 LIMIT 1
+[28/03/2017 18:24:09 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1120
+[28/03/2017 18:24:09 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1120
+[28/03/2017 18:24:09 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1120
+[28/03/2017 18:24:09 ] Executando query: SELECT DATE_FORMAT(data, '%d/%m/%Y') AS data FROM pedido_empenho WHERE id_pedido = 1120 LIMIT 1
+[28/03/2017 18:24:09 ] Executando query: SELECT itens.nome_fornecedor FROM itens, itens_pedido WHERE itens_pedido.id_item = itens.id AND itens_pedido.id_pedido = 1120 LIMIT 1
+[28/03/2017 18:24:09 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1119
+[28/03/2017 18:24:09 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1119
+[28/03/2017 18:24:09 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1119
+[28/03/2017 18:24:09 ] Executando query: SELECT DATE_FORMAT(data, '%d/%m/%Y') AS data FROM pedido_empenho WHERE id_pedido = 1119 LIMIT 1
+[28/03/2017 18:24:09 ] Executando query: SELECT itens.nome_fornecedor FROM itens, itens_pedido WHERE itens_pedido.id_item = itens.id AND itens_pedido.id_pedido = 1119 LIMIT 1
+[28/03/2017 18:24:09 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1118
+[28/03/2017 18:24:09 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1118
+[28/03/2017 18:24:09 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1118
+[28/03/2017 18:24:09 ] Executando query: SELECT DATE_FORMAT(data, '%d/%m/%Y') AS data FROM pedido_empenho WHERE id_pedido = 1118 LIMIT 1
+[28/03/2017 18:24:09 ] Executando query: SELECT itens.nome_fornecedor FROM itens, itens_pedido WHERE itens_pedido.id_item = itens.id AND itens_pedido.id_pedido = 1118 LIMIT 1
+[28/03/2017 18:24:09 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1117
+[28/03/2017 18:24:09 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1117
+[28/03/2017 18:24:09 ] Executando query: SELECT itens.nome_fornecedor FROM itens, itens_pedido WHERE itens_pedido.id_item = itens.id AND itens_pedido.id_pedido = 1117 LIMIT 1
+[28/03/2017 18:24:09 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1116
+[28/03/2017 18:24:09 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1116
+[28/03/2017 18:24:09 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1116
+[28/03/2017 18:24:09 ] Executando query: SELECT DATE_FORMAT(data, '%d/%m/%Y') AS data FROM pedido_empenho WHERE id_pedido = 1116 LIMIT 1
+[28/03/2017 18:24:09 ] Executando query: SELECT itens.nome_fornecedor FROM itens, itens_pedido WHERE itens_pedido.id_item = itens.id AND itens_pedido.id_pedido = 1116 LIMIT 1
+[28/03/2017 18:24:09 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1115
+[28/03/2017 18:24:09 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1115
+[28/03/2017 18:24:09 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1115
+[28/03/2017 18:24:09 ] Executando query: SELECT DATE_FORMAT(data, '%d/%m/%Y') AS data FROM pedido_empenho WHERE id_pedido = 1115 LIMIT 1
+[28/03/2017 18:24:09 ] Executando query: SELECT itens.nome_fornecedor FROM itens, itens_pedido WHERE itens_pedido.id_item = itens.id AND itens_pedido.id_pedido = 1115 LIMIT 1
+[28/03/2017 18:24:09 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1114
+[28/03/2017 18:24:09 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1114
+[28/03/2017 18:24:09 ] Executando query: SELECT itens.nome_fornecedor FROM itens, itens_pedido WHERE itens_pedido.id_item = itens.id AND itens_pedido.id_pedido = 1114 LIMIT 1
+[28/03/2017 18:24:09 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1113
+[28/03/2017 18:24:09 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1113
+[28/03/2017 18:24:09 ] Executando query: SELECT itens.nome_fornecedor FROM itens, itens_pedido WHERE itens_pedido.id_item = itens.id AND itens_pedido.id_pedido = 1113 LIMIT 1
+[28/03/2017 18:24:09 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1112
+[28/03/2017 18:24:09 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1112
+[28/03/2017 18:24:09 ] Executando query: SELECT itens.nome_fornecedor FROM itens, itens_pedido WHERE itens_pedido.id_item = itens.id AND itens_pedido.id_pedido = 1112 LIMIT 1
+[28/03/2017 18:24:09 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1111
+[28/03/2017 18:24:09 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1111
+[28/03/2017 18:24:09 ] Executando query: SELECT itens.nome_fornecedor FROM itens, itens_pedido WHERE itens_pedido.id_item = itens.id AND itens_pedido.id_pedido = 1111 LIMIT 1
+[28/03/2017 18:24:09 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1110
+[28/03/2017 18:24:09 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1110
+[28/03/2017 18:24:09 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1110
+[28/03/2017 18:24:09 ] Executando query: SELECT DATE_FORMAT(data, '%d/%m/%Y') AS data FROM pedido_empenho WHERE id_pedido = 1110 LIMIT 1
+[28/03/2017 18:24:09 ] Executando query: SELECT itens.nome_fornecedor FROM itens, itens_pedido WHERE itens_pedido.id_item = itens.id AND itens_pedido.id_pedido = 1110 LIMIT 1
+[28/03/2017 18:24:09 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1109
+[28/03/2017 18:24:09 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1109
+[28/03/2017 18:24:09 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1109
+[28/03/2017 18:24:09 ] Executando query: SELECT DATE_FORMAT(data, '%d/%m/%Y') AS data FROM pedido_empenho WHERE id_pedido = 1109 LIMIT 1
+[28/03/2017 18:24:09 ] Executando query: SELECT itens.nome_fornecedor FROM itens, itens_pedido WHERE itens_pedido.id_item = itens.id AND itens_pedido.id_pedido = 1109 LIMIT 1
+[28/03/2017 18:24:09 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1108
+[28/03/2017 18:24:09 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1108
+[28/03/2017 18:24:09 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1108
+[28/03/2017 18:24:09 ] Executando query: SELECT DATE_FORMAT(data, '%d/%m/%Y') AS data FROM pedido_empenho WHERE id_pedido = 1108 LIMIT 1
+[28/03/2017 18:24:09 ] Executando query: SELECT itens.nome_fornecedor FROM itens, itens_pedido WHERE itens_pedido.id_item = itens.id AND itens_pedido.id_pedido = 1108 LIMIT 1
+[28/03/2017 18:24:09 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1107
+[28/03/2017 18:24:09 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1107
+[28/03/2017 18:24:09 ] Executando query: SELECT itens.nome_fornecedor FROM itens, itens_pedido WHERE itens_pedido.id_item = itens.id AND itens_pedido.id_pedido = 1107 LIMIT 1
+[28/03/2017 18:24:09 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1106
+[28/03/2017 18:24:09 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1106
+[28/03/2017 18:24:09 ] Executando query: SELECT itens.nome_fornecedor FROM itens, itens_pedido WHERE itens_pedido.id_item = itens.id AND itens_pedido.id_pedido = 1106 LIMIT 1
+[28/03/2017 18:24:09 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1105
+[28/03/2017 18:24:09 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1105
+[28/03/2017 18:24:09 ] Executando query: SELECT itens.nome_fornecedor FROM itens, itens_pedido WHERE itens_pedido.id_item = itens.id AND itens_pedido.id_pedido = 1105 LIMIT 1
+[28/03/2017 18:24:09 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1104
+[28/03/2017 18:24:09 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1104
+[28/03/2017 18:24:09 ] Executando query: SELECT itens.nome_fornecedor FROM itens, itens_pedido WHERE itens_pedido.id_item = itens.id AND itens_pedido.id_pedido = 1104 LIMIT 1
+[28/03/2017 18:24:09 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1103
+[28/03/2017 18:24:09 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1103
+[28/03/2017 18:24:09 ] Executando query: SELECT itens.nome_fornecedor FROM itens, itens_pedido WHERE itens_pedido.id_item = itens.id AND itens_pedido.id_pedido = 1103 LIMIT 1
+[28/03/2017 18:24:09 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1102
+[28/03/2017 18:24:09 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1102
+[28/03/2017 18:24:09 ] Executando query: SELECT itens.nome_fornecedor FROM itens, itens_pedido WHERE itens_pedido.id_item = itens.id AND itens_pedido.id_pedido = 1102 LIMIT 1
+[28/03/2017 18:24:09 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1101
+[28/03/2017 18:24:09 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1101
+[28/03/2017 18:24:09 ] Executando query: SELECT itens.nome_fornecedor FROM itens, itens_pedido WHERE itens_pedido.id_item = itens.id AND itens_pedido.id_pedido = 1101 LIMIT 1
+[28/03/2017 18:24:09 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1100
+[28/03/2017 18:24:09 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1100
+[28/03/2017 18:24:09 ] Executando query: SELECT itens.nome_fornecedor FROM itens, itens_pedido WHERE itens_pedido.id_item = itens.id AND itens_pedido.id_pedido = 1100 LIMIT 1
+[28/03/2017 18:24:09 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1099
+[28/03/2017 18:24:09 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1099
+[28/03/2017 18:24:09 ] Executando query: SELECT itens.nome_fornecedor FROM itens, itens_pedido WHERE itens_pedido.id_item = itens.id AND itens_pedido.id_pedido = 1099 LIMIT 1
+[28/03/2017 18:24:09 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1098
+[28/03/2017 18:24:09 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1098
+[28/03/2017 18:24:09 ] Executando query: SELECT itens.nome_fornecedor FROM itens, itens_pedido WHERE itens_pedido.id_item = itens.id AND itens_pedido.id_pedido = 1098 LIMIT 1
+[28/03/2017 18:24:09 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1097
+[28/03/2017 18:24:09 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1097
+[28/03/2017 18:24:09 ] Executando query: SELECT itens.nome_fornecedor FROM itens, itens_pedido WHERE itens_pedido.id_item = itens.id AND itens_pedido.id_pedido = 1097 LIMIT 1
+[28/03/2017 18:24:09 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1096
+[28/03/2017 18:24:09 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1096
+[28/03/2017 18:24:09 ] Executando query: SELECT itens.nome_fornecedor FROM itens, itens_pedido WHERE itens_pedido.id_item = itens.id AND itens_pedido.id_pedido = 1096 LIMIT 1
+[28/03/2017 18:24:09 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1095
+[28/03/2017 18:24:09 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1095
+[28/03/2017 18:24:09 ] Executando query: SELECT itens.nome_fornecedor FROM itens, itens_pedido WHERE itens_pedido.id_item = itens.id AND itens_pedido.id_pedido = 1095 LIMIT 1
+[28/03/2017 18:24:09 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1094
+[28/03/2017 18:24:09 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1094
+[28/03/2017 18:24:09 ] Executando query: SELECT itens.nome_fornecedor FROM itens, itens_pedido WHERE itens_pedido.id_item = itens.id AND itens_pedido.id_pedido = 1094 LIMIT 1
+[28/03/2017 18:24:09 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1093
+[28/03/2017 18:24:09 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1093
+[28/03/2017 18:24:09 ] Executando query: SELECT itens.nome_fornecedor FROM itens, itens_pedido WHERE itens_pedido.id_item = itens.id AND itens_pedido.id_pedido = 1093 LIMIT 1
+[28/03/2017 18:24:09 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1092
+[28/03/2017 18:24:09 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1092
+[28/03/2017 18:24:09 ] Executando query: SELECT itens.nome_fornecedor FROM itens, itens_pedido WHERE itens_pedido.id_item = itens.id AND itens_pedido.id_pedido = 1092 LIMIT 1
+[28/03/2017 18:24:09 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1091
+[28/03/2017 18:24:09 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1091
+[28/03/2017 18:24:09 ] Executando query: SELECT itens.nome_fornecedor FROM itens, itens_pedido WHERE itens_pedido.id_item = itens.id AND itens_pedido.id_pedido = 1091 LIMIT 1
+[28/03/2017 18:24:09 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1090
+[28/03/2017 18:24:09 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1090
+[28/03/2017 18:24:09 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1090
+[28/03/2017 18:24:09 ] Executando query: SELECT DATE_FORMAT(data, '%d/%m/%Y') AS data FROM pedido_empenho WHERE id_pedido = 1090 LIMIT 1
+[28/03/2017 18:24:09 ] Executando query: SELECT itens.nome_fornecedor FROM itens, itens_pedido WHERE itens_pedido.id_item = itens.id AND itens_pedido.id_pedido = 1090 LIMIT 1
+[28/03/2017 18:24:09 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1089
+[28/03/2017 18:24:09 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1089
+[28/03/2017 18:24:09 ] Executando query: SELECT itens.nome_fornecedor FROM itens, itens_pedido WHERE itens_pedido.id_item = itens.id AND itens_pedido.id_pedido = 1089 LIMIT 1
+[28/03/2017 18:24:09 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1088
+[28/03/2017 18:24:09 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1088
+[28/03/2017 18:24:09 ] Executando query: SELECT itens.nome_fornecedor FROM itens, itens_pedido WHERE itens_pedido.id_item = itens.id AND itens_pedido.id_pedido = 1088 LIMIT 1
+[28/03/2017 18:24:09 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1087
+[28/03/2017 18:24:09 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1087
+[28/03/2017 18:24:09 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1087
+[28/03/2017 18:24:09 ] Executando query: SELECT DATE_FORMAT(data, '%d/%m/%Y') AS data FROM pedido_empenho WHERE id_pedido = 1087 LIMIT 1
+[28/03/2017 18:24:09 ] Executando query: SELECT itens.nome_fornecedor FROM itens, itens_pedido WHERE itens_pedido.id_item = itens.id AND itens_pedido.id_pedido = 1087 LIMIT 1
+[28/03/2017 18:24:09 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1086
+[28/03/2017 18:24:09 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1086
+[28/03/2017 18:24:09 ] Executando query: SELECT itens.nome_fornecedor FROM itens, itens_pedido WHERE itens_pedido.id_item = itens.id AND itens_pedido.id_pedido = 1086 LIMIT 1
+[28/03/2017 18:24:09 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1085
+[28/03/2017 18:24:09 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1085
+[28/03/2017 18:24:09 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1085
+[28/03/2017 18:24:09 ] Executando query: SELECT DATE_FORMAT(data, '%d/%m/%Y') AS data FROM pedido_empenho WHERE id_pedido = 1085 LIMIT 1
+[28/03/2017 18:24:09 ] Executando query: SELECT itens.nome_fornecedor FROM itens, itens_pedido WHERE itens_pedido.id_item = itens.id AND itens_pedido.id_pedido = 1085 LIMIT 1
+[28/03/2017 18:24:09 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1084
+[28/03/2017 18:24:09 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1084
+[28/03/2017 18:24:09 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1084
+[28/03/2017 18:24:09 ] Executando query: SELECT DATE_FORMAT(data, '%d/%m/%Y') AS data FROM pedido_empenho WHERE id_pedido = 1084 LIMIT 1
+[28/03/2017 18:24:09 ] Executando query: SELECT itens.nome_fornecedor FROM itens, itens_pedido WHERE itens_pedido.id_item = itens.id AND itens_pedido.id_pedido = 1084 LIMIT 1
+[28/03/2017 18:24:09 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1083
+[28/03/2017 18:24:09 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1083
+[28/03/2017 18:24:09 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1083
+[28/03/2017 18:24:09 ] Executando query: SELECT DATE_FORMAT(data, '%d/%m/%Y') AS data FROM pedido_empenho WHERE id_pedido = 1083 LIMIT 1
+[28/03/2017 18:24:09 ] Executando query: SELECT itens.nome_fornecedor FROM itens, itens_pedido WHERE itens_pedido.id_item = itens.id AND itens_pedido.id_pedido = 1083 LIMIT 1
+[28/03/2017 18:24:09 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1082
+[28/03/2017 18:24:09 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1082
+[28/03/2017 18:24:09 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1082
+[28/03/2017 18:24:09 ] Executando query: SELECT DATE_FORMAT(data, '%d/%m/%Y') AS data FROM pedido_empenho WHERE id_pedido = 1082 LIMIT 1
+[28/03/2017 18:24:09 ] Executando query: SELECT itens.nome_fornecedor FROM itens, itens_pedido WHERE itens_pedido.id_item = itens.id AND itens_pedido.id_pedido = 1082 LIMIT 1
+[28/03/2017 18:24:09 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1081
+[28/03/2017 18:24:09 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1081
+[28/03/2017 18:24:09 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1081
+[28/03/2017 18:24:09 ] Executando query: SELECT DATE_FORMAT(data, '%d/%m/%Y') AS data FROM pedido_empenho WHERE id_pedido = 1081 LIMIT 1
+[28/03/2017 18:24:09 ] Executando query: SELECT itens.nome_fornecedor FROM itens, itens_pedido WHERE itens_pedido.id_item = itens.id AND itens_pedido.id_pedido = 1081 LIMIT 1
+[28/03/2017 18:24:09 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1080
+[28/03/2017 18:24:09 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1080
+[28/03/2017 18:24:09 ] Executando query: SELECT itens.nome_fornecedor FROM itens, itens_pedido WHERE itens_pedido.id_item = itens.id AND itens_pedido.id_pedido = 1080 LIMIT 1
+[28/03/2017 18:24:09 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1079
+[28/03/2017 18:24:09 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1079
+[28/03/2017 18:24:09 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1079
+[28/03/2017 18:24:09 ] Executando query: SELECT DATE_FORMAT(data, '%d/%m/%Y') AS data FROM pedido_empenho WHERE id_pedido = 1079 LIMIT 1
+[28/03/2017 18:24:09 ] Executando query: SELECT itens.nome_fornecedor FROM itens, itens_pedido WHERE itens_pedido.id_item = itens.id AND itens_pedido.id_pedido = 1079 LIMIT 1
+[28/03/2017 18:24:09 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1078
+[28/03/2017 18:24:09 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1078
+[28/03/2017 18:24:09 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1078
+[28/03/2017 18:24:09 ] Executando query: SELECT DATE_FORMAT(data, '%d/%m/%Y') AS data FROM pedido_empenho WHERE id_pedido = 1078 LIMIT 1
+[28/03/2017 18:24:09 ] Executando query: SELECT itens.nome_fornecedor FROM itens, itens_pedido WHERE itens_pedido.id_item = itens.id AND itens_pedido.id_pedido = 1078 LIMIT 1
+[28/03/2017 18:24:09 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1077
+[28/03/2017 18:24:09 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1077
+[28/03/2017 18:24:09 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1077
+[28/03/2017 18:24:09 ] Executando query: SELECT DATE_FORMAT(data, '%d/%m/%Y') AS data FROM pedido_empenho WHERE id_pedido = 1077 LIMIT 1
+[28/03/2017 18:24:09 ] Executando query: SELECT itens.nome_fornecedor FROM itens, itens_pedido WHERE itens_pedido.id_item = itens.id AND itens_pedido.id_pedido = 1077 LIMIT 1
+[28/03/2017 18:24:09 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1076
+[28/03/2017 18:24:09 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1076
+[28/03/2017 18:24:09 ] Executando query: SELECT itens.nome_fornecedor FROM itens, itens_pedido WHERE itens_pedido.id_item = itens.id AND itens_pedido.id_pedido = 1076 LIMIT 1
+[28/03/2017 18:24:09 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1075
+[28/03/2017 18:24:09 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1075
+[28/03/2017 18:24:09 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1075
+[28/03/2017 18:24:09 ] Executando query: SELECT DATE_FORMAT(data, '%d/%m/%Y') AS data FROM pedido_empenho WHERE id_pedido = 1075 LIMIT 1
+[28/03/2017 18:24:09 ] Executando query: SELECT itens.nome_fornecedor FROM itens, itens_pedido WHERE itens_pedido.id_item = itens.id AND itens_pedido.id_pedido = 1075 LIMIT 1
+[28/03/2017 18:24:09 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1074
+[28/03/2017 18:24:09 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1074
+[28/03/2017 18:24:09 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1074
+[28/03/2017 18:24:09 ] Executando query: SELECT DATE_FORMAT(data, '%d/%m/%Y') AS data FROM pedido_empenho WHERE id_pedido = 1074 LIMIT 1
+[28/03/2017 18:24:09 ] Executando query: SELECT itens.nome_fornecedor FROM itens, itens_pedido WHERE itens_pedido.id_item = itens.id AND itens_pedido.id_pedido = 1074 LIMIT 1
+[28/03/2017 18:24:09 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1073
+[28/03/2017 18:24:09 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1073
+[28/03/2017 18:24:09 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1073
+[28/03/2017 18:24:09 ] Executando query: SELECT DATE_FORMAT(data, '%d/%m/%Y') AS data FROM pedido_empenho WHERE id_pedido = 1073 LIMIT 1
+[28/03/2017 18:24:09 ] Executando query: SELECT itens.nome_fornecedor FROM itens, itens_pedido WHERE itens_pedido.id_item = itens.id AND itens_pedido.id_pedido = 1073 LIMIT 1
+[28/03/2017 18:24:09 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1072
+[28/03/2017 18:24:09 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1072
+[28/03/2017 18:24:09 ] Executando query: SELECT itens.nome_fornecedor FROM itens, itens_pedido WHERE itens_pedido.id_item = itens.id AND itens_pedido.id_pedido = 1072 LIMIT 1
+[28/03/2017 18:24:09 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1071
+[28/03/2017 18:24:09 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1071
+[28/03/2017 18:24:09 ] Executando query: SELECT itens.nome_fornecedor FROM itens, itens_pedido WHERE itens_pedido.id_item = itens.id AND itens_pedido.id_pedido = 1071 LIMIT 1
+[28/03/2017 18:24:09 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1070
+[28/03/2017 18:24:09 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1070
+[28/03/2017 18:24:09 ] Executando query: SELECT itens.nome_fornecedor FROM itens, itens_pedido WHERE itens_pedido.id_item = itens.id AND itens_pedido.id_pedido = 1070 LIMIT 1
+[28/03/2017 18:24:09 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1069
+[28/03/2017 18:24:09 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1069
+[28/03/2017 18:24:09 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1069
+[28/03/2017 18:24:09 ] Executando query: SELECT DATE_FORMAT(data, '%d/%m/%Y') AS data FROM pedido_empenho WHERE id_pedido = 1069 LIMIT 1
+[28/03/2017 18:24:09 ] Executando query: SELECT itens.nome_fornecedor FROM itens, itens_pedido WHERE itens_pedido.id_item = itens.id AND itens_pedido.id_pedido = 1069 LIMIT 1
+[28/03/2017 18:24:09 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1068
+[28/03/2017 18:24:09 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1068
+[28/03/2017 18:24:09 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1068
+[28/03/2017 18:24:09 ] Executando query: SELECT DATE_FORMAT(data, '%d/%m/%Y') AS data FROM pedido_empenho WHERE id_pedido = 1068 LIMIT 1
+[28/03/2017 18:24:09 ] Executando query: SELECT itens.nome_fornecedor FROM itens, itens_pedido WHERE itens_pedido.id_item = itens.id AND itens_pedido.id_pedido = 1068 LIMIT 1
+[28/03/2017 18:24:09 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1066
+[28/03/2017 18:24:09 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1066
+[28/03/2017 18:24:09 ] Executando query: SELECT itens.nome_fornecedor FROM itens, itens_pedido WHERE itens_pedido.id_item = itens.id AND itens_pedido.id_pedido = 1066 LIMIT 1
+[28/03/2017 18:24:09 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1065
+[28/03/2017 18:24:09 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1065
+[28/03/2017 18:24:09 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1065
+[28/03/2017 18:24:09 ] Executando query: SELECT DATE_FORMAT(data, '%d/%m/%Y') AS data FROM pedido_empenho WHERE id_pedido = 1065 LIMIT 1
+[28/03/2017 18:24:09 ] Executando query: SELECT itens.nome_fornecedor FROM itens, itens_pedido WHERE itens_pedido.id_item = itens.id AND itens_pedido.id_pedido = 1065 LIMIT 1
+[28/03/2017 18:24:09 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1064
+[28/03/2017 18:24:09 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1064
+[28/03/2017 18:24:09 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1064
+[28/03/2017 18:24:09 ] Executando query: SELECT DATE_FORMAT(data, '%d/%m/%Y') AS data FROM pedido_empenho WHERE id_pedido = 1064 LIMIT 1
+[28/03/2017 18:24:09 ] Executando query: SELECT itens.nome_fornecedor FROM itens, itens_pedido WHERE itens_pedido.id_item = itens.id AND itens_pedido.id_pedido = 1064 LIMIT 1
+[28/03/2017 18:24:09 ] Executando query: SELECT saldo FROM saldo_setor WHERE id_setor = 2
+[28/03/2017 18:29:52 ] Executando query: SELECT * FROM status
+[28/03/2017 18:29:52 ] Executando query: SELECT * FROM prioridade
+[28/03/2017 18:29:52 ] Executando query: SELECT * FROM setores
+[28/03/2017 18:29:52 ] Executando query: SELECT * FROM saldo_categoria
+[28/03/2017 18:29:52 ] Executando query: SELECT noticias, saldos, pedidos, recepcao FROM usuario_permissoes WHERE id_usuario = 1
+[28/03/2017 18:29:52 ] Executando query: SELECT count(saldos_adiantados.id) AS solic_adi, (SELECT count(solic_alt_pedido.id) FROM solic_alt_pedido WHERE solic_alt_pedido.status = 2) AS solic_alt, (SELECT count(pedido.id) FROM pedido WHERE pedido.status = 2) AS solic_ped FROM saldos_adiantados WHERE saldos_adiantados.status = 2
+[28/03/2017 18:29:52 ] Executando query: SELECT saldo FROM saldo_setor WHERE id_setor = 2
+[28/03/2017 18:29:52 ] Executando query: SELECT id, nome, id_setor FROM usuario  ORDER BY nome ASC
+[28/03/2017 18:29:52 ] Executando query: SELECT column_name AS nome FROM information_schema.columns WHERE table_name = 'usuario_permissoes' AND column_name <> 'id_usuario'
+[28/03/2017 18:29:54 ] Executando query: SELECT noticias, saldos, pedidos, recepcao FROM usuario_permissoes WHERE id_usuario = 1
+[28/03/2017 18:29:54 ] Executando query: SELECT * FROM status
+[28/03/2017 18:29:54 ] Executando query: SELECT * FROM prioridade
+[28/03/2017 18:29:54 ] Executando query: SELECT * FROM setores
+[28/03/2017 18:29:54 ] Executando query: SELECT * FROM saldo_categoria
+[28/03/2017 18:29:54 ] Executando query: SELECT id, id_setor, DATE_FORMAT(data_pedido, '%d/%m/%Y') AS data_pedido, prioridade, status, valor, aprov_gerencia FROM pedido WHERE status <> 3 AND alteracao = 0  ORDER BY id DESC LIMIT 100
+[28/03/2017 18:29:54 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1169
+[28/03/2017 18:29:54 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1169
+[28/03/2017 18:29:54 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1169
+[28/03/2017 18:29:54 ] Executando query: SELECT DATE_FORMAT(data, '%d/%m/%Y') AS data FROM pedido_empenho WHERE id_pedido = 1169 LIMIT 1
+[28/03/2017 18:29:54 ] Executando query: SELECT itens.nome_fornecedor FROM itens, itens_pedido WHERE itens_pedido.id_item = itens.id AND itens_pedido.id_pedido = 1169 LIMIT 1
+[28/03/2017 18:29:54 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1168
+[28/03/2017 18:29:54 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1168
+[28/03/2017 18:29:54 ] Executando query: SELECT itens.nome_fornecedor FROM itens, itens_pedido WHERE itens_pedido.id_item = itens.id AND itens_pedido.id_pedido = 1168 LIMIT 1
+[28/03/2017 18:29:54 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1167
+[28/03/2017 18:29:54 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1167
+[28/03/2017 18:29:54 ] Executando query: SELECT itens.nome_fornecedor FROM itens, itens_pedido WHERE itens_pedido.id_item = itens.id AND itens_pedido.id_pedido = 1167 LIMIT 1
+[28/03/2017 18:29:54 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1166
+[28/03/2017 18:29:54 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1166
+[28/03/2017 18:29:54 ] Executando query: SELECT itens.nome_fornecedor FROM itens, itens_pedido WHERE itens_pedido.id_item = itens.id AND itens_pedido.id_pedido = 1166 LIMIT 1
+[28/03/2017 18:29:54 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1164
+[28/03/2017 18:29:54 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1164
+[28/03/2017 18:29:54 ] Executando query: SELECT itens.nome_fornecedor FROM itens, itens_pedido WHERE itens_pedido.id_item = itens.id AND itens_pedido.id_pedido = 1164 LIMIT 1
+[28/03/2017 18:29:54 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1163
+[28/03/2017 18:29:54 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1163
+[28/03/2017 18:29:54 ] Executando query: SELECT itens.nome_fornecedor FROM itens, itens_pedido WHERE itens_pedido.id_item = itens.id AND itens_pedido.id_pedido = 1163 LIMIT 1
+[28/03/2017 18:29:54 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1162
+[28/03/2017 18:29:54 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1162
+[28/03/2017 18:29:54 ] Executando query: SELECT itens.nome_fornecedor FROM itens, itens_pedido WHERE itens_pedido.id_item = itens.id AND itens_pedido.id_pedido = 1162 LIMIT 1
+[28/03/2017 18:29:54 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1161
+[28/03/2017 18:29:54 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1161
+[28/03/2017 18:29:54 ] Executando query: SELECT itens.nome_fornecedor FROM itens, itens_pedido WHERE itens_pedido.id_item = itens.id AND itens_pedido.id_pedido = 1161 LIMIT 1
+[28/03/2017 18:29:54 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1160
+[28/03/2017 18:29:54 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1160
+[28/03/2017 18:29:54 ] Executando query: SELECT itens.nome_fornecedor FROM itens, itens_pedido WHERE itens_pedido.id_item = itens.id AND itens_pedido.id_pedido = 1160 LIMIT 1
+[28/03/2017 18:29:54 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1159
+[28/03/2017 18:29:54 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1159
+[28/03/2017 18:29:54 ] Executando query: SELECT itens.nome_fornecedor FROM itens, itens_pedido WHERE itens_pedido.id_item = itens.id AND itens_pedido.id_pedido = 1159 LIMIT 1
+[28/03/2017 18:29:54 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1158
+[28/03/2017 18:29:54 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1158
+[28/03/2017 18:29:54 ] Executando query: SELECT itens.nome_fornecedor FROM itens, itens_pedido WHERE itens_pedido.id_item = itens.id AND itens_pedido.id_pedido = 1158 LIMIT 1
+[28/03/2017 18:29:54 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1157
+[28/03/2017 18:29:54 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1157
+[28/03/2017 18:29:54 ] Executando query: SELECT itens.nome_fornecedor FROM itens, itens_pedido WHERE itens_pedido.id_item = itens.id AND itens_pedido.id_pedido = 1157 LIMIT 1
+[28/03/2017 18:29:54 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1156
+[28/03/2017 18:29:54 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1156
+[28/03/2017 18:29:54 ] Executando query: SELECT itens.nome_fornecedor FROM itens, itens_pedido WHERE itens_pedido.id_item = itens.id AND itens_pedido.id_pedido = 1156 LIMIT 1
+[28/03/2017 18:29:54 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1155
+[28/03/2017 18:29:54 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1155
+[28/03/2017 18:29:54 ] Executando query: SELECT itens.nome_fornecedor FROM itens, itens_pedido WHERE itens_pedido.id_item = itens.id AND itens_pedido.id_pedido = 1155 LIMIT 1
+[28/03/2017 18:29:54 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1154
+[28/03/2017 18:29:54 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1154
+[28/03/2017 18:29:54 ] Executando query: SELECT itens.nome_fornecedor FROM itens, itens_pedido WHERE itens_pedido.id_item = itens.id AND itens_pedido.id_pedido = 1154 LIMIT 1
+[28/03/2017 18:29:54 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1153
+[28/03/2017 18:29:54 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1153
+[28/03/2017 18:29:54 ] Executando query: SELECT itens.nome_fornecedor FROM itens, itens_pedido WHERE itens_pedido.id_item = itens.id AND itens_pedido.id_pedido = 1153 LIMIT 1
+[28/03/2017 18:29:54 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1152
+[28/03/2017 18:29:54 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1152
+[28/03/2017 18:29:54 ] Executando query: SELECT itens.nome_fornecedor FROM itens, itens_pedido WHERE itens_pedido.id_item = itens.id AND itens_pedido.id_pedido = 1152 LIMIT 1
+[28/03/2017 18:29:54 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1151
+[28/03/2017 18:29:54 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1151
+[28/03/2017 18:29:54 ] Executando query: SELECT itens.nome_fornecedor FROM itens, itens_pedido WHERE itens_pedido.id_item = itens.id AND itens_pedido.id_pedido = 1151 LIMIT 1
+[28/03/2017 18:29:54 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1150
+[28/03/2017 18:29:54 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1150
+[28/03/2017 18:29:54 ] Executando query: SELECT itens.nome_fornecedor FROM itens, itens_pedido WHERE itens_pedido.id_item = itens.id AND itens_pedido.id_pedido = 1150 LIMIT 1
+[28/03/2017 18:29:54 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1149
+[28/03/2017 18:29:54 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1149
+[28/03/2017 18:29:54 ] Executando query: SELECT itens.nome_fornecedor FROM itens, itens_pedido WHERE itens_pedido.id_item = itens.id AND itens_pedido.id_pedido = 1149 LIMIT 1
+[28/03/2017 18:29:54 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1148
+[28/03/2017 18:29:54 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1148
+[28/03/2017 18:29:54 ] Executando query: SELECT itens.nome_fornecedor FROM itens, itens_pedido WHERE itens_pedido.id_item = itens.id AND itens_pedido.id_pedido = 1148 LIMIT 1
+[28/03/2017 18:29:54 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1147
+[28/03/2017 18:29:54 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1147
+[28/03/2017 18:29:54 ] Executando query: SELECT itens.nome_fornecedor FROM itens, itens_pedido WHERE itens_pedido.id_item = itens.id AND itens_pedido.id_pedido = 1147 LIMIT 1
+[28/03/2017 18:29:54 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1146
+[28/03/2017 18:29:54 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1146
+[28/03/2017 18:29:54 ] Executando query: SELECT itens.nome_fornecedor FROM itens, itens_pedido WHERE itens_pedido.id_item = itens.id AND itens_pedido.id_pedido = 1146 LIMIT 1
+[28/03/2017 18:29:54 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1145
+[28/03/2017 18:29:54 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1145
+[28/03/2017 18:29:54 ] Executando query: SELECT itens.nome_fornecedor FROM itens, itens_pedido WHERE itens_pedido.id_item = itens.id AND itens_pedido.id_pedido = 1145 LIMIT 1
+[28/03/2017 18:29:54 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1144
+[28/03/2017 18:29:54 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1144
+[28/03/2017 18:29:54 ] Executando query: SELECT itens.nome_fornecedor FROM itens, itens_pedido WHERE itens_pedido.id_item = itens.id AND itens_pedido.id_pedido = 1144 LIMIT 1
+[28/03/2017 18:29:54 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1143
+[28/03/2017 18:29:54 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1143
+[28/03/2017 18:29:54 ] Executando query: SELECT itens.nome_fornecedor FROM itens, itens_pedido WHERE itens_pedido.id_item = itens.id AND itens_pedido.id_pedido = 1143 LIMIT 1
+[28/03/2017 18:29:54 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1139
+[28/03/2017 18:29:54 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1139
+[28/03/2017 18:29:54 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1139
+[28/03/2017 18:29:54 ] Executando query: SELECT DATE_FORMAT(data, '%d/%m/%Y') AS data FROM pedido_empenho WHERE id_pedido = 1139 LIMIT 1
+[28/03/2017 18:29:54 ] Executando query: SELECT itens.nome_fornecedor FROM itens, itens_pedido WHERE itens_pedido.id_item = itens.id AND itens_pedido.id_pedido = 1139 LIMIT 1
+[28/03/2017 18:29:54 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1138
+[28/03/2017 18:29:54 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1138
+[28/03/2017 18:29:54 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1138
+[28/03/2017 18:29:54 ] Executando query: SELECT DATE_FORMAT(data, '%d/%m/%Y') AS data FROM pedido_empenho WHERE id_pedido = 1138 LIMIT 1
+[28/03/2017 18:29:54 ] Executando query: SELECT itens.nome_fornecedor FROM itens, itens_pedido WHERE itens_pedido.id_item = itens.id AND itens_pedido.id_pedido = 1138 LIMIT 1
+[28/03/2017 18:29:54 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1137
+[28/03/2017 18:29:54 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1137
+[28/03/2017 18:29:54 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1137
+[28/03/2017 18:29:54 ] Executando query: SELECT DATE_FORMAT(data, '%d/%m/%Y') AS data FROM pedido_empenho WHERE id_pedido = 1137 LIMIT 1
+[28/03/2017 18:29:54 ] Executando query: SELECT itens.nome_fornecedor FROM itens, itens_pedido WHERE itens_pedido.id_item = itens.id AND itens_pedido.id_pedido = 1137 LIMIT 1
+[28/03/2017 18:29:54 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1136
+[28/03/2017 18:29:54 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1136
+[28/03/2017 18:29:54 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1136
+[28/03/2017 18:29:54 ] Executando query: SELECT DATE_FORMAT(data, '%d/%m/%Y') AS data FROM pedido_empenho WHERE id_pedido = 1136 LIMIT 1
+[28/03/2017 18:29:54 ] Executando query: SELECT itens.nome_fornecedor FROM itens, itens_pedido WHERE itens_pedido.id_item = itens.id AND itens_pedido.id_pedido = 1136 LIMIT 1
+[28/03/2017 18:29:54 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1135
+[28/03/2017 18:29:54 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1135
+[28/03/2017 18:29:54 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1135
+[28/03/2017 18:29:54 ] Executando query: SELECT DATE_FORMAT(data, '%d/%m/%Y') AS data FROM pedido_empenho WHERE id_pedido = 1135 LIMIT 1
+[28/03/2017 18:29:54 ] Executando query: SELECT itens.nome_fornecedor FROM itens, itens_pedido WHERE itens_pedido.id_item = itens.id AND itens_pedido.id_pedido = 1135 LIMIT 1
+[28/03/2017 18:29:54 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1134
+[28/03/2017 18:29:54 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1134
+[28/03/2017 18:29:54 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1134
+[28/03/2017 18:29:54 ] Executando query: SELECT DATE_FORMAT(data, '%d/%m/%Y') AS data FROM pedido_empenho WHERE id_pedido = 1134 LIMIT 1
+[28/03/2017 18:29:54 ] Executando query: SELECT itens.nome_fornecedor FROM itens, itens_pedido WHERE itens_pedido.id_item = itens.id AND itens_pedido.id_pedido = 1134 LIMIT 1
+[28/03/2017 18:29:54 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1132
+[28/03/2017 18:29:54 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1132
+[28/03/2017 18:29:54 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1132
+[28/03/2017 18:29:54 ] Executando query: SELECT DATE_FORMAT(data, '%d/%m/%Y') AS data FROM pedido_empenho WHERE id_pedido = 1132 LIMIT 1
+[28/03/2017 18:29:54 ] Executando query: SELECT itens.nome_fornecedor FROM itens, itens_pedido WHERE itens_pedido.id_item = itens.id AND itens_pedido.id_pedido = 1132 LIMIT 1
+[28/03/2017 18:29:54 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1131
+[28/03/2017 18:29:54 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1131
+[28/03/2017 18:29:54 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1131
+[28/03/2017 18:29:54 ] Executando query: SELECT DATE_FORMAT(data, '%d/%m/%Y') AS data FROM pedido_empenho WHERE id_pedido = 1131 LIMIT 1
+[28/03/2017 18:29:54 ] Executando query: SELECT itens.nome_fornecedor FROM itens, itens_pedido WHERE itens_pedido.id_item = itens.id AND itens_pedido.id_pedido = 1131 LIMIT 1
+[28/03/2017 18:29:54 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1130
+[28/03/2017 18:29:54 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1130
+[28/03/2017 18:29:54 ] Executando query: SELECT itens.nome_fornecedor FROM itens, itens_pedido WHERE itens_pedido.id_item = itens.id AND itens_pedido.id_pedido = 1130 LIMIT 1
+[28/03/2017 18:29:54 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1129
+[28/03/2017 18:29:54 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1129
+[28/03/2017 18:29:54 ] Executando query: SELECT itens.nome_fornecedor FROM itens, itens_pedido WHERE itens_pedido.id_item = itens.id AND itens_pedido.id_pedido = 1129 LIMIT 1
+[28/03/2017 18:29:54 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1128
+[28/03/2017 18:29:54 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1128
+[28/03/2017 18:29:54 ] Executando query: SELECT itens.nome_fornecedor FROM itens, itens_pedido WHERE itens_pedido.id_item = itens.id AND itens_pedido.id_pedido = 1128 LIMIT 1
+[28/03/2017 18:29:54 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1127
+[28/03/2017 18:29:54 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1127
+[28/03/2017 18:29:54 ] Executando query: SELECT itens.nome_fornecedor FROM itens, itens_pedido WHERE itens_pedido.id_item = itens.id AND itens_pedido.id_pedido = 1127 LIMIT 1
+[28/03/2017 18:29:54 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1126
+[28/03/2017 18:29:54 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1126
+[28/03/2017 18:29:54 ] Executando query: SELECT itens.nome_fornecedor FROM itens, itens_pedido WHERE itens_pedido.id_item = itens.id AND itens_pedido.id_pedido = 1126 LIMIT 1
+[28/03/2017 18:29:54 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1125
+[28/03/2017 18:29:54 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1125
+[28/03/2017 18:29:54 ] Executando query: SELECT itens.nome_fornecedor FROM itens, itens_pedido WHERE itens_pedido.id_item = itens.id AND itens_pedido.id_pedido = 1125 LIMIT 1
+[28/03/2017 18:29:54 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1124
+[28/03/2017 18:29:54 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1124
+[28/03/2017 18:29:54 ] Executando query: SELECT itens.nome_fornecedor FROM itens, itens_pedido WHERE itens_pedido.id_item = itens.id AND itens_pedido.id_pedido = 1124 LIMIT 1
+[28/03/2017 18:29:54 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1123
+[28/03/2017 18:29:54 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1123
+[28/03/2017 18:29:54 ] Executando query: SELECT itens.nome_fornecedor FROM itens, itens_pedido WHERE itens_pedido.id_item = itens.id AND itens_pedido.id_pedido = 1123 LIMIT 1
+[28/03/2017 18:29:54 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1122
+[28/03/2017 18:29:54 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1122
+[28/03/2017 18:29:54 ] Executando query: SELECT itens.nome_fornecedor FROM itens, itens_pedido WHERE itens_pedido.id_item = itens.id AND itens_pedido.id_pedido = 1122 LIMIT 1
+[28/03/2017 18:29:54 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1121
+[28/03/2017 18:29:54 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1121
+[28/03/2017 18:29:54 ] Executando query: SELECT itens.nome_fornecedor FROM itens, itens_pedido WHERE itens_pedido.id_item = itens.id AND itens_pedido.id_pedido = 1121 LIMIT 1
+[28/03/2017 18:29:54 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1120
+[28/03/2017 18:29:54 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1120
+[28/03/2017 18:29:54 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1120
+[28/03/2017 18:29:54 ] Executando query: SELECT DATE_FORMAT(data, '%d/%m/%Y') AS data FROM pedido_empenho WHERE id_pedido = 1120 LIMIT 1
+[28/03/2017 18:29:54 ] Executando query: SELECT itens.nome_fornecedor FROM itens, itens_pedido WHERE itens_pedido.id_item = itens.id AND itens_pedido.id_pedido = 1120 LIMIT 1
+[28/03/2017 18:29:54 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1119
+[28/03/2017 18:29:54 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1119
+[28/03/2017 18:29:54 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1119
+[28/03/2017 18:29:54 ] Executando query: SELECT DATE_FORMAT(data, '%d/%m/%Y') AS data FROM pedido_empenho WHERE id_pedido = 1119 LIMIT 1
+[28/03/2017 18:29:54 ] Executando query: SELECT itens.nome_fornecedor FROM itens, itens_pedido WHERE itens_pedido.id_item = itens.id AND itens_pedido.id_pedido = 1119 LIMIT 1
+[28/03/2017 18:29:54 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1118
+[28/03/2017 18:29:54 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1118
+[28/03/2017 18:29:54 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1118
+[28/03/2017 18:29:54 ] Executando query: SELECT DATE_FORMAT(data, '%d/%m/%Y') AS data FROM pedido_empenho WHERE id_pedido = 1118 LIMIT 1
+[28/03/2017 18:29:54 ] Executando query: SELECT itens.nome_fornecedor FROM itens, itens_pedido WHERE itens_pedido.id_item = itens.id AND itens_pedido.id_pedido = 1118 LIMIT 1
+[28/03/2017 18:29:54 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1117
+[28/03/2017 18:29:54 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1117
+[28/03/2017 18:29:54 ] Executando query: SELECT itens.nome_fornecedor FROM itens, itens_pedido WHERE itens_pedido.id_item = itens.id AND itens_pedido.id_pedido = 1117 LIMIT 1
+[28/03/2017 18:29:54 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1116
+[28/03/2017 18:29:54 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1116
+[28/03/2017 18:29:54 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1116
+[28/03/2017 18:29:54 ] Executando query: SELECT DATE_FORMAT(data, '%d/%m/%Y') AS data FROM pedido_empenho WHERE id_pedido = 1116 LIMIT 1
+[28/03/2017 18:29:54 ] Executando query: SELECT itens.nome_fornecedor FROM itens, itens_pedido WHERE itens_pedido.id_item = itens.id AND itens_pedido.id_pedido = 1116 LIMIT 1
+[28/03/2017 18:29:54 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1115
+[28/03/2017 18:29:54 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1115
+[28/03/2017 18:29:54 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1115
+[28/03/2017 18:29:54 ] Executando query: SELECT DATE_FORMAT(data, '%d/%m/%Y') AS data FROM pedido_empenho WHERE id_pedido = 1115 LIMIT 1
+[28/03/2017 18:29:54 ] Executando query: SELECT itens.nome_fornecedor FROM itens, itens_pedido WHERE itens_pedido.id_item = itens.id AND itens_pedido.id_pedido = 1115 LIMIT 1
+[28/03/2017 18:29:54 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1114
+[28/03/2017 18:29:54 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1114
+[28/03/2017 18:29:54 ] Executando query: SELECT itens.nome_fornecedor FROM itens, itens_pedido WHERE itens_pedido.id_item = itens.id AND itens_pedido.id_pedido = 1114 LIMIT 1
+[28/03/2017 18:29:54 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1113
+[28/03/2017 18:29:54 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1113
+[28/03/2017 18:29:54 ] Executando query: SELECT itens.nome_fornecedor FROM itens, itens_pedido WHERE itens_pedido.id_item = itens.id AND itens_pedido.id_pedido = 1113 LIMIT 1
+[28/03/2017 18:29:54 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1112
+[28/03/2017 18:29:54 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1112
+[28/03/2017 18:29:54 ] Executando query: SELECT itens.nome_fornecedor FROM itens, itens_pedido WHERE itens_pedido.id_item = itens.id AND itens_pedido.id_pedido = 1112 LIMIT 1
+[28/03/2017 18:29:54 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1111
+[28/03/2017 18:29:54 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1111
+[28/03/2017 18:29:54 ] Executando query: SELECT itens.nome_fornecedor FROM itens, itens_pedido WHERE itens_pedido.id_item = itens.id AND itens_pedido.id_pedido = 1111 LIMIT 1
+[28/03/2017 18:29:54 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1110
+[28/03/2017 18:29:54 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1110
+[28/03/2017 18:29:54 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1110
+[28/03/2017 18:29:54 ] Executando query: SELECT DATE_FORMAT(data, '%d/%m/%Y') AS data FROM pedido_empenho WHERE id_pedido = 1110 LIMIT 1
+[28/03/2017 18:29:54 ] Executando query: SELECT itens.nome_fornecedor FROM itens, itens_pedido WHERE itens_pedido.id_item = itens.id AND itens_pedido.id_pedido = 1110 LIMIT 1
+[28/03/2017 18:29:54 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1109
+[28/03/2017 18:29:54 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1109
+[28/03/2017 18:29:54 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1109
+[28/03/2017 18:29:54 ] Executando query: SELECT DATE_FORMAT(data, '%d/%m/%Y') AS data FROM pedido_empenho WHERE id_pedido = 1109 LIMIT 1
+[28/03/2017 18:29:54 ] Executando query: SELECT itens.nome_fornecedor FROM itens, itens_pedido WHERE itens_pedido.id_item = itens.id AND itens_pedido.id_pedido = 1109 LIMIT 1
+[28/03/2017 18:29:54 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1108
+[28/03/2017 18:29:54 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1108
+[28/03/2017 18:29:54 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1108
+[28/03/2017 18:29:54 ] Executando query: SELECT DATE_FORMAT(data, '%d/%m/%Y') AS data FROM pedido_empenho WHERE id_pedido = 1108 LIMIT 1
+[28/03/2017 18:29:54 ] Executando query: SELECT itens.nome_fornecedor FROM itens, itens_pedido WHERE itens_pedido.id_item = itens.id AND itens_pedido.id_pedido = 1108 LIMIT 1
+[28/03/2017 18:29:54 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1107
+[28/03/2017 18:29:54 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1107
+[28/03/2017 18:29:54 ] Executando query: SELECT itens.nome_fornecedor FROM itens, itens_pedido WHERE itens_pedido.id_item = itens.id AND itens_pedido.id_pedido = 1107 LIMIT 1
+[28/03/2017 18:29:54 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1106
+[28/03/2017 18:29:54 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1106
+[28/03/2017 18:29:54 ] Executando query: SELECT itens.nome_fornecedor FROM itens, itens_pedido WHERE itens_pedido.id_item = itens.id AND itens_pedido.id_pedido = 1106 LIMIT 1
+[28/03/2017 18:29:54 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1105
+[28/03/2017 18:29:54 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1105
+[28/03/2017 18:29:54 ] Executando query: SELECT itens.nome_fornecedor FROM itens, itens_pedido WHERE itens_pedido.id_item = itens.id AND itens_pedido.id_pedido = 1105 LIMIT 1
+[28/03/2017 18:29:54 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1104
+[28/03/2017 18:29:54 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1104
+[28/03/2017 18:29:54 ] Executando query: SELECT itens.nome_fornecedor FROM itens, itens_pedido WHERE itens_pedido.id_item = itens.id AND itens_pedido.id_pedido = 1104 LIMIT 1
+[28/03/2017 18:29:54 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1103
+[28/03/2017 18:29:54 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1103
+[28/03/2017 18:29:54 ] Executando query: SELECT itens.nome_fornecedor FROM itens, itens_pedido WHERE itens_pedido.id_item = itens.id AND itens_pedido.id_pedido = 1103 LIMIT 1
+[28/03/2017 18:29:54 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1102
+[28/03/2017 18:29:54 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1102
+[28/03/2017 18:29:54 ] Executando query: SELECT itens.nome_fornecedor FROM itens, itens_pedido WHERE itens_pedido.id_item = itens.id AND itens_pedido.id_pedido = 1102 LIMIT 1
+[28/03/2017 18:29:54 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1101
+[28/03/2017 18:29:54 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1101
+[28/03/2017 18:29:54 ] Executando query: SELECT itens.nome_fornecedor FROM itens, itens_pedido WHERE itens_pedido.id_item = itens.id AND itens_pedido.id_pedido = 1101 LIMIT 1
+[28/03/2017 18:29:54 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1100
+[28/03/2017 18:29:54 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1100
+[28/03/2017 18:29:54 ] Executando query: SELECT itens.nome_fornecedor FROM itens, itens_pedido WHERE itens_pedido.id_item = itens.id AND itens_pedido.id_pedido = 1100 LIMIT 1
+[28/03/2017 18:29:54 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1099
+[28/03/2017 18:29:54 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1099
+[28/03/2017 18:29:54 ] Executando query: SELECT itens.nome_fornecedor FROM itens, itens_pedido WHERE itens_pedido.id_item = itens.id AND itens_pedido.id_pedido = 1099 LIMIT 1
+[28/03/2017 18:29:54 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1098
+[28/03/2017 18:29:54 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1098
+[28/03/2017 18:29:54 ] Executando query: SELECT itens.nome_fornecedor FROM itens, itens_pedido WHERE itens_pedido.id_item = itens.id AND itens_pedido.id_pedido = 1098 LIMIT 1
+[28/03/2017 18:29:54 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1097
+[28/03/2017 18:29:54 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1097
+[28/03/2017 18:29:54 ] Executando query: SELECT itens.nome_fornecedor FROM itens, itens_pedido WHERE itens_pedido.id_item = itens.id AND itens_pedido.id_pedido = 1097 LIMIT 1
+[28/03/2017 18:29:54 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1096
+[28/03/2017 18:29:54 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1096
+[28/03/2017 18:29:54 ] Executando query: SELECT itens.nome_fornecedor FROM itens, itens_pedido WHERE itens_pedido.id_item = itens.id AND itens_pedido.id_pedido = 1096 LIMIT 1
+[28/03/2017 18:29:54 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1095
+[28/03/2017 18:29:54 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1095
+[28/03/2017 18:29:54 ] Executando query: SELECT itens.nome_fornecedor FROM itens, itens_pedido WHERE itens_pedido.id_item = itens.id AND itens_pedido.id_pedido = 1095 LIMIT 1
+[28/03/2017 18:29:54 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1094
+[28/03/2017 18:29:54 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1094
+[28/03/2017 18:29:54 ] Executando query: SELECT itens.nome_fornecedor FROM itens, itens_pedido WHERE itens_pedido.id_item = itens.id AND itens_pedido.id_pedido = 1094 LIMIT 1
+[28/03/2017 18:29:54 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1093
+[28/03/2017 18:29:54 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1093
+[28/03/2017 18:29:54 ] Executando query: SELECT itens.nome_fornecedor FROM itens, itens_pedido WHERE itens_pedido.id_item = itens.id AND itens_pedido.id_pedido = 1093 LIMIT 1
+[28/03/2017 18:29:54 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1092
+[28/03/2017 18:29:54 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1092
+[28/03/2017 18:29:54 ] Executando query: SELECT itens.nome_fornecedor FROM itens, itens_pedido WHERE itens_pedido.id_item = itens.id AND itens_pedido.id_pedido = 1092 LIMIT 1
+[28/03/2017 18:29:54 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1091
+[28/03/2017 18:29:54 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1091
+[28/03/2017 18:29:54 ] Executando query: SELECT itens.nome_fornecedor FROM itens, itens_pedido WHERE itens_pedido.id_item = itens.id AND itens_pedido.id_pedido = 1091 LIMIT 1
+[28/03/2017 18:29:54 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1090
+[28/03/2017 18:29:54 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1090
+[28/03/2017 18:29:54 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1090
+[28/03/2017 18:29:54 ] Executando query: SELECT DATE_FORMAT(data, '%d/%m/%Y') AS data FROM pedido_empenho WHERE id_pedido = 1090 LIMIT 1
+[28/03/2017 18:29:54 ] Executando query: SELECT itens.nome_fornecedor FROM itens, itens_pedido WHERE itens_pedido.id_item = itens.id AND itens_pedido.id_pedido = 1090 LIMIT 1
+[28/03/2017 18:29:54 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1089
+[28/03/2017 18:29:54 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1089
+[28/03/2017 18:29:54 ] Executando query: SELECT itens.nome_fornecedor FROM itens, itens_pedido WHERE itens_pedido.id_item = itens.id AND itens_pedido.id_pedido = 1089 LIMIT 1
+[28/03/2017 18:29:54 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1088
+[28/03/2017 18:29:54 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1088
+[28/03/2017 18:29:54 ] Executando query: SELECT itens.nome_fornecedor FROM itens, itens_pedido WHERE itens_pedido.id_item = itens.id AND itens_pedido.id_pedido = 1088 LIMIT 1
+[28/03/2017 18:29:54 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1087
+[28/03/2017 18:29:54 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1087
+[28/03/2017 18:29:54 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1087
+[28/03/2017 18:29:54 ] Executando query: SELECT DATE_FORMAT(data, '%d/%m/%Y') AS data FROM pedido_empenho WHERE id_pedido = 1087 LIMIT 1
+[28/03/2017 18:29:54 ] Executando query: SELECT itens.nome_fornecedor FROM itens, itens_pedido WHERE itens_pedido.id_item = itens.id AND itens_pedido.id_pedido = 1087 LIMIT 1
+[28/03/2017 18:29:54 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1086
+[28/03/2017 18:29:54 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1086
+[28/03/2017 18:29:54 ] Executando query: SELECT itens.nome_fornecedor FROM itens, itens_pedido WHERE itens_pedido.id_item = itens.id AND itens_pedido.id_pedido = 1086 LIMIT 1
+[28/03/2017 18:29:54 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1085
+[28/03/2017 18:29:54 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1085
+[28/03/2017 18:29:54 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1085
+[28/03/2017 18:29:54 ] Executando query: SELECT DATE_FORMAT(data, '%d/%m/%Y') AS data FROM pedido_empenho WHERE id_pedido = 1085 LIMIT 1
+[28/03/2017 18:29:54 ] Executando query: SELECT itens.nome_fornecedor FROM itens, itens_pedido WHERE itens_pedido.id_item = itens.id AND itens_pedido.id_pedido = 1085 LIMIT 1
+[28/03/2017 18:29:54 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1084
+[28/03/2017 18:29:54 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1084
+[28/03/2017 18:29:54 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1084
+[28/03/2017 18:29:54 ] Executando query: SELECT DATE_FORMAT(data, '%d/%m/%Y') AS data FROM pedido_empenho WHERE id_pedido = 1084 LIMIT 1
+[28/03/2017 18:29:54 ] Executando query: SELECT itens.nome_fornecedor FROM itens, itens_pedido WHERE itens_pedido.id_item = itens.id AND itens_pedido.id_pedido = 1084 LIMIT 1
+[28/03/2017 18:29:54 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1083
+[28/03/2017 18:29:54 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1083
+[28/03/2017 18:29:54 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1083
+[28/03/2017 18:29:54 ] Executando query: SELECT DATE_FORMAT(data, '%d/%m/%Y') AS data FROM pedido_empenho WHERE id_pedido = 1083 LIMIT 1
+[28/03/2017 18:29:54 ] Executando query: SELECT itens.nome_fornecedor FROM itens, itens_pedido WHERE itens_pedido.id_item = itens.id AND itens_pedido.id_pedido = 1083 LIMIT 1
+[28/03/2017 18:29:54 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1082
+[28/03/2017 18:29:54 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1082
+[28/03/2017 18:29:54 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1082
+[28/03/2017 18:29:54 ] Executando query: SELECT DATE_FORMAT(data, '%d/%m/%Y') AS data FROM pedido_empenho WHERE id_pedido = 1082 LIMIT 1
+[28/03/2017 18:29:54 ] Executando query: SELECT itens.nome_fornecedor FROM itens, itens_pedido WHERE itens_pedido.id_item = itens.id AND itens_pedido.id_pedido = 1082 LIMIT 1
+[28/03/2017 18:29:54 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1081
+[28/03/2017 18:29:54 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1081
+[28/03/2017 18:29:54 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1081
+[28/03/2017 18:29:54 ] Executando query: SELECT DATE_FORMAT(data, '%d/%m/%Y') AS data FROM pedido_empenho WHERE id_pedido = 1081 LIMIT 1
+[28/03/2017 18:29:54 ] Executando query: SELECT itens.nome_fornecedor FROM itens, itens_pedido WHERE itens_pedido.id_item = itens.id AND itens_pedido.id_pedido = 1081 LIMIT 1
+[28/03/2017 18:29:54 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1080
+[28/03/2017 18:29:54 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1080
+[28/03/2017 18:29:54 ] Executando query: SELECT itens.nome_fornecedor FROM itens, itens_pedido WHERE itens_pedido.id_item = itens.id AND itens_pedido.id_pedido = 1080 LIMIT 1
+[28/03/2017 18:29:54 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1079
+[28/03/2017 18:29:54 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1079
+[28/03/2017 18:29:54 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1079
+[28/03/2017 18:29:54 ] Executando query: SELECT DATE_FORMAT(data, '%d/%m/%Y') AS data FROM pedido_empenho WHERE id_pedido = 1079 LIMIT 1
+[28/03/2017 18:29:54 ] Executando query: SELECT itens.nome_fornecedor FROM itens, itens_pedido WHERE itens_pedido.id_item = itens.id AND itens_pedido.id_pedido = 1079 LIMIT 1
+[28/03/2017 18:29:54 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1078
+[28/03/2017 18:29:54 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1078
+[28/03/2017 18:29:54 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1078
+[28/03/2017 18:29:54 ] Executando query: SELECT DATE_FORMAT(data, '%d/%m/%Y') AS data FROM pedido_empenho WHERE id_pedido = 1078 LIMIT 1
+[28/03/2017 18:29:54 ] Executando query: SELECT itens.nome_fornecedor FROM itens, itens_pedido WHERE itens_pedido.id_item = itens.id AND itens_pedido.id_pedido = 1078 LIMIT 1
+[28/03/2017 18:29:54 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1077
+[28/03/2017 18:29:54 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1077
+[28/03/2017 18:29:54 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1077
+[28/03/2017 18:29:54 ] Executando query: SELECT DATE_FORMAT(data, '%d/%m/%Y') AS data FROM pedido_empenho WHERE id_pedido = 1077 LIMIT 1
+[28/03/2017 18:29:54 ] Executando query: SELECT itens.nome_fornecedor FROM itens, itens_pedido WHERE itens_pedido.id_item = itens.id AND itens_pedido.id_pedido = 1077 LIMIT 1
+[28/03/2017 18:29:54 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1076
+[28/03/2017 18:29:54 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1076
+[28/03/2017 18:29:54 ] Executando query: SELECT itens.nome_fornecedor FROM itens, itens_pedido WHERE itens_pedido.id_item = itens.id AND itens_pedido.id_pedido = 1076 LIMIT 1
+[28/03/2017 18:29:54 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1075
+[28/03/2017 18:29:54 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1075
+[28/03/2017 18:29:54 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1075
+[28/03/2017 18:29:54 ] Executando query: SELECT DATE_FORMAT(data, '%d/%m/%Y') AS data FROM pedido_empenho WHERE id_pedido = 1075 LIMIT 1
+[28/03/2017 18:29:54 ] Executando query: SELECT itens.nome_fornecedor FROM itens, itens_pedido WHERE itens_pedido.id_item = itens.id AND itens_pedido.id_pedido = 1075 LIMIT 1
+[28/03/2017 18:29:54 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1074
+[28/03/2017 18:29:54 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1074
+[28/03/2017 18:29:54 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1074
+[28/03/2017 18:29:54 ] Executando query: SELECT DATE_FORMAT(data, '%d/%m/%Y') AS data FROM pedido_empenho WHERE id_pedido = 1074 LIMIT 1
+[28/03/2017 18:29:54 ] Executando query: SELECT itens.nome_fornecedor FROM itens, itens_pedido WHERE itens_pedido.id_item = itens.id AND itens_pedido.id_pedido = 1074 LIMIT 1
+[28/03/2017 18:29:54 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1073
+[28/03/2017 18:29:54 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1073
+[28/03/2017 18:29:54 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1073
+[28/03/2017 18:29:54 ] Executando query: SELECT DATE_FORMAT(data, '%d/%m/%Y') AS data FROM pedido_empenho WHERE id_pedido = 1073 LIMIT 1
+[28/03/2017 18:29:54 ] Executando query: SELECT itens.nome_fornecedor FROM itens, itens_pedido WHERE itens_pedido.id_item = itens.id AND itens_pedido.id_pedido = 1073 LIMIT 1
+[28/03/2017 18:29:54 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1072
+[28/03/2017 18:29:54 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1072
+[28/03/2017 18:29:54 ] Executando query: SELECT itens.nome_fornecedor FROM itens, itens_pedido WHERE itens_pedido.id_item = itens.id AND itens_pedido.id_pedido = 1072 LIMIT 1
+[28/03/2017 18:29:54 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1071
+[28/03/2017 18:29:54 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1071
+[28/03/2017 18:29:54 ] Executando query: SELECT itens.nome_fornecedor FROM itens, itens_pedido WHERE itens_pedido.id_item = itens.id AND itens_pedido.id_pedido = 1071 LIMIT 1
+[28/03/2017 18:29:54 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1070
+[28/03/2017 18:29:54 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1070
+[28/03/2017 18:29:54 ] Executando query: SELECT itens.nome_fornecedor FROM itens, itens_pedido WHERE itens_pedido.id_item = itens.id AND itens_pedido.id_pedido = 1070 LIMIT 1
+[28/03/2017 18:29:54 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1069
+[28/03/2017 18:29:54 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1069
+[28/03/2017 18:29:54 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1069
+[28/03/2017 18:29:54 ] Executando query: SELECT DATE_FORMAT(data, '%d/%m/%Y') AS data FROM pedido_empenho WHERE id_pedido = 1069 LIMIT 1
+[28/03/2017 18:29:54 ] Executando query: SELECT itens.nome_fornecedor FROM itens, itens_pedido WHERE itens_pedido.id_item = itens.id AND itens_pedido.id_pedido = 1069 LIMIT 1
+[28/03/2017 18:29:54 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1068
+[28/03/2017 18:29:54 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1068
+[28/03/2017 18:29:54 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1068
+[28/03/2017 18:29:54 ] Executando query: SELECT DATE_FORMAT(data, '%d/%m/%Y') AS data FROM pedido_empenho WHERE id_pedido = 1068 LIMIT 1
+[28/03/2017 18:29:54 ] Executando query: SELECT itens.nome_fornecedor FROM itens, itens_pedido WHERE itens_pedido.id_item = itens.id AND itens_pedido.id_pedido = 1068 LIMIT 1
+[28/03/2017 18:29:54 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1066
+[28/03/2017 18:29:54 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1066
+[28/03/2017 18:29:54 ] Executando query: SELECT itens.nome_fornecedor FROM itens, itens_pedido WHERE itens_pedido.id_item = itens.id AND itens_pedido.id_pedido = 1066 LIMIT 1
+[28/03/2017 18:29:54 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1065
+[28/03/2017 18:29:54 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1065
+[28/03/2017 18:29:54 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1065
+[28/03/2017 18:29:54 ] Executando query: SELECT DATE_FORMAT(data, '%d/%m/%Y') AS data FROM pedido_empenho WHERE id_pedido = 1065 LIMIT 1
+[28/03/2017 18:29:54 ] Executando query: SELECT itens.nome_fornecedor FROM itens, itens_pedido WHERE itens_pedido.id_item = itens.id AND itens_pedido.id_pedido = 1065 LIMIT 1
+[28/03/2017 18:29:54 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1064
+[28/03/2017 18:29:54 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1064
+[28/03/2017 18:29:54 ] Executando query: SELECT empenho FROM pedido_empenho WHERE id_pedido = 1064
+[28/03/2017 18:29:54 ] Executando query: SELECT DATE_FORMAT(data, '%d/%m/%Y') AS data FROM pedido_empenho WHERE id_pedido = 1064 LIMIT 1
+[28/03/2017 18:29:54 ] Executando query: SELECT itens.nome_fornecedor FROM itens, itens_pedido WHERE itens_pedido.id_item = itens.id AND itens_pedido.id_pedido = 1064 LIMIT 1
+[28/03/2017 18:29:54 ] Executando query: SELECT saldo FROM saldo_setor WHERE id_setor = 2
+[28/03/2017 18:29:56 ] Executando query: SELECT * FROM status
+[28/03/2017 18:29:56 ] Executando query: SELECT * FROM prioridade
+[28/03/2017 18:29:56 ] Executando query: SELECT * FROM setores
+[28/03/2017 18:29:56 ] Executando query: SELECT * FROM saldo_categoria
+[28/03/2017 18:29:56 ] Executando query: SELECT prioridade FROM pedido WHERE id = 1169
+[28/03/2017 18:29:56 ] Executando query: SELECT * FROM status
+[28/03/2017 18:29:56 ] Executando query: SELECT * FROM prioridade
+[28/03/2017 18:29:56 ] Executando query: SELECT * FROM setores
+[28/03/2017 18:29:56 ] Executando query: SELECT * FROM saldo_categoria
+[28/03/2017 18:29:56 ] Executando query: SELECT id_setor FROM pedido WHERE id = 1169
+[28/03/2017 18:29:56 ] Executando query: SELECT pedido.id, DATE_FORMAT(pedido.data_pedido, '%d/%m/%Y') AS data_pedido, EXTRACT(YEAR FROM pedido.data_pedido) AS ano, mes.sigla_mes AS ref_mes, status.nome AS status, pedido.valor AS valor, pedido.obs, pedido.pedido_contrato, prioridade.nome AS prioridade, pedido.aprov_gerencia, pedido.id_usuario FROM prioridade, pedido, mes, status WHERE pedido.prioridade = prioridade.id AND status.id = pedido.status AND pedido.id = 1169 AND mes.id = pedido.ref_mes
+[28/03/2017 18:29:56 ] Executando query: SELECT usuario.nome FROM usuario WHERE usuario.id = 15
+[28/03/2017 18:29:56 ] Executando query: SELECT setores_grupos.nome, pedido_grupo.id_pedido FROM setores_grupos, pedido_grupo WHERE pedido_grupo.id_grupo = setores_grupos.id AND pedido_grupo.id_pedido = 1169
+[28/03/2017 18:29:56 ] Executando query: SELECT contrato_tipo.nome, pedido_contrato.siafi FROM contrato_tipo, pedido_contrato WHERE pedido_contrato.id_tipo = contrato_tipo.id AND pedido_contrato.id_pedido = 1169
+[28/03/2017 18:29:56 ] Executando query: SELECT fonte_recurso, ptres, plano_interno FROM pedido_fonte WHERE id_pedido = 1169
+[28/03/2017 18:29:56 ] Executando query: SELECT licitacao.tipo AS id_tipo, licitacao_tipo.nome AS tipo, licitacao.numero, licitacao.uasg, licitacao.processo_original, licitacao.gera_contrato FROM licitacao, licitacao_tipo WHERE licitacao_tipo.id = licitacao.tipo AND licitacao.id_pedido = 1169 LIMIT 1
+[28/03/2017 18:29:56 ] Executando query: SELECT DISTINCT itens.num_licitacao, itens.num_processo, itens.dt_inicio, itens.dt_fim FROM itens_pedido, itens WHERE itens.id = itens_pedido.id_item AND itens_pedido.id_pedido = 1169
+[28/03/2017 18:29:56 ] Executando query: SELECT DISTINCT itens.cgc_fornecedor, itens.nome_fornecedor, itens.num_contrato FROM itens, itens_pedido WHERE itens.id = itens_pedido.id_item AND itens_pedido.id_pedido = 1169 AND itens.num_licitacao = 164
+[28/03/2017 18:29:56 ] Executando query: SELECT itens.cod_reduzido, itens.cod_despesa, itens.seq_item_processo, itens.complemento_item, itens.vl_unitario, itens_pedido.qtd, itens_pedido.valor FROM itens, itens_pedido WHERE itens.id = itens_pedido.id_item AND itens_pedido.id_pedido = 1169 AND itens.cgc_fornecedor = '00986846000142' ORDER BY CAST(itens.seq_item_processo AS UNSIGNED) ASC
+[28/03/2017 18:29:56 ] Executando query: SELECT pedido_empenho.empenho, DATE_FORMAT(pedido_empenho.data, '%d/%m/%Y') AS data FROM pedido_empenho WHERE pedido_empenho.id_pedido = 1169
+[28/03/2017 18:29:56 ] Executando query: SELECT DATE_FORMAT(comentarios.data_coment, '%d/%m/%Y') AS data_coment, comentarios.comentario FROM comentarios, prioridade WHERE prioridade.id = comentarios.prioridade AND comentarios.id_pedido = 1169
