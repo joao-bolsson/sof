@@ -24,7 +24,6 @@ session_start();
 spl_autoload_register(function (string $class_name) {
     include_once '../class/' . $class_name . '.class.php';
 });
-$obj_Busca = BuscaLTE::getInstance();
 
 $admin = filter_input(INPUT_POST, "admin");
 $users = filter_input(INPUT_POST, "users");
@@ -39,18 +38,18 @@ if (!is_null($filter)) {
 if (!is_null($admin) && isset($_SESSION['id_setor']) && ($_SESSION['id_setor'] == 2 || $_SESSION['id_setor'] == 12)) {
 
     switch ($form) {
-        
+
         case 'loadAdminTable':
-            echo $obj_Busca->loadAdminTable();
+            echo BuscaLTE::loadAdminTable();
             break;
 
         case 'refreshTableHora':
-            echo $obj_Busca->refreshTableHora();
+            echo BuscaLTE::refreshTableHora();
             break;
 
         case 'carregaPostsPag':
             $tabela = filter_input(INPUT_POST, 'tabela');
-            echo $obj_Busca->getNoticiasEditar($tabela);
+            echo BuscaLTE::getNoticiasEditar($tabela);
             break;
 
         case 'customRel':
@@ -59,16 +58,16 @@ if (!is_null($admin) && isset($_SESSION['id_setor']) && ($_SESSION['id_setor'] =
             break;
 
         case 'listProcessos':
-            echo $obj_Busca->getProcessos("recepcao");
+            echo BuscaLTE::getProcessos("recepcao");
             break;
 
         case 'tableRecepcao':
-            echo $obj_Busca->getTabelaRecepcao();
+            echo BuscaLTE::getTabelaRecepcao();
             break;
 
         case 'iniTableSolicAltPed':
             $status = filter_input(INPUT_POST, 'status');
-            echo $obj_Busca->getAdminSolicAltPedidos($status);
+            echo BuscaLTE::getAdminSolicAltPedidos($status);
             break;
 
         case 'tableItensPedido':
@@ -92,17 +91,17 @@ if (!is_null($admin) && isset($_SESSION['id_setor']) && ($_SESSION['id_setor'] =
                 $where = 'AND id = ' . $id_pedido;
             }
 
-            echo $obj_Busca->getSolicitacoesAdmin($where, $array_pedidos);
+            echo BuscaLTE::getSolicitacoesAdmin($where, $array_pedidos);
             break;
 
         case 'tableSolicitacoesAdiantamento':
             $status = filter_input(INPUT_POST, 'status');
-            echo $obj_Busca->getSolicAdiantamentos($status);
+            echo BuscaLTE::getSolicAdiantamentos($status);
             break;
 
         case 'analisaPedido':
             $id_pedido = filter_input(INPUT_POST, 'id_pedido');
-            echo $obj_Busca->getItensPedidoAnalise($id_pedido);
+            echo BuscaLTE::getItensPedidoAnalise($id_pedido);
             break;
         default:
             break;
@@ -112,11 +111,11 @@ if (!is_null($admin) && isset($_SESSION['id_setor']) && ($_SESSION['id_setor'] =
     switch ($form) {
         case 'listLancamentos':
             $id_setor = filter_input(INPUT_POST, 'id_setor');
-            echo $obj_Busca->getLancamentos($id_setor);
+            echo BuscaLTE::getLancamentos($id_setor);
             break;
 
         case 'listRascunhos':
-            echo $obj_Busca->getRascunhos();
+            echo BuscaLTE::getRascunhos();
             break;
 
         case 'listPedidos':
@@ -140,44 +139,44 @@ if (!is_null($admin) && isset($_SESSION['id_setor']) && ($_SESSION['id_setor'] =
                 $array_pedidos = [];
             }
 
-            echo $obj_Busca->getMeusPedidos($where, $array_pedidos);
+            echo BuscaLTE::getMeusPedidos($where, $array_pedidos);
             break;
 
         case 'listProcessos':
-            echo $obj_Busca->getProcessos("solicitacoes");
+            echo BuscaLTE::getProcessos("solicitacoes");
             break;
 
         case 'iniSolicAltPedSetor':
-            echo $obj_Busca->getSolicAltPedidos();
+            echo BuscaLTE::getSolicAltPedidos();
             break;
 
         case 'listAdiantamentos':
-            echo $obj_Busca->getSolicAdiSetor();
+            echo BuscaLTE::getSolicAdiSetor();
             break;
 
         case 'addItemPedido':
             $id_item = filter_input(INPUT_POST, 'id_item');
             $qtd = filter_input(INPUT_POST, 'qtd');
 
-            echo $obj_Busca->addItemPedido($id_item, $qtd);
+            echo BuscaLTE::addItemPedido($id_item, $qtd);
             break;
 
         case 'pesquisarProcesso':
             $busca = filter_input(INPUT_POST, 'busca');
-            echo $obj_Busca->getConteudoProcesso($busca);
+            echo BuscaLTE::getConteudoProcesso($busca);
             break;
 
         case 'editaPedido':
             $id_pedido = filter_input(INPUT_POST, 'id_pedido');
 
-            echo $obj_Busca->getConteudoPedido($id_pedido);
+            echo BuscaLTE::getConteudoPedido($id_pedido);
             break;
 
         case 'imprimirPedido':
             $id_pedido = filter_input(INPUT_POST, 'id_pedido');
             $_SESSION["imprimirPedido"] = 1;
             $_SESSION["id_ped_imp"] = $id_pedido;
-            $_SESSION['pedido_rascunho'] = $obj_Busca->getRequestDraft($id_pedido);
+            $_SESSION['pedido_rascunho'] = BuscaLTE::getRequestDraft($id_pedido);
             break;
 
         default:

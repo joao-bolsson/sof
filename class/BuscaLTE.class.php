@@ -20,15 +20,9 @@ require_once '../defines.php';
 
 final class BuscaLTE {
 
-    private static $INSTANCE;
-
-    public static function getInstance(): BuscaLTE {
-        if (empty(self::$INSTANCE)) {
-            self::$INSTANCE = new BuscaLTE();
-        }
-        return self::$INSTANCE;
-    }
-
+    /**
+     * Default constructor.
+     */
     private function __construct() {
         // empty
     }
@@ -39,7 +33,7 @@ final class BuscaLTE {
      * @param int $id_user Id of the user to format last register.
      * @return array with 'date' and 'time' of last register of the user.
      */
-    private function formatTimeLast(int $status, int $id_user): array {
+    private static function formatTimeLast(int $status, int $id_user): array {
         $column = ($status == 1) ? 'entrada' : 'saida';
 
         $id_last = Busca::getLastRegister($id_user);
@@ -61,7 +55,7 @@ final class BuscaLTE {
     /**
      * @return string Table of administration tool.
      */
-    public function loadAdminTable(): string {
+    public static function loadAdminTable(): string {
         $query = Query::getInstance()->exe("SELECT usuario_hora.id, usuario.nome, DATE_FORMAT(entrada, '%d/%m/%Y %H:%i:%s') AS entrada, DATE_FORMAT(saida, '%d/%m/%Y %H:%i:%s') AS saida FROM usuario_hora, usuario WHERE usuario.id = usuario_hora.id_usuario ORDER BY usuario_hora.id DESC LIMIT " . LIMIT_LOGS);
 
         $table = new Table('', '', [], false);
@@ -79,7 +73,7 @@ final class BuscaLTE {
         return $table;
     }
 
-    public function refreshTableHora(): string {
+    public static function refreshTableHora(): string {
         $query = Query::getInstance()->exe('SELECT DISTINCT usuario_hora.id_usuario, usuario.nome FROM usuario_hora, usuario WHERE usuario_hora.id_usuario = usuario.id ORDER BY usuario.nome ASC');
 
         $table = new Table('', '', [], false);
@@ -92,7 +86,7 @@ final class BuscaLTE {
             $row = new Row();
             $row->addColumn(new Column($obj->nome));
             $row->addColumn(new Column(new Small('label bg-' . $color, $status)));
-            $array = $this->formatTimeLast($info, $obj->id_usuario);
+            $array = self::formatTimeLast($info, $obj->id_usuario);
             $row->addColumn(new Column($array['time']));
             $row->addColumn(new Column($array['date']));
 
@@ -107,7 +101,7 @@ final class BuscaLTE {
      *
      * @return string
      */
-    public function getTabsNoticiasLTE(): string {
+    public static function getTabsNoticiasLTE(): string {
         $query = Query::getInstance()->exe('SELECT id, tabela, nome FROM paginas_post');
         $row = new Row();
         while ($pag = $query->fetch_object()) {
@@ -128,7 +122,7 @@ final class BuscaLTE {
      * @param int $tabela
      * @return string
      */
-    public function getNoticiasEditar(int $tabela): string {
+    public static function getNoticiasEditar(int $tabela): string {
         $query = Query::getInstance()->exe("SELECT id, tabela, titulo, DATE_FORMAT(data, '%d/%m/%Y') AS data FROM postagens WHERE ativa = 1 AND tabela = " . $tabela . ' ORDER BY data ASC');
         $table = new Table('', '', [], false);
         while ($postagem = $query->fetch_object()) {
@@ -154,7 +148,7 @@ final class BuscaLTE {
      *
      * @return string
      */
-    public function getPostarEm(): string {
+    public static function getPostarEm(): string {
         $retorno = '';
         $query = Query::getInstance()->exe('SELECT id, nome FROM paginas_post');
         while ($pagina = $query->fetch_object()) {
@@ -167,7 +161,7 @@ final class BuscaLTE {
      * Retorna a quantidade de solicitações de adiantamento, alt pedidos e de pedidos em análise.
      * @return object Objeto com as quantidades de solicitações.
      */
-    public function getCountSolic() {
+    public static function getCountSolic() {
         $query = Query::getInstance()->exe('SELECT count(saldos_adiantados.id) AS solic_adi, (SELECT count(solic_alt_pedido.id) FROM solic_alt_pedido WHERE solic_alt_pedido.status = 2) AS solic_alt, (SELECT count(pedido.id) FROM pedido WHERE pedido.status = 2) AS solic_ped FROM saldos_adiantados WHERE saldos_adiantados.status = 2');
         $obj = $query->fetch_object();
         return $obj;
@@ -176,7 +170,7 @@ final class BuscaLTE {
     /**
      * @return string A row with contract options.
      */
-    public function getOptionsContrato(): string {
+    public static function getOptionsContrato(): string {
         $query = Query::getInstance()->exe('SELECT id, nome FROM contrato_tipo');
         $row = new Row();
         while ($obj = $query->fetch_object()) {
@@ -193,7 +187,7 @@ final class BuscaLTE {
      * @param int $id_setor
      * @return string Lista de usuários cadastrados.
      */
-    public function getUsers(bool $users = false, int $id_setor = 0): string {
+    public static function getUsers(bool $users = false, int $id_setor = 0): string {
         $where = ($id_setor != 0) ? 'WHERE id_setor = ' . $id_setor : '';
 
         if ($users) {
@@ -213,7 +207,7 @@ final class BuscaLTE {
      * @param int $id_setor Id do setor para retornar os grupos.
      * @return string Options dentro de um <select> com os grupos de um setor.
      */
-    public function getOptionsGrupos(int $id_setor): string {
+    public static function getOptionsGrupos(int $id_setor): string {
         $query = Query::getInstance()->exe('SELECT id, nome, cod FROM setores_grupos WHERE id_setor = ' . $id_setor);
         $retorno = '';
         if ($query->num_rows > 0) {
@@ -229,7 +223,7 @@ final class BuscaLTE {
      * @param int $cont Número de radios que devem aparecer em cada linha.
      * @return string Radios buttons com opções de licitação para um pedido.
      */
-    public function getOptionsLicitacao(int $cont): string {
+    public static function getOptionsLicitacao(int $cont): string {
         $query = Query::getInstance()->exe('SELECT id, nome FROM licitacao_tipo');
         $retorno = '<tr>';
         $i = 0;
@@ -255,7 +249,7 @@ final class BuscaLTE {
      * @param int $id_pedido Id do pedido.
      * @return string Fornecedor do pedido
      */
-    public function getFornecedor(int $id_pedido): string {
+    public static function getFornecedor(int $id_pedido): string {
         $query = Query::getInstance()->exe('SELECT itens.nome_fornecedor FROM itens, itens_pedido WHERE itens_pedido.id_item = itens.id AND itens_pedido.id_pedido = ' . $id_pedido . ' LIMIT 1');
         if ($query->num_rows < 1) {
             return '';
@@ -271,7 +265,7 @@ final class BuscaLTE {
      * @param int $id_setor id do setor
      * @return string
      */
-    public function getPedidosAnalise(int $id_setor): string {
+    public static function getPedidosAnalise(int $id_setor): string {
         $retorno = '';
         $query = Query::getInstance()->exe('SELECT valor FROM pedido WHERE id_setor = ' . $id_setor . ' AND status = 2');
         $soma = $cont = 0;
@@ -294,7 +288,7 @@ final class BuscaLTE {
      *
      * @return string
      */
-    public function getOptionsSetores(): string {
+    public static function getOptionsSetores(): string {
         $retorno = '';
         $count = count(ARRAY_SETORES);
 
@@ -309,7 +303,7 @@ final class BuscaLTE {
      *
      * @return string
      */
-    public function getOptionsPrioridades(): string {
+    public static function getOptionsPrioridades(): string {
         $retorno = '';
         $count = count(ARRAY_PRIORIDADE);
 
@@ -319,7 +313,7 @@ final class BuscaLTE {
         return $retorno;
     }
 
-    public function getOptionsCategoria(): string {
+    public static function getOptionsCategoria(): string {
         $retorno = '';
         $count = count(ARRAY_CATEGORIA);
 
@@ -334,7 +328,7 @@ final class BuscaLTE {
      *
      * @return string
      */
-    public function getOptionsStatus(): string {
+    public static function getOptionsStatus(): string {
         $retorno = '';
         $count = count(ARRAY_STATUS);
         for ($i = 2; $i < $count; $i++) {
@@ -348,7 +342,7 @@ final class BuscaLTE {
      *
      * @return string
      */
-    public function getTiposProcessos(): string {
+    public static function getTiposProcessos(): string {
         $retorno = '';
         $query = Query::getInstance()->exe('SELECT id, nome FROM processos_tipo');
         while ($tipo = $query->fetch_object()) {
@@ -363,7 +357,7 @@ final class BuscaLTE {
      * @param int $id_pedido id do pedido.
      * @return bool Se o pedido é um rascunho - true, senão false.
      */
-    public function getRequestDraft(int $id_pedido): bool {
+    public static function getRequestDraft(int $id_pedido): bool {
         $query = Query::getInstance()->exe('SELECT prioridade FROM pedido WHERE id = ' . $id_pedido);
         $obj = $query->fetch_object();
         return ARRAY_PRIORIDADE[$obj->prioridade] == 'Rascunho';
@@ -375,7 +369,7 @@ final class BuscaLTE {
      * @param int $cont Número de radioBtn por linha.
      * @return string
      */
-    public function getStatus(int $cont): string {
+    public static function getStatus(int $cont): string {
         $retorno = '<tr>';
         $i = 0;
         $count = count(ARRAY_STATUS);
@@ -403,7 +397,7 @@ final class BuscaLTE {
      *
      * @return string Opções de prioridades para os pedidos.
      */
-    public function getPrioridades(): string {
+    public static function getPrioridades(): string {
         $count = count(ARRAY_PRIORIDADE);
 
         $row = new Row();
@@ -422,7 +416,7 @@ final class BuscaLTE {
      *
      * @return string
      */
-    public function getTabelaRecepcao(): string {
+    public static function getTabelaRecepcao(): string {
         $query = Query::getInstance()->exe('SELECT processos.id, processos.num_processo, processos_tipo.nome AS tipo, processos.estante, processos.prateleira, processos.entrada, processos.saida, processos.responsavel, processos.retorno, processos.obs FROM processos, processos_tipo WHERE processos.tipo = processos_tipo.id ORDER BY id ASC');
         $table = new Table('', '', [], false);
         while ($processo = $query->fetch_object()) {
@@ -449,7 +443,7 @@ final class BuscaLTE {
     /**
      * Retorna as permissões para cadastro de usuários.
      */
-    public function getCheckPermissoes(): string {
+    public static function getCheckPermissoes(): string {
         $query = Query::getInstance()->exe("SELECT column_name AS nome FROM information_schema.columns WHERE table_name = 'usuario_permissoes' AND column_name <> 'id_usuario'");
         $retorno = "";
         $i = 1;
@@ -473,7 +467,7 @@ final class BuscaLTE {
      * @param int $id_user User's id
      * @return object JSON with the user's permissions in system.
      */
-    public function getPermissoes(int $id_user) {
+    public static function getPermissoes(int $id_user) {
         $query = Query::getInstance()->exe('SELECT noticias, saldos, pedidos, recepcao FROM usuario_permissoes WHERE id_usuario = ' . $id_user);
         $obj_permissoes = $query->fetch_object();
         return $obj_permissoes;
@@ -494,7 +488,7 @@ final class BuscaLTE {
      * @param int $st
      * @return string
      */
-    public function getAdminSolicAltPedidos(int $st): string {
+    public static function getAdminSolicAltPedidos(int $st): string {
         $query = Query::getInstance()->exe("SELECT solic_alt_pedido.id, solic_alt_pedido.id_pedido, setores.nome, DATE_FORMAT(solic_alt_pedido.data_solicitacao, '%d/%m/%Y') AS data_solicitacao, DATE_FORMAT(solic_alt_pedido.data_analise, '%d/%m/%Y') AS data_analise, solic_alt_pedido.justificativa, solic_alt_pedido.status FROM solic_alt_pedido, setores WHERE solic_alt_pedido.id_setor = setores.id AND solic_alt_pedido.status = " . $st . " ORDER BY solic_alt_pedido.id DESC LIMIT 200");
 
         $array_status = ['Reprovado', 'Aprovado', 'Aberto'];
@@ -527,7 +521,7 @@ final class BuscaLTE {
      * @param int $st Status
      * @return string
      */
-    public function getSolicAdiantamentos(int $st): string {
+    public static function getSolicAdiantamentos(int $st): string {
         $query = Query::getInstance()->exe("SELECT saldos_adiantados.id, setores.nome, DATE_FORMAT(saldos_adiantados.data_solicitacao, '%d/%m/%Y') AS data_solicitacao, DATE_FORMAT(saldos_adiantados.data_analise, '%d/%m/%Y') AS data_analise, saldos_adiantados.valor_adiantado, saldos_adiantados.justificativa FROM saldos_adiantados, setores WHERE saldos_adiantados.id_setor = setores.id AND saldos_adiantados.status = " . $st . " ORDER BY saldos_adiantados.data_solicitacao DESC LIMIT 200");
         $array_status = ['Reprovado', 'Aprovado', 'Aberto'];
         $array_lb = ['red', 'green', 'orange'];
@@ -570,7 +564,7 @@ final class BuscaLTE {
      * @param int $id_pedido Id do pedido
      * @return string Data do cadastro do empenho
      */
-    private function verDataEmpenho(int $id_pedido): string {
+    private static function verDataEmpenho(int $id_pedido): string {
         $query = Query::getInstance()->exe("SELECT DATE_FORMAT(data, '%d/%m/%Y') AS data FROM pedido_empenho WHERE id_pedido = " . $id_pedido . ' LIMIT 1');
 
         if ($query->num_rows < 1) {
@@ -587,7 +581,7 @@ final class BuscaLTE {
      * @param int $id_setor Id do setor que fez o pedido.
      * @return string
      */
-    private function buildButtons(int $id, int $status, int $id_setor): string {
+    private static function buildButtons(int $id, int $status, int $id_setor): string {
         $component = new Div('btn-group');
 
         if ($status != 3 && $status != 4) {
@@ -607,7 +601,7 @@ final class BuscaLTE {
         }
 
         if (Busca::verEmpenho($id) != 'EMPENHO SIAFI PENDENTE' && $_SESSION['id_setor'] != 12 && $status > 6) {
-            $component->addComponent(new Button('', BTN_DEFAULT, "cadEmpenho(" . $id . ", '" . Busca::verEmpenho($id) . "', '" . $this->verDataEmpenho($id) . "')", "data-toggle=\"tooltip\"", 'Cadastrar Empenho', 'credit-card'));
+            $component->addComponent(new Button('', BTN_DEFAULT, "cadEmpenho(" . $id . ", '" . Busca::verEmpenho($id) . "', '" . self::verDataEmpenho($id) . "')", "data-toggle=\"tooltip\"", 'Cadastrar Empenho', 'credit-card'));
         }
 
         $component->addComponent(new Button('', BTN_DEFAULT, "imprimir(" . $id . ")", "data-toggle=\"tooltip\"", 'Imprimir', 'print'));
@@ -621,7 +615,7 @@ final class BuscaLTE {
      * @param array $pedidos
      * @return string
      */
-    public function getSolicitacoesAdmin(string $where = '', array $pedidos = []): string {
+    public static function getSolicitacoesAdmin(string $where = '', array $pedidos = []): string {
         $query = Query::getInstance()->exe("SELECT id, id_setor, DATE_FORMAT(data_pedido, '%d/%m/%Y') AS data_pedido, prioridade, status, valor, aprov_gerencia FROM pedido WHERE status <> 3 AND alteracao = 0 " . $where . ' ORDER BY id DESC LIMIT ' . LIMIT_MAX);
 
         $table = new Table('', '', array(), false);
@@ -666,7 +660,7 @@ final class BuscaLTE {
                 $row->addColumn(new Column(ARRAY_STATUS[$pedido->status]));
                 $row->addColumn(new Column("R$ " . $pedido->valor));
                 $row->addColumn(new Column($btnVerEmpenho));
-                $row->addColumn(new Column($this->getFornecedor($pedido->id)));
+                $row->addColumn(new Column(self::getFornecedor($pedido->id)));
 
                 $table->addRow($row);
             }
@@ -694,7 +688,7 @@ final class BuscaLTE {
      * @param int $id_pedido
      * @return string
      */
-    public function getItensPedidoAnalise(int $id_pedido): string {
+    public static function getItensPedidoAnalise(int $id_pedido): string {
         $query = Query::getInstance()->exe('SELECT itens.qt_contrato, itens.id AS id_itens, itens_pedido.qtd AS qtd_solicitada, itens_pedido.valor, itens.nome_fornecedor, itens.num_licitacao, itens.dt_inicio, itens.dt_fim, itens.cod_reduzido, itens.complemento_item, itens.vl_unitario, itens.qt_saldo, itens.cod_despesa, itens.descr_despesa, itens.num_contrato, itens.num_processo, itens.descr_mod_compra, itens.num_licitacao, itens.cgc_fornecedor, itens.num_extrato, itens.descricao, itens.qt_contrato, itens.vl_contrato, itens.qt_utilizado, itens.vl_utilizado, itens.qt_saldo, itens.vl_saldo, itens.seq_item_processo FROM itens_pedido, itens WHERE itens_pedido.id_pedido = ' . $id_pedido . ' AND itens_pedido.id_item = itens.id ORDER BY itens.seq_item_processo ASC');
 
         $table = new Table('', '', [], false);
@@ -751,7 +745,7 @@ final class BuscaLTE {
      *
      * @return string
      */
-    public function getSolicAltPedidos(): string {
+    public static function getSolicAltPedidos(): string {
         $id_setor = $_SESSION['id_setor'];
         $query = Query::getInstance()->exe("SELECT solic_alt_pedido.id_pedido, DATE_FORMAT(solic_alt_pedido.data_solicitacao, '%d/%m/%Y') AS data_solicitacao, DATE_FORMAT(solic_alt_pedido.data_analise, '%d/%m/%Y') AS data_analise, solic_alt_pedido.justificativa, solic_alt_pedido.status, pedido.id_usuario FROM solic_alt_pedido, pedido WHERE pedido.id = solic_alt_pedido.id_pedido AND solic_alt_pedido.id_setor = " . $id_setor . ' ORDER BY solic_alt_pedido.id DESC LIMIT ' . LIMIT_MAX);
         $table = new Table('', '', array(), false);
@@ -782,7 +776,7 @@ final class BuscaLTE {
      *
      * @return string
      */
-    public function getSolicAdiSetor(): string {
+    public static function getSolicAdiSetor(): string {
         $id_setor = $_SESSION['id_setor'];
         $query = Query::getInstance()->exe("SELECT id, DATE_FORMAT(data_solicitacao, '%d/%m/%Y') AS data_solicitacao, DATE_FORMAT(data_analise, '%d/%m/%Y') AS data_analise, valor_adiantado, justificativa, status FROM saldos_adiantados WHERE id_setor = " . $id_setor . ' ORDER BY id DESC LIMIT ' . LIMIT_MAX);
         $array_status = ['Reprovado', 'Aprovado', 'Aberto'];
@@ -813,7 +807,7 @@ final class BuscaLTE {
      * @param string $busca
      * @return string
      */
-    public function getConteudoProcesso(string $busca): string {
+    public static function getConteudoProcesso(string $busca): string {
         $query = Query::getInstance()->exe("SELECT id, id_item_processo, nome_fornecedor, cod_reduzido, complemento_item, replace(vl_unitario, ',', '.') AS vl_unitario, qt_contrato, qt_utilizado, vl_utilizado, qt_saldo, vl_saldo FROM itens WHERE num_processo LIKE '%" . $busca . "%' AND cancelado = 0");
         $table = new Table('', '', [], false);
         while ($item = $query->fetch_object()) {
@@ -848,7 +842,7 @@ final class BuscaLTE {
      * @param int $qtd
      * @return string
      */
-    public function addItemPedido(int $id_item, int $qtd): string {
+    public static function addItemPedido(int $id_item, int $qtd): string {
         $query = Query::getInstance()->exe("SELECT id, nome_fornecedor, num_processo, num_licitacao, cod_reduzido, complemento_item, replace(vl_unitario, ',', '.') AS vl_unitario, qt_saldo, qt_contrato, qt_utilizado, vl_saldo, vl_contrato, vl_utilizado FROM itens WHERE id = " . $id_item);
         $item = $query->fetch_object();
         $item->complemento_item = str_replace("\"", "\'", $item->complemento_item);
@@ -901,7 +895,7 @@ final class BuscaLTE {
      *
      * @return string
      */
-    public function getRascunhos(): string {
+    public static function getRascunhos(): string {
         $id_setor = $_SESSION['id_setor'];
         $query = Query::getInstance()->exe("SELECT id, DATE_FORMAT(data_pedido, '%d/%m/%Y') AS data_pedido, pedido.valor, status, pedido.id_usuario FROM pedido WHERE id_setor = " . $id_setor . ' AND alteracao = 1 ORDER BY id DESC LIMIT ' . LIMIT_MAX);
 
@@ -927,11 +921,11 @@ final class BuscaLTE {
      * @param int $id_pedido Request's id.
      * @return string Rows with itens of $id_pedido param.
      */
-    public function getConteudoPedido(int $id_pedido): string {
+    public static function getConteudoPedido(int $id_pedido): string {
         $retorno = '';
         $query = Query::getInstance()->exe('SELECT id_item, qtd FROM itens_pedido WHERE id_pedido = ' . $id_pedido);
         while ($item = $query->fetch_object()) {
-            $retorno .= $this->addItemPedido($item->id_item, $item->qtd);
+            $retorno .= self::addItemPedido($item->id_item, $item->qtd);
         }
         return $retorno;
     }
@@ -943,7 +937,7 @@ final class BuscaLTE {
      * @param array $pedidos
      * @return string
      */
-    public function getMeusPedidos(string $where = '', array $pedidos = []): string {
+    public static function getMeusPedidos(string $where = '', array $pedidos = []): string {
         $id_setor = $_SESSION['id_setor'];
         $query = Query::getInstance()->exe("SELECT id, DATE_FORMAT(data_pedido, '%d/%m/%Y') AS data_pedido, prioridade, status, valor, id_usuario FROM pedido WHERE id_setor = " . $id_setor . ' AND alteracao = 0 ' . $where . ' ORDER BY id DESC LIMIT ' . LIMIT_MAX);
 
@@ -964,7 +958,7 @@ final class BuscaLTE {
                 $row->addColumn(new Column(new Small('label bg-gray', ARRAY_STATUS[$pedido->status])));
                 $row->addColumn(new Column($empenho));
                 $row->addColumn(new Column('R$ ' . $pedido->valor));
-                $row->addColumn(new Column($this->getFornecedor($pedido->id)));
+                $row->addColumn(new Column(self::getFornecedor($pedido->id)));
                 $row->addColumn(new Column(self::buildButtonsMyRequests($pedido->id, $pedido->status, $pedido->id_usuario)));
 
                 $table->addRow($row);
@@ -991,7 +985,7 @@ final class BuscaLTE {
      * @param string $tela If 'recepcao' - add process in tables used by reception, else - search itens of process.
      * @return string Rows with all process.
      */
-    public function getProcessos(string $tela): string {
+    public static function getProcessos(string $tela): string {
         $sql = 'SELECT DISTINCT num_processo FROM itens';
         $onclick = 'pesquisarProcesso';
         $title = 'Pesquisar Processo';
@@ -1014,7 +1008,7 @@ final class BuscaLTE {
         return $table;
     }
 
-    private function getSetorTransf(int $id_lancamento) {
+    private static function getSetorTransf(int $id_lancamento) {
         $query = Query::getInstance()->exe('SELECT id_setor, valor FROM saldos_lancamentos WHERE id = ' . $id_lancamento);
         $obj = $query->fetch_object();
 
@@ -1032,7 +1026,7 @@ final class BuscaLTE {
      * @param int $id_setor id do setor
      * @return string
      */
-    public function getLancamentos(int $id_setor): string {
+    public static function getLancamentos(int $id_setor): string {
         $where = ($id_setor != 0) ? ' WHERE id_setor = ' . $id_setor : '';
 
         $query = Query::getInstance()->exe("SELECT id, id_setor, DATE_FORMAT(data, '%d/%m/%Y') AS data, valor, categoria FROM saldos_lancamentos" . $where . ' ORDER BY id DESC LIMIT ' . LIMIT_MAX);
@@ -1040,7 +1034,7 @@ final class BuscaLTE {
         $table = new Table('', '', [], false);
         while ($lancamento = $query->fetch_object()) {
             $cor = ($lancamento->valor < 0) ? 'red' : 'green';
-            $setor_transf = ($lancamento->categoria == 3) ? $this->getSetorTransf($lancamento->id) : '';
+            $setor_transf = ($lancamento->categoria == 3) ? self::getSetorTransf($lancamento->id) : '';
 
             $btn = ($_SESSION['id_setor'] == 2 && $lancamento->categoria != 4 && $lancamento->categoria != 2) ? new Button('', BTN_DEFAULT, "undoFreeMoney(" . $lancamento->id . ")", "data-toggle=\"tooltip\"", 'Desfazer', 'undo') : '';
             $lancamento->valor = number_format($lancamento->valor, 3, ',', '.');

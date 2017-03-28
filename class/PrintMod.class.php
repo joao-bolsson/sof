@@ -403,7 +403,7 @@ final class PrintMod {
 
             $row = new Row();
             $row->addColumn(new Column($pedido->id));
-            $row->addColumn(new Column(BuscaLTE::getInstance()->getFornecedor($pedido->id)));
+            $row->addColumn(new Column(BuscaLTE::getFornecedor($pedido->id)));
             $row->addColumn(new Column($pedido->setor));
 
             if ($status == 8) {
@@ -552,7 +552,7 @@ final class PrintMod {
 
             $row = new Row();
             $row->addColumn(new Column($pedido->id));
-            $row->addColumn(new Column(BuscaLTE::getInstance()->getFornecedor($pedido->id)));
+            $row->addColumn(new Column(BuscaLTE::getFornecedor($pedido->id)));
             $row->addColumn(new Column($pedido->setor));
             if (in_array(8, $status)) {
                 $row->addColumn(new Column($pedido->prioridade));
