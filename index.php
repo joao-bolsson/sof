@@ -1,9 +1,9 @@
 <?php
 
 /**
- * 	Arquivo principal do sistema.
+ *    Arquivo principal do sistema.
  *
- * 	@author João Bolsson
+ * @author João Bolsson
  */
 ini_set('display_errors', true);
 error_reporting(E_ALL);
