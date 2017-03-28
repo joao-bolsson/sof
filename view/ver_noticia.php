@@ -9,8 +9,6 @@ spl_autoload_register(function (string $class_name) {
 });
 
 $controller = Controller::getInstance();
-//instanciando classe de busca para popular o select de estados
-$obj_Busca = Busca::getInstance();
 $id = 0;
 if (!isset($_SESSION["id_noticia"]) && !isset($_SESSION["pag"])) {
     //impede que o usuário veja esta página digitando no navegador
@@ -245,7 +243,7 @@ if (!isset($_SESSION["id_noticia"]) && !isset($_SESSION["pag"])) {
                         <div class="card-main">
 
                             <div class="card-inner fr-view">
-                                <?= $obj_Busca->getInfoNoticia($id); ?>
+                                <?= Busca::getInfoNoticia($id); ?>
                             </div>
                             <div class="card-action">
                                 <div class="card-action-btn pull-left">

@@ -29,9 +29,7 @@ spl_autoload_register(function (string $class_name) {
     include_once '../class/' . $class_name . '.class.php';
 });
 
-$obj_Busca = Busca::getInstance();
-
-if ($obj_Busca->isActive()) {
+if (BuscaisActive()) {
 
     $obj_Geral = Geral::getInstance();
     $obj_Util = Util::getInstance();
@@ -401,7 +399,7 @@ if ($obj_Busca->isActive()) {
                 $id_setor = filter_input(INPUT_POST, 'id_setor');
                 $valor = filter_input(INPUT_POST, 'valor');
 
-                $saldo_atual = $obj_Busca->getSaldo($id_setor);
+                $saldo_atual = Busca::getSaldo($id_setor);
 
                 $libera = $obj_Geral->liberaSaldo($id_setor, $valor, $saldo_atual);
 

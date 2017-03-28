@@ -42,7 +42,7 @@ final class BuscaLTE {
     private function formatTimeLast(int $status, int $id_user): array {
         $column = ($status == 1) ? 'entrada' : 'saida';
 
-        $id_last = Busca::getInstance()->getLastRegister($id_user);
+        $id_last = Busca::getLastRegister($id_user);
         $query = Query::getInstance()->exe("SELECT DATE_FORMAT(" . $column . ", '%d/%m/%Y') AS date, DATE_FORMAT(" . $column . ", '%H:%i:%s') AS time FROM usuario_hora WHERE id = " . $id_last);
 
         $array = $query->fetch_array();
@@ -85,7 +85,7 @@ final class BuscaLTE {
         $table = new Table('', '', [], false);
 
         while ($obj = $query->fetch_object()) {
-            $info = !Busca::getInstance()->getInfoTime($obj->id_usuario);
+            $info = !Busca::getInfoTime($obj->id_usuario);
             $status = ($info == 1) ? 'Entrada' : 'Saída';
             $color = ($info == 1) ? 'green' : 'red';
 
@@ -606,8 +606,8 @@ final class BuscaLTE {
             }
         }
 
-        if (Busca::getInstance()->verEmpenho($id) != 'EMPENHO SIAFI PENDENTE' && $_SESSION['id_setor'] != 12 && $status > 6) {
-            $component->addComponent(new Button('', BTN_DEFAULT, "cadEmpenho(" . $id . ", '" . Busca::getInstance()->verEmpenho($id) . "', '" . $this->verDataEmpenho($id) . "')", "data-toggle=\"tooltip\"", 'Cadastrar Empenho', 'credit-card'));
+        if (Busca::verEmpenho($id) != 'EMPENHO SIAFI PENDENTE' && $_SESSION['id_setor'] != 12 && $status > 6) {
+            $component->addComponent(new Button('', BTN_DEFAULT, "cadEmpenho(" . $id . ", '" . Busca::verEmpenho($id) . "', '" . $this->verDataEmpenho($id) . "')", "data-toggle=\"tooltip\"", 'Cadastrar Empenho', 'credit-card'));
         }
 
         $component->addComponent(new Button('', BTN_DEFAULT, "imprimir(" . $id . ")", "data-toggle=\"tooltip\"", 'Imprimir', 'print'));
@@ -640,7 +640,7 @@ final class BuscaLTE {
             }
 
             if ($flag) {
-                $btnVerEmpenho = Busca::getInstance()->verEmpenho($pedido->id);
+                $btnVerEmpenho = Busca::verEmpenho($pedido->id);
                 if ($btnVerEmpenho == 'EMPENHO SIAFI PENDENTE') {
                     $btnVerEmpenho = '';
                 }
@@ -950,7 +950,7 @@ final class BuscaLTE {
         $table = new Table('', '', [], false);
         while ($pedido = $query->fetch_object()) {
             if (!in_array($pedido->id, $pedidos)) {
-                $empenho = Busca::getInstance()->verEmpenho($pedido->id);
+                $empenho = Busca::verEmpenho($pedido->id);
                 if ($empenho == 'EMPENHO SIAFI PENDENTE') {
                     $empenho = '';
                 }

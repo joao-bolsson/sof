@@ -80,7 +80,7 @@ final class Geral {
             Query::getInstance()->exe('INSERT INTO usuario_hora VALUES(NULL, ' . $id_usuario . ", NOW(), NULL, NULL, '" . $ip . "')");
         } else {
             // saída
-            $id_last = Busca::getInstance()->getLastRegister();
+            $id_last = Busca::getLastRegister();
             Query::getInstance()->exe('UPDATE usuario_hora SET saida = NOW() WHERE id = ' . $id_last);
             // atualiza horas realizadas
             $horas = Util::getInstance()->getTimeDiffHora($id_last);
@@ -582,7 +582,7 @@ final class Geral {
         }
         Query::getInstance()->exe("UPDATE saldo_setor SET saldo = '{$saldo}' WHERE id_setor = " . $id_setor);
         if ($id_setor != 2) {
-            $saldo_sof = Busca::getInstance()->getSaldo(2) - $valor;
+            $saldo_sof = Busca::getSaldo(2) - $valor;
             $saldo_sof = number_format($saldo_sof, 3, '.', '');
             Query::getInstance()->exe("UPDATE saldo_setor SET saldo = '{$saldo_sof}' WHERE id_setor = 2;");
         }

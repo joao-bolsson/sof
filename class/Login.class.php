@@ -81,8 +81,8 @@ final class Login {
                 $_SESSION['nome_setor'] = Login::getNomeSetor($usuario->{$this->campoSetor});
 
                 //definindo os slides para evitar recarregamentos desnecessários
-                $_SESSION["slide1"] = Busca::getInstance()->getSlide(1);
-                $_SESSION["slide2"] = Busca::getInstance()->getSlide(2);
+                $_SESSION["slide1"] = Busca::getSlide(1);
+                $_SESSION["slide2"] = Busca::getSlide(2);
 
                 $retorno = $usuario->{$this->campoSetor};
             }

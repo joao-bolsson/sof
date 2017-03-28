@@ -19,7 +19,7 @@ require_once '../defines.php';
 //instanciando classe de busca para popular o select de estados
 $obj_Busca = BuscaLTE::getInstance();
 $id_setor = $_SESSION["id_setor"];
-$saldo_total = Busca::getInstance()->getSaldo($id_setor);
+$saldo_total = Busca::getSaldo($id_setor);
 $pedidos_em_analise = $obj_Busca->getPedidosAnalise($id_setor);
 $select_grupo = $obj_Busca->getOptionsGrupos($id_setor);
 ?>
@@ -174,7 +174,7 @@ $select_grupo = $obj_Busca->getOptionsGrupos($id_setor);
                 <section class="content-header">
                     <h1>
                         <?= $_SESSION['nome_setor']; ?>
-                        <small>Saldo: R$ <?= number_format(Busca::getInstance()->getSaldo($_SESSION['id_setor']), 3, ',', '.'); ?></small>
+                        <small>Saldo: R$ <?= number_format(Busca::getSaldo($_SESSION['id_setor']), 3, ',', '.'); ?></small>
                     </h1>
                     <ol class="breadcrumb">
                         <li class="active"><i class="fa fa-dashboard"></i> Solicitações de Empenho</li>

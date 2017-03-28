@@ -16,21 +16,14 @@ spl_autoload_register(function (string $class_name) {
 
 final class Busca {
 
-    private static $INSTANCE;
-
-    public static function getInstance(): Busca {
-        if (empty(self::$INSTANCE)) {
-            self::$INSTANCE = new Busca();
-        }
-        return self::$INSTANCE;
-    }
-
+    /**
+     * Busca constructor.
+     */
     private function __construct() {
         // empty
     }
 
-
-    public function scanDataBase() {
+    public static function scanDataBase() {
         $query = Query::getInstance()->exe("SELECT id, valor FROM pedido;");
 
         while ($obj = $query->fetch_object()) {
@@ -45,7 +38,7 @@ final class Busca {
     }
 
 
-    public function getInfoLog(int $id) {
+    public static function getInfoLog(int $id) {
         $query = Query::getInstance()->exe("SELECT usuario.nome, DATE_FORMAT(entrada, '%d/%m/%Y %H:%i:%s') AS entrada, DATE_FORMAT(saida, '%d/%m/%Y %H:%i:%s') AS saida FROM usuario_hora, usuario WHERE usuario_hora.id_usuario = usuario.id AND usuario_hora.id = " . $id);
 
         $obj = $query->fetch_object();
@@ -59,7 +52,7 @@ final class Busca {
      * @param int $id Id of user.
      * @return int int Id of last register in usuario_hora.
      */
-    public function getLastRegister(int $id = 0) {
+    public static function getLastRegister(int $id = 0) {
         $id_usuario = ($id == 0) ? $_SESSION['id'] : $id;
         $query_id = Query::getInstance()->exe('SELECT max(id) AS id FROM usuario_hora WHERE id_usuario = ' . $id_usuario);
 
@@ -72,8 +65,8 @@ final class Busca {
      * Verify ifuser must make an in or out.
      * @return int If 1 - in, else - out.
      */
-    public function getInfoTime(int $id_usuario = 0): int {
-        $id_last = $this->getLastRegister($id_usuario);
+    public static function getInfoTime(int $id_usuario = 0): int {
+        $id_last = self::getLastRegister($id_usuario);
 
         $return = NULL;
 
@@ -106,7 +99,7 @@ final class Busca {
      * @param string $table tabel mysql
      * @return array array com a coluna nome da table
      */
-    public function getArrayDefines(string $table): array {
+    public static function getArrayDefines(string $table): array {
         $query = Query::getInstance()->exe('SELECT * FROM ' . $table);
 
         $array = [NULL];
@@ -117,7 +110,7 @@ final class Busca {
         return $array;
     }
 
-    public function getInfoContrato(int $id_pedido) {
+    public static function getInfoContrato(int $id_pedido) {
         $query = Query::getInstance()->exe('SELECT pedido.pedido_contrato, pedido_contrato.id_tipo, pedido_contrato.siafi FROM pedido, pedido_contrato WHERE pedido.id = pedido_contrato.id_pedido AND pedido.id = ' . $id_pedido);
         if ($query->num_rows < 1) {
             return false;
@@ -126,7 +119,7 @@ final class Busca {
         return json_encode($obj);
     }
 
-    public function getGrupo(int $id_pedido) {
+    public static function getGrupo(int $id_pedido) {
         $query = Query::getInstance()->exe('SELECT id_grupo FROM pedido_grupo WHERE id_pedido = ' . $id_pedido);
         if ($query->num_rows < 1) {
             return false;
@@ -138,7 +131,7 @@ final class Busca {
     /**
      * @return bool Se o sistema está ativo - true, senão - false.
      */
-    public function isActive(): bool {
+    public static function isActive(): bool {
         $query = Query::getInstance()->exe('SELECT ativo FROM sistema LIMIT 1');
         $obj = $query->fetch_object();
         return $obj->ativo;
@@ -150,7 +143,7 @@ final class Busca {
      * @param int $pedido Id do pedido.
      * @return string Uma tabela com os processos e as informações dele.
      */
-    public function getProcessosPedido(int $pedido): string {
+    public static function getProcessosPedido(int $pedido): string {
         $query = Query::getInstance()->exe('SELECT DISTINCT itens.num_processo, itens.dt_fim FROM itens, itens_pedido WHERE itens_pedido.id_pedido = ' . $pedido . ' AND itens_pedido.id_item = itens.id');
         $table = new Table('', '', array(), false);
         while ($processo = $query->fetch_object()) {
@@ -168,7 +161,7 @@ final class Busca {
      *
      * @return string Linhas para uma tabela mostrar os problemas.
      */
-    public function getProblemas(): string {
+    public static function getProblemas(): string {
         $query = Query::getInstance()->exe('SELECT setores.nome AS setor, problemas.assunto, problemas.descricao FROM setores, problemas WHERE setores.id = problemas.id_setor ORDER BY problemas.id DESC');
         $table = new Table('', '', array(), false);
 
@@ -194,7 +187,7 @@ final class Busca {
      * @param int $id_item Item's id in the table items.
      * @return string
      */
-    public function getInfoItem($id_item): string {
+    public static function getInfoItem($id_item): string {
         $query = Query::getInstance()->exe("SELECT cod_despesa, descr_despesa, cod_reduzido, dt_fim, complemento_item, replace(vl_unitario, ',', '.') AS vl_unitario, qt_contrato, replace(vl_contrato, ',', '.') AS vl_contrato, qt_utilizado, replace(vl_utilizado, ',', '.') AS vl_utilizado, qt_saldo, replace(vl_saldo, ',', '.') AS vl_saldo, seq_item_processo FROM itens WHERE id = " . $id_item);
         $obj = $query->fetch_object();
         return json_encode($obj);
@@ -206,7 +199,7 @@ final class Busca {
      * @param int $id_pedido Id do pedido.
      * @return string
      */
-    public function verEmpenho(int $id_pedido): string {
+    public static function verEmpenho(int $id_pedido): string {
         $retorno = '';
         $query = Query::getInstance()->exe('SELECT empenho FROM pedido_empenho WHERE id_pedido = ' . $id_pedido);
         if ($query->num_rows < 1) {
@@ -218,7 +211,7 @@ final class Busca {
         return $retorno;
     }
 
-    public function getTotalInOutSaldos(int $id_setor): string {
+    public static function getTotalInOutSaldos(int $id_setor): string {
         $where = ($id_setor != 0) ? 'AND id_setor = ' . $id_setor : '';
         $query_in = Query::getInstance()->exe('SELECT sum(valor) soma FROM saldos_lancamentos WHERE valor > 0 ' . $where);
         $query_out = Query::getInstance()->exe('SELECT sum(valor) soma FROM saldos_lancamentos WHERE valor < 0 ' . $where);
@@ -236,7 +229,7 @@ final class Busca {
      * @param int $id_setor Sector's id.
      * @return string Sector's name.
      */
-    public function getSetorNome(int $id_setor): string {
+    public static function getSetorNome(int $id_setor): string {
         $query = Query::getInstance()->exe('SELECT nome FROM setores WHERE id = ' . $id_setor);
         $obj = $query->fetch_object();
         return $obj->nome;
@@ -248,7 +241,7 @@ final class Busca {
      * @param int $id_processo Process's id.
      * @return string Process's informations.
      */
-    public function getInfoProcesso(int $id_processo): string {
+    public static function getInfoProcesso(int $id_processo): string {
         $query = Query::getInstance()->exe('SELECT num_processo, tipo, estante, prateleira, entrada, saida, responsavel, retorno, obs FROM processos WHERE id = ' . $id_processo);
         $obj = $query->fetch_object();
         return json_encode($obj);
@@ -260,7 +253,7 @@ final class Busca {
      * @param int $id_user User's id.
      * @return object Object with user's permissions in system.
      */
-    public function getPermissoes(int $id_user) {
+    public static function getPermissoes(int $id_user) {
         $query = Query::getInstance()->exe('SELECT noticias, saldos, pedidos, recepcao FROM usuario_permissoes WHERE id_usuario = ' . $id_user);
         $obj_permissoes = $query->fetch_object();
         return $obj_permissoes;
@@ -272,7 +265,7 @@ final class Busca {
      * @param int $id News id.
      * @return string News information.
      */
-    public function getInfoNoticia(int $id): string {
+    public static function getInfoNoticia(int $id): string {
         $query = Query::getInstance()->exe('SELECT postagem FROM postagens WHERE id = ' . $id);
         $noticia = $query->fetch_object();
         return html_entity_decode($noticia->postagem);
@@ -284,7 +277,7 @@ final class Busca {
      * @param string $tabela Filter by table's name.
      * @return string
      */
-    public function getPostagens(string $tabela): string {
+    public static function getPostagens(string $tabela): string {
         //declarando retorno
         $retorno = '';
         $query = Query::getInstance()->exe("SELECT postagens.id, postagens.titulo, DATE_FORMAT(postagens.data, '%d/%m/%Y') AS data FROM postagens, paginas_post WHERE postagens.tabela = paginas_post.id AND paginas_post.tabela = '{$tabela}' AND ativa = 1 ORDER BY data ASC");
@@ -304,7 +297,7 @@ final class Busca {
      * @param int $slide (1 ou 2)-> o primeiro mostra as últimas notícias e o segundo aleatórias
      * @return string
      */
-    public function getSlide(int $slide): string {
+    public static function getSlide(int $slide): string {
         $order = ($slide == 1) ? 'postagens.data DESC' : 'rand()';
         $retorno = '';
         $array_anima = array("primeira", "segunda", "terceira", "quarta", "quinta");
@@ -361,7 +354,7 @@ final class Busca {
      * @param string $busca Title to search.
      * @return string News with the title similar to $busca.
      */
-    public function pesquisar(string $busca): string {
+    public static function pesquisar(string $busca): string {
         $busca = htmlentities($busca);
         $busca = Query::getInstance()->real_escape_string($busca);
         $retorno = "
@@ -410,33 +403,11 @@ final class Busca {
     }
 
     /**
-     *    Função que retorna as 'tabs' com as ṕáginas das notícias para editar.
-     *
-     * @return string
-     */
-    public function getTabsNoticias(): string {
-        $retorno = "";
-        $query = Query::getInstance()->exe('SELECT id, tabela, nome FROM paginas_post');
-        while ($pag = $query->fetch_object()) {
-            $retorno .= "
-                <td>
-                    <div class=\"radiobtn radiobtn-adv\">
-                        <label for=\"pag-" . $pag->tabela . "\">
-                            <input type=\"radio\" id=\"pag-" . $pag->tabela . "\" name=\"pag\" class=\"access-hide\" onclick=\"carregaPostsPag(" . $pag->id . ");\">" . $pag->nome . "
-                            <span class=\"radiobtn-circle\"></span><span class=\"radiobtn-circle-check\"></span>
-                        </label>
-                    </div>
-                </td>";
-        }
-        return $retorno;
-    }
-
-    /**
      * Função para buscar conteúdo de uma publicação para edição.
      *
      * @return string
      */
-    public function getPublicacaoEditar(int $id): string {
+    public static function getPublicacaoEditar(int $id): string {
         $query = Query::getInstance()->exe('SELECT postagem FROM postagens WHERE id = ' . $id);
         $publicacao = $query->fetch_object();
         return $publicacao->postagem;
@@ -448,7 +419,7 @@ final class Busca {
      *
      * @return string
      */
-    public function getInfoPedidoAnalise(int $id_pedido, int $id_setor): string {
+    public static function getInfoPedidoAnalise(int $id_pedido, int $id_setor): string {
         $query = Query::getInstance()->exe('SELECT saldo_setor.saldo, pedido.prioridade, pedido.status, pedido.valor, pedido.obs FROM saldo_setor, pedido WHERE saldo_setor.id_setor = ' . $id_setor . ' AND pedido.id = ' . $id_pedido);
         $pedido = $query->fetch_object();
         return json_encode($pedido);
@@ -459,7 +430,7 @@ final class Busca {
      *
      * @return string
      */
-    public function getSaldo(int $id_setor): string {
+    public static function getSaldo(int $id_setor): string {
         $query = Query::getInstance()->exe('SELECT saldo FROM saldo_setor WHERE id_setor = ' . $id_setor);
         if ($query->num_rows < 1) {
             Query::getInstance()->exe("INSERT INTO saldo_setor VALUES(NULL, " . $id_setor . ", '0.000');");
@@ -475,13 +446,13 @@ final class Busca {
      *
      * @return string
      */
-    public function getPopulaRascunho(int $id_pedido, int $id_setor): string {
+    public static function getPopulaRascunho(int $id_pedido, int $id_setor): string {
         $query = Query::getInstance()->exe('SELECT saldo_setor.saldo, pedido.valor, pedido.obs FROM saldo_setor, pedido WHERE pedido.id = ' . $id_pedido . ' AND saldo_setor.id_setor = ' . $id_setor);
         $pedido = $query->fetch_object();
         return json_encode($pedido);
     }
 
-    public function getLicitacao(int $id_pedido) {
+    public static function getLicitacao(int $id_pedido) {
         $query = Query::getInstance()->exe('SELECT id, tipo, numero, uasg, processo_original, gera_contrato FROM licitacao WHERE id_pedido = ' . $id_pedido);
         $retorno = false;
         if ($query->num_rows > 0) {

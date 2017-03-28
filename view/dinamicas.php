@@ -9,8 +9,6 @@ spl_autoload_register(function (string $class_name) {
 });
 
 $controller = Controller::getInstance();
-//instanciando classe de busca para popular o select de estados
-$obj_Busca = Busca::getInstance();
 $id = 0;
 if (isset($_SESSION["id_dinamicas"])) {
     $id = $_SESSION["id_dinamicas"];
@@ -250,7 +248,7 @@ if (isset($_SESSION["id_dinamicas"])) {
                                             </thead>
                                             <tbody id="noticias">
                                                 <?php
-                                                echo $obj_Busca->getPostagens('dinamicas');
+                                                echo Busca::getPostagens('dinamicas');
                                                 unset($_SESSION["id_dinamicas"]);
                                                 ?>
                                             </tbody>
