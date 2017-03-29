@@ -384,16 +384,24 @@ final class Geral {
     public static function cadastraEmpenho(int $id_pedido, string $empenho, string $data): bool {
         $empenho = Query::getInstance()->real_escape_string($empenho);
         // verifica se o pedido ja não possui empenho
-        $query_check = Query::getInstance()->exe('SELECT id FROM pedido_empenho WHERE id_pedido = ' . $id_pedido);
+        $query_check = Query::getInstance()->exe('SELECT pedido_empenho.id, pedido.status FROM pedido_empenho, pedido WHERE pedido_empenho.id_pedido= pedido.id AND pedido.id = ' . $id_pedido);
         $sql = "";
+
+        if ($query_check->num_rows > 0) {
+            $obj = $query_check->fetch_object();
+
+            if ($obj->status == 6) {
+                // mudando status do pedido
+                Query::getInstance()->exe('UPDATE pedido SET status = 7 WHERE id = ' . $id_pedido);
+            }
+        }
+
         if ($query_check->num_rows < 1) {
             // cadastrando empenho
             $sql = "INSERT INTO pedido_empenho VALUES(NULL, {$id_pedido}, '{$empenho}', '{$data}');";
-            // mudando status do pedido
-            Query::getInstance()->exe('UPDATE pedido SET status = 7 WHERE id = ' . $id_pedido);
         } else {
             // alterando empenho
-            $sql = "UPDATE pedido_empenho SET pedido_empenho.empenho = '{$empenho}', pedido_empenho.data = '{$data}' WHERE pedido_empenho.id_pedido = " . $id_pedido;
+            $sql = "UPDATE pedido_empenho SET empenho = '{$empenho}', data = '{$data}' WHERE id_pedido = " . $id_pedido;
         }
         Query::getInstance()->exe($sql);
         return true;

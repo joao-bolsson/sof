@@ -58,7 +58,7 @@ class Query {
     public function exe(string $sql) {
         $this->openConnection();
 
-        Logger::info("Executing query: " . $sql);
+//        Logger::info("Executing query: " . $sql);
         $query = $this->mysqli->query($sql) or exit('Error: ' . $this->mysqli->error);
 
         $this->insert_id = $this->mysqli->insert_id;
