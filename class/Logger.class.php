@@ -8,7 +8,7 @@
  */
 class Logger {
 
-    private static $INFO_PATH = "../log/info.log";
+    private static $INFO_PATH = __DIR__ . "/../log/info.log";
 
     /**
      * Default constructor.
