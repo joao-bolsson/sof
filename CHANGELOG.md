@@ -1,5 +1,9 @@
 ## CHANGELOG ##
 
+#### v2.1.11 - 29/03/2017 ####
+- Corrige bug no cadastro de empenho de um pedido
+- Melhora arquitetura da aplicação
+
 #### v2.1.10 - 19/03/2017 ####
 - Implementa testes com PHPUnit
 - Corrige bug do somatório no relatório de pedidos selecionados pelo SOF

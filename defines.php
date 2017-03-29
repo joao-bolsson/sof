@@ -3,7 +3,7 @@
 include_once 'class/Busca.class.php';
 
 defined('SALT') or define('SALT', '$1$j:[]bols$');
-defined('VERSION') or define('VERSION', '2.1.10');
+defined('VERSION') or define('VERSION', '2.1.11');
 defined('COPYRIGHT') or define('COPYRIGHT', "<strong>Copyright © 2016-2017 <a href=\"https://github.com/joao-bolsson\">João Bolsson</a>.</strong> All rights reserved.");
 
 defined('ARRAY_STATUS') or define('ARRAY_STATUS', Busca::getArrayDefines('status'));
