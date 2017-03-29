@@ -9,8 +9,7 @@ spl_autoload_register(function (string $class_name) {
     include_once '../class/' . $class_name . '.class.php';
 });
 
-$obj_Busca = Busca::getInstance();
-if (!$obj_Busca->isActive()) {
+if (!Busca::isActive()) {
     echo "desativado";
 } else {
     $obj_Login = Login::getInstance();

@@ -16,12 +16,10 @@ spl_autoload_register(function (string $class_name) {
     include_once '../class/' . $class_name . '.class.php';
 });
 require_once '../defines.php';
-//instanciando classe de busca para popular o select de estados
-$obj_Busca = BuscaLTE::getInstance();
 $id_setor = $_SESSION["id_setor"];
-$saldo_total = Busca::getInstance()->getSaldo($id_setor);
-$pedidos_em_analise = $obj_Busca->getPedidosAnalise($id_setor);
-$select_grupo = $obj_Busca->getOptionsGrupos($id_setor);
+$saldo_total = Busca::getSaldo($id_setor);
+$pedidos_em_analise = BuscaLTE::getPedidosAnalise($id_setor);
+$select_grupo = BuscaLTE::getOptionsGrupos($id_setor);
 ?>
 <!DOCTYPE html>
 <html>
@@ -174,7 +172,7 @@ $select_grupo = $obj_Busca->getOptionsGrupos($id_setor);
                 <section class="content-header">
                     <h1>
                         <?= $_SESSION['nome_setor']; ?>
-                        <small>Saldo: R$ <?= number_format(Busca::getInstance()->getSaldo($_SESSION['id_setor']), 3, ',', '.'); ?></small>
+                        <small>Saldo: R$ <?= number_format(Busca::getSaldo($_SESSION['id_setor']), 3, ',', '.'); ?></small>
                     </h1>
                     <ol class="breadcrumb">
                         <li class="active"><i class="fa fa-dashboard"></i> Solicitações de Empenho</li>
@@ -262,7 +260,7 @@ $select_grupo = $obj_Busca->getOptionsGrupos($id_setor);
                                         <div class="form-group">
                                             <table class="table table-bordered table-striped">
                                                 <tr>
-                                                    <?= $obj_Busca->getPrioridades(); ?>
+                                                    <?= BuscaLTE::getPrioridades(); ?>
                                                 </tr>
                                             </table>
                                         </div>
@@ -272,7 +270,7 @@ $select_grupo = $obj_Busca->getOptionsGrupos($id_setor);
                                         </div>
                                         <h2>Licitação</h2>
                                         <table class="table table-bordered table-striped">
-                                            <?= $obj_Busca->getOptionsLicitacao(4); ?>
+                                            <?= BuscaLTE::getOptionsLicitacao(4); ?>
                                         </table>
                                         <table class="table table-bordered table-striped">
                                             <input id="idLic" type="hidden" name="idLic" value="0">
@@ -322,7 +320,7 @@ $select_grupo = $obj_Busca->getOptionsGrupos($id_setor);
                                         </div>
                                         <table class="table table-bordered table-striped">
                                             <tr>
-                                                <?= $obj_Busca->getOptionsContrato(); ?>
+                                                <?= BuscaLTE::getOptionsContrato(); ?>
                                             </tr>
                                         </table>
                                         <div class="form-group">
@@ -372,7 +370,7 @@ $select_grupo = $obj_Busca->getOptionsGrupos($id_setor);
                                 <div class="form-group">
                                     <label>Categoria</label>
                                     <select class="form-control select2" name="categoria[]" multiple="multiple" data-placeholder="Selecione" required>
-                                        <?= $obj_Busca->getOptionsCategoria(); ?>
+                                        <?= BuscaLTE::getOptionsCategoria(); ?>
                                     </select>
                                 </div>
                                 <div class="form-group">
@@ -427,14 +425,14 @@ $select_grupo = $obj_Busca->getOptionsGrupos($id_setor);
                                     <label>Prioridade</label>
                                     <select class="form-control" name="prioridade" required>
                                         <option value="0">Todas</option>
-                                        <?= $obj_Busca->getOptionsPrioridades(); ?>
+                                        <?= BuscaLTE::getOptionsPrioridades(); ?>
                                     </select>
                                 </div>
                                 <div class="form-group">
                                     <label>Status</label>
                                     <select class="form-control select2" multiple="multiple" data-placeholder="Selecione" name="status[]" required>
                                         <option value="0">Todos</option>
-                                        <?= $obj_Busca->getOptionsStatus(); ?>
+                                        <?= BuscaLTE::getOptionsStatus(); ?>
                                     </select>
                                 </div>
                                 <div class="form-group">
@@ -510,7 +508,7 @@ $select_grupo = $obj_Busca->getOptionsGrupos($id_setor);
                                 <div class="form-group">
                                     <label>Usuário</label>
                                     <select id="userA" class="form-control" name="user" required>
-                                        <?= $obj_Busca->getUsers(true); ?>
+                                        <?= BuscaLTE::getUsers(true); ?>
                                     </select>
                                 </div>
                             </div>

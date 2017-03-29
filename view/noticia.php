@@ -9,8 +9,6 @@ spl_autoload_register(function (string $class_name) {
 });
 
 $controller = Controller::getInstance();
-//instanciando classe de busca para popular o select de estados
-$obj_Busca = Busca::getInstance();
 ?>
 <!DOCTYPE html>
 <html lang="pt">
@@ -245,7 +243,7 @@ $obj_Busca = Busca::getInstance();
                                             </thead>
                                             <tbody id="noticias">
                                                 <?php
-                                                echo $obj_Busca->getPostagens('noticia');
+                                                echo Busca::getPostagens('noticia');
                                                 ?>
                                             </tbody>
                                         </table>

@@ -12,7 +12,6 @@ if (isset($_SESSION["relatorioProcessos"]) && $_SESSION["relatorioProcessos"] &&
     require_once MPDF_PATH . '/vendor/autoload.php';
 
     $tipo = $_SESSION["relatorioTipo"];
-    $obj_Print = PrintMod::getInstance();
 
     $html_style = "<link rel=\"stylesheet\" type=\"text/css\" href=\"../relatorios.css\"/>";
 
@@ -28,9 +27,9 @@ if (isset($_SESSION["relatorioProcessos"]) && $_SESSION["relatorioProcessos"] &&
         <h5>RELATÓRIO DE PROCESSOS</h5>
     </fieldset><br>";
 
-    $html_itens .= $obj_Print->getRelatorioProcessos($tipo);
+    $html_itens .= PrintMod::getRelatorioProcessos($tipo);
 
-    $html = $html_style . $html_header . $html_table_itens . $html_itens . "</body>";
+    $html = $html_style . $html_header . $html_itens . "</body>";
 
     $mpdf = new mPDF();
     date_default_timezone_set('America/Sao_Paulo');
@@ -39,7 +38,7 @@ if (isset($_SESSION["relatorioProcessos"]) && $_SESSION["relatorioProcessos"] &&
     $data = date('j/m/Y  H:i');
     //definimos oque vai conter no rodape do pdf
     $mpdf->SetFooter("{$data}||Pagina {PAGENO}/{nb}");
-    //e escreve todo conteudo html vindo de nossa página html em nosso arquivo
+    //e escreve o conteudo html vindo de nossa página html em nosso arquivo
     $mpdf->WriteHTML($html);
     //fechamos nossa instancia ao pdf
     $mpdf->Output();

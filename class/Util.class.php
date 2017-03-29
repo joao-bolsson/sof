@@ -1,10 +1,10 @@
 <?php
 
 /**
- * 	Classe com funções úteis
+ *    Classe com funções úteis
  *
- * 	@author João Bolsson
- * 	@since 2016, 05 Sep
+ * @author João Bolsson
+ * @since 2016, 05 Sep
  */
 ini_set('display_errors', true);
 error_reporting(E_ALL);
@@ -86,10 +86,10 @@ final class Util {
      * @param string $periodo Date range like 03/03/2017 - 05/04/2017
      * @return float Hours report of the user in $periodo (may be NULL)
      */
-    public function getTotHoras(int $id_usuario, string $periodo): float {
+    public static function getTotHoras(int $id_usuario, string $periodo): float {
         $array = explode(' - ', $periodo);
-        $dataI = $this->dateFormat($array[0]);
-        $dataF = $this->dateFormat($array[1]);
+        $dataI = self::dateFormat($array[0]);
+        $dataF = self::dateFormat($array[1]);
 
         $query = Query::getInstance()->exe("SELECT sum(horas) AS total FROM usuario_hora WHERE (entrada BETWEEN '" . $dataI . "' AND '" . $dataF . "') AND id_usuario = " . $id_usuario . ' LIMIT 1');
         $obj = $query->fetch_object();
@@ -101,7 +101,7 @@ final class Util {
      * @param int $id_usuario User's id
      * @return bool Any 'saida' of user is NULL - true, else false.
      */
-    public function isCurrentLoggedIn(int $id_usuario): bool {
+    public static function isCurrentLoggedIn(int $id_usuario): bool {
         $query = Query::getInstance()->exe('SELECT saida FROM usuario_hora WHERE id_usuario = ' . $id_usuario . ' AND saida IS NULL;');
 
         return ($query->num_rows > 0);
@@ -111,11 +111,10 @@ final class Util {
      * @param int $id_last Register's id.
      * @return float Hours between in and out of register $id_last
      */
-    public function getTimeDiffHora(int $id_last): float {
-        $query = Query::getInstance()->exe("SELECT TIMESTAMPDIFF(SECOND, entrada, saida) as seconds FROM usuario_hora WHERE id = " . $id_last);
+    public static function getTimeDiffHora(int $id_last): float {
+        $query = Query::getInstance()->exe("SELECT TIMESTAMPDIFF(SECOND, entrada, saida) AS seconds FROM usuario_hora WHERE id = " . $id_last);
 
         $obj = $query->fetch_object();
-        $horas = 0;
         if ($obj->seconds == NULL) {
             exit('TIMEDIFF is NULL');
         } else {
@@ -130,7 +129,7 @@ final class Util {
      * @param int $id_user User's id.
      * @return string User's name.
      */
-    public function getUserName(int $id_user): string {
+    public static function getUserName(int $id_user): string {
         $query = Query::getInstance()->exe("SELECT usuario.nome FROM usuario WHERE usuario.id = " . $id_user);
         $obj = $query->fetch_object();
 
@@ -206,7 +205,7 @@ final class Util {
      * @param string $body
      * @return bool
      */
-    final public function preparaEmail(string $from, string $nome_from, string $para, string $nome_para, string $assunto, string $altBody, string $body) {
+    public function preparaEmail(string $from, string $nome_from, string $para, string $nome_para, string $assunto, string $altBody, string $body) {
         $this->mail->setFrom($from, $nome_from);
         $this->mail->addAddress($para, $nome_para);
         $this->mail->addReplyTo($from, $nome_from);
@@ -218,10 +217,10 @@ final class Util {
     /**
      *  Função que gera uma senha aleatória
      *
-     *  @access public
-     *  @return string
+     * @access public
+     * @return string
      */
-    final public function criaSenha(): string {
+    public static function criaSenha(): string {
         // declarando retorno
         $retorno = "";
 
@@ -242,13 +241,13 @@ final class Util {
     }
 
     /**
-     * 	Função para formatar uma data d/m/Y em Y-m-d
+     *    Função para formatar uma data d/m/Y em Y-m-d
      *
-     * 	@access public
-     * 	@param $data Data a ser formatada
-     * 	@return The date in format Y-m-d
+     * @access public
+     * @param $data Data a ser formatada
+     * @return The date in format Y-m-d
      */
-    public function dateFormat(string $data): string {
+    public static function dateFormat(string $data): string {
         $array_data = explode('/', $data);
 
         $retorno = "";
@@ -263,42 +262,7 @@ final class Util {
      * @access public
      * @return string
      */
-    public function getArquivos(): string {
-        //declarando retorno
-        $retorno = "";
-        $pasta = '../uploads/';
-        $diretorio = dir($pasta);
-
-        while ($arquivo = $diretorio->read()) {
-            $tipo = pathinfo($pasta . $arquivo);
-            $label = "label";
-            if ($tipo["extension"] == "jpg" || $tipo["extension"] == "png" || $tipo["extension"] == "jpeg") {
-                $tipo = "Imagem";
-                $label .= " label-brand";
-            } else {
-                $tipo = "Documento";
-            }
-            if ($arquivo != "." && $arquivo != ".." && $tipo != "Imagem") {
-                //mostra apenas os documentos pdf e doc
-                $retorno .= "
-                    <tr>
-                        <td><span class=\"" . $label . "\" style=\"font-size: 11pt !important; font-weight: bold;\">" . $tipo . "</span></td>
-                        <td><a href=\"" . $pasta . $arquivo . "\">" . $arquivo . "</a></td>
-                        <td><button class=\"btn btn-flat waves-attach waves-effect\" onclick=\"delArquivo('" . $pasta . $arquivo . "');\"><span class=\"icon\">delete</span><span style=\"font-weight:bold;\">Excluir</span></button></td>
-                    </tr>";
-            }
-        }
-        $diretorio->close();
-        return $retorno;
-    }
-
-    /**
-     * Função que exibe os arquivos no modal do admin, usada diretamente no index
-     *
-     * @access public
-     * @return string
-     */
-    public function getArquivosLTE(): string {
+    public static function getArquivosLTE(): string {
         $pasta = '../uploads/';
         $diretorio = dir($pasta);
 
@@ -326,7 +290,7 @@ final class Util {
      * @access public
      * @return string
      */
-    public function setInputsArquivo(int $qtd): string {
+    public static function setInputsArquivo(int $qtd): string {
         $qtd++;
         return "
             <div id=\"file-" . $qtd . "\" class=\"tile\">

@@ -9,8 +9,6 @@ spl_autoload_register(function (string $class_name) {
 });
 
 $controller = Controller::getInstance();
-//instanciando classe de busca para popular o select de estados
-$obj_Busca = Busca::getInstance();
 ?>
 <!DOCTYPE html>
 <html lang="pt">

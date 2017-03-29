@@ -16,11 +16,9 @@ spl_autoload_register(function (string $class_name) {
     include_once '../class/' . $class_name . '.class.php';
 });
 require_once '../defines.php';
-//instanciando classe de busca para popular o select de estados
-$obj_Busca = BuscaLTE::getInstance();
-$permissao = $obj_Busca->getPermissoes($_SESSION["id"]);
+$permissao = BuscaLTE::getPermissoes($_SESSION["id"]);
 
-$count = $obj_Busca->getCountSolic();
+$count = BuscaLTE::getCountSolic();
 
 if (isset($_SESSION['editmode'])) {
     unset($_SESSION['editmode']);
@@ -271,7 +269,7 @@ if (isset($_SESSION['editmode'])) {
             <h1>
                 <?= $_SESSION['nome_setor']; ?>
                 <small>Saldo:
-                    R$ <?= number_format(Busca::getInstance()->getSaldo($_SESSION['id_setor']), 3, ',', '.'); ?></small>
+                    R$ <?= number_format(Busca::getSaldo($_SESSION['id_setor']), 3, ',', '.'); ?></small>
             </h1>
             <ol class="breadcrumb">
                 <li><a href="#"><i class="fa fa-dashboard"></i> Início</a></li>
@@ -821,7 +819,7 @@ if (isset($_SESSION['editmode'])) {
                                     <input id="saldo_total" type="hidden" name="saldo_total" value="0.000">
                                     <input id="prioridade" type="hidden" name="prioridade" value="0">
                                     <table class="table table-bordered table-striped">
-                                        <?= $obj_Busca->getStatus(4) ?>
+                                        <?= BuscaLTE::getStatus(4) ?>
                                     </table>
                                     <div class="form-group">
                                         <label>Comentário</label>
@@ -935,7 +933,7 @@ if (isset($_SESSION['editmode'])) {
                                 <label>Tipo</label>
                                 <select id="type" class="form-control" name="type" required>
                                     <option value="0">Todos</option>
-                                    <?= $obj_Busca->getTiposProcessos() ?>
+                                    <?= BuscaLTE::getTiposProcessos() ?>
                                 </select>
                             </div>
                             <div class="modal-footer">
@@ -999,7 +997,7 @@ if (isset($_SESSION['editmode'])) {
                                         <div class="form-group">
                                             <label>Tipo</label>
                                             <select id="tipo" class="form-control" name="tipo" required>
-                                                <?= $obj_Busca->getTiposProcessos() ?>
+                                                <?= BuscaLTE::getTiposProcessos() ?>
                                             </select>
                                         </div>
                                     </td>
@@ -1103,7 +1101,7 @@ if (isset($_SESSION['editmode'])) {
                             <div class="form-group">
                                 <label>Usuário</label>
                                 <select id="userA" class="form-control" name="user" required>
-                                    <?= $obj_Busca->getUsers(); ?>
+                                    <?= BuscaLTE::getUsers(); ?>
                                 </select>
                             </div>
                         </div>
@@ -1148,10 +1146,10 @@ if (isset($_SESSION['editmode'])) {
                             <div class="form-group">
                                 <label>Setor</label>
                                 <select class="form-control" name="setor" required>
-                                    <?= $obj_Busca->getOptionsSetores(); ?>
+                                    <?= BuscaLTE::getOptionsSetores(); ?>
                                 </select>
                             </div>
-                            <?= $obj_Busca->getCheckPermissoes(); ?>
+                            <?= BuscaLTE::getCheckPermissoes(); ?>
                         </div>
                         <div class="modal-footer">
                             <button class="btn btn-primary" type="submit" style="width: 100%;"><i
@@ -1307,14 +1305,14 @@ if (isset($_SESSION['editmode'])) {
                                 <label>Setor</label>
                                 <select class="form-control" name="setor" required>
                                     <option value="0">Todos</option>
-                                    <?= $obj_Busca->getOptionsSetores(); ?>
+                                    <?= BuscaLTE::getOptionsSetores(); ?>
                                 </select>
                             </div>
                             <div class="form-group">
                                 <label>Categoria</label>
                                 <select class="form-control select2" name="categoria[]" multiple="multiple"
                                         data-placeholder="Selecione" required>
-                                    <?= $obj_Busca->getOptionsCategoria(); ?>
+                                    <?= BuscaLTE::getOptionsCategoria(); ?>
                                 </select>
                             </div>
                             <div class="form-group">
@@ -1367,14 +1365,14 @@ if (isset($_SESSION['editmode'])) {
                                 <label>Setor</label>
                                 <select class="form-control" name="setor" required>
                                     <option value="0">Todos</option>
-                                    <?= $obj_Busca->getOptionsSetores(); ?>
+                                    <?= BuscaLTE::getOptionsSetores(); ?>
                                 </select>
                             </div>
                             <div class="form-group">
                                 <label>Prioridade</label>
                                 <select class="form-control" name="prioridade" required>
                                     <option value="0">Todas</option>
-                                    <?= $obj_Busca->getOptionsPrioridades(); ?>
+                                    <?= BuscaLTE::getOptionsPrioridades(); ?>
                                 </select>
                             </div>
                             <div class="form-group">
@@ -1382,7 +1380,7 @@ if (isset($_SESSION['editmode'])) {
                                 <select class="form-control select2" multiple="multiple" data-placeholder="Selecione"
                                         name="status[]" required>
                                     <option value="0">Todos</option>
-                                    <?= $obj_Busca->getOptionsStatus(); ?>
+                                    <?= BuscaLTE::getOptionsStatus(); ?>
                                 </select>
                             </div>
                             <div class="form-group">
@@ -1569,14 +1567,14 @@ if (isset($_SESSION['editmode'])) {
                                 <label>Setor Origem</label>
                                 <select id="setorOri" class="form-control" name="setorOri" required
                                         onchange="getSaldoOri();">
-                                    <?= $obj_Busca->getOptionsSetores(); ?>
+                                    <?= BuscaLTE::getOptionsSetores(); ?>
                                 </select>
                                 <p id="saldoDispOri" style="font-weight: bold;"></p>
                             </div>
                             <div class="form-group">
                                 <label>Setor Destino</label>
                                 <select id="setorDest" class="form-control" name="setorDest" required>
-                                    <?= $obj_Busca->getOptionsSetores(); ?>
+                                    <?= BuscaLTE::getOptionsSetores(); ?>
                                 </select>
                             </div>
                             <div class="form-group">
@@ -1613,7 +1611,7 @@ if (isset($_SESSION['editmode'])) {
                                 <div class="form-group">
                                     <label>Setor</label>
                                     <select id="setor" class="form-control" name="setor" required>
-                                        <?= $obj_Busca->getOptionsSetores(); ?>
+                                        <?= BuscaLTE::getOptionsSetores(); ?>
                                     </select>
                                 </div>
                                 <div class="form-group">
@@ -1646,7 +1644,7 @@ if (isset($_SESSION['editmode'])) {
                             <select id="selectSetor" class="form-control" onchange="changeSetor();">
                                 <option value="-1">Nenhum</option>
                                 <option value="0">Todos</option>
-                                <?= $obj_Busca->getOptionsSetores(); ?>
+                                <?= BuscaLTE::getOptionsSetores(); ?>
                             </select>
                         </div>
                         <table class="table table-bordered table-striped">

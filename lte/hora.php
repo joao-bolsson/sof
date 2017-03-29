@@ -12,8 +12,7 @@ session_start();
 spl_autoload_register(function (string $class_name) {
     include_once '../class/' . $class_name . '.class.php';
 });
-$obj_Busca = BuscaLTE::getInstance();
-$permissao = $obj_Busca->getPermissoes($_SESSION["id"]);
+$permissao = BuscaLTE::getPermissoes($_SESSION["id"]);
 if (!isset($_SESSION["id_setor"]) || $_SESSION["id_setor"] != 2) {
     header("Location: ../");
 }
@@ -239,7 +238,7 @@ require_once '../defines.php';
                                 <div class="form-group">
                                     <label>Usuário</label>
                                     <select class="form-control" name="user" required>
-                                        <?= $obj_Busca->getUsers(false, $_SESSION['id_setor']); ?>
+                                        <?= BuscaLTE::getUsers(false, $_SESSION['id_setor']); ?>
                                     </select>
                                 </div>
                                 <div class="form-group">

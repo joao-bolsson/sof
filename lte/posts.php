@@ -12,9 +12,7 @@ session_start();
 spl_autoload_register(function (string $class_name) {
     include_once '../class/' . $class_name . '.class.php';
 });
-$obj_Busca = BuscaLTE::getInstance();
-$obj_Util = Util::getInstance();
-$permissao = $obj_Busca->getPermissoes($_SESSION["id"]);
+$permissao = BuscaLTE::getPermissoes($_SESSION["id"]);
 if (!isset($_SESSION["id_setor"]) || $_SESSION["id_setor"] != 2 || !$permissao->noticias) {
     header("Location: ../");
 }
@@ -169,7 +167,7 @@ require_once '../defines.php';
                                     <div class="form-group">
                                         <label>Postar em:</label>
                                         <select id="pag" class="form-control" name="pag" required>
-                                            <?= $obj_Busca->getPostarEm(); ?>
+                                            <?= BuscaLTE::getPostarEm(); ?>
                                         </select>
                                     </div>
                                     <div class="form-group">
@@ -223,8 +221,8 @@ require_once '../defines.php';
                                         <th>Nome</th>
                                     </tr>
                                 </thead>
-                                <tbody><?= $obj_Util->getArquivosLTE(); ?></tbody>
-                            </table> 
+                                <tbody><?= Util::getArquivosLTE(); ?></tbody>
+                            </table>
                         </div>
                     </div>
                 </div>
@@ -242,7 +240,7 @@ require_once '../defines.php';
                             </div>
                             <table class="table">
                                 <tr>
-                                    <?= $obj_Busca->getTabsNoticiasLTE(); ?>
+                                    <?= BuscaLTE::getTabsNoticiasLTE(); ?>
                                 </tr>
                             </table>
                             <table id="tableNoticiasEditar" class="table table-bordered table-striped">
