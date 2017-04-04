@@ -94,22 +94,6 @@ final class Busca {
         return $return;
     }
 
-    /**
-     * É importante que tabela selecionada tenha id e nome como colunas.
-     * @param string $table tabel mysql
-     * @return array array com a coluna nome da table
-     */
-    public static function getArrayDefines(string $table): array {
-        $query = Query::getInstance()->exe('SELECT * FROM ' . $table);
-
-        $array = [NULL];
-        while ($obj = $query->fetch_object()) {
-            $array[$obj->id] = $obj->nome;
-        }
-
-        return $array;
-    }
-
     public static function getInfoContrato(int $id_pedido) {
         $query = Query::getInstance()->exe('SELECT pedido.pedido_contrato, pedido_contrato.id_tipo, pedido_contrato.siafi FROM pedido, pedido_contrato WHERE pedido.id = pedido_contrato.id_pedido AND pedido.id = ' . $id_pedido);
         if ($query->num_rows < 1) {
