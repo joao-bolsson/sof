@@ -847,6 +847,9 @@ if (isset($_SESSION['editmode'])) {
                                     </div>
                                 </div>
                             </form>
+                            <div id="overlayLoadDetPed" class="overlay" style="display: none;">
+                                <i class="fa fa-refresh fa-spin"></i>
+                            </div>
                         </div><!-- ./box -->
                     </div> <!-- ./col-xs-12 -->
                 </div> <!-- ./row -->
