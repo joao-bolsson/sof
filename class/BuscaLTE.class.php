@@ -512,7 +512,7 @@ final class BuscaLTE {
     }
 
     /**
-     *    Função que retorna as solicitações de adiantamentos de saldos enviadas ao SOF para análise.
+     * Function that returns the advances requests sent to SOF analyse.
      *
      * @param int $st Status
      * @return string
@@ -557,11 +557,11 @@ final class BuscaLTE {
     }
 
     /**
-     * @param int $id_pedido Id do pedido
-     * @return string Data do cadastro do empenho
+     * @param int $id_request Request id.
+     * @return string Date register of the effort.
      */
-    private static function verDataEmpenho(int $id_pedido): string {
-        $query = Query::getInstance()->exe("SELECT DATE_FORMAT(data, '%d/%m/%Y') AS data FROM pedido_empenho WHERE id_pedido = " . $id_pedido . ' LIMIT 1');
+    private static function verDataEmpenho(int $id_request): string {
+        $query = Query::getInstance()->exe("SELECT DATE_FORMAT(data, '%d/%m/%Y') AS data FROM pedido_empenho WHERE id_pedido = " . $id_request . ' LIMIT 1');
 
         if ($query->num_rows < 1) {
             return '';
@@ -571,20 +571,21 @@ final class BuscaLTE {
     }
 
     /**
-     * Constroi os botoes para a análise.
-     * @param int $id Id do pedido.
-     * @param int $status Status atual do pedido.
-     * @param int $id_setor Id do setor que fez o pedido.
+     * Builds the buttons to the analysis.
+     *
+     * @param int $id Request id.
+     * @param int $status Current status of the request.
+     * @param int $id_sector Sector id that did the request..
      * @return string
      */
-    private static function buildButtons(int $id, int $status, int $id_setor): string {
+    private static function buildButtons(int $id, int $status, int $id_sector): string {
         $component = new Div('btn-group');
 
         if ($status != 3 && $status != 4) {
             if ($_SESSION['id_setor'] == 12) {
                 $component->addComponent(new Button('', BTN_DEFAULT, "enviaForn(" . $id . ")", "data-toggle=\"tooltip\"", 'Enviar ao Fornecedor', 'send'));
             } else if ($status == 2) {
-                $component->addComponent(new Button('', BTN_DEFAULT, "analisarPedido(" . $id . ", " . $id_setor . ")", "data-toggle=\"tooltip\"", 'Analisar', 'pencil'));
+                $component->addComponent(new Button('', BTN_DEFAULT, "analisarPedido(" . $id . ", " . $id_sector . ")", "data-toggle=\"tooltip\"", 'Analisar', 'pencil'));
             } else if ($status == 5) {
                 $component->addComponent(new Button('', BTN_DEFAULT, "cadFontes(" . $id . ")", "data-toggle=\"tooltip\"", 'Cadastrar Fontes', 'comment'));
             } else if ($status == 6) {
@@ -592,7 +593,7 @@ final class BuscaLTE {
             } else if ($status == 7) {
                 $component->addComponent(new Button('', BTN_DEFAULT, "enviaOrdenador(" . $id . ")", "data-toggle=\"tooltip\"", 'Enviar ao Ordenador', 'send'));
             } else {
-                $component->addComponent(new Button('', BTN_DEFAULT, "getStatus(" . $id . ", " . $id_setor . ")", "data-toggle=\"tooltip\"", 'Alterar Status', 'wrench'));
+                $component->addComponent(new Button('', BTN_DEFAULT, "getStatus(" . $id . ", " . $id_sector . ")", "data-toggle=\"tooltip\"", 'Alterar Status', 'wrench'));
             }
         }
 
@@ -605,23 +606,23 @@ final class BuscaLTE {
     }
 
     /**
-     * Função para retornar as solicitações para o SOF.
+     * Function that returns the requests to SOF (used in main page).
      *
      * @param string $where
-     * @param array $pedidos
+     * @param array $requests
      * @return string
      */
-    public static function getSolicitacoesAdmin(string $where = '', array $pedidos = []): string {
+    public static function getSolicitacoesAdmin(string $where = '', array $requests = []): string {
         $query = Query::getInstance()->exe("SELECT id, id_setor, DATE_FORMAT(data_pedido, '%d/%m/%Y') AS data_pedido, prioridade, status, valor, aprov_gerencia FROM pedido WHERE status <> 3 AND alteracao = 0 " . $where . ' ORDER BY id DESC LIMIT ' . LIMIT_MAX);
 
         $table = new Table('', '', array(), false);
-        while ($pedido = $query->fetch_object()) {
-            // determina se o pedido vai ser adicionado na tabela
+        while ($request = $query->fetch_object()) {
+            // determines if the request will add in the table
             $flag = false;
 
-            if (!in_array($pedido->id, $pedidos)) {
+            if (!in_array($request->id, $requests)) {
                 if ($_SESSION['id_setor'] == 12) {
-                    if ($pedido->status == 8) {
+                    if ($request->status == 8) {
                         $flag = true;
                     }
                 } else {
@@ -630,33 +631,33 @@ final class BuscaLTE {
             }
 
             if ($flag) {
-                $btnVerEmpenho = Busca::verEmpenho($pedido->id);
+                $btnVerEmpenho = Busca::verEmpenho($request->id);
                 if ($btnVerEmpenho == 'EMPENHO SIAFI PENDENTE') {
                     $btnVerEmpenho = '';
                 }
-                $pedido->valor = number_format($pedido->valor, 3, ',', '.');
-                $aprovGerencia = ($pedido->aprov_gerencia) ? new Small('label pull-right bg-gray', 'A', "data-toggle=\"tooltip\"", 'Aprovado pela Gerência') : '';
+                $request->valor = number_format($request->valor, 3, ',', '.');
+                $aprovGerencia = ($request->aprov_gerencia) ? new Small('label pull-right bg-gray', 'A', "data-toggle=\"tooltip\"", 'Aprovado pela Gerência') : '';
 
                 $check_all = "
                 <div class=\"form-group\">
-                    <input type=\"checkbox\" name=\"checkPedRel\" id=\"checkPedRel" . $pedido->id . "\" value=\"" . $pedido->id . "\">
+                    <input type=\"checkbox\" name=\"checkPedRel\" id=\"checkPedRel" . $request->id . "\" value=\"" . $request->id . "\">
                 </div>
                 " . $aprovGerencia . "";
 
-                $buttons = self::buildButtons($pedido->id, $pedido->status, $pedido->id_setor);
+                $buttons = self::buildButtons($request->id, $request->status, $request->id_setor);
 
-                $row = new Row('rowPedido' . $pedido->id);
+                $row = new Row('rowPedido' . $request->id);
 
                 $row->addColumn(new Column($check_all));
                 $row->addColumn(new Column($buttons));
-                $row->addColumn(new Column($pedido->id));
-                $row->addColumn(new Column(ARRAY_SETORES[$pedido->id_setor]));
-                $row->addColumn(new Column($pedido->data_pedido));
-                $row->addColumn(new Column(ARRAY_PRIORIDADE[$pedido->prioridade]));
-                $row->addColumn(new Column(ARRAY_STATUS[$pedido->status]));
-                $row->addColumn(new Column("R$ " . $pedido->valor));
+                $row->addColumn(new Column($request->id));
+                $row->addColumn(new Column(ARRAY_SETORES[$request->id_setor]));
+                $row->addColumn(new Column($request->data_pedido));
+                $row->addColumn(new Column(ARRAY_PRIORIDADE[$request->prioridade]));
+                $row->addColumn(new Column(ARRAY_STATUS[$request->status]));
+                $row->addColumn(new Column("R$ " . $request->valor));
                 $row->addColumn(new Column($btnVerEmpenho));
-                $row->addColumn(new Column(self::getFornecedor($pedido->id)));
+                $row->addColumn(new Column(self::getFornecedor($request->id)));
 
                 $table->addRow($row);
             }
@@ -679,13 +680,13 @@ final class BuscaLTE {
     }
 
     /**
-     * Função para trazer as informações de um pedido a ser analisado.
+     * Function to search teh informations of a request to be analysed.
      *
-     * @param int $id_pedido
+     * @param int $id_request
      * @return string
      */
-    public static function getItensPedidoAnalise(int $id_pedido): string {
-        $query = Query::getInstance()->exe('SELECT itens.qt_contrato, itens.id AS id_itens, itens_pedido.qtd AS qtd_solicitada, itens_pedido.valor, itens.nome_fornecedor, itens.num_licitacao, itens.dt_inicio, itens.dt_fim, itens.cod_reduzido, itens.complemento_item, itens.vl_unitario, itens.qt_saldo, itens.cod_despesa, itens.descr_despesa, itens.num_contrato, itens.num_processo, itens.descr_mod_compra, itens.num_licitacao, itens.cgc_fornecedor, itens.num_extrato, itens.descricao, itens.qt_contrato, itens.vl_contrato, itens.qt_utilizado, itens.vl_utilizado, itens.qt_saldo, itens.vl_saldo, itens.seq_item_processo FROM itens_pedido, itens WHERE itens_pedido.id_pedido = ' . $id_pedido . ' AND itens_pedido.id_item = itens.id ORDER BY itens.seq_item_processo ASC');
+    public static function getItensPedidoAnalise(int $id_request): string {
+        $query = Query::getInstance()->exe('SELECT itens.qt_contrato, itens.id AS id_itens, itens_pedido.qtd AS qtd_solicitada, itens_pedido.valor, itens.nome_fornecedor, itens.num_licitacao, itens.dt_inicio, itens.dt_fim, itens.cod_reduzido, itens.complemento_item, itens.vl_unitario, itens.qt_saldo, itens.cod_despesa, itens.descr_despesa, itens.num_contrato, itens.num_processo, itens.descr_mod_compra, itens.num_licitacao, itens.cgc_fornecedor, itens.num_extrato, itens.descricao, itens.qt_contrato, itens.vl_contrato, itens.qt_utilizado, itens.vl_utilizado, itens.qt_saldo, itens.vl_saldo, itens.seq_item_processo FROM itens_pedido, itens WHERE itens_pedido.id_pedido = ' . $id_request . ' AND itens_pedido.id_item = itens.id ORDER BY itens.seq_item_processo ASC');
 
         $table = new Table('', '', [], false);
         while ($item = $query->fetch_object()) {
@@ -737,28 +738,28 @@ final class BuscaLTE {
     }
 
     /**
-     *    Função que retorna uma tabela com as solicitações de alteração de pedidos
+     * Function that returns a table with requests to change orders
      *
      * @return string
      */
     public static function getSolicAltPedidos(): string {
-        $id_setor = $_SESSION['id_setor'];
-        $query = Query::getInstance()->exe("SELECT solic_alt_pedido.id_pedido, DATE_FORMAT(solic_alt_pedido.data_solicitacao, '%d/%m/%Y') AS data_solicitacao, DATE_FORMAT(solic_alt_pedido.data_analise, '%d/%m/%Y') AS data_analise, solic_alt_pedido.justificativa, solic_alt_pedido.status, pedido.id_usuario FROM solic_alt_pedido, pedido WHERE pedido.id = solic_alt_pedido.id_pedido AND solic_alt_pedido.id_setor = " . $id_setor . ' ORDER BY solic_alt_pedido.id DESC LIMIT ' . LIMIT_MAX);
+        $id_sector = $_SESSION['id_setor'];
+        $query = Query::getInstance()->exe("SELECT solic_alt_pedido.id_pedido, DATE_FORMAT(solic_alt_pedido.data_solicitacao, '%d/%m/%Y') AS data_solicitacao, DATE_FORMAT(solic_alt_pedido.data_analise, '%d/%m/%Y') AS data_analise, solic_alt_pedido.justificativa, solic_alt_pedido.status, pedido.id_usuario FROM solic_alt_pedido, pedido WHERE pedido.id = solic_alt_pedido.id_pedido AND solic_alt_pedido.id_setor = " . $id_sector . ' ORDER BY solic_alt_pedido.id DESC LIMIT ' . LIMIT_MAX);
         $table = new Table('', '', array(), false);
 
         $array_status = ['Reprovado', 'Aprovado', 'Aberto'];
         $array_lb = ['red', 'green', 'orange'];
 
-        while ($solic = $query->fetch_object()) {
-            $status = $array_status[$solic->status];
-            $label = 'bg-' . $array_lb[$solic->status];
-            $solic->justificativa = str_replace("\"", "\'", $solic->justificativa);
-            if ($solic->id_usuario == $_SESSION['id']) {
+        while ($request = $query->fetch_object()) {
+            $status = $array_status[$request->status];
+            $label = 'bg-' . $array_lb[$request->status];
+            $request->justificativa = str_replace("\"", "\'", $request->justificativa);
+            if ($request->id_usuario == $_SESSION['id']) {
                 $row = new Row();
-                $row->addColumn(new Column($solic->id_pedido));
-                $row->addColumn(new Column($solic->data_solicitacao));
-                $row->addColumn(new Column(($solic->status == 2) ? '--------------' : $solic->data_analise));
-                $row->addColumn(new Column(new Button('', BTN_DEFAULT, "viewCompl('" . $solic->justificativa . "')", "data-toggle=\"tooltip\"", 'Ver Justificativa', 'eye')));
+                $row->addColumn(new Column($request->id_pedido));
+                $row->addColumn(new Column($request->data_solicitacao));
+                $row->addColumn(new Column(($request->status == 2) ? '--------------' : $request->data_analise));
+                $row->addColumn(new Column(new Button('', BTN_DEFAULT, "viewCompl('" . $request->justificativa . "')", "data-toggle=\"tooltip\"", 'Ver Justificativa', 'eye')));
                 $row->addColumn(new Column(new Small('label ' . $label, $status)));
 
                 $table->addRow($row);
@@ -768,28 +769,28 @@ final class BuscaLTE {
     }
 
     /**
-     *    Função que retorna as solicitações de adiantamento de saldos do setor
+     * Function that returns the advance requests of the logged in sector.
      *
      * @return string
      */
     public static function getSolicAdiSetor(): string {
-        $id_setor = $_SESSION['id_setor'];
-        $query = Query::getInstance()->exe("SELECT id, DATE_FORMAT(data_solicitacao, '%d/%m/%Y') AS data_solicitacao, DATE_FORMAT(data_analise, '%d/%m/%Y') AS data_analise, valor_adiantado, justificativa, status FROM saldos_adiantados WHERE id_setor = " . $id_setor . ' ORDER BY id DESC LIMIT ' . LIMIT_MAX);
+        $id_sector = $_SESSION['id_setor'];
+        $query = Query::getInstance()->exe("SELECT id, DATE_FORMAT(data_solicitacao, '%d/%m/%Y') AS data_solicitacao, DATE_FORMAT(data_analise, '%d/%m/%Y') AS data_analise, valor_adiantado, justificativa, status FROM saldos_adiantados WHERE id_setor = " . $id_sector . ' ORDER BY id DESC LIMIT ' . LIMIT_MAX);
         $array_status = ['Reprovado', 'Aprovado', 'Aberto'];
         $array_lb = ['red', 'green', 'orange'];
 
         $table = new Table('', '', [], false);
-        while ($solic = $query->fetch_object()) {
-            $status = $array_status[$solic->status];
-            $label = 'bg-' . $array_lb[$solic->status];
-            $solic->justificativa = str_replace("\"", "\'", $solic->justificativa);
-            $solic->valor_adiantado = number_format($solic->valor_adiantado, 3, ',', '.');
+        while ($request = $query->fetch_object()) {
+            $status = $array_status[$request->status];
+            $label = 'bg-' . $array_lb[$request->status];
+            $request->justificativa = str_replace("\"", "\'", $request->justificativa);
+            $request->valor_adiantado = number_format($request->valor_adiantado, 3, ',', '.');
 
             $row = new Row();
-            $row->addColumn(new Column($solic->data_solicitacao));
-            $row->addColumn(new Column(($solic->status == 2) ? '--------------' : $solic->data_analise));
-            $row->addColumn(new Column($solic->valor_adiantado));
-            $row->addColumn(new Column(new Button('', BTN_DEFAULT, "viewCompl('" . $solic->justificativa . "')", "data-toggle=\"tooltip\"", 'Ver Justificativa', 'eye')));
+            $row->addColumn(new Column($request->data_solicitacao));
+            $row->addColumn(new Column(($request->status == 2) ? '--------------' : $request->data_analise));
+            $row->addColumn(new Column($request->valor_adiantado));
+            $row->addColumn(new Column(new Button('', BTN_DEFAULT, "viewCompl('" . $request->justificativa . "')", "data-toggle=\"tooltip\"", 'Ver Justificativa', 'eye')));
             $row->addColumn(new Column(new Small('label ' . $label, $status)));
 
             $table->addRow($row);
@@ -798,13 +799,13 @@ final class BuscaLTE {
     }
 
     /**
-     * Função para mostrar os itens de um processo pesquisado no menu solicitações.
+     * Function to show the items of a searched process in requests menu.
      *
-     * @param string $busca
+     * @param string $search
      * @return string
      */
-    public static function getConteudoProcesso(string $busca): string {
-        $query = Query::getInstance()->exe("SELECT id, id_item_processo, nome_fornecedor, cod_reduzido, complemento_item, replace(vl_unitario, ',', '.') AS vl_unitario, qt_contrato, qt_utilizado, vl_utilizado, qt_saldo, vl_saldo FROM itens WHERE num_processo LIKE '%" . $busca . "%' AND cancelado = 0");
+    public static function getConteudoProcesso(string $search): string {
+        $query = Query::getInstance()->exe("SELECT id, id_item_processo, nome_fornecedor, cod_reduzido, complemento_item, replace(vl_unitario, ',', '.') AS vl_unitario, qt_contrato, qt_utilizado, vl_utilizado, qt_saldo, vl_saldo FROM itens WHERE num_processo LIKE '%" . $search . "%' AND cancelado = 0");
         $table = new Table('', '', [], false);
         while ($item = $query->fetch_object()) {
             $item->complemento_item = str_replace("\"", "\'", $item->complemento_item);
@@ -832,7 +833,7 @@ final class BuscaLTE {
     }
 
     /**
-     * Função para trazer a linha do item anexado ao pedido
+     * Function to bring the item line attached to the order.
      *
      * @param int $id_item
      * @param int $qtd
@@ -887,24 +888,24 @@ final class BuscaLTE {
     }
 
     /**
-     * Função para retornar os rascunhos para continuar editando.
+     * Function to return the drafts of the sector logged in.
      *
      * @return string
      */
     public static function getRascunhos(): string {
-        $id_setor = $_SESSION['id_setor'];
-        $query = Query::getInstance()->exe("SELECT id, DATE_FORMAT(data_pedido, '%d/%m/%Y') AS data_pedido, pedido.valor, status, pedido.id_usuario FROM pedido WHERE id_setor = " . $id_setor . ' AND alteracao = 1 ORDER BY id DESC LIMIT ' . LIMIT_MAX);
+        $id_sector = $_SESSION['id_setor'];
+        $query = Query::getInstance()->exe("SELECT id, DATE_FORMAT(data_pedido, '%d/%m/%Y') AS data_pedido, pedido.valor, status, pedido.id_usuario FROM pedido WHERE id_setor = " . $id_sector . ' AND alteracao = 1 ORDER BY id DESC LIMIT ' . LIMIT_MAX);
 
         $table = new Table('', '', [], false);
-        while ($rascunho = $query->fetch_object()) {
-            $rascunho->valor = number_format($rascunho->valor, 3, ',', '.');
+        while ($draft = $query->fetch_object()) {
+            $draft->valor = number_format($draft->valor, 3, ',', '.');
 
             $row = new Row();
-            $row->addColumn(new Column($rascunho->id));
-            $row->addColumn(new Column(new Small('label bg-gray', ARRAY_STATUS[$rascunho->status])));
-            $row->addColumn(new Column($rascunho->data_pedido));
-            $row->addColumn(new Column('R$ ' . $rascunho->valor));
-            $row->addColumn(new Column(self::buildButtonsDraft($rascunho->id_usuario, $rascunho->id)));
+            $row->addColumn(new Column($draft->id));
+            $row->addColumn(new Column(new Small('label bg-gray', ARRAY_STATUS[$draft->status])));
+            $row->addColumn(new Column($draft->data_pedido));
+            $row->addColumn(new Column('R$ ' . $draft->valor));
+            $row->addColumn(new Column(self::buildButtonsDraft($draft->id_usuario, $draft->id)));
 
             $table->addRow($row);
         }
@@ -914,32 +915,32 @@ final class BuscaLTE {
     /**
      * Function that returns the content of request for edition.
      *
-     * @param int $id_pedido Request's id.
-     * @return string Rows with itens of $id_pedido param.
+     * @param int $id_request Request's id.
+     * @return string Rows with items of $id_request param.
      */
-    public static function getConteudoPedido(int $id_pedido): string {
-        $retorno = '';
-        $query = Query::getInstance()->exe('SELECT id_item, qtd FROM itens_pedido WHERE id_pedido = ' . $id_pedido);
+    public static function getConteudoPedido(int $id_request): string {
+        $return = '';
+        $query = Query::getInstance()->exe('SELECT id_item, qtd FROM itens_pedido WHERE id_pedido = ' . $id_request);
         while ($item = $query->fetch_object()) {
-            $retorno .= self::addItemPedido($item->id_item, $item->qtd);
+            $return .= self::addItemPedido($item->id_item, $item->qtd);
         }
-        return $retorno;
+        return $return;
     }
 
     /**
-     * Função para o setor acompanhar o andamento do seu pedido.
+     * Function that returns the request did by sector logged in.
      *
      * @param string $where
-     * @param array $pedidos
+     * @param array $requests
      * @return string
      */
-    public static function getMeusPedidos(string $where = '', array $pedidos = []): string {
+    public static function getMeusPedidos(string $where = '', array $requests = []): string {
         $id_setor = $_SESSION['id_setor'];
         $query = Query::getInstance()->exe("SELECT id, DATE_FORMAT(data_pedido, '%d/%m/%Y') AS data_pedido, prioridade, status, valor, id_usuario FROM pedido WHERE id_setor = " . $id_setor . ' AND alteracao = 0 ' . $where . ' ORDER BY id DESC LIMIT ' . LIMIT_MAX);
 
         $table = new Table('', '', [], false);
         while ($pedido = $query->fetch_object()) {
-            if (!in_array($pedido->id, $pedidos)) {
+            if (!in_array($pedido->id, $requests)) {
                 $empenho = Busca::verEmpenho($pedido->id);
                 if ($empenho == 'EMPENHO SIAFI PENDENTE') {
                     $empenho = '';
@@ -963,10 +964,10 @@ final class BuscaLTE {
         return $table;
     }
 
-    private static final function buildButtonsMyRequests(int $id, int $status, int $id_usuario): string {
+    private static final function buildButtonsMyRequests(int $id, int $status, int $id_user): string {
         $group = "<div class=\"btn-group\">";
 
-        $btnSolicAlt = ($status == 2 || $status == 5 && $id_usuario == $_SESSION['id']) ? new Button('', BTN_DEFAULT . ' btn-sm', "solicAltPed(" . $id . ")", "data-toggle=\"tooltip\"", 'Solicitar Alteração', 'wrench') : '';
+        $btnSolicAlt = ($status == 2 || $status == 5 && $id_user == $_SESSION['id']) ? new Button('', BTN_DEFAULT . ' btn-sm', "solicAltPed(" . $id . ")", "data-toggle=\"tooltip\"", 'Solicitar Alteração', 'wrench') : '';
 
         $btnPrint = new Button('', BTN_DEFAULT . ' btn-sm', "imprimir(" . $id . ")", "data-toggle=\"tooltip\"", 'Imprimir', 'print');
 
@@ -978,15 +979,15 @@ final class BuscaLTE {
     /**
      * Build rows with process in database.
      *
-     * @param string $tela If 'recepcao' - add process in tables used by reception, else - search itens of process.
+     * @param string $screen If 'recepcao' - add process in tables used by reception, else - search items of process.
      * @return string Rows with all process.
      */
-    public static function getProcessos(string $tela): string {
+    public static function getProcessos(string $screen): string {
         $sql = 'SELECT DISTINCT num_processo FROM itens';
         $onclick = 'pesquisarProcesso';
         $title = 'Pesquisar Processo';
         $icon = 'search';
-        if ($tela == 'recepcao') {
+        if ($screen == 'recepcao') {
             $sql = 'SELECT DISTINCT num_processo FROM itens WHERE num_processo NOT IN (SELECT DISTINCT num_processo FROM processos)';
             $onclick = 'addProcesso';
             $title = 'Adicionar Processo';
@@ -994,10 +995,10 @@ final class BuscaLTE {
         }
         $query = Query::getInstance()->exe($sql);
         $table = new Table('', '', [], false);
-        while ($processo = $query->fetch_object()) {
+        while ($process = $query->fetch_object()) {
             $row = new Row();
-            $row->addColumn(new Column($processo->num_processo));
-            $row->addColumn(new Column(new Button('', 'btn btn-primary', $onclick . "('" . $processo->num_processo . "', 0)", "data-toggle=\"tooltip\"", $title, $icon)));
+            $row->addColumn(new Column($process->num_processo));
+            $row->addColumn(new Column(new Button('', 'btn btn-primary', $onclick . "('" . $process->num_processo . "', 0)", "data-toggle=\"tooltip\"", $title, $icon)));
 
             $table->addRow($row);
         }
@@ -1019,11 +1020,11 @@ final class BuscaLTE {
     /**
      *    Função que retorna a tabela com os lançamentos de saldos pelo SOF
      *
-     * @param int $id_setor id do setor
+     * @param int $id_sector Sector id.
      * @return string
      */
-    public static function getLancamentos(int $id_setor): string {
-        $where = ($id_setor != 0) ? ' WHERE id_setor = ' . $id_setor : '';
+    public static function getLancamentos(int $id_sector): string {
+        $where = ($id_sector != 0) ? ' WHERE id_setor = ' . $id_sector : '';
 
         $query = Query::getInstance()->exe("SELECT id, id_setor, DATE_FORMAT(data, '%d/%m/%Y') AS data, valor, categoria FROM saldos_lancamentos" . $where . ' ORDER BY id DESC LIMIT ' . LIMIT_MAX);
 
