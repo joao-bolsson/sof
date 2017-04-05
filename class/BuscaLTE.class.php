@@ -1,10 +1,9 @@
 <?php
 
 /**
- *  Classe com as funções de busca utilizadas principalmente pelo arquivo php/busca.php
- *  qualquer função que RETORNE dados do banco, devem ser feitas nesta classe
+ * Class with the functions used, principally, by file php/buscaLTE.php. Any function that returns data from the database, must be make in this class.
  *
- *  Usada para a nova aparência da parte administrativa do SOF.
+ * Used by the new appearance of SOF (since v2.0)
  *
  * @author João Bolsson (joaovictorbolsson@gmail.com).
  * @since 2017, 15 Jan.
@@ -97,7 +96,7 @@ final class BuscaLTE {
     }
 
     /**
-     *    Função que retorna as 'tabs' com as ṕáginas das notícias para editar.
+     * Function that returns the 'tabs' with the pages of news to edit.
      *
      * @return string
      */
@@ -117,25 +116,25 @@ final class BuscaLTE {
     }
 
     /**
-     *    Função para retornar a tabela de notícias de uma página para edição
+     * Function to return the news table of a page to edition.
      *
-     * @param int $tabela
+     * @param int $table_id
      * @return string
      */
-    public static function getNoticiasEditar(int $tabela): string {
-        $query = Query::getInstance()->exe("SELECT id, tabela, titulo, DATE_FORMAT(data, '%d/%m/%Y') AS data FROM postagens WHERE ativa = 1 AND tabela = " . $tabela . ' ORDER BY data ASC');
+    public static function getNoticiasEditar(int $table_id): string {
+        $query = Query::getInstance()->exe("SELECT id, tabela, titulo, DATE_FORMAT(data, '%d/%m/%Y') AS data FROM postagens WHERE ativa = 1 AND tabela = " . $table_id . ' ORDER BY data ASC');
         $table = new Table('', '', [], false);
-        while ($postagem = $query->fetch_object()) {
+        while ($post = $query->fetch_object()) {
             $btn_group = "<div class=\"btn-group\">";
-            $btn_group .= new Button('', BTN_DEFAULT . ' btn-sm', "editaNoticia(" . $postagem->id . ", " . $postagem->tabela . ")", "data-toggle=\"tooltip\"", 'Editar', 'pencil');
+            $btn_group .= new Button('', BTN_DEFAULT . ' btn-sm', "editaNoticia(" . $post->id . ", " . $post->tabela . ")", "data-toggle=\"tooltip\"", 'Editar', 'pencil');
 
-            $btn_group .= new Button('', BTN_DEFAULT . ' btn-sm', "excluirNoticia(" . $postagem->id . ")", "data-toggle=\"tooltip\"", 'Excluir', 'trash');
+            $btn_group .= new Button('', BTN_DEFAULT . ' btn-sm', "excluirNoticia(" . $post->id . ")", "data-toggle=\"tooltip\"", 'Excluir', 'trash');
             $btn_group .= '</div>';
 
             $row = new Row();
 
-            $row->addColumn(new Column($postagem->data));
-            $row->addColumn(new Column($postagem->titulo));
+            $row->addColumn(new Column($post->data));
+            $row->addColumn(new Column($post->titulo));
             $row->addColumn(new Column($btn_group));
 
             $table->addRow($row);
@@ -144,22 +143,21 @@ final class BuscaLTE {
     }
 
     /**
-     * Função para escrever as opções para "Postar em " do painel administrativo
+     * Function to write the options to "Post in" of the administrative panel.
      *
      * @return string
      */
     public static function getPostarEm(): string {
-        $retorno = '';
+        $return = '';
         $query = Query::getInstance()->exe('SELECT id, nome FROM paginas_post');
-        while ($pagina = $query->fetch_object()) {
-            $retorno .= "<option id=\"op" . $pagina->id . "\" value=\"" . $pagina->id . "\">" . $pagina->nome . "</option>";
+        while ($page = $query->fetch_object()) {
+            $return .= "<option id=\"op" . $page->id . "\" value=\"" . $page->id . "\">" . $page->nome . "</option>";
         }
-        return $retorno;
+        return $return;
     }
 
     /**
-     * Retorna a quantidade de solicitações de adiantamento, alt pedidos e de pedidos em análise.
-     * @return object Objeto com as quantidades de solicitações.
+     * @return mixed Object with the quantities of requests.
      */
     public static function getCountSolic() {
         $query = Query::getInstance()->exe('SELECT count(saldos_adiantados.id) AS solic_adi, (SELECT count(solic_alt_pedido.id) FROM solic_alt_pedido WHERE solic_alt_pedido.status = 2) AS solic_alt, (SELECT count(pedido.id) FROM pedido WHERE pedido.status = 2) AS solic_ped FROM saldos_adiantados WHERE saldos_adiantados.status = 2');
@@ -184,55 +182,56 @@ final class BuscaLTE {
 
     /**
      * @param bool $users
-     * @param int $id_setor
-     * @return string Lista de usuários cadastrados.
+     * @param int $id_sector
+     * @return string Options with the registered users.
      */
-    public static function getUsers(bool $users = false, int $id_setor = 0): string {
-        $where = ($id_setor != 0) ? 'WHERE id_setor = ' . $id_setor : '';
+    public static function getUsers(bool $users = false, int $id_sector = 0): string {
+        $where = ($id_sector != 0) ? 'WHERE id_setor = ' . $id_sector : '';
 
         if ($users) {
             $where = "WHERE login = 'uapublico'";
         }
         $query = Query::getInstance()->exe('SELECT id, nome, id_setor FROM usuario ' . $where . ' ORDER BY nome ASC');
 
-        $retorno = "";
+        $return = "";
         while ($user = $query->fetch_object()) {
-            $retorno .= "<option value=\"" . $user->id . "\">" . $user->nome . " (" . ARRAY_SETORES[$user->id_setor] . ")</option>";
+            $return .= "<option value=\"" . $user->id . "\">" . $user->nome . " (" . ARRAY_SETORES[$user->id_setor] . ")</option>";
         }
-        return $retorno;
+        return $return;
     }
 
     /**
      *
-     * @param int $id_setor Id do setor para retornar os grupos.
-     * @return string Options dentro de um <select> com os grupos de um setor.
+     * @param int $id_sector Sector id.
+     * @return string Option with the groups of sector.
      */
-    public static function getOptionsGrupos(int $id_setor): string {
-        $query = Query::getInstance()->exe('SELECT id, nome, cod FROM setores_grupos WHERE id_setor = ' . $id_setor);
-        $retorno = '';
+    public static function getOptionsGrupos(int $id_sector): string {
+        $query = Query::getInstance()->exe('SELECT id, nome, cod FROM setores_grupos WHERE id_setor = ' . $id_sector);
+        $return = '';
         if ($query->num_rows > 0) {
             while ($obj = $query->fetch_object()) {
-                $retorno .= "<option value=\"" . $obj->id . "\">" . utf8_encode($obj->nome) . '&nbsp;(' . $obj->cod . ')' . '</option>';
+                $return .= "<option value=\"" . $obj->id . "\">" . utf8_encode($obj->nome) . '&nbsp;(' . $obj->cod . ')' . '</option>';
             }
         }
-        return $retorno;
+        return $return;
     }
 
     /**
-     * Função para construir as linhas de uma tabela com as opções de licitação para fazer um pedido.
-     * @param int $cont Número de radios que devem aparecer em cada linha.
-     * @return string Radios buttons com opções de licitação para um pedido.
+     * Function that build the rows of a table with the the bidding options to make a request
+     *
+     * @param int $cont Number of radios that must be in every single line.
+     * @return string Radios buttons with the bidding options for a request.
      */
     public static function getOptionsLicitacao(int $cont): string {
         $query = Query::getInstance()->exe('SELECT id, nome FROM licitacao_tipo');
-        $retorno = '<tr>';
+        $return = '<tr>';
         $i = 0;
         while ($obj = $query->fetch_object()) {
             if ($i == $cont) {
                 $i = 0;
-                $retorno .= '</tr><tr>';
+                $return .= '</tr><tr>';
             }
-            $retorno .= "
+            $return .= "
                 <td>
                     <div class=\"form-group\">
                         <input type=\"radio\" name=\"tipoLic\" id=\"tipoLic" . $obj->id . "\" class=\"minimal\" value=\"" . $obj->id . "\" required > " . $obj->nome . "
@@ -241,16 +240,17 @@ final class BuscaLTE {
             $i++;
         }
 
-        return $retorno;
+        return $return;
     }
 
     /**
-     * Função para trazer informação do fornecedor de um pedido.
-     * @param int $id_pedido Id do pedido.
-     * @return string Fornecedor do pedido
+     * Function to search informations of the provider of a request.
+     *
+     * @param int $id_request Request id.
+     * @return string Provider.
      */
-    public static function getFornecedor(int $id_pedido): string {
-        $query = Query::getInstance()->exe('SELECT itens.nome_fornecedor FROM itens, itens_pedido WHERE itens_pedido.id_item = itens.id AND itens_pedido.id_pedido = ' . $id_pedido . ' LIMIT 1');
+    public static function getFornecedor(int $id_request): string {
+        $query = Query::getInstance()->exe('SELECT itens.nome_fornecedor FROM itens, itens_pedido WHERE itens_pedido.id_item = itens.id AND itens_pedido.id_pedido = ' . $id_request . ' LIMIT 1');
         if ($query->num_rows < 1) {
             return '';
         }
@@ -260,126 +260,124 @@ final class BuscaLTE {
     }
 
     /**
-     *    Função que retorna os pedidos em análise e o total deles
+     * Function that returns the requests in analysis and the total its.
      *
-     * @param int $id_setor id do setor
+     * @param int $id_sector Sector id.
      * @return string
      */
-    public static function getPedidosAnalise(int $id_setor): string {
-        $retorno = '';
-        $query = Query::getInstance()->exe('SELECT valor FROM pedido WHERE id_setor = ' . $id_setor . ' AND status = 2');
-        $soma = $cont = 0;
+    public static function getPedidosAnalise(int $id_sector): string {
+        $return = '';
+        $query = Query::getInstance()->exe('SELECT valor FROM pedido WHERE id_setor = ' . $id_sector . ' AND status = 2');
+        $sum = $cont = 0;
         while ($ped = $query->fetch_object()) {
-            $soma += $ped->valor;
+            $sum += $ped->valor;
             $cont++;
         }
-        if ($soma > 0) {
-            $soma = number_format($soma, 3, ',', '.');
-            $retorno = "
+        if ($sum > 0) {
+            $sum = number_format($sum, 3, ',', '.');
+            $return = "
                 <tr>
-                    <td colspan=\"2\">Você tem " . $cont . " pedido(s) em análise no total de R$ " . $soma . "</td>
+                    <td colspan=\"2\">Você tem " . $cont . " pedido(s) em análise no total de R$ " . $sum . "</td>
                 </tr>";
         }
-        return $retorno;
+        return $return;
     }
 
     /**
-     *    Função que retorna as options com os setores cadastrados no sistema
+     * Function that returns the options with the registered sectors in system.
      *
      * @return string
      */
     public static function getOptionsSetores(): string {
-        $retorno = '';
+        $return = '';
         $count = count(ARRAY_SETORES);
 
         for ($i = 2; $i < $count; $i++) {
-            $retorno .= "<option value=\"" . $i . "\">" . ARRAY_SETORES[$i] . '</option>';
+            $return .= "<option value=\"" . $i . "\">" . ARRAY_SETORES[$i] . '</option>';
         }
-        return $retorno;
+        return $return;
     }
 
     /**
-     *    Função que retornar as options com as prioridades existentes no sistemas para os pedidos
+     * Function that returns the option with exists priorities in system for the requests.
      *
      * @return string
      */
     public static function getOptionsPrioridades(): string {
-        $retorno = '';
+        $return = '';
         $count = count(ARRAY_PRIORIDADE);
 
         for ($i = 1; $i < $count - 1; $i++) {
-            $retorno .= "<option value=\"" . $i . "\">" . ARRAY_PRIORIDADE[$i] . '</option>';
+            $return .= "<option value=\"" . $i . "\">" . ARRAY_PRIORIDADE[$i] . '</option>';
         }
-        return $retorno;
+        return $return;
     }
 
     public static function getOptionsCategoria(): string {
-        $retorno = '';
+        $return = '';
         $count = count(ARRAY_CATEGORIA);
 
         for ($i = 1; $i < $count; $i++) {
-            $retorno .= "<option value=\"" . $i . "\">" . ARRAY_CATEGORIA[$i] . '</option>';
+            $return .= "<option value=\"" . $i . "\">" . ARRAY_CATEGORIA[$i] . '</option>';
         }
-        return $retorno;
+        return $return;
     }
 
     /**
-     *    Função que retorna as options com os status de pedidos
+     * Function that returns the options with the registered status in system.
      *
      * @return string
      */
     public static function getOptionsStatus(): string {
-        $retorno = '';
+        $return = '';
         $count = count(ARRAY_STATUS);
         for ($i = 2; $i < $count; $i++) {
-            $retorno .= "<option value=\"" . $i . "\">" . ARRAY_STATUS[$i] . '</option>';
+            $return .= "<option value=\"" . $i . "\">" . ARRAY_STATUS[$i] . '</option>';
         }
-        return $retorno;
+        return $return;
     }
 
     /**
-     *    Função que retorna as options para tipo de processos para o cadastro de novos processos.
+     * Function that returns the options to the type of process to the register of new ones.
      *
      * @return string
      */
     public static function getTiposProcessos(): string {
-        $retorno = '';
+        $return = '';
         $query = Query::getInstance()->exe('SELECT id, nome FROM processos_tipo');
-        while ($tipo = $query->fetch_object()) {
-            $retorno .= "<option value=\"" . $tipo->id . "\">" . $tipo->nome . '</option>';
+        while ($type = $query->fetch_object()) {
+            $return .= "<option value=\"" . $type->id . "\">" . $type->nome . '</option>';
         }
-        return $retorno;
+        return $return;
     }
 
     /**
-     *    Função que retornar se um pedido é ou não rascunho.
-     *
-     * @param int $id_pedido id do pedido.
-     * @return bool Se o pedido é um rascunho - true, senão false.
+     * @param int $id_request Request id.
+     * @return bool If the requests is a draft - true, else - false.
      */
-    public static function getRequestDraft(int $id_pedido): bool {
-        $query = Query::getInstance()->exe('SELECT prioridade FROM pedido WHERE id = ' . $id_pedido);
+    public static function getRequestDraft(int $id_request): bool {
+        $query = Query::getInstance()->exe('SELECT prioridade FROM pedido WHERE id = ' . $id_request);
         $obj = $query->fetch_object();
         return ARRAY_PRIORIDADE[$obj->prioridade] == 'Rascunho';
     }
 
     /**
-     *    Função que constroi os radioBtn da análise dos pedidos.
+     * Function that builds the radios buttons in analysis of requests.
      *
-     * @param int $cont Número de radioBtn por linha.
+     * @param int $cont Number of radios button by line.
      * @return string
      */
     public static function getStatus(int $cont): string {
-        $retorno = '<tr>';
+        $return = '<tr>';
         $i = 0;
         $count = count(ARRAY_STATUS);
 
         for ($j = 2; $j < $count; $j++) {
             if ($i == $cont) {
                 $i = 0;
-                $retorno .= '</tr><tr>';
+                $return .= '</tr><tr>';
             }
-            $retorno .= "
+            $return .= "
                 <td>
                     <div class=\"form-group\">
                         <label>
@@ -388,14 +386,12 @@ final class BuscaLTE {
                 </td>";
             $i++;
         }
-        $retorno .= '</tr>';
-        return $retorno;
+        $return .= '</tr>';
+        return $return;
     }
 
     /**
-     *    Função que retornar os radioBtn das prioridades dos pedidos.
-     *
-     * @return string Opções de prioridades para os pedidos.
+     * @return string The radios buttons of priorities of the requests.
      */
     public static function getPrioridades(): string {
         $count = count(ARRAY_PRIORIDADE);
@@ -412,44 +408,44 @@ final class BuscaLTE {
     }
 
     /**
-     *   Função utilizada para retornar a tabela dos processos da recepção.
+     * Function used to returns the table of process of reception.
      *
      * @return string
      */
     public static function getTabelaRecepcao(): string {
         $query = Query::getInstance()->exe('SELECT processos.id, processos.num_processo, processos_tipo.nome AS tipo, processos.estante, processos.prateleira, processos.entrada, processos.saida, processos.responsavel, processos.retorno, processos.obs FROM processos, processos_tipo WHERE processos.tipo = processos_tipo.id ORDER BY id ASC');
         $table = new Table('', '', [], false);
-        while ($processo = $query->fetch_object()) {
-            $processo->obs = str_replace("\"", "\'", $processo->obs);
+        while ($process = $query->fetch_object()) {
+            $process->obs = str_replace("\"", "\'", $process->obs);
 
             $row = new Row();
             $div = new Div('btn-group');
-            $div->addComponent(new Button('', BTN_DEFAULT, "addProcesso('', " . $processo->id . ")", "data-toggle=\"tooltip\"", 'Editar', 'pencil'));
+            $div->addComponent(new Button('', BTN_DEFAULT, "addProcesso('', " . $process->id . ")", "data-toggle=\"tooltip\"", 'Editar', 'pencil'));
             $row->addColumn(new Column($div));
-            $row->addColumn(new Column($processo->num_processo));
-            $row->addColumn(new Column($processo->tipo));
-            $row->addColumn(new Column($processo->estante));
-            $row->addColumn(new Column($processo->prateleira));
-            $row->addColumn(new Column($processo->entrada));
-            $row->addColumn(new Column($processo->saida));
-            $row->addColumn(new Column($processo->responsavel));
-            $row->addColumn(new Column($processo->retorno));
-            $row->addColumn(new Column(new Button('', BTN_DEFAULT, "viewCompl('" . $processo->obs . "')", "data-toggle=\"tooltip\"", 'Ver Observação', 'eye')));
+            $row->addColumn(new Column($process->num_processo));
+            $row->addColumn(new Column($process->tipo));
+            $row->addColumn(new Column($process->estante));
+            $row->addColumn(new Column($process->prateleira));
+            $row->addColumn(new Column($process->entrada));
+            $row->addColumn(new Column($process->saida));
+            $row->addColumn(new Column($process->responsavel));
+            $row->addColumn(new Column($process->retorno));
+            $row->addColumn(new Column(new Button('', BTN_DEFAULT, "viewCompl('" . $process->obs . "')", "data-toggle=\"tooltip\"", 'Ver Observação', 'eye')));
             $table->addRow($row);
         }
         return $table;
     }
 
     /**
-     * Retorna as permissões para cadastro de usuários.
+     * @return string The permissions for user registration.
      */
     public static function getCheckPermissoes(): string {
         $query = Query::getInstance()->exe("SELECT column_name AS nome FROM information_schema.columns WHERE table_name = 'usuario_permissoes' AND column_name <> 'id_usuario'");
-        $retorno = "";
+        $return = "";
         $i = 1;
         while ($obj = $query->fetch_object()) {
             $nome = ucfirst($obj->nome);
-            $retorno .= "
+            $return .= "
                 <div class=\"form-group\" style=\"display: inline-block;\">
                     <label>
                         <input id=\"perm" . $i . "\" type=\"checkbox\" name=\"" . $obj->nome . "\" class=\"minimal\"/>
@@ -458,7 +454,7 @@ final class BuscaLTE {
                 </div>";
             $i++;
         }
-        return $retorno;
+        return $return;
     }
 
     /**
@@ -469,21 +465,21 @@ final class BuscaLTE {
      */
     public static function getPermissoes(int $id_user) {
         $query = Query::getInstance()->exe('SELECT noticias, saldos, pedidos, recepcao FROM usuario_permissoes WHERE id_usuario = ' . $id_user);
-        $obj_permissoes = $query->fetch_object();
-        return $obj_permissoes;
+        $obj_permissions = $query->fetch_object();
+        return $obj_permissions;
     }
 
     private static final function buildButtonsSolicAltPedAdmin(int $id, int $id_pedido): string {
         $group = "<div class=\"btn-group\">";
-        $btn_aprovar = new Button('', BTN_DEFAULT, "analisaSolicAlt(" . $id . ", " . $id_pedido . ", 1)", "data-toggle=\"tooltip\"", 'Aprovar', 'check');
-        $btn_reprovar = new Button('', BTN_DEFAULT, "analisaSolicAlt(" . $id . ", " . $id_pedido . ", 0)", "data-toggle=\"tooltip\"", 'Reprovar', 'trash');
+        $btn_approve = new Button('', BTN_DEFAULT, "analisaSolicAlt(" . $id . ", " . $id_pedido . ", 1)", "data-toggle=\"tooltip\"", 'Aprovar', 'check');
+        $btn_reprove = new Button('', BTN_DEFAULT, "analisaSolicAlt(" . $id . ", " . $id_pedido . ", 0)", "data-toggle=\"tooltip\"", 'Reprovar', 'trash');
 
-        $group .= $btn_aprovar . $btn_reprovar . '</div>';
+        $group .= $btn_approve . $btn_reprove . '</div>';
         return $group;
     }
 
     /**
-     *    Função que retorna a tabela com as solicitações de alteração de pedidos    para o SOF analisar
+     * Function that returns the table with the requests change orders to SOF analysis
      *
      * @param int $st
      * @return string
@@ -498,17 +494,17 @@ final class BuscaLTE {
         $label = 'bg-' . $array_lb[$st];
 
         $table = new Table('', '', array(), false);
-        while ($solic = $query->fetch_object()) {
-            $btn_group = ($st == 2) ? self::buildButtonsSolicAltPedAdmin($solic->id, $solic->id_pedido) : '';
-            $solic->justificativa = str_replace("\"", "\'", $solic->justificativa);
+        while ($request = $query->fetch_object()) {
+            $btn_group = ($st == 2) ? self::buildButtonsSolicAltPedAdmin($request->id, $request->id_pedido) : '';
+            $request->justificativa = str_replace("\"", "\'", $request->justificativa);
 
             $row = new Row();
             $row->addColumn(new Column($btn_group));
-            $row->addColumn(new Column($solic->id_pedido));
-            $row->addColumn(new Column($solic->nome));
-            $row->addColumn(new Column($solic->data_solicitacao));
-            $row->addColumn(new Column(($st == 2) ? '--------------' : $solic->data_analise));
-            $row->addColumn(new Column(new Button('', 'btn btn-sm btn-primary', "viewCompl('" . $solic->justificativa . "')", "data-toggle=\"tooltip\"", 'Ver Justificativa', 'eye')));
+            $row->addColumn(new Column($request->id_pedido));
+            $row->addColumn(new Column($request->nome));
+            $row->addColumn(new Column($request->data_solicitacao));
+            $row->addColumn(new Column(($st == 2) ? '--------------' : $request->data_analise));
+            $row->addColumn(new Column(new Button('', 'btn btn-sm btn-primary', "viewCompl('" . $request->justificativa . "')", "data-toggle=\"tooltip\"", 'Ver Justificativa', 'eye')));
             $row->addColumn(new Column(new Small('label pull-right ' . $label, $status)));
             $table->addRow($row);
         }
