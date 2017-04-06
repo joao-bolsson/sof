@@ -15,6 +15,7 @@ defined('ARRAY_CATEGORIA') or define('ARRAY_CATEGORIA', [NULL, 'normal', 'adiant
 defined('LIMIT_MAX') or define('LIMIT_MAX', 100);
 defined('LIMIT_LOGS') or define('LIMIT_LOGS', 50);
 defined('LIMIT_REQ_REPORT') or define('LIMIT_REQ_REPORT', 200);
+defined('LIMIT_HOURS_REPORT') or define('LIMIT_HOURS_REPORT', 100);
 
 defined('MPDF_PATH') or define('MPDF_PATH', __DIR__ . '/pdf');
 
