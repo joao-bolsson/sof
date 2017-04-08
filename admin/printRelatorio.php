@@ -47,7 +47,7 @@ if (!is_null($type)) {
         switch ($tipo) {
             case 'pedidos':
                 $id_setor = filter_input(INPUT_POST, 'setor');
-                $prioridade = filter_input(INPUT_POST, 'prioridade');
+                $prioridade = filter_input(INPUT_POST, 'prioridade', FILTER_DEFAULT, FILTER_FORCE_ARRAY);
                 $status = filter_input(INPUT_POST, 'status', FILTER_DEFAULT, FILTER_FORCE_ARRAY);
                 $dataI = filter_input(INPUT_POST, 'dataI');
                 $dataF = filter_input(INPUT_POST, 'dataF');

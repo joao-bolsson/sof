@@ -4,6 +4,35 @@ $(function () {
         Pace.restart();
     });
 
+    $("#formPedido").submit(function () {
+        var data = $(this).serialize();
+
+        var id_pedido = document.getElementById('id_pedido').value;
+
+        if (id_pedido == 0) {
+            alert("Nenhum pedido para editar");
+            return false;
+        }
+
+        document.getElementById('overlayLoad').style.display = 'block';
+        document.getElementById('overlayLoadDetPed').style.display = 'block';
+        $.ajax({
+            type: "POST",
+            url: "../php/geral.php",
+            data: data,
+            success: function () {
+                dropTableSolic(id_pedido);
+                iniSolicitacoes(false, id_pedido);
+                limpaTela();
+                document.getElementById('overlayLoad').style.display = 'none';
+                document.getElementById('overlayLoadDetPed').style.display = 'none';
+                avisoSnack('Alterações Salvas! Pedido: ' + id_pedido);
+            }
+        });
+
+        return false;
+    });
+
     tableItens = '';
     var ta = document.getElementById('divTableItens');
     if (ta !== null) {

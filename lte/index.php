@@ -847,6 +847,9 @@ if (isset($_SESSION['editmode'])) {
                                     </div>
                                 </div>
                             </form>
+                            <div id="overlayLoadDetPed" class="overlay" style="display: none;">
+                                <i class="fa fa-refresh fa-spin"></i>
+                            </div>
                         </div><!-- ./box -->
                     </div> <!-- ./col-xs-12 -->
                 </div> <!-- ./row -->
@@ -1370,7 +1373,8 @@ if (isset($_SESSION['editmode'])) {
                             </div>
                             <div class="form-group">
                                 <label>Prioridade</label>
-                                <select class="form-control" name="prioridade" required>
+                                <select class="form-control select2" multiple="multiple" data-placeholder="Selecione"
+                                        name="prioridade[]" required>
                                     <option value="0">Todas</option>
                                     <?= BuscaLTE::getOptionsPrioridades(); ?>
                                 </select>
