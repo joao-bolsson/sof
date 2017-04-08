@@ -467,18 +467,16 @@ final class PrintMod {
     /**
      * Function that returns the requests report.
      *
-     * @param int $id_sector
-     * @param int $priority
-     * @param array $status
-     * @param string $dateI
-     * @param string $dateF
-     * @param bool $checkSIAFI
+     * @param int $id_sector Sector id.
+     * @param array $priority Array with priorities.
+     * @param array $status Array with status.
+     * @param string $dateI Initial date of report.
+     * @param string $dateF Final date of report.
+     * @param bool $checkSIAFI Request contains SIAFI.
      * @return string Content of PDF document
      */
-    public static function getRelatorioPedidos(int $id_sector, int $priority, array $status, string $dateI, string $dateF, bool $checkSIAFI): string {
-        $return = '';
-        $where_status = '';
-        $where_priority = ($priority != 0) ? 'AND pedido.prioridade = ' . $priority : '';
+    public static function getRelatorioPedidos(int $id_sector, array $priority, array $status, string $dateI, string $dateF, bool $checkSIAFI): string {
+        $return = $where_status = $where_priority = '';
         $where_sector = ($id_sector != 0) ? 'AND pedido.id_setor = ' . $id_sector : '';
 
         if (!in_array(0, $status)) {
@@ -491,6 +489,18 @@ final class PrintMod {
                 }
             }
             $where_status .= ") ";
+        }
+
+        if (!in_array(0, $priority)) {
+            $len = count($priority);
+            $where_priority = "AND (";
+            for ($i = 0; $i < $len; $i++) {
+                $where_priority .= "pedido.prioridade = " . $priority[$i];
+                if ($i < $len - 1) {
+                    $where_priority .= " OR ";
+                }
+            }
+            $where_priority .= ") ";
         }
         $dataIni = Util::dateFormat($dateI);
         $dataFim = Util::dateFormat($dateF);

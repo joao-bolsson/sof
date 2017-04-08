@@ -1373,7 +1373,8 @@ if (isset($_SESSION['editmode'])) {
                             </div>
                             <div class="form-group">
                                 <label>Prioridade</label>
-                                <select class="form-control" name="prioridade" required>
+                                <select class="form-control select2" multiple="multiple" data-placeholder="Selecione"
+                                        name="prioridade[]" required>
                                     <option value="0">Todas</option>
                                     <?= BuscaLTE::getOptionsPrioridades(); ?>
                                 </select>
