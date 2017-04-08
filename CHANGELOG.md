@@ -1,5 +1,12 @@
 ## CHANGELOG ##
 
+#### v2.1.12 - 07/04/2017 ####
+- Não recarrega toda a página quando um pedido for alterado pela análise do SOF
+- Suporte para relatório de pedidos com mais de uma prioridade
+- Melhoria de funções e correções pequenas
+- Documentação
+- Site será acessado somente via https
+
 #### v2.1.11 - 29/03/2017 ####
 - Corrige bug no cadastro de empenho de um pedido
 - Melhora arquitetura da aplicação
