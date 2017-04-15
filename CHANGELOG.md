@@ -1,5 +1,8 @@
 ## CHANGELOG ##
 
+#### v2.1.13 - 15/04/2017 ####
+- Correção de bug no cadastro de empenhos
+
 #### v2.1.12 - 07/04/2017 ####
 - Não recarrega toda a página quando um pedido for alterado pela análise do SOF
 - Suporte para relatório de pedidos com mais de uma prioridade
