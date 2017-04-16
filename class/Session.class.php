@@ -17,18 +17,6 @@ class Session {
 
     private static $INSTANCE;
 
-    /*
-     public static function singleton() {
-	  	if( !isset( self::$instance ) )
-		{
-			$c = __CLASS__;
-			self::$instance = new $c;
-		}
-
-		return self::$instance;
-	  }//<--
-     */
-
     public static function getInstance(): Session {
         if (empty(self::$INSTANCE)) {
             self::$INSTANCE = new Session();

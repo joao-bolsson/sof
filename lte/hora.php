@@ -1,6 +1,6 @@
 <?php
 /**
- *  Interface usada pelo Setor de Orçamento para gerenciar postagens no site.
+ * Interface used by SOF to register users log in and log out.
  *
  *  @author João Bolsson (joaovictorbolsson@gmail.com).
  *  @since 2017, 26 Feb.
@@ -12,7 +12,7 @@ session_start();
 spl_autoload_register(function (string $class_name) {
     include_once '../class/' . $class_name . '.class.php';
 });
-$permissao = BuscaLTE::getPermissoes($_SESSION["id"]);
+$permission = BuscaLTE::getPermissoes($_SESSION["id"]);
 if (!isset($_SESSION["id_setor"]) || $_SESSION["id_setor"] != 2) {
     header("Location: ../");
 }
@@ -109,7 +109,7 @@ require_once '../defines.php';
                             <?= $_SESSION['nome_setor']; ?>
                         </h1>
                         <ol class="breadcrumb">
-                            <?php if ($permissao->pedidos || $permissao->recepcao || $permissao->saldos): ?>
+                            <?php if ($permission->pedidos || $permission->recepcao || $permission->saldos): ?>
                                 <li><a href="index.php"><i class="fa fa-dashboard"></i> Início</a></li>
                                 <li class="active">Ponto Eletrônico</li>
                             <?php else : ?>
