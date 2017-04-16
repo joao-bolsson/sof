@@ -2,6 +2,8 @@
 
 #### v2.1.13 - 15/04/2017 ####
 - Correção de bug no cadastro de empenhos
+- Mostra changelog para o usuário do SOF
+- Implementa logs de erros
 
 #### v2.1.12 - 07/04/2017 ####
 - Não recarrega toda a página quando um pedido for alterado pela análise do SOF
