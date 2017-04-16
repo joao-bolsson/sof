@@ -240,6 +240,14 @@ if (isset($_SESSION['editmode'])) {
                         </a>
                     </li>
                 <?php endif; ?>
+                <li>
+                    <a href="changelog.php">
+                        <i class="fa fa-code-fork"></i> <span>Changelog</span>
+                        <span class="pull-right-container">
+                            <small class="label pull-right bg-blue">Novo</small>
+                        </span>
+                    </a>
+                </li>
                 <?php if ($permissao->recepcao): ?>
                     <li>
                         <a href="javascript:listProcessos('admin');">

@@ -23,7 +23,15 @@ class Logger {
      * @param string $info Information to log
      */
     public static function info(string $info) {
-        error_log('[' . date("d/m/Y H:i:s ") . "] " . $info . "\n", 3, self::$INFO_PATH);
+        error_log('[INFO] [' . date("d/m/Y H:i:s ") . "] " . $info . "\n", 3, self::$INFO_PATH);
+    }
+
+    /**
+     * Puts an error log message in log file.
+     * @param string $error Error message to log.
+     */
+    public static function error(string $error) {
+        error_log('[ERROR] [' . date("d/m/Y H:i:s ") . "] " . $error . "\n", 3, self::$INFO_PATH);
     }
 
 }
