@@ -156,6 +156,11 @@ $(function () {
             iniDataTable('#tableListProblemas');
         }
     });
+
+    $('#infoItem').on('shown.bs.modal', function () {
+        $(".date").inputmask("dd/mm/yyyy", {"placeholder": "dd/mm/yyyy"});
+    });
+
     $('.modal').on('hidden.bs.modal', function () {
         $(this).removeClass('fv-modal-stack');
         $('body').data('fv_open_modals', $('body').data('fv_open_modals') - 1);
