@@ -504,6 +504,17 @@ if (Busca::isActive()) {
                 $id_setor = $_SESSION['id_setor'];
                 $pag = filter_input(INPUT_POST, 'pag'); // like lte/solicitacoes.php
                 Geral::insereProblema($id_setor, $assunto, $descricao);
+
+                $from = $obj_Util->mail->Username;
+                $nome_from = utf8_decode("Setor de Orçamento e Finanças do HUSM");
+                $altBody = "Olá! Temos um problema: " . $assunto;
+
+                $obj_Util->preparaEmail($from, $nome_from, "joaovictorbolsson@gmail.com", "João", "Problema relatado", $altBody, $descricao);
+
+                //send the message, check for errors
+                if (!$obj_Util->mail->send()) {
+                    Logger::error("Erro ao enviar problema por e-mail");
+                }
                 header('Location: ../' . $pag);
                 break;
 
