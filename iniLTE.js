@@ -1987,6 +1987,26 @@ function editaItem(id_item) {
         document.getElementById('dtFim').value = obj.dt_fim;
         document.getElementById('descrDespesa').value = obj.descr_despesa;
         document.getElementById('seqItemProcesso').value = obj.seq_item_processo;
+
+        document.getElementById('id_item_processo').value = obj.id_item_processo;
+        document.getElementById('id_item_contrato').value = obj.id_item_contrato;
+        document.getElementById('descr_tipo_doc').value = obj.descr_tipo_doc;
+        document.getElementById('num_contrato').value = obj.num_contrato;
+        document.getElementById('num_processo').value = obj.num_processo;
+        document.getElementById('descr_mod_compra').value = obj.descr_mod_compra;
+        document.getElementById('num_licitacao').value = obj.num_licitacao;
+        document.getElementById('dt_inicio').value = obj.dt_inicio;
+        document.getElementById('dt_fim').value = obj.dt_fim;
+        document.getElementById('dt_geracao').value = obj.dt_geracao;
+        document.getElementById('cgc_fornecedor').value = obj.cgc_fornecedor;
+        document.getElementById('nome_fornecedor').value = obj.nome_fornecedor;
+        document.getElementById('nome_unidade').value = obj.nome_unidade;
+        document.getElementById('cod_estruturado').value = obj.cod_estruturado;
+        document.getElementById('num_extrato').value = obj.num_extrato;
+        document.getElementById('descricao').value = obj.descricao;
+        document.getElementById('id_extrato_contr').value = obj.id_extrato_contr;
+        document.getElementById('id_unidade').value = obj.id_unidade;
+        document.getElementById('ano_orcamento').value = obj.ano_orcamento;
     });
 }
 
