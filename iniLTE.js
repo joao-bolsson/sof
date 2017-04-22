@@ -189,6 +189,7 @@ $(function () {
     });
 
     $('#infoItem').on('hidden.bs.modal', function () {
+        document.getElementById('id').value = 0;
         document.getElementById('formEditRegItem').reset();
     });
 
