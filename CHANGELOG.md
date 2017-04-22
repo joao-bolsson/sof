@@ -1,5 +1,9 @@
 ## CHANGELOG ##
 
+#### v2.1.14 - 22/04/2017 ####
+- Envio de problemas relatados para o e-mail joaovictorbolsson@gmail.com
+- Edição completa das informações de um item
+
 #### v2.1.13 - 15/04/2017 ####
 - Correção de bug no cadastro de empenhos
 - Mostra changelog para o usuário do SOF
