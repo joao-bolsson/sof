@@ -114,7 +114,21 @@ final class Geral {
         if (empty($dados)) {
             exit('Factory data is empty');
         }
-        Query::getInstance()->exe("UPDATE itens SET cod_despesa = '" . $dados->codDespesa . "', descr_despesa = '" . $dados->descrDespesa . "', cod_reduzido = '" . $dados->codReduzido . "', dt_fim = '" . $dados->dtFim . "', seq_item_processo = '" . $dados->seqItemProcesso . "' WHERE id = " . $dados->idItem . " LIMIT 1;");
+
+        $attach_fields = ['id_item_processo', 'id_item_contrato', 'descr_tipo_doc', 'num_contrato', 'num_processo', 'descr_mod_compra', 'num_licitacao', 'dt_inicio', 'dt_fim', 'dt_geracao', 'cgc_fornecedor', 'nome_fornecedor', 'nome_unidade', 'cod_estruturado', 'num_extrato', 'descricao', 'id_extrato_contr', 'id_unidade', 'ano_orcamento'];
+
+        $sets = ", ";
+        $len = count($attach_fields);
+        for ($i = 0; $i < $len; $i++) {
+            $aux = Query::getInstance()->real_escape_string($dados->{$attach_fields[$i]});
+            $info = str_replace("\"", "'", $aux);
+            $sets .= $attach_fields[$i] . "=\"" . $info . "\"";
+            if ($i != $len - 1) {
+                $sets .= ", ";
+            }
+        }
+
+        Query::getInstance()->exe("UPDATE itens SET cod_despesa = '" . $dados->cod_despesa . "', descr_despesa = '" . $dados->descr_despesa . "', cod_reduzido = '" . $dados->cod_reduzido . "', seq_item_processo = '" . $dados->seq_item_processo . "' {$sets} WHERE id = " . $dados->id . " LIMIT 1;");
     }
 
     /**
@@ -322,25 +336,25 @@ final class Geral {
      * @return bool
      */
     public static function editItem($data): bool {
-        $query_qtd = Query::getInstance()->exe("SELECT sum(itens_pedido.qtd) AS soma FROM itens_pedido WHERE itens_pedido.id_item = " . $data->idItem);
+        $query_qtd = Query::getInstance()->exe("SELECT sum(itens_pedido.qtd) AS soma FROM itens_pedido WHERE itens_pedido.id_item = " . $data->id);
         if ($query_qtd->num_rows > 0) {
             $obj_qtd = $query_qtd->fetch_object();
             $sum = $obj_qtd->soma;
-            if ($data->qtContrato < $sum || $data->qtUtilizada < $sum) {
+            if ($data->qt_contrato < $sum || $data->qt_utilizado < $sum) {
                 return false;
             }
         }
-        $data->compItem = Query::getInstance()->real_escape_string($data->compItem);
-        Query::getInstance()->exe("UPDATE itens SET itens.complemento_item = '{$data->compItem}', itens.vl_unitario = '{$data->vlUnitario}', itens.qt_contrato = {$data->qtContrato}, itens.qt_utilizado = {$data->qtUtilizada}, itens.vl_utilizado = '{$data->vlUtilizado}', itens.qt_saldo = {$data->qtSaldo}, itens.vl_saldo = '{$data->vlSaldo}' WHERE itens.id = " . $data->idItem);
+        $data->complemento_item = Query::getInstance()->real_escape_string($data->complemento_item);
+        Query::getInstance()->exe("UPDATE itens SET itens.complemento_item = '{$data->complemento_item}', itens.vl_unitario = '{$data->vl_unitario}', itens.qt_contrato = {$data->qt_contrato}, itens.qt_utilizado = {$data->qt_utilizado}, itens.vl_utilizado = '{$data->vl_utilizado}', itens.qt_saldo = {$data->qt_saldo}, itens.vl_saldo = '{$data->vl_saldo}' WHERE itens.id = " . $data->id);
 
         // seleciona infos dos pedidos que contém o item editado e que não passaram da análise
-        $query = Query::getInstance()->exe("SELECT itens_pedido.id_pedido, itens_pedido.qtd, itens_pedido.valor AS valor_item, pedido.id_setor, pedido.valor AS valor_pedido, saldo_setor.saldo FROM itens_pedido, pedido, saldo_setor WHERE saldo_setor.id_setor = pedido.id_setor AND itens_pedido.id_item = {$data->idItem} AND itens_pedido.id_pedido = pedido.id AND pedido.status <= 2;");
+        $query = Query::getInstance()->exe("SELECT itens_pedido.id_pedido, itens_pedido.qtd, itens_pedido.valor AS valor_item, pedido.id_setor, pedido.valor AS valor_pedido, saldo_setor.saldo FROM itens_pedido, pedido, saldo_setor WHERE saldo_setor.id_setor = pedido.id_setor AND itens_pedido.id_item = {$data->id} AND itens_pedido.id_pedido = pedido.id AND pedido.status <= 2;");
 
         $pedidos = [];
         $i = 0;
         while ($obj = $query->fetch_object()) {
-            $valorItem = $obj->qtd * $data->vlUnitario;
-            Query::getInstance()->exe("UPDATE itens_pedido SET itens_pedido.valor = '{$valorItem}' WHERE itens_pedido.id_item = {$data->idItem} AND itens_pedido.id_pedido = " . $obj->id_pedido);
+            $valorItem = $obj->qtd * $data->vl_unitario;
+            Query::getInstance()->exe("UPDATE itens_pedido SET itens_pedido.valor = '{$valorItem}' WHERE itens_pedido.id_item = {$data->id} AND itens_pedido.id_pedido = " . $obj->id_pedido);
             $saldo_setor = $obj->saldo + $obj->valor_item;
             $saldo_setor -= $valorItem;
             $saldo_setor = number_format($saldo_setor, 3, '.', '');
