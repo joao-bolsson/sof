@@ -2043,30 +2043,3 @@ function editaItem(id_item) {
         document.getElementById('ano_orcamento').value = obj.ano_orcamento;
     });
 }
-
-function submitEditItem() {
-    var fields = ['idItem', 'compItem', 'vlUnitario', 'qtContrato', 'vlContrato', 'qtUtilizada', 'vlUtilizado', 'qtSaldo', 'vlSaldo', 'codDespesa', 'codReduzido', 'dtFim', 'descrDespesa', 'seqItemProcesso'];
-    var dados = [];
-    for (var i = 0; i < fields.length; i++) {
-        dados[i] = document.getElementById(fields[i]).value;
-    }
-    $.post('../php/geral.php', {
-        admin: 1,
-        form: 'editItem',
-        fields: fields,
-        dados: dados
-    }).done(function (resposta) {
-        if (resposta == 0) {
-            alert('Conflito: a nova quantidade do contrato ou a nova quantidade utilizada são menores que a quantidade utilizada pelos pedidos desse item. A edição não foi concluída');
-        }
-    });
-    $('#infoItem').modal('hide');
-    var element = document.getElementById('editmode');
-    if (element !== null) {
-        var proc = document.getElementById('numProc').innerHTML;
-        pesquisarProcesso(proc);
-    } else {
-        limpaTela();
-        iniSolicitacoes(false, 0);
-    }
-}
