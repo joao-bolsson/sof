@@ -122,13 +122,13 @@ final class Geral {
         for ($i = 0; $i < $len; $i++) {
             $aux = Query::getInstance()->real_escape_string($dados->{$attach_fields[$i]});
             $info = str_replace("\"", "'", $aux);
-            $sets .= $attach_fields[$i] . "=\" " . $info . "\"";
+            $sets .= $attach_fields[$i] . "=\"" . $info . "\"";
             if ($i != $len - 1) {
                 $sets .= ", ";
             }
         }
 
-        Query::getInstance()->exe("UPDATE itens SET cod_despesa = '" . $dados->cod_despesa . "', descr_despesa = '" . $dados->descr_despesa . "', cod_reduzido = '" . $dados->cod_reduzido . "', dt_fim = '" . $dados->dt_fim . "', seq_item_processo = '" . $dados->seq_item_processo . "' {$sets} WHERE id = " . $dados->id . " LIMIT 1;");
+        Query::getInstance()->exe("UPDATE itens SET cod_despesa = '" . $dados->cod_despesa . "', descr_despesa = '" . $dados->descr_despesa . "', cod_reduzido = '" . $dados->cod_reduzido . "', seq_item_processo = '" . $dados->seq_item_processo . "' {$sets} WHERE id = " . $dados->id . " LIMIT 1;");
     }
 
     /**
