@@ -50,8 +50,9 @@ $(function () {
                     limpaTela();
                     iniSolicitacoes(false, 0);
                 }
-            },
-            fail: function () {
+            }
+        }).done(function (resposta) {
+            if (resposta == 'fail') {
                 alert('Conflito: a nova quantidade do contrato ou a nova quantidade utilizada são menores que a quantidade utilizada pelos pedidos desse item. A edição não foi concluída');
             }
         });
@@ -1609,6 +1610,7 @@ function viewCompl(texto) {
 }
 
 function pesquisarProcesso(busca) {
+    document.getElementById('overlayLoad').style.display = 'block';
     console.log(busca);
     $('#listProcessos').modal('hide');
     $.post('../php/buscaLTE.php', {
@@ -1620,6 +1622,7 @@ function pesquisarProcesso(busca) {
         $('#conteudoProcesso').html(resposta);
         iniDataTable('#tableProcessos');
         document.getElementById('numProc').innerHTML = busca;
+        document.getElementById('overlayLoad').style.display = 'none';
         avisoSnack('Busca Realizada com Sucesso !');
     });
 }

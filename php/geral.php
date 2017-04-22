@@ -104,7 +104,7 @@ if (Busca::isActive()) {
                     if ($success) {
                         Geral::editItemFactory($obj_data);
                     } else {
-                        echo false;
+                        echo "fail";
                     }
                 }
                 break;
