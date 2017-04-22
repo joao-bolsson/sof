@@ -177,8 +177,9 @@ if (!isset($_SESSION['editmode'])) {
                     <h4 class="modal-title">Informações do Item</h4>
                 </div>
                 <span id="editmode" style="display: none;"></span>
-                <form action="javascript:submitEditItem();" method="post">
-                    <input id="idItem" type="hidden" name="idItem" value="0"/>
+                <form id="formEditRegItem" action="../php/geral.php" method="POST">
+                    <input id="id" type="hidden" name="id" value="0"/>
+                    <input type="hidden" name="form" value="formEditRegItem"/>
                     <div class="modal-body">
                         <?php include_once 'formItem.html' ?>
                     </div>

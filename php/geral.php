@@ -1,21 +1,21 @@
 <?php
 
 /**
- * 	Todos os formulários de registro e funções que precisem registrar informações no banco
- * 	devem ser mandadas para este arquivo
+ *    Todos os formulários de registro e funções que precisem registrar informações no banco
+ *    devem ser mandadas para este arquivo
  *
  *
- * 	existem algumas variáveis controladoras, tal como 'admin', 'form' e 'user'
+ *    existem algumas variáveis controladoras, tal como 'admin', 'form' e 'user'
  *
- * 	se a variável admin existir, então a ação foi feita por um usuário do SOF e deve ser
- * 	autenticada com isset($_SESSION["id_setor"]) && $_SESSION["id_setor"] == 2
+ *    se a variável admin existir, então a ação foi feita por um usuário do SOF e deve ser
+ *    autenticada com isset($_SESSION["id_setor"]) && $_SESSION["id_setor"] == 2
  *
- * 	form controla o que fazer quando este arquivo for chamado
+ *    form controla o que fazer quando este arquivo for chamado
  *
- * 	user chama funções que podem ser feitas por todos os setores (inclusive o SOF)
+ *    user chama funções que podem ser feitas por todos os setores (inclusive o SOF)
  *
- * 	@author João Bolsson
- * 	@since Version 1.0
+ * @author João Bolsson
+ * @since Version 1.0
  *
  */
 ini_set('display_errors', true);
@@ -58,6 +58,55 @@ if (Busca::isActive()) {
             case 'pointRegister':
                 $log = filter_input(INPUT_POST, 'log');
                 Geral::pointRegister($log);
+                break;
+
+            case 'formEditRegItem':
+                $id = filter_input(INPUT_POST, 'id');
+
+                $array_names = ARRAY_ITEM_FIELDS;
+
+                if ($id == 0) {
+                    // register a new item
+                    $data = [];
+
+                    $len = count($array_names);
+                    for ($i = 0; $i < $len; $i++) {
+                        $name = $array_names[$i];
+
+                        if ($name == 'id') {
+                            $data[$name] = 'NULL';
+                        } else if ($name == 'cancelado') {
+                            $data[$name] = '0';
+                        } else if ($name == 'chave') {
+                            $data[$name] = '';
+                        } else {
+                            $data[$name] = filter_input(INPUT_POST, $name);
+                        }
+                    }
+                    $data['chave'] = $data['num_processo'] . '#' . $data['cod_reduzido'] . '#' . $data['seq_item_processo'];
+                    Geral::cadItensRP($data, $array_names);
+                    unset($data);
+                } else {
+                    // update it
+                    $data = [];
+
+                    for ($i = 0; $i < count($array_names); $i++) {
+                        $name = $array_names[$i];
+                        $input = filter_input(INPUT_POST, $name);
+                        if ($input !== NULL) {
+                            $data[$name] = $input;
+                        }
+                    }
+
+                    $obj_data = (object)$data;
+                    unset($data);
+                    $success = Geral::editItem($obj_data);
+                    if ($success) {
+                        Geral::editItemFactory($obj_data);
+                    } else {
+                        echo false;
+                    }
+                }
                 break;
 
             case 'cadItens':
@@ -201,7 +250,7 @@ if (Busca::isActive()) {
                     $array_dados[$fields[$i]] = $dados[$i];
                 }
 
-                $obj_dados = (object) $array_dados;
+                $obj_dados = (object)$array_dados;
                 unset($fields);
                 unset($dados);
                 unset($array_dados);

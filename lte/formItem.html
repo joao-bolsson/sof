@@ -3,7 +3,7 @@
         <td colspan="3">
             <div class="form-group">
                 <label>Complemento do Item</label>
-                <textarea class="form-control" id="compItem" name="complemento" required
+                <textarea class="form-control" id="complemento_item" name="complemento_item" required
                           rows="5"></textarea>
             </div>
         </td>
@@ -12,22 +12,22 @@
         <td>
             <div class="form-group">
                 <label>Código Despesa</label>
-                <input class="form-control" id="codDespesa" name="cod_despesa" type="text"
+                <input class="form-control" id="cod_despesa" name="cod_despesa" type="text"
                        maxlength="15" required>
             </div>
         </td>
         <td>
             <div class="form-group">
                 <label>Código Reduzido</label>
-                <input class="form-control" id="codReduzido" name="cod_reduzido" type="text"
+                <input class="form-control" id="cod_reduzido" name="cod_reduzido" type="text"
                        maxlength="20" required>
             </div>
         </td>
         <td>
             <div class="form-group">
-                <label>Data Fim</label>
-                <input class="form-control" id="dtFim" name="dt_fim" type="text" maxlength="10"
-                       required>
+                <label>Ano Orçamento</label>
+                <input type="number" id="ano_orcamento" name="ano_orcamento" step="1" min="2000"
+                       class="form-control">
             </div>
         </td>
     </tr>
@@ -35,21 +35,21 @@
         <td>
             <div class="form-group">
                 <label>Valor Unitário</label>
-                <input class="form-control" id="vlUnitario" name="vl_unitario" type="number"
+                <input class="form-control" id="vl_unitario" name="vl_unitario" type="number"
                        step="0.0001" required>
             </div>
         </td>
         <td>
             <div class="form-group">
                 <label>Quantidade Contrato</label>
-                <input class="form-control" id="qtContrato" name="qt_contrato" type="number"
+                <input class="form-control" id="qt_contrato" name="qt_contrato" type="number"
                        required>
             </div>
         </td>
         <td>
             <div class="form-group">
                 <label>Valor Contrato</label>
-                <input class="form-control" id="vlContrato" name="vl_contrato" type="number"
+                <input class="form-control" id="vl_contrato" name="vl_contrato" type="number"
                        step="0.001" required>
             </div>
         </td>
@@ -58,21 +58,21 @@
         <td>
             <div class="form-group">
                 <label>Quantidade Utilizada</label>
-                <input class="form-control" id="qtUtilizada" name="qt_utilizada" type="number"
+                <input class="form-control" id="qt_utilizado" name="qt_utilizado" type="number"
                        required>
             </div>
         </td>
         <td>
             <div class="form-group">
                 <label>Valor Utilizado</label>
-                <input class="form-control" id="vlUtilizado" name="vl_utilizado" type="number"
+                <input class="form-control" id="vl_utilizado" name="vl_utilizado" type="number"
                        step="0.001" required>
             </div>
         </td>
         <td>
             <div class="form-group">
                 <label>Quantidade Saldo</label>
-                <input class="form-control" id="qtSaldo" name="qt_saldo" type="number" required>
+                <input class="form-control" id="qt_saldo" name="qt_saldo" type="number" required>
             </div>
         </td>
     </tr>
@@ -80,21 +80,21 @@
         <td>
             <div class="form-group">
                 <label>Valor Saldo</label>
-                <input class="form-control" id="vlSaldo" name="vl_saldo" type="number"
+                <input class="form-control" id="vl_saldo" name="vl_saldo" type="number"
                        step="0.001" required>
             </div>
         </td>
         <td>
             <div class="form-group">
                 <label>Descrição Despesa</label>
-                <input class="form-control" id="descrDespesa" name="descr_despesa" type="text"
+                <input class="form-control" id="descr_despesa" name="descr_despesa" type="text"
                        maxlength="100" required>
             </div>
         </td>
         <td>
             <div class="form-group">
                 <label>Seq Item Processo</label>
-                <input class="form-control" id="seqItemProcesso" name="seq_item_processo"
+                <input class="form-control" id="seq_item_processo" name="seq_item_processo"
                        type="text" maxlength="20" required>
             </div>
         </td>
@@ -233,15 +233,6 @@
             <div class="form-group">
                 <label>Id Unidade</label>
                 <input type="number" id="id_unidade" name="id_unidade" step="1" class="form-control">
-            </div>
-        </td>
-    </tr>
-    <tr>
-        <td colspan="3">
-            <div class="form-group">
-                <label>Ano Orçamento</label>
-                <input type="number" id="ano_orcamento" name="ano_orcamento" step="1" min="2000"
-                       class="form-control">
             </div>
         </td>
     </tr>
