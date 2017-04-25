@@ -852,13 +852,14 @@ function addProcesso(numProcesso, id) {
             document.getElementById("responsavel").value = obj.responsavel;
             document.getElementById("retorno").value = obj.retorno;
             document.getElementById("obs").value = obj.obs;
+            document.getElementById("vigencia").value = obj.vigencia;
         });
     }
     $('#addProcesso').modal();
 }
 
 function updateProcesso() {
-    var campos = ["id_processo", "num_processo", "tipo", "estante", "prateleira", "entrada", "saida", "responsavel", "retorno", "obs"];
+    var campos = ["id_processo", "num_processo", "tipo", "estante", "prateleira", "entrada", "saida", "responsavel", "retorno", "obs", "vigencia"];
     var dados = [];
     for (var i = 0; i < campos.length; i++) {
         dados[i] = document.getElementById(campos[i]).value;
