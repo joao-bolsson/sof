@@ -212,6 +212,11 @@ CREATE TABLE `saldo_categoria` (
   `nome` varchar(30) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
+CREATE TABLE `saldo_justificativa` (
+  `id` int(10) UNSIGNED NOT NULL,
+  `justificativa` varchar(50) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
 CREATE TABLE `saldo_setor` (
   `id` int(10) UNSIGNED NOT NULL,
   `id_setor` int(10) UNSIGNED NOT NULL,
@@ -371,6 +376,9 @@ ALTER TABLE `saldos_transferidos`
 ALTER TABLE `saldo_categoria`
   ADD PRIMARY KEY (`id`);
 
+ALTER TABLE `saldo_justificativa`
+  ADD PRIMARY KEY (`id`);
+
 ALTER TABLE `saldo_setor`
   ADD PRIMARY KEY (`id`),
   ADD KEY `id_setor` (`id_setor`);
@@ -439,13 +447,15 @@ ALTER TABLE `processos_tipo`
 ALTER TABLE `saldos_adiantados`
   MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
 ALTER TABLE `saldos_lancamentos`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1590;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1631;
 ALTER TABLE `saldos_transferidos`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=95;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=115;
 ALTER TABLE `saldo_categoria`
   MODIFY `id` int(1) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+ALTER TABLE `saldo_justificativa`
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 ALTER TABLE `saldo_setor`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
 ALTER TABLE `setores`
   MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
 ALTER TABLE `setores_grupos`

@@ -27,6 +27,22 @@ final class BuscaLTE {
     }
 
     /**
+     * @return string Justifies options to make a transference.
+     */
+    public static function getJustifies(): string {
+        $query = Query::getInstance()->exe("SELECT justificativa FROM saldo_justificativa;");
+
+        $return = "";
+
+        while ($obj = $query->fetch_object()) {
+            $obj->justificativa = str_replace("\"", "'", $obj->justificativa);
+            $return .= "<option value=\"" . $obj->justificativa . "\">" . $obj->justificativa . "</option>";
+        }
+
+        return $return;
+    }
+
+    /**
      * Gets an array with information of the last register of user.
      * @param int $status If 1 - last register is a log in, else if a log out.
      * @param int $id_user Id of the user to format last register.

@@ -46,6 +46,13 @@ if (Busca::isActive()) {
     if (!is_null($admin) && isset($_SESSION["id_setor"]) && ($_SESSION["id_setor"] == 2 || $_SESSION["id_setor"] == 12)) {
         switch ($form) {
 
+            case 'regJustify':
+                $just = filter_input(INPUT_POST, 'justificativa');
+
+                Geral::recordJustify($just);
+                header("Location: ../lte/");
+                break;
+
             case 'editLog':
                 $id = filter_input(INPUT_POST, 'idLog');
                 $entrada = filter_input(INPUT_POST, 'entrada');
@@ -277,8 +284,13 @@ if (Busca::isActive()) {
                 $dest = filter_input(INPUT_POST, 'dest');
                 $valor = filter_input(INPUT_POST, 'valor');
                 $just = filter_input(INPUT_POST, 'just');
-                echo $transfere = Geral::transfereSaldo($ori, $dest, $valor, $just);
+                $transfere = Geral::transfereSaldo($ori, $dest, $valor, $just);
 
+                if ($transfere) {
+                    echo "success";
+                } else {
+                    echo "fail";
+                }
                 break;
             // comentário
 

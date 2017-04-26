@@ -25,6 +25,17 @@ final class Geral {
         // empty
     }
 
+    /**
+     * Records a justification for balance clearances.
+     *
+     * @param string $text Justify balance to record.
+     */
+    public static function recordJustify(string $text) {
+        $text = str_replace("\"", "'", $text);
+
+        Query::getInstance()->exe("INSERT INTO saldo_justificativa VALUES(NULL, \"$text\")");
+    }
+
     public static function scanDataBase() {
         $query = Query::getInstance()->exe("SELECT id, valor FROM pedido;");
 

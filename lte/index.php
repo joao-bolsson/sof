@@ -1068,11 +1068,13 @@ if (isset($_SESSION['editmode'])) {
                                     aria-hidden="true">&times;</span></button>
                         <h4 class="modal-title">Nova Transferência</h4>
                     </div>
-                    <form id="formTransferencia" action="javascript:transfereSaldo();" method="post">
+                    <form id="formTransferencia" action="../php/geral.php" method="POST">
+                        <input type="hidden" name="admin" value="1">
+                        <input type="hidden" name="form" value="transfereSaldo">
                         <div class="modal-body">
                             <div class="form-group">
                                 <label>Setor Origem</label>
-                                <select id="setorOri" class="form-control" name="setorOri" required
+                                <select class="form-control" name="ori" required
                                         onchange="getSaldoOri();">
                                     <?= BuscaLTE::getOptionsSetores(); ?>
                                 </select>
@@ -1080,24 +1082,61 @@ if (isset($_SESSION['editmode'])) {
                             </div>
                             <div class="form-group">
                                 <label>Setor Destino</label>
-                                <select id="setorDest" class="form-control" name="setorDest" required>
+                                <select class="form-control" name="dest" required>
                                     <?= BuscaLTE::getOptionsSetores(); ?>
                                 </select>
                             </div>
                             <div class="form-group">
                                 <label>Valor</label>
-                                <input class="form-control" id="valorTransf" name="valor" type="number" step="0.001"
+                                <input class="form-control" name="valor" type="number" step="0.001"
                                        required min="0.001">
                             </div>
                             <div class="form-group">
                                 <label>Justificativa</label>
-                                <textarea class="form-control" id="justTransf" name="obs" rows="3"
-                                          placeholder="Motivo da transferência" required></textarea>
+                                <select class="form-control select2" name="just"
+                                        data-placeholder="Selecione o motivo da transferência" required>
+                                    <?= BuscaLTE::getJustifies(); ?>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <button class="btn btn-primary" type="button" onclick="abreModal('#regJustify')"><i
+                                            class="fa fa-plus"></i> Cadastrar Justificativa
+                                </button>
                             </div>
                         </div>
                         <div class="modal-footer">
                             <button class="btn btn-primary" type="submit" style="width: 100%;"><i
                                         class="fa fa-refresh"></i>&nbsp;Liberar
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="modal fade" id="regJustify" role="dialog">
+            <div class="modal-dialog" style="width: 40%;">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                                    aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title">Cadastrar Justificativa</h4>
+                    </div>
+                    <form action="../php/geral.php" method="post">
+                        <input type="hidden" name="admin" value="1">
+                        <input type="hidden" name="form" value="regJustify">
+                        <div class="modal-body">
+                            <small class="label bg-gray"><i class="fa fa-exclamation-circle "></i>A página será
+                                recarregada em seguida
+                            </small>
+                            <div class="form-group">
+                                <label>Justificativa</label>
+                                <textarea class="form-control" rows="2" name="justificativa" maxlength="40"
+                                          placeholder="Digite a justificativa. Máx. 40 caracteres" required></textarea>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button class="btn btn-primary" type="submit" style="width: 100%;"><i
+                                        class="fa fa-send"></i>&nbsp;Cadastrar
                             </button>
                         </div>
                     </form>
