@@ -1,5 +1,9 @@
 ## CHANGELOG ##
 
+#### v2.1.15 - 02/05/2017 ####
+- Adiciona vigência ao processo
+- Justificativas pré-carregadas pelo SOF (saldos)
+
 #### v2.1.14 - 22/04/2017 ####
 - Envio de problemas relatados para o e-mail joaovictorbolsson@gmail.com
 - Edição completa das informações de um item
