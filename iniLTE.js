@@ -4,6 +4,28 @@ $(function () {
         Pace.restart();
     });
 
+    $("#formTransferencia").submit(function () {
+        var data = $(this).serialize();
+
+        $.ajax({
+            type: "POST",
+            url: "../php/geral.php",
+            data: data,
+            success: function () {
+                $('#tableListLancamentos').DataTable().destroy();
+                $('#transferencia').modal('hide');
+                document.getElementById('formTransferencia').reset();
+            }
+        }).done(function (r) {
+            if (r === 'success') {
+                alert('O valor foi transferido com SUCESSO! ');
+            } else {
+                alert('Saldo insuficiente para realizar a transferência');
+            }
+        });
+        return false;
+    });
+
     $("#formPedido").submit(function () {
         var data = $(this).serialize();
 
@@ -224,6 +246,10 @@ $(function () {
     $('#relPedidos').on('shown.bs.modal', function () {
         $('.select2').select2();
         $(".date").inputmask("dd/mm/yyyy", {"placeholder": "dd/mm/yyyy"});
+    });
+
+    $('#transferencia').on('shown.bs.modal', function () {
+        $('.select2').select2();
     });
 
     $('#relLibOrc').on('shown.bs.modal', function () {
@@ -713,31 +739,6 @@ function checkPedContr(element) {
     maybeRequiredTipoContr(element.checked);
 }
 
-function transfereSaldo() {
-    $('#formTransferencia .btn').blur();
-    var ori = document.getElementById('setorOri').value;
-    var dest = document.getElementById('setorDest').value;
-    var valor = document.getElementById('valorTransf').value;
-    var just = document.getElementById('justTransf').value;
-    $.post('../php/geral.php', {
-        admin: 1,
-        form: 'transfereSaldo',
-        ori: ori,
-        dest: dest,
-        valor: valor,
-        just: just
-    }).done(function (resposta) {
-        if (resposta) {
-            alert('O valor de R$ ' + valor + ' foi transferido com SUCESSO! ');
-            $('#tableListLancamentos').DataTable().destroy();
-            $('#transferencia').modal('hide');
-            document.getElementById('formTransferencia').reset();
-        } else {
-            alert('Saldo insuficiente para realizar a transferência');
-        }
-    });
-}
-
 function resetSenha() {
     document.getElementById("loaderResetSenha").style.display = 'inline-block';
     var email = document.getElementById('userReset').value;
@@ -852,13 +853,14 @@ function addProcesso(numProcesso, id) {
             document.getElementById("responsavel").value = obj.responsavel;
             document.getElementById("retorno").value = obj.retorno;
             document.getElementById("obs").value = obj.obs;
+            document.getElementById("vigencia").value = obj.vigencia;
         });
     }
     $('#addProcesso').modal();
 }
 
 function updateProcesso() {
-    var campos = ["id_processo", "num_processo", "tipo", "estante", "prateleira", "entrada", "saida", "responsavel", "retorno", "obs"];
+    var campos = ["id_processo", "num_processo", "tipo", "estante", "prateleira", "entrada", "saida", "responsavel", "retorno", "obs", "vigencia"];
     var dados = [];
     for (var i = 0; i < campos.length; i++) {
         dados[i] = document.getElementById(campos[i]).value;

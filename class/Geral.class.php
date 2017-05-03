@@ -25,6 +25,17 @@ final class Geral {
         // empty
     }
 
+    /**
+     * Records a justification for balance clearances.
+     *
+     * @param string $text Justify balance to record.
+     */
+    public static function recordJustify(string $text) {
+        $text = str_replace("\"", "'", $text);
+
+        Query::getInstance()->exe("INSERT INTO saldo_justificativa VALUES(NULL, \"$text\")");
+    }
+
     public static function scanDataBase() {
         $query = Query::getInstance()->exe("SELECT id, valor FROM pedido;");
 
@@ -492,9 +503,9 @@ final class Geral {
         }
         if ($dados[0] == 0) {
             // INSERT
-            Query::getInstance()->exe("INSERT INTO processos VALUES(NULL, '{$dados[1]}', '{$dados[2]}', '{$dados[3]}', '{$dados[4]}', '{$dados[5]}', '{$dados[6]}', '{$dados[7]}', '{$dados[8]}', '{$dados[9]}');");
+            Query::getInstance()->exe("INSERT INTO processos VALUES(NULL, '{$dados[1]}', '{$dados[2]}', '{$dados[3]}', '{$dados[4]}', '{$dados[5]}', '{$dados[6]}', '{$dados[7]}', '{$dados[8]}', '{$dados[9]}', '{$dados[10]}');");
         } else {
-            Query::getInstance()->exe("UPDATE processos SET num_processo = '{$dados[1]}', tipo = '{$dados[2]}', estante = '{$dados[3]}', prateleira = '{$dados[4]}', entrada = '{$dados[5]}', saida = '{$dados[6]}', responsavel = '{$dados[7]}', retorno = '{$dados[8]}', obs = '{$dados[9]}' WHERE id = {$dados[0]};");
+            Query::getInstance()->exe("UPDATE processos SET num_processo = '{$dados[1]}', tipo = '{$dados[2]}', estante = '{$dados[3]}', prateleira = '{$dados[4]}', entrada = '{$dados[5]}', saida = '{$dados[6]}', responsavel = '{$dados[7]}', retorno = '{$dados[8]}', obs = '{$dados[9]}', vigencia = '{$dados[10]}' WHERE id = {$dados[0]};");
         }
         return true;
     }

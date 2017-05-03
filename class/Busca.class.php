@@ -224,7 +224,7 @@ final class Busca {
      * @return string Process's informations.
      */
     public static function getInfoProcesso(int $id_process): string {
-        $query = Query::getInstance()->exe('SELECT num_processo, tipo, estante, prateleira, entrada, saida, responsavel, retorno, obs FROM processos WHERE id = ' . $id_process);
+        $query = Query::getInstance()->exe('SELECT num_processo, tipo, estante, prateleira, entrada, saida, responsavel, retorno, obs, vigencia FROM processos WHERE id = ' . $id_process);
         $obj = $query->fetch_object();
         return json_encode($obj);
     }
