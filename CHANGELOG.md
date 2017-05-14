@@ -1,5 +1,10 @@
 ## CHANGELOG ##
 
+#### v2.1.16 - 14/05/2017 ####
+- Corrige bug para visualizar justificativa nas Solicitações de Alteração de Pedido
+- Permite ao SOF desativar um usuário (somente login iara) Obs.: os registros do usuário permanecem, mas ele não poderá mais logar no sistema.
+- Começa a versionalizar a estrutura do banco
+
 #### v2.1.15 - 02/05/2017 ####
 - Adiciona vigência ao processo
 - Justificativas pré-carregadas pelo SOF (saldos)
