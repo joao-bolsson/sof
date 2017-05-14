@@ -55,6 +55,32 @@ $(function () {
         return false;
     });
 
+    $("#formDesativarUsuario").submit(function () {
+        var data = $(this).serialize();
+
+        document.getElementById('overlayLoad').style.display = 'block';
+        document.getElementById('overlayLoadDetPed').style.display = 'block';
+
+        $.ajax({
+            type: "POST",
+            url: "../php/geral.php",
+            data: data,
+            success: function () {
+                $("#manageUsers").modal('hide');
+                document.getElementById('overlayLoad').style.display = 'none';
+                document.getElementById('overlayLoadDetPed').style.display = 'none';
+                avisoSnack("Usuário desativado");
+                document.getElementById('usersToDisable').innerHTML = '';
+            }
+        }).done(function (r) {
+            if (r === 'fail') {
+                alert('Erro ao desativar usuário. Contate o administrador.');
+            }
+        });
+
+        return false;
+    });
+
     $("#formEditRegItem").submit(function () {
         var data = $(this).serialize();
 
@@ -208,6 +234,15 @@ $(function () {
 
     $('#infoItem').on('shown.bs.modal', function () {
         $(".date").inputmask("dd/mm/yyyy", {"placeholder": "dd/mm/yyyy"});
+    });
+
+    $('#manageUsers').on('shown.bs.modal', function () {
+        $.post('../php/buscaLTE.php', {
+            admin: 1,
+            form: 'getUsers'
+        }, function (resposta) {
+            document.getElementById('usersToDisable').innerHTML = resposta;
+        });
     });
 
     $('#infoItem').on('hidden.bs.modal', function () {
@@ -1605,6 +1640,18 @@ function removeTableRow(id_item, valor) {
         row.parentNode.removeChild(row);
     }
     avisoSnack('Item Removido do Pedido !');
+}
+
+function showInformation(table, column, id) {
+    $.post('../php/buscaLTE.php', {
+        users: 1,
+        form: 'showInformation',
+        table: table,
+        column: column,
+        id: id
+    }).done(function (resposta) {
+        viewCompl(resposta);
+    });
 }
 
 function viewCompl(texto) {

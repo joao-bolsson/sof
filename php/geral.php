@@ -46,6 +46,15 @@ if (Busca::isActive()) {
     if (!is_null($admin) && isset($_SESSION["id_setor"]) && ($_SESSION["id_setor"] == 2 || $_SESSION["id_setor"] == 12)) {
         switch ($form) {
 
+            case 'desativaUser':
+                $user = filter_input(INPUT_POST, 'user');
+                if ($user !== NULL) {
+                    Geral::disableUser($user);
+                } else {
+                    echo "fail";
+                }
+                break;
+
             case 'regJustify':
                 $just = filter_input(INPUT_POST, 'justificativa');
 

@@ -179,6 +179,14 @@ if (isset($_SESSION['editmode'])) {
                             <i class="fa fa-user-plus"></i> <span>Adicionar Usuário</span>
                         </a>
                     </li>
+                    <li>
+                        <a href="javascript:abreModal('#manageUsers');">
+                            <i class="fa fa-user-times"></i> <span>Desativar Usuário</span>
+                            <span class="pull-right-container">
+                                <small class="label pull-right bg-blue">Novo</small>
+                            </span>
+                        </a>
+                    </li>
                 <?php endif; ?>
                 <?php if ($_SESSION['login'] == 'joao'): ?>
                     <li>
@@ -746,6 +754,33 @@ if (isset($_SESSION['editmode'])) {
                         <div class="modal-footer">
                             <button class="btn btn-primary" type="submit" style="width: 100%;"><i
                                         class="fa fa-send"></i>&nbsp;Cadastrar
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div aria-hidden="true" class="modal fade" id="manageUsers" role="dialog" tabindex="-1">
+            <div class="modal-dialog" style="width: 40%;">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                                    aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title">Desativar Usuário</h4>
+                    </div>
+                    <form id="formDesativarUsuario" action="../php/geral.php" method="POST">
+                        <input type="hidden" name="form" value="desativaUser"/>
+                        <input type="hidden" name="admin" value="1"/>
+                        <div class="modal-body">
+                            <div class="form-group">
+                                <label>Usuário</label>
+                                <select id="usersToDisable" class="form-control" name="user" required>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button class="btn btn-danger" type="submit" style="width: 100%;"><i
+                                        class="fa fa-close"></i>&nbsp;Desativar
                             </button>
                         </div>
                     </form>

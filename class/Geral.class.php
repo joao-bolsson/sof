@@ -26,6 +26,15 @@ final class Geral {
     }
 
     /**
+     * Function that disable an user.
+     *
+     * @param int $id User id.
+     */
+    public static function disableUser(int $id) {
+        Query::getInstance()->exe("UPDATE usuario SET ativo = 0 WHERE id = " . $id);
+    }
+
+    /**
      * Records a justification for balance clearances.
      *
      * @param string $text Justify balance to record.
@@ -529,7 +538,7 @@ final class Geral {
         // evita SQL Injections
         $email = Query::getInstance()->real_escape_string($email);
         // verificando se o e-mail consta no sistema
-        $query_email = Query::getInstance()->exe("SELECT id FROM usuario WHERE email = '{$email}' LIMIT 1;");
+        $query_email = Query::getInstance()->exe("SELECT id FROM usuario WHERE email = '{$email}' AND ativo = 1 LIMIT 1;");
         if ($query_email->num_rows == 1) {
             $id = $query_email->fetch_object()->id;
             // criptografando a senha

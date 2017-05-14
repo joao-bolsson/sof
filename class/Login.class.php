@@ -63,7 +63,7 @@ final class Login {
         //escapando caracteres especiais para evitar SQL Injections
         $login = Query::getInstance()->real_escape_string($login);
         //fazendo a consulta
-        $query = Query::getInstance()->exe("SELECT {$this->campoID}, {$this->campoNome}, {$this->campoSenha}, {$this->campoEmail}, {$this->campoSetor} FROM {$this->tabela} WHERE BINARY {$this->campoLogin} = '{$login}' LIMIT 1");
+        $query = Query::getInstance()->exe("SELECT {$this->campoID}, {$this->campoNome}, {$this->campoSenha}, {$this->campoEmail}, {$this->campoSetor} FROM {$this->tabela} WHERE BINARY {$this->campoLogin} = '{$login}' AND ativo = 1 LIMIT 1");
 
         if ($query->num_rows > 0) {
             //colocando o retorno da query em um objeto

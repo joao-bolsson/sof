@@ -207,6 +207,7 @@ final class BuscaLTE {
         if ($users) {
             $where = "WHERE login = 'uapublico'";
         }
+        $where .= ($where == '') ? "WHERE ativo = 1" : ' AND ativo = 1';
         $query = Query::getInstance()->exe('SELECT id, nome, id_setor FROM usuario ' . $where . ' ORDER BY nome ASC');
 
         $return = "";
@@ -495,6 +496,20 @@ final class BuscaLTE {
     }
 
     /**
+     * Gets the information of a column in table by id.
+     *
+     * @param string $table Table to search.
+     * @param string $column Column to search.
+     * @param int $id Row id.
+     * @return string Information in that column.
+     */
+    public static function showInformation(string $table, string $column, int $id): string {
+        $query = Query::getInstance()->exe("SELECT " . $column . " FROM " . $table . " WHERE id=" . $id . " LIMIT 1;");
+        $obj = $query->fetch_object();
+        return $obj->{$column};
+    }
+
+    /**
      * Function that returns the table with the requests change orders to SOF analysis
      *
      * @param int $st
@@ -520,7 +535,7 @@ final class BuscaLTE {
             $row->addColumn(new Column($request->nome));
             $row->addColumn(new Column($request->data_solicitacao));
             $row->addColumn(new Column(($st == 2) ? '--------------' : $request->data_analise));
-            $row->addColumn(new Column(new Button('', 'btn btn-sm btn-primary', "viewCompl('" . $request->justificativa . "')", "data-toggle=\"tooltip\"", 'Ver Justificativa', 'eye')));
+            $row->addColumn(new Column(new Button('', 'btn btn-sm btn-primary', "showInformation('solic_alt_pedido', 'justificativa', $request->id);", "data-toggle=\"tooltip\"", 'Ver Justificativa', 'eye')));
             $row->addColumn(new Column(new Small('label pull-right ' . $label, $status)));
             $table->addRow($row);
         }
