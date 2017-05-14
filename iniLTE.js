@@ -1642,6 +1642,18 @@ function removeTableRow(id_item, valor) {
     avisoSnack('Item Removido do Pedido !');
 }
 
+function showInformation(table, column, id) {
+    $.post('../php/buscaLTE.php', {
+        users: 1,
+        form: 'showInformation',
+        table: table,
+        column: column,
+        id: id
+    }).done(function (resposta) {
+        viewCompl(resposta);
+    });
+}
+
 function viewCompl(texto) {
     $('#complementoItem').html(texto);
     $('#viewCompl').modal();

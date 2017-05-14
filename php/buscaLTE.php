@@ -113,6 +113,14 @@ if (!is_null($admin) && isset($_SESSION['id_setor']) && ($_SESSION['id_setor'] =
 } else if (!is_null($users) && isset($_SESSION['id_setor']) && $_SESSION['id_setor'] != 0) {
 
     switch ($form) {
+
+        case 'showInformation':
+            $column = filter_input(INPUT_POST, 'column');
+            $table = filter_input(INPUT_POST, 'table');
+            $id = filter_input(INPUT_POST, 'id');
+
+            echo BuscaLTE::showInformation($table, $column, $id);
+            break;
         case 'listLancamentos':
             $id_setor = filter_input(INPUT_POST, 'id_setor');
             echo BuscaLTE::getLancamentos($id_setor);
