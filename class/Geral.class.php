@@ -265,7 +265,7 @@ final class Geral {
      */
     public static function cadUser(string $nome, string $login, string $email, int $setor, string $senha): int {
         $senha_crp = crypt($senha, SALT);
-        Query::getInstance()->exe("INSERT INTO usuario VALUES(NULL, '{$nome}', '{$login}', '{$senha_crp}', {$setor}, '{$email}');");
+        Query::getInstance()->exe("INSERT INTO usuario VALUES(NULL, '{$nome}', '{$login}', '{$senha_crp}', {$setor}, '{$email}', 1);");
         $id = Query::getInstance()->getInsertId();
 
         return $id;
