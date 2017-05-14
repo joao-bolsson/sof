@@ -207,6 +207,7 @@ final class BuscaLTE {
         if ($users) {
             $where = "WHERE login = 'uapublico'";
         }
+        $where .= ($where == '') ? "WHERE ativo = 1" : ' AND ativo = 1';
         $query = Query::getInstance()->exe('SELECT id, nome, id_setor FROM usuario ' . $where . ' ORDER BY nome ASC');
 
         $return = "";

@@ -1,20 +1,20 @@
 <?php
 
 /**
- * 	Todas as funções que fizerem consultas e no banco para retornar à tela, serão
- * 	encaminhadas para este arquivo
+ *    Todas as funções que fizerem consultas e no banco para retornar à tela, serão
+ *    encaminhadas para este arquivo
  *
- * 	existem algumas variáveis controladoras, tal como 'admin', 'form' e 'user'
+ *    existem algumas variáveis controladoras, tal como 'admin', 'form' e 'user'
  *
- * 	se a variável admin existir, então a ação foi feita por um usuário do SOF e deve ser
- * 	autenticada com isset($_SESSION['id_setor']) && $_SESSION['id_setor'] == 2
+ *    se a variável admin existir, então a ação foi feita por um usuário do SOF e deve ser
+ *    autenticada com isset($_SESSION['id_setor']) && $_SESSION['id_setor'] == 2
  *
- * 	form controla o que fazer quando este arquivo for chamado
+ *    form controla o que fazer quando este arquivo for chamado
  *
- * 	user chama funções que podem ser feitas por todos os setores (inclusive o SOF)
+ *    user chama funções que podem ser feitas por todos os setores (inclusive o SOF)
  *
- * 	@author João Bolsson (joaovictorbolsson@gmail.com)
- * 	@since 2017, 15 Jan.
+ * @author João Bolsson (joaovictorbolsson@gmail.com)
+ * @since 2017, 15 Jan.
  *
  */
 ini_set('display_errors', true);
@@ -38,6 +38,10 @@ if (!is_null($filter)) {
 if (!is_null($admin) && isset($_SESSION['id_setor']) && ($_SESSION['id_setor'] == 2 || $_SESSION['id_setor'] == 12)) {
 
     switch ($form) {
+
+        case 'getUsers':
+            echo BuscaLTE::getUsers();
+            break;
 
         case 'loadAdminTable':
             echo BuscaLTE::loadAdminTable();
