@@ -182,9 +182,6 @@ if (isset($_SESSION['editmode'])) {
                     <li>
                         <a href="javascript:abreModal('#manageUsers');">
                             <i class="fa fa-user-times"></i> <span>Desativar Usuário</span>
-                            <span class="pull-right-container">
-                                <small class="label pull-right bg-blue">Novo</small>
-                            </span>
                         </a>
                     </li>
                 <?php endif; ?>
