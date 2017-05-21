@@ -89,7 +89,7 @@ final class BuscaLTE {
     }
 
     public static function refreshTableHora(): string {
-        $query = Query::getInstance()->exe('SELECT DISTINCT usuario_hora.id_usuario, usuario.nome FROM usuario_hora, usuario WHERE usuario_hora.id_usuario = usuario.id ORDER BY usuario.nome ASC');
+        $query = Query::getInstance()->exe('SELECT DISTINCT usuario_hora.id_usuario, usuario.nome FROM usuario_hora, usuario WHERE usuario_hora.id_usuario = usuario.id AND usuario.ativo = 1 ORDER BY usuario.nome ASC');
 
         $table = new Table('', '', [], false);
 
