@@ -46,7 +46,7 @@ class Query {
 
     private function openConnection() {
         if (empty($this->mysqli)) {
-            $this->mysqli = Conexao::getInstance()->getConexao();
+            $this->mysqli = Conexao::getInstance()->getConnection();
         }
     }
 
