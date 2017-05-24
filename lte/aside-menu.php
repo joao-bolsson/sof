@@ -124,6 +124,9 @@ $permissao = BuscaLTE::getPermissoes($_SESSION["id"]);
                 <li>
                     <a href="javascript:abreModal('#transferencia');">
                         <i class="fa fa-arrows-h"></i> <span>Transferências</span>
+                        <span class="pull-right-container">
+                                            <small class="label pull-right bg-blue">Novo</small>
+                                        </span>
                     </a>
                 </li>
             <?php endif; ?>

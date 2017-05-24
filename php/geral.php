@@ -295,6 +295,12 @@ if (Busca::isActive()) {
                 $just = filter_input(INPUT_POST, 'just');
                 $transfere = Geral::transfereSaldo($ori, $dest, $valor, $just);
 
+                $fonte = filter_input(INPUT_POST, 'fonte');
+                $ptres = filter_input(INPUT_POST, 'ptres');
+                $plano = filter_input(INPUT_POST, 'plano');
+
+                Geral::cadSourceToBalance($fonte, $ptres, $plano, $dest, $valor);
+
                 if ($transfere) {
                     echo "success";
                 } else {

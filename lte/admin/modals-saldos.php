@@ -50,6 +50,18 @@
                                     class="fa fa-plus"></i> Cadastrar Justificativa
                         </button>
                     </div>
+                    <div class="form-group">
+                        <label>Fonte de Recurso</label>
+                        <input class="form-control" name="fonte" required/>
+                    </div>
+                    <div class="form-group">
+                        <label>PTRES</label>
+                        <input class="form-control" name="ptres" required/>
+                    </div>
+                    <div class="form-group">
+                        <label>Plano Interno</label>
+                        <input class="form-control" name="plano" required/>
+                    </div>
                 </div>
                 <div class="modal-footer">
                     <button class="btn btn-primary" type="submit" style="width: 100%;"><i

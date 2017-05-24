@@ -26,6 +26,20 @@ final class Geral {
     }
 
     /**
+     * Cadastra uma fonte de recurso para o saldo transferido.
+     *
+     * @param string $fonte Fonte de Recurso.
+     * @param string $ptres PTRES.
+     * @param string $plano Plano Interno.
+     * @param int $id_setor Setor que recebeu o saldo.
+     * @param string $valor Valor a ser liberado para o setor.
+     */
+    public static function cadSourceToBalance(string $fonte, string $ptres, string $plano, int $id_setor, string $valor) {
+        $values = "NULL, " . $id_setor . ", \"" . $valor . "\", \"" . $fonte . "\", \"" . $ptres . "\", \"" . $plano . "\"";
+        Query::getInstance()->exe("INSERT INTO saldo_fonte VALUES(" . $values . ")");
+    }
+
+    /**
      * Function that disable an user.
      *
      * @param int $id User id.
