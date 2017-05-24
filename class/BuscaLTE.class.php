@@ -305,12 +305,24 @@ final class BuscaLTE {
      *
      * @return string
      */
-    public static function getOptionsSetores(): string {
+    public static function getOptionsSetores(array $sectors_in = [], array $sectors_out = []): string {
         $return = '';
-        $count = count(ARRAY_SETORES);
+        if (count($sectors_in) > 0) {
+            $len = count($sectors_in);
+            for ($j = 0; $j < $len; $j++) {
+                $i = $sectors_in[$j];
+                if (!in_array($i, $sectors_out)) {
+                    $return .= "<option value=\"" . $i . "\">" . ARRAY_SETORES[$i] . '</option>';
+                }
+            }
+        } else {
+            $count = count(ARRAY_SETORES);
 
-        for ($i = 2; $i < $count; $i++) {
-            $return .= "<option value=\"" . $i . "\">" . ARRAY_SETORES[$i] . '</option>';
+            for ($i = 2; $i < $count; $i++) {
+                if (!in_array($i, $sectors_out)) {
+                    $return .= "<option value=\"" . $i . "\">" . ARRAY_SETORES[$i] . '</option>';
+                }
+            }
         }
         return $return;
     }

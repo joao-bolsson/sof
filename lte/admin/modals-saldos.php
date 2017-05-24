@@ -23,14 +23,14 @@
                         <label>Setor Origem</label>
                         <select class="form-control" name="ori" required
                                 onchange="getSaldoOri();">
-                            <?= BuscaLTE::getOptionsSetores(); ?>
+                            <?= BuscaLTE::getOptionsSetores([2]); ?>
                         </select>
                         <p id="saldoDispOri" style="font-weight: bold;"></p>
                     </div>
                     <div class="form-group">
                         <label>Setor Destino</label>
                         <select class="form-control" name="dest" required>
-                            <?= BuscaLTE::getOptionsSetores(); ?>
+                            <?= BuscaLTE::getOptionsSetores([], [2]); ?>
                         </select>
                     </div>
                     <div class="form-group">
@@ -116,7 +116,7 @@
                         <div class="form-group">
                             <label>Setor</label>
                             <select id="setor" class="form-control" name="setor" required>
-                                <?= BuscaLTE::getOptionsSetores(); ?>
+                                <?= BuscaLTE::getOptionsSetores([2]); ?>
                             </select>
                         </div>
                         <div class="form-group">
