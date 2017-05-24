@@ -87,7 +87,7 @@
                             aria-hidden="true">&times;</span></button>
                 <h4 class="modal-title">Relatar Problema</h4>
             </div>
-            <form action="../php/geral.php" method="post">
+            <form action="../../php/geral.php" method="post">
                 <input type="hidden" name="users" value="1">
                 <input type="hidden" name="form" value="problema">
                 <input type="hidden" name="pag" value="lte/">

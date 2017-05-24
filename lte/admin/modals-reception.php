@@ -40,7 +40,7 @@
                 </button>
                 <h4 class="modal-title">Novo Tipo de Processo</h4>
             </div>
-            <form action="../php/geral.php" method="post">
+            <form action="../../php/geral.php" method="post">
                 <input type="hidden" name="admin" value="1"/>
                 <input type="hidden" name="form" value="newTypeProcess"/>
                 <div class="modal-body">

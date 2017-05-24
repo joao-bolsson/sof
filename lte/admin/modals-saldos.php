@@ -15,7 +15,7 @@
                             aria-hidden="true">&times;</span></button>
                 <h4 class="modal-title">Nova Transferência</h4>
             </div>
-            <form id="formTransferencia" action="../php/geral.php" method="POST">
+            <form id="formTransferencia" action="../../php/geral.php" method="POST">
                 <input type="hidden" name="admin" value="1">
                 <input type="hidden" name="form" value="transfereSaldo">
                 <div class="modal-body">
@@ -68,7 +68,7 @@
                             aria-hidden="true">&times;</span></button>
                 <h4 class="modal-title">Cadastrar Justificativa</h4>
             </div>
-            <form action="../php/geral.php" method="post">
+            <form action="../../php/geral.php" method="post">
                 <input type="hidden" name="admin" value="1">
                 <input type="hidden" name="form" value="regJustify">
                 <div class="modal-body">

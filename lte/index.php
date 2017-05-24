@@ -120,15 +120,15 @@ if (isset($_SESSION['editmode'])) {
         <section class="content">
             <?php
             if ($permissao->recepcao) {
-                include_once "body_recepcao.php";
+                include_once "admin/body_recepcao.php";
             }
 
             if ($permissao->saldos) {
-                include_once "body_saldos.php";
+                include_once "admin/body_saldos.php";
             }
 
             if ($permissao->pedidos) {
-                include_once "body_pedidos.php";
+                include_once "admin/body_pedidos.php";
             }
             ?>
         </section><!-- /.content -->
@@ -144,23 +144,23 @@ if (isset($_SESSION['editmode'])) {
     </footer>
     <?php
     if ($permissao->pedidos) {
-        include_once "modals-pedidos.php";
+        include_once "admin/modals-pedidos.php";
     }
 
     if ($permissao->saldos) {
-        include_once "modals-saldos.php";
+        include_once "admin/modals-saldos.php";
     }
 
     if ($permissao->recepcao) {
-        include_once 'modals-reception.php';
+        include_once "admin/modals-reception.php";
     }
 
     if ($_SESSION['login'] == 'joao' || $_SESSION['login'] == 'iara') {
-        include_once "admin_modais.php";
+        include_once "admin/admin_modais.php";
     }
 
     // no need special permissions
-    include_once "modals-geral.php";
+    include_once "admin/modals-geral.php";
     ?>
 </div><!-- ./wrapper -->
 
