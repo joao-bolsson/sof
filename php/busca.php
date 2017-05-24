@@ -95,6 +95,11 @@ if (!is_null($admin) && isset($_SESSION['id_setor']) && ($_SESSION['id_setor'] =
             echo Busca::getInfoPedidoAnalise($id_pedido, $id_setor);
             break;
 
+        case 'fillTransfSource':
+            $id_setor = filter_input(INPUT_POST, 'id');
+            echo Busca::getSources($id_setor);
+            break;
+
         default:
             break;
     }

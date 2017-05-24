@@ -29,7 +29,7 @@
                     </div>
                     <div class="form-group">
                         <label>Setor Destino</label>
-                        <select class="form-control" name="dest" required>
+                        <select id="transfDest" class="form-control" name="dest" required onchange="changeTransfDest(this)">
                             <?= BuscaLTE::getOptionsSetores([], [2]); ?>
                         </select>
                     </div>
@@ -49,6 +49,12 @@
                         <button class="btn btn-primary" type="button" onclick="abreModal('#regJustify')"><i
                                     class="fa fa-plus"></i> Cadastrar Justificativa
                         </button>
+                    </div>
+                    <div class="form-group">
+                        <label>Fonte de Recurso</label>
+                        <select class="form-control select2" id="transfSource" name="fonte" multiple="multiple"
+                                data-placeholder="Selecione" required>
+                        </select>
                     </div>
                     <div class="form-group">
                         <label>Fonte de Recurso</label>

@@ -22,6 +22,17 @@ final class Busca {
         // empty
     }
 
+    public static function getSources(int $id): string {
+        $query = Query::getInstance()->exe("SELECT id, valor, fonte_recurso, ptres, plano_interno FROM saldo_fonte WHERE id_setor = " . $id);
+        $opt = "";
+
+        while ($obj = $query->fetch_object()) {
+            $opt .= "<option value=\"" . $obj->id . "\">" . $obj->fonte_recurso . "</option>";
+        }
+
+        return $opt;
+    }
+
     public static function scanDataBase() {
         $query = Query::getInstance()->exe("SELECT id, valor FROM pedido;");
 
