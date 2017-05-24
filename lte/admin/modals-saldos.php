@@ -19,6 +19,14 @@
                 <input type="hidden" name="admin" value="1">
                 <input type="hidden" name="form" value="transfereSaldo">
                 <div class="modal-body">
+                    <div class="margin">
+                        <button class="btn btn-primary" type="button" onclick="abreModal('#regJustify')"><i
+                                    class="fa fa-plus"></i> Justificativa
+                        </button>
+                        <button class="btn btn-primary" type="button" onclick="abreModal('#cadFontesTransf')"><i
+                                    class="fa fa-plus"></i> Fonte
+                        </button>
+                    </div>
                     <div class="form-group">
                         <label>Setor Origem</label>
                         <select class="form-control" name="ori" required
@@ -29,7 +37,8 @@
                     </div>
                     <div class="form-group">
                         <label>Setor Destino</label>
-                        <select id="transfDest" class="form-control" name="dest" required onchange="changeTransfDest(this)">
+                        <select id="transfDest" class="form-control" name="dest" required
+                                onchange="changeTransfDest(this)">
                             <?= BuscaLTE::getOptionsSetores([], [2]); ?>
                         </select>
                     </div>
@@ -46,14 +55,38 @@
                         </select>
                     </div>
                     <div class="form-group">
-                        <button class="btn btn-primary" type="button" onclick="abreModal('#regJustify')"><i
-                                    class="fa fa-plus"></i> Cadastrar Justificativa
-                        </button>
-                    </div>
-                    <div class="form-group">
                         <label>Fonte de Recurso</label>
                         <select class="form-control select2" id="transfSource" name="fonte" multiple="multiple"
+                                data-placeholder="Selecione a fonte de recurso" required>
+                        </select>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-primary" type="submit" style="width: 100%;"><i
+                                class="fa fa-refresh"></i>&nbsp;Liberar
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<div aria-hidden="true" class="modal fade" id="cadFontesTransf" role="dialog" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                            aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">Cadastrar Fontes</h4>
+            </div>
+            <form action="../../php/geral.php" method="POST">
+                <input type="hidden" name="admin" value="1"/>
+                <input type="hidden" name="form" value="cadFontesTransf"/>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label>Setor</label>
+                        <select id="fonteSetores" class="form-control" name="setores[]" multiple="multiple"
                                 data-placeholder="Selecione" required>
+                            <?= BuscaLTE::getOptionsSetores(); ?>
                         </select>
                     </div>
                     <div class="form-group">
@@ -71,7 +104,7 @@
                 </div>
                 <div class="modal-footer">
                     <button class="btn btn-primary" type="submit" style="width: 100%;"><i
-                                class="fa fa-refresh"></i>&nbsp;Liberar
+                                class="fa fa-send"></i>&nbsp;Cadastrar
                     </button>
                 </div>
             </form>
