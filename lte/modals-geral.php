@@ -1,3 +1,13 @@
+<?php
+/**
+ * File with general modals. (No need special permissions)
+ *
+ * @author João Bolsson (joaovictorbolsson@gmail.com).
+ * @since 2017, 23 May.
+ */
+
+?>
+
 <div aria-hidden="true" class="modal fade" id="loadMoreCustom" role="dialog" tabindex="-1">
     <div class="modal-dialog">
         <div class="modal-content">

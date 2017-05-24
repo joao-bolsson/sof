@@ -1,3 +1,12 @@
+<?php
+/**
+ * File with modals about balances.
+ *
+ * @author João Bolsson (joaovictorbolsson@gmail.com).
+ * @since 2017, 23 May.
+ */
+
+?>
 <div aria-hidden="true" class="modal fade" id="transferencia" role="dialog" tabindex="-1">
     <div class="modal-dialog">
         <div class="modal-content">

@@ -212,6 +212,15 @@ CREATE TABLE `saldo_categoria` (
   `nome` varchar(30) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
+CREATE TABLE `saldo_fonte` (
+  `id` int(10) UNSIGNED NOT NULL,
+  `id_setor` int(10) UNSIGNED NOT NULL,
+  `valor` varchar(50) NOT NULL,
+  `fonte_recurso` varchar(50) DEFAULT NULL,
+  `ptres` varchar(50) DEFAULT NULL,
+  `plano_interno` varchar(100) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
 CREATE TABLE `saldo_justificativa` (
   `id` int(10) UNSIGNED NOT NULL,
   `justificativa` varchar(50) NOT NULL
@@ -377,6 +386,10 @@ ALTER TABLE `saldos_transferidos`
 ALTER TABLE `saldo_categoria`
   ADD PRIMARY KEY (`id`);
 
+ALTER TABLE `saldo_fonte`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `id_setor` (`id_setor`);
+
 ALTER TABLE `saldo_justificativa`
   ADD PRIMARY KEY (`id`);
 
@@ -453,6 +466,8 @@ ALTER TABLE `saldos_transferidos`
   MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=133;
 ALTER TABLE `saldo_categoria`
   MODIFY `id` int(1) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+ALTER TABLE `saldo_fonte`
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
 ALTER TABLE `saldo_justificativa`
   MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 ALTER TABLE `saldo_setor`
@@ -526,6 +541,9 @@ ALTER TABLE `saldos_lancamentos`
 ALTER TABLE `saldos_transferidos`
   ADD CONSTRAINT `saldos_transferidos_ibfk_1` FOREIGN KEY (`id_setor_ori`) REFERENCES `setores` (`id`),
   ADD CONSTRAINT `saldos_transferidos_ibfk_2` FOREIGN KEY (`id_setor_dest`) REFERENCES `setores` (`id`);
+
+ALTER TABLE `saldo_fonte`
+  ADD CONSTRAINT `saldo_fonte_ibfk_1` FOREIGN KEY (`id_setor`) REFERENCES `setores` (`id`);
 
 ALTER TABLE `saldo_setor`
   ADD CONSTRAINT `saldo_setor_ibfk_1` FOREIGN KEY (`id_setor`) REFERENCES `setores` (`id`);

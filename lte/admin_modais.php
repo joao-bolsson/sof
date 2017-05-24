@@ -1,10 +1,19 @@
+<?php
+/**
+ * File with admin modals.
+ *
+ * @author João Bolsson (joaovictorbolsson@gmail.com).
+ * @since 2017, 23 May.
+ */
+
+?>
 <?php if ($_SESSION['login'] == 'joao' || $_SESSION['login'] == 'iara'): ?>
     <div aria-hidden="true" class="modal fade" id="altUser" role="dialog" tabindex="-1">
         <div class="modal-dialog" style="width: 40%;">
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
-                            aria-hidden="true">&times;</span></button>
+                                aria-hidden="true">&times;</span></button>
                     <h4 class="modal-title">Alterar Usuário</h4>
                 </div>
                 <form action="../php/geral.php" method="POST">
@@ -20,7 +29,7 @@
                     </div>
                     <div class="modal-footer">
                         <button class="btn btn-primary" type="submit" style="width: 100%;"><i
-                                class="fa fa-refresh"></i>&nbsp;Trocar
+                                    class="fa fa-refresh"></i>&nbsp;Trocar
                         </button>
                     </div>
                 </form>
@@ -32,7 +41,7 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
-                            aria-hidden="true">&times;</span></button>
+                                aria-hidden="true">&times;</span></button>
                     <h4 class="modal-title">Adicionar Usuário</h4>
                 </div>
                 <form action="../php/geral.php" method="POST">
@@ -64,7 +73,7 @@
                     </div>
                     <div class="modal-footer">
                         <button class="btn btn-primary" type="submit" style="width: 100%;"><i
-                                class="fa fa-send"></i>&nbsp;Cadastrar
+                                    class="fa fa-send"></i>&nbsp;Cadastrar
                         </button>
                     </div>
                 </form>
@@ -76,7 +85,7 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
-                            aria-hidden="true">&times;</span></button>
+                                aria-hidden="true">&times;</span></button>
                     <h4 class="modal-title">Desativar Usuário</h4>
                 </div>
                 <form id="formDesativarUsuario" action="../php/geral.php" method="POST">
@@ -91,7 +100,7 @@
                     </div>
                     <div class="modal-footer">
                         <button class="btn btn-danger" type="submit" style="width: 100%;"><i
-                                class="fa fa-close"></i>&nbsp;Desativar
+                                    class="fa fa-close"></i>&nbsp;Desativar
                         </button>
                     </div>
                 </form>
@@ -105,7 +114,7 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
-                            aria-hidden="true">&times;</span></button>
+                                aria-hidden="true">&times;</span></button>
                     <h4 class="modal-title">Problemas Relatados</h4>
                 </div>
                 <div class="modal-body">

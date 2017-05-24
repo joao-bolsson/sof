@@ -1,3 +1,12 @@
+<?php
+/**
+ * File with contents about reception.
+ *
+ * @author João Bolsson (joaovictorbolsson@gmail.com).
+ * @since 2017, 23 May.
+ */
+
+?>
 <div class="row">
     <div class="col-xs-12">
         <div class="box box-primary">

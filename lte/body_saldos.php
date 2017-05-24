@@ -1,3 +1,12 @@
+<?php
+/**
+ * File with contents about balances.
+ *
+ * @author João Bolsson (joaovictorbolsson@gmail.com).
+ * @since 2017, 23 May.
+ */
+
+?>
 <div id="rowSolicAdi" class="row" style="display: none;">
     <div class="col-xs-12">
         <div class="box">

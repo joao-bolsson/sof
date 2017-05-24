@@ -1,3 +1,12 @@
+<?php
+/**
+ * File with contents about requests.
+ *
+ * @author João Bolsson (joaovictorbolsson@gmail.com).
+ * @since 2017, 23 May.
+ */
+
+?>
 <div id="rowAltPed" class="row" style="display: none;">
     <div class="col-xs-12">
         <div class="box">
