@@ -1,6 +1,6 @@
 /**
  * This file contains the mains functions used in lte/hora.php
- * 
+ *
  * @author João Bolsson (joaovictorbolsson@gmail.com)
  * @since 2017, 04 Mar.
  */
@@ -18,6 +18,10 @@ $(function () {
     });
     $('#registerAdmin').on('shown.bs.modal', function () {
         loadAdminTable();
+    });
+    $('#registerAdmin').on('hidden.bs.modal', function () {
+        $('#tableRegisters').DataTable().destroy();
+        $('#tbodyAdminTool').html('');
     });
 });
 
@@ -39,6 +43,43 @@ function editLog(id) {
     });
 }
 
+function iniDataTable(tabela) {
+    $(tabela).DataTable({
+        "destroy": true,
+        "paging": true,
+        "lengthChange": true,
+        "searching": true,
+        "ordering": true,
+        "order": [[1, "desc"]],
+        "info": true,
+        "autoWidth": true,
+        language: {
+            "decimal": "",
+            "emptyTable": "Nenhum dado na tabela",
+            "info": "_MAX_ resultados encontrados",
+            "infoEmpty": "",
+            "infoFiltered": "",
+            "infoPostFix": "",
+            "thousands": ",",
+            "lengthMenu": "Monstrando _MENU_ entradas",
+            "loadingRecords": "Carregando...",
+            "processing": "Processando...",
+            "search": "Pesquisar:",
+            "zeroRecords": "Nenhum resultado encontrado",
+            "paginate": {
+                "first": "Primeiro",
+                "last": "Último",
+                "next": "Próximo",
+                "previous": "Anterior"
+            },
+            "aria": {
+                "sortAscending": ": activate to sort column ascending",
+                "sortDescending": ": activate to sort column descending"
+            }
+        }
+    });
+}
+
 /**
  * Load table of admin tool
  */
@@ -49,6 +90,7 @@ function loadAdminTable() {
         form: 'loadAdminTable'
     }, function (resposta) {
         $('#tbodyAdminTool').html(resposta);
+        iniDataTable('#tableRegisters');
         document.getElementById('overlayLoadAdmin').style.display = 'none';
     });
 }

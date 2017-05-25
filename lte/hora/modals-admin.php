@@ -13,7 +13,7 @@
                 <div id="overlayLoadAdmin" class="overlay" style="display: none;">
                     <i class="fa fa-refresh fa-spin"></i>
                 </div>
-                <table class="table table-bordered table-striped">
+                <table id="tableRegisters" class="table table-bordered table-striped">
                     <thead>
                     <tr>
                         <th>Nome</th>
