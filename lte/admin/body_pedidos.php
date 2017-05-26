@@ -134,7 +134,7 @@
                     </button>
                 </div>
             </div><!-- /.box-header -->
-            <form id="formPedido" action="../../php/geral.php" method="POST">
+            <form id="formPedido" action="../php/geral.php" method="POST">
                 <input type="hidden" name="admin" value="1"/>
                 <input id="form" type="hidden" name="form" value="" required/>
                 <input id="id_pedido" type="hidden" name="id_pedido" value="0"/>

@@ -210,7 +210,7 @@
                             aria-hidden="true">&times;</span></button>
                 <h4 class="modal-title">Importar Itens</h4>
             </div>
-            <form enctype="multipart/form-data" action="../../php/geral.php" method="post">
+            <form enctype="multipart/form-data" action="../php/geral.php" method="post">
                 <input type="hidden" name="admin" value="1">
                 <input type="hidden" name="form" value="importItens">
                 <div class="modal-body">
@@ -238,7 +238,7 @@
                             aria-hidden="true">&times;</span></button>
                 <h4 class="modal-title">Informações do Item</h4>
             </div>
-            <form id="formEditRegItem" action="../../php/geral.php" method="POST">
+            <form id="formEditRegItem" action="../php/geral.php" method="POST">
                 <input id="id" type="hidden" name="id" value="0"/>
                 <input type="hidden" name="form" value="formEditRegItem"/>
                 <input type="hidden" name="admin" value="1"/>
