@@ -7,7 +7,7 @@
  */
 
 ?>
-<div aria-hidden="true" class="modal fade" id="transferencia" role="dialog" tabindex="-1">
+<div aria-hidden="true" class="modal fade" id="transferencia" role="dialog">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
@@ -56,7 +56,7 @@
                     </div>
                     <div class="form-group">
                         <label>Fonte de Recurso</label>
-                        <select class="form-control select2" id="transfSource" name="fonte" multiple="multiple"
+                        <select class="form-control select2" id="transfSource" name="fonte"
                                 data-placeholder="Selecione a fonte de recurso" required>
                         </select>
                     </div>
@@ -82,11 +82,14 @@
                 <input type="hidden" name="admin" value="1"/>
                 <input type="hidden" name="form" value="cadFontesTransf"/>
                 <div class="modal-body">
+                    <small class="label bg-gray"><i class="fa fa-exclamation-circle "></i> A página será
+                        recarregada em seguida
+                    </small>
                     <div class="form-group">
                         <label>Setor</label>
                         <select id="fonteSetores" class="form-control" name="setores[]" multiple="multiple"
                                 data-placeholder="Selecione" required>
-                            <?= BuscaLTE::getOptionsSetores(); ?>
+                            <?= BuscaLTE::getOptionsSetores([], [2]); ?>
                         </select>
                     </div>
                     <div class="form-group">
