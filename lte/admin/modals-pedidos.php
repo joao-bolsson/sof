@@ -15,20 +15,22 @@
                             aria-hidden="true">&times;</span></button>
                 <h4 class="modal-title">Cadastrar Empenho</h4>
             </div>
-            <form action="javascript:enviaEmpenho();" method="POST">
+            <form id="formEnviaEmpenho" action="../php/geral.php" method="POST">
+                <input type="hidden" name="form" value="enviaEmpenho">
+                <input type="hidden" name="admin" value="1">
                 <div class="modal-body">
                     <div class="form-group">
                         <label>Pedido</label>
-                        <input class="form-control" id="id_pedido_emp" name="id_pedido_emp" type="number"
-                               required disabled>
+                        <input class="form-control" name="id_pedido" type="number"
+                               required disabled/>
                     </div>
                     <div class="form-group">
                         <label>Empenho</label>
-                        <input class="form-control" id="empenho" name="empenho" required/>
+                        <input class="form-control" name="empenho" required/>
                     </div>
                     <div class="form-group">
                         <label>Data</label>
-                        <input class="form-control date" id="dataEmp" name="dataEmp" required/>
+                        <input class="form-control date" name="data" required/>
                     </div>
                 </div>
                 <div class="modal-footer">

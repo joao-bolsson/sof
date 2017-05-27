@@ -265,10 +265,6 @@ $(function () {
         $(".date").inputmask("dd/mm/yyyy", {"placeholder": "dd/mm/yyyy"});
     });
 
-    $('#cadEmpenho').on('shown.bs.modal', function () {
-        $(".date").inputmask("dd/mm/yyyy", {"placeholder": "dd/mm/yyyy"});
-    });
-
     $('#addProcesso').on('shown.bs.modal', function () {
         $(".date").inputmask("dd/mm/yyyy", {"placeholder": "dd/mm/yyyy"});
     });
@@ -416,24 +412,6 @@ function changeTransfDest(element) {
     fillTransfSource(element.value);
 }
 
-function cadEmpenho(id_pedido, empenho, data) {
-    document.getElementById('id_pedido_emp').value = '';
-    document.getElementById('empenho').value = '';
-    document.getElementById('dataEmp').value = '';
-    $('#cadEmpenho').modal();
-    document.getElementById('id_pedido_emp').value = id_pedido;
-    if (empenho != null) {
-        if (empenho.length > 0) {
-            document.getElementById('empenho').value = empenho;
-        }
-    }
-    if (data != null) {
-        if (data.length > 0) {
-            document.getElementById('dataEmp').value = data;
-        }
-    }
-}
-
 function cadFontes(id_pedido) {
     $('#cadFontes').modal();
     document.getElementById('id_pedido_fonte').value = id_pedido;
@@ -458,28 +436,6 @@ function dropTableSolic(id_pedido) {
         console.log('is null: clear table');
         document.getElementById('conteudoSolicitacoes').innerHTML = '';
     }
-}
-
-function enviaEmpenho() {
-    var id_pedido = document.getElementById('id_pedido_emp').value;
-    dropTableSolic(id_pedido);
-    var empenho = document.getElementById('empenho').value;
-    var data = document.getElementById('dataEmp').value;
-    $.post('../php/geral.php', {
-        admin: 1,
-        form: 'enviaEmpenho',
-        id_pedido: id_pedido,
-        empenho: empenho,
-        data: data
-    }).done(function (resposta) {
-        if (resposta) {
-            $('#cadEmpenho').modal('hide');
-            iniSolicitacoes(false, id_pedido);
-            limpaTela();
-        } else {
-            alert('Ocorreu um erro no servidor. Contate o administrador.');
-        }
-    });
 }
 
 function enviaOrdenador(id_pedido) {
@@ -1165,6 +1121,7 @@ function iniSolicitacoes(flag, id_pedido) {
         }
         iniDataTable('#tableSolicitacoes');
         document.getElementById('overlayLoad').style.display = 'none';
+        document.getElementById('overlayLoadDetPed').style.display = 'none';
     });
 }
 
