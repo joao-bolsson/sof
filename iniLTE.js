@@ -412,11 +412,6 @@ function changeTransfDest(element) {
     fillTransfSource(element.value);
 }
 
-function cadFontes(id_pedido) {
-    $('#cadFontes').modal();
-    document.getElementById('id_pedido_fonte').value = id_pedido;
-}
-
 function dropTableSolic(id_pedido) {
     document.getElementById('overlayLoad').style.display = 'block';
     var element = document.getElementById('conteudoSolicitacoes');
@@ -453,30 +448,6 @@ function enviaOrdenador(id_pedido) {
             }
         });
     }
-}
-
-function enviaFontes() {
-    var id_pedido = document.getElementById('id_pedido_fonte').value;
-    dropTableSolic(id_pedido);
-    var fonte = document.getElementById('fonte').value;
-    var ptres = document.getElementById('ptres').value;
-    var plano = document.getElementById('plano').value;
-    $.post('../php/geral.php', {
-        admin: 1,
-        form: 'enviaFontes',
-        id_pedido: id_pedido,
-        fonte: fonte,
-        ptres: ptres,
-        plano: plano
-    }).done(function (resposta) {
-        if (resposta) {
-            $('#cadFontes').modal('hide');
-            iniSolicitacoes(false, id_pedido);
-            limpaTela();
-        } else {
-            alert('Ocorreu um erro no servidor. Contate o administrador.');
-        }
-    });
 }
 
 function verEmpenho(id_pedido) {

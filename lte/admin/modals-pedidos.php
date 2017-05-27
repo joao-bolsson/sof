@@ -15,7 +15,7 @@
                             aria-hidden="true">&times;</span></button>
                 <h4 class="modal-title">Cadastrar Empenho</h4>
             </div>
-            <form id="formEnviaEmpenho" action="../php/geral.php" method="POST">
+            <form id="formEnviaEmpenho">
                 <input type="hidden" name="form" value="enviaEmpenho">
                 <input type="hidden" name="admin" value="1">
                 <div class="modal-body">
@@ -50,24 +50,26 @@
                             aria-hidden="true">&times;</span></button>
                 <h4 class="modal-title">Cadastrar Fontes</h4>
             </div>
-            <form action="javascript:enviaFontes();" method="POST">
+            <form id="formEnviaFontes">
+                <input type="hidden" name="admin" value="1">
+                <input type="hidden" name="form" value="enviaFontes">
                 <div class="modal-body">
                     <div class="form-group">
                         <label>Pedido</label>
-                        <input class="form-control" id="id_pedido_fonte" name="id_pedido_fonte" type="number"
+                        <input class="form-control" name="id_pedido" type="number"
                                required disabled>
                     </div>
                     <div class="form-group">
                         <label>Fonte de Recurso</label>
-                        <input class="form-control" id="fonte" name="fonte" required/>
+                        <input class="form-control" name="fonte" required/>
                     </div>
                     <div class="form-group">
                         <label>PTRES</label>
-                        <input class="form-control" id="ptres" name="ptres" required/>
+                        <input class="form-control" name="ptres" required/>
                     </div>
                     <div class="form-group">
                         <label>Plano Interno</label>
-                        <input class="form-control" id="plano" name="plano" required/>
+                        <input class="form-control" name="plano" required/>
                     </div>
                 </div>
                 <div class="modal-footer">
