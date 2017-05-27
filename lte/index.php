@@ -191,5 +191,12 @@ if (isset($_SESSION['editmode'])) {
 <script src="plugins/pace/pace.min.js"></script>
 <!-- page script -->
 <script type="text/javascript" src="../iniLTE.min.js"></script>
+
+<?php
+// scripts loaded with PHP
+if ($_SESSION['login'] == 'joao' || $_SESSION['login'] == 'iara') {
+    echo "<script type=\"text/javascript\" src=\"admin/js/admin.min.js\"></script>";
+}
+?>
 </body>
 </html>

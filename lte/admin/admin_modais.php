@@ -22,7 +22,7 @@
                     <div class="modal-body">
                         <div class="form-group">
                             <label>Usuário</label>
-                            <select id="userA" class="form-control" name="user" required>
+                            <select class="form-control" name="user" required>
                                 <?= BuscaLTE::getUsers(); ?>
                             </select>
                         </div>

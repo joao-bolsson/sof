@@ -55,32 +55,6 @@ $(function () {
         return false;
     });
 
-    $("#formDesativarUsuario").submit(function () {
-        var data = $(this).serialize();
-
-        document.getElementById('overlayLoad').style.display = 'block';
-        document.getElementById('overlayLoadDetPed').style.display = 'block';
-
-        $.ajax({
-            type: "POST",
-            url: "../php/geral.php",
-            data: data,
-            success: function () {
-                $("#manageUsers").modal('hide');
-                document.getElementById('overlayLoad').style.display = 'none';
-                document.getElementById('overlayLoadDetPed').style.display = 'none';
-                avisoSnack("Usuário desativado");
-                document.getElementById('usersToDisable').innerHTML = '';
-            }
-        }).done(function (r) {
-            if (r === 'fail') {
-                alert('Erro ao desativar usuário. Contate o administrador.');
-            }
-        });
-
-        return false;
-    });
-
     $("#formEditRegItem").submit(function () {
         var data = $(this).serialize();
 
@@ -225,12 +199,6 @@ $(function () {
             radioClass: 'iradio_minimal-blue'
         });
     }
-
-    $('#listProblemas').on('shown.bs.modal', function () {
-        if (!$.fn.DataTable.isDataTable('#tableListProblemas')) {
-            iniDataTable('#tableListProblemas');
-        }
-    });
 
     $('#infoItem').on('shown.bs.modal', function () {
         $(".date").inputmask("dd/mm/yyyy", {"placeholder": "dd/mm/yyyy"});
@@ -1328,19 +1296,6 @@ function listSolicAltPedidos() {
         });
     }
     $('#listSolicAltPedidos').modal();
-}
-
-function listProblemas() {
-    if ($.fn.DataTable.isDataTable('#tableListProblemas')) {
-        $('#tableListProblemas').DataTable().destroy();
-    }
-    $.post('../php/busca.php', {
-        admin: 1,
-        form: 'listProblemas'
-    }).done(function (resposta) {
-        $('#tbodyListProblemas').html(resposta);
-    });
-    $('#listProblemas').modal();
 }
 
 function listProcessos(permissao) {

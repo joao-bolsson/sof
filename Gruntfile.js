@@ -12,7 +12,8 @@ module.exports = function (grunt) {
                 files: {
                     'ini.min.js': ['ini.js'],
                     'iniLTE.min.js': ['iniLTE.js'],
-                    'hora.min.js': ['hora.js']
+                    'hora.min.js': ['hora.js'],
+                    'lte/admin/js/admin.min.js' : ['lte/admin/js/admin.js']
                 }
             }
         } // uglify
