@@ -1100,7 +1100,7 @@ function refreshSaldo() {
 
 function listLancamentos(id_setor) {
     $('#listLancamentos').modal('show');
-    if (id_setor !== null) {
+    if (id_setor != null) {
         changeSetor(id_setor);
     }
 }
