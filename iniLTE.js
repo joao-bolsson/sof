@@ -692,13 +692,13 @@ function iniAdminSolicitacoes() {
         form: 'permissoes'
     }).done(function (resposta) {
         var permissao = jQuery.parseJSON(resposta);
-        if (permissao.recepcao) {
+        if (permissao.recepcao == 1) {
             iniRecepcao();
         }
-        if (permissao.pedidos) {
+        if (permissao.pedidos == 1) {
             iniSolicitacoes(false, 0);
         }
-        if (permissao.saldos) {
+        if (permissao.saldos == 1) {
             getSaldoOri();
         }
     });
