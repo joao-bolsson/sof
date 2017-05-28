@@ -335,9 +335,17 @@ if (Busca::isActive()) {
             // comentário
 
             case 'recepcao':
-                // array com os dados
-                $dados = filter_input(INPUT_POST, 'dados', FILTER_DEFAULT, FILTER_FORCE_ARRAY);
-                $update = Geral::updateProcesso($dados);
+                // fields names in form
+                $fields = ["id_processo", "num_processo", "tipo", "estante", "prateleira", "entrada", "saida", "responsavel", "retorno", "obs", "vigencia"];
+
+                $len = count($fields);
+
+                $data = [];
+                for ($i = 0; $i < $len; $i++) {
+                    $data[$i] = filter_input(INPUT_POST, $fields[$i]);
+                }
+
+                $update = Geral::updateProcesso($data);
 
                 if ($update) {
                     echo "true";

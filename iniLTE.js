@@ -234,10 +234,6 @@ $(function () {
         $('.select2').select2();
     });
 
-    $('#addProcesso').on('shown.bs.modal', function () {
-        $(".date").inputmask("dd/mm/yyyy", {"placeholder": "dd/mm/yyyy"});
-    });
-
     $('#listProcessos').on('shown.bs.modal', function () {
         if (!$.fn.DataTable.isDataTable('#tableListProcessos')) {
             iniDataTable('#tableListProcessos');
@@ -706,87 +702,6 @@ function iniAdminSolicitacoes() {
             getSaldoOri();
         }
     });
-}
-
-function iniRecepcao() {
-    var element = document.getElementById('conteudoRecepcao');
-    if (element === null) {
-        return;
-    }
-    $.post('../php/buscaLTE.php', {
-        admin: 1,
-        form: 'tableRecepcao'
-    }).done(function (resposta) {
-        if (element.innerHTML.length > 0) {
-            $('#tableRecepcao').DataTable().destroy();
-        }
-        element.innerHTML = resposta;
-        iniDataTable('#tableRecepcao');
-    });
-}
-
-function iniListProcessos() {
-    $.post('../php/buscaLTE.php', {
-        admin: 1,
-        form: 'listProcessos'
-    }).done(function (resposta) {
-        if (document.getElementById('tbodyListProcessos').innerHTML.length > 0) {
-            $('#tableListProcessos').DataTable().destroy();
-        }
-        document.getElementById('tbodyListProcessos').innerHTML = resposta;
-        iniDataTable('#tableListProcessos');
-    });
-}
-
-function addProcesso(numProcesso, id) {
-    document.getElementById("id_processo").value = id;
-    if (id === 0) {
-        document.getElementById('num_processo').value = numProcesso;
-    } else {
-        $.post('../php/busca.php', {
-            admin: 1,
-            form: 'addProcesso',
-            id_processo: id
-        }).done(function (resposta) {
-            var obj = jQuery.parseJSON(resposta);
-            document.getElementById("num_processo").value = obj.num_processo;
-            document.getElementById("tipo").value = obj.tipo;
-            document.getElementById("estante").value = obj.estante;
-            document.getElementById("prateleira").value = obj.prateleira;
-            document.getElementById("entrada").value = obj.entrada;
-            document.getElementById("saida").value = obj.saida;
-            document.getElementById("responsavel").value = obj.responsavel;
-            document.getElementById("retorno").value = obj.retorno;
-            document.getElementById("obs").value = obj.obs;
-            document.getElementById("vigencia").value = obj.vigencia;
-        });
-    }
-    $('#addProcesso').modal();
-}
-
-function updateProcesso() {
-    var campos = ["id_processo", "num_processo", "tipo", "estante", "prateleira", "entrada", "saida", "responsavel", "retorno", "obs", "vigencia"];
-    var dados = [];
-    for (var i = 0; i < campos.length; i++) {
-        dados[i] = document.getElementById(campos[i]).value;
-    }
-    $.post('../php/geral.php', {
-        admin: 1,
-        form: 'recepcao',
-        dados: dados
-    }).done(function (resposta) {
-        if (resposta === "true") {
-            document.getElementById('formProcesso').reset();
-            document.getElementById('id_processo').value = 0;
-            alert('Sucesso!');
-        } else {
-            alert('Ocorreu um erro no servidor. Contate o administrador');
-            window.location.href = "sair.php";
-        }
-    });
-    iniRecepcao();
-    iniListProcessos();
-    $('#addProcesso').modal('hide');
 }
 
 function putNumberFormat(value) {
