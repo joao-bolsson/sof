@@ -5,11 +5,13 @@
  */
 
 $(function () {
-    $('#cadEmpenho').on('shown.bs.modal', function () {
+    var modalCadEmpenho = $('#cadEmpenho');
+
+    modalCadEmpenho.on('shown.bs.modal', function () {
         $(".date").inputmask("dd/mm/yyyy", {"placeholder": "dd/mm/yyyy"});
     });
 
-    $('#cadEmpenho').on('hidden.bs.modal', function () {
+    modalCadEmpenho.on('hidden.bs.modal', function () {
         $("input[name='id_pedido']", "#formEnviaEmpenho").attr('disabled', '');
         document.getElementById("formEnviaEmpenho").reset();
     });
