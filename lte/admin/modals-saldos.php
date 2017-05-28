@@ -15,7 +15,7 @@
                             aria-hidden="true">&times;</span></button>
                 <h4 class="modal-title">Nova Transferência</h4>
             </div>
-            <form id="formTransferencia" action="../php/geral.php" method="POST">
+            <form id="formTransferencia">
                 <input type="hidden" name="admin" value="1">
                 <input type="hidden" name="form" value="transfereSaldo">
                 <div class="modal-body">

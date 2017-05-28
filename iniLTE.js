@@ -4,28 +4,6 @@ $(function () {
         Pace.restart();
     });
 
-    $("#formTransferencia").submit(function () {
-        var data = $(this).serialize();
-
-        $.ajax({
-            type: "POST",
-            url: "../php/geral.php",
-            data: data,
-            success: function () {
-                $('#tableListLancamentos').DataTable().destroy();
-                $('#transferencia').modal('hide');
-                document.getElementById('formTransferencia').reset();
-            }
-        }).done(function (r) {
-            if (r === 'success') {
-                alert('O valor foi transferido com SUCESSO! ');
-            } else {
-                alert('Saldo insuficiente para realizar a transferência');
-            }
-        });
-        return false;
-    });
-
     $("#formPedido").submit(function () {
         var data = $(this).serialize();
 

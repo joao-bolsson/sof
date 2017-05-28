@@ -200,6 +200,10 @@ if ($_SESSION['login'] == 'joao' || $_SESSION['login'] == 'iara') {
 if ($permissao->pedidos) {
     echo "<script type=\"text/javascript\" src=\"admin/js/pedidos.min.js\"></script>";
 }
+
+if ($permissao->saldos) {
+    echo "<script type=\"text/javascript\" src=\"admin/js/saldos.min.js\"></script>";
+}
 ?>
 </body>
 </html>

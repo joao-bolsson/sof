@@ -14,7 +14,8 @@ module.exports = function (grunt) {
                     'iniLTE.min.js': ['iniLTE.js'],
                     'hora.min.js': ['hora.js'],
                     'lte/admin/js/admin.min.js' : ['lte/admin/js/admin.js'],
-                    'lte/admin/js/pedidos.min.js' : ['lte/admin/js/pedidos.js']
+                    'lte/admin/js/pedidos.min.js' : ['lte/admin/js/pedidos.js'],
+                    'lte/admin/js/saldos.min.js' : ['lte/admin/js/saldos.js']
                 }
             }
         } // uglify
