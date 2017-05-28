@@ -153,17 +153,19 @@
                 <h4 class="modal-title">Liberar Saldo</h4>
             </div>
             <div class="modal-body">
-                <form action="javascript:liberaSaldo();" method="post">
+                <form id="formLiberaSaldo">
+                    <input type="hidden" name="admin" value="1">
+                    <input type="hidden" name="form" value="liberaSaldo">
                     <div class="modal-inner">
                         <div class="form-group">
                             <label>Setor</label>
-                            <select id="setor" class="form-control" name="setor" required>
+                            <select class="form-control" name="id_setor" required>
                                 <?= BuscaLTE::getOptionsSetores([2]); ?>
                             </select>
                         </div>
                         <div class="form-group">
                             <label>Valor</label>
-                            <input id="valorFree" type="number" class="form-control" placeholder="Valor"
+                            <input type="number" class="form-control" placeholder="Valor"
                                    name="valor" step="0.001" required min="0.001">
                         </div>
                     </div>

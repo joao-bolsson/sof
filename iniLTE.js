@@ -1089,26 +1089,6 @@ function solicAltPed(id_pedido) {
     $('#div-lb-high').addClass('control-highlight');
 }
 
-function liberaSaldo() {
-    var setor = document.getElementById('setor').value;
-    var valor = document.getElementById('valorFree').value;
-    valor = parseFloat(valor).toFixed(3);
-    $.post('../php/geral.php', {
-        admin: 1,
-        form: 'liberaSaldo',
-        id_setor: setor,
-        valor: valor
-    }).done(function (resposta) {
-        if (resposta) {
-            alert('O valor de R$ ' + valor + ' foi acrescentado ao saldo do setor com SUCESSO.');
-            location.reload();
-        } else {
-            alert('Ocorreu um erro no servidor. Contate o administrador.');
-            window.location.href = 'sair.php';
-        }
-    });
-}
-
 function refreshSaldo() {
     $.post('../php/busca.php', {
         admin: 1,

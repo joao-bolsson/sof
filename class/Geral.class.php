@@ -632,11 +632,12 @@ final class Geral {
      *    Função para liberação de saldo de um setor
      *
      * @param int $id_setor .
-     * @param float $valor .
+     * @param string $vl .
      * @param float $saldo_atual .
      * @return bool
      */
-    public static function liberaSaldo(int $id_setor, float $valor, float $saldo_atual): bool {
+    public static function liberaSaldo(int $id_setor, string $vl, float $saldo_atual): bool {
+        $valor = number_format(floatval($vl), 3);
         $saldo = $saldo_atual + $valor;
         $saldo = number_format($saldo, 3, '.', '');
         $verifica = Query::getInstance()->exe("SELECT saldo_setor.id FROM saldo_setor WHERE saldo_setor.id_setor = " . $id_setor);
