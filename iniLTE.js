@@ -1697,17 +1697,6 @@ function imprimir(id_pedido) {
         window.open("../view/printPedido.php");
     });
 }
-// função para recepção para gerar relatórios
-function print() {
-    var tipo = document.getElementById('type').value;
-    $.post('../php/busca.php', {
-        admin: 1,
-        form: 'relatorioProcessos',
-        tipo: tipo
-    }).done(function () {
-        window.open("../admin/printRel.php");
-    });
-}
 
 function analisarPedido(id_pedido, id_setor) {
     $('button').blur();

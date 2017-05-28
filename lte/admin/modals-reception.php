@@ -14,11 +14,13 @@
                 </button>
                 <h4 class="modal-title">Gerar Relatório</h4>
             </div>
-            <form action="javascript:print();" method="post">
+            <form id="formRelatorioRecepcao">
+                <input type="hidden" name="admin" value="1">
+                <input type="hidden" name="form" value="relatorioProcessos">
                 <div class="modal-body">
                     <div class="form-group">
                         <label>Tipo</label>
-                        <select id="type" class="form-control" name="type" required>
+                        <select class="form-control" name="tipo" required>
                             <option value="0">Todos</option>
                             <?= BuscaLTE::getTiposProcessos() ?>
                         </select>

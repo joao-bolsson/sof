@@ -204,6 +204,10 @@ if ($permissao->pedidos) {
 if ($permissao->saldos) {
     echo "<script type=\"text/javascript\" src=\"admin/js/saldos.min.js\"></script>";
 }
+
+if ($permissao->recepcao) {
+    echo "<script type=\"text/javascript\" src=\"admin/js/recepcao.min.js\"></script>";
+}
 ?>
 </body>
 </html>
