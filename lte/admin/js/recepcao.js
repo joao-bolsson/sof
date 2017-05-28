@@ -89,7 +89,7 @@ function addProcesso(numProcesso, id) {
             $("input[name='saida']", "#formProcesso").val(obj.saida);
             $("input[name='responsavel']", "#formProcesso").val(obj.responsavel);
             $("input[name='retorno']", "#formProcesso").val(obj.retorno);
-            $("input[name='obs']", "#formProcesso").val(obj.obs);
+            $("textarea[name='obs']", "#formProcesso").val(obj.obs);
             $("input[name='vigencia']", "#formProcesso").val(obj.vigencia);
         });
     }
