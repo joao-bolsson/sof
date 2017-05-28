@@ -89,7 +89,7 @@
                             aria-hidden="true">&times;</span></button>
                 <h4 class="modal-title">Relatório de Liberações Orçamentárias</h4>
             </div>
-            <form action="../../admin/printRelatorio.php" method="post" target="_blank">
+            <form action="../admin/printRelatorio.php" method="post" target="_blank">
                 <input type="hidden" name="tipo" value="liberacoes"/>
                 <input type="hidden" name="relatorio" value="1"/>
                 <div class="modal-body">
@@ -145,7 +145,7 @@
                             aria-hidden="true">&times;</span></button>
                 <h4 class="modal-title">Relatório de Pedidos</h4>
             </div>
-            <form action="../../admin/printRelatorio.php" method="post" target="_blank">
+            <form action="../admin/printRelatorio.php" method="post" target="_blank">
                 <input type="hidden" name="tipo" value="pedidos"/>
                 <input type="hidden" name="relatorio" value="1"/>
                 <div class="modal-body">

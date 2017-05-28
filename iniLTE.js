@@ -182,10 +182,10 @@ $(function () {
 
 // numero de permissoes
     var perm_count = 4;
-    for (var i = 1; i <= perm_count; i++) {
-        var element = document.getElementById('perm' + i);
-        if (element !== null) {
-            $('#perm' + i).iCheck({
+    for (var k = 1; k <= perm_count; k++) {
+        var perm = document.getElementById('perm' + k);
+        if (perm !== null) {
+            $('#perm' + k).iCheck({
                 checkboxClass: 'icheckbox_minimal-blue',
                 radioClass: 'iradio_minimal-blue'
             });
@@ -200,6 +200,7 @@ $(function () {
         });
     }
 
+    // TODO: mover infoItem para outro js
     $('#infoItem').on('shown.bs.modal', function () {
         $(".date").inputmask("dd/mm/yyyy", {"placeholder": "dd/mm/yyyy"});
     });
@@ -251,18 +252,8 @@ $(function () {
         fillTransfSource(id_dest);
     });
 
-    $('#relPedidos').on('shown.bs.modal', function () {
-        $('.select2').select2();
-        $(".date").inputmask("dd/mm/yyyy", {"placeholder": "dd/mm/yyyy"});
-    });
-
     $('#transferencia').on('shown.bs.modal', function () {
         $('.select2').select2();
-    });
-
-    $('#relLibOrc').on('shown.bs.modal', function () {
-        $('.select2').select2();
-        $(".date").inputmask("dd/mm/yyyy", {"placeholder": "dd/mm/yyyy"});
     });
 
     $('#addProcesso').on('shown.bs.modal', function () {
@@ -448,20 +439,6 @@ function enviaOrdenador(id_pedido) {
             }
         });
     }
-}
-
-function verEmpenho(id_pedido) {
-    $.post('../php/busca.php', {
-        users: 1,
-        form: 'verEmpenho',
-        id_pedido: id_pedido
-    }).done(function (resposta) {
-        if (resposta === 'EMPENHO SIAFI PENDENTE') {
-            viewCompl(resposta);
-        } else {
-            viewCompl('Empenho: ' + resposta);
-        }
-    });
 }
 
 function hideDivs() {
