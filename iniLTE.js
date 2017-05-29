@@ -640,24 +640,6 @@ function checkPedContr(element) {
     maybeRequiredTipoContr(element.checked);
 }
 
-function resetSenha() {
-    document.getElementById("loaderResetSenha").style.display = 'inline-block';
-    var email = document.getElementById('userReset').value;
-    $.post('../php/geral.php', {
-        form: 'resetSenha',
-        email: email
-    }).done(function (resposta) {
-        if (resposta) {
-            alert("Sua senha foi resetada e enviada para o seu e-mail.");
-        } else {
-            alert("Ocorreu um erro no servidor. Contate o administrador.");
-        }
-        $('#esqueceuSenha').modal('hide');
-        document.getElementById('formReset').reset();
-        document.getElementById("loaderResetSenha").style.display = 'none';
-    });
-}
-
 function altInfoUser() {
     var nome = document.getElementById('nameUser').value;
     var email = document.getElementById('emailUser').value;
@@ -1567,26 +1549,6 @@ function populaLicitacao(id_pedido) {
             var element = document.getElementById('tipoLic' + obj.tipo);
             changeTipoLic(element);
         }
-    });
-}
-
-function login() {
-    var user = document.getElementById("user").value;
-    var senha = document.getElementById("senha").value;
-    document.getElementById("loader").style.display = 'inline-block';
-    $.post('../php/login.php', {
-        login: user,
-        senha: senha
-    }).done(function (resposta) {
-        if (resposta == "false") {
-            document.getElementById("formLogin").reset();
-            document.getElementById("aviso").style.display = 'flex';
-        } else if (resposta == "desativado") {
-            alert("Estamos realizando uma manutenção no momento. Tente fazer o login novamente dentro de 10min ;)");
-        } else {
-            window.location.href = '../';
-        }
-        document.getElementById("loader").style.display = 'none';
     });
 }
 

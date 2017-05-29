@@ -46,7 +46,7 @@ class Controller {
         } else {
             $return .= "
                 <li class=\"active\">
-                    <a class=\"btn btn-flat waves-attach waves-light\" href=\"javascript:abreModal('#login');\"><span class=\"text-white\"><span class=\"icon\">power_settings_new</span>LOGIN</span></a>
+                    <a class=\"btn btn-flat waves-attach waves-light\" href=\"../lte/login.php\"><span class=\"text-white\"><span class=\"icon\">power_settings_new</span>LOGIN</span></a>
                 </li>";
         }
 
