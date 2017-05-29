@@ -37,24 +37,6 @@ function avisoSnack(aviso, corpo) {
     });
 }
 
-function resetSenha() {
-    document.getElementById("loaderResetSenha").style.display = 'inline-block';
-    var email = document.getElementById('userReset').value;
-    $.post('../php/geral.php', {
-        form: 'resetSenha',
-        email: email
-    }, function (resposta) {
-        if (resposta) {
-            alert("Sua senha foi resetada e enviada para o seu e-mail.");
-        } else {
-            alert("Ocorreu um erro no servidor. Contate o administrador.");
-        }
-        $('#esqueceuSenha').modal('hide');
-        document.getElementById('formReset').reset();
-        document.getElementById("loaderResetSenha").style.display = 'none';
-    });
-}
-
 function altInfoUser() {
     document.getElementById("loader").style.display = 'inline-block';
     var nome = document.getElementById('nameUser').value;
@@ -79,26 +61,6 @@ function altInfoUser() {
         } else {
             alert("Ocorreu um erro no servidor. Contate o administrador.");
             location.reload();
-        }
-        document.getElementById("loader").style.display = 'none';
-    });
-}
-
-function login() {
-    var user = document.getElementById("user").value;
-    var senha = document.getElementById("senha").value;
-    document.getElementById("loader").style.display = 'inline-block';
-    $.post('../php/login.php', {
-        login: user,
-        senha: senha
-    }, function (resposta) {
-        if (resposta == "false") {
-            document.getElementById("formLogin").reset();
-            document.getElementById("aviso").style.display = 'flex';
-        } else if (resposta == "desativado") {
-            alert("Estamos realizando uma manutenção no momento. Tente fazer o login novamente dentro de 10min ;)");
-        } else {
-            window.location.href = '../';
         }
         document.getElementById("loader").style.display = 'none';
     });
