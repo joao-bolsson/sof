@@ -556,19 +556,6 @@ function iniDataTable(tabela) {
         });
     }
 }
-function changeTipoContr(element) {
-    var val = element.value;
-    document.getElementById('siafi').required = (val == 3);
-}
-
-function maybeRequiredTipoContr(flag) {
-    var x = document.getElementsByName("tipoCont");
-    for (var i = 0; i < x.length; i++) {
-        if (x[i].type === "radio") {
-            x[i].required = flag;
-        }
-    }
-}
 
 function altInfoUser() {
     var nome = document.getElementById('nameUser').value;
@@ -1022,38 +1009,6 @@ function listAdiantamentos() {
     $('#listAdiantamentos').modal('show');
 }
 
-function changeTipoLic(element) {
-    var selected = element.value;
-    if (selected == 3 || selected == 4 || selected == 2) { // Adesao, Compra Compartilhada ou Inexibilidade
-        maybeDisableFields(false);
-    } else {
-        maybeDisableFields(true);
-    }
-    if (selected == 6) { // RP
-        document.getElementById('infoLic').required = false;
-    } else {
-        document.getElementById('infoLic').required = true;
-    }
-    maybeRequiredTipoContr(true);
-}
-
-function maybeDisableFields(flag) {
-    document.getElementById('uasg').disabled = flag;
-    document.getElementById('procOri').disabled = flag;
-    var status = 'enable';
-    if (flag) {
-        status = 'disable';
-    }
-    $('#gera').iCheck(status);
-    $('#ngera').iCheck(status);
-    // required
-
-    document.getElementById('uasg').required = !flag;
-    document.getElementById('procOri').required = !flag;
-    document.getElementById('gera').required = !flag;
-    document.getElementById('ngera').required = !flag;
-}
-
 function verProcessos(pedido) {
     $.post('../php/busca.php', {
         admin: 1,
@@ -1321,21 +1276,6 @@ function pesquisarProcesso(busca) {
         document.getElementById('numProc').innerHTML = busca;
         document.getElementById('overlayLoad').style.display = 'none';
         avisoSnack('Busca Realizada com Sucesso !');
-    });
-}
-
-function fillSaldo() {
-    $.post('../php/busca.php', {
-        users: 1,
-        form: 'fillSaldo'
-    }).done(function (resposta) {
-        $('#text_saldo_total').html('R$ ' + resposta);
-    });
-    $.post('../php/busca.php', {
-        users: 1,
-        form: 'getSaldo'
-    }).done(function (resposta) {
-        document.getElementById('saldo_total').value = resposta;
     });
 }
 

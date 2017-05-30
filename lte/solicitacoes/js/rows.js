@@ -5,8 +5,8 @@
  */
 
 $(function () {
-    var checkPedContr = document.getElementById("checkPedContr");
-    if (checkPedContr !== null) {
+    var checkPedContrato = document.getElementById("checkPedContr");
+    if (checkPedContrato !== null) {
         document.getElementById("checkPedContr").onclick = function () {
             checkPedContr(this);
         };
@@ -48,6 +48,44 @@ $(function () {
     }
 });
 
+function changeTipoLic(element) {
+    var selected = element.value;
+    if (selected == 3 || selected == 4 || selected == 2) { // Adesao, Compra Compartilhada ou Inexibilidade
+        maybeDisableFields(false);
+    } else {
+        maybeDisableFields(true);
+    }
+
+    document.getElementById('infoLic').required = selected != 6;
+    maybeRequiredTipoContr(true);
+}
+
+function maybeRequiredTipoContr(flag) {
+    var x = document.getElementsByName("tipoCont");
+    for (var i = 0; i < x.length; i++) {
+        if (x[i].type === "radio") {
+            x[i].required = flag;
+        }
+    }
+}
+
+function maybeDisableFields(flag) {
+    document.getElementById('uasg').disabled = flag;
+    document.getElementById('procOri').disabled = flag;
+    var status = 'enable';
+    if (flag) {
+        status = 'disable';
+    }
+    $('#gera').iCheck(status);
+    $('#ngera').iCheck(status);
+    // required
+
+    document.getElementById('uasg').required = !flag;
+    document.getElementById('procOri').required = !flag;
+    document.getElementById('gera').required = !flag;
+    document.getElementById('ngera').required = !flag;
+}
+
 function checkPedContr(element) {
     // se for um pedido de contrato, deve escolher uma opcao
     maybeRequiredTipoContr(element.checked);
@@ -61,14 +99,35 @@ function iniPagSolicitacoes() {
         radioClass: 'iradio_minimal-blue'
     });
     for (var i = 1; i <= 3; i++) {
-        $('#tipoCont' + i).iCheck({
+        var tipoCont = $('#tipoCont' + i);
+        tipoCont.iCheck({
             checkboxClass: 'icheckbox_minimal-blue',
             radioClass: 'iradio_minimal-blue'
         });
-        $('#tipoCont' + i).on('ifChecked', function () {
+        tipoCont.on('ifChecked', function () {
             changeTipoContr(this);
         });
     }
+}
+
+function changeTipoContr(element) {
+    var val = element.value;
+    document.getElementById('siafi').required = (val == 3);
+}
+
+function fillSaldo() {
+    $.post('../php/busca.php', {
+        users: 1,
+        form: 'fillSaldo'
+    }).done(function (resposta) {
+        $('#text_saldo_total').html('R$ ' + resposta);
+    });
+    $.post('../php/busca.php', {
+        users: 1,
+        form: 'getSaldo'
+    }).done(function (resposta) {
+        document.getElementById('saldo_total').value = resposta;
+    });
 }
 
 function limpaTelaSolic() {
@@ -91,12 +150,15 @@ function limpaTelaSolic() {
     document.getElementById('procOri').value = '';
     document.getElementById('procOri').required = false;
     document.getElementById('procOri').disabled = true;
-    $('#gera').iCheck('uncheck');
+    var gera = $('#gera');
+    var ngera = $('#ngera');
+
+    gera.iCheck('uncheck');
     document.getElementById('gera').required = false;
-    $('#gera').iCheck('disable');
-    $('#ngera').iCheck('uncheck');
+    gera.iCheck('disable');
+    ngera.iCheck('uncheck');
     document.getElementById('ngera').required = false;
-    $('#ngera').iCheck('disable');
+    ngera.iCheck('disable');
     $('#checkPedContr').iCheck('uncheck');
     // opções de contrato
     for (var i = 1; i <= 3; i++) {
