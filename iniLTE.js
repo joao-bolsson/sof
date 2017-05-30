@@ -120,59 +120,9 @@ $(function () {
         }
     }
 
-    for (var i = 1; i <= 6; i++) {
-        var element = document.getElementById('tipoLic' + i);
-        if (element !== null) {
-            $('#tipoLic' + i).iCheck({
-                checkboxClass: 'icheckbox_minimal-blue',
-                radioClass: 'iradio_minimal-blue'
-            });
-            $('#tipoLic' + i).on('ifChecked', function () {
-                changeTipoLic(this);
-            });
-        }
-    }
-
-    var element = document.getElementById('gera');
-    if (element !== null) {
-        $('#gera').iCheck({
-            checkboxClass: 'icheckbox_minimal-blue',
-            radioClass: 'iradio_minimal-blue'
-        });
-        $('#gera').iCheck('disable');
-    }
-    var element = document.getElementById('ngera');
-    if (element !== null) {
-        $('#ngera').iCheck({
-            checkboxClass: 'icheckbox_minimal-blue',
-            radioClass: 'iradio_minimal-blue'
-        });
-        $('#ngera').iCheck('disable');
-    }
-
     element = document.getElementById('checkSaifi');
     if (element !== null) {
         $('#checkSaifi').iCheck({
-            checkboxClass: 'icheckbox_minimal-blue',
-            radioClass: 'iradio_minimal-blue'
-        });
-    }
-
-// numero de permissoes
-    var perm_count = 4;
-    for (var k = 1; k <= perm_count; k++) {
-        var perm = document.getElementById('perm' + k);
-        if (perm !== null) {
-            $('#perm' + k).iCheck({
-                checkboxClass: 'icheckbox_minimal-blue',
-                radioClass: 'iradio_minimal-blue'
-            });
-        }
-    }
-
-    var excluir = document.getElementById('checkExcluir');
-    if (excluir !== null) {
-        $('#checkExcluir').iCheck({
             checkboxClass: 'icheckbox_minimal-blue',
             radioClass: 'iradio_minimal-blue'
         });

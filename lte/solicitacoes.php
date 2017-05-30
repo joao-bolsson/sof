@@ -168,8 +168,9 @@ $select_grupo = BuscaLTE::getOptionsGrupos($id_setor);
 <script src="plugins/input-mask/jquery.inputmask.extensions.js"></script>
 <!-- PACE -->
 <script src="plugins/pace/pace.min.js"></script>
-<!-- page script -->
+<!-- page scripts -->
 <script type="text/javascript" src="../iniLTE.min.js"></script>
+<script type="text/javascript" src="solicitacoes/js/rows.min.js"></script>
 
 </body>
 </html>

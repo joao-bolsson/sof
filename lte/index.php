@@ -190,7 +190,7 @@ if (isset($_SESSION['editmode'])) {
 <!-- PACE -->
 <script src="plugins/pace/pace.min.js"></script>
 <!-- page script -->
-<script type="text/javascript" src="../iniLTE.min.js"></script>
+<script type="text/javascript" src="../iniLTE.js"></script>
 
 <?php
 // scripts loaded with PHP
@@ -198,7 +198,8 @@ if ($_SESSION['login'] == 'joao' || $_SESSION['login'] == 'iara') {
     echo "<script type=\"text/javascript\" src=\"admin/js/admin.min.js\"></script>";
 }
 if ($permissao->pedidos) {
-    echo "<script type=\"text/javascript\" src=\"admin/js/pedidos.min.js\"></script>";
+    echo "<script type=\"text/javascript\" src=\"admin/js/modals-pedidos.min.js\"></script>";
+    echo "<script type=\"text/javascript\" src=\"admin/js/body-pedidos.min.js\"></script>";
 }
 
 if ($permissao->saldos) {
