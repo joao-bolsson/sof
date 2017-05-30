@@ -133,15 +133,6 @@ $(function () {
         $(".date").inputmask("dd/mm/yyyy", {"placeholder": "dd/mm/yyyy"});
     });
 
-    $('#manageUsers').on('shown.bs.modal', function () {
-        $.post('../php/buscaLTE.php', {
-            admin: 1,
-            form: 'getUsers'
-        }, function (resposta) {
-            document.getElementById('usersToDisable').innerHTML = resposta;
-        });
-    });
-
     $('#infoItem').on('hidden.bs.modal', function () {
         document.getElementById('id').value = 0;
         document.getElementById('formEditRegItem').reset();
@@ -168,12 +159,6 @@ $(function () {
         $('.modal-backdrop').not('fv-modal-stack')
             .addClass('fv-modal-stack');
     });
-    var checkPedContr = document.getElementById("checkPedContr");
-    if (checkPedContr !== null) {
-        document.getElementById("checkPedContr").onclick = function () {
-            checkPedContr(this);
-        };
-    }
 
     $('#transferencia').on('shown.bs.modal', function () {
         var id_dest = document.getElementById('transfDest').value;
@@ -583,11 +568,6 @@ function maybeRequiredTipoContr(flag) {
             x[i].required = flag;
         }
     }
-}
-
-function checkPedContr(element) {
-// se for um pedido de contrato, deve escolher uma opcao
-    maybeRequiredTipoContr(element.checked);
 }
 
 function altInfoUser() {
@@ -1161,24 +1141,6 @@ function listRascunhos() {
     $('#listRascunhos').modal('show');
 }
 
-function iniPagSolicitacoes() {
-    iniDataTable('#tableProcessos');
-    $(".select2").select2();
-    $('#checkPedContr').iCheck({
-        checkboxClass: 'icheckbox_minimal-blue',
-        radioClass: 'iradio_minimal-blue'
-    });
-    for (var i = 1; i <= 3; i++) {
-        $('#tipoCont' + i).iCheck({
-            checkboxClass: 'icheckbox_minimal-blue',
-            radioClass: 'iradio_minimal-blue'
-        });
-        $('#tipoCont' + i).on('ifChecked', function () {
-            changeTipoContr(this);
-        });
-    }
-}
-
 function iniTableSolicAdiant() {
     var status = ['stabertos', 'staprovados', 'streprovado'];
     var st = null;
@@ -1374,131 +1336,6 @@ function fillSaldo() {
         form: 'getSaldo'
     }).done(function (resposta) {
         document.getElementById('saldo_total').value = resposta;
-    });
-}
-
-function limpaTelaSolic() {
-    fillSaldo();
-    document.getElementById('pedido').value = 0;
-    document.getElementById('conteudoPedido').innerHTML = '';
-    document.getElementById('total').value = 'R$ 0';
-    document.getElementById('total_hidden').value = 0;
-    $('#stRascunho').iCheck('check');
-    document.getElementById('obs').value = '';
-    // licitação
-    for (var i = 1; i <= 6; i++) {
-        $('#tipoLic' + i).iCheck('uncheck');
-    }
-    document.getElementById('infoLic').value = '';
-    document.getElementById('infoLic').required = true;
-    document.getElementById('uasg').value = '';
-    document.getElementById('uasg').required = false;
-    document.getElementById('uasg').disabled = true;
-    document.getElementById('procOri').value = '';
-    document.getElementById('procOri').required = false;
-    document.getElementById('procOri').disabled = true;
-    $('#gera').iCheck('uncheck');
-    document.getElementById('gera').required = false;
-    $('#gera').iCheck('disable');
-    $('#ngera').iCheck('uncheck');
-    document.getElementById('ngera').required = false;
-    $('#ngera').iCheck('disable');
-    $('#checkPedContr').iCheck('uncheck');
-    // opções de contrato
-    for (var i = 1; i <= 3; i++) {
-        document.getElementById('tipoCont' + i).required = false;
-        $('#tipoCont' + i).iCheck('uncheck');
-    }
-    document.getElementById('siafi').value = '';
-    $('button').blur();
-}
-
-function editaPedido(id_pedido) {
-    limpaTelaSolic();
-    $.post('../php/busca.php', {
-        users: 1,
-        form: 'populaRascunho',
-        id_pedido: id_pedido
-    }).done(function (retorno) {
-        var obj = jQuery.parseJSON(retorno);
-        //valor do pedido
-        document.getElementById('total_hidden').value = obj.valor;
-        document.getElementById('total').value = "R$ " + obj.valor;
-        //saldo
-        document.getElementById('saldo_total').value = parseFloat(obj.saldo - obj.valor).toFixed(3);
-        $('#text_saldo_total').html('R$ ' + parseFloat(obj.saldo - obj.valor).toFixed(3));
-        // obs
-        document.getElementById('obs').value = obj.obs;
-    });
-    document.getElementById('pedido').value = id_pedido;
-    $('#listRascunhos').modal('hide');
-    $.post('../php/buscaLTE.php', {
-        users: 1,
-        form: 'editaPedido',
-        id_pedido: id_pedido
-    }).done(function (resposta) {
-        $('#conteudoPedido').html(resposta);
-    });
-    populaLicitacao(id_pedido);
-    populaGrupo(id_pedido);
-    populaContrato(id_pedido);
-}
-
-function populaContrato(id_pedido) {
-    $.post('../php/busca.php', {
-        users: 1,
-        form: 'populaContrato',
-        id_pedido: id_pedido
-    }).done(function (resposta) {
-        if (resposta !== false) {
-            var obj = jQuery.parseJSON(resposta);
-            document.getElementById('siafi').value = obj.siafi;
-            if (obj.id_tipo > 0) {
-                $('#tipoCont' + obj.id_tipo).iCheck('check');
-            }
-            if (obj.pedido_contrato == 1) {
-                $('#checkPedContr').iCheck('check');
-            }
-        }
-    });
-}
-
-function populaGrupo(id_pedido) {
-    $.post('../php/busca.php', {
-        users: 1,
-        form: 'populaGrupo',
-        id_pedido: id_pedido
-    }).done(function (resposta) {
-        if (resposta) {
-            $('#grupo').val(resposta).trigger('change');
-        }
-    });
-}
-
-function populaLicitacao(id_pedido) {
-    $.post('../php/busca.php', {
-        users: 1,
-        form: 'populaLicitacao',
-        id_pedido: id_pedido
-    }).done(function (resposta) {
-        if (resposta) {
-            var obj = jQuery.parseJSON(resposta);
-            document.getElementById('idLic').value = obj.id;
-            document.getElementById('infoLic').value = obj.numero;
-            $('#tipoLic' + obj.tipo).iCheck('check');
-            if (obj.tipo == 3 || obj.tipo == 4 || obj.tipo == 2) {
-                document.getElementById('uasg').value = obj.uasg;
-                document.getElementById('procOri').value = obj.processo_original;
-            }
-            if (obj.gera_contrato == 1) {
-                $('#gera').iCheck('check');
-            } else {
-                $('#ngera').iCheck('check');
-            }
-            maybeDisableFields(!(obj.tipo == 3 || obj.tipo == 4 || obj.tipo == 2));
-            var element = document.getElementById('tipoLic' + obj.tipo);
-            changeTipoLic(element);
-        }
     });
 }
 

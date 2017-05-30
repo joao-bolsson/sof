@@ -5,6 +5,15 @@
  */
 
 $(function () {
+    $('#manageUsers').on('shown.bs.modal', function () {
+        $.post('../php/buscaLTE.php', {
+            admin: 1,
+            form: 'getUsers'
+        }, function (resposta) {
+            document.getElementById('usersToDisable').innerHTML = resposta;
+        });
+    });
+
     // checkbox permissions to add new user
     for (var k = 1; k <= 4; k++) {
         var perm = document.getElementById('perm' + k);
