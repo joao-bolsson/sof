@@ -116,6 +116,9 @@
 <script src="plugins/jQuery/jquery-2.2.3.min.js"></script>
 <!-- Bootstrap 3.3.6 -->
 <script src="bootstrap/js/bootstrap.min.js"></script>
+
+<!-- page scripts -->
+<script type="text/javascript" src="util/util_lte.min.js"></script>
 <script src="admin/js/login.min.js"></script>
 </body>
 </html>

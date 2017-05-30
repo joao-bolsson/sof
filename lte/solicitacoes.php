@@ -137,6 +137,7 @@ $select_grupo = BuscaLTE::getOptionsGrupos($id_setor);
     </footer>
     <?php
     include_once "solicitacoes/modals-geral.php";
+    include_once "util/modals-util.php";
     ?>
 </div>
 <!-- ./wrapper -->
@@ -169,6 +170,7 @@ $select_grupo = BuscaLTE::getOptionsGrupos($id_setor);
 <!-- PACE -->
 <script src="plugins/pace/pace.min.js"></script>
 <!-- page scripts -->
+<script type="text/javascript" src="util/util_lte.min.js"></script>
 <script type="text/javascript" src="../iniLTE.min.js"></script>
 <script type="text/javascript" src="solicitacoes/js/rows.min.js"></script>
 

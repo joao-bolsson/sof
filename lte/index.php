@@ -161,6 +161,7 @@ if (isset($_SESSION['editmode'])) {
 
     // no need special permissions
     include_once "admin/modals-geral.php";
+    include_once "util/modals-util.php";
     ?>
 </div><!-- ./wrapper -->
 
@@ -190,7 +191,8 @@ if (isset($_SESSION['editmode'])) {
 <!-- PACE -->
 <script src="plugins/pace/pace.min.js"></script>
 <!-- page script -->
-<script type="text/javascript" src="../iniLTE.js"></script>
+<script type="text/javascript" src="util/util_lte.min.js"></script>
+<script type="text/javascript" src="../iniLTE.min.js"></script>
 
 <?php
 // scripts loaded with PHP
