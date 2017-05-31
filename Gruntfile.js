@@ -20,7 +20,8 @@ module.exports = function (grunt) {
                     'lte/admin/js/login.min.js': ['lte/admin/js/login.js'],
                     'lte/admin/js/body-pedidos.min.js': ['lte/admin/js/body-pedidos.js'],
                     'lte/solicitacoes/js/rows.min.js': ['lte/solicitacoes/js/rows.js'],
-                    'lte/util/util_lte.min.js': ['lte/util/util_lte.js']
+                    'lte/util/util_lte.min.js': ['lte/util/util_lte.js'],
+                    'lte/posts/posts.min.js': ['lte/posts/posts.js']
                 }
             }
         } // uglify

@@ -63,3 +63,7 @@ $(function () {
         });
     });
 });
+
+function abreModal(id_modal) {
+    $(id_modal).modal();
+}

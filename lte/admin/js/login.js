@@ -50,7 +50,3 @@ function showInfo(text) {
     $("#textInfo").html(text);
     $("#info").modal();
 }
-
-function abreModal(id_modal) {
-    $(id_modal).modal();
-}

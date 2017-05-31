@@ -150,7 +150,7 @@ require_once '../defines.php';
                     <div class="box-header with-border">
                         <h3 class="box-title">Adicionar Notícia</h3>
                     </div>
-                    <form enctype="multipart/form-data" action="../php/geral.php" id="ajax_form" method="post"
+                    <form enctype="multipart/form-data" action="../php/geral.php" method="post"
                           onreset="recarregaForm();">
                         <input type="hidden" name="admin" value="1"/>
                         <input type="hidden" name="form" value="novanoticia">
@@ -267,44 +267,7 @@ require_once '../defines.php';
             </div>
         </div>
     </div>
-    <div class="modal fade" id="myInfos" role="dialog">
-        <div class="modal-dialog" style="width: 40%;">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
-                                aria-hidden="true">&times;</span></button>
-                    <h4 class="modal-title">Informações do Usuário</h4>
-                </div>
-                <form id="altInfo" action="javascript:altInfoUser();" method="post">
-                    <div class="modal-body">
-                        <div class="form-group">
-                            <label>Nome</label>
-                            <input class="form-control" id="nameUser" name="nameUser" type="text"
-                                   value="<?= $_SESSION['nome'] ?>" required>
-                        </div>
-                        <div class="form-group">
-                            <label>E-mail</label>
-                            <input class="form-control" id="emailUser" name="emailUser" type="email"
-                                   value="<?= $_SESSION['email'] ?>" required>
-                        </div>
-                        <div class="form-group">
-                            <label>Senha Atual</label>
-                            <input class="form-control" id="senhaAtualUser" name="senhaAtualUser" type="password"
-                                   required>
-                        </div>
-                        <div class="form-group">
-                            <label>Nova Senha</label>
-                            <input class="form-control" id="senhaUser" name="senhaUser" type="password" required>
-                        </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button class="btn btn-primary" type="submit" style="width: 100%;"><i class="fa fa-refresh"></i>&nbsp;Atualizar
-                        </button>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
+    <?php include_once "util/modals-util.php"; ?>
 </div>
 <!-- ./wrapper -->
 
@@ -367,44 +330,9 @@ require_once '../defines.php';
 <!-- Include Language file if we want to use it. -->
 <script type="text/javascript" src="../plugins/froala/js/languages/pt_br.min.js"></script>
 
-<!-- Initialize the editor. -->
-<script>
-    $(function () {
-        //Date picker
-        $('#data').datepicker({
-            autoclose: true,
-            format: 'yyyy-mm-dd'
-        });
-
-        $('.minimal').iCheck({
-            checkboxClass: 'icheckbox_flat-blue',
-            radioClass: 'iradio_flat-blue'
-        });
-
-        $('.minimal').on('ifChecked', function () {
-            loadPosts(this);
-        });
-
-        $('#txtnoticia').froalaEditor({
-            language: 'pt_br',
-            charCounterCount: false,
-            heightMin: 100,
-            heightMax: 400,
-            // Set the image upload URL.
-            imageUploadURL: '../admin/upload_image.php',
-            // Set the file upload URL.
-            fileUploadURL: '../admin/upload_file.php',
-            // Set the image upload URL.
-            imageManagerLoadURL: '../admin/load_images.php',
-            // Set the image delete URL.
-            imageManagerDeleteURL: '../admin/delete_image.php',
-        });
-    });
-</script>
-
 <!-- page script -->
-<script type="text/javascript" src="util/util_lte.min.js"></script>
-<script type="text/javascript" src="../iniLTE.min.js"></script>
+<script type="text/javascript" src="util/util_lte.js"></script>
+<script type="text/javascript" src="posts/posts.js"></script>
 </body>
 </html>
 

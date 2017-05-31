@@ -1,28 +1,40 @@
 $(function () {
-    $('.modal').on('hidden.bs.modal', function () {
+    var modal = $('.modal');
+
+    var body = $('body');
+
+    modal.on('hidden.bs.modal', function () {
         $(this).removeClass('fv-modal-stack');
-        $('body').data('fv_open_modals', $('body').data('fv_open_modals') - 1);
+        body.data('fv_open_modals', body.data('fv_open_modals') - 1);
     });
 
-    $('.modal').on('shown.bs.modal', function () {
+    modal.on('shown.bs.modal', function () {
         // keep track of the number of open modals
-        if (typeof ($('body').data('fv_open_modals')) == 'undefined') {
-            $('body').data('fv_open_modals', 0);
+        if (typeof (body.data('fv_open_modals')) == 'undefined') {
+            body.data('fv_open_modals', 0);
         }
         // if the z-index of this modal has been set, ignore.
         if ($(this).hasClass('fv-modal-stack')) {
             return;
         }
+
+        var modal_backdrop = $('.modal-backdrop');
         $(this).addClass('fv-modal-stack');
-        $('body').data('fv_open_modals', $('body').data('fv_open_modals') + 1);
-        $(this).css('z-index', 1040 + (10 * $('body').data('fv_open_modals')));
-        $('.modal-backdrop').not('.fv-modal-stack')
-                .css('z-index', 1039 + (10 * $('body').data('fv_open_modals')));
-        $('.modal-backdrop').not('fv-modal-stack')
-                .addClass('fv-modal-stack');
+        body.data('fv_open_modals', body.data('fv_open_modals') + 1);
+        $(this).css('z-index', 1040 + (10 * body.data('fv_open_modals')));
+        modal_backdrop.not('.fv-modal-stack')
+            .css('z-index', 1039 + (10 * body.data('fv_open_modals')));
+        modal_backdrop.not('fv-modal-stack').addClass('fv-modal-stack');
     });
 });
 
+/**
+ * Essa função existe no util.min.js, para a versão LTE do sistema.
+ *
+ * Ela precisa ficar aqui para a versão antiga do site (público).
+ *
+ * @param id_modal
+ */
 function abreModal(id_modal) {
     $(id_modal).modal();
 }
@@ -34,35 +46,6 @@ function avisoSnack(aviso, corpo) {
         show: function () {
             snackbarText++;
         }
-    });
-}
-
-function altInfoUser() {
-    document.getElementById("loader").style.display = 'inline-block';
-    var nome = document.getElementById('nameUser').value;
-    var email = document.getElementById('emailUser').value;
-    var senhaAtual = document.getElementById('senhaAtualUser').value;
-    var novaSenha = document.getElementById('senhaUser').value;
-    $.post('../php/geral.php', {
-        users: 1,
-        form: 'infoUser',
-        nome: nome,
-        email: email,
-        novaSenha: novaSenha,
-        senhaAtual: senhaAtual
-    }, function (resposta) {
-        if (resposta) {
-            $('#myInfos').modal('hide');
-            document.getElementById('altInfo').reset();
-            avisoSnack('Suas informações foram salvas com sucesso!', 'body');
-            document.getElementById('nameUser').value = nome;
-            document.getElementById('emailUser').value = email;
-            document.getElementById('userLogado').innerHTML = nome;
-        } else {
-            alert("Ocorreu um erro no servidor. Contate o administrador.");
-            location.reload();
-        }
-        document.getElementById("loader").style.display = 'none';
     });
 }
 
@@ -121,10 +104,4 @@ function dropTile(id) {
     }
     qtd = document.getElementById('qtd-arquivos').value;
     document.getElementById('qtd-arquivos').value = parseInt(qtd) - 1;
-}
-
-function recarregaForm() {
-    document.getElementById("funcao").value = "novanoticia";
-    document.getElementById("id_noticia").value = 0;
-    document.getElementById("tabela").value = 0;
 }
