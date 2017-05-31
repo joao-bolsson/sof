@@ -5,6 +5,16 @@
  */
 
 $(function () {
+
+    var transfModal = $("#transferencia");
+    transfModal.on('shown.bs.modal', function () {
+        getSaldoOri();
+    });
+
+    transfModal.on('hidden.bs.modal', function () {
+        document.getElementById('formTransferencia').reset();
+    });
+
     $("#formTransferencia").submit(function (event) {
         event.preventDefault();
         var data = $(this).serialize();
@@ -48,3 +58,26 @@ $(function () {
     });
 
 });
+
+function putNumberFormat(value) {
+    $.post('../php/busca.php', {
+        users: 1,
+        form: 'number_format',
+        value: value
+    }).done(function (resposta) {
+        $('#saldoDispOri').html('Saldo disponível: R$ ' + resposta);
+    });
+}
+
+function getSaldoOri() {
+    var select = document.getElementById('transfOri');
+    var setorOri = select.options[select.selectedIndex].value;
+    $.post('../php/busca.php', {
+        admin: 1,
+        form: 'getSaldoOri',
+        setorOri: setorOri
+    }).done(function (resposta) {
+        putNumberFormat(resposta);
+        $("input[name='valor']", "#formTransferencia").attr('max', resposta);
+    });
+}

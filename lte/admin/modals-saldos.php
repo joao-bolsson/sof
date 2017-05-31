@@ -29,8 +29,7 @@
                     </div>
                     <div class="form-group">
                         <label>Setor Origem</label>
-                        <select class="form-control" name="ori" required
-                                onchange="getSaldoOri();">
+                        <select class="form-control" id="transfOri" name="ori" required>
                             <?= BuscaLTE::getOptionsSetores([2]); ?>
                         </select>
                         <p id="saldoDispOri" style="font-weight: bold;"></p>

@@ -67,3 +67,122 @@ $(function () {
 function abreModal(id_modal) {
     $(id_modal).modal();
 }
+
+function iniDataTable(tabela) {
+    if (tabela == '#tableItensPedido' || tabela == '#tableProcessos') {
+        $(tabela).DataTable({
+            "destroy": true,
+            "paging": true,
+            "lengthChange": true,
+            "searching": true,
+            "ordering": true,
+            "info": true,
+            "scrollX": true,
+            "columnDefs": [
+                {"width": "15%", "targets": 0},
+                {"width": "15%", "targets": 5}
+            ],
+            "lengthMenu": [5, 10, 25, 50, 100],
+            language: {
+                "decimal": "",
+                "emptyTable": "Nenhum dado na tabela",
+                "info": "_MAX_ resultados encontrados",
+                "infoEmpty": "",
+                "infoFiltered": "",
+                "infoPostFix": "",
+                "thousands": ",",
+                "lengthMenu": "Monstrando _MENU_ entradas",
+                "loadingRecords": "Carregando...",
+                "processing": "Processando...",
+                "search": "Pesquisar:",
+                "zeroRecords": "Nenhum resultado encontrado",
+                "paginate": {
+                    "first": "Primeiro",
+                    "last": "Último",
+                    "next": "Próximo",
+                    "previous": "Anterior"
+                },
+                "aria": {
+                    "sortAscending": ": activate to sort column ascending",
+                    "sortDescending": ": activate to sort column descending"
+                }
+            }
+        });
+    } else if (tabela == '#tableSolicitacoes') {
+        $(tabela).DataTable({
+            "destroy": true,
+            "paging": true,
+            "lengthChange": true,
+            "searching": true,
+            "ordering": true,
+            "order": [[2, "desc"]],
+            "info": true,
+            "autoWidth": true,
+            "columnDefs": [
+                {"width": "15%", "targets": 1}
+            ],
+            language: {
+                "decimal": "",
+                "emptyTable": "Nenhum dado na tabela",
+                "info": "_MAX_ resultados encontrados",
+                "infoEmpty": "",
+                "infoFiltered": "",
+                "infoPostFix": "",
+                "thousands": ",",
+                "lengthMenu": "Monstrando _MENU_ entradas",
+                "loadingRecords": "Carregando...",
+                "processing": "Processando...",
+                "search": "Pesquisar:",
+                "zeroRecords": "Nenhum resultado encontrado",
+                "paginate": {
+                    "first": "Primeiro",
+                    "last": "Último",
+                    "next": "Próximo",
+                    "previous": "Anterior"
+                },
+                "aria": {
+                    "sortAscending": ": activate to sort column ascending",
+                    "sortDescending": ": activate to sort column descending"
+                }
+            }
+        });
+        $(tabela).on('page.dt', function () {
+            selectAll(false);
+        }).DataTable();
+    } else {
+        $(tabela).DataTable({
+            "destroy": true,
+            "paging": true,
+            "lengthChange": true,
+            "searching": true,
+            "ordering": true,
+            "order": [[0, "desc"]],
+            "info": true,
+            "autoWidth": true,
+            language: {
+                "decimal": "",
+                "emptyTable": "Nenhum dado na tabela",
+                "info": "_MAX_ resultados encontrados",
+                "infoEmpty": "",
+                "infoFiltered": "",
+                "infoPostFix": "",
+                "thousands": ",",
+                "lengthMenu": "Monstrando _MENU_ entradas",
+                "loadingRecords": "Carregando...",
+                "processing": "Processando...",
+                "search": "Pesquisar:",
+                "zeroRecords": "Nenhum resultado encontrado",
+                "paginate": {
+                    "first": "Primeiro",
+                    "last": "Último",
+                    "next": "Próximo",
+                    "previous": "Anterior"
+                },
+                "aria": {
+                    "sortAscending": ": activate to sort column ascending",
+                    "sortDescending": ": activate to sort column descending"
+                }
+            }
+        });
+    }
+}
