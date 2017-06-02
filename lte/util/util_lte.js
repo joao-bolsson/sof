@@ -68,6 +68,196 @@ function abreModal(id_modal) {
     $(id_modal).modal();
 }
 
+function loadChecks() {
+    var elements = document.getElementsByName('checkPedRel');
+    var len = elements.length;
+    for (var i = 0; i < len; i++) {
+        var id_pedido = elements[i].value;
+        var id_e = 'checkPedRel' + id_pedido;
+        var input = document.getElementById(id_e);
+        if (input !== null) {
+            $('#' + id_e).iCheck('destroy');
+            $('#' + id_e).iCheck({
+                checkboxClass: 'icheckbox_flat-blue',
+                radioClass: 'iradio_flat-blue'
+            });
+            $('#' + id_e).on('ifChecked', function () {
+                pushOrRemove(this);
+                checkImp();
+            });
+            $('#' + id_e).on('ifUnchecked', function () {
+                pushOrRemove(this);
+                checkImp();
+            });
+        }
+    }
+}
+
+var pedidosRelCustom = [];
+
+function pushOrRemove(element) {
+    var len = pedidosRelCustom.length;
+    if (element.checked) {
+        console.log('push: ' + element.value);
+        // push the id on the array
+        if (len === 0) {
+            console.log('array vazio');
+            pedidosRelCustom.push(element.value);
+        } else {
+            console.log('array nao vazio -> procura por 0 e substitui');
+            for (var i = 0; i < len; i++) {
+                if (pedidosRelCustom[i] === 0) {
+                    console.log('achou zero, vai substituir');
+                    pedidosRelCustom[i] = element.value;
+                    return;
+                }
+            }
+            console.log('nao achou zero, faz o push');
+            pedidosRelCustom.push(element.value);
+        }
+    } else {
+        console.log('remove: ' + element.value);
+        // procura o id e substitui por zero
+        for (var i = 0; i < len; i++) {
+            if (pedidosRelCustom[i] === element.value) {
+                console.log('achou, substitui por zero');
+                pedidosRelCustom[i] = 0;
+                return;
+            }
+        }
+    }
+}
+
+function printChecks() {
+    $('#btnPrintCheck').blur();
+    var len = pedidosRelCustom.length;
+    var pedidos = [];
+    for (var i = 0; i < len; i++) {
+        if (pedidosRelCustom[i] !== 0) {
+            pedidos.push(pedidosRelCustom[i]);
+        } else {
+            console.log('zero');
+        }
+    }
+    if (pedidos.length < 1) {
+        console.log('nenhum pedido selecionado');
+        return;
+    }
+    $.post('../php/buscaLTE.php', {
+        admin: 1,
+        form: 'customRel',
+        pedidos: pedidos
+    }).done(function () {
+        window.open("../admin/printRelatorio.php");
+    });
+}
+
+function aprovGerencia() {
+    $('#btnAprovGeren').blur();
+    var len = pedidosRelCustom.length;
+    var pedidos = [];
+    var str = '[';
+    for (var i = 0; i < len; i++) {
+        if (pedidosRelCustom[i] !== 0) {
+            pedidos.push(pedidosRelCustom[i]);
+            str += '' + pedidosRelCustom[i];
+            if (i !== len - 1) {
+                str += ', ';
+            }
+        } else {
+            console.log('zero');
+        }
+    }
+    str += ']';
+    if (pedidos.length < 1) {
+        console.log('nenhum pedido selecionado');
+        return;
+    }
+
+    if (confirm('Os pedidos ' + str + ' serão sinalizados como Aprovado pela Gerência. Essa açao é irreversível. Prosseguir?')) {
+        $.post('../php/geral.php', {
+            admin: 1,
+            form: 'aprovaGeren',
+            pedidos: pedidos
+        }).done(function (resposta) {
+            console.log(resposta);
+            iniSolicitacoes(false, 0);
+        });
+    }
+    pedidosRelCustom = [];
+    checkImp();
+}
+
+function checkImp() {
+    var len = pedidosRelCustom.length;
+    var btn = document.getElementById('btnPrintCheck');
+    var btnAprov = document.getElementById('btnAprovGeren');
+    if (btn === null && btnAprov === null) {
+        return;
+    }
+    for (var i = 0; i < len; i++) {
+        if (pedidosRelCustom[i] !== 0) {
+            console.log('tem algum selecionado');
+            if (btn !== null) {
+                btn.disabled = false;
+            }
+            if (btnAprov !== null) {
+                btnAprov.disabled = false;
+            }
+            return;
+        }
+    }
+    console.log('nenhum selecionado');
+    if (btn !== null) {
+        btn.disabled = true;
+    }
+    if (btnAprov !== null) {
+        btnAprov.disabled = true;
+    }
+}
+
+function dropTableSolic(id_pedido) {
+    document.getElementById('overlayLoad').style.display = 'block';
+    var element = document.getElementById('conteudoSolicitacoes');
+    if (element.innerHTML.length > 0) {
+        $('#tableSolicitacoes').DataTable().destroy();
+    }
+    if (id_pedido !== null) {
+        console.log('is not null: ' + id_pedido);
+        var row = document.getElementById('rowPedido' + id_pedido);
+        if (row.parentNode) {
+            row.parentNode.removeChild(row);
+            console.log('removeu rowPedido' + id_pedido);
+        } else {
+            console.log('nao removeu');
+        }
+    } else {
+        console.log('is null: clear table');
+        document.getElementById('conteudoSolicitacoes').innerHTML = '';
+    }
+}
+
+function getIdsPedido() {
+    var element = document.getElementById('conteudoSolicitacoes');
+    var pedidos = [];
+    if (element === null) {
+        console.log('conteudoSolicitacoes nao existe');
+        return pedidos;
+    } else if (element.innerHTML.length == 0) {
+        console.log('tabela vazia');
+        return pedidos;
+    }
+    var rows = element.rows;
+    var len = rows.length;
+    console.log('rows: ' + len);
+    for (var i = 0; i < len; i++) {
+        var id = rows[i].id;
+        id = id.replace('rowPedido', '');
+        pedidos.push(id);
+    }
+    return pedidos;
+}
+
 function avisoSnack(aviso) {
     // Get the snackbar DIV
     var x = document.getElementById('snackbar');

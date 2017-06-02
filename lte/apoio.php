@@ -225,5 +225,6 @@ require_once '../defines.php';
 <!-- page script -->
 <script type="text/javascript" src="util/util_lte.min.js"></script>
 <script type="text/javascript" src="../iniLTE.min.js"></script>
+<script type="text/javascript" src="apoio/apoio.min.js"></script>
 </body>
 </html>

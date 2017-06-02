@@ -22,7 +22,8 @@ module.exports = function (grunt) {
                     'lte/solicitacoes/js/rows.min.js': ['lte/solicitacoes/js/rows.js'],
                     'lte/solicitacoes/js/modals-geral.min.js': ['lte/solicitacoes/js/modals-geral.js'],
                     'lte/util/util_lte.min.js': ['lte/util/util_lte.js'],
-                    'lte/posts/posts.min.js': ['lte/posts/posts.js']
+                    'lte/posts/posts.min.js': ['lte/posts/posts.js'],
+                    'lte/apoio/apoio.min.js': ['lte/apoio/apoio.js']
                 }
             }
         } // uglify
