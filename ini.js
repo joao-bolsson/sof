@@ -39,16 +39,6 @@ function abreModal(id_modal) {
     $(id_modal).modal();
 }
 
-function avisoSnack(aviso, corpo) {
-    $(corpo).snackbar({
-        content: aviso,
-        alive: 1500,
-        show: function () {
-            snackbarText++;
-        }
-    });
-}
-
 function aviso() {
     var tile = document.getElementById("aviso");
     if (tile.parentNode) {

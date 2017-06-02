@@ -68,6 +68,23 @@ function abreModal(id_modal) {
     $(id_modal).modal();
 }
 
+function avisoSnack(aviso) {
+    // Get the snackbar DIV
+    var x = document.getElementById('snackbar');
+    if (x === null) {
+        return;
+    }
+    x.innerHTML = aviso;
+
+    // Add the "show" class to DIV
+    x.className = 'show';
+
+    // After 3 seconds, remove the show class from DIV
+    setTimeout(function () {
+        x.className = x.className.replace('show', '');
+    }, 3000);
+}
+
 function iniDataTable(tabela) {
     if (tabela == '#tableItensPedido' || tabela == '#tableProcessos') {
         $(tabela).DataTable({

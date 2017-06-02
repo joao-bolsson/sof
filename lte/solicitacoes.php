@@ -173,7 +173,7 @@ $select_grupo = BuscaLTE::getOptionsGrupos($id_setor);
 <script type="text/javascript" src="util/util_lte.min.js"></script>
 <script type="text/javascript" src="../iniLTE.min.js"></script>
 <script type="text/javascript" src="solicitacoes/js/rows.min.js"></script>
-
+<script type="text/javascript" src="solicitacoes/js/modals-geral.min.js"></script>
 </body>
 </html>
 

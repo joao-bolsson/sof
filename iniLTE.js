@@ -327,23 +327,6 @@ function resetSystem() {
     }
 }
 
-function avisoSnack(aviso) {
-    // Get the snackbar DIV
-    var x = document.getElementById('snackbar');
-    if (x === null) {
-        return;
-    }
-    x.innerHTML = aviso;
-
-    // Add the "show" class to DIV
-    x.className = 'show';
-
-    // After 3 seconds, remove the show class from DIV
-    setTimeout(function () {
-        x.className = x.className.replace('show', '');
-    }, 3000);
-}
-
 function iniAdminSolicitacoes() {
     $.post('../php/busca.php', {
         admin: 1,
@@ -681,18 +664,6 @@ function undoFreeMoney(id_lancamento) {
     });
 }
 
-function refreshDataSaldo(id_setor) {
-    $.post('../php/busca.php', {
-        users: 1,
-        form: 'refreshTotSaldos',
-        id_setor: id_setor
-    }).done(function (resposta) {
-        var obj = jQuery.parseJSON(resposta);
-        $('#totIn').html(obj.entrada);
-        $('#totOut').html(obj.saida);
-    });
-}
-
 function listSolicAltPedidos() {
     if (!$.fn.DataTable.isDataTable('#tableListProcessos')) {
         $.post('../php/buscaLTE.php', {
@@ -812,18 +783,6 @@ function listPedidos() {
     } else {
         $('#listPedidos').modal('show');
     }
-}
-
-function listRascunhos() {
-    if (document.getElementById('tbodyListRascunhos').innerHTML.length === 0) {
-        $.post('../php/buscaLTE.php', {
-            users: 1,
-            form: 'listRascunhos'
-        }).done(function (resposta) {
-            $('#tbodyListRascunhos').html(resposta);
-        });
-    }
-    $('#listRascunhos').modal('show');
 }
 
 function iniTableSolicAdiant() {
@@ -1101,15 +1060,6 @@ function getNomeSetor(id_setor) {
     }).done(function (resposta) {
         document.getElementById("nomeSetorDet").innerHTML = resposta;
     });
-}
-
-function sleep(milliseconds) {
-    var start = new Date().getTime();
-    for (var i = 0; i < 1e7; i++) {
-        if ((new Date().getTime() - start) > milliseconds) {
-            break;
-        }
-    }
 }
 
 function deletePedido(id_pedido) {
