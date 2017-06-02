@@ -3,7 +3,7 @@
  * @author João Bolsson (joaovictorbolsson@gmail.com)
  * @since 2017, 27 May.
  */
-
+var statusSaldos = ['stabertos', 'staprovados', 'streprovado'];
 $(function () {
 
     var transfModal = $("#transferencia");
@@ -57,7 +57,47 @@ $(function () {
 
     });
 
+    for (var i = 0; i < statusSaldos.length; i++) {
+        var element = document.getElementById(statusSaldos[i]);
+        if (element !== null) {
+            var checkEl = $('#' + statusSaldos[i]);
+            checkEl.iCheck({
+                checkboxClass: 'icheckbox_minimal-blue',
+                radioClass: 'iradio_minimal-blue'
+            });
+            checkEl.on('ifChecked', function () {
+                iniTableSolicAdiant();
+            });
+        }
+    }
+
 });
+
+function mostraSolicAdiant() {
+    mostra('rowSolicAdi');
+    iniTableSolicAdiant();
+}
+
+function iniTableSolicAdiant() {
+    var st = null;
+    for (var i = 0; i < statusSaldos.length; i++) {
+        var element = document.getElementById(statusSaldos[i]);
+        if (element.checked) {
+            st = element.value;
+        }
+    }
+    $.post('../php/buscaLTE.php', {
+        admin: 1,
+        form: 'tableSolicitacoesAdiantamento',
+        status: st
+    }).done(function (resposta) {
+        if ($.fn.DataTable.isDataTable('#tableSolicitacoesAdiantamento')) {
+            $('#tableSolicitacoesAdiantamento').DataTable().destroy();
+        }
+        document.getElementById('conteudoSolicitacoesAdiantamento').innerHTML = resposta;
+        iniDataTable('#tableSolicitacoesAdiantamento');
+    });
+}
 
 function putNumberFormat(value) {
     $.post('../php/busca.php', {

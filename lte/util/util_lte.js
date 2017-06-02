@@ -275,6 +275,32 @@ function avisoSnack(aviso) {
     }, 3000);
 }
 
+function hideDivs() {
+    var divs = ['rowPedidos', 'rowDetPedido', 'rowSolicAdi', 'rowAltPed', 'rowCadRP'];
+    for (i = 0; i < divs.length; i++) {
+        var element = document.getElementById(divs[i]);
+        if (element !== null) {
+            element.style.display = 'none';
+        }
+    }
+}
+
+function mostra(row) {
+    hideDivs();
+    var div = document.getElementById(row);
+    if (div === null) {
+        console.log("Can't show element: is null");
+        return;
+    }
+    var display = div.style.display;
+    if (display === 'block') {
+        display = 'none';
+    } else {
+        display = 'block';
+    }
+    div.style.display = display;
+}
+
 function iniDataTable(tabela) {
     if (tabela == '#tableItensPedido' || tabela == '#tableProcessos') {
         $(tabela).DataTable({

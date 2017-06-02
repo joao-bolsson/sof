@@ -66,20 +66,6 @@ $(function () {
         tableItens = ta.innerHTML;
     }
 
-    var status = ['stabertos', 'staprovados', 'streprovado'];
-    for (var i = 0; i < status.length; i++) {
-        var element = document.getElementById(status[i]);
-        if (element !== null) {
-            $('#' + status[i]).iCheck({
-                checkboxClass: 'icheckbox_minimal-blue',
-                radioClass: 'iradio_minimal-blue'
-            });
-            $('#' + status[i]).on('ifChecked', function (event) {
-                iniTableSolicAdiant();
-            });
-        }
-    }
-
     for (var i = 2; i <= 10; i++) {
         // radios dos detalhes do pedido
         var element = document.getElementById('st' + i);
@@ -239,36 +225,11 @@ function enviaOrdenador(id_pedido) {
     }
 }
 
-function hideDivs() {
-    var divs = ['rowPedidos', 'rowDetPedido', 'rowSolicAdi', 'rowAltPed', 'rowCadRP'];
-    for (i = 0; i < divs.length; i++) {
-        var element = document.getElementById(divs[i]);
-        if (element !== null) {
-            element.style.display = 'none';
-        }
-    }
-}
-
-function mostra(row) {
-    hideDivs();
-    var display = document.getElementById(row).style.display;
-    if (display === 'block') {
-        display = 'none';
-    } else {
-        display = 'block';
-    }
-    document.getElementById(row).style.display = display;
-}
-
 function mostraPed() {
     $('button').blur();
     hideDivs();
     document.getElementById('rowPedidos').style.display = 'block';
     iniSolicitacoes(false, 0);
-}
-function mostraSolicAdiant() {
-    mostra('rowSolicAdi');
-    iniTableSolicAdiant();
 }
 
 function mostraSolicAltPed() {
@@ -584,28 +545,6 @@ function listPedidos() {
     } else {
         $('#listPedidos').modal('show');
     }
-}
-
-function iniTableSolicAdiant() {
-    var status = ['stabertos', 'staprovados', 'streprovado'];
-    var st = null;
-    for (var i = 0; i < status.length; i++) {
-        var element = document.getElementById(status[i]);
-        if (element.checked) {
-            st = element.value;
-        }
-    }
-    $.post('../php/buscaLTE.php', {
-        admin: 1,
-        form: 'tableSolicitacoesAdiantamento',
-        status: st
-    }).done(function (resposta) {
-        if ($.fn.DataTable.isDataTable('#tableSolicitacoesAdiantamento')) {
-            $('#tableSolicitacoesAdiantamento').DataTable().destroy();
-        }
-        document.getElementById('conteudoSolicitacoesAdiantamento').innerHTML = resposta;
-        iniDataTable('#tableSolicitacoesAdiantamento');
-    });
 }
 
 function iniTableSolicAltPed() {
