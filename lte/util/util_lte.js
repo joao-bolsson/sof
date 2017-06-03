@@ -62,7 +62,46 @@ $(function () {
             }
         });
     });
+
+    var id_e = 'checkPedRel';
+    var input = document.getElementById(id_e);
+    if (input !== null) {
+        var checkReq = $('#' + id_e);
+        checkReq.on('ifCreated', function () {
+            checkReq.iCheck('destroy');
+        });
+        checkReq.iCheck({
+            checkboxClass: 'icheckbox_flat-blue',
+            radioClass: 'iradio_flat-blue'
+        });
+        checkReq.on('ifChecked', function () {
+            selectAll(true);
+        });
+        checkReq.on('ifUnchecked', function () {
+            selectAll(false);
+        });
+    }
 });
+
+function selectAll(flag) {
+    var state = 'uncheck';
+    if (flag) {
+        state = 'check';
+    }
+    $('#checkPedRel').iCheck(state);
+    var element = document.getElementById('tableSolicitacoes');
+    if (element == null) {
+        console.log("tableSolicitacoes doesn't exists");
+        return;
+    }
+    var rows = element.rows;
+    var len = rows.length;
+    for (var i = 0; i < len; i++) {
+        var id = rows[i].id;
+        id = id.replace("rowPedido", "checkPedRel");
+        $('#' + id).iCheck(state);
+    }
+}
 
 function abreModal(id_modal) {
     $(id_modal).modal();
@@ -76,16 +115,17 @@ function loadChecks() {
         var id_e = 'checkPedRel' + id_pedido;
         var input = document.getElementById(id_e);
         if (input !== null) {
-            $('#' + id_e).iCheck('destroy');
-            $('#' + id_e).iCheck({
+            var check = $('#' + id_e);
+            check.iCheck('destroy');
+            check.iCheck({
                 checkboxClass: 'icheckbox_flat-blue',
                 radioClass: 'iradio_flat-blue'
             });
-            $('#' + id_e).on('ifChecked', function () {
+            check.on('ifChecked', function () {
                 pushOrRemove(this);
                 checkImp();
             });
-            $('#' + id_e).on('ifUnchecked', function () {
+            check.on('ifUnchecked', function () {
                 pushOrRemove(this);
                 checkImp();
             });
@@ -98,30 +138,23 @@ var pedidosRelCustom = [];
 function pushOrRemove(element) {
     var len = pedidosRelCustom.length;
     if (element.checked) {
-        console.log('push: ' + element.value);
         // push the id on the array
         if (len === 0) {
-            console.log('array vazio');
             pedidosRelCustom.push(element.value);
         } else {
-            console.log('array nao vazio -> procura por 0 e substitui');
             for (var i = 0; i < len; i++) {
                 if (pedidosRelCustom[i] === 0) {
-                    console.log('achou zero, vai substituir');
                     pedidosRelCustom[i] = element.value;
                     return;
                 }
             }
-            console.log('nao achou zero, faz o push');
             pedidosRelCustom.push(element.value);
         }
     } else {
-        console.log('remove: ' + element.value);
-        // procura o id e substitui por zero
-        for (var i = 0; i < len; i++) {
-            if (pedidosRelCustom[i] === element.value) {
-                console.log('achou, substitui por zero');
-                pedidosRelCustom[i] = 0;
+        // look for id and replace with zero
+        for (var j = 0; j < len; j++) {
+            if (pedidosRelCustom[j] === element.value) {
+                pedidosRelCustom[j] = 0;
                 return;
             }
         }
