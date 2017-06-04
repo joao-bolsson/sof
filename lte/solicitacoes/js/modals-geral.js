@@ -24,7 +24,31 @@ $(function () {
         $('#tbodySolicAltPedido').html("");
         $('#tableSolicAltPedido').DataTable().destroy();
     });
+
+    var modalAdi = $('#listAdiantamentos');
+
+    modalAdi.on('show.bs.modal', function () {
+        $.post('../php/buscaLTE.php', {
+            users: 1,
+            form: 'listAdiantamentos'
+        }).done(function (resposta) {
+            $('#tbodyListAdiantamentos').html(resposta);
+        });
+    });
+
+    modalAdi.on('shown.bs.modal', function () {
+        iniDataTable('#tableListAdiantamentos');
+    });
+
+    modalAdi.on('hidden.bs.modal', function () {
+        $('#tbodyListAdiantamentos').html("");
+        $('#tableListAdiantamentos').DataTable().destroy();
+    });
 });
+
+function listAdiantamentos() {
+    $('#listAdiantamentos').modal();
+}
 
 function listSolicAltPedidos() {
     $('#listSolicAltPedidos').modal();

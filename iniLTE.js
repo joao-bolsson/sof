@@ -77,21 +77,6 @@ $(function () {
         }
     }
 
-
-    status = ['stAltAbertos', 'stAltAprovados', 'stAltReprovado'];
-    for (var i = 0; i < status.length; i++) {
-        var element = document.getElementById(status[i]);
-        if (element !== null) {
-            $('#' + status[i]).iCheck({
-                checkboxClass: 'icheckbox_minimal-blue',
-                radioClass: 'iradio_minimal-blue'
-            });
-            $('#' + status[i]).on('ifChecked', function (event) {
-                iniTableSolicAltPed();
-            });
-        }
-    }
-
     status = ['stNormal', 'stPreferencial', 'stUrgente', 'stEmergencial', 'stRascunho'];
     for (var i = 0; i < status.length; i++) {
         var element = document.getElementById(status[i]);
@@ -145,12 +130,6 @@ $(function () {
     $('#listLancamentos').on('shown.bs.modal', function () {
         if (!$.fn.DataTable.isDataTable('#tableListLancamentos')) {
             iniDataTable('#tableListLancamentos');
-        }
-    });
-
-    $('#listAdiantamentos').on('shown.bs.modal', function () {
-        if (!$.fn.DataTable.isDataTable('#tableListAdiantamentos')) {
-            iniDataTable('#tableListAdiantamentos');
         }
     });
 
@@ -228,55 +207,6 @@ function loadMore() {
     iniSolicitacoes(true);
 }
 
-function iniSolicitacoes(flag, id_pedido) {
-    $(".date").inputmask("dd/mm/yyyy", {"placeholder": "dd/mm/yyyy"});
-    var element = document.getElementById('conteudoSolicitacoes');
-    if (element === null) {
-        return;
-    }
-    var load = document.getElementById('overlayLoad');
-    if (load !== null) {
-        load.style.display = 'block';
-    }
-    var limit1 = 0, limit2 = 0;
-    if (flag) {
-        var input = document.getElementById('limit1');
-        if (input !== null) {
-            limit1 = document.getElementById('limit1').value;
-            limit2 = document.getElementById('limit2').value;
-        }
-    } else if (id_pedido != 0) {
-        console.log('vai atualizar uma linha: ' + id_pedido);
-    } else if (id_pedido == 0) {
-        console.log('busca os últimos 100 pedidos');
-    }
-    if (element.innerHTML.length > 0) {
-        $('#tableSolicitacoes').DataTable().destroy();
-    }
-    var pedidos = getIdsPedido();
-    $.post('../php/buscaLTE.php', {
-        admin: 1,
-        form: 'tableItensPedido',
-        limit1: limit1,
-        limit2: limit2,
-        id_pedido: id_pedido,
-        pedidos: pedidos
-    }).done(function (resposta) {
-        if (resposta.length > 0) {
-            element.innerHTML += resposta;
-            loadChecks();
-        }
-        iniDataTable('#tableSolicitacoes');
-        if (load !== null) {
-            load.style.display = 'none';
-        }
-        var loadDetPed = document.getElementById('overlayLoadDetPed');
-        if (loadDetPed !== null) {
-            loadDetPed.style.display = 'none';
-        }
-    });
-}
-
 function listLancamentos(id_setor) {
     $('#listLancamentos').modal('show');
     if (id_setor != null) {
@@ -304,18 +234,6 @@ function listProcessos(permissao) {
         });
     }
     $('#listProcessos').modal('show');
-}
-
-function listAdiantamentos() {
-    if (!$.fn.DataTable.isDataTable('#tableListAdiantamentos')) {
-        $.post('../php/buscaLTE.php', {
-            users: 1,
-            form: 'listAdiantamentos'
-        }).done(function (resposta) {
-            $('#tbodyListAdiantamentos').html(resposta);
-        });
-    }
-    $('#listAdiantamentos').modal('show');
 }
 
 function verProcessos(pedido) {
@@ -391,29 +309,6 @@ function listPedidos() {
     } else {
         $('#listPedidos').modal('show');
     }
-}
-
-function iniTableSolicAltPed() {
-    var table = 'tableSolicAltPedido';
-    var status = ['stAltAbertos', 'stAltAprovados', 'stAltReprovado'];
-    var st = null;
-    for (var i = 0; i < status.length; i++) {
-        var element = document.getElementById(status[i]);
-        if (element.checked) {
-            st = element.value;
-        }
-    }
-    $.post('../php/buscaLTE.php', {
-        admin: 1,
-        form: 'iniTableSolicAltPed',
-        status: st
-    }).done(function (resposta) {
-        if ($.fn.DataTable.isDataTable('#' + table)) {
-            $('#' + table).DataTable().destroy();
-        }
-        document.getElementById('contSolicAltPedido').innerHTML = resposta;
-        iniDataTable('#' + table);
-    });
 }
 
 function analisaAdi(id, acao) {

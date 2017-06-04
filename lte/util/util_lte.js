@@ -107,6 +107,55 @@ function abreModal(id_modal) {
     $(id_modal).modal();
 }
 
+function iniSolicitacoes(flag, id_pedido) {
+    $(".date").inputmask("dd/mm/yyyy", {"placeholder": "dd/mm/yyyy"});
+    var element = document.getElementById('conteudoSolicitacoes');
+    if (element === null) {
+        return;
+    }
+    var load = document.getElementById('overlayLoad');
+    if (load !== null) {
+        load.style.display = 'block';
+    }
+    var limit1 = 0, limit2 = 0;
+    if (flag) {
+        var input = document.getElementById('limit1');
+        if (input !== null) {
+            limit1 = document.getElementById('limit1').value;
+            limit2 = document.getElementById('limit2').value;
+        }
+    } else if (id_pedido != 0) {
+        console.log('vai atualizar uma linha: ' + id_pedido);
+    } else if (id_pedido == 0) {
+        console.log('busca os últimos 100 pedidos');
+    }
+    if (element.innerHTML.length > 0) {
+        $('#tableSolicitacoes').DataTable().destroy();
+    }
+    var pedidos = getIdsPedido();
+    $.post('../php/buscaLTE.php', {
+        admin: 1,
+        form: 'tableItensPedido',
+        limit1: limit1,
+        limit2: limit2,
+        id_pedido: id_pedido,
+        pedidos: pedidos
+    }).done(function (resposta) {
+        if (resposta.length > 0) {
+            element.innerHTML += resposta;
+            loadChecks();
+        }
+        iniDataTable('#tableSolicitacoes');
+        if (load !== null) {
+            load.style.display = 'none';
+        }
+        var loadDetPed = document.getElementById('overlayLoadDetPed');
+        if (loadDetPed !== null) {
+            loadDetPed.style.display = 'none';
+        }
+    });
+}
+
 function loadChecks() {
     var elements = document.getElementsByName('checkPedRel');
     var len = elements.length;
