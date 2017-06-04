@@ -81,6 +81,29 @@ $(function () {
             selectAll(false);
         });
     }
+
+    var checkSiafi = document.getElementById('checkSaifi');
+    if (checkSiafi !== null) {
+        $('#checkSaifi').iCheck({
+            checkboxClass: 'icheckbox_minimal-blue',
+            radioClass: 'iradio_minimal-blue'
+        });
+    }
+
+    var status = ['stNormal', 'stPreferencial', 'stUrgente', 'stEmergencial', 'stRascunho'];
+    for (var i = 0; i < status.length; i++) {
+        var element = document.getElementById(status[i]);
+        if (element !== null) {
+            var checkSt = $('#' + status[i]);
+            checkSt.iCheck({
+                checkboxClass: 'icheckbox_minimal-blue',
+                radioClass: 'iradio_minimal-blue'
+            });
+            if (i === status.length - 1) {
+                checkSt.iCheck('check');
+            }
+        }
+    }
 });
 
 function selectAll(flag) {

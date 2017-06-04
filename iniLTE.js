@@ -66,39 +66,6 @@ $(function () {
         tableItens = ta.innerHTML;
     }
 
-    for (var i = 2; i <= 10; i++) {
-        // radios dos detalhes do pedido
-        var element = document.getElementById('st' + i);
-        if (element !== null) {
-            $('#st' + i).iCheck({
-                checkboxClass: 'icheckbox_minimal-blue',
-                radioClass: 'iradio_minimal-blue'
-            });
-        }
-    }
-
-    status = ['stNormal', 'stPreferencial', 'stUrgente', 'stEmergencial', 'stRascunho'];
-    for (var i = 0; i < status.length; i++) {
-        var element = document.getElementById(status[i]);
-        if (element !== null) {
-            $('#' + status[i]).iCheck({
-                checkboxClass: 'icheckbox_minimal-blue',
-                radioClass: 'iradio_minimal-blue'
-            });
-            if (i === status.length - 1) {
-                $('#' + status[i]).iCheck('check');
-            }
-        }
-    }
-
-    element = document.getElementById('checkSaifi');
-    if (element !== null) {
-        $('#checkSaifi').iCheck({
-            checkboxClass: 'icheckbox_minimal-blue',
-            radioClass: 'iradio_minimal-blue'
-        });
-    }
-
     // TODO: mover infoItem para outro js
     $('#infoItem').on('shown.bs.modal', function () {
         $(".date").inputmask("dd/mm/yyyy", {"placeholder": "dd/mm/yyyy"});

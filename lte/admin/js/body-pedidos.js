@@ -27,6 +27,17 @@ $(function () {
             });
         }
     }
+
+    for (var j = 2; j <= 10; j++) {
+        // radios dos detalhes do pedido
+        var checkStDetPed = document.getElementById('st' + j);
+        if (checkStDetPed !== null) {
+            $('#st' + j).iCheck({
+                checkboxClass: 'icheckbox_minimal-blue',
+                radioClass: 'iradio_minimal-blue'
+            });
+        }
+    }
 });
 
 function iniTableSolicAltPed() {
