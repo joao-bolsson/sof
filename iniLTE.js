@@ -66,12 +66,12 @@ $(function () {
         tableItens = ta.innerHTML;
     }
 
-    // TODO: mover infoItem para outro js
-    $('#infoItem').on('shown.bs.modal', function () {
+    var modalInfoItem = $('#infoItem');
+    modalInfoItem.on('shown.bs.modal', function () {
         $(".date").inputmask("dd/mm/yyyy", {"placeholder": "dd/mm/yyyy"});
     });
 
-    $('#infoItem').on('hidden.bs.modal', function () {
+    modalInfoItem.on('hidden.bs.modal', function () {
         document.getElementById('id').value = 0;
         document.getElementById('formEditRegItem').reset();
     });
@@ -79,12 +79,6 @@ $(function () {
     $('#listProcessos').on('shown.bs.modal', function () {
         if (!$.fn.DataTable.isDataTable('#tableListProcessos')) {
             iniDataTable('#tableListProcessos');
-        }
-    });
-
-    $('#listPedidos').on('shown.bs.modal', function () {
-        if (!$.fn.DataTable.isDataTable('#tableListPedidos')) {
-            iniDataTable('#tableListPedidos');
         }
     });
 
@@ -226,50 +220,6 @@ function getIdsRequest() {
         pedidos.push(id);
     }
     return pedidos;
-}
-
-function loadMoreRequests() {
-    document.getElementById('overlayLoad').style.display = 'block';
-    var limit1 = 0, limit2 = 0;
-    var input = document.getElementById('limit1');
-    if (input !== null) {
-        limit1 = document.getElementById('limit1').value;
-        limit2 = document.getElementById('limit2').value;
-    }
-    var element = document.getElementById('tbodyListPedidos');
-    if (element.innerHTML.length > 0) {
-        $('#tableListPedidos').DataTable().destroy();
-    }
-    var pedidos = getIdsRequest();
-    $.post('../php/buscaLTE.php', {
-        users: 1,
-        form: 'listPedidos',
-        limit1: limit1,
-        limit2: limit2,
-        pedidos: pedidos
-    }).done(function (resposta) {
-        if (resposta.length > 0) {
-            element.innerHTML += resposta;
-        }
-        iniDataTable('#tableListPedidos');
-    });
-    $('button').blur();
-    $('#loadMoreCustom').modal('hide');
-    document.getElementById('overlayLoad').style.display = 'none';
-}
-
-function listPedidos() {
-    if (document.getElementById('tbodyListPedidos').innerHTML.length === 0) {
-        $.post('../php/buscaLTE.php', {
-            users: 1,
-            form: 'listPedidos'
-        }).done(function (resposta) {
-            $('#tbodyListPedidos').html(resposta);
-            $('#listPedidos').modal('show');
-        });
-    } else {
-        $('#listPedidos').modal('show');
-    }
 }
 
 function analisaAdi(id, acao) {
