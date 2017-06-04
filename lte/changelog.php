@@ -58,7 +58,7 @@ require_once __DIR__ . '/../vendor/erusev/parsedown/Parsedown.php';
     <![endif]-->
 </head>
 <!-- ADD THE CLASS layout-top-nav TO REMOVE THE SIDEBAR. -->
-<body class="hold-transition skin-blue layout-top-nav" onload="refreshPage()">
+<body class="hold-transition skin-blue layout-top-nav">
 <div class="wrapper">
 
     <header class="main-header">
@@ -123,8 +123,8 @@ require_once __DIR__ . '/../vendor/erusev/parsedown/Parsedown.php';
                     </div>
                     <div class="box-body">
                         <?php
-                            $parseDown = new Parsedown();
-                            echo $parseDown->text(file_get_contents(__DIR__ . '/../CHANGELOG.md'));
+                        $parseDown = new Parsedown();
+                        echo $parseDown->text(file_get_contents(__DIR__ . '/../CHANGELOG.md'));
                         ?>
                     </div><!-- ./box-body -->
                 </div>
@@ -145,44 +145,9 @@ require_once __DIR__ . '/../vendor/erusev/parsedown/Parsedown.php';
         </div>
         <!-- /.container -->
     </footer>
-    <div class="modal fade" id="myInfos" role="dialog" tabindex="-1">
-        <div class="modal-dialog" style="width: 40%;">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
-                                aria-hidden="true">&times;</span></button>
-                    <h4 class="modal-title">Informações do Usuário</h4>
-                </div>
-                <form id="altInfo" action="javascript:altInfoUser();" method="post">
-                    <div class="modal-body">
-                        <div class="form-group">
-                            <label>Nome</label>
-                            <input class="form-control" id="nameUser" name="nameUser" type="text"
-                                   value="<?= $_SESSION['nome'] ?>" required>
-                        </div>
-                        <div class="form-group">
-                            <label>E-mail</label>
-                            <input class="form-control" id="emailUser" name="emailUser" type="email"
-                                   value="<?= $_SESSION['email'] ?>" required>
-                        </div>
-                        <div class="form-group">
-                            <label>Senha Atual</label>
-                            <input class="form-control" id="senhaAtualUser" name="senhaAtualUser" type="password"
-                                   required>
-                        </div>
-                        <div class="form-group">
-                            <label>Nova Senha</label>
-                            <input class="form-control" id="senhaUser" name="senhaUser" type="password" required>
-                        </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button class="btn btn-primary" type="submit" style="width: 100%;"><i class="fa fa-refresh"></i>&nbsp;Atualizar
-                        </button>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
+    <?php
+    include_once "util/modals-util.php";
+    ?>
 </div>
 <!-- ./wrapper -->
 
@@ -209,8 +174,6 @@ require_once __DIR__ . '/../vendor/erusev/parsedown/Parsedown.php';
 
 <!-- page script -->
 <script type="text/javascript" src="util/util_lte.min.js"></script>
-<script type="text/javascript" src="../iniLTE.min.js"></script>
-<script type="text/javascript" src="../hora.min.js"></script>
 </body>
 </html>
 

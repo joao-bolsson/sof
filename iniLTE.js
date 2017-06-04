@@ -237,18 +237,6 @@ function analisaSolicAlt(id_solic, id_pedido, acao) {
     });
 }
 
-function resetSystem() {
-    confirm = confirm('Resetar o sistema para o estado original?');
-    if (confirm) {
-        $.post('../php/geral.php', {
-            admin: 1,
-            form: 'resetSystem'
-        }).done(function () {
-            location.reload();
-        });
-    }
-}
-
 function iniAdminSolicitacoes() {
     $.post('../php/busca.php', {
         admin: 1,

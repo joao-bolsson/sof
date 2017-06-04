@@ -174,6 +174,7 @@ require_once '../defines.php';
         include_once "hora/modals-admin.php";
     }
     include_once "hora/modals-geral.php";
+    include_once "util/modals-util.php";
     ?>
 </div>
 <!-- ./wrapper -->
@@ -202,7 +203,7 @@ require_once '../defines.php';
 <!-- page script -->
 <script type="text/javascript" src="util/util_lte.min.js"></script>
 <script type="text/javascript" src="../iniLTE.min.js"></script>
-<script type="text/javascript" src="../hora.min.js"></script>
+<script type="text/javascript" src="hora/js/hora.min.js"></script>
 </body>
 </html>
 

@@ -254,6 +254,7 @@ if (Busca::isActive()) {
                 }
                 echo Geral::enviaOrdenador($id_pedido);
                 break;
+
             case 'enviaFontes':
                 $id_pedido = filter_input(INPUT_POST, 'id_pedido');
                 $fonte = filter_input(INPUT_POST, 'fonte');
@@ -261,12 +262,7 @@ if (Busca::isActive()) {
                 $plano = filter_input(INPUT_POST, 'plano');
                 echo Geral::cadastraFontes($id_pedido, $fonte, $ptres, $plano);
                 break;
-            case 'resetSystem':
-                if ($_SESSION['login'] == 'joao') {
-                    Geral::resetSystem();
-                }
-                break;
-            // comment.
+
             case 'editItem':
                 $fields = filter_input(INPUT_POST, 'fields', FILTER_DEFAULT, FILTER_FORCE_ARRAY);
                 $dados = filter_input(INPUT_POST, 'dados', FILTER_DEFAULT, FILTER_FORCE_ARRAY);

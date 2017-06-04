@@ -95,11 +95,6 @@ $permissao = BuscaLTE::getPermissoes($_SESSION["id"]);
             <?php endif; ?>
             <?php if ($_SESSION['login'] == 'joao'): ?>
                 <li>
-                    <a href="javascript:resetSystem();">
-                        <i class="fa fa-exclamation-circle"></i> <span>Resetar</span>
-                    </a>
-                </li>
-                <li>
                     <a href="javascript:listProblemas();">
                         <i class="fa fa-warning"></i> <span>Problemas</span>
                     </a>

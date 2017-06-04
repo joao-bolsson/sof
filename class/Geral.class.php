@@ -357,22 +357,6 @@ final class Geral {
     }
 
     /**
-     *    Função para resetar o sistema para o estado orinal
-     */
-    public static function resetSystem() {
-        $tables = ['comentarios', 'itens_pedido', 'pedido_empenho', 'pedido_fonte', 'processos', 'saldo_setor', 'saldos_adiantados', 'saldos_lancamentos', 'saldos_transferidos', 'solic_alt_pedido', 'itens', 'licitacao', 'pedido_grupo', 'pedido_log_status', 'pedido_contrato', 'pedido'];
-
-        $len = count($tables);
-        for ($i = 0; $i < $len; $i++) {
-            $tb = $tables[$i];
-            // DELETE
-            Query::getInstance()->exe('DELETE FROM ' . $tb);
-            // ALTER TABLE
-            Query::getInstance()->exe('ALTER TABLE ' . $tb . ' AUTO_INCREMENT = 1');
-        }
-    }
-
-    /**
      *    Função para os usuários relatarem problemas no site.
      */
     public static function insereProblema(int $id_setor, string $assunto, string $descricao) {

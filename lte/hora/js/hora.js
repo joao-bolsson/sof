@@ -16,10 +16,11 @@ $(function () {
             language: 'pt-BR'
         });
     });
-    $('#registerAdmin').on('shown.bs.modal', function () {
+    var modalAdmin = $('#registerAdmin');
+    modalAdmin.on('shown.bs.modal', function () {
         loadAdminTable();
     });
-    $('#registerAdmin').on('hidden.bs.modal', function () {
+    modalAdmin.on('hidden.bs.modal', function () {
         $('#tableRegisters').DataTable().destroy();
         $('#tbodyAdminTool').html('');
     });
@@ -50,7 +51,7 @@ function iniDataTable(tabela) {
         "lengthChange": true,
         "searching": true,
         "ordering": true,
-        "order": [[1, "desc"]],
+        "order": [[1, "asc"]],
         "info": true,
         "autoWidth": true,
         language: {

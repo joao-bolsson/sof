@@ -12,7 +12,7 @@ module.exports = function (grunt) {
                 files: {
                     'ini.min.js': ['ini.js'],
                     'iniLTE.min.js': ['iniLTE.js'],
-                    'hora.min.js': ['hora.js'],
+                    'lte/hora/js/hora.min.js': ['lte/hora/js/hora.js'],
                     'lte/admin/js/admin.min.js': ['lte/admin/js/admin.js'],
                     'lte/admin/js/modals-pedidos.min.js': ['lte/admin/js/modals-pedidos.js'],
                     'lte/admin/js/saldos.min.js': ['lte/admin/js/saldos.js'],
