@@ -77,20 +77,30 @@ $permissao = BuscaLTE::getPermissoes($_SESSION["id"]);
                 </li>
             <?php endif; ?>
             <?php if ($_SESSION['login'] == 'joao' || $_SESSION['login'] == 'iara'): ?>
-                <li>
-                    <a href="javascript:abreModal('#altUser');">
-                        <i class="fa fa-user"></i> <span>Alterar Usuário</span>
+                <li class="treeview">
+                    <a href="#">
+                        <i class="fa fa-users"></i> <span>Usuários</span>
+                        <span class="pull-right-container">
+                            <small class="label pull-right bg-blue">Novo</small>
+                        </span>
                     </a>
-                </li>
-                <li>
-                    <a href="javascript:abreModal('#cadUser');">
-                        <i class="fa fa-user-plus"></i> <span>Adicionar Usuário</span>
-                    </a>
-                </li>
-                <li>
-                    <a href="javascript:abreModal('#manageUsers');">
-                        <i class="fa fa-user-times"></i> <span>Desativar Usuário</span>
-                    </a>
+                    <ul class="treeview-menu">
+                        <li>
+                            <a href="javascript:abreModal('#altUser');">
+                                <i class="fa fa-user"></i> <span>Alterar Usuário</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="javascript:abreModal('#cadUser');">
+                                <i class="fa fa-user-plus"></i> <span>Adicionar Usuário</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="javascript:abreModal('#manageUsers');">
+                                <i class="fa fa-user-times"></i> <span>Desativar Usuário</span>
+                            </a>
+                        </li>
+                    </ul>
                 </li>
             <?php endif; ?>
             <?php if ($_SESSION['login'] == 'joao'): ?>
