@@ -151,12 +151,6 @@ $(function () {
         }
     });
 
-    $('#listSolicAltPedidos').on('shown.bs.modal', function () {
-        if (!$.fn.DataTable.isDataTable('#tableSolicAltPedido')) {
-            iniDataTable('#tableSolicAltPedido');
-        }
-    });
-
     $('#listLancamentos').on('shown.bs.modal', function () {
         if (!$.fn.DataTable.isDataTable('#tableListLancamentos')) {
             iniDataTable('#tableListLancamentos');
@@ -312,18 +306,6 @@ function listLancamentos(id_setor) {
     if (id_setor != null) {
         changeSetor(id_setor);
     }
-}
-
-function listSolicAltPedidos() {
-    if (!$.fn.DataTable.isDataTable('#tableListProcessos')) {
-        $.post('../php/buscaLTE.php', {
-            users: 1,
-            form: 'iniSolicAltPedSetor'
-        }).done(function (resposta) {
-            $('#tbodySolicAltPedido').html(resposta);
-        });
-    }
-    $('#listSolicAltPedidos').modal();
 }
 
 function listProcessos(permissao) {
