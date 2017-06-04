@@ -94,23 +94,6 @@ function relListUsers() {
     window.open("../admin/printRelatorio.php?relatorio=1&tipo=users");
 }
 
-function enviaOrdenador(id_pedido) {
-    if (confirm("Mudar o status do pedido para \"Enviado ao Ordenador\"?")) {
-        dropTableSolic(id_pedido);
-        $.post('../php/geral.php', {
-            admin: 1,
-            form: 'enviaOrdenador',
-            id_pedido: id_pedido
-        }).done(function (resposta) {
-            if (resposta) {
-                iniSolicitacoes(false, id_pedido);
-            } else {
-                alert('Ocorreu um erro no servidor. Contate o administrador.');
-            }
-        });
-    }
-}
-
 function mostraPed() {
     $('button').blur();
     hideDivs();
@@ -121,24 +104,6 @@ function mostraPed() {
 function mostraSolicAltPed() {
     mostra('rowAltPed');
     iniTableSolicAltPed();
-}
-
-function analisaSolicAlt(id_solic, id_pedido, acao) {
-    $.post('../php/geral.php', {
-        admin: 1,
-        form: 'analisaSolicAlt',
-        id_solic: id_solic,
-        id_pedido: id_pedido,
-        acao: acao
-    }).done(function (resposta) {
-        if (resposta == false) {
-            alert(resposta);
-            window.location.href = 'index.php';
-        } else {
-            iniSolicitacoes(false, 0);
-            iniTableSolicAltPed();
-        }
-    });
 }
 
 function iniAdminSolicitacoes() {
@@ -189,17 +154,6 @@ function listProcessos(permissao) {
         });
     }
     $('#listProcessos').modal('show');
-}
-
-function verProcessos(pedido) {
-    $.post('../php/busca.php', {
-        admin: 1,
-        form: 'verProcessos',
-        id_pedido: pedido
-    }).done(function (resposta) {
-        $('#tbodyListProcessos').html(resposta);
-        abreModal('#listProcessos');
-    });
 }
 
 function getIdsRequest() {

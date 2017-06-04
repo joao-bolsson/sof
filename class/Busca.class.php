@@ -133,25 +133,6 @@ final class Busca {
     }
 
     /**
-     * Function to return the process that is in the requests with its due dates
-     *
-     * @param int $request Request id.
-     * @return string A table with teh process and its informations.
-     */
-    public static function getProcessosPedido(int $request): string {
-        $query = Query::getInstance()->exe('SELECT DISTINCT itens.num_processo, itens.dt_fim FROM itens, itens_pedido WHERE itens_pedido.id_pedido = ' . $request . ' AND itens_pedido.id_item = itens.id');
-        $table = new Table('', '', array(), false);
-        while ($process = $query->fetch_object()) {
-            $row = new Row();
-            $row->addColumn(new Column($process->num_processo));
-            $row->addColumn(new Column($process->dt_fim));
-
-            $table->addRow($row);
-        }
-        return $table;
-    }
-
-    /**
      * Function to return the reported problems.
      *
      * @return string Rows to put in a table that shows the problems.

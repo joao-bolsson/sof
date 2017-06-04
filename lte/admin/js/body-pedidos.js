@@ -40,6 +40,41 @@ $(function () {
     }
 });
 
+function enviaOrdenador(id_pedido) {
+    if (confirm("Mudar o status do pedido para \"Enviado ao Ordenador\"?")) {
+        dropTableSolic(id_pedido);
+        $.post('../php/geral.php', {
+            admin: 1,
+            form: 'enviaOrdenador',
+            id_pedido: id_pedido
+        }).done(function (resposta) {
+            if (resposta) {
+                iniSolicitacoes(false, id_pedido);
+            } else {
+                alert('Ocorreu um erro no servidor. Contate o administrador.');
+            }
+        });
+    }
+}
+
+function analisaSolicAlt(id_solic, id_pedido, acao) {
+    $.post('../php/geral.php', {
+        admin: 1,
+        form: 'analisaSolicAlt',
+        id_solic: id_solic,
+        id_pedido: id_pedido,
+        acao: acao
+    }).done(function (resposta) {
+        if (resposta == false) {
+            alert(resposta);
+            window.location.href = 'index.php';
+        } else {
+            iniSolicitacoes(false, 0);
+            iniTableSolicAltPed();
+        }
+    });
+}
+
 function iniTableSolicAltPed() {
     var table = 'tableSolicAltPedido';
     var st = null;

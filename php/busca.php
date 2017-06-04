@@ -47,11 +47,6 @@ if (!is_null($admin) && isset($_SESSION['id_setor']) && ($_SESSION['id_setor'] =
             echo Busca::getInfoTime();
             break;
 
-        case 'verProcessos':
-            $id_pedido = filter_input(INPUT_POST, 'id_pedido');
-            echo Busca::getProcessosPedido($id_pedido);
-            break;
-
         case 'listProblemas':
             echo Busca::getProblemas();
             break;
