@@ -277,7 +277,7 @@
         </div>
     </div>
 </div>
-<div aria-hidden="true" class="modal fade" id="alt_pedido" role="dialog" tabindex="-1" data-backdrop="static">
+<div aria-hidden="true" class="modal fade" id="alt_pedido" role="dialog" tabindex="-1">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">

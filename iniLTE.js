@@ -307,27 +307,6 @@ function iniSolicitacoes(flag, id_pedido) {
     });
 }
 
-function formEnvia() {
-    var id_pedido = document.getElementById("id_pedido_alt").value;
-    var justificativa = document.getElementById("justificativa_alt_ped").value;
-    $.post('../php/geral.php', {
-        users: 1,
-        form: 'alt_pedido',
-        id_pedido: id_pedido,
-        justificativa: justificativa
-    }).done(function (resposta) {
-        // Quando terminada a requisição
-        alert(resposta);
-        $('#alt_pedido').modal('hide');
-    });
-}
-
-function solicAltPed(id_pedido) {
-    document.getElementById('id_pedido_alt').value = id_pedido;
-    abreModal('#alt_pedido');
-    $('#div-lb-high').addClass('control-highlight');
-}
-
 function refreshSaldo() {
     $.post('../php/busca.php', {
         admin: 1,
