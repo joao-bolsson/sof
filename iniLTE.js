@@ -124,15 +124,6 @@ $(function () {
         document.getElementById('formEditRegItem').reset();
     });
 
-    $('#transferencia').on('shown.bs.modal', function () {
-        var id_dest = document.getElementById('transfDest').value;
-        fillTransfSource(id_dest);
-    });
-
-    $('#transferencia').on('shown.bs.modal', function () {
-        $('.select2').select2();
-    });
-
     $('#listProcessos').on('shown.bs.modal', function () {
         if (!$.fn.DataTable.isDataTable('#tableListProcessos')) {
             iniDataTable('#tableListProcessos');
@@ -167,21 +158,6 @@ $(function () {
 
 function relListUsers() {
     window.open("../admin/printRelatorio.php?relatorio=1&tipo=users");
-}
-
-function fillTransfSource(id_dest) {
-    $.post('../php/busca.php', {
-        admin: 1,
-        form: 'fillTransfSource',
-        id: id_dest
-    }, function (resposta) {
-        $('#transfSource').html(resposta);
-        $("#transfSource").select2();
-    });
-}
-
-function changeTransfDest(element) {
-    fillTransfSource(element.value);
 }
 
 function enviaOrdenador(id_pedido) {

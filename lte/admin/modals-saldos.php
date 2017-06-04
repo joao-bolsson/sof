@@ -7,7 +7,7 @@
  */
 
 ?>
-<div aria-hidden="true" class="modal fade" id="transferencia" role="dialog">
+<div aria-hidden="true" class="modal fade" id="transferencia" role="dialog" tabindex="-1">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">

@@ -9,6 +9,8 @@ $(function () {
     var transfModal = $("#transferencia");
     transfModal.on('shown.bs.modal', function () {
         getSaldoOri();
+        var id_dest = document.getElementById('transfDest').value;
+        fillTransfSource(id_dest);
     });
 
     transfModal.on('hidden.bs.modal', function () {
@@ -72,6 +74,24 @@ $(function () {
     }
 
 });
+
+function fillTransfSource(id_dest) {
+    $.post('../php/busca.php', {
+        admin: 1,
+        form: 'fillTransfSource',
+        id: id_dest
+    }, function (resposta) {
+        var selectSource = $('#transfSource');
+        selectSource.html(resposta);
+        $(".select2", "#transferencia").select2({
+            dropdownParent: $("#transferencia")
+        });
+    });
+}
+
+function changeTransfDest(element) {
+    fillTransfSource(element.value);
+}
 
 function mostraSolicAdiant() {
     mostra('rowSolicAdi');
