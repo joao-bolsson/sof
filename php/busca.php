@@ -61,10 +61,6 @@ if (!is_null($admin) && isset($_SESSION['id_setor']) && ($_SESSION['id_setor'] =
             echo Busca::getSaldo($id_setor);
             break;
 
-        case 'refreshSaldo':
-            echo Busca::getSaldo($_SESSION['id_setor']);
-            break;
-
         case 'infoItem':
             $id_item = filter_input(INPUT_POST, 'id_item');
             echo Busca::getInfoItem($id_item);

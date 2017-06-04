@@ -307,52 +307,11 @@ function iniSolicitacoes(flag, id_pedido) {
     });
 }
 
-function refreshSaldo() {
-    $.post('../php/busca.php', {
-        admin: 1,
-        form: 'refreshSaldo'
-    }).done(function (resposta) {
-        document.getElementById('labelSaldoSOF').innerHTML = 'Saldo disponível: R$ ' + resposta;
-    });
-}
-
 function listLancamentos(id_setor) {
     $('#listLancamentos').modal('show');
     if (id_setor != null) {
         changeSetor(id_setor);
     }
-}
-
-function changeSetor(id_setor) {
-    var el = document.getElementById('selectSetor');
-    var setor = (el !== null) ? el.value : id_setor;
-    $.post('../php/buscaLTE.php', {
-        users: 1,
-        form: 'listLancamentos',
-        id_setor: setor
-    }).done(function (resposta) {
-        if (document.getElementById('tbodyListLancamentos').innerHTML.length > 0) {
-            $('#tableListLancamentos').DataTable().destroy();
-        }
-        $('#tbodyListLancamentos').html(resposta);
-        if (id_setor == null) {
-            iniDataTable('#tableListLancamentos');
-        }
-    });
-    if (id_setor == null) {
-        refreshDataSaldo(setor);
-    }
-}
-
-function undoFreeMoney(id_lancamento) {
-    console.log("Undo free money: " + id_lancamento);
-    $.post('../php/geral.php', {
-        admin: 1,
-        form: 'undoFreeMoney',
-        id_lancamento: id_lancamento
-    }).done(function () {
-        location.reload();
-    });
 }
 
 function listSolicAltPedidos() {
