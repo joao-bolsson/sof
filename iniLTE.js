@@ -115,12 +115,6 @@ $(function () {
         }
     });
 
-    $('#listRascunhos').on('shown.bs.modal', function () {
-        if (!$.fn.DataTable.isDataTable('#tableListRascunhos')) {
-            iniDataTable('#tableListRascunhos');
-        }
-    });
-
     $('#listPedidos').on('shown.bs.modal', function () {
         if (!$.fn.DataTable.isDataTable('#tableListPedidos')) {
             iniDataTable('#tableListPedidos');
@@ -541,28 +535,6 @@ function getNomeSetor(id_setor) {
     }).done(function (resposta) {
         document.getElementById("nomeSetorDet").innerHTML = resposta;
     });
-}
-
-function deletePedido(id_pedido) {
-    var confirma = confirm('Todos os registros referentes à esse pedido serão excluído do sistema para economizar espaço ;) Deseja prosseguir?');
-    if (!confirma) {
-        return;
-    }
-    $.post('../php/geral.php', {
-        users: 1,
-        form: 'deletePedido',
-        id_pedido: id_pedido
-    }).done(function (resposta) {
-        if (resposta != "true") {
-            alert(resposta);
-        } else {
-            avisoSnack('Pedido deletado com sucesso !');
-            $('#tableListRascunhos').DataTable().destroy();
-            $('#tbodyListRascunhos').html('');
-        }
-    });
-    $('button').blur();
-    $('#listRascunhos').modal('hide');
 }
 
 function getStatus(id_pedido, id_setor) {

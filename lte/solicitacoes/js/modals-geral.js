@@ -44,7 +44,49 @@ $(function () {
         $('#tbodyListAdiantamentos').html("");
         $('#tableListAdiantamentos').DataTable().destroy();
     });
+
+    var modalRascunhos = $('#listRascunhos');
+
+    modalRascunhos.on('show.bs.modal', function () {
+        $.post('../php/buscaLTE.php', {
+            users: 1,
+            form: 'listRascunhos'
+        }).done(function (resposta) {
+            $('#tbodyListRascunhos').html(resposta);
+        });
+    });
+
+    modalRascunhos.on('shown.bs.modal', function () {
+        iniDataTable('#tableListRascunhos');
+    });
+
+    modalRascunhos.on('hidden.bs.modal', function () {
+        $('#tbodyListRascunhos').html("");
+        $('#tableListRascunhos').DataTable().destroy();
+    })
 });
+
+function deletePedido(id_pedido) {
+    var confirma = confirm('Todos os registros referentes à esse pedido serão excluído do sistema para economizar espaço ;) Deseja prosseguir?');
+    if (!confirma) {
+        return;
+    }
+    $.post('../php/geral.php', {
+        users: 1,
+        form: 'deletePedido',
+        id_pedido: id_pedido
+    }).done(function (resposta) {
+        if (resposta != "true") {
+            alert(resposta);
+        } else {
+            avisoSnack('Pedido deletado com sucesso !');
+            $('#tableListRascunhos').DataTable().destroy();
+            $('#tbodyListRascunhos').html('');
+        }
+    });
+    $('button').blur();
+    $('#listRascunhos').modal('hide');
+}
 
 function listAdiantamentos() {
     $('#listAdiantamentos').modal();
@@ -55,15 +97,7 @@ function listSolicAltPedidos() {
 }
 
 function listRascunhos() {
-    if (document.getElementById('tbodyListRascunhos').innerHTML.length === 0) {
-        $.post('../php/buscaLTE.php', {
-            users: 1,
-            form: 'listRascunhos'
-        }).done(function (resposta) {
-            $('#tbodyListRascunhos').html(resposta);
-        });
-    }
-    $('#listRascunhos').modal('show');
+    $('#listRascunhos').modal();
 }
 
 /**
