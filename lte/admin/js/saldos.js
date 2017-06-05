@@ -164,23 +164,23 @@ function undoFreeMoney(id_lancamento) {
     });
 }
 
-function changeSetor(id_setor) {
-    var el = document.getElementById('selectSetor');
-    var setor = (el !== null) ? el.value : id_setor;
-    $.post('../php/buscaLTE.php', {
-        users: 1,
-        form: 'listLancamentos',
-        id_setor: setor
-    }).done(function (resposta) {
-        if (document.getElementById('tbodyListLancamentos').innerHTML.length > 0) {
+function analisaAdi(id, acao) {
+    $('a').blur();
+    var aprova;
+    if (acao) {
+        aprova = confirm("O setor receberá o valor adiantado e terá esse mesmo valor descontado no próximo mês, estando sujeito à ficar com saldo negativo.\n\nDeseja continuar?");
+    } else {
+        aprova = confirm("A solicitação de adiantamento será reprovada e o saldo do setor não será alterado.\n\nDeseja continuar?");
+    }
+    if (aprova) {
+        $.post('../php/geral.php', {
+            admin: 1,
+            form: 'aprovaAdi',
+            id: id,
+            acao: acao
+        }).done(function () {
             $('#tableListLancamentos').DataTable().destroy();
-        }
-        $('#tbodyListLancamentos').html(resposta);
-        if (id_setor == null) {
-            iniDataTable('#tableListLancamentos');
-        }
-    });
-    if (id_setor == null) {
-        refreshDataSaldo(setor);
+            iniTableSolicAdiant();
+        });
     }
 }

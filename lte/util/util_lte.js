@@ -130,6 +130,27 @@ function abreModal(id_modal) {
     $(id_modal).modal();
 }
 
+function changeSetor(id_setor) {
+    var el = document.getElementById('selectSetor');
+    var setor = (el !== null) ? el.value : id_setor;
+    $.post('../php/buscaLTE.php', {
+        users: 1,
+        form: 'listLancamentos',
+        id_setor: setor
+    }).done(function (resposta) {
+        if (document.getElementById('tbodyListLancamentos').innerHTML.length > 0) {
+            $('#tableListLancamentos').DataTable().destroy();
+        }
+        $('#tbodyListLancamentos').html(resposta);
+        if (id_setor == null) {
+            iniDataTable('#tableListLancamentos');
+        }
+    });
+    if (id_setor == null) {
+        refreshDataSaldo(setor);
+    }
+}
+
 function iniSolicitacoes(flag, id_pedido) {
     $(".date").inputmask("dd/mm/yyyy", {"placeholder": "dd/mm/yyyy"});
     var element = document.getElementById('conteudoSolicitacoes');

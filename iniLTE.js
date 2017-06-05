@@ -176,27 +176,6 @@ function getIdsRequest() {
     return pedidos;
 }
 
-function analisaAdi(id, acao) {
-    $('a').blur();
-    var aprova;
-    if (acao) {
-        aprova = confirm("O setor receberá o valor adiantado e terá esse mesmo valor descontado no próximo mês, estando sujeito à ficar com saldo negativo.\n\nDeseja continuar?");
-    } else {
-        aprova = confirm("A solicitação de adiantamento será reprovada e o saldo do setor não será alterado.\n\nDeseja continuar?");
-    }
-    if (aprova) {
-        $.post('../php/geral.php', {
-            admin: 1,
-            form: 'aprovaAdi',
-            id: id,
-            acao: acao
-        }).done(function () {
-            $('#tableListLancamentos').DataTable().destroy();
-            iniTableSolicAdiant();
-        });
-    }
-}
-
 function checkItemPedido(id_item, vl_unitario, qt_saldo) {
     var qtd_item = document.getElementById('qtd' + id_item).value;
     var itens = document.getElementsByClassName('classItens');
