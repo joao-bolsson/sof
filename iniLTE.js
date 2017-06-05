@@ -76,12 +76,6 @@ $(function () {
         document.getElementById('formEditRegItem').reset();
     });
 
-    $('#listProcessos').on('shown.bs.modal', function () {
-        if (!$.fn.DataTable.isDataTable('#tableListProcessos')) {
-            iniDataTable('#tableListProcessos');
-        }
-    });
-
     $('#listLancamentos').on('shown.bs.modal', function () {
         if (!$.fn.DataTable.isDataTable('#tableListLancamentos')) {
             iniDataTable('#tableListLancamentos');
@@ -128,28 +122,6 @@ function listLancamentos(id_setor) {
     }
 }
 
-function listProcessos(permissao) {
-    if (document.getElementById('tbodyListProcessos').innerHTML.length > 0) {
-        $('#tableListProcessos').DataTable().destroy();
-    }
-    if (permissao == 'users') {
-        $.post('../php/buscaLTE.php', {
-            users: 1,
-            form: 'listProcessos'
-        }).done(function (resposta) {
-            $('#tbodyListProcessos').html(resposta);
-        });
-    } else if (permissao == 'admin') {
-        $.post('../php/buscaLTE.php', {
-            admin: 1,
-            form: 'listProcessos'
-        }).done(function (resposta) {
-            $('#tbodyListProcessos').html(resposta);
-        });
-    }
-    $('#listProcessos').modal('show');
-}
-
 function showInformation(table, column, id) {
     $.post('../php/buscaLTE.php', {
         users: 1,
@@ -167,23 +139,7 @@ function viewCompl(texto) {
     $('#viewCompl').modal();
 }
 
-function pesquisarProcesso(busca) {
-    document.getElementById('overlayLoad').style.display = 'block';
-    console.log(busca);
-    $('#listProcessos').modal('hide');
-    $.post('../php/buscaLTE.php', {
-        users: 1,
-        form: 'pesquisarProcesso',
-        busca: busca
-    }).done(function (resposta) {
-        $('#tableProcessos').DataTable().destroy();
-        $('#conteudoProcesso').html(resposta);
-        iniDataTable('#tableProcessos');
-        document.getElementById('numProc').innerHTML = busca;
-        document.getElementById('overlayLoad').style.display = 'none';
-        avisoSnack('Busca Realizada com Sucesso !');
-    });
-}
+// até aqui, ok
 
 function btnPesquisa() {
     if (document.getElementById("pesquisa").style.display == "" ||

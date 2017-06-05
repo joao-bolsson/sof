@@ -104,7 +104,57 @@ $(function () {
             }
         }
     }
+
+    var modalListProcessos = $('#listProcessos');
+    modalListProcessos.on('shown.bs.modal', function () {
+        console.log('show proc');
+        iniDataTable('#tableListProcessos');
+    });
+
+    modalListProcessos.on('hidden.bs.modal', function () {
+        console.log('hidden proc');
+        $('#tbodyListProcessos').html("");
+        $('#tableListProcessos').DataTable().destroy();
+    });
+
 });
+
+function listProcessos(permissao) {
+    if (permissao == 'users') {
+        $.post('../php/buscaLTE.php', {
+            users: 1,
+            form: 'listProcessos'
+        }).done(function (resposta) {
+            $('#tbodyListProcessos').html(resposta);
+        });
+    } else if (permissao == 'admin') {
+        $.post('../php/buscaLTE.php', {
+            admin: 1,
+            form: 'listProcessos'
+        }).done(function (resposta) {
+            $('#tbodyListProcessos').html(resposta);
+        });
+    }
+    $('#listProcessos').modal('show');
+}
+
+function pesquisarProcesso(busca) {
+    document.getElementById('overlayLoad').style.display = 'block';
+    console.log(busca);
+    $('#listProcessos').modal('hide');
+    $.post('../php/buscaLTE.php', {
+        users: 1,
+        form: 'pesquisarProcesso',
+        busca: busca
+    }).done(function (resposta) {
+        $('#tableProcessos').DataTable().destroy();
+        $('#conteudoProcesso').html(resposta);
+        iniDataTable('#tableProcessos');
+        document.getElementById('numProc').innerHTML = busca;
+        document.getElementById('overlayLoad').style.display = 'none';
+        avisoSnack('Busca Realizada com Sucesso !');
+    });
+}
 
 function selectAll(flag) {
     var state = 'uncheck';
