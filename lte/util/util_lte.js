@@ -119,6 +119,20 @@ $(function () {
 
 });
 
+function imprimir(id_pedido) {
+    $('button').blur();
+    if (id_pedido == 0) {
+        id_pedido = document.getElementById("pedido").value;
+    }
+    $.post('../php/buscaLTE.php', {
+        users: 1,
+        form: 'imprimirPedido',
+        id_pedido: id_pedido
+    }).done(function () {
+        window.open("../view/printPedido.php");
+    });
+}
+
 function listProcessos(permissao) {
     if (permissao == 'users') {
         $.post('../php/buscaLTE.php', {
