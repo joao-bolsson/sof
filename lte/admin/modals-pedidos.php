@@ -242,19 +242,7 @@
                             aria-hidden="true">&times;</span></button>
                 <h4 class="modal-title">Informações do Item</h4>
             </div>
-            <form id="formEditRegItem" action="../php/geral.php" method="POST">
-                <input id="id" type="hidden" name="id" value="0"/>
-                <input type="hidden" name="form" value="formEditRegItem"/>
-                <input type="hidden" name="admin" value="1"/>
-                <div class="modal-body">
-                    <?php include_once 'formItem.html' ?>
-                </div>
-                <div class="modal-footer">
-                    <button class="btn btn-primary" type="submit" style="width: 100%;"><i
-                                class="fa fa-refresh"></i>&nbsp;Atualizar
-                    </button>
-                </div>
-            </form>
+            <?php include_once __DIR__ . "/../util/formEditRegItem.php"; ?>
         </div>
     </div>
 </div>

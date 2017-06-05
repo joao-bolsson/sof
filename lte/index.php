@@ -200,8 +200,11 @@ if ($_SESSION['login'] == 'joao' || $_SESSION['login'] == 'iara') {
     echo "<script type=\"text/javascript\" src=\"admin/js/admin.min.js\"></script>";
 }
 if ($permissao->pedidos) {
-    echo "<script type=\"text/javascript\" src=\"admin/js/modals-pedidos.min.js\"></script>";
-    echo "<script type=\"text/javascript\" src=\"admin/js/body-pedidos.min.js\"></script>";
+    echo "
+        <script type=\"text/javascript\" src=\"admin/js/modals-pedidos.min.js\"></script>
+        <script type=\"text/javascript\" src=\"admin/js/body-pedidos.min.js\"></script>
+        <script type=\"text/javascript\" src=\"util/editMode.min.js\"></script>
+    ";
 }
 
 if ($permissao->saldos) {

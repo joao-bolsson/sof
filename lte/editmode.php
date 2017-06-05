@@ -179,18 +179,7 @@ if (!isset($_SESSION['editmode'])) {
                     <h4 class="modal-title">Informações do Item</h4>
                 </div>
                 <span id="editmode" style="display: none;"></span>
-                <form id="formEditRegItem" action="../php/geral.php" method="POST">
-                    <input id="id" type="hidden" name="id" value="0"/>
-                    <input type="hidden" name="form" value="formEditRegItem"/>
-                    <input type="hidden" name="admin" value="1"/>
-                    <div class="modal-body">
-                        <?php include_once 'formItem.html' ?>
-                    </div>
-                    <div class="modal-footer">
-                        <button class="btn btn-primary" type="submit" style="width: 100%;"><i class="fa fa-refresh"></i>&nbsp;Atualizar / Cadastrar
-                        </button>
-                    </div>
-                </form>
+                <?php include_once "util/formEditRegItem.php"; ?>
             </div>
         </div>
     </div>
@@ -239,6 +228,7 @@ if (!isset($_SESSION['editmode'])) {
 <!-- page script -->
 <script type="text/javascript" src="util/util_lte.min.js"></script>
 <script type="text/javascript" src="../iniLTE.min.js"></script>
+<script type="text/javascript" src="util/editMode.min.js"></script>
 </body>
 </html>
 

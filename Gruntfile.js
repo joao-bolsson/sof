@@ -22,6 +22,7 @@ module.exports = function (grunt) {
                     'lte/solicitacoes/js/rows.min.js': ['lte/solicitacoes/js/rows.js'],
                     'lte/solicitacoes/js/modals-geral.min.js': ['lte/solicitacoes/js/modals-geral.js'],
                     'lte/util/util_lte.min.js': ['lte/util/util_lte.js'],
+                    'lte/util/editMode.min.js': ['lte/util/editMode.js'],
                     'lte/posts/posts.min.js': ['lte/posts/posts.js'],
                     'lte/apoio/apoio.min.js': ['lte/apoio/apoio.js']
                 }
