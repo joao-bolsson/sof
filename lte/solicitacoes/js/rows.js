@@ -169,6 +169,88 @@ function limpaTelaSolic() {
     $('button').blur();
 }
 
+function checkItemPedido(id_item, vl_unitario, qt_saldo) {
+    var qtd_item = document.getElementById('qtd' + id_item).value;
+    var itens = document.getElementsByClassName('classItens');
+    for (var i = 0; i < itens.length; i++) {
+        if (itens[i].value == id_item) {
+            avisoSnack('Esse item já está contido no pedido. Verifique!');
+            return;
+        }
+    }
+    if (qtd_item <= 0) {
+        document.getElementById("qtd" + id_item).style.border = "0.12em solid red";
+        document.getElementById("qtd" + id_item).focus();
+    } else {
+        //limpando os campos
+        document.getElementById("qtd" + id_item).style.border = "none";
+        document.getElementById("qtd" + id_item).value = "";
+        //verifica se a qtd solicitada está disponível
+        if (qtd_item > qt_saldo) {
+            avisoSnack('QUANTIDADE INDISPONÍVEL !');
+        } else {
+            var valor = parseFloat(qtd_item * vl_unitario).toFixed(3);
+            var total_pedido = document.getElementById('total_hidden').value;
+            total_pedido += valor;
+            saldo_total = parseFloat(document.getElementById("saldo_total").value);
+            if (valor > saldo_total) {
+                avisoSnack('SALDO INSUFICIENTE !');
+            } else {
+                addItemPedido(id_item, qtd_item, vl_unitario);
+            }
+        }
+    }
+}
+
+function addItemPedido(id_item, qtd, vl_unitario) {
+    //valor do pedido
+    var valor = qtd * vl_unitario;
+    var t = document.getElementById('total_hidden').value;
+    var total = parseFloat(t) + parseFloat(valor);
+    document.getElementById('total_hidden').value = parseFloat(total).toFixed(3);
+    var tot_str = parseFloat(total).toFixed(3);
+    $.post('../php/busca.php', {
+        users: 1,
+        form: 'number_format',
+        value: tot_str
+    }).done(function (resposta) {
+        document.getElementById('total').value = "R$ " + resposta;
+    });
+    //saldo
+    var s = document.getElementById('saldo_total').value;
+    var saldo_total = parseFloat(s) - parseFloat(valor);
+    document.getElementById('saldo_total').value = parseFloat(saldo_total).toFixed(3);
+    $('#text_saldo_total').html('R$ ' + parseFloat(saldo_total).toFixed(3));
+    $.post('../php/buscaLTE.php', {
+        users: 1,
+        form: 'addItemPedido',
+        id_item: id_item,
+        qtd: qtd
+    }).done(function (resposta) {
+        var conteudoPedido = document.getElementById('conteudoPedido').innerHTML;
+        $('#conteudoPedido').html(conteudoPedido + resposta);
+        avisoSnack('Item Inserido ao Pedido !');
+    });
+}
+
+function removeTableRow(id_item, valor) {
+    //valor do pedido
+    var t = document.getElementById('total_hidden').value;
+    var total = parseFloat(t) - parseFloat(valor);
+    document.getElementById('total_hidden').value = parseFloat(total).toFixed(3);
+    document.getElementById('total').value = "R$ " + parseFloat(total).toFixed(3);
+    //saldo
+    var s = document.getElementById('saldo_total').value;
+    var saldo_total = parseFloat(s) + parseFloat(valor);
+    document.getElementById('saldo_total').value = parseFloat(saldo_total).toFixed(3);
+    document.getElementById('text_saldo_total').innerHTML = "R$ " + parseFloat(saldo_total).toFixed(3);
+    var row = document.getElementById("row" + id_item);
+    if (row.parentNode) {
+        row.parentNode.removeChild(row);
+    }
+    avisoSnack('Item Removido do Pedido !');
+}
+
 function editaPedido(id_pedido) {
     limpaTelaSolic();
     $.post('../php/busca.php', {

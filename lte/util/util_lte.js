@@ -151,6 +151,12 @@ function changeSetor(id_setor) {
     }
 }
 
+function loadMore() {
+    $('button').blur();
+    $('#loadMoreCustom').modal('hide');
+    iniSolicitacoes(true);
+}
+
 function iniSolicitacoes(flag, id_pedido) {
     $(".date").inputmask("dd/mm/yyyy", {"placeholder": "dd/mm/yyyy"});
     var element = document.getElementById('conteudoSolicitacoes');

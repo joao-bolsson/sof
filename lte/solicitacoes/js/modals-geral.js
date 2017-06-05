@@ -91,6 +91,26 @@ function listPedidos() {
     $('#listPedidos').modal();
 }
 
+function getIdsRequest() {
+    var element = document.getElementById('tbodyListPedidos');
+    var pedidos = [];
+    if (element === null) {
+        console.log('tbodyListPedidos nao existe');
+        return pedidos;
+    } else if (element.innerHTML.length == 0) {
+        console.log('tabela vazia');
+        return pedidos;
+    }
+    var rows = element.rows;
+    var len = rows.length;
+    for (var i = 0; i < len; i++) {
+        var id = rows[i].id;
+        id = id.replace('ped', '');
+        pedidos.push(id);
+    }
+    return pedidos;
+}
+
 /**
  * Action do formulário para carregar mais pedidos (Meus Pedidos).
  */
