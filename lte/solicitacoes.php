@@ -19,7 +19,7 @@ require_once '../defines.php';
 $id_setor = $_SESSION["id_setor"];
 $saldo_total = Busca::getSaldo($id_setor);
 $pedidos_em_analise = BuscaLTE::getPedidosAnalise($id_setor);
-$select_grupo = BuscaLTE::getOptionsGrupos($id_setor);
+
 ?>
 <!DOCTYPE html>
 <html>

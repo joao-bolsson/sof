@@ -233,6 +233,17 @@ final class BuscaLTE {
         return $return;
     }
 
+    public static function getOptionsSources(int $id_sector): string {
+        $query = Query::getInstance()->exe("SELECT id, valor, fonte_recurso, ptres FROM saldo_fonte WHERE id_setor = " . $id_sector);
+        $options = "";
+        if ($query->num_rows > 0) {
+            while ($obj = $query->fetch_object()) {
+                $options .= "<option value=\"" . $obj->id . "\">" . $obj->fonte_recurso . ' (R$ ' . $obj->valor . '</option>';
+            }
+        }
+        return $options;
+    }
+
     /**
      * Function that build the rows of a table with the the bidding options to make a request
      *

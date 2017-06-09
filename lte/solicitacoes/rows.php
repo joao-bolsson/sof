@@ -5,6 +5,9 @@
  * @author João Bolsson (joaovictorbolsson@gmail.com).
  * @since 2017, 25 May.
  */
+
+$select_grupo = BuscaLTE::getOptionsGrupos($_SESSION["id_setor"]);
+$select_sources = BuscaLTE::getOptionsSources($_SESSION["id_setor"]);
 ?>
 <div class="row">
     <div class="col-xs-12">
@@ -13,7 +16,7 @@
                 <h3 class="box-title">Itens do Processo: <span id="numProc">--------------------</span></h3>
                 <div class="box-tools pull-right">
                     <button type="button" class="btn btn-box-tool" data-widget="collapse"><i
-                            class="fa fa-minus"></i>
+                                class="fa fa-minus"></i>
                     </button>
                 </div>
             </div><!-- /.box-header -->
@@ -47,11 +50,11 @@
         <div class="box box-primary">
             <div class="box-header">
                 <h3 class="box-title">Pedido | SALDO <span
-                        id="text_saldo_total">R$ <?= number_format($saldo_total, 3, ',', '.'); ?></span>
+                            id="text_saldo_total">R$ <?= number_format($saldo_total, 3, ',', '.'); ?></span>
                 </h3>
                 <div class="box-tools pull-right">
                     <button type="button" class="btn btn-box-tool" data-widget="collapse"><i
-                            class="fa fa-minus"></i>
+                                class="fa fa-minus"></i>
                     </button>
                 </div>
             </div><!-- /.box-header -->
@@ -147,6 +150,15 @@
                             </select>
                         </div>
                     <?php endif ?>
+                    <?php if (strlen($select_sources) > 0): ?>
+                        <h2>Fonte de Recurso</h2>
+                        <div class="form-group">
+                            <label>Selecione a fonte</label>
+                            <select id="source" class="form-control select2" name="fonte" required>
+                                <?= $select_sources ?>
+                            </select>
+                        </div>
+                    <?php endif ?>
                     <div class="form-group">
                         <input class="minimal" id="checkPedContr" name="pedidoContrato" type="checkbox">
                         Pedido de Contrato
@@ -166,7 +178,7 @@
                             onclick="limpaTelaSolic();"><i class="fa fa-close"></i>&nbsp;Limpar
                     </button>
                     <button class="btn btn-primary" type="submit" style="width: 50%;"><i
-                            class="fa fa-send"></i>&nbsp;Enviar Pedido / Salvar Rascunho
+                                class="fa fa-send"></i>&nbsp;Enviar Pedido / Salvar Rascunho
                     </button>
                 </div>
             </form>
