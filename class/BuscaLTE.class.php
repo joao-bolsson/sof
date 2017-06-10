@@ -238,7 +238,7 @@ final class BuscaLTE {
         $options = "";
         if ($query->num_rows > 0) {
             while ($obj = $query->fetch_object()) {
-                $options .= "<option value=\"" . $obj->id . "\">" . $obj->fonte_recurso . ' (R$ ' . $obj->valor . '</option>';
+                $options .= "<option value=\"" . $obj->id . "\">" . $obj->fonte_recurso . ' (R$ ' . $obj->valor . ')</option>';
             }
         }
         return $options;
