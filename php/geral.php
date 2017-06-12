@@ -666,6 +666,12 @@ if (Busca::isActive()) {
                 if (empty($total_pedido)) {
                     exit("Pedido zerado. Esse pedido não será inserido no sistema. Volte e recarregue a página.");
                 }
+
+                $id_fonte = filter_input(INPUT_POST, 'fonte');
+                if (!Busca::hasSourcesForRequest($id_fonte, $total_pedido)) {
+                    exit("Erro: O Saldo da fonte selecionada não é suficiente para realizar o pedido.");
+                }
+
                 $saldo_total = filter_input(INPUT_POST, 'saldo_total');
                 $prioridade = filter_input(INPUT_POST, 'st');
                 $obs = filter_input(INPUT_POST, 'obs');

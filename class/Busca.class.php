@@ -22,6 +22,17 @@ final class Busca {
         // empty
     }
 
+    public static function hasSourcesForRequest(int $id_fonte, string $value): bool {
+        $query = Query::getInstance()->exe("SELECT valor FROM saldo_fonte WHERE id = " . $id_fonte);
+        if ($query->num_rows > 0) {
+            $obj = $query->fetch_object();
+            if ($value < $obj->valor) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     public static function getSources(int $id): string {
         $query = Query::getInstance()->exe("SELECT id, valor, fonte_recurso, ptres, plano_interno FROM saldo_fonte WHERE id_setor = " . $id);
         $opt = "";
