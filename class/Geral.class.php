@@ -25,6 +25,25 @@ final class Geral {
         // empty
     }
 
+    public static function insertRequestSources(int $id_pedido, int $id_fonte) {
+        $query_vl = Query::getInstance()->exe("SELECT valor FROM pedido WHERE id = " . $id_pedido);
+        $query_vlF = Query::getInstance()->exe("SELECT valor FROM saldo_fonte WHERE id = " . $id_fonte);
+        if ($query_vl->num_rows > 0 && $query_vlF->num_rows > 0) {
+            $vl_pedido = $query_vl->fetch_object()->valor;
+            $vl_fonte = $query_vlF->fetch_object()->valor;
+
+            $vl_fonte -= $vl_pedido;
+
+            Query::getInstance()->exe("UPDATE saldo_fonte SET valor = '" . $vl_fonte . "' WHERE id = " . $id_fonte);
+
+            $sql = new SQLBuilder(SQLBuilder::$INSERT);
+            $sql->setTables(["pedido_id_fonte"]);
+            $sql->setValues([NULL, $id_pedido, $id_fonte]);
+
+            Query::getInstance()->exe($sql->__toString());
+        }
+    }
+
     /**
      * Função usada para recolhimento de saldo dos demais setores para o SOF.
      *

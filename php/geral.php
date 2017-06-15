@@ -668,8 +668,10 @@ if (Busca::isActive()) {
                 }
 
                 $id_fonte = filter_input(INPUT_POST, 'fonte');
-                if (!Busca::hasSourcesForRequest($id_fonte, $total_pedido)) {
-                    exit("Erro: O Saldo da fonte selecionada não é suficiente para realizar o pedido.");
+                if (!is_null($id_fonte)) {
+                    if (!Busca::hasSourcesForRequest($id_fonte, $total_pedido)) {
+                        exit("Erro: O Saldo da fonte selecionada não é suficiente para realizar o pedido.");
+                    }
                 }
 
                 $saldo_total = filter_input(INPUT_POST, 'saldo_total');
@@ -728,6 +730,8 @@ if (Busca::isActive()) {
                     }
                 }
                 Geral::insertPedContr($pedido, $tipo_cont, $siafi);
+
+                Geral::insertRequestSources($pedido, $id_fonte);
 
                 header("Location: ../lte/solicitacoes.php");
                 break;
