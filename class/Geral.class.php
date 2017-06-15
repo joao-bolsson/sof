@@ -25,23 +25,34 @@ final class Geral {
         // empty
     }
 
-    public static function insertRequestSources(int $id_pedido, int $id_fonte) {
+    public static function insertRequestSources(int $id_pedido, int $id_fonte, int $prioridade) {
         $query_vl = Query::getInstance()->exe("SELECT valor FROM pedido WHERE id = " . $id_pedido);
         $query_vlF = Query::getInstance()->exe("SELECT valor FROM saldo_fonte WHERE id = " . $id_fonte);
-        if ($query_vl->num_rows > 0 && $query_vlF->num_rows > 0) {
-            $vl_pedido = $query_vl->fetch_object()->valor;
-            $vl_fonte = $query_vlF->fetch_object()->valor;
 
+        if ($query_vl->num_rows < 1 || $query_vlF->num_rows < 1) {
+            exit("Erro ao inserir as fonte de recurso.");
+        }
+
+        $vl_pedido = $query_vl->fetch_object()->valor;
+        $vl_fonte = $query_vlF->fetch_object()->valor;
+
+        if (self::existsSources($id_pedido)) {
+            // deleta a fonte atual: garante a edição corretamente
+            Query::getInstance()->exe("DELETE FROM pedido_id_fonte WHERE id_pedido = " . $id_pedido);
+        }
+
+        if ($prioridade != 5) { // rascunho, o saldo da fonte não deve ser alterado
             $vl_fonte -= $vl_pedido;
 
             Query::getInstance()->exe("UPDATE saldo_fonte SET valor = '" . $vl_fonte . "' WHERE id = " . $id_fonte);
-
-            $sql = new SQLBuilder(SQLBuilder::$INSERT);
-            $sql->setTables(["pedido_id_fonte"]);
-            $sql->setValues([NULL, $id_pedido, $id_fonte]);
-
-            Query::getInstance()->exe($sql->__toString());
         }
+
+        // associa a fonte ao pedido
+        $sql = new SQLBuilder(SQLBuilder::$INSERT);
+        $sql->setTables(["pedido_id_fonte"]);
+        $sql->setValues([NULL, $id_pedido, $id_fonte]);
+
+        Query::getInstance()->exe($sql->__toString());
     }
 
     /**
@@ -925,6 +936,10 @@ final class Geral {
                 Query::getInstance()->exe("INSERT INTO saldos_lancamentos VALUES(NULL, {$id_setor}, '{$hoje}', '-{$total_pedido}', 4);");
                 // próxima fase
                 $fase++;
+                // não precisa cadastrar fontes, elas já estão cadastradas
+                if (self::existsSources($id_pedido)) {
+                    $fase++;
+                }
             }
             $saldo_setor = number_format($saldo_setor, 3, '.', '');
             Query::getInstance()->exe("UPDATE saldo_setor SET saldo = '{$saldo_setor}' WHERE id_setor = {$id_setor};");
@@ -938,6 +953,12 @@ final class Geral {
             Query::getInstance()->exe("INSERT INTO comentarios VALUES(NULL, {$id_pedido}, '{$hoje}', {$prioridade}, {$fase}, '{$obj_tot->valor}', '{$comentario}');");
         }
         return true;
+    }
+
+    private static function existsSources(int $id_request): bool {
+        $query = Query::getInstance()->exe("SELECT * FROM pedido_id_fonte WHERE id_pedido = " . $id_request);
+
+        return $query->num_rows > 0;
     }
 
     /**

@@ -116,6 +116,15 @@ final class Busca {
         return $return;
     }
 
+    public static function getInfoSources(int $id_request) {
+        $query = Query::getInstance()->exe("SELECT id_fonte FROM pedido_id_fonte WHERE id_pedido = " . $id_request);
+        if ($query->num_rows > 0) {
+            return $query->fetch_object()->id_fonte;
+        }
+        Logger::error("Get info sources returning 0: impossible");
+        return 0;
+    }
+
     public static function getInfoContrato(int $id_request) {
         $query = Query::getInstance()->exe('SELECT pedido.pedido_contrato, pedido_contrato.id_tipo, pedido_contrato.siafi FROM pedido, pedido_contrato WHERE pedido.id = pedido_contrato.id_pedido AND pedido.id = ' . $id_request);
         if ($query->num_rows < 1) {

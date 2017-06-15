@@ -106,6 +106,13 @@ if (!is_null($admin) && isset($_SESSION['id_setor']) && ($_SESSION['id_setor'] =
             echo Busca::getSaldo($_SESSION['id_setor']);
             break;
 
+        case 'populaSources':
+            $id_pedido = filter_input(INPUT_POST, 'id_pedido');
+            if (!empty($id_pedido)) {
+                echo Busca::getInfoSources($id_pedido);
+            }
+            break;
+
         case 'populaContrato':
             $id_pedido = filter_input(INPUT_POST, 'id_pedido');
             if (empty($id_pedido)) {

@@ -280,6 +280,19 @@ function editaPedido(id_pedido) {
     populaLicitacao(id_pedido);
     populaGrupo(id_pedido);
     populaContrato(id_pedido);
+    populaSources(id_pedido);
+}
+
+function populaSources(id_pedido) {
+    $.post('../php/busca.php', {
+        users: 1,
+        form: 'populaSources',
+        id_pedido: id_pedido
+    }).done(function (resposta) {
+        if (resposta) {
+            $('#source').val(resposta).trigger('change');
+        }
+    });
 }
 
 function populaContrato(id_pedido) {

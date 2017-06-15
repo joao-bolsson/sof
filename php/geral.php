@@ -722,7 +722,7 @@ if (Busca::isActive()) {
                     exit("Pedido inserido. Erro ao registrar uma das 3 opções.");
                 }
                 $siafi = "";
-                if ($tipo_cont == 3) {
+                if ($tipo_cont == 2 || $tipo_cont == 3) {
                     // se for reforço ou anulação, precisa ter o SIAFI
                     $siafi = filter_input(INPUT_POST, 'siafi');
                     if (empty($siafi)) {
@@ -731,7 +731,7 @@ if (Busca::isActive()) {
                 }
                 Geral::insertPedContr($pedido, $tipo_cont, $siafi);
 
-                Geral::insertRequestSources($pedido, $id_fonte);
+                Geral::insertRequestSources($pedido, $id_fonte, $prioridade);
 
                 header("Location: ../lte/solicitacoes.php");
                 break;
