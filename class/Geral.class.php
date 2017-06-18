@@ -897,11 +897,15 @@ final class Geral {
      * @return bool
      */
     public static function pedidoAnalisado($id_pedido, $fase, $prioridade, $id_item, $item_cancelado, $qtd_solicitada, $qt_saldo, $qt_utilizado, $vl_saldo, $vl_utilizado, $valor_item, $saldo_setor, $total_pedido, $comentario) {
+
+        $total_pedido_float = $total_pedido;
         $query = Query::getInstance()->exe('SELECT id_setor FROM pedido WHERE id = ' . $id_pedido);
         // selecionando o id do setor que fez o pedido
         $obj_id = $query->fetch_object();
         $id_setor = $obj_id->id_setor;
         $hoje = date('Y-m-d');
+
+        $has_sources = self::existsSources($id_pedido);
         // verificando itens cancelados, somente quando passam pela análise
         if ($fase <= 4) {
             if (in_array(1, $item_cancelado) || in_array(true, $item_cancelado) || $fase == 3) {
@@ -916,9 +920,13 @@ final class Geral {
                         $cancelado = ', cancelado = 1';
                         Query::getInstance()->exe('DELETE FROM itens_pedido WHERE id_pedido = ' . $id_pedido . ' AND id_item = ' . $id_item[$i]);
                         $total_pedido -= $valor_item[$i];
+                        $total_pedido_float -= $valor_item[$i];
                     }
                     Query::getInstance()->exe("UPDATE itens SET qt_saldo = '{$qt_saldo[$i]}', qt_utilizado = '{$qt_utilizado[$i]}', vl_saldo = '{$vl_saldo[$i]}', vl_utilizado = '{$vl_utilizado[$i]}'{$cancelado} WHERE id = " . $id_item[$i]);
-                    $saldo_setor += $valor_item[$i];
+                    if ($has_sources) {
+                        $saldo_setor += $valor_item[$i];
+                        // se não tiver fonte, o saldo do setor não é alterado e a o valor do pedido retorna ao sof
+                    }
                 }
             }
         }
@@ -931,6 +939,35 @@ final class Geral {
                 // reprovado
                 $alteracao = 1;
                 $prioridade = 5;
+                if ($has_sources) {
+                    // se for reprovado, devolve o valor retirado da fonte
+                    $query_fonte = Query::getInstance()->exe("SELECT saldo_fonte.id AS id_fonte, saldo_fonte.valor AS saldo_fonte, pedido.valor AS valor_pedido FROM saldo_fonte, pedido_id_fonte, pedido WHERE pedido.id = pedido_id_fonte.id_pedido AND pedido_id_fonte.id_fonte = saldo_fonte.id AND pedido.id = " . $id_pedido);
+                    if ($query->num_rows > 0) {
+                        $obj = $query_fonte->fetch_object();
+                        $new_vl = $obj->saldo_fonte + $obj->valor_pedido;
+                        $new_vl = number_format($new_vl, 3, '.', '');
+                        Query::getInstance()->exe("UPDATE saldo_fonte SET valor = '" . $new_vl . "' WHERE id_setor = " . $id_setor . " AND id = " . $obj->id_fonte);
+                    }
+                } else {
+                    // devolve o valor do pedido ao sof
+                    $saldo_sof = Busca::getSaldo(2);
+                    $saldo_sof += $total_pedido_float;
+                    $saldo_sof = number_format($saldo_sof, 3, '.', '');
+
+                    Query::getInstance()->exe("UPDATE saldo_setor SET saldo = '" . $saldo_sof . "' WHERE id_setor = 2");
+
+                    // coloca na tabela de lançamentos
+                    // valor do pedido volta ao SOF
+                    $hoje = date('Y-m-d');
+
+                    $sqlBuilder = new SQLBuilder(SQLBuilder::$INSERT);
+                    $sqlBuilder->setTables(['saldos_lancamentos']);
+                    $sqlBuilder->setValues([null, $id_setor, $hoje, -$total_pedido_float, 5]);
+                    Query::getInstance()->exe($sqlBuilder->__toString());
+
+                    $sqlBuilder->setValues([null, 2, $hoje, $total_pedido_float, 5]);
+                    Query::getInstance()->exe($sqlBuilder->__toString());
+                }
             } else if ($fase == 4) {
                 // aprovado
                 Query::getInstance()->exe("INSERT INTO saldos_lancamentos VALUES(NULL, {$id_setor}, '{$hoje}', '-{$total_pedido}', 4);");
@@ -941,8 +978,6 @@ final class Geral {
                     $fase++;
                 }
             }
-            $saldo_setor = number_format($saldo_setor, 3, '.', '');
-            Query::getInstance()->exe("UPDATE saldo_setor SET saldo = '{$saldo_setor}' WHERE id_setor = {$id_setor};");
         }
         Query::getInstance()->exe("UPDATE pedido SET status = " . $fase . ", prioridade = " . $prioridade . ", alteracao = " . $alteracao . " WHERE id = " . $id_pedido);
         if (strlen($comentario) > 0) {
@@ -965,6 +1000,7 @@ final class Geral {
      *    Função para deletar um pedido (rascunhos).
      */
     public static function deletePedido(int $id_pedido): string {
+        Query::getInstance()->exe("DELETE FROM pedido_id_fonte WHERE id_pedido = " . $id_pedido);
         Query::getInstance()->exe('DELETE FROM licitacao WHERE licitacao.id_pedido = ' . $id_pedido);
         Query::getInstance()->exe("DELETE FROM pedido_contrato WHERE pedido_contrato.id_pedido = " . $id_pedido);
         Query::getInstance()->exe("DELETE FROM pedido_grupo WHERE pedido_grupo.id_pedido = " . $id_pedido);

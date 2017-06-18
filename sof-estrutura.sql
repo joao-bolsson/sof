@@ -354,7 +354,7 @@ ALTER TABLE `pedido_grupo`
 
 ALTER TABLE `pedido_id_fonte`
   ADD PRIMARY KEY (`id`),
-  ADD KEY `id_pedido` (`id_pedido`),
+  ADD UNIQUE KEY `id_pedido` (`id_pedido`),
   ADD KEY `id_fonte` (`id_fonte`);
 
 ALTER TABLE `pedido_log_status`
@@ -438,7 +438,7 @@ ALTER TABLE `usuario_permissoes`
 
 
 ALTER TABLE `comentarios`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=232;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=236;
 ALTER TABLE `contrato_tipo`
   MODIFY `id` tinyint(3) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 ALTER TABLE `itens`
@@ -474,7 +474,7 @@ ALTER TABLE `processos_tipo`
 ALTER TABLE `saldos_adiantados`
   MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 ALTER TABLE `saldos_lancamentos`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2209;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2213;
 ALTER TABLE `saldos_transferidos`
   MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=157;
 ALTER TABLE `saldo_categoria`
