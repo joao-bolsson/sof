@@ -134,6 +134,12 @@ CREATE TABLE `pedido_grupo` (
   `id_grupo` int(10) UNSIGNED NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
+CREATE TABLE `pedido_id_fonte` (
+  `id` int(10) UNSIGNED NOT NULL,
+  `id_pedido` int(10) UNSIGNED NOT NULL,
+  `id_fonte` int(10) UNSIGNED NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
 CREATE TABLE `pedido_log_status` (
   `id_pedido` int(10) UNSIGNED NOT NULL,
   `id_status` int(1) UNSIGNED NOT NULL,
@@ -210,6 +216,15 @@ CREATE TABLE `saldos_transferidos` (
 CREATE TABLE `saldo_categoria` (
   `id` int(1) NOT NULL,
   `nome` varchar(30) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+CREATE TABLE `saldo_fonte` (
+  `id` int(10) UNSIGNED NOT NULL,
+  `id_setor` int(10) UNSIGNED NOT NULL,
+  `valor` varchar(50) NOT NULL,
+  `fonte_recurso` varchar(50) DEFAULT NULL,
+  `ptres` varchar(50) DEFAULT NULL,
+  `plano_interno` varchar(100) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 CREATE TABLE `saldo_justificativa` (
@@ -337,6 +352,11 @@ ALTER TABLE `pedido_grupo`
   ADD KEY `id_pedido` (`id_pedido`),
   ADD KEY `id_grupo` (`id_grupo`);
 
+ALTER TABLE `pedido_id_fonte`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `id_pedido` (`id_pedido`),
+  ADD KEY `id_fonte` (`id_fonte`);
+
 ALTER TABLE `pedido_log_status`
   ADD UNIQUE KEY `chave` (`chave`),
   ADD KEY `id_pedido` (`id_pedido`),
@@ -377,6 +397,10 @@ ALTER TABLE `saldos_transferidos`
 ALTER TABLE `saldo_categoria`
   ADD PRIMARY KEY (`id`);
 
+ALTER TABLE `saldo_fonte`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `id_setor` (`id_setor`);
+
 ALTER TABLE `saldo_justificativa`
   ADD PRIMARY KEY (`id`);
 
@@ -414,15 +438,15 @@ ALTER TABLE `usuario_permissoes`
 
 
 ALTER TABLE `comentarios`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=231;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=236;
 ALTER TABLE `contrato_tipo`
   MODIFY `id` tinyint(3) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 ALTER TABLE `itens`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=233475;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=234649;
 ALTER TABLE `itens_pedido`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5320;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5322;
 ALTER TABLE `licitacao`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2340;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2342;
 ALTER TABLE `licitacao_tipo`
   MODIFY `id` tinyint(3) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 ALTER TABLE `mes`
@@ -430,11 +454,13 @@ ALTER TABLE `mes`
 ALTER TABLE `paginas_post`
   MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 ALTER TABLE `pedido`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2340;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2342;
 ALTER TABLE `pedido_empenho`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1695;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1697;
 ALTER TABLE `pedido_fonte`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1782;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1786;
+ALTER TABLE `pedido_id_fonte`
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 ALTER TABLE `postagens`
   MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=45;
 ALTER TABLE `prioridade`
@@ -442,17 +468,19 @@ ALTER TABLE `prioridade`
 ALTER TABLE `problemas`
   MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 ALTER TABLE `processos`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=99;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=105;
 ALTER TABLE `processos_tipo`
-  MODIFY `id` int(1) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+  MODIFY `id` int(1) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
 ALTER TABLE `saldos_adiantados`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 ALTER TABLE `saldos_lancamentos`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2119;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2213;
 ALTER TABLE `saldos_transferidos`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=133;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=157;
 ALTER TABLE `saldo_categoria`
-  MODIFY `id` int(1) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` int(1) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+ALTER TABLE `saldo_fonte`
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 ALTER TABLE `saldo_justificativa`
   MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 ALTER TABLE `saldo_setor`
@@ -468,7 +496,7 @@ ALTER TABLE `status`
 ALTER TABLE `usuario`
   MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=45;
 ALTER TABLE `usuario_hora`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=352;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=353;
 
 ALTER TABLE `comentarios`
   ADD CONSTRAINT `comentarios_ibfk_1` FOREIGN KEY (`id_pedido`) REFERENCES `pedido` (`id`),
@@ -503,6 +531,10 @@ ALTER TABLE `pedido_grupo`
   ADD CONSTRAINT `pedido_grupo_ibfk_1` FOREIGN KEY (`id_pedido`) REFERENCES `pedido` (`id`),
   ADD CONSTRAINT `pedido_grupo_ibfk_2` FOREIGN KEY (`id_grupo`) REFERENCES `setores_grupos` (`id`);
 
+ALTER TABLE `pedido_id_fonte`
+  ADD CONSTRAINT `pedido_id_fonte_ibfk_1` FOREIGN KEY (`id_pedido`) REFERENCES `pedido` (`id`),
+  ADD CONSTRAINT `pedido_id_fonte_ibfk_2` FOREIGN KEY (`id_fonte`) REFERENCES `saldo_fonte` (`id`);
+
 ALTER TABLE `pedido_log_status`
   ADD CONSTRAINT `pedido_log_status_ibfk_1` FOREIGN KEY (`id_pedido`) REFERENCES `pedido` (`id`),
   ADD CONSTRAINT `pedido_log_status_ibfk_2` FOREIGN KEY (`id_status`) REFERENCES `status` (`id`);
@@ -526,6 +558,9 @@ ALTER TABLE `saldos_lancamentos`
 ALTER TABLE `saldos_transferidos`
   ADD CONSTRAINT `saldos_transferidos_ibfk_1` FOREIGN KEY (`id_setor_ori`) REFERENCES `setores` (`id`),
   ADD CONSTRAINT `saldos_transferidos_ibfk_2` FOREIGN KEY (`id_setor_dest`) REFERENCES `setores` (`id`);
+
+ALTER TABLE `saldo_fonte`
+  ADD CONSTRAINT `saldo_fonte_ibfk_1` FOREIGN KEY (`id_setor`) REFERENCES `setores` (`id`);
 
 ALTER TABLE `saldo_setor`
   ADD CONSTRAINT `saldo_setor_ibfk_1` FOREIGN KEY (`id_setor`) REFERENCES `setores` (`id`);

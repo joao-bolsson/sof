@@ -179,40 +179,7 @@ if (!isset($_SESSION['editmode'])) {
                     <h4 class="modal-title">Informações do Item</h4>
                 </div>
                 <span id="editmode" style="display: none;"></span>
-                <form id="formEditRegItem" action="../php/geral.php" method="POST">
-                    <input id="id" type="hidden" name="id" value="0"/>
-                    <input type="hidden" name="form" value="formEditRegItem"/>
-                    <input type="hidden" name="admin" value="1"/>
-                    <div class="modal-body">
-                        <?php include_once 'formItem.html' ?>
-                    </div>
-                    <div class="modal-footer">
-                        <button class="btn btn-primary" type="submit" style="width: 100%;"><i class="fa fa-refresh"></i>&nbsp;Atualizar / Cadastrar
-                        </button>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
-    <div aria-hidden="true" class="modal fade" id="listProcessos" role="dialog" tabindex="-1">
-        <div class="modal-dialog modal-lg">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
-                                aria-hidden="true">&times;</span></button>
-                    <h4 class="modal-title">Processos Atendidos pelo SOF</h4>
-                </div>
-                <div class="modal-body">
-                    <table id="tableListProcessos" class="table table-bordered table-striped">
-                        <thead>
-                        <tr>
-                            <th>Número do Processo</th>
-                            <th></th>
-                        </tr>
-                        </thead>
-                        <tbody id="tbodyListProcessos"></tbody>
-                    </table>
-                </div>
+                <?php include_once "util/formEditRegItem.php"; ?>
             </div>
         </div>
     </div>
@@ -231,44 +198,9 @@ if (!isset($_SESSION['editmode'])) {
             </div><!-- /.modal-content -->
         </div><!-- /.modal-dialog -->
     </div><!-- /.modal -->
-    <div class="modal fade" id="myInfos" role="dialog">
-        <div class="modal-dialog" style="width: 40%;">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
-                                aria-hidden="true">&times;</span></button>
-                    <h4 class="modal-title">Informações do Usuário</h4>
-                </div>
-                <form id="altInfo" action="javascript:altInfoUser();" method="post">
-                    <div class="modal-body">
-                        <div class="form-group">
-                            <label>Nome</label>
-                            <input class="form-control" id="nameUser" name="nameUser" type="text"
-                                   value="<?= $_SESSION['nome'] ?>" required>
-                        </div>
-                        <div class="form-group">
-                            <label>E-mail</label>
-                            <input class="form-control" id="emailUser" name="emailUser" type="email"
-                                   value="<?= $_SESSION['email'] ?>" required>
-                        </div>
-                        <div class="form-group">
-                            <label>Senha Atual</label>
-                            <input class="form-control" id="senhaAtualUser" name="senhaAtualUser" type="password"
-                                   required>
-                        </div>
-                        <div class="form-group">
-                            <label>Nova Senha</label>
-                            <input class="form-control" id="senhaUser" name="senhaUser" type="password" required>
-                        </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button class="btn btn-primary" type="submit" style="width: 100%;"><i class="fa fa-refresh"></i>&nbsp;Atualizar
-                        </button>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
+    <?php
+    include_once "util/modals-util.php";
+    ?>
 </div>
 <!-- ./wrapper -->
 
@@ -294,7 +226,9 @@ if (!isset($_SESSION['editmode'])) {
 <!-- PACE -->
 <script src="plugins/pace/pace.min.js"></script>
 <!-- page script -->
+<script type="text/javascript" src="util/util_lte.min.js"></script>
 <script type="text/javascript" src="../iniLTE.min.js"></script>
+<script type="text/javascript" src="util/editMode.min.js"></script>
 </body>
 </html>
 

@@ -13,7 +13,7 @@ final class Conexao {
 
     private $mysqli;
 
-    private $servidor, $usuario, $senha, $banco;
+    private $server, $user, $password, $database;
     private static $INSTANCE;
 
     public static function getInstance(): Conexao {
@@ -23,13 +23,23 @@ final class Conexao {
         return self::$INSTANCE;
     }
 
-    private function __construct($servidor = "localhost", $usuario = "root", $senha = "j:03984082037@[]ccufsm", $banco = "sof") {
+    /**
+     * Gets a configuration section in config file.
+     *
+     * @param string $section Section to read.
+     */
+    private static function getConfig(string $section) {
+        $array = parse_ini_file(__DIR__ . "/../config.ini", true);
+        return $array[$section];
+    }
 
-        //definindo variaveis
-        $this->servidor = $servidor;
-        $this->usuario = $usuario;
-        $this->senha = $senha;
-        $this->banco = $banco;
+    private function __construct() {
+        $config = self::getConfig('main');
+
+        $this->server = $config["server"];
+        $this->user = $config["user"];
+        $this->password = $config["pass"];
+        $this->database = $config["database"];
     }
 
     /**
@@ -37,7 +47,7 @@ final class Conexao {
      *
      * @access public
      */
-    public function getConexao() {
+    public function getConnection() {
         $this->pingSH();
 
         return $this->mysqli;
@@ -47,7 +57,7 @@ final class Conexao {
      * Initialize a connection.
      */
     private function startConnection() {
-        $this->mysqli = new MySQLi($this->servidor, $this->usuario, $this->senha, $this->banco);
+        $this->mysqli = new MySQLi($this->server, $this->user, $this->password, $this->database);
 
         /*
          * This is the "official" OO way to do it,

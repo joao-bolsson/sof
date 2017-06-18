@@ -14,11 +14,13 @@
                 </button>
                 <h4 class="modal-title">Gerar Relatório</h4>
             </div>
-            <form action="javascript:print();" method="post">
+            <form id="formRelatorioRecepcao">
+                <input type="hidden" name="admin" value="1">
+                <input type="hidden" name="form" value="relatorioProcessos">
                 <div class="modal-body">
                     <div class="form-group">
                         <label>Tipo</label>
-                        <select id="type" class="form-control" name="type" required>
+                        <select class="form-control" name="tipo" required>
                             <option value="0">Todos</option>
                             <?= BuscaLTE::getTiposProcessos() ?>
                         </select>
@@ -65,8 +67,10 @@
                 </button>
                 <h4 class="modal-title">Processo</h4>
             </div>
-            <form id="formProcesso" action="javascript:updateProcesso();" method="post">
-                <input id="id_processo" type="hidden" value="0"/>
+            <form id="formProcesso">
+                <input id="id_processo" name="id_processo" type="hidden" value="0"/>
+                <input type="hidden" name="form" value="recepcao">
+                <input type="hidden" name="admin" value="1">
                 <div class="modal-body">
                     <table class="table">
                         <tbody>
@@ -74,14 +78,14 @@
                             <td>
                                 <div class="form-group">
                                     <label>Processo</label>
-                                    <input class="form-control" id="num_processo" name="num_processo" type="text"
+                                    <input class="form-control" name="num_processo" type="text"
                                            required>
                                 </div>
                             </td>
                             <td>
                                 <div class="form-group">
                                     <label>Tipo</label>
-                                    <select id="tipo" class="form-control" name="tipo" required>
+                                    <select class="form-control" name="tipo" required>
                                         <?= BuscaLTE::getTiposProcessos() ?>
                                     </select>
                                 </div>
@@ -91,13 +95,13 @@
                             <td>
                                 <div class="form-group">
                                     <label>Estante</label>
-                                    <input class="form-control" id="estante" name="estante" type="text" required>
+                                    <input class="form-control" name="estante" type="text" required>
                                 </div>
                             </td>
                             <td>
                                 <div class="form-group">
                                     <label>Prateleira</label>
-                                    <input class="form-control" id="prateleira" name="prateleira" type="text" required>
+                                    <input class="form-control" name="prateleira" type="text" required>
                                 </div>
                             </td>
                         </tr>
@@ -105,14 +109,14 @@
                             <td>
                                 <div class="form-group">
                                     <label>Entrada (dd/mm/yyyy)</label>
-                                    <input class="form-control date" id="entrada" name="entrada" type="text" required
+                                    <input class="form-control date" name="entrada" type="text" required
                                            maxlength="10">
                                 </div>
                             </td>
                             <td>
                                 <div class="form-group">
                                     <label>Saída (dd/mm/yyyy)</label>
-                                    <input class="form-control date" id="saida" name="saida" type="text" maxlength="10">
+                                    <input class="form-control date" name="saida" type="text" maxlength="10">
                                 </div>
                             </td>
                         </tr>
@@ -120,13 +124,13 @@
                             <td>
                                 <div class="form-group">
                                     <label>Responsável</label>
-                                    <input class="form-control" id="responsavel" name="responsavel" type="text">
+                                    <input class="form-control" name="responsavel" type="text">
                                 </div>
                             </td>
                             <td>
                                 <div class="form-group">
                                     <label>Retorno (dd/mm/yyyy)</label>
-                                    <input class="form-control date" id="retorno" name="retorno" type="text"
+                                    <input class="form-control date" name="retorno" type="text"
                                            maxlength="10">
                                 </div>
                             </td>
@@ -135,13 +139,13 @@
                             <td>
                                 <div class="form-group">
                                     <label>Observação</label>
-                                    <textarea class="form-control" id="obs" name="obs" rows="2"></textarea>
+                                    <textarea class="form-control" name="obs" rows="2"></textarea>
                                 </div>
                             </td>
                             <td>
                                 <div class="form-group">
                                     <label>Vigência (dd/mm/yyyy)</label>
-                                    <input class="form-control date" id="vigencia" name="vigencia" type="text"
+                                    <input class="form-control date" name="vigencia" type="text"
                                            maxlength="10">
                                 </div>
                             </td>

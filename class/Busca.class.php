@@ -22,6 +22,28 @@ final class Busca {
         // empty
     }
 
+    public static function hasSourcesForRequest(int $id_fonte, string $value): bool {
+        $query = Query::getInstance()->exe("SELECT valor FROM saldo_fonte WHERE id = " . $id_fonte);
+        if ($query->num_rows > 0) {
+            $obj = $query->fetch_object();
+            if ($value < $obj->valor) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public static function getSources(int $id): string {
+        $query = Query::getInstance()->exe("SELECT id, valor, fonte_recurso, ptres, plano_interno FROM saldo_fonte WHERE id_setor = " . $id);
+        $opt = "";
+
+        while ($obj = $query->fetch_object()) {
+            $opt .= "<option value=\"" . $obj->id . "\">" . $obj->fonte_recurso . "</option>";
+        }
+
+        return $opt;
+    }
+
     public static function scanDataBase() {
         $query = Query::getInstance()->exe("SELECT id, valor FROM pedido;");
 
@@ -94,6 +116,15 @@ final class Busca {
         return $return;
     }
 
+    public static function getInfoSources(int $id_request) {
+        $query = Query::getInstance()->exe("SELECT id_fonte FROM pedido_id_fonte WHERE id_pedido = " . $id_request);
+        if ($query->num_rows > 0) {
+            return $query->fetch_object()->id_fonte;
+        }
+        Logger::error("Get info sources returning 0: impossible");
+        return 0;
+    }
+
     public static function getInfoContrato(int $id_request) {
         $query = Query::getInstance()->exe('SELECT pedido.pedido_contrato, pedido_contrato.id_tipo, pedido_contrato.siafi FROM pedido, pedido_contrato WHERE pedido.id = pedido_contrato.id_pedido AND pedido.id = ' . $id_request);
         if ($query->num_rows < 1) {
@@ -119,25 +150,6 @@ final class Busca {
         $query = Query::getInstance()->exe('SELECT ativo FROM sistema LIMIT 1');
         $obj = $query->fetch_object();
         return $obj->ativo;
-    }
-
-    /**
-     * Function to return the process that is in the requests with its due dates
-     *
-     * @param int $request Request id.
-     * @return string A table with teh process and its informations.
-     */
-    public static function getProcessosPedido(int $request): string {
-        $query = Query::getInstance()->exe('SELECT DISTINCT itens.num_processo, itens.dt_fim FROM itens, itens_pedido WHERE itens_pedido.id_pedido = ' . $request . ' AND itens_pedido.id_item = itens.id');
-        $table = new Table('', '', array(), false);
-        while ($process = $query->fetch_object()) {
-            $row = new Row();
-            $row->addColumn(new Column($process->num_processo));
-            $row->addColumn(new Column($process->dt_fim));
-
-            $table->addRow($row);
-        }
-        return $table;
     }
 
     /**

@@ -46,6 +46,16 @@ if (Busca::isActive()) {
     if (!is_null($admin) && isset($_SESSION["id_setor"]) && ($_SESSION["id_setor"] == 2 || $_SESSION["id_setor"] == 12)) {
         switch ($form) {
 
+            case 'cadFontesTransf':
+                $setores = filter_input(INPUT_POST, 'setores', FILTER_DEFAULT, FILTER_FORCE_ARRAY);
+                $fonte = filter_input(INPUT_POST, 'fonte');
+                $ptres = filter_input(INPUT_POST, 'ptres');
+                $plano = filter_input(INPUT_POST, 'plano');
+
+                Geral::cadSourceToSectors($setores, $fonte, $ptres, $plano);
+                header("Location: ../lte/");
+                break;
+
             case 'desativaUser':
                 $user = filter_input(INPUT_POST, 'user');
                 if ($user !== NULL) {
@@ -244,6 +254,7 @@ if (Busca::isActive()) {
                 }
                 echo Geral::enviaOrdenador($id_pedido);
                 break;
+
             case 'enviaFontes':
                 $id_pedido = filter_input(INPUT_POST, 'id_pedido');
                 $fonte = filter_input(INPUT_POST, 'fonte');
@@ -251,12 +262,7 @@ if (Busca::isActive()) {
                 $plano = filter_input(INPUT_POST, 'plano');
                 echo Geral::cadastraFontes($id_pedido, $fonte, $ptres, $plano);
                 break;
-            case 'resetSystem':
-                if ($_SESSION['login'] == 'joao') {
-                    Geral::resetSystem();
-                }
-                break;
-            // comment.
+
             case 'editItem':
                 $fields = filter_input(INPUT_POST, 'fields', FILTER_DEFAULT, FILTER_FORCE_ARRAY);
                 $dados = filter_input(INPUT_POST, 'dados', FILTER_DEFAULT, FILTER_FORCE_ARRAY);
@@ -295,6 +301,10 @@ if (Busca::isActive()) {
                 $just = filter_input(INPUT_POST, 'just');
                 $transfere = Geral::transfereSaldo($ori, $dest, $valor, $just);
 
+                $fonte = filter_input(INPUT_POST, 'fonte');
+
+                Geral::cadSourceToBalance($fonte, $dest, $valor);
+
                 if ($transfere) {
                     echo "success";
                 } else {
@@ -321,9 +331,17 @@ if (Busca::isActive()) {
             // comentário
 
             case 'recepcao':
-                // array com os dados
-                $dados = filter_input(INPUT_POST, 'dados', FILTER_DEFAULT, FILTER_FORCE_ARRAY);
-                $update = Geral::updateProcesso($dados);
+                // fields names in form
+                $fields = ["id_processo", "num_processo", "tipo", "estante", "prateleira", "entrada", "saida", "responsavel", "retorno", "obs", "vigencia"];
+
+                $len = count($fields);
+
+                $data = [];
+                for ($i = 0; $i < $len; $i++) {
+                    $data[$i] = filter_input(INPUT_POST, $fields[$i]);
+                }
+
+                $update = Geral::updateProcesso($data);
 
                 if ($update) {
                     echo "true";
@@ -648,6 +666,14 @@ if (Busca::isActive()) {
                 if (empty($total_pedido)) {
                     exit("Pedido zerado. Esse pedido não será inserido no sistema. Volte e recarregue a página.");
                 }
+
+                $id_fonte = filter_input(INPUT_POST, 'fonte');
+                if (!is_null($id_fonte)) {
+                    if (!Busca::hasSourcesForRequest($id_fonte, $total_pedido)) {
+                        exit("Erro: O Saldo da fonte selecionada não é suficiente para realizar o pedido.");
+                    }
+                }
+
                 $saldo_total = filter_input(INPUT_POST, 'saldo_total');
                 $prioridade = filter_input(INPUT_POST, 'st');
                 $obs = filter_input(INPUT_POST, 'obs');
@@ -696,7 +722,7 @@ if (Busca::isActive()) {
                     exit("Pedido inserido. Erro ao registrar uma das 3 opções.");
                 }
                 $siafi = "";
-                if ($tipo_cont == 3) {
+                if ($tipo_cont == 2 || $tipo_cont == 3) {
                     // se for reforço ou anulação, precisa ter o SIAFI
                     $siafi = filter_input(INPUT_POST, 'siafi');
                     if (empty($siafi)) {
@@ -704,6 +730,8 @@ if (Busca::isActive()) {
                     }
                 }
                 Geral::insertPedContr($pedido, $tipo_cont, $siafi);
+
+                Geral::insertRequestSources($pedido, $id_fonte, $prioridade);
 
                 header("Location: ../lte/solicitacoes.php");
                 break;

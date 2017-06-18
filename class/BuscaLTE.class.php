@@ -89,7 +89,7 @@ final class BuscaLTE {
     }
 
     public static function refreshTableHora(): string {
-        $query = Query::getInstance()->exe('SELECT DISTINCT usuario_hora.id_usuario, usuario.nome FROM usuario_hora, usuario WHERE usuario_hora.id_usuario = usuario.id ORDER BY usuario.nome ASC');
+        $query = Query::getInstance()->exe('SELECT DISTINCT usuario_hora.id_usuario, usuario.nome FROM usuario_hora, usuario WHERE usuario_hora.id_usuario = usuario.id AND usuario.ativo = 1 ORDER BY usuario.nome ASC');
 
         $table = new Table('', '', [], false);
 
@@ -233,6 +233,17 @@ final class BuscaLTE {
         return $return;
     }
 
+    public static function getOptionsSources(int $id_sector): string {
+        $query = Query::getInstance()->exe("SELECT id, valor, fonte_recurso, ptres FROM saldo_fonte WHERE id_setor = " . $id_sector);
+        $options = "";
+        if ($query->num_rows > 0) {
+            while ($obj = $query->fetch_object()) {
+                $options .= "<option value=\"" . $obj->id . "\">" . $obj->fonte_recurso . ' (R$ ' . $obj->valor . ')</option>';
+            }
+        }
+        return $options;
+    }
+
     /**
      * Function that build the rows of a table with the the bidding options to make a request
      *
@@ -305,12 +316,24 @@ final class BuscaLTE {
      *
      * @return string
      */
-    public static function getOptionsSetores(): string {
+    public static function getOptionsSetores(array $sectors_in = [], array $sectors_out = []): string {
         $return = '';
-        $count = count(ARRAY_SETORES);
+        if (count($sectors_in) > 0) {
+            $len = count($sectors_in);
+            for ($j = 0; $j < $len; $j++) {
+                $i = $sectors_in[$j];
+                if (!in_array($i, $sectors_out)) {
+                    $return .= "<option value=\"" . $i . "\">" . ARRAY_SETORES[$i] . '</option>';
+                }
+            }
+        } else {
+            $count = count(ARRAY_SETORES);
 
-        for ($i = 2; $i < $count; $i++) {
-            $return .= "<option value=\"" . $i . "\">" . ARRAY_SETORES[$i] . '</option>';
+            for ($i = 2; $i < $count; $i++) {
+                if (!in_array($i, $sectors_out)) {
+                    $return .= "<option value=\"" . $i . "\">" . ARRAY_SETORES[$i] . '</option>';
+                }
+            }
         }
         return $return;
     }

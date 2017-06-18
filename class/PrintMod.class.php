@@ -177,18 +177,30 @@ final class PrintMod {
         $query = Query::getInstance()->exe('SELECT fonte_recurso, ptres, plano_interno FROM pedido_fonte WHERE id_pedido = ' . $id_request);
         if ($query->num_rows > 0) {
             $source = $query->fetch_object();
-            $table = new Table('', '', ['Fonte de Recurso', 'PTRES', 'Plano Interno'], true);
-            $row = new Row();
-            $row->addColumn(new Column($source->fonte_recurso));
-            $row->addColumn(new Column($source->ptres));
-            $row->addColumn(new Column($source->plano_interno));
-
-            $table->addRow($row);
+            $table = self::buildSourcesTable($source);
 
             return "<fieldset class = \"preg\">" . $table . '</fieldset><br>';
         } else {
-            return '<fieldset><h5>PEDIDO AGUARDA FONTE DE RECURSO</h5></fieldset><br>';
+            $query_f = Query::getInstance()->exe("SELECT saldo_fonte.id, saldo_fonte.fonte_recurso, saldo_fonte.ptres, saldo_fonte.plano_interno FROM saldo_fonte, pedido_id_fonte WHERE saldo_fonte.id = pedido_id_fonte.id_fonte AND pedido_id_fonte.id_pedido = " . $id_request);
+            if ($query_f->num_rows > 0) {
+                $source = $query_f->fetch_object();
+                $table = self::buildSourcesTable($source);
+
+                return "<fieldset class = \"preg\">" . $table . '</fieldset><br>';
+            }
         }
+        return '<fieldset><h5>PEDIDO AGUARDA FONTE DE RECURSO</h5></fieldset><br>';
+    }
+
+    private static function buildSourcesTable(stdClass $source): Table {
+        $table = new Table('', '', ['Fonte de Recurso', 'PTRES', 'Plano Interno'], true);
+        $row = new Row();
+        $row->addColumn(new Column($source->fonte_recurso));
+        $row->addColumn(new Column($source->ptres));
+        $row->addColumn(new Column($source->plano_interno));
+
+        $table->addRow($row);
+        return $table;
     }
 
     private static function getEmpenho(int $id_request): string {

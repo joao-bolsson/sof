@@ -47,11 +47,6 @@ if (!is_null($admin) && isset($_SESSION['id_setor']) && ($_SESSION['id_setor'] =
             echo Busca::getInfoTime();
             break;
 
-        case 'verProcessos':
-            $id_pedido = filter_input(INPUT_POST, 'id_pedido');
-            echo Busca::getProcessosPedido($id_pedido);
-            break;
-
         case 'listProblemas':
             echo Busca::getProblemas();
             break;
@@ -59,10 +54,6 @@ if (!is_null($admin) && isset($_SESSION['id_setor']) && ($_SESSION['id_setor'] =
         case 'getSaldoOri':
             $id_setor = filter_input(INPUT_POST, 'setorOri');
             echo Busca::getSaldo($id_setor);
-            break;
-
-        case 'refreshSaldo':
-            echo Busca::getSaldo($_SESSION['id_setor']);
             break;
 
         case 'infoItem':
@@ -95,6 +86,11 @@ if (!is_null($admin) && isset($_SESSION['id_setor']) && ($_SESSION['id_setor'] =
             echo Busca::getInfoPedidoAnalise($id_pedido, $id_setor);
             break;
 
+        case 'fillTransfSource':
+            $id_setor = filter_input(INPUT_POST, 'id');
+            echo Busca::getSources($id_setor);
+            break;
+
         default:
             break;
     }
@@ -108,6 +104,13 @@ if (!is_null($admin) && isset($_SESSION['id_setor']) && ($_SESSION['id_setor'] =
 
         case 'getSaldo':
             echo Busca::getSaldo($_SESSION['id_setor']);
+            break;
+
+        case 'populaSources':
+            $id_pedido = filter_input(INPUT_POST, 'id_pedido');
+            if (!empty($id_pedido)) {
+                echo Busca::getInfoSources($id_pedido);
+            }
             break;
 
         case 'populaContrato':
