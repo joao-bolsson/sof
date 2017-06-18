@@ -1,5 +1,15 @@
 ## CHANGELOG ##
 
+#### v2.2.0 - 18/06/2017 ####
+- Nova tela de login
+- Segrega arquivos JavaScript em outros menores (não havia necessidade de carregar várias funções que nunca deveriam ser usadas em determinadas páginas)
+- Implementação de pedidos com vinculação de fonte de recurso.
+- Implementação de nova categoria de lançamento de saldo: recolhimento. Pedidos sem fonte de recurso e reprovados voltam para o setor como rascunho e o valor desse pedido, ao invés de retornar para o setor que o fez, volta para o SOF.
+
+Nota 1: todo o valor de saldo disponível para os setores foi recolhido pelo SOF. Assim, os próximos pedidos deverão ter uma fonte anexada.
+
+Nota 2: pedidos que já foram enviados em versões anteriores, sem fonte de recurso, deverão seguir o mesmo fluxo de antes: o SOF cadastra a fonte de recurso e caso o pedido seja reprovado, volta para o setor que o fez e o valor desse pedido retorna ao SOF. Se esse pedido voltar novamente ao SOF, terá uma fonte de recurso anexada pelo setor que o fez.
+
 #### v2.1.16 - 14/05/2017 ####
 - Corrige bug para visualizar justificativa nas Solicitações de Alteração de Pedido
 - Permite ao SOF desativar um usuário (somente login iara) Obs.: os registros do usuário permanecem, mas ele não poderá mais logar no sistema.
