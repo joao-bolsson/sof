@@ -367,7 +367,7 @@ final class Geral {
     public static function cadUser(string $nome, string $login, string $email, int $setor, string $senha): int {
         $senha_crp = crypt($senha, SALT);
 
-        $query = Query::getInstance()->exe("SELECT id FROM usuario WHERE email = 'joaovictorbolsson@gmail.com';");
+        $query = Query::getInstance()->exe("SELECT id FROM usuario WHERE email = '" . $email . "';");
         $id = 0;
         if ($query->num_rows > 0) {
             // usuário já existente, atualiza as informações e reativa
