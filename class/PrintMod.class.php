@@ -52,6 +52,10 @@ final class PrintMod {
                     <h6>Mostrando " . $query->num_rows . " linhas de " . $tot_rows . " encontradas</h6>
                 </fieldset><br>";
 
+        $return .= "
+            <fieldset class=\"preg\">
+                    <h5>REGISTROS NO PONTO ELETRÔNICO</h5>
+                </fieldset><br>";
         $return .= "<fieldset class=\"preg\">";
 
         $table = new Table('', 'prod', ['IP', 'Entrada', 'Saída', 'Horas'], true);
@@ -66,8 +70,35 @@ final class PrintMod {
             $table->addRow($row);
         }
 
+        $atestados = self::buildTableAtestados($id_user, $dataI, $dataF);
+
         $return .= $table . '</fieldset>';
+
+        $return .= "<br>
+            <fieldset class=\"preg\">
+                    <h5>ATESTADOS NO PERÍODO</h5>
+                </fieldset><br>";
+        $return .= "<fieldset class=\"preg\">" . $atestados . "</fieldset>";
         return $return;
+    }
+
+    public static function buildTableAtestados(int $id_user, string $dataI, string $dataF): Table {
+        $table = new Table('', 'prod', ['Data da Falta', 'Horas Abonadas', 'Justificativa'], true);
+
+        $query = Query::getInstance()->exe("SELECT DATE_FORMAT(dia, '%d/%m/%Y') AS data, horas, justificativa FROM usuario_atestados WHERE (dia BETWEEN '" . $dataI . "' AND '" . $dataF . "') AND id_usuario = " . $id_user);
+
+        if ($query->num_rows) {
+            while ($obj = $query->fetch_object()) {
+                $row = new Row();
+                $row->addColumn(new Column($obj->data));
+                $row->addColumn(new Column($obj->horas));
+                $row->addColumn(new Column($obj->justificativa));
+
+                $table->addRow($row);
+            }
+        }
+
+        return $table;
     }
 
     public static function getRelUsers(): string {

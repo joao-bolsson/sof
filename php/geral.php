@@ -46,6 +46,16 @@ if (Busca::isActive()) {
     if (!is_null($admin) && isset($_SESSION["id_setor"]) && ($_SESSION["id_setor"] == 2 || $_SESSION["id_setor"] == 12)) {
         switch ($form) {
 
+            case 'atestado':
+                $id_user = filter_input(INPUT_POST, 'user');
+                $horas = filter_input(INPUT_POST, 'horas');
+                $justificativa = filter_input(INPUT_POST, 'justificativa');
+                $dia = filter_input(INPUT_POST, 'dia');
+
+                $data = Util::dateFormat($dia);
+                echo Geral::cadAtestado($id_user, $horas, $justificativa, $data);
+                break;
+
             case 'cadFontesTransf':
                 $setores = filter_input(INPUT_POST, 'setores', FILTER_DEFAULT, FILTER_FORCE_ARRAY);
                 $fonte = filter_input(INPUT_POST, 'fonte');

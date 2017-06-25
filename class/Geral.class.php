@@ -25,6 +25,18 @@ final class Geral {
         // empty
     }
 
+    public static function cadAtestado(int $id_user, int $horas, string $justificativa, string $data):bool {
+        $builder = new SQLBuilder(SQLBuilder::$INSERT);
+        $builder->setTables(['usuario_atestados']);
+        $builder->setValues([NULL, $id_user, $data, $horas, $justificativa]);
+
+        $query = Query::getInstance()->exe($builder->__toString());
+        if ($query) {
+            return true;
+        }
+        return false;
+    }
+
     public static function insertRequestSources(int $id_pedido, int $id_fonte, int $prioridade) {
         $query_vl = Query::getInstance()->exe("SELECT valor FROM pedido WHERE id = " . $id_pedido);
         $query_vlF = Query::getInstance()->exe("SELECT valor FROM saldo_fonte WHERE id = " . $id_fonte);
@@ -360,17 +372,31 @@ final class Geral {
      * @param string $login Login.
      * @param string $email E-mail para contato e perda de senha.
      * @param int $setor Id do setor do usuário.
-     * @return string Senha do usuário feita pelo sistema.
+     * @param string $senha Senha do usuário feita pelo sistema.
+     *
+     * @return int User id.
      */
     public static function cadUser(string $nome, string $login, string $email, int $setor, string $senha): int {
         $senha_crp = crypt($senha, SALT);
-        Query::getInstance()->exe("INSERT INTO usuario VALUES(NULL, '{$nome}', '{$login}', '{$senha_crp}', {$setor}, '{$email}', 1);");
-        $id = Query::getInstance()->getInsertId();
+
+        $query = Query::getInstance()->exe("SELECT id FROM usuario WHERE email = '" . $email . "';");
+        $id = 0;
+        if ($query->num_rows > 0) {
+            // usuário já existente, atualiza as informações e reativa
+            $id = $query->fetch_object()->id;
+
+            Query::getInstance()->exe("UPDATE usuario SET nome = '" . $nome . "', login = '" . $login . "', senha = '" . $senha_crp . "', id_setor = " . $setor . ", ativo = 1 WHERE id = " . $id);
+        } else {
+            Query::getInstance()->exe("INSERT INTO usuario VALUES(NULL, '{$nome}', '{$login}', '{$senha_crp}', {$setor}, '{$email}', 1);");
+            $id = Query::getInstance()->getInsertId();
+        }
 
         return $id;
     }
 
     public static function cadPermissao(int $usuario, int $noticias, int $saldos, int $pedidos, int $recepcao) {
+        // garante reativação de usuários
+        Query::getInstance()->exe("DELETE FROM usuario_permissoes WHERE id_usuario = " . $usuario);
         Query::getInstance()->exe("INSERT INTO usuario_permissoes VALUES({$usuario}, {$noticias}, {$saldos}, {$pedidos}, {$recepcao});");
     }
 
