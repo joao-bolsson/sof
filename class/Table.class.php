@@ -113,10 +113,15 @@ class Table {
             $body = "<tbody>";
         }
 
-        foreach ($this->rows as $row) {
-            if ($row instanceof Row) {
-                $body .= $row;
+        if (count($this->rows) > 0) {
+            foreach ($this->rows as $row) {
+                if ($row instanceof Row) {
+                    $body .= $row;
+                }
             }
+        } else {
+            $count_h = count($this->headers);
+            $body .= "<tr><td colspan='" . $count_h . "'>Nenhum registro na tabela</td></tr>";
         }
 
         if ($this->build_body) {
