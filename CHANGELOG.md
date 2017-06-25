@@ -1,5 +1,10 @@
 ## CHANGELOG ##
 
+#### v2.2.1 - 25/06/2017 ####
+- Reativação de usuário quando o e-mail de um usuário que está sendo cadastrado já está no sistema, porém inativo. As antigas informações são substituídas pelas novas cadastradas, inclusive as permissões.
+- Cadastro de atestados para os usuários (somente para admin)
+- Atestados aparecerem no relatório e as horas abonadas são automaticamente somadas no total de horas mostrados no topo.
+
 #### v2.2.0 - 18/06/2017 ####
 - Nova tela de login
 - Segrega arquivos JavaScript em outros menores (não havia necessidade de carregar várias funções que nunca deveriam ser usadas em determinadas páginas)
