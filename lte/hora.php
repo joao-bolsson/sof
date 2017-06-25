@@ -78,6 +78,8 @@ require_once '../defines.php';
                         <?php if ($is_admin): ?>
                             <li><a href="javascript:abreModal('#registerAdmin');"><i class="fa fa-wrench"></i>
                                     Administrar</a></li>
+                            <li><a href="javascript:abreModal('#atestado');"><i class="fa fa-medkit"></i>
+                                    Atestados</a></li>
                         <?php endif; ?>
                     </ul>
                 </div>
@@ -200,6 +202,14 @@ require_once '../defines.php';
 <!-- PACE -->
 <script src="plugins/pace/pace.min.js"></script>
 
+<?php
+    if ($is_admin) {
+        echo "<!-- InputMask -->
+<script src=\"plugins/input-mask/jquery.inputmask.js\"></script>
+<script src=\"plugins/input-mask/jquery.inputmask.date.extensions.js\"></script>
+<script src=\"plugins/input-mask/jquery.inputmask.extensions.js\"></script>";
+    }
+?>
 <!-- page script -->
 <script type="text/javascript" src="util/util_lte.min.js"></script>
 <script type="text/javascript" src="../iniLTE.min.js"></script>

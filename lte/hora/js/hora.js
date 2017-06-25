@@ -6,6 +6,28 @@
  */
 
 $(function () {
+
+    $("#atestado").on('shown.bs.modal', function () {
+        $(".date").inputmask("dd/mm/yyyy", {"placeholder": "dd/mm/yyyy"});
+    });
+
+    $('#formAtestado').submit(function (event) {
+        event.preventDefault();
+
+        var data = $(this).serialize();
+
+        $.post('../php/geral.php', data).done(function (resposta) {
+            if (resposta) {
+                alert("Atestado cadastrado com sucesso.");
+            } else {
+                alert("Ocorreu um erro no servidor. Contate o administrador.")
+            }
+        }).always(function () {
+            $("#atestado").modal('hide');
+            document.getElementById("formAtestado").reset();
+        });
+    });
+
     $('#relRegister').on('shown.bs.modal', function () {
         $('#reservation').daterangepicker({
             locale: {

@@ -91,10 +91,21 @@ final class Util {
         $dataI = self::dateFormat($array[0]);
         $dataF = self::dateFormat($array[1]);
 
+        $query_atestados = Query::getInstance()->exe("SELECT sum(horas) AS total FROM usuario_atestados WHERE (dia BETWEEN '" . $dataI . "' AND '" . $dataF . "') AND id_usuario = " . $id_usuario);
+
+        $obj_atestados = $query_atestados->fetch_object();
+
+        $horas = 0;
+
+        if ($obj_atestados->total !== NULL) {
+            $horas += $obj_atestados->total;
+        }
+
         $query = Query::getInstance()->exe("SELECT sum(horas) AS total FROM usuario_hora WHERE (entrada BETWEEN '" . $dataI . "' AND '" . $dataF . "') AND id_usuario = " . $id_usuario . ' LIMIT 1');
         $obj = $query->fetch_object();
         $obj->total = ($obj->total == NULL) ? 0 : $obj->total;
-        return $obj->total;
+        $horas += $obj->total;
+        return $horas;
     }
 
     /**

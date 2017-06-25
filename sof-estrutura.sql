@@ -279,6 +279,14 @@ CREATE TABLE `usuario` (
   `ativo` tinyint(1) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
+CREATE TABLE `usuario_atestados` (
+  `id` int(10) UNSIGNED NOT NULL,
+  `id_usuario` int(10) UNSIGNED NOT NULL,
+  `dia` date NOT NULL,
+  `horas` tinyint(3) UNSIGNED NOT NULL,
+  `justificativa` varchar(50) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
 CREATE TABLE `usuario_hora` (
   `id` int(10) UNSIGNED NOT NULL,
   `id_usuario` int(10) UNSIGNED NOT NULL,
@@ -429,6 +437,10 @@ ALTER TABLE `usuario`
   ADD UNIQUE KEY `email` (`email`),
   ADD KEY `id_setor` (`id_setor`);
 
+ALTER TABLE `usuario_atestados`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `id_usuario` (`id_usuario`);
+
 ALTER TABLE `usuario_hora`
   ADD PRIMARY KEY (`id`),
   ADD KEY `id_usuario` (`id_usuario`);
@@ -496,6 +508,8 @@ ALTER TABLE `status`
   MODIFY `id` int(1) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 ALTER TABLE `usuario`
   MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=45;
+ALTER TABLE `usuario_atestados`
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 ALTER TABLE `usuario_hora`
   MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=353;
 
@@ -575,6 +589,9 @@ ALTER TABLE `solic_alt_pedido`
 
 ALTER TABLE `usuario`
   ADD CONSTRAINT `usuario_ibfk_1` FOREIGN KEY (`id_setor`) REFERENCES `setores` (`id`);
+
+ALTER TABLE `usuario_atestados`
+  ADD CONSTRAINT `usuario_atestados_ibfk_1` FOREIGN KEY (`id_usuario`) REFERENCES `usuario` (`id`);
 
 ALTER TABLE `usuario_hora`
   ADD CONSTRAINT `usuario_hora_ibfk_1` FOREIGN KEY (`id_usuario`) REFERENCES `usuario` (`id`);
