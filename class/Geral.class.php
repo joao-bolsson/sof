@@ -713,7 +713,7 @@ final class Geral {
      * @return bool
      */
     public static function liberaSaldo(int $id_setor, string $vl, float $saldo_atual): bool {
-        $valor = number_format(floatval($vl), 3);
+        $valor = floatval($vl);
         $saldo = $saldo_atual + $valor;
         $saldo = number_format($saldo, 3, '.', '');
         $verifica = Query::getInstance()->exe("SELECT saldo_setor.id FROM saldo_setor WHERE saldo_setor.id_setor = " . $id_setor);
