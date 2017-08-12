@@ -1,5 +1,11 @@
 ## CHANGELOG ##
 
+#### v2.2.2 - 12/08/2017 ####
+- Melhoria na importação de itens
+- Geração de relatório de fontes de recurso
+
+Nota: A importação não é feita mais diretamente no site, ao invés disso, é criado um arquivo com as inserções que devem ser feitas no banco e enviada uma notificação para o e-mail do admin (eu). Dentro de 1 dia ou menos, o arquivo vai ser importado para o site pelo admin. É uma processo mais demorado mas que garante que o site não pare de responder.
+
 #### v2.2.1 - 25/06/2017 ####
 - Reativação de usuário quando o e-mail de um usuário que está sendo cadastrado já está no sistema, porém inativo. As antigas informações são substituídas pelas novas cadastradas, inclusive as permissões.
 - Cadastro de atestados para os usuários (somente para admin)
