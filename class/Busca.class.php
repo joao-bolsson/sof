@@ -13,6 +13,8 @@ spl_autoload_register(function (string $class_name) {
     include_once $class_name . '.class.php';
 });
 
+require_once '../defines.php';
+
 final class Busca {
 
     /**
@@ -20,6 +22,32 @@ final class Busca {
      */
     private function __construct() {
         // empty
+    }
+
+    public static function getOptionsSectorHasSources() {
+        $query = Query::getInstance()->exe("SELECT DISTINCT saldo_fonte.id_setor, setores.nome FROM saldo_fonte, setores WHERE setores.id = saldo_fonte.id_setor");
+        if ($query->num_rows > 0) {
+            $options = "";
+
+            while ($obj = $query->fetch_object()) {
+                $options .= "<option value=\"" . $obj->id_setor . "\">" . $obj->nome . "</option>";
+            }
+            return $options;
+        }
+        return "";
+    }
+
+    public static function getSourcesForSector(int $id_setor): string {
+        $query = Query::getInstance()->exe("SELECT id, fonte_recurso FROM saldo_fonte WHERE id_setor = " . $id_setor . " ORDER BY id DESC LIMIT " . LIMIT_REQ_SOURCES);
+        if ($query->num_rows > 0) {
+            $options = "";
+
+            while ($obj = $query->fetch_object()) {
+                $options .= "<option value=\"" . $obj->id . "\">" . $obj->fonte_recurso . "</option>";
+            }
+            return $options;
+        }
+        return "";
     }
 
     public static function hasSourcesForRequest(int $id_fonte, string $value): bool {
