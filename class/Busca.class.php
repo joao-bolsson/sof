@@ -13,8 +13,6 @@ spl_autoload_register(function (string $class_name) {
     include_once $class_name . '.class.php';
 });
 
-require_once '../defines.php';
-
 final class Busca {
 
     /**
@@ -38,7 +36,7 @@ final class Busca {
     }
 
     public static function getSourcesForSector(int $id_setor): string {
-        $query = Query::getInstance()->exe("SELECT id, fonte_recurso FROM saldo_fonte WHERE id_setor = " . $id_setor . " ORDER BY id DESC LIMIT " . LIMIT_REQ_SOURCES);
+        $query = Query::getInstance()->exe("SELECT id, fonte_recurso FROM saldo_fonte WHERE id_setor = " . $id_setor . " ORDER BY id DESC LIMIT 300");
         if ($query->num_rows > 0) {
             $options = "";
 
