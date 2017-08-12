@@ -80,9 +80,6 @@ $permissao = BuscaLTE::getPermissoes($_SESSION["id"]);
                 <li class="treeview">
                     <a href="#">
                         <i class="fa fa-users"></i> <span>Usuários</span>
-                        <span class="pull-right-container">
-                            <small class="label pull-right bg-blue">Novo</small>
-                        </span>
                     </a>
                     <ul class="treeview-menu">
                         <li>
@@ -129,9 +126,6 @@ $permissao = BuscaLTE::getPermissoes($_SESSION["id"]);
                 <li>
                     <a href="javascript:abreModal('#transferencia');">
                         <i class="fa fa-arrows-h"></i> <span>Transferências</span>
-                        <span class="pull-right-container">
-                            <small class="label pull-right bg-blue">Novo</small>
-                        </span>
                     </a>
                 </li>
             <?php endif; ?>
@@ -144,13 +138,18 @@ $permissao = BuscaLTE::getPermissoes($_SESSION["id"]);
                 <li class="treeview">
                     <a href="#">
                         <i class="fa fa-file-text"></i> <span>Relatórios</span>
+                        <span class="pull-right-container">
+                            <small class="label pull-right bg-blue">Novo</small>
+                        </span>
                     </a>
                     <ul class="treeview-menu">
-                        <li><a href="javascript:abreModal('#relPedidos');"><i class="fa fa-circle-o"></i>
-                                Pedidos</a></li>
+                        <li><a href="javascript:abreModal('#relPedidos');"><i class="fa fa-circle-o"></i>Pedidos</a>
+                        </li>
                         <li><a href="javascript:relListUsers();"><i class="fa fa-circle-o"></i> Usuários</a></li>
                         <li><a href="javascript:abreModal('#relLibOrc');"><i class="fa fa-circle-o"></i> Liberações
                                 Orçamentárias</a></li>
+                        <li><a href="javascript:abreModal('#relFontes');"><i class="fa fa-circle-o"></i>Fontes</a>
+                        </li>
                     </ul>
                 </li>
             <?php endif; ?>

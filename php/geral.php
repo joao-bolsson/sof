@@ -295,7 +295,6 @@ if (Busca::isActive()) {
                 }
 
                 break;
-            // comment.
 
             case 'enviaEmpenho':
                 $id_pedido = filter_input(INPUT_POST, 'id_pedido');
@@ -303,7 +302,7 @@ if (Busca::isActive()) {
                 $data = Util::dateFormat(filter_input(INPUT_POST, 'data'));
                 echo $cadastra = Geral::cadastraEmpenho($id_pedido, $empenho, $data);
                 break;
-            // comentário
+
             case 'transfereSaldo':
                 $ori = filter_input(INPUT_POST, 'ori');
                 $dest = filter_input(INPUT_POST, 'dest');
@@ -321,7 +320,6 @@ if (Busca::isActive()) {
                     echo "fail";
                 }
                 break;
-            // comentário
 
             case 'newTypeProcess':
                 $tipo = filter_input(INPUT_POST, 'newType');
@@ -338,7 +336,6 @@ if (Busca::isActive()) {
                 }
                 header("Location: ../lte/");
                 break;
-            // comentário
 
             case 'recepcao':
                 // fields names in form
@@ -361,11 +358,13 @@ if (Busca::isActive()) {
 
                 break;
 
-            // comentário
-
             case 'importItens':
                 // Tamanho máximo do arquivo (em Bytes)
-                $_UP['tamanho'] = 1024 * 1024 * 1024; // 3MB
+                $maxFileSize = 1024;
+                for ($j = 1; $j < MAX_UPLOAD_SIZE; $j++) {
+                    $maxFileSize *= 1024;
+                }
+                $_UP['tamanho'] = $maxFileSize;
                 // Array com as extensões permitidas
                 $_UP['extensoes'] = array('tsv');
                 // Renomeia o arquivo? (Se true, o arquivo será salvo como .jpg e um nome único)
@@ -380,7 +379,6 @@ if (Busca::isActive()) {
                 // Verifica se houve algum erro com o upload. Se sim, exibe a mensagem do erro
                 if ($_FILES["file"]["error"] != 0) {
                     die("Não foi possível fazer o upload, erro:" . $_UP['erros'][$_FILES["file"]['error']]);
-                    exit; // Para a execução do script
                 }
                 // Caso script chegue a esse ponto, não houve erro com o upload e o PHP pode continuar
                 // Faz a verificação da extensão do arquivo
@@ -389,13 +387,11 @@ if (Busca::isActive()) {
                 $file_extension = end($tmp);
                 $extensao = strtolower($file_extension);
                 if (array_search($extensao, $_UP['extensoes']) === false) {
-                    echo "Por favor, envie arquivos com as segues extensões: .tsv";
-                    exit;
+                    exit("Por favor, envie arquivos com as segues extensões: .tsv");
                 }
                 // Faz a verificação do tamanho do arquivo
                 if ($_UP['tamanho'] < $_FILES["file"]['size']) {
-                    echo "O arquivo enviado é muito grande, envie arquivos de até 3Mb.";
-                    exit;
+                    exit("O arquivo enviado é muito grande, envie arquivos de até " . MAX_UPLOAD_SIZE . "MB.");
                 }
                 $nome_final = $_FILES["file"]['name'];
                 // O arquivo passou em todas as verificações, hora de tentar movê-lo para a pasta
@@ -407,21 +403,39 @@ if (Busca::isActive()) {
                 $dados = $obj_Util->readFile($_FILES["file"]['tmp_name']);
                 unset($_FILES["file"]);
                 if (count($dados) < 1) {
-                    exit;
+                    exit("Empty file!");
                 }
                 // prepara a importação dos itens (insert)
                 $array_sql = $obj_Util->prepareImport($dados);
                 unset($dados);
-                $insert = Geral::importaItens($array_sql);
+                $insert = true;
+                $len = count($array_sql);
+                $sqlFileName = "../toImport/" . $nome_final . ".sql";
+                for ($i = 0; $i < $len; $i++) {
+                    $query = $array_sql[$i];
+                    file_put_contents($sqlFileName, $query, FILE_APPEND);
+                }
                 unset($array_sql);
+
+                $descricao = "Novo arquivo para importar em toImport";
+
+                $from = $obj_Util->mail->Username;
+                $nome_from = utf8_decode("Setor de Orçamento e Finanças do HUSM");
+                $altBody = "Importação SOFHUSM ";
+
+                $obj_Util->preparaEmail($from, $nome_from, "joaovictorbolsson@gmail.com", "João", utf8_decode("Nova importação"), $altBody, $descricao);
+
+                //send the message, check for errors
+                if (!$obj_Util->mail->send()) {
+                    Logger::error("Erro ao enviar notificação por e-mail.");
+                }
+
                 if ($insert) {
                     header("Location: ../lte/");
                 } else {
                     exit("Ocorreu um erro ao importar os itens. Contate o administrador.");
                 }
                 break;
-
-            // comentário
 
             case 'analisaSolicAlt':
                 $id_solic = filter_input(INPUT_POST, 'id_solic');
@@ -431,7 +445,6 @@ if (Busca::isActive()) {
                 $analisa = Geral::analisaSolicAlt($id_solic, $id_pedido, $acao);
                 echo $analisa;
                 break;
-            // comment.
 
             case 'altStatus':
                 $id_pedido = filter_input(INPUT_POST, 'id_pedido');
@@ -449,7 +462,6 @@ if (Busca::isActive()) {
                     echo "Ocorreu algum erro no servidor. Contate o administrador.";
                 }
                 break;
-            // comentário
 
             case 'gerenciaPedido':
                 $saldo_setor = filter_input(INPUT_POST, 'saldo_total');
@@ -489,8 +501,6 @@ if (Busca::isActive()) {
                 }
                 break;
 
-            // comentário
-
             case 'liberaSaldo':
                 $id_setor = filter_input(INPUT_POST, 'id_setor');
                 $valor = filter_input(INPUT_POST, 'valor');
@@ -507,8 +517,6 @@ if (Busca::isActive()) {
 
                 break;
 
-            // comentário
-
             case 'aprovaAdi':
                 $id = filter_input(INPUT_POST, 'id');
                 $acao = filter_input(INPUT_POST, 'acao');
@@ -517,8 +525,6 @@ if (Busca::isActive()) {
                     echo "Ocorreu um erro no servidor. Contate o administrador";
                 }
                 break;
-
-            // comentário
 
             case 'alterSenha':
                 $id_user = filter_input(INPUT_POST, 'id_user');
@@ -533,8 +539,6 @@ if (Busca::isActive()) {
                     echo false;
                 }
                 break;
-
-            // comentário
 
             case 'novanoticia':
                 $data = filter_input(INPUT_POST, 'data');
@@ -563,8 +567,6 @@ if (Busca::isActive()) {
                 }
                 break;
 
-            // comentário
-
             case 'delArquivo':
                 $file = filter_input(INPUT_POST, 'caminhoDel');
                 $unlink = unlink($file);
@@ -574,8 +576,6 @@ if (Busca::isActive()) {
                     echo "Falha ao excluir arquivo: " . $file;
                 }
                 break;
-
-            // comentário
 
             case 'excluirNoticia':
                 $id = filter_input(INPUT_POST, 'id');
@@ -620,6 +620,7 @@ if (Busca::isActive()) {
                 $id_pedido = filter_input(INPUT_POST, 'id_pedido');
                 echo $delete = Geral::deletePedido($id_pedido);
                 break;
+
             // redefinindo informações do usuário
             case 'infoUser':
                 $id_user = $_SESSION["id"];
@@ -642,6 +643,7 @@ if (Busca::isActive()) {
                 $solicita = Geral::solicAltPedido($id_pedido, $id_setor, $justificativa);
                 echo $solicita;
                 break;
+
             case 'adiantamento':
                 $valor = filter_input(INPUT_POST, 'valor_adiantamento');
                 $justificativa = filter_input(INPUT_POST, 'justificativa');
@@ -654,6 +656,7 @@ if (Busca::isActive()) {
                     echo "Ocorreu algum erro no servidor. Contate o administrador";
                 }
                 break;
+
             case 'pedido':
                 $id_user = $_SESSION['id'];
                 $id_setor = $_SESSION["id_setor"];

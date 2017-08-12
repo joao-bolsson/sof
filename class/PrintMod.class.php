@@ -24,6 +24,40 @@ final class PrintMod {
         // empty
     }
 
+    public static function relSources(int $setor, int $fonte, string $dI, string $dF): string {
+        $dataI = Util::dateFormat($dI);
+        $dataF = Util::dateFormat($dF);
+
+        $query = Query::getInstance()->exe("SELECT pedido.id, DATE_FORMAT(pedido.data_pedido, '%d/%m/%Y') AS data_pedido, prioridade, status, valor FROM pedido, pedido_id_fonte WHERE pedido_id_fonte.id_pedido = pedido.id AND pedido_id_fonte.id_fonte = " . $fonte . " AND pedido.data_pedido BETWEEN '" . $dataI . "' AND '" . $dataF . "';");
+
+        $query_fonte = Query::getInstance()->exe("SELECT fonte_recurso FROM saldo_fonte WHERE id = " . $fonte);
+        $fonte_recurso = $query_fonte->fetch_object()->fonte_recurso;
+
+        $return = "
+            <fieldset class=\"preg\">
+                    <h5>DESCRIÇÃO DO RELATÓRIO</h5>
+                    <h6>Relatório de Fontes de Recurso</h6>
+                    <h5>Fonte: " . $fonte_recurso . "</h5>
+                    <h5>Setor: " . ARRAY_SETORES[$setor] . "</h5>
+                    <h5>Período: " . $dI . " - " . $dF . "</h5>
+                </fieldset><br>";
+
+        $table = new Table('', 'prod', ['ID', 'Data', 'Prioridade', 'Status', 'Valor'], true);
+
+        while ($obj = $query->fetch_object()) {
+            $row = new Row();
+            $row->addColumn(new Column($obj->id));
+            $row->addColumn(new Column($obj->data_pedido));
+            $row->addColumn(new Column(ARRAY_PRIORIDADE[$obj->prioridade]));
+            $row->addColumn(new Column(ARRAY_STATUS[$obj->status]));
+            $valor = number_format($obj->valor, 3, ',', '.');
+            $row->addColumn(new Column("R$ " . $valor));
+            $table->addRow($row);
+        }
+        $return .= $table->__toString();
+        return $return;
+    }
+
     /**
      * @param int $id_user User id.
      * @param string $period Period in the format DD/MM/YYYY - DD/MM/YYYY.

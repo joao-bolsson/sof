@@ -45,6 +45,16 @@ if (!is_null($type)) {
     if ($type === INPUT_POST) {
         $tipo = filter_input(INPUT_POST, 'tipo');
         switch ($tipo) {
+
+            case 'fontes':
+                $setor = filter_input(INPUT_POST, 'setor');
+                $fonte = filter_input(INPUT_POST, 'fonte');
+                $dataI = filter_input(INPUT_POST, 'dataI');
+                $dataF = filter_input(INPUT_POST, 'dataF');
+
+                $html .= PrintMod::relSources($setor, $fonte, $dataI, $dataF);
+                break;
+
             case 'pedidos':
                 $id_setor = filter_input(INPUT_POST, 'setor');
                 $prioridade = filter_input(INPUT_POST, 'prioridade', FILTER_DEFAULT, FILTER_FORCE_ARRAY);

@@ -42,6 +42,61 @@
         </div>
     </div>
 </div>
+<div class="modal fade" id="relFontes" role="dialog" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span>&times;</span>
+                </button>
+                <h4 class="modal-title">Relatório de Fontes</h4>
+            </div>
+            <form action="../admin/printRelatorio.php" method="post" target="_blank">
+                <input type="hidden" name="tipo" value="fontes"/>
+                <input type="hidden" name="relatorio" value="1"/>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label>Setor</label>
+                        <select id="selectSetorRelFonte" class="form-control" name="setor" required>
+                            <?= Busca::getOptionsSectorHasSources(); ?>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Fonte</label>
+                        <select id="selectFonte" class="form-control" name="fonte" required>
+                            <option value="0">Todos</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Data Início</label>
+                        <div class="input-group">
+                            <div class="input-group-addon">
+                                <i class="fa fa-calendar"></i>
+                            </div>
+                            <input type="text" class="form-control date" name="dataI" required
+                                   data-inputmask="'alias': 'dd/mm/yyyy'" data-mask>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Data Fim</label>
+                        <div class="input-group">
+                            <div class="input-group-addon">
+                                <i class="fa fa-calendar"></i>
+                            </div>
+                            <input type="text" class="form-control date" name="dataF" required
+                                   data-inputmask="'alias': 'dd/mm/yyyy'" data-mask>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-primary" type="submit" style="width: 100%;"><i
+                                class="fa fa-refresh"></i>&nbsp;Gerar
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
 <div aria-hidden="true" class="modal fade" id="cadFontes" role="dialog" tabindex="-1">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -210,8 +265,8 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
-                            aria-hidden="true">&times;</span></button>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span>&times;</span>
+                </button>
                 <h4 class="modal-title">Importar Itens</h4>
             </div>
             <form enctype="multipart/form-data" action="../php/geral.php" method="post">
@@ -222,7 +277,7 @@
                         <label for="file">Arquivo</label>
                         <input type="file" id="file" name="file" required>
 
-                        <p class="help-block">Tamanho máximo: 2 MB</p>
+                        <p class="help-block">Tamanho máximo: <?= MAX_UPLOAD_SIZE ?> MB</p>
                     </div>
                 </div>
                 <div class="modal-footer">

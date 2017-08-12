@@ -25,7 +25,7 @@ final class Geral {
         // empty
     }
 
-    public static function cadAtestado(int $id_user, int $horas, string $justificativa, string $data):bool {
+    public static function cadAtestado(int $id_user, int $horas, string $justificativa, string $data): bool {
         $builder = new SQLBuilder(SQLBuilder::$INSERT);
         $builder->setTables(['usuario_atestados']);
         $builder->setValues([NULL, $id_user, $data, $horas, $justificativa]);
@@ -624,18 +624,6 @@ final class Geral {
             Query::getInstance()->exe("INSERT INTO processos VALUES(NULL, '{$dados[1]}', '{$dados[2]}', '{$dados[3]}', '{$dados[4]}', '{$dados[5]}', '{$dados[6]}', '{$dados[7]}', '{$dados[8]}', '{$dados[9]}', '{$dados[10]}');");
         } else {
             Query::getInstance()->exe("UPDATE processos SET num_processo = '{$dados[1]}', tipo = '{$dados[2]}', estante = '{$dados[3]}', prateleira = '{$dados[4]}', entrada = '{$dados[5]}', saida = '{$dados[6]}', responsavel = '{$dados[7]}', retorno = '{$dados[8]}', obs = '{$dados[9]}', vigencia = '{$dados[10]}' WHERE id = {$dados[0]};");
-        }
-        return true;
-    }
-
-    /**
-     *    Função que importa itens por SQL.
-     */
-    public static function importaItens(array $array_sql): bool {
-        $len = count($array_sql);
-        for ($i = 0; $i < $len; $i++) {
-            $query = $array_sql[$i];
-            Query::getInstance()->exe($query);
         }
         return true;
     }
