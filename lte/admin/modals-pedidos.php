@@ -210,8 +210,8 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
-                            aria-hidden="true">&times;</span></button>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span>&times;</span>
+                </button>
                 <h4 class="modal-title">Importar Itens</h4>
             </div>
             <form enctype="multipart/form-data" action="../php/geral.php" method="post">
@@ -222,7 +222,7 @@
                         <label for="file">Arquivo</label>
                         <input type="file" id="file" name="file" required>
 
-                        <p class="help-block">Tamanho máximo: 2 MB</p>
+                        <p class="help-block">Tamanho máximo: <?= MAX_UPLOAD_SIZE ?> MB</p>
                     </div>
                 </div>
                 <div class="modal-footer">

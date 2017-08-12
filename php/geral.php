@@ -360,7 +360,11 @@ if (Busca::isActive()) {
 
             case 'importItens':
                 // Tamanho máximo do arquivo (em Bytes)
-                $_UP['tamanho'] = 1024 * 1024 * 1024; // 3MB
+                $maxFileSize = 1024;
+                for ($j = 1; $j < MAX_UPLOAD_SIZE; $j++) {
+                    $maxFileSize *= 1024;
+                }
+                $_UP['tamanho'] = $maxFileSize;
                 // Array com as extensões permitidas
                 $_UP['extensoes'] = array('tsv');
                 // Renomeia o arquivo? (Se true, o arquivo será salvo como .jpg e um nome único)
@@ -387,7 +391,7 @@ if (Busca::isActive()) {
                 }
                 // Faz a verificação do tamanho do arquivo
                 if ($_UP['tamanho'] < $_FILES["file"]['size']) {
-                    exit("O arquivo enviado é muito grande, envie arquivos de até 3Mb.");
+                    exit("O arquivo enviado é muito grande, envie arquivos de até " . MAX_UPLOAD_SIZE . "MB.");
                 }
                 $nome_final = $_FILES["file"]['name'];
                 // O arquivo passou em todas as verificações, hora de tentar movê-lo para a pasta
@@ -404,8 +408,28 @@ if (Busca::isActive()) {
                 // prepara a importação dos itens (insert)
                 $array_sql = $obj_Util->prepareImport($dados);
                 unset($dados);
-                $insert = Geral::importaItens($array_sql);
+                $insert = true;
+                $len = count($array_sql);
+                $sqlFileName = "../toImport/" . $nome_final . ".sql";
+                for ($i = 0; $i < $len; $i++) {
+                    $query = $array_sql[$i];
+                    file_put_contents($sqlFileName, $query, FILE_APPEND);
+                }
                 unset($array_sql);
+
+                $descricao = "Novo arquivo para importar em toImport";
+
+                $from = $obj_Util->mail->Username;
+                $nome_from = utf8_decode("Setor de Orçamento e Finanças do HUSM");
+                $altBody = "Importação SOFHUSM ";
+
+                $obj_Util->preparaEmail($from, $nome_from, "joaovictorbolsson@gmail.com", "João", utf8_decode("Nova importação"), $altBody, $descricao);
+
+                //send the message, check for errors
+                if (!$obj_Util->mail->send()) {
+                    Logger::error("Erro ao enviar notificação por e-mail.");
+                }
+
                 if ($insert) {
                     header("Location: ../lte/");
                 } else {

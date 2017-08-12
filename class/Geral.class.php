@@ -629,24 +629,6 @@ final class Geral {
     }
 
     /**
-     *    Função que importa itens por SQL.
-     */
-    public static function importaItens(array $array_sql): bool {
-        $len = count($array_sql);
-        for ($i = 0; $i < $len; $i++) {
-            $query = $array_sql[$i];
-            $starttime = microtime(true);
-
-            Query::getInstance()->exe($query);
-
-            $endtime = microtime(true);
-            $duration = $endtime - $starttime; //calculates total time taken in ms
-            Logger::info("Query executed in: " . $duration . "ms");
-        }
-        return true;
-    }
-
-    /**
      *  Função para dar update numa senha de acordo com o email.
      */
     public static function resetSenha(string $email, string $senha) {
