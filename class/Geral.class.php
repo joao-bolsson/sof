@@ -25,7 +25,7 @@ final class Geral {
         // empty
     }
 
-    public static function cadAtestado(int $id_user, int $horas, string $justificativa, string $data):bool {
+    public static function cadAtestado(int $id_user, int $horas, string $justificativa, string $data): bool {
         $builder = new SQLBuilder(SQLBuilder::$INSERT);
         $builder->setTables(['usuario_atestados']);
         $builder->setValues([NULL, $id_user, $data, $horas, $justificativa]);
@@ -635,7 +635,13 @@ final class Geral {
         $len = count($array_sql);
         for ($i = 0; $i < $len; $i++) {
             $query = $array_sql[$i];
+            $starttime = microtime(true);
+
             Query::getInstance()->exe($query);
+
+            $endtime = microtime(true);
+            $duration = $endtime - $starttime; //calculates total time taken in ms
+            Logger::info("Query executed in: " . $duration . "ms");
         }
         return true;
     }
