@@ -14,15 +14,18 @@ class GeralTest extends TestCase {
      * Tests the requests total with its sum of items values.
      */
     public function testRequestsValues() {
-        $query = Query::getInstance()->exe("SELECT id, valor FROM pedido;");
+        $query = Query::getInstance()->exe("SELECT id, round(valor, 3) AS valor FROM pedido;");
 
+        $error = false;
         while ($obj = $query->fetch_object()) {
-            $ped = Query::getInstance()->exe("SELECT sum(valor) AS soma FROM itens_pedido WHERE id_pedido = " . $obj->id);
+            $ped = Query::getInstance()->exe("SELECT round(sum(valor), 3) AS soma FROM itens_pedido WHERE id_pedido = " . $obj->id);
             $obj_ped = $ped->fetch_object();
-            $total = number_format($obj->valor, 3, '.', '');
-            $sum = number_format($obj_ped->soma, 3, '.', '');
-            $this->assertEquals($total, $sum, "Pedido " . $obj->id . " quebrado");
+            if ($obj->valor != $obj_ped->soma) {
+                echo "Pedido " . $obj->id . " quebrado\n";
+                $error = true;
+            }
         }
+        $this->assertEquals($error, false, "Pedidos quebrados");
     }
 
 }
