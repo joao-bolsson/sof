@@ -9,6 +9,7 @@
 class Logger {
 
     private static $INFO_PATH = __DIR__ . "/../log/info.log";
+    private static $ERROR_PATH = __DIR__ . "/../log/error.log";
 
     /**
      * Default constructor.
@@ -23,7 +24,7 @@ class Logger {
      * @param string $info Information to log
      */
     public static function info(string $info) {
-        error_log('[INFO] [' . date("d/m/Y H:i:s ") . "] " . $info . "\n", 3, self::$INFO_PATH);
+        error_log('[' . date("d/m/Y H:i:s ") . "] " . $info . "\n", 3, self::$INFO_PATH);
     }
 
     /**
@@ -31,7 +32,7 @@ class Logger {
      * @param string $error Error message to log.
      */
     public static function error(string $error) {
-        error_log('[ERROR] [' . date("d/m/Y H:i:s ") . "] " . $error . "\n", 3, self::$INFO_PATH);
+        error_log('[' . date("d/m/Y H:i:s ") . "] " . $error . "\n", 3, self::$ERROR_PATH);
     }
 
 }

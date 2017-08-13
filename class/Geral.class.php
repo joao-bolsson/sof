@@ -492,6 +492,13 @@ final class Geral {
 
             $pedidos[$i++] = $obj->id_pedido;
         }
+        $len = count($pedidos);
+        for ($i = 0; $i < $len; $i++) {
+            $error = self::checkForErrors($pedidos[$i]);
+            if ($error) {
+                Logger::error("Pedido quebrado em editItem: " . $pedidos[$i]);
+            }
+        }
         self::updateRequests($pedidos);
         return true;
     }
@@ -898,8 +905,24 @@ final class Geral {
                 Query::getInstance()->exe("UPDATE itens SET qt_saldo = {$qtd_disponivel[$i]}, qt_utilizado = {$qtd_utilizado[$i]}, vl_saldo = '{$vl_saldo[$i]}', vl_utilizado = '{$vl_utilizado[$i]}' WHERE id = {$id_item[$i]};");
             }
         }
+        $error = self::checkForErrors($pedido);
+        if ($error) {
+            Logger::error("Pedido quebrado em insertPedido: " . $pedido);
+        }
         self::updateRequests([$pedido]);
         return true;
+    }
+
+    private static function checkForErrors(int $pedido): bool {
+        $query = Query::getInstance()->exe("SELECT id, round(valor, 3) AS valor FROM pedido WHERE id = " . $pedido);
+        $obj = $query->fetch_object();
+
+        $ped = Query::getInstance()->exe("SELECT round(sum(valor), 3) AS soma FROM itens_pedido WHERE id_pedido = " . $pedido);
+        $obj_ped = $ped->fetch_object();
+        if ($obj->valor != $obj_ped->soma) {
+            return true;
+        }
+        return false;
     }
 
     /**
@@ -1000,6 +1023,10 @@ final class Geral {
             $query_vl = Query::getInstance()->exe("SELECT valor FROM pedido WHERE id = " . $id_pedido);
             $obj_tot = $query_vl->fetch_object();
             Query::getInstance()->exe("INSERT INTO comentarios VALUES(NULL, {$id_pedido}, '{$hoje}', {$prioridade}, {$fase}, '{$obj_tot->valor}', '{$comentario}');");
+        }
+        $error = self::checkForErrors($id_pedido);
+        if ($error) {
+            Logger::error("Pedido quebrado em pedidoAnalisado: " . $id_pedido);
         }
         return true;
     }
