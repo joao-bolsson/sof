@@ -157,13 +157,13 @@ final class Geral {
     }
 
     public static function scanDataBase() {
-        $query = Query::getInstance()->exe("SELECT id, valor FROM pedido;");
+        $query = Query::getInstance()->exe("SELECT id, round(valor, 3) AS valor FROM pedido;");
 
         while ($obj = $query->fetch_object()) {
-            $ped = Query::getInstance()->exe("SELECT sum(valor) AS soma FROM itens_pedido WHERE id_pedido = " . $obj->id);
+            $ped = Query::getInstance()->exe("SELECT round(sum(valor), 3) AS soma FROM itens_pedido WHERE id_pedido = " . $obj->id);
             $obj_ped = $ped->fetch_object();
-            $total = number_format($obj->valor, 3, '.', '');
-            $sum = number_format($obj_ped->soma, 3, '.', '');
+            $total = $obj->valor;
+            $sum = $obj_ped->soma;
             if ($total != $sum) {
                 Query::getInstance()->exe("UPDATE pedido SET valor = '" . $sum . "' WHERE id = " . $obj->id);
             }
