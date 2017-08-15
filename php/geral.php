@@ -451,10 +451,15 @@ if (Busca::isActive()) {
 
             case 'altStatus':
                 $id_pedido = filter_input(INPUT_POST, 'id_pedido');
-                $id_setor = filter_input(INPUT_POST, 'id_setor');
                 $comentario = filter_input(INPUT_POST, 'comentario');
                 $status = filter_input(INPUT_POST, 'fase');
-                $analisado = Geral::altStatus($id_pedido, $id_setor, $comentario, $status);
+
+                $pedido = new Request($id_pedido);
+
+                $pedido->setStatus($status);
+                $pedido->addComment($comentario);
+
+                $analisado = true;
                 $excluir = filter_input(INPUT_POST, 'excluir');
                 if (!empty($excluir) && $status == 3) {
                     Geral::deletePedido($id_pedido);

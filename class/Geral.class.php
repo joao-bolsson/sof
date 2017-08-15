@@ -485,27 +485,6 @@ final class Geral {
     }
 
     /**
-     *    Função para alterar somente o status do pedido
-     *
-     * @param int $id_pedido Id do pedido
-     * @param int $id_setor Id do setor que fez o pedido
-     * @param string $comentario Comentário do SOF.
-     * @param int $status Novo status do pedido
-     * @return bool
-     */
-    public static function altStatus(int $id_pedido, int $id_setor, string $comentario, int $status): bool {
-        Query::getInstance()->exe("UPDATE pedido SET status = {$status} WHERE id = " . $id_pedido);
-        $query = Query::getInstance()->exe("SELECT pedido.prioridade, pedido.valor FROM pedido WHERE id = " . $id_pedido);
-        $obj = $query->fetch_object();
-        $hoje = date('Y-m-d');
-        if (strlen($comentario) > 0) {
-            $comentario = Query::getInstance()->real_escape_string($comentario);
-            Query::getInstance()->exe("INSERT INTO comentarios VALUES(NULL, {$id_pedido}, '{$hoje}', {$obj->prioridade}, {$status}, '{$obj->valor}', '{$comentario}');");
-        }
-        return true;
-    }
-
-    /**
      * Function that register the request effort.
      *
      * @param int $id_request Request id.

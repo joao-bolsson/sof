@@ -116,4 +116,20 @@ final class Request {
         $this->approv_manager = $obj->aprov_gerencia;
     }
 
+    /**
+     * Add a comment to this request.
+     * @param string $comment Comment to insert for this request.
+     */
+    public function addComment(string $comment) {
+        if (strlen($comment) > 0) {
+            $hoje = date('Y-m-d');
+            $escaped_comment = Query::getInstance()->real_escape_string($comment);
+            $builder = new SQLBuilder(SQLBuilder::$INSERT);
+            $builder->setTables(['comentarios']);
+            $builder->setValues([NULL, $this->id, $hoje, $this->priority, $this->status, $this->value, $escaped_comment]);
+
+            Query::getInstance()->exe($builder->__toString());
+        }
+    }
+
 }
