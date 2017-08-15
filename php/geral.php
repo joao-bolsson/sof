@@ -254,7 +254,8 @@ if (Busca::isActive()) {
                 if (empty($id)) {
                     break;
                 }
-                Geral::enviaFornecedor($id);
+                $pedido = new Request($id);
+                $pedido->setStatus(9);
                 break;
 
             case 'enviaOrdenador':
@@ -262,7 +263,9 @@ if (Busca::isActive()) {
                 if (empty($id_pedido)) {
                     break;
                 }
-                echo Geral::enviaOrdenador($id_pedido);
+                $pedido = new Request($id_pedido);
+                $pedido->setStatus(8);
+                echo true;
                 break;
 
             case 'enviaFontes':

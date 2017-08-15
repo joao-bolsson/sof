@@ -411,25 +411,6 @@ final class Geral {
     }
 
     /**
-     *    Funçao para mudar o status do pedido para 'Enviado ao Fornecedor' (UA)
-     *
-     * @param $id_pedido int Id do pedido.
-     */
-    public static function enviaFornecedor(int $id_pedido) {
-        Query::getInstance()->exe('UPDATE pedido SET status = 9 WHERE id = ' . $id_pedido);
-    }
-
-    /**
-     *    Função para enviar um pedido ao ordenador.
-     *
-     * @return bool if success - true, else false.
-     */
-    public static function enviaOrdenador(int $id_pedido): bool {
-        Query::getInstance()->exe('UPDATE pedido SET status = 8 WHERE id = ' . $id_pedido);
-        return true;
-    }
-
-    /**
      *    Função para cadastrar fontes do pedido (status == Aguarda Orçamento)
      *
      * @return bool If inserts all datas - true, else false.
