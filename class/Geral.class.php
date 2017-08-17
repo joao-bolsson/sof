@@ -997,22 +997,4 @@ final class Geral {
         return $query->num_rows > 0;
     }
 
-    /**
-     *    Função para deletar um pedido (rascunhos).
-     */
-    public static function deletePedido(int $id_pedido): string {
-        Query::getInstance()->exe("DELETE FROM pedido_id_fonte WHERE id_pedido = " . $id_pedido);
-        Query::getInstance()->exe('DELETE FROM licitacao WHERE licitacao.id_pedido = ' . $id_pedido);
-        Query::getInstance()->exe("DELETE FROM pedido_contrato WHERE pedido_contrato.id_pedido = " . $id_pedido);
-        Query::getInstance()->exe("DELETE FROM pedido_grupo WHERE pedido_grupo.id_pedido = " . $id_pedido);
-        Query::getInstance()->exe("DELETE FROM comentarios WHERE comentarios.id_pedido = " . $id_pedido);
-        Query::getInstance()->exe("DELETE FROM itens_pedido WHERE itens_pedido.id_pedido = " . $id_pedido);
-        Query::getInstance()->exe("DELETE FROM pedido_empenho WHERE pedido_empenho.id_pedido = " . $id_pedido);
-        Query::getInstance()->exe("DELETE FROM pedido_fonte WHERE pedido_fonte.id_pedido = " . $id_pedido);
-        Query::getInstance()->exe("DELETE FROM solic_alt_pedido WHERE solic_alt_pedido.id_pedido = " . $id_pedido);
-        Query::getInstance()->exe("DELETE FROM pedido_log_status WHERE pedido_log_status.id_pedido = " . $id_pedido);
-        Query::getInstance()->exe("DELETE FROM pedido WHERE pedido.id = " . $id_pedido);
-        return "true";
-    }
-
 }

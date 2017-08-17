@@ -462,7 +462,7 @@ if (Busca::isActive()) {
                 $analisado = true;
                 $excluir = filter_input(INPUT_POST, 'excluir');
                 if (!empty($excluir) && $status == 3) {
-                    Geral::deletePedido($id_pedido);
+                    Request::delete($id_pedido);
                 }
                 if ($analisado) {
                     header("Location: ../lte/");
@@ -500,7 +500,7 @@ if (Busca::isActive()) {
 
                 $excluir = filter_input(INPUT_POST, 'excluir');
                 if (!empty($excluir) && $fase == 3) {
-                    Geral::deletePedido($id_pedido);
+                    Request::delete($id_pedido);
                 }
                 if ($analisado) {
                     header("Location: ../lte/");
@@ -626,7 +626,7 @@ if (Busca::isActive()) {
 
             case 'deletePedido':
                 $id_pedido = filter_input(INPUT_POST, 'id_pedido');
-                echo $delete = Geral::deletePedido($id_pedido);
+                Request::delete($id_pedido);
                 break;
 
             // redefinindo informações do usuário

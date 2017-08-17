@@ -153,14 +153,10 @@ function deletePedido(id_pedido) {
         users: 1,
         form: 'deletePedido',
         id_pedido: id_pedido
-    }).done(function (resposta) {
-        if (resposta != "true") {
-            alert(resposta);
-        } else {
-            avisoSnack('Pedido deletado com sucesso !');
-            $('#tableListRascunhos').DataTable().destroy();
-            $('#tbodyListRascunhos').html('');
-        }
+    }).done(function () {
+        avisoSnack('Pedido deletado com sucesso !');
+        $('#tableListRascunhos').DataTable().destroy();
+        $('#tbodyListRascunhos').html('');
     });
     $('button').blur();
     $('#listRascunhos').modal('hide');
