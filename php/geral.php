@@ -496,7 +496,8 @@ if (Busca::isActive()) {
 
                 $comentario = filter_input(INPUT_POST, 'comentario');
 
-                $analisado = Geral::pedidoAnalisado($id_pedido, $fase, $prioridade, $id_item, $item_cancelado, $qtd_solicitada, $qt_saldo, $qt_utilizado, $vl_saldo, $vl_utilizado, $valor_item, $saldo_setor, $total_pedido, $comentario);
+                $pedido = new Request($id_pedido);
+                $analisado = $pedido->manage($fase, $prioridade, $id_item, $item_cancelado, $qtd_solicitada, $qt_saldo, $qt_utilizado, $vl_saldo, $vl_utilizado, $valor_item, $saldo_setor, $total_pedido, $comentario);
 
                 $excluir = filter_input(INPUT_POST, 'excluir');
                 if (!empty($excluir) && $fase == 3) {

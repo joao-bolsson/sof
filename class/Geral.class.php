@@ -873,7 +873,7 @@ final class Geral {
         return true;
     }
 
-    private static function checkForErrors(int $pedido): bool {
+    public static function checkForErrors(int $pedido): bool {
         $query = Query::getInstance()->exe("SELECT id, round(valor, 3) AS valor FROM pedido WHERE id = " . $pedido);
         $obj = $query->fetch_object();
 
@@ -885,113 +885,7 @@ final class Geral {
         return false;
     }
 
-    /**
-     *    Função para analisar um pedido, enviar comentários, alterar status, desativar itens
-     *    cancelados, retornar para o setor
-     *
-     * @param $id_item -> array com os ids dos itens utilizados no pedido
-     * @param $item_cancelado -> cada posição está associada ao array $id_item, se na posição x $id_item estiver 1, então o item na posição x de $id_item foi cancelado
-     * @return bool
-     */
-    public static function pedidoAnalisado($id_pedido, $fase, $prioridade, $id_item, $item_cancelado, $qtd_solicitada, $qt_saldo, $qt_utilizado, $vl_saldo, $vl_utilizado, $valor_item, $saldo_setor, $total_pedido, $comentario) {
-
-        $total_pedido_float = $total_pedido;
-        $query = Query::getInstance()->exe('SELECT id_setor FROM pedido WHERE id = ' . $id_pedido);
-        // selecionando o id do setor que fez o pedido
-        $obj_id = $query->fetch_object();
-        $id_setor = $obj_id->id_setor;
-        $hoje = date('Y-m-d');
-
-        $has_sources = self::existsSources($id_pedido);
-        // verificando itens cancelados, somente quando passam pela análise
-        if ($fase <= 4) {
-            if (in_array(1, $item_cancelado) || in_array(true, $item_cancelado) || $fase == 3) {
-                // só percorre os itens se tiver algum item cancelado ou se o pedido for reprovado
-                for ($i = 0; $i < count($id_item); $i++) {
-                    $qt_saldo[$i] += $qtd_solicitada[$i];
-                    $qt_utilizado[$i] -= $qtd_solicitada[$i];
-                    $vl_saldo[$i] += $valor_item[$i];
-                    $vl_utilizado[$i] -= $valor_item[$i];
-                    $cancelado = '';
-                    if ($item_cancelado[$i]) {
-                        $cancelado = ', cancelado = 1';
-                        Query::getInstance()->exe('DELETE FROM itens_pedido WHERE id_pedido = ' . $id_pedido . ' AND id_item = ' . $id_item[$i]);
-                        $total_pedido -= $valor_item[$i];
-                        $total_pedido_float -= $valor_item[$i];
-                    }
-                    Query::getInstance()->exe("UPDATE itens SET qt_saldo = '{$qt_saldo[$i]}', qt_utilizado = '{$qt_utilizado[$i]}', vl_saldo = '{$vl_saldo[$i]}', vl_utilizado = '{$vl_utilizado[$i]}'{$cancelado} WHERE id = " . $id_item[$i]);
-                    if ($has_sources) {
-                        $saldo_setor += $valor_item[$i];
-                        // se não tiver fonte, o saldo do setor não é alterado e a o valor do pedido retorna ao sof
-                    }
-                }
-            }
-        }
-        // alterar o status do pedido
-        $alteracao = 0;
-        if ($fase == 2 || $fase == 3 || $fase == 4) {
-            $total_pedido = number_format($total_pedido, 3, '.', '');
-            Query::getInstance()->exe("UPDATE pedido SET valor = '" . $total_pedido . "' WHERE id = " . $id_pedido);
-            if ($fase == 3) {
-                // reprovado
-                $alteracao = 1;
-                $prioridade = 5;
-                if ($has_sources) {
-                    // se for reprovado, devolve o valor retirado da fonte
-                    $query_fonte = Query::getInstance()->exe("SELECT saldo_fonte.id AS id_fonte, saldo_fonte.valor AS saldo_fonte, pedido.valor AS valor_pedido FROM saldo_fonte, pedido_id_fonte, pedido WHERE pedido.id = pedido_id_fonte.id_pedido AND pedido_id_fonte.id_fonte = saldo_fonte.id AND pedido.id = " . $id_pedido);
-                    if ($query->num_rows > 0) {
-                        $obj = $query_fonte->fetch_object();
-                        $new_vl = $obj->saldo_fonte + $obj->valor_pedido;
-                        $new_vl = number_format($new_vl, 3, '.', '');
-                        Query::getInstance()->exe("UPDATE saldo_fonte SET valor = '" . $new_vl . "' WHERE id_setor = " . $id_setor . " AND id = " . $obj->id_fonte);
-                    }
-                } else {
-                    // devolve o valor do pedido ao sof
-                    $saldo_sof = Busca::getSaldo(2);
-                    $saldo_sof += $total_pedido_float;
-                    $saldo_sof = number_format($saldo_sof, 3, '.', '');
-
-                    Query::getInstance()->exe("UPDATE saldo_setor SET saldo = '" . $saldo_sof . "' WHERE id_setor = 2");
-
-                    // coloca na tabela de lançamentos
-                    // valor do pedido volta ao SOF
-                    $hoje = date('Y-m-d');
-
-                    $sqlBuilder = new SQLBuilder(SQLBuilder::$INSERT);
-                    $sqlBuilder->setTables(['saldos_lancamentos']);
-                    $sqlBuilder->setValues([null, $id_setor, $hoje, -$total_pedido_float, 5]);
-                    Query::getInstance()->exe($sqlBuilder->__toString());
-
-                    $sqlBuilder->setValues([null, 2, $hoje, $total_pedido_float, 5]);
-                    Query::getInstance()->exe($sqlBuilder->__toString());
-                }
-            } else if ($fase == 4) {
-                // aprovado
-                Query::getInstance()->exe("INSERT INTO saldos_lancamentos VALUES(NULL, {$id_setor}, '{$hoje}', '-{$total_pedido}', 4);");
-                // próxima fase
-                $fase++;
-                // não precisa cadastrar fontes, elas já estão cadastradas
-                if (self::existsSources($id_pedido)) {
-                    $fase++;
-                }
-            }
-        }
-        Query::getInstance()->exe("UPDATE pedido SET status = " . $fase . ", prioridade = " . $prioridade . ", alteracao = " . $alteracao . " WHERE id = " . $id_pedido);
-        if (strlen($comentario) > 0) {
-            // inserindo comentário da análise
-            $comentario = Query::getInstance()->real_escape_string($comentario);
-            $query_vl = Query::getInstance()->exe("SELECT valor FROM pedido WHERE id = " . $id_pedido);
-            $obj_tot = $query_vl->fetch_object();
-            Query::getInstance()->exe("INSERT INTO comentarios VALUES(NULL, {$id_pedido}, '{$hoje}', {$prioridade}, {$fase}, '{$obj_tot->valor}', '{$comentario}');");
-        }
-        $error = self::checkForErrors($id_pedido);
-        if ($error) {
-            Logger::error("Pedido quebrado em pedidoAnalisado: " . $id_pedido);
-        }
-        return true;
-    }
-
-    private static function existsSources(int $id_request): bool {
+    public static function existsSources(int $id_request): bool {
         $query = Query::getInstance()->exe("SELECT * FROM pedido_id_fonte WHERE id_pedido = " . $id_request);
 
         return $query->num_rows > 0;
