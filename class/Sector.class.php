@@ -33,6 +33,8 @@ final class Sector {
         if ($query->num_rows > 0) {
             $obj = $query->fetch_object();
             $this->money = $obj->saldo;
+        } else {
+            Query::getInstance()->exe("INSERT INTO saldo_setor VALUES(NULL, {$this->id}, '0.000');");
         }
 
         return $this->money;

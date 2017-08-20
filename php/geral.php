@@ -492,16 +492,19 @@ if (Busca::isActive()) {
                 $id_setor = filter_input(INPUT_POST, 'id_setor');
                 $valor = filter_input(INPUT_POST, 'valor');
 
-                $saldo_atual = Busca::getSaldo($id_setor);
+                $sector = new Sector($id_setor);
+                $vl = floatval($valor);
+                $oldMoney = $sector->getMoney();
+                $sector->setMoney($oldMoney + $vl);
 
-                $libera = Geral::liberaSaldo($id_setor, $valor, $saldo_atual);
-
-                if ($libera) {
-                    echo true;
-                } else {
-                    echo false;
+                if ($sector->getId() != 2) {
+                    $sof = new Sector(2);
+                    $oldSOFMoney = $sof->getMoney();
+                    $sof->setMoney($oldSOFMoney - $vl);
                 }
 
+                $hoje = date('Y-m-d');
+                Query::getInstance()->exe("INSERT INTO saldos_lancamentos VALUES(NULL, {$sector->getId()}, '{$hoje}', '{$vl}', 1);");
                 break;
 
             case 'aprovaAdi':

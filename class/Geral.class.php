@@ -660,33 +660,6 @@ final class Geral {
     }
 
     /**
-     *    Função para liberação de saldo de um setor
-     *
-     * @param int $id_setor .
-     * @param string $vl .
-     * @param float $saldo_atual .
-     * @return bool
-     */
-    public static function liberaSaldo(int $id_setor, string $vl, float $saldo_atual): bool {
-        $valor = floatval($vl);
-        $saldo = $saldo_atual + $valor;
-        $saldo = number_format($saldo, 3, '.', '');
-        $verifica = Query::getInstance()->exe("SELECT saldo_setor.id FROM saldo_setor WHERE saldo_setor.id_setor = " . $id_setor);
-        if ($verifica->num_rows < 1) {
-            Query::getInstance()->exe("INSERT INTO saldo_setor VALUES(NULL, {$id_setor}, '0.000');");
-        }
-        Query::getInstance()->exe("UPDATE saldo_setor SET saldo = '{$saldo}' WHERE id_setor = " . $id_setor);
-        if ($id_setor != 2) {
-            $saldo_sof = Busca::getSaldo(2) - $valor;
-            $saldo_sof = number_format($saldo_sof, 3, '.', '');
-            Query::getInstance()->exe("UPDATE saldo_setor SET saldo = '{$saldo_sof}' WHERE id_setor = 2;");
-        }
-        $hoje = date('Y-m-d');
-        Query::getInstance()->exe("INSERT INTO saldos_lancamentos VALUES(NULL, {$id_setor}, '{$hoje}', '{$valor}', 1);");
-        return true;
-    }
-
-    /**
      *    Função para aprovar uma solicitação de adiantamento
      *
      * @param int $id
