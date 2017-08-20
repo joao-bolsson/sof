@@ -91,6 +91,11 @@ final class Request {
     private $has_sources;
 
     /**
+     * @var Licitacao
+     */
+    private $licitacao;
+
+    /**
      * Default construct.
      * @param int $id Id request (0 for a no existing request in db).
      */
@@ -404,6 +409,29 @@ final class Request {
             Query::getInstance()->exe('UPDATE pedido SET status = ' . $this->status . ' WHERE id = ' . $this->id);
         }
     }
+
+    /**
+     * @param Licitacao $licitacao
+     */
+    public function setLicitacao(Licitacao $licitacao) {
+        $this->licitacao = $licitacao;
+
+        $idLic = $this->licitacao->getId();
+        $tipo = $this->licitacao->getTipo();
+        $numero = $this->licitacao->getNumero();
+        $uasg = $this->licitacao->getUasg();
+        $procOri = $this->licitacao->getProcessoOriginal();
+        $geraContrato = $this->licitacao->getGeraContrato();
+
+        if ($idLic == 0) {
+            Query::getInstance()->exe("INSERT INTO licitacao VALUES(NULL, {$this->id}, {$tipo}, '{$numero}', '{$uasg}', '{$procOri}', {$geraContrato});");
+        } else {
+            Query::getInstance()->exe("UPDATE licitacao SET tipo = {$tipo}, numero = '{$numero}', uasg = '{$uasg}', processo_original = '{$procOri}', gera_contrato = {$geraContrato} WHERE id = {$idLic};");
+        }
+
+        Logger::info("Adiciona licitacao no pedido: " . $this->id);
+    }
+
 
     /**
      * @return int Request id

@@ -774,38 +774,6 @@ final class Geral {
         return $obj->tabela;
     }
 
-    /**
-     * Função para cadastrar uma licitação.
-     *
-     * UASG e procOri podem ser NULL.
-     *
-     * @param string $numero Número informado no formulário.
-     * @param string $uasg Uasg, se o tipo for adesao ou compra compartilhada.
-     * @param string $procOri Processo Original, se o tipo for adesao ou compra compartilhada.
-     * @param int $tipo Tipo de licitação.
-     * @param int $pedido Id do pedido.
-     * @param int $idLic id da licitação.
-     * @param int $geraContrato flag que determina se gera ou nao contrato - apenas mostra na impressao.
-     * @return bool
-     */
-    public static function insertLicitacao(string $numero, $uasg, $procOri, int $tipo, int $pedido, int $idLic, int $geraContrato): bool {
-        if ($tipo != 3 && $tipo != 4 && $tipo != 2) { // Adesão, Compra Compartilhada ou Inexibilidade
-            $uasg = "";
-            $procOri = "";
-            $geraContrato = 0;
-        }
-
-        $query = "";
-        if ($idLic == 0) {
-            $query = "INSERT INTO licitacao VALUES(NULL, {$pedido}, {$tipo}, '{$numero}', '{$uasg}', '{$procOri}', {$geraContrato});";
-        } else {
-            $query = "UPDATE licitacao SET tipo = {$tipo}, numero = '{$numero}', uasg = '{$uasg}', processo_original = '{$procOri}', gera_contrato = {$geraContrato} WHERE id = {$idLic};";
-        }
-
-        Query::getInstance()->exe($query);
-        return true;
-    }
-
     public static function checkForErrors(int $pedido): bool {
         $query = Query::getInstance()->exe("SELECT id, round(valor, 3) AS valor FROM pedido WHERE id = " . $pedido);
         $obj = $query->fetch_object();

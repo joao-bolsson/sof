@@ -684,7 +684,8 @@ if (Busca::isActive()) {
                     $pedido_contrato = 1;
                 }
 
-                $request = new Request(NEW_REQUEST_ID);
+                // $pedido pode ser 0, será sobrescrito depois
+                $request = new Request($pedido);
                 $request->insertNewRequest($id_user, $id_setor, $id_item, $qtd_solicitada, $prioridade, $obs, $pedido_contrato);
 
                 $pedido = $request->getId();
@@ -704,7 +705,9 @@ if (Busca::isActive()) {
                     $geraContrato = 0;
                 }
 
-                Geral::insertLicitacao($numero, $uasg, $procOri, $tipo, $pedido, $idLic, $geraContrato);
+                $licitacao = new Licitacao($idLic, $numero, $uasg, $procOri, $tipo, $geraContrato);
+
+                $request->setLicitacao($licitacao);
 
                 $grupo = filter_input(INPUT_POST, 'grupo');
                 if (!empty($grupo)) {
