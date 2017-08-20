@@ -174,7 +174,7 @@ final class Geral {
      * Update the requests value according its items values.
      * @param array $req Array with requests to be updated.
      */
-    private static function updateRequests(array $req) {
+    public static function updateRequests(array $req) {
         $len = count($req);
         for ($i = 0; $i < $len; $i++) {
             $request = $req[$i];
@@ -803,73 +803,6 @@ final class Geral {
         }
 
         Query::getInstance()->exe($query);
-        return true;
-    }
-
-    /**
-     *   Função para enviar um pedido ao SOF
-     *
-     * @access public
-     * @param array $id_item Array com os ids dos itens do pedido.
-     * @param array $qtd Array com as quantidades dos itens do pedido.
-     * @param array $valor Array com os valores dos itens do pedido.
-     * @param int $pedido Id do pedido. Se 0, pedido novo, senão editando rascunho ou enviando ao SOF.
-     * @return bool
-     */
-    public static function insertPedido($id_user, $id_setor, $id_item, $qtd_solicitada, $qtd_disponivel, $qtd_contrato, $qtd_utilizado, $vl_saldo, $vl_contrato, $vl_utilizado, $valor, $total_pedido, $saldo_total, $prioridade, $obs, &$pedido, $pedido_contrato) {
-
-        $obs = Query::getInstance()->real_escape_string($obs);
-        $hoje = date('Y-m-d');
-        $mes = date("n");
-
-        if ($prioridade == 5) {
-            if ($pedido == 0) {
-                // NOVO
-                //inserindo os dados iniciais do pedido
-                Query::getInstance()->exe("INSERT INTO pedido VALUES(NULL, {$id_setor}, {$id_user}, '{$hoje}', '{$mes}', 1, {$prioridade}, 1, '{$total_pedido}', '{$obs}', {$pedido_contrato}, 0);");
-                $pedido = Query::getInstance()->getInsertId();
-            } else {
-                //remover resgistros antigos do rascunho
-                Query::getInstance()->exe("DELETE FROM itens_pedido WHERE id_pedido = " . $pedido);
-                Query::getInstance()->exe("UPDATE pedido SET data_pedido = '{$hoje}', ref_mes = {$mes}, prioridade = {$prioridade}, valor = '{$total_pedido}', obs = '{$obs}', pedido_contrato = {$pedido_contrato}, aprov_gerencia = 0 WHERE id = " . $pedido);
-            }
-            //inserindo os itens do pedido
-            for ($i = 0; $i < count($id_item); $i++) {
-                Query::getInstance()->exe("INSERT INTO itens_pedido VALUES(NULL, {$pedido}, {$id_item[$i]}, {$qtd_solicitada[$i]}, '{$valor[$i]}');");
-            }
-        } else {
-            // atualiza saldo
-            Query::getInstance()->exe("UPDATE saldo_setor SET saldo = '{$saldo_total}' WHERE id_setor = " . $id_setor);
-            // enviado ao sof
-            if ($pedido == 0) {
-                //inserindo os dados iniciais do pedido
-                Query::getInstance()->exe("INSERT INTO pedido VALUES(NULL, {$id_setor}, {$id_user}, '{$hoje}', '{$mes}', 0, {$prioridade}, 2, '{$total_pedido}', '{$obs}', {$pedido_contrato}, 0);");
-                $pedido = Query::getInstance()->getInsertId();
-            } else {
-                // atualizando pedido
-                Query::getInstance()->exe("UPDATE pedido SET data_pedido = '{$hoje}', ref_mes = {$mes}, alteracao = 0, prioridade = {$prioridade}, status = 2, valor = '{$total_pedido}', obs = '{$obs}', pedido_contrato = {$pedido_contrato}, aprov_gerencia = 0 WHERE id = " . $pedido);
-            }
-            //remover resgistros antigos do pedido
-            Query::getInstance()->exe("DELETE FROM itens_pedido WHERE id_pedido = " . $pedido);
-            // alterando infos dos itens solicitados
-            for ($i = 0; $i < count($id_item); $i++) {
-                Query::getInstance()->exe("INSERT INTO itens_pedido VALUES(NULL, {$pedido}, {$id_item[$i]}, {$qtd_solicitada[$i]}, '{$valor[$i]}');");
-                // qtd_disponivel == qt_saldo
-                $qtd_disponivel[$i] -= $qtd_solicitada[$i];
-                $qtd_utilizado[$i] += $qtd_solicitada[$i];
-                if ($vl_saldo[$i] == 0) {
-                    $vl_saldo[$i] = $vl_contrato[$i];
-                }
-                $vl_saldo[$i] -= $valor[$i];
-                $vl_utilizado[$i] += $valor[$i];
-                Query::getInstance()->exe("UPDATE itens SET qt_saldo = {$qtd_disponivel[$i]}, qt_utilizado = {$qtd_utilizado[$i]}, vl_saldo = '{$vl_saldo[$i]}', vl_utilizado = '{$vl_utilizado[$i]}' WHERE id = {$id_item[$i]};");
-            }
-        }
-        $error = self::checkForErrors($pedido);
-        if ($error) {
-            Logger::error("Pedido quebrado em insertPedido: " . $pedido);
-        }
-        self::updateRequests([$pedido]);
         return true;
     }
 

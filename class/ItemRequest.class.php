@@ -15,6 +15,7 @@ final class ItemRequest {
 
     private $qt_saldo;
     private $qt_utilizado;
+    private $vl_contrato;
     private $vl_saldo;
     private $vl_utilizado;
     private $vl_unitario;
@@ -129,6 +130,13 @@ final class ItemRequest {
     }
 
     /**
+     * @return float
+     */
+    public function getVlContrato(): float {
+        return $this->vl_contrato;
+    }
+
+    /**
      * @param int $qt Number of this item requested in a Request.
      */
     public function setQtdRequested(int $qt) {
@@ -138,12 +146,13 @@ final class ItemRequest {
     }
 
     private function initItem() {
-        $query = Query::getInstance()->exe("SELECT qt_saldo, qt_utilizado, vl_saldo, vl_utilizado, vl_unitario, cancelado FROM itens WHERE id = " . $this->id);
+        $query = Query::getInstance()->exe("SELECT qt_saldo, vl_contrato, qt_utilizado, vl_saldo, vl_utilizado, vl_unitario, cancelado FROM itens WHERE id = " . $this->id);
         if ($query->num_rows > 0) {
             $obj = $query->fetch_object();
 
             $this->qt_saldo = $obj->qt_saldo;
             $this->qt_utilizado = $obj->qt_utilizado;
+            $this->vl_contrato = $obj->vl_contrato;
             $this->vl_saldo = $obj->vl_saldo;
             $this->vl_utilizado = $obj->vl_utilizado;
             $this->vl_unitario = $obj->vl_unitario;

@@ -650,13 +650,6 @@ if (Busca::isActive()) {
                 // dados do formulário
                 $id_item = filter_input(INPUT_POST, 'id_item', FILTER_DEFAULT, FILTER_FORCE_ARRAY);
                 $qtd_solicitada = filter_input(INPUT_POST, 'qtd_solicitada', FILTER_DEFAULT, FILTER_FORCE_ARRAY);
-                $qtd_disponivel = filter_input(INPUT_POST, 'qtd_disponivel', FILTER_DEFAULT, FILTER_FORCE_ARRAY);
-                $qtd_contrato = filter_input(INPUT_POST, 'qtd_contrato', FILTER_DEFAULT, FILTER_FORCE_ARRAY);
-                $qtd_utilizado = filter_input(INPUT_POST, 'qtd_utilizado', FILTER_DEFAULT, FILTER_FORCE_ARRAY);
-                $vl_saldo = filter_input(INPUT_POST, 'vl_saldo', FILTER_DEFAULT, FILTER_FORCE_ARRAY);
-                $vl_contrato = filter_input(INPUT_POST, 'vl_contrato', FILTER_DEFAULT, FILTER_FORCE_ARRAY);
-                $vl_utilizado = filter_input(INPUT_POST, 'vl_utilizado', FILTER_DEFAULT, FILTER_FORCE_ARRAY);
-                $valor = filter_input(INPUT_POST, 'valor', FILTER_DEFAULT, FILTER_FORCE_ARRAY);
 
                 if (empty($id_item)) {
                     exit("Erro ao ler os itens do pedido.");
@@ -674,7 +667,6 @@ if (Busca::isActive()) {
                     }
                 }
 
-                $saldo_total = filter_input(INPUT_POST, 'saldo_total');
                 $prioridade = filter_input(INPUT_POST, 'st');
                 $obs = filter_input(INPUT_POST, 'obs');
 
@@ -692,7 +684,10 @@ if (Busca::isActive()) {
                     $pedido_contrato = 1;
                 }
 
-                Geral::insertPedido($id_user, $id_setor, $id_item, $qtd_solicitada, $qtd_disponivel, $qtd_contrato, $qtd_utilizado, $vl_saldo, $vl_contrato, $vl_utilizado, $valor, $total_pedido, $saldo_total, $prioridade, $obs, $pedido, $pedido_contrato);
+                $request = new Request(NEW_REQUEST_ID);
+                $request->insertNewRequest($id_user, $id_setor, $id_item, $qtd_solicitada, $prioridade, $obs, $pedido_contrato);
+
+                $pedido = $request->getId();
 
                 // licitação
                 $idLic = filter_input(INPUT_POST, 'idLic');

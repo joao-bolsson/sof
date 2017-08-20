@@ -38,7 +38,7 @@ final class Request {
     private $ref_month;
 
     /** This request can be changed by source sector.
-     * @var bool
+     * @var int
      */
     private $change;
 
@@ -54,16 +54,7 @@ final class Request {
     private $status;
 
     private $today;
-
-    /**
-     * @param int $status New request status.
-     */
-    public function setStatus(int $status) {
-        $this->status = $status;
-        if ($this->id != NEW_REQUEST_ID) {
-            Query::getInstance()->exe('UPDATE pedido SET status = ' . $this->status . ' WHERE id = ' . $this->id);
-        }
-    }
+    private $mes;
 
     /**
      * Request value
@@ -79,13 +70,13 @@ final class Request {
 
     /**
      * Flag that indicates if this request is a contract request.
-     * @var bool
+     * @var int
      */
     private $contract_request;
 
     /**
      * Flag that indicates if this request was approved by management.
-     * @var bool
+     * @var int
      */
     private $approv_manager;
 
@@ -105,12 +96,112 @@ final class Request {
      */
     public function __construct(int $id) {
         $this->today = date('Y-m-d');
+        $this->mes = date("n");
         $this->id = $id;
+        $this->value = 0;
+        $this->approv_manager = 0;
         if ($this->id != NEW_REQUEST_ID) {
             $this->fillFieldsFromDB();
             $this->fillItens();
             $this->has_sources = Geral::existsSources($this->id);
         }
+    }
+
+    /**
+     * Insert a new request in DB.
+     *
+     * @param int $id_user User that made this request.
+     * @param int $id_setor Sector that made this request.
+     * @param array $id_item Items that will be used in this request.
+     * @param array $qtd_solicitada Requested values for each item in $id_item.
+     * @param int $prioridade Request priority
+     * @param string $obs Request note.
+     * @param int $pedido_contrato If is a contract request - 1, else - 0.
+     */
+    public function insertNewRequest(int $id_user, int $id_setor, array $id_item, array $qtd_solicitada, int $prioridade, string $obs, int $pedido_contrato) {
+
+        $this->priority = $prioridade;
+        $this->id_sector = $id_setor;
+        $this->id_user = $id_user;
+        $this->contract_request = $pedido_contrato;
+        $this->obs = Query::getInstance()->real_escape_string($obs);
+
+        $this->itens = [];
+        $i = 0;
+        foreach ($id_item as $key => $value) {
+            $item = new ItemRequest($value);
+            $item->setQtdRequested($qtd_solicitada[$key]);
+            $this->itens[$i++] = $item;
+            $this->value += $item->getItemValueInRequest();
+        }
+
+        if ($this->priority == 5) {
+            if ($this->id == NEW_REQUEST_ID) {
+                $this->change = 1;
+                $this->status = 1;
+                //inserindo os dados iniciais do pedido
+                Query::getInstance()->exe("INSERT INTO pedido VALUES(NULL, {$this->id_sector}, {$this->id_user}, '{$this->today}', '{$this->mes}', {$this->change}, {$this->priority}, {$this->status}, '{$this->value}', '{$this->obs}', {$this->contract_request}, {$this->approv_manager});");
+                $this->id = Query::getInstance()->getInsertId();
+            } else {
+                //remover resgistros antigos do rascunho
+                Query::getInstance()->exe("DELETE FROM itens_pedido WHERE id_pedido = " . $this->id);
+                Query::getInstance()->exe("UPDATE pedido SET data_pedido = '{$this->today}', ref_mes = {$this->mes}, prioridade = {$this->priority}, valor = '{$this->value}', obs = '{$this->obs}', pedido_contrato = {$this->contract_request}, aprov_gerencia = {$this->approv_manager} WHERE id = " . $this->id);
+            }
+
+            //inserindo os itens do pedido
+            foreach ($this->itens as $item) {
+                if ($item instanceof ItemRequest) {
+                    Query::getInstance()->exe("INSERT INTO itens_pedido VALUES(NULL, {$this->id}, {$item->getId()}, {$item->getQtRequested()}, '{$item->getItemValueInRequest()}');");
+                }
+            }
+        } else {
+            $this->updateSectorMoney();
+            $this->status = 2;
+            $this->change = 0;
+            // enviado ao sof
+            if ($this->id == NEW_REQUEST_ID) {
+                //inserindo os dados iniciais do pedido
+                Query::getInstance()->exe("INSERT INTO pedido VALUES(NULL, {$this->id_sector}, {$this->id_user}, '{$this->today}', '{$this->mes}', {$this->change}, {$this->priority}, {$this->status}, '{$this->value}', '{$this->obs}', {$this->contract_request}, {$this->approv_manager});");
+                $this->id = Query::getInstance()->getInsertId();
+            } else {
+                // atualizando pedido
+                Query::getInstance()->exe("UPDATE pedido SET data_pedido = '{$this->today}', ref_mes = {$this->mes}, alteracao = {$this->change}, prioridade = {$this->priority}, status = {$this->status}, valor = '{$this->value}', obs = '{$this->obs}', pedido_contrato = {$this->contract_request}, aprov_gerencia = {$this->approv_manager} WHERE id = " . $this->id);
+            }
+            //remover resgistros antigos do pedido
+            Query::getInstance()->exe("DELETE FROM itens_pedido WHERE id_pedido = " . $this->id);
+
+            // alterando infos dos itens solicitados
+            foreach ($this->itens as &$item) {
+                if ($item instanceof ItemRequest) {
+                    $qt_requested = $item->getQtRequested();
+                    $vl_in_request = $item->getItemValueInRequest();
+                    Query::getInstance()->exe("INSERT INTO itens_pedido VALUES(NULL, {$this->id}, {$item->getId()}, {$qt_requested}, '{$vl_in_request}');");
+
+                    $oldQtSaldo = $item->getQtSaldo();
+                    $item->setQtSaldo($oldQtSaldo - $qt_requested);
+
+                    $oldQtUtilizado = $item->getQtUtilizado();
+                    $item->setQtUtilizado($oldQtUtilizado + $qt_requested);
+
+                    $oldVlSaldo = $item->getVlSaldo();
+                    if ($oldVlSaldo == 0) {
+                        $oldVlSaldo = $item->getVlContrato();
+                    }
+
+                    $item->setVlSaldo($oldVlSaldo - $vl_in_request);
+
+                    $oldVlUtilizado = $item->getVlUtilizado();
+                    $item->setVlUtilizado($oldVlUtilizado + $vl_in_request);
+                }
+            }
+
+            $this->updateItens();
+        }
+        $error = Geral::checkForErrors($this->id);
+        if ($error) {
+            Logger::error("Pedido quebrado em insertPedido: " . $this->id);
+        }
+        Geral::updateRequests([$this->id]);
     }
 
     private function fillFieldsFromDB() {
@@ -245,7 +336,7 @@ final class Request {
     }
 
     private function reprove() {
-        $this->change = true;
+        $this->change = 1;
         $this->priority = 5;
 
         if ($this->has_sources) {
@@ -302,6 +393,23 @@ final class Request {
         Query::getInstance()->exe("DELETE FROM solic_alt_pedido WHERE solic_alt_pedido.id_pedido = " . $id);
         Query::getInstance()->exe("DELETE FROM pedido_log_status WHERE pedido_log_status.id_pedido = " . $id);
         Query::getInstance()->exe("DELETE FROM pedido WHERE pedido.id = " . $id);
+    }
+
+    /**
+     * @param int $status New request status.
+     */
+    public function setStatus(int $status) {
+        $this->status = $status;
+        if ($this->id != NEW_REQUEST_ID) {
+            Query::getInstance()->exe('UPDATE pedido SET status = ' . $this->status . ' WHERE id = ' . $this->id);
+        }
+    }
+
+    /**
+     * @return int Request id
+     */
+    public function getId(): int {
+        return $this->id;
     }
 
 }
