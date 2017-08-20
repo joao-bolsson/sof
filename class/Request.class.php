@@ -112,6 +112,71 @@ final class Request {
         }
     }
 
+    private function setDraft() {
+        if ($this->id == NEW_REQUEST_ID) {
+            $this->change = 1;
+            $this->status = 1;
+            //inserindo os dados iniciais do pedido
+            Query::getInstance()->exe("INSERT INTO pedido VALUES(NULL, {$this->id_sector}, {$this->id_user}, '{$this->today}', '{$this->mes}', {$this->change}, {$this->priority}, {$this->status}, '{$this->value}', '{$this->obs}', {$this->contract_request}, {$this->approv_manager});");
+            $this->id = Query::getInstance()->getInsertId();
+        } else {
+            //remover resgistros antigos do rascunho
+            Query::getInstance()->exe("DELETE FROM itens_pedido WHERE id_pedido = " . $this->id);
+            Query::getInstance()->exe("UPDATE pedido SET data_pedido = '{$this->today}', ref_mes = {$this->mes}, prioridade = {$this->priority}, valor = '{$this->value}', obs = '{$this->obs}', pedido_contrato = {$this->contract_request}, aprov_gerencia = {$this->approv_manager} WHERE id = " . $this->id);
+        }
+
+        //inserindo os itens do pedido
+        foreach ($this->itens as $item) {
+            if ($item instanceof ItemRequest) {
+                Query::getInstance()->exe("INSERT INTO itens_pedido VALUES(NULL, {$this->id}, {$item->getId()}, {$item->getQtRequested()}, '{$item->getItemValueInRequest()}');");
+            }
+        }
+    }
+
+    private function sendToSOF() {
+        $this->updateSectorMoney();
+        $this->status = 2;
+        $this->change = 0;
+        // enviado ao sof
+        if ($this->id == NEW_REQUEST_ID) {
+            //inserindo os dados iniciais do pedido
+            Query::getInstance()->exe("INSERT INTO pedido VALUES(NULL, {$this->id_sector}, {$this->id_user}, '{$this->today}', '{$this->mes}', {$this->change}, {$this->priority}, {$this->status}, '{$this->value}', '{$this->obs}', {$this->contract_request}, {$this->approv_manager});");
+            $this->id = Query::getInstance()->getInsertId();
+        } else {
+            // atualizando pedido
+            Query::getInstance()->exe("UPDATE pedido SET data_pedido = '{$this->today}', ref_mes = {$this->mes}, alteracao = {$this->change}, prioridade = {$this->priority}, status = {$this->status}, valor = '{$this->value}', obs = '{$this->obs}', pedido_contrato = {$this->contract_request}, aprov_gerencia = {$this->approv_manager} WHERE id = " . $this->id);
+        }
+        //remover resgistros antigos do pedido
+        Query::getInstance()->exe("DELETE FROM itens_pedido WHERE id_pedido = " . $this->id);
+
+        // alterando infos dos itens solicitados
+        foreach ($this->itens as &$item) {
+            if ($item instanceof ItemRequest) {
+                $qt_requested = $item->getQtRequested();
+                $vl_in_request = $item->getItemValueInRequest();
+                Query::getInstance()->exe("INSERT INTO itens_pedido VALUES(NULL, {$this->id}, {$item->getId()}, {$qt_requested}, '{$vl_in_request}');");
+
+                $oldQtSaldo = $item->getQtSaldo();
+                $item->setQtSaldo($oldQtSaldo - $qt_requested);
+
+                $oldQtUtilizado = $item->getQtUtilizado();
+                $item->setQtUtilizado($oldQtUtilizado + $qt_requested);
+
+                $oldVlSaldo = $item->getVlSaldo();
+                if ($oldVlSaldo == 0) {
+                    $oldVlSaldo = $item->getVlContrato();
+                }
+
+                $item->setVlSaldo($oldVlSaldo - $vl_in_request);
+
+                $oldVlUtilizado = $item->getVlUtilizado();
+                $item->setVlUtilizado($oldVlUtilizado + $vl_in_request);
+            }
+        }
+
+        $this->updateItens();
+    }
+
     /**
      * Insert a new request in DB.
      *
@@ -141,72 +206,10 @@ final class Request {
         }
 
         if ($this->priority == 5) {
-            if ($this->id == NEW_REQUEST_ID) {
-                $this->change = 1;
-                $this->status = 1;
-                //inserindo os dados iniciais do pedido
-                Query::getInstance()->exe("INSERT INTO pedido VALUES(NULL, {$this->id_sector}, {$this->id_user}, '{$this->today}', '{$this->mes}', {$this->change}, {$this->priority}, {$this->status}, '{$this->value}', '{$this->obs}', {$this->contract_request}, {$this->approv_manager});");
-                $this->id = Query::getInstance()->getInsertId();
-            } else {
-                //remover resgistros antigos do rascunho
-                Query::getInstance()->exe("DELETE FROM itens_pedido WHERE id_pedido = " . $this->id);
-                Query::getInstance()->exe("UPDATE pedido SET data_pedido = '{$this->today}', ref_mes = {$this->mes}, prioridade = {$this->priority}, valor = '{$this->value}', obs = '{$this->obs}', pedido_contrato = {$this->contract_request}, aprov_gerencia = {$this->approv_manager} WHERE id = " . $this->id);
-            }
-
-            //inserindo os itens do pedido
-            foreach ($this->itens as $item) {
-                if ($item instanceof ItemRequest) {
-                    Query::getInstance()->exe("INSERT INTO itens_pedido VALUES(NULL, {$this->id}, {$item->getId()}, {$item->getQtRequested()}, '{$item->getItemValueInRequest()}');");
-                }
-            }
+            $this->setDraft();
         } else {
-            $this->updateSectorMoney();
-            $this->status = 2;
-            $this->change = 0;
-            // enviado ao sof
-            if ($this->id == NEW_REQUEST_ID) {
-                //inserindo os dados iniciais do pedido
-                Query::getInstance()->exe("INSERT INTO pedido VALUES(NULL, {$this->id_sector}, {$this->id_user}, '{$this->today}', '{$this->mes}', {$this->change}, {$this->priority}, {$this->status}, '{$this->value}', '{$this->obs}', {$this->contract_request}, {$this->approv_manager});");
-                $this->id = Query::getInstance()->getInsertId();
-            } else {
-                // atualizando pedido
-                Query::getInstance()->exe("UPDATE pedido SET data_pedido = '{$this->today}', ref_mes = {$this->mes}, alteracao = {$this->change}, prioridade = {$this->priority}, status = {$this->status}, valor = '{$this->value}', obs = '{$this->obs}', pedido_contrato = {$this->contract_request}, aprov_gerencia = {$this->approv_manager} WHERE id = " . $this->id);
-            }
-            //remover resgistros antigos do pedido
-            Query::getInstance()->exe("DELETE FROM itens_pedido WHERE id_pedido = " . $this->id);
-
-            // alterando infos dos itens solicitados
-            foreach ($this->itens as &$item) {
-                if ($item instanceof ItemRequest) {
-                    $qt_requested = $item->getQtRequested();
-                    $vl_in_request = $item->getItemValueInRequest();
-                    Query::getInstance()->exe("INSERT INTO itens_pedido VALUES(NULL, {$this->id}, {$item->getId()}, {$qt_requested}, '{$vl_in_request}');");
-
-                    $oldQtSaldo = $item->getQtSaldo();
-                    $item->setQtSaldo($oldQtSaldo - $qt_requested);
-
-                    $oldQtUtilizado = $item->getQtUtilizado();
-                    $item->setQtUtilizado($oldQtUtilizado + $qt_requested);
-
-                    $oldVlSaldo = $item->getVlSaldo();
-                    if ($oldVlSaldo == 0) {
-                        $oldVlSaldo = $item->getVlContrato();
-                    }
-
-                    $item->setVlSaldo($oldVlSaldo - $vl_in_request);
-
-                    $oldVlUtilizado = $item->getVlUtilizado();
-                    $item->setVlUtilizado($oldVlUtilizado + $vl_in_request);
-                }
-            }
-
-            $this->updateItens();
+            $this->sendToSOF();
         }
-        $error = Geral::checkForErrors($this->id);
-        if ($error) {
-            Logger::error("Pedido quebrado em insertPedido: " . $this->id);
-        }
-        Geral::updateRequests([$this->id]);
     }
 
     private function fillFieldsFromDB() {

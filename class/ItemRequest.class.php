@@ -143,10 +143,11 @@ final class ItemRequest {
         $this->qt_requested = $qt;
 
         $this->item_value_in_request = $this->qt_requested * $this->vl_unitario;
+        Logger::info("Vl unit: " . $this->vl_unitario . " | Qtd: " . $this->qt_requested . " | Value: " . $this->item_value_in_request);
     }
 
     private function initItem() {
-        $query = Query::getInstance()->exe("SELECT qt_saldo, vl_contrato, qt_utilizado, vl_saldo, vl_utilizado, vl_unitario, cancelado FROM itens WHERE id = " . $this->id);
+        $query = Query::getInstance()->exe("SELECT qt_saldo, vl_contrato, qt_utilizado, vl_saldo, vl_utilizado, round(replace(vl_unitario, ',', '.'), 3) AS vl_unitario, cancelado FROM itens WHERE id = " . $this->id);
         if ($query->num_rows > 0) {
             $obj = $query->fetch_object();
 
