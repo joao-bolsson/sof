@@ -472,41 +472,19 @@ if (Busca::isActive()) {
                 break;
 
             case 'gerenciaPedido':
-                $saldo_setor = filter_input(INPUT_POST, 'saldo_total');
-                //id do pedido
                 $id_pedido = filter_input(INPUT_POST, 'id_pedido');
-                $total_pedido = filter_input(INPUT_POST, 'total_hidden');
-                $id_item = filter_input(INPUT_POST, 'id_item', FILTER_DEFAULT, FILTER_FORCE_ARRAY);
-                // id dos itens cancelados
                 $item_cancelado = filter_input(INPUT_POST, 'item_cancelado', FILTER_DEFAULT, FILTER_FORCE_ARRAY);
-
-                $qtd_solicitada = filter_input(INPUT_POST, 'qtd_solicitada', FILTER_DEFAULT, FILTER_FORCE_ARRAY);
-                $qt_saldo = filter_input(INPUT_POST, 'qt_saldo', FILTER_DEFAULT, FILTER_FORCE_ARRAY);
-                $qt_utilizado = filter_input(INPUT_POST, 'qt_utilizado', FILTER_DEFAULT, FILTER_FORCE_ARRAY);
-                $vl_saldo = filter_input(INPUT_POST, 'vl_saldo', FILTER_DEFAULT, FILTER_FORCE_ARRAY);
-                $vl_utilizado = filter_input(INPUT_POST, 'vl_utilizado', FILTER_DEFAULT, FILTER_FORCE_ARRAY);
-                $valor_item = filter_input(INPUT_POST, 'valor_item', FILTER_DEFAULT, FILTER_FORCE_ARRAY);
-
                 $fase = filter_input(INPUT_POST, 'fase');
                 $prioridade = filter_input(INPUT_POST, 'prioridade');
-                if ($fase == 'rascunho') {
-                    $prioridade = $fase;
-                    $fase = 'Rascunho';
-                }
-
                 $comentario = filter_input(INPUT_POST, 'comentario');
 
                 $pedido = new Request($id_pedido);
-                $analisado = $pedido->manage($fase, $prioridade, $id_item, $item_cancelado, $qtd_solicitada, $qt_saldo, $qt_utilizado, $vl_saldo, $vl_utilizado, $valor_item, $saldo_setor, $total_pedido, $comentario);
+                $pedido->manage($fase, $item_cancelado);
+                $pedido->addComment($comentario);
 
                 $excluir = filter_input(INPUT_POST, 'excluir');
                 if (!empty($excluir) && $fase == 3) {
                     Request::delete($id_pedido);
-                }
-                if ($analisado) {
-                    header("Location: ../lte/");
-                } else {
-                    echo "Ocorreu algum erro no servidor. Contate o administrador.";
                 }
                 break;
 

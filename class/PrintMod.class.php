@@ -332,7 +332,7 @@ final class PrintMod {
                 // ----------------------------------------------------------------------
                 $query_items = Query::getInstance()->exe("SELECT itens.cod_reduzido, itens.cod_despesa, itens.seq_item_processo, itens.complemento_item, itens.vl_unitario, itens_pedido.qtd, itens_pedido.valor FROM itens, itens_pedido WHERE itens.id = itens_pedido.id_item AND itens_pedido.id_pedido = " . $id_request . " AND itens.cgc_fornecedor = '" . $provider->cgc_fornecedor . "' ORDER BY CAST(itens.seq_item_processo AS UNSIGNED) ASC");
 
-                $table = new Table('', 'prod', ['Código', 'Item', 'Natureza', 'Descrição', 'Quantidade', 'Valor Unitário', 'Valor Total'], true);
+                $table = new Table('', 'prod', ['Código', 'ItemRequest', 'Natureza', 'Descrição', 'Quantidade', 'Valor Unitário', 'Valor Total'], true);
                 while ($item = $query_items->fetch_object()) {
                     $item->complemento_item = mb_strtoupper($item->complemento_item, 'UTF-8');
                     $item->valor = number_format($item->valor, 3, ',', '.');

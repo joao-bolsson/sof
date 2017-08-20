@@ -886,7 +886,7 @@ final class Geral {
     }
 
     public static function existsSources(int $id_request): bool {
-        $query = Query::getInstance()->exe("SELECT * FROM pedido_id_fonte WHERE id_pedido = " . $id_request);
+        $query = Query::getInstance()->exe("SELECT id FROM pedido_id_fonte WHERE id_pedido = " . $id_request);
 
         return $query->num_rows > 0;
     }

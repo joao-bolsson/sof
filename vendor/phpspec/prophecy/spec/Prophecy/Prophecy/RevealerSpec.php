@@ -29,10 +29,10 @@ class RevealerSpec extends ObjectBehavior
         $prophecy2->reveal()->willReturn($object2);
 
         $this->reveal(array(
-            array('item' => $prophecy2),
+            array('ItemRequest' => $prophecy2),
             $prophecy1
         ))->shouldReturn(array(
-            array('item' => $object2),
+            array('ItemRequest' => $object2),
             $object1
         ));
     }
