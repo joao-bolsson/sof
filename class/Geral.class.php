@@ -512,57 +512,6 @@ final class Geral {
     }
 
     /**
-     *    Função que transfere um valor do saldo de um setor para outro
-     *
-     * @param int $ori Setor de origem do saldo.
-     * @param int $dest Setor de destino do saldo.
-     * @param float $valor Valor que será transferido.
-     * @param string $just Justificativa da transferência.
-     * @return bool
-     */
-    public static function transfereSaldo(int $ori, int $dest, float $valor, string $just): bool {
-        $valor = number_format($valor, 3, '.', '');
-        $saldo_ori = '0';
-        // selecionando o saldo do setor origem
-        $query_saldo_ori = Query::getInstance()->exe('SELECT saldo FROM saldo_setor WHERE id_setor = ' . $ori);
-        if ($query_saldo_ori->num_rows < 1) {
-            Query::getInstance()->exe("INSERT INTO saldo_setor VALUES(NULL, {$ori}, '0.000');");
-        } else {
-            $obj = $query_saldo_ori->fetch_object();
-            $saldo_ori = $obj->saldo;
-        }
-
-        if ($valor > $saldo_ori) {
-            return false;
-        }
-        $valor = number_format($valor, 3, '.', '');
-        // registrando a transferência
-        $justificativa = Query::getInstance()->real_escape_string($just);
-        Query::getInstance()->exe("INSERT INTO saldos_transferidos VALUES(NULL, {$ori}, {$dest}, '{$valor}', '{$justificativa}');");
-        // registrando na tabela de lançamentos
-        $hoje = date('Y-m-d');
-        Query::getInstance()->exe("INSERT INTO saldos_lancamentos VALUES(NULL, {$ori}, '{$hoje}', '-{$valor}', 3), (NULL, {$dest}, '{$hoje}', '{$valor}', 3);");
-        // atualizando o saldo do setor origem
-        $saldo_ori -= $valor;
-        $saldo_ori = number_format($saldo_ori, 3, '.', '');
-        Query::getInstance()->exe("UPDATE saldo_setor SET saldo = '{$saldo_ori}' WHERE id_setor = " . $ori);
-        // atualizando o saldo do setor destino
-        $saldo_dest = '0';
-        // selecionando o saldo do setor destino
-        $query_saldo_dest = Query::getInstance()->exe('SELECT saldo FROM saldo_setor WHERE id_setor = ' . $dest);
-        if ($query_saldo_dest->num_rows < 1) {
-            Query::getInstance()->exe("INSERT INTO saldo_setor VALUES(NULL, {$dest}, '0.000');");
-        } else {
-            $obj = $query_saldo_dest->fetch_object();
-            $saldo_dest = $obj->saldo;
-        }
-        $saldo_dest += $valor;
-        $saldo_dest = number_format($saldo_dest, 3, '.', '');
-        Query::getInstance()->exe("UPDATE saldo_setor SET saldo = '{$saldo_dest}' WHERE id_setor = " . $dest);
-        return true;
-    }
-
-    /**
      *    Função para cadastrar novo tipo de processo.
      */
     public static function newTypeProcess(string $tipo): bool {

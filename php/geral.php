@@ -311,10 +311,13 @@ if (Busca::isActive()) {
                 $dest = filter_input(INPUT_POST, 'dest');
                 $valor = filter_input(INPUT_POST, 'valor');
                 $just = filter_input(INPUT_POST, 'just');
-                $transfere = Geral::transfereSaldo($ori, $dest, $valor, $just);
+
+                $sector = new Sector($dest);
+                $sof = new Sector(2);
+
+                $transfere = $sof->transferMoneyTo($sector, $valor, $just);
 
                 $fonte = filter_input(INPUT_POST, 'fonte');
-
                 Geral::cadSourceToBalance($fonte, $dest, $valor);
 
                 if ($transfere) {
