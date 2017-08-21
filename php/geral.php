@@ -197,7 +197,8 @@ if (Busca::isActive()) {
                 }
                 $senha = Util::criaSenha();
 
-                $id_user = Geral::cadUser($nome, $login, $email, $setor, $senha);
+                $user = new User(0);
+                $user->createOrUpdate($nome, $login, $email, $setor, $senha);
 
                 $noticias = 0;
                 $saldos = 0;
@@ -221,7 +222,7 @@ if (Busca::isActive()) {
                     }
                 }
 
-                Geral::cadPermissao($id_user, $noticias, $saldos, $pedidos, $recepcao);
+                $user->setPermissions($noticias, $saldos, $pedidos, $recepcao);
 
                 $from = $obj_Util->mail->Username;
                 $nome_from = utf8_decode("Setor de Orçamento e Finanças do HUSM");

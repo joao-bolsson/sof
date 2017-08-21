@@ -367,40 +367,6 @@ final class Geral {
     }
 
     /**
-     * Cadastra um usuário.
-     * @param string $nome Nome do usuário.
-     * @param string $login Login.
-     * @param string $email E-mail para contato e perda de senha.
-     * @param int $setor Id do setor do usuário.
-     * @param string $senha Senha do usuário feita pelo sistema.
-     *
-     * @return int User id.
-     */
-    public static function cadUser(string $nome, string $login, string $email, int $setor, string $senha): int {
-        $senha_crp = crypt($senha, SALT);
-
-        $query = Query::getInstance()->exe("SELECT id FROM usuario WHERE email = '" . $email . "';");
-        $id = 0;
-        if ($query->num_rows > 0) {
-            // usuário já existente, atualiza as informações e reativa
-            $id = $query->fetch_object()->id;
-
-            Query::getInstance()->exe("UPDATE usuario SET nome = '" . $nome . "', login = '" . $login . "', senha = '" . $senha_crp . "', id_setor = " . $setor . ", ativo = 1 WHERE id = " . $id);
-        } else {
-            Query::getInstance()->exe("INSERT INTO usuario VALUES(NULL, '{$nome}', '{$login}', '{$senha_crp}', {$setor}, '{$email}', 1);");
-            $id = Query::getInstance()->getInsertId();
-        }
-
-        return $id;
-    }
-
-    public static function cadPermissao(int $usuario, int $noticias, int $saldos, int $pedidos, int $recepcao) {
-        // garante reativação de usuários
-        Query::getInstance()->exe("DELETE FROM usuario_permissoes WHERE id_usuario = " . $usuario);
-        Query::getInstance()->exe("INSERT INTO usuario_permissoes VALUES({$usuario}, {$noticias}, {$saldos}, {$pedidos}, {$recepcao});");
-    }
-
-    /**
      * Insere um grupo ao pedido.
      * @param int $pedido Id do pedido.
      * @param int $grupo id do grupo para inserir ao pedido.
