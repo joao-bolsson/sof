@@ -184,5 +184,12 @@ final class User {
         Query::getInstance()->exe('UPDATE usuario_hora SET horas = ' . $horas . ' WHERE id = ' . $id);
     }
 
+    /**
+     * Disable this user.
+     */
+    public function disable() {
+        Query::getInstance()->exe("UPDATE usuario SET ativo = 0 WHERE id = " . $this->id);
+    }
+
 
 }

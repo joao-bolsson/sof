@@ -67,9 +67,10 @@ if (Busca::isActive()) {
                 break;
 
             case 'desativaUser':
-                $user = filter_input(INPUT_POST, 'user');
-                if ($user !== NULL) {
-                    Geral::disableUser($user);
+                $id_user = filter_input(INPUT_POST, 'user');
+                if ($id_user !== NULL) {
+                    $user = new User($id_user);
+                    $user->disable();
                 } else {
                     echo "fail";
                 }

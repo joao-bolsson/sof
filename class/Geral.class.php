@@ -68,42 +68,6 @@ final class Geral {
     }
 
     /**
-     * Função usada para recolhimento de saldo dos demais setores para o SOF.
-     *
-     * @param int $id_setor Setor para recolher o saldo.
-     * @return bool flag indicating the success or not of this function.
-     */
-    public static function revertMoney(int $id_setor): bool {
-        $query_saldo = Query::getInstance()->exe("SELECT saldo FROM saldo_setor WHERE id_setor = " . $id_setor . " LIMIT 1;");
-
-        if ($query_saldo->num_rows < 1) {
-            Logger::error("Setor não possui saldo. Não pode ser recolhido.");
-            return false;
-        }
-        $obj_saldo = $query_saldo->fetch_object();
-        $vl_recolhido = $obj_saldo->saldo;
-
-        Query::getInstance()->exe("UPDATE saldo_setor SET saldo = '0.000' WHERE id_setor = " . $id_setor);
-
-        $hoje = date('Y-m-d');
-        $sqlBuilder = new SQLBuilder(SQLBuilder::$INSERT);
-        $sqlBuilder->setTables(['saldos_lancamentos']);
-        $sqlBuilder->setValues([null, $id_setor, $hoje, -$vl_recolhido, 5]);
-        Query::getInstance()->exe($sqlBuilder->__toString());
-
-        $query_saldo_sof = Query::getInstance()->exe("SELECT saldo FROM saldo_setor WHERE id_setor = 2 LIMIT 1;");
-        $objSaldoSof = $query_saldo_sof->fetch_object();
-        $novoSaldo = $objSaldoSof->saldo + $vl_recolhido;
-
-        Query::getInstance()->exe("UPDATE saldo_setor SET saldo = '" . $novoSaldo . "' WHERE id_setor = 2;");
-
-        $sqlBuilder->setValues([null, 2, $hoje, $vl_recolhido, 5]);
-        Query::getInstance()->exe($sqlBuilder->__toString());
-
-        return true;
-    }
-
-    /**
      * @param array $sectors Setores que terão essa fonte cadastrada para futuros lançamentos.
      * @param string $fonte Fonte.
      * @param string $ptres PTRES da fonte de recurso.
@@ -134,15 +98,6 @@ final class Geral {
             $novo_valor = $old_value + $add_value;
             Query::getInstance()->exe("UPDATE saldo_fonte SET valor = '" . $novo_valor . "' WHERE id = " . $fonte);
         }
-    }
-
-    /**
-     * Function that disable an user.
-     *
-     * @param int $id User id.
-     */
-    public static function disableUser(int $id) {
-        Query::getInstance()->exe("UPDATE usuario SET ativo = 0 WHERE id = " . $id);
     }
 
     /**
