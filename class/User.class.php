@@ -143,5 +143,46 @@ final class User {
         return $this->id;
     }
 
+    /**
+     * Register a in or out of hours control.
+     *
+     * @param int $log If 1 - in, else - out.
+     * @param string $ip User IP address.
+     */
+    public function pointRegister(int $log, string $ip) {
+        if ($log == 1) {
+            // entrada
+            Query::getInstance()->exe('INSERT INTO usuario_hora VALUES(NULL, ' . $this->id . ", NOW(), NULL, NULL, '" . $ip . "')");
+        } else {
+            // saída
+            $id_last = Busca::getLastRegister();
+            Query::getInstance()->exe('UPDATE usuario_hora SET saida = NOW() WHERE id = ' . $id_last);
+            // atualiza horas realizadas
+            $horas = Util::getTimeDiffHora($id_last);
+            Query::getInstance()->exe('UPDATE usuario_hora SET horas = ' . $horas . ' WHERE id = ' . $id_last);
+        }
+    }
+
+    /**
+     * Edit the log informations.
+     *
+     * @param int $id Log id.
+     * @param string $entrada New int
+     * @param string $saida New out.
+     */
+    public function editLog(int $id, string $entrada, string $saida) {
+        $dateTimeE = DateTime::createFromFormat('d/m/Y H:i:s', $entrada);
+        $in = $dateTimeE->format('Y-m-d H:i:s');
+
+        $dateTimeS = DateTime::createFromFormat('d/m/Y H:i:s', $saida);
+        $out = $dateTimeS->format('Y-m-d H:i:s');
+
+        Query::getInstance()->exe("UPDATE usuario_hora SET entrada = '" . $in . "', saida = '" . $out . "' WHERE id = " . $id);
+
+        // atualiza horas realizadas
+        $horas = Util::getTimeDiffHora($id);
+        Query::getInstance()->exe('UPDATE usuario_hora SET horas = ' . $horas . ' WHERE id = ' . $id);
+    }
+
 
 }

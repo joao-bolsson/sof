@@ -87,13 +87,17 @@ if (Busca::isActive()) {
                 $entrada = filter_input(INPUT_POST, 'entrada');
                 $saida = filter_input(INPUT_POST, 'saida');
 
-                Geral::editLog($id, $entrada, $saida);
+                $user = new User($_SESSION['id']);
+                $user->editLog($id, $entrada, $saida);
                 header('Location: ../lte/hora.php');
                 break;
 
             case 'pointRegister':
                 $log = filter_input(INPUT_POST, 'log');
-                Geral::pointRegister($log);
+                $ip = filter_input(INPUT_SERVER, 'REMOTE_ADDR');
+                $user = new User($_SESSION['id']);
+
+                $user->pointRegister($log, $ip);
                 break;
 
             case 'formEditRegItem':

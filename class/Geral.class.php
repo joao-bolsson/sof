@@ -183,36 +183,6 @@ final class Geral {
         }
     }
 
-    public static function editLog(int $id, string $entrada, string $saida) {
-        $dateTimeE = DateTime::createFromFormat('d/m/Y H:i:s', $entrada);
-        $in = $dateTimeE->format('Y-m-d H:i:s');
-
-        $dateTimeS = DateTime::createFromFormat('d/m/Y H:i:s', $saida);
-        $out = $dateTimeS->format('Y-m-d H:i:s');
-
-        Query::getInstance()->exe("UPDATE usuario_hora SET entrada = '" . $in . "', saida = '" . $out . "' WHERE id = " . $id);
-
-        // atualiza horas realizadas
-        $horas = Util::getTimeDiffHora($id);
-        Query::getInstance()->exe('UPDATE usuario_hora SET horas = ' . $horas . ' WHERE id = ' . $id);
-    }
-
-    public static function pointRegister(int $log) {
-        $id_usuario = $_SESSION['id'];
-        if ($log == 1) {
-            $ip = filter_input(INPUT_SERVER, 'REMOTE_ADDR');
-            // entrada
-            Query::getInstance()->exe('INSERT INTO usuario_hora VALUES(NULL, ' . $id_usuario . ", NOW(), NULL, NULL, '" . $ip . "')");
-        } else {
-            // saída
-            $id_last = Busca::getLastRegister();
-            Query::getInstance()->exe('UPDATE usuario_hora SET saida = NOW() WHERE id = ' . $id_last);
-            // atualiza horas realizadas
-            $horas = Util::getTimeDiffHora($id_last);
-            Query::getInstance()->exe('UPDATE usuario_hora SET horas = ' . $horas . ' WHERE id = ' . $id_last);
-        }
-    }
-
     /**
      *
      * @param array $dados Informações que serão inseridas na tabela de itens.
