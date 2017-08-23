@@ -25,18 +25,6 @@ final class Geral {
         // empty
     }
 
-    public static function cadAtestado(int $id_user, int $horas, string $justificativa, string $data): bool {
-        $builder = new SQLBuilder(SQLBuilder::$INSERT);
-        $builder->setTables(['usuario_atestados']);
-        $builder->setValues([NULL, $id_user, $data, $horas, $justificativa]);
-
-        $query = Query::getInstance()->exe($builder->__toString());
-        if ($query) {
-            return true;
-        }
-        return false;
-    }
-
     public static function insertRequestSources(int $id_pedido, int $id_fonte, int $prioridade) {
         $query_vl = Query::getInstance()->exe("SELECT valor FROM pedido WHERE id = " . $id_pedido);
         $query_vlF = Query::getInstance()->exe("SELECT valor FROM saldo_fonte WHERE id = " . $id_fonte);

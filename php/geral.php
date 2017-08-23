@@ -53,7 +53,9 @@ if (Busca::isActive()) {
                 $dia = filter_input(INPUT_POST, 'dia');
 
                 $data = Util::dateFormat($dia);
-                echo Geral::cadAtestado($id_user, $horas, $justificativa, $data);
+
+                $user = new User($id_user);
+                echo $user->addAttest($horas, $justificativa, $data);
                 break;
 
             case 'cadFontesTransf':

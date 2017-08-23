@@ -191,5 +191,25 @@ final class User {
         Query::getInstance()->exe("UPDATE usuario SET ativo = 0 WHERE id = " . $this->id);
     }
 
+    /**
+     * Insert a new attest to this user.
+     *
+     * @param int $horas Attest hours out.
+     * @param string $justificativa Attest justificative.
+     * @param string $data Attest date.
+     * @return bool If success - true, else - false.
+     */
+    public function addAttest(int $horas, string $justificativa, string $data): bool {
+        $builder = new SQLBuilder(SQLBuilder::$INSERT);
+        $builder->setTables(['usuario_atestados']);
+        $builder->setValues([NULL, $this->id, $data, $horas, $justificativa]);
+
+        $query = Query::getInstance()->exe($builder->__toString());
+        if ($query) {
+            return true;
+        }
+        return false;
+    }
+
 
 }
