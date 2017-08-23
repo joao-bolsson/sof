@@ -86,14 +86,14 @@ final class Request {
     private $itens;
 
     /**
-     * @var bool Flag that indicates if this request has sources.
-     */
-    private $has_sources;
-
-    /**
      * @var Licitacao
      */
     private $licitacao;
+
+    /**
+     * @var MoneySource
+     */
+    private $moneySource;
 
     /**
      * Default construct.
@@ -105,10 +105,24 @@ final class Request {
         $this->id = $id;
         $this->value = 0;
         $this->approv_manager = 0;
+        $this->moneySource = NULL;
         if ($this->id != NEW_REQUEST_ID) {
             $this->fillFieldsFromDB();
             $this->fillItens();
-            $this->has_sources = Geral::existsSources($this->id);
+            $this->initMoneySource();
+        }
+    }
+
+    private function hasSources() {
+        return !empty($this->moneySource);
+    }
+
+    private function initMoneySource() {
+        $query = Query::getInstance()->exe("SELECT id_fonte FROM pedido_id_fonte WHERE id_pedido = " . $this->id);
+        if ($query->num_rows > 0) {
+            $obj = $query->fetch_object();
+
+            $this->moneySource = new MoneySource($obj->id_fonte);
         }
     }
 
@@ -241,7 +255,7 @@ final class Request {
                 $this->itens[$i++] = $item;
             }
         } else {
-            Logger::info("[ERROR] pedido sem itens, id pedido: " . $this->id);
+            Logger::error("Pedido sem itens, id pedido: " . $this->id);
         }
     }
 
@@ -347,7 +361,7 @@ final class Request {
         $this->change = 1;
         $this->priority = 5;
 
-        if ($this->has_sources) {
+        if ($this->hasSources()) {
             // devolve o valor do pedido para a fonte
             $query_fonte = Query::getInstance()->exe("SELECT saldo_fonte.id AS id_fonte, saldo_fonte.valor AS saldo_fonte FROM saldo_fonte, pedido_id_fonte WHERE pedido_id_fonte.id_fonte = saldo_fonte.id AND pedido_id_fonte.id_pedido = " . $this->id);
             if ($query_fonte->num_rows > 0) {
@@ -380,7 +394,7 @@ final class Request {
         // próxima fase
         $this->status++;
         // não precisa cadastrar fontes, elas já estão cadastradas
-        if ($this->has_sources) {
+        if ($this->hasSources()) {
             $this->status++;
         }
     }
@@ -431,10 +445,31 @@ final class Request {
         } else {
             Query::getInstance()->exe("UPDATE licitacao SET tipo = {$tipo}, numero = '{$numero}', uasg = '{$uasg}', processo_original = '{$procOri}', gera_contrato = {$geraContrato} WHERE id = {$idLic};");
         }
-
-        Logger::info("Adiciona licitacao no pedido: " . $this->id);
     }
 
+    /**
+     * @param MoneySource $moneySource
+     */
+    public function setMoneySource(MoneySource $moneySource) {
+        if ($this->hasSources()) {
+            // deleta a fonte atual: garante a edição corretamente
+            Query::getInstance()->exe("DELETE FROM pedido_id_fonte WHERE id_pedido = " . $this->id);
+        }
+        $this->moneySource = $moneySource;
+
+        if ($this->priority != 5) {
+            // rascunho, o saldo da fonte não deve ser alterado
+            $oldValue = $moneySource->getValue();
+            $moneySource->setValue($oldValue - $this->value);
+        }
+
+        // associa a fonte ao pedido
+        $sql = new SQLBuilder(SQLBuilder::$INSERT);
+        $sql->setTables(["pedido_id_fonte"]);
+        $sql->setValues([NULL, $this->id, $moneySource->getId()]);
+
+        Query::getInstance()->exe($sql->__toString());
+    }
 
     /**
      * @return int Request id

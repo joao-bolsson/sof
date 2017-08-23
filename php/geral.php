@@ -700,7 +700,9 @@ if (Busca::isActive()) {
 
                 // $pedido pode ser 0, será sobrescrito depois
                 $request = new Request($pedido);
-                $request->insertNewRequest($id_user, $id_setor, $id_item, $qtd_solicitada, $prioridade, $obs, $pedido_contrato);
+                if (!$pedido_existe) {
+                    $request->insertNewRequest($id_user, $id_setor, $id_item, $qtd_solicitada, $prioridade, $obs, $pedido_contrato);
+                }
 
                 $pedido = $request->getId();
 
@@ -743,7 +745,8 @@ if (Busca::isActive()) {
                 }
                 Geral::insertPedContr($pedido, $tipo_cont, $siafi);
 
-                Geral::insertRequestSources($pedido, $id_fonte, $prioridade);
+                $moneySource = new MoneySource($id_fonte);
+                $request->setMoneySource($moneySource);
 
                 header("Location: ../lte/solicitacoes.php");
                 break;

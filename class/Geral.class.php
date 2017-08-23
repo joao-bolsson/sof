@@ -25,36 +25,6 @@ final class Geral {
         // empty
     }
 
-    public static function insertRequestSources(int $id_pedido, int $id_fonte, int $prioridade) {
-        $query_vl = Query::getInstance()->exe("SELECT valor FROM pedido WHERE id = " . $id_pedido);
-        $query_vlF = Query::getInstance()->exe("SELECT valor FROM saldo_fonte WHERE id = " . $id_fonte);
-
-        if ($query_vl->num_rows < 1 || $query_vlF->num_rows < 1) {
-            exit("Erro ao inserir as fonte de recurso.");
-        }
-
-        $vl_pedido = $query_vl->fetch_object()->valor;
-        $vl_fonte = $query_vlF->fetch_object()->valor;
-
-        if (self::existsSources($id_pedido)) {
-            // deleta a fonte atual: garante a edição corretamente
-            Query::getInstance()->exe("DELETE FROM pedido_id_fonte WHERE id_pedido = " . $id_pedido);
-        }
-
-        if ($prioridade != 5) { // rascunho, o saldo da fonte não deve ser alterado
-            $vl_fonte -= $vl_pedido;
-
-            Query::getInstance()->exe("UPDATE saldo_fonte SET valor = '" . $vl_fonte . "' WHERE id = " . $id_fonte);
-        }
-
-        // associa a fonte ao pedido
-        $sql = new SQLBuilder(SQLBuilder::$INSERT);
-        $sql->setTables(["pedido_id_fonte"]);
-        $sql->setValues([NULL, $id_pedido, $id_fonte]);
-
-        Query::getInstance()->exe($sql->__toString());
-    }
-
     /**
      * @param array $sectors Setores que terão essa fonte cadastrada para futuros lançamentos.
      * @param string $fonte Fonte.

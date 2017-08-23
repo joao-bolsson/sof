@@ -143,7 +143,6 @@ final class ItemRequest {
         $this->qt_requested = $qt;
 
         $this->item_value_in_request = $this->qt_requested * $this->vl_unitario;
-        Logger::info("Vl unit: " . $this->vl_unitario . " | Qtd: " . $this->qt_requested . " | Value: " . $this->item_value_in_request);
     }
 
     private function initItem() {
