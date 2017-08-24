@@ -96,6 +96,11 @@ final class Request {
     private $moneySource;
 
     /**
+     * @var SectorGroup
+     */
+    private $group;
+
+    /**
      * Default construct.
      * @param int $id Id request (0 for a no existing request in db).
      */
@@ -106,10 +111,21 @@ final class Request {
         $this->value = 0;
         $this->approv_manager = 0;
         $this->moneySource = NULL;
+        $this->group = NULL;
         if ($this->id != NEW_REQUEST_ID) {
             $this->fillFieldsFromDB();
             $this->fillItens();
             $this->initMoneySource();
+            $this->initGroup();
+        }
+    }
+
+    private function initGroup() {
+        $query = Query::getInstance()->exe("SELECT id_grupo FROM pedido_grupo WHERE id_pedido = " . $this->id);
+        if ($query->num_rows > 0) {
+            $obj = $query->fetch_object();
+
+            $this->group = new SectorGroup($obj->id_grupo);
         }
     }
 
@@ -470,6 +486,28 @@ final class Request {
 
         Query::getInstance()->exe($sql->__toString());
     }
+
+    /**
+     * @return SectorGroup
+     */
+    public function getGroup(): SectorGroup {
+        return $this->group;
+    }
+
+    /**
+     * @param SectorGroup $group
+     */
+    public function setGroup(SectorGroup $group) {
+        if (!empty($this->group)) {
+            // update
+            Query::getInstance()->exe("UPDATE pedido_grupo SET id_grupo = {$group->getId()} WHERE id_pedido = {$this->id} LIMIT 1;");
+        } else {
+            // insert
+            Query::getInstance()->exe("INSERT INTO pedido_grupo VALUES({$this->id}, {$group->getId()});");
+        }
+        $this->group = $group;
+    }
+
 
     /**
      * @return int Request id

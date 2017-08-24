@@ -727,7 +727,8 @@ if (Busca::isActive()) {
 
                 $grupo = filter_input(INPUT_POST, 'grupo');
                 if (!empty($grupo)) {
-                    Geral::insertGrupoPedido($pedido, $grupo, $pedido_existe);
+                    $group = new SectorGroup($grupo);
+                    $request->setGroup($group);
                 }
 
                 // pedido de contrato

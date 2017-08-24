@@ -250,19 +250,10 @@ final class Geral {
     }
 
     /**
-     * Insere um grupo ao pedido.
-     * @param int $pedido Id do pedido.
-     * @param int $grupo id do grupo para inserir ao pedido.
-     */
-    public static function insertGrupoPedido(int $pedido, int $grupo, bool $existe) {
-        $sql = ($existe) ? "UPDATE pedido_grupo SET id_grupo = {$grupo} WHERE id_pedido = {$pedido} LIMIT 1;" : "INSERT INTO pedido_grupo VALUES({$pedido}, {$grupo});";
-        Query::getInstance()->exe($sql);
-    }
-
-    /**
      *    Função para cadastrar fontes do pedido (status == Aguarda Orçamento)
      *
      * @return bool If inserts all datas - true, else false.
+     * @deprecated Use Request->setMoneySource()
      */
     public static function cadastraFontes(int $id_pedido, string $fonte, string $ptres, string $plano): bool {
         $fonte = Query::getInstance()->real_escape_string($fonte);
