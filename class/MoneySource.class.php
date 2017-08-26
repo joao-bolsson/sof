@@ -113,5 +113,21 @@ final class MoneySource {
         Query::getInstance()->exe("UPDATE saldo_fonte SET valor = '" . $this->value . "' WHERE id = " . $this->id);
     }
 
+    /**
+     * @param array $sectors Sectors that will have this money source.
+     * @param string $souce Source.
+     * @param string $ptres PTRES.
+     * @param string $plan Intern plan.
+     */
+    public static function newSourceToSectors(array $sectors, string $souce, string $ptres, string $plan) {
+        foreach ($sectors as $sector) {
+            $builder = new SQLBuilder(SQLBuilder::$INSERT);
+            $builder->setTables(['saldo_fonte']);
+            $builder->setValues([NULL, $sector, 0, $souce, $ptres, $plan]);
+
+            Query::getInstance()->exe($builder->__toString());
+        }
+    }
+
 
 }

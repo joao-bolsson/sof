@@ -64,7 +64,7 @@ if (Busca::isActive()) {
                 $ptres = filter_input(INPUT_POST, 'ptres');
                 $plano = filter_input(INPUT_POST, 'plano');
 
-                Geral::cadSourceToSectors($setores, $fonte, $ptres, $plano);
+                MoneySource::newSourceToSectors($setores, $fonte, $ptres, $plano);
                 header("Location: ../lte/");
                 break;
 
@@ -81,7 +81,7 @@ if (Busca::isActive()) {
             case 'regJustify':
                 $just = filter_input(INPUT_POST, 'justificativa');
 
-                Geral::recordJustify($just);
+                Util::recordJustify($just);
                 header("Location: ../lte/");
                 break;
 
@@ -317,16 +317,21 @@ if (Busca::isActive()) {
             case 'transfereSaldo':
                 $ori = filter_input(INPUT_POST, 'ori');
                 $dest = filter_input(INPUT_POST, 'dest');
-                $valor = filter_input(INPUT_POST, 'valor');
+                $val = filter_input(INPUT_POST, 'valor');
                 $just = filter_input(INPUT_POST, 'just');
 
                 $sector = new Sector($dest);
                 $sof = new Sector(2);
 
+                $valor = floatval($val);
+
                 $transfere = $sof->transferMoneyTo($sector, $valor, $just);
 
                 $fonte = filter_input(INPUT_POST, 'fonte');
-                Geral::cadSourceToBalance($fonte, $dest, $valor);
+
+                $moneySource = new MoneySource($fonte);
+                $oldValue = $moneySource->getValue();
+                $moneySource->setValue($oldValue + $valor);
 
                 if ($transfere) {
                     echo "success";

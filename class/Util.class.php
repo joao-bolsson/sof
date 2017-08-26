@@ -359,4 +359,15 @@ final class Util {
         return true;
     }
 
+    /**
+     * Records a justification for balance clearances.
+     *
+     * @param string $text Justify balance to record.
+     */
+    public static function recordJustify(string $text) {
+        $text = str_replace("\"", "'", $text);
+
+        Query::getInstance()->exe("INSERT INTO saldo_justificativa VALUES(NULL, \"$text\")");
+    }
+
 }

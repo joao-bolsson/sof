@@ -25,50 +25,6 @@ final class Geral {
         // empty
     }
 
-    /**
-     * @param array $sectors Setores que terão essa fonte cadastrada para futuros lançamentos.
-     * @param string $fonte Fonte.
-     * @param string $ptres PTRES da fonte de recurso.
-     * @param string $plano Plano da fonte de recurso.
-     */
-    public static function cadSourceToSectors(array $sectors, string $fonte, string $ptres, string $plano) {
-        $len = count($sectors);
-        for ($i = 0; $i < $len; $i++) {
-            $id = $sectors[$i];
-            $values = "NULL, " . $id . ", '0', \"" . $fonte . "\", \"" . $ptres . "\", \"" . $plano . "\"";
-            $sql = "INSERT INTO saldo_fonte VALUES(" . $values . ")";
-            Query::getInstance()->exe($sql);
-        }
-    }
-
-    /**
-     *
-     * @param int $fonte Fonte de Recurso id.
-     * @param int $id_setor Setor que recebeu o saldo.
-     * @param string $valor Valor a ser liberado para o setor.
-     */
-    public static function cadSourceToBalance(int $fonte, int $id_setor, string $valor) {
-        $query = Query::getInstance()->exe("SELECT valor FROM saldo_fonte WHERE id = " . $fonte);
-        if ($query->num_rows > 0) {
-            $obj = $query->fetch_object();
-            $old_value = floatval($obj->valor);
-            $add_value = floatval($valor);
-            $novo_valor = $old_value + $add_value;
-            Query::getInstance()->exe("UPDATE saldo_fonte SET valor = '" . $novo_valor . "' WHERE id = " . $fonte);
-        }
-    }
-
-    /**
-     * Records a justification for balance clearances.
-     *
-     * @param string $text Justify balance to record.
-     */
-    public static function recordJustify(string $text) {
-        $text = str_replace("\"", "'", $text);
-
-        Query::getInstance()->exe("INSERT INTO saldo_justificativa VALUES(NULL, \"$text\")");
-    }
-
     public static function scanDataBase() {
         $query = Query::getInstance()->exe("SELECT id, round(valor, 3) AS valor FROM pedido;");
 
