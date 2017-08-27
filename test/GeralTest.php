@@ -21,11 +21,13 @@ class GeralTest extends TestCase {
             $ped = Query::getInstance()->exe("SELECT round(sum(valor), 3) AS soma FROM itens_pedido WHERE id_pedido = " . $obj->id);
             $obj_ped = $ped->fetch_object();
             if ($obj->valor != $obj_ped->soma) {
-                echo "Pedido " . $obj->id . " quebrado\n";
+                echo "Pedido " . $obj->id . " quebrado: Valor: " . $obj->valor . " | Soma dos itens: " . $obj_ped->soma . "\n";
                 $error = true;
             }
         }
         $this->assertEquals($error, false, "Pedidos quebrados");
     }
+
+    // NOTE: never test the request values and its items values (vl_unitario can change - only changes requests values if its is before analysis.
 
 }

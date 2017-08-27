@@ -146,7 +146,7 @@ final class ItemRequest {
     }
 
     private function initItem() {
-        $query = Query::getInstance()->exe("SELECT qt_saldo, vl_contrato, qt_utilizado, vl_saldo, vl_utilizado, round(replace(vl_unitario, ',', '.'), 3) AS vl_unitario, cancelado FROM itens WHERE id = " . $this->id);
+        $query = Query::getInstance()->exe("SELECT qt_saldo, vl_contrato, qt_utilizado, vl_saldo, vl_utilizado, round(replace(vl_unitario, ',', '.'), 4) AS vl_unitario, cancelado FROM itens WHERE id = " . $this->id);
         if ($query->num_rows > 0) {
             $obj = $query->fetch_object();
 

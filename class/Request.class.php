@@ -81,9 +81,9 @@ final class Request {
     private $approv_manager;
 
     /**
-     * @var array Arrays of itens of this request.
+     * @var array Arrays of items of this request.
      */
-    private $itens;
+    private $items;
 
     /**
      * @var Licitacao
@@ -156,7 +156,7 @@ final class Request {
         }
 
         //inserindo os itens do pedido
-        foreach ($this->itens as $item) {
+        foreach ($this->items as $item) {
             if ($item instanceof ItemRequest) {
                 Query::getInstance()->exe("INSERT INTO itens_pedido VALUES(NULL, {$this->id}, {$item->getId()}, {$item->getQtRequested()}, '{$item->getItemValueInRequest()}');");
             }
@@ -180,7 +180,7 @@ final class Request {
         Query::getInstance()->exe("DELETE FROM itens_pedido WHERE id_pedido = " . $this->id);
 
         // alterando infos dos itens solicitados
-        foreach ($this->itens as &$item) {
+        foreach ($this->items as &$item) {
             if ($item instanceof ItemRequest) {
                 $qt_requested = $item->getQtRequested();
                 $vl_in_request = $item->getItemValueInRequest();
@@ -226,12 +226,12 @@ final class Request {
         $this->contract_request = $pedido_contrato;
         $this->obs = Query::getInstance()->real_escape_string($obs);
 
-        $this->itens = [];
+        $this->items = [];
         $i = 0;
         foreach ($id_item as $key => $value) {
             $item = new ItemRequest($value);
             $item->setQtdRequested($qtd_solicitada[$key]);
-            $this->itens[$i++] = $item;
+            $this->items[$i++] = $item;
             $this->value += $item->getItemValueInRequest();
         }
 
@@ -243,7 +243,7 @@ final class Request {
     }
 
     private function fillFieldsFromDB() {
-        $query = Query::getInstance()->exe("SELECT id_setor, id_usuario, data_pedido, ref_mes, alteracao, prioridade, status, valor, obs, pedido_contrato, aprov_gerencia FROM pedido WHERE id = " . $this->id);
+        $query = Query::getInstance()->exe("SELECT id_setor, id_usuario, data_pedido, ref_mes, alteracao, prioridade, status, round(valor, 3) AS valor, obs, pedido_contrato, aprov_gerencia FROM pedido WHERE id = " . $this->id);
 
         $obj = $query->fetch_object();
 
@@ -263,12 +263,12 @@ final class Request {
     private function fillItens() {
         $query = Query::getInstance()->exe("SELECT id_item, qtd, valor FROM itens_pedido WHERE id_pedido = " . $this->id);
 
-        if ($query->num_rows > 0 && count($this->itens) == 0) {
+        if ($query->num_rows > 0 && count($this->items) == 0) {
             $i = 0;
             while ($obj = $query->fetch_object()) {
                 $item = new ItemRequest($obj->id_item);
                 $item->setQtdRequested($obj->qtd);
-                $this->itens[$i++] = $item;
+                $this->items[$i++] = $item;
             }
         } else {
             Logger::error("Pedido sem itens, id pedido: " . $this->id);
@@ -294,7 +294,7 @@ final class Request {
     private function updateItens() {
         $toDelete = [];
         $i = 0;
-        foreach ($this->itens as $item) {
+        foreach ($this->items as $item) {
             if ($item instanceof ItemRequest) {
                 $cancelado = '';
                 if ($item->isCancelado()) {
@@ -326,7 +326,7 @@ final class Request {
         if (in_array(1, $item_cancelado) || in_array(true, $item_cancelado) || $this->status == 3) {
             // só percorre os itens se tiver algum item cancelado ou se o pedido for reprovado
 
-            foreach ($this->itens as $key => &$item) {
+            foreach ($this->items as $key => &$item) {
                 if ($item instanceof ItemRequest) {
                     $qtRequested = $item->getQtRequested();
                     $vlItemInRequest = $item->getItemValueInRequest();
@@ -514,6 +514,20 @@ final class Request {
      */
     public function getId(): int {
         return $this->id;
+    }
+
+    /**
+     * @return float
+     */
+    public function getValue(): float {
+        return $this->value;
+    }
+
+    /**
+     * @return array
+     */
+    public function getItems(): array {
+        return $this->items;
     }
 
 }
