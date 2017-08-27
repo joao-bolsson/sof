@@ -1,5 +1,9 @@
 ## CHANGELOG ##
 
+#### v2.2.3 - 27/08/2017 ####
+- Construção de objetos para representar um pedido, um setor, uma fonte de recurso, etc. Isso deverá ajudar na padronização das funções futuramente e evitar erros de calculo.
+- Atualização de valores de pedidos errados e saldos dos setores.
+
 #### v2.2.2 - 12/08/2017 ####
 - Melhoria na importação de itens
 - Geração de relatório de fontes de recurso
