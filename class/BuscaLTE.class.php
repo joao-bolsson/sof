@@ -1080,7 +1080,7 @@ final class BuscaLTE {
     public static function getLancamentos(int $id_sector): string {
         $where = ($id_sector != 0) ? ' WHERE id_setor = ' . $id_sector : '';
 
-        $query = Query::getInstance()->exe("SELECT id, id_setor, DATE_FORMAT(data, '%d/%m/%Y') AS data, valor, categoria FROM saldos_lancamentos" . $where . ' ORDER BY id DESC LIMIT ' . LIMIT_MAX);
+        $query = Query::getInstance()->exe("SELECT id, id_setor, DATE_FORMAT(data, '%d/%m/%Y') AS data, round(valor, 3) AS valor, categoria FROM saldos_lancamentos" . $where . ' ORDER BY id DESC LIMIT ' . LIMIT_MAX);
 
         $table = new Table('', '', [], false);
         while ($lancamento = $query->fetch_object()) {
@@ -1088,7 +1088,6 @@ final class BuscaLTE {
             $setor_transf = ($lancamento->categoria == 3) ? self::getSetorTransf($lancamento->id) : '';
 
             $btn = ($_SESSION['id_setor'] == 2 && $lancamento->categoria != 4 && $lancamento->categoria != 2) ? new Button('', BTN_DEFAULT, "undoFreeMoney(" . $lancamento->id . ")", "data-toggle=\"tooltip\"", 'Desfazer', 'undo') : '';
-            $lancamento->valor = number_format($lancamento->valor, 3, ',', '.');
 
             $row = new Row();
             $row->addColumn(new Column($btn));

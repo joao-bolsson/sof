@@ -53,7 +53,9 @@ if (Busca::isActive()) {
                 $dia = filter_input(INPUT_POST, 'dia');
 
                 $data = Util::dateFormat($dia);
-                echo Geral::cadAtestado($id_user, $horas, $justificativa, $data);
+
+                $user = new User($id_user);
+                echo $user->addAttest($horas, $justificativa, $data);
                 break;
 
             case 'cadFontesTransf':
@@ -62,14 +64,15 @@ if (Busca::isActive()) {
                 $ptres = filter_input(INPUT_POST, 'ptres');
                 $plano = filter_input(INPUT_POST, 'plano');
 
-                Geral::cadSourceToSectors($setores, $fonte, $ptres, $plano);
+                MoneySource::newSourceToSectors($setores, $fonte, $ptres, $plano);
                 header("Location: ../lte/");
                 break;
 
             case 'desativaUser':
-                $user = filter_input(INPUT_POST, 'user');
-                if ($user !== NULL) {
-                    Geral::disableUser($user);
+                $id_user = filter_input(INPUT_POST, 'user');
+                if ($id_user !== NULL) {
+                    $user = new User($id_user);
+                    $user->disable();
                 } else {
                     echo "fail";
                 }
@@ -78,7 +81,7 @@ if (Busca::isActive()) {
             case 'regJustify':
                 $just = filter_input(INPUT_POST, 'justificativa');
 
-                Geral::recordJustify($just);
+                Util::recordJustify($just);
                 header("Location: ../lte/");
                 break;
 
@@ -87,13 +90,17 @@ if (Busca::isActive()) {
                 $entrada = filter_input(INPUT_POST, 'entrada');
                 $saida = filter_input(INPUT_POST, 'saida');
 
-                Geral::editLog($id, $entrada, $saida);
+                $user = new User($_SESSION['id']);
+                $user->editLog($id, $entrada, $saida);
                 header('Location: ../lte/hora.php');
                 break;
 
             case 'pointRegister':
                 $log = filter_input(INPUT_POST, 'log');
-                Geral::pointRegister($log);
+                $ip = filter_input(INPUT_SERVER, 'REMOTE_ADDR');
+                $user = new User($_SESSION['id']);
+
+                $user->pointRegister($log, $ip);
                 break;
 
             case 'formEditRegItem':
@@ -197,7 +204,8 @@ if (Busca::isActive()) {
                 }
                 $senha = Util::criaSenha();
 
-                $id_user = Geral::cadUser($nome, $login, $email, $setor, $senha);
+                $user = new User(0);
+                $user->createOrUpdate($nome, $login, $email, $setor, $senha);
 
                 $noticias = 0;
                 $saldos = 0;
@@ -221,7 +229,7 @@ if (Busca::isActive()) {
                     }
                 }
 
-                Geral::cadPermissao($id_user, $noticias, $saldos, $pedidos, $recepcao);
+                $user->setPermissions($noticias, $saldos, $pedidos, $recepcao);
 
                 $from = $obj_Util->mail->Username;
                 $nome_from = utf8_decode("Setor de Orçamento e Finanças do HUSM");
@@ -254,7 +262,8 @@ if (Busca::isActive()) {
                 if (empty($id)) {
                     break;
                 }
-                Geral::enviaFornecedor($id);
+                $pedido = new Request($id);
+                $pedido->setStatus(9);
                 break;
 
             case 'enviaOrdenador':
@@ -262,7 +271,9 @@ if (Busca::isActive()) {
                 if (empty($id_pedido)) {
                     break;
                 }
-                echo Geral::enviaOrdenador($id_pedido);
+                $pedido = new Request($id_pedido);
+                $pedido->setStatus(8);
+                echo true;
                 break;
 
             case 'enviaFontes':
@@ -306,13 +317,21 @@ if (Busca::isActive()) {
             case 'transfereSaldo':
                 $ori = filter_input(INPUT_POST, 'ori');
                 $dest = filter_input(INPUT_POST, 'dest');
-                $valor = filter_input(INPUT_POST, 'valor');
+                $val = filter_input(INPUT_POST, 'valor');
                 $just = filter_input(INPUT_POST, 'just');
-                $transfere = Geral::transfereSaldo($ori, $dest, $valor, $just);
+
+                $sector = new Sector($dest);
+                $sof = new Sector(2);
+
+                $valor = floatval($val);
+
+                $transfere = $sof->transferMoneyTo($sector, $valor, $just);
 
                 $fonte = filter_input(INPUT_POST, 'fonte');
 
-                Geral::cadSourceToBalance($fonte, $dest, $valor);
+                $moneySource = new MoneySource($fonte);
+                $oldValue = $moneySource->getValue();
+                $moneySource->setValue($oldValue + $valor);
 
                 if ($transfere) {
                     echo "success";
@@ -448,13 +467,18 @@ if (Busca::isActive()) {
 
             case 'altStatus':
                 $id_pedido = filter_input(INPUT_POST, 'id_pedido');
-                $id_setor = filter_input(INPUT_POST, 'id_setor');
                 $comentario = filter_input(INPUT_POST, 'comentario');
                 $status = filter_input(INPUT_POST, 'fase');
-                $analisado = Geral::altStatus($id_pedido, $id_setor, $comentario, $status);
+
+                $pedido = new Request($id_pedido);
+
+                $pedido->setStatus($status);
+                $pedido->addComment($comentario);
+
+                $analisado = true;
                 $excluir = filter_input(INPUT_POST, 'excluir');
                 if (!empty($excluir) && $status == 3) {
-                    Geral::deletePedido($id_pedido);
+                    Request::delete($id_pedido);
                 }
                 if ($analisado) {
                     header("Location: ../lte/");
@@ -464,40 +488,19 @@ if (Busca::isActive()) {
                 break;
 
             case 'gerenciaPedido':
-                $saldo_setor = filter_input(INPUT_POST, 'saldo_total');
-                //id do pedido
                 $id_pedido = filter_input(INPUT_POST, 'id_pedido');
-                $total_pedido = filter_input(INPUT_POST, 'total_hidden');
-                $id_item = filter_input(INPUT_POST, 'id_item', FILTER_DEFAULT, FILTER_FORCE_ARRAY);
-                // id dos itens cancelados
                 $item_cancelado = filter_input(INPUT_POST, 'item_cancelado', FILTER_DEFAULT, FILTER_FORCE_ARRAY);
-
-                $qtd_solicitada = filter_input(INPUT_POST, 'qtd_solicitada', FILTER_DEFAULT, FILTER_FORCE_ARRAY);
-                $qt_saldo = filter_input(INPUT_POST, 'qt_saldo', FILTER_DEFAULT, FILTER_FORCE_ARRAY);
-                $qt_utilizado = filter_input(INPUT_POST, 'qt_utilizado', FILTER_DEFAULT, FILTER_FORCE_ARRAY);
-                $vl_saldo = filter_input(INPUT_POST, 'vl_saldo', FILTER_DEFAULT, FILTER_FORCE_ARRAY);
-                $vl_utilizado = filter_input(INPUT_POST, 'vl_utilizado', FILTER_DEFAULT, FILTER_FORCE_ARRAY);
-                $valor_item = filter_input(INPUT_POST, 'valor_item', FILTER_DEFAULT, FILTER_FORCE_ARRAY);
-
                 $fase = filter_input(INPUT_POST, 'fase');
                 $prioridade = filter_input(INPUT_POST, 'prioridade');
-                if ($fase == 'rascunho') {
-                    $prioridade = $fase;
-                    $fase = 'Rascunho';
-                }
-
                 $comentario = filter_input(INPUT_POST, 'comentario');
 
-                $analisado = Geral::pedidoAnalisado($id_pedido, $fase, $prioridade, $id_item, $item_cancelado, $qtd_solicitada, $qt_saldo, $qt_utilizado, $vl_saldo, $vl_utilizado, $valor_item, $saldo_setor, $total_pedido, $comentario);
+                $pedido = new Request($id_pedido);
+                $pedido->manage($fase, $item_cancelado);
+                $pedido->addComment($comentario);
 
                 $excluir = filter_input(INPUT_POST, 'excluir');
                 if (!empty($excluir) && $fase == 3) {
-                    Geral::deletePedido($id_pedido);
-                }
-                if ($analisado) {
-                    header("Location: ../lte/");
-                } else {
-                    echo "Ocorreu algum erro no servidor. Contate o administrador.";
+                    Request::delete($id_pedido);
                 }
                 break;
 
@@ -505,16 +508,19 @@ if (Busca::isActive()) {
                 $id_setor = filter_input(INPUT_POST, 'id_setor');
                 $valor = filter_input(INPUT_POST, 'valor');
 
-                $saldo_atual = Busca::getSaldo($id_setor);
+                $sector = new Sector($id_setor);
+                $vl = floatval($valor);
+                $oldMoney = $sector->getMoney();
+                $sector->setMoney($oldMoney + $vl);
 
-                $libera = Geral::liberaSaldo($id_setor, $valor, $saldo_atual);
-
-                if ($libera) {
-                    echo true;
-                } else {
-                    echo false;
+                if ($sector->getId() != 2) {
+                    $sof = new Sector(2);
+                    $oldSOFMoney = $sof->getMoney();
+                    $sof->setMoney($oldSOFMoney - $vl);
                 }
 
+                $hoje = date('Y-m-d');
+                Query::getInstance()->exe("INSERT INTO saldos_lancamentos VALUES(NULL, {$sector->getId()}, '{$hoje}', '{$vl}', 1);");
                 break;
 
             case 'aprovaAdi':
@@ -618,7 +624,7 @@ if (Busca::isActive()) {
 
             case 'deletePedido':
                 $id_pedido = filter_input(INPUT_POST, 'id_pedido');
-                echo $delete = Geral::deletePedido($id_pedido);
+                Request::delete($id_pedido);
                 break;
 
             // redefinindo informações do usuário
@@ -663,13 +669,6 @@ if (Busca::isActive()) {
                 // dados do formulário
                 $id_item = filter_input(INPUT_POST, 'id_item', FILTER_DEFAULT, FILTER_FORCE_ARRAY);
                 $qtd_solicitada = filter_input(INPUT_POST, 'qtd_solicitada', FILTER_DEFAULT, FILTER_FORCE_ARRAY);
-                $qtd_disponivel = filter_input(INPUT_POST, 'qtd_disponivel', FILTER_DEFAULT, FILTER_FORCE_ARRAY);
-                $qtd_contrato = filter_input(INPUT_POST, 'qtd_contrato', FILTER_DEFAULT, FILTER_FORCE_ARRAY);
-                $qtd_utilizado = filter_input(INPUT_POST, 'qtd_utilizado', FILTER_DEFAULT, FILTER_FORCE_ARRAY);
-                $vl_saldo = filter_input(INPUT_POST, 'vl_saldo', FILTER_DEFAULT, FILTER_FORCE_ARRAY);
-                $vl_contrato = filter_input(INPUT_POST, 'vl_contrato', FILTER_DEFAULT, FILTER_FORCE_ARRAY);
-                $vl_utilizado = filter_input(INPUT_POST, 'vl_utilizado', FILTER_DEFAULT, FILTER_FORCE_ARRAY);
-                $valor = filter_input(INPUT_POST, 'valor', FILTER_DEFAULT, FILTER_FORCE_ARRAY);
 
                 if (empty($id_item)) {
                     exit("Erro ao ler os itens do pedido.");
@@ -687,7 +686,6 @@ if (Busca::isActive()) {
                     }
                 }
 
-                $saldo_total = filter_input(INPUT_POST, 'saldo_total');
                 $prioridade = filter_input(INPUT_POST, 'st');
                 $obs = filter_input(INPUT_POST, 'obs');
 
@@ -705,7 +703,13 @@ if (Busca::isActive()) {
                     $pedido_contrato = 1;
                 }
 
-                Geral::insertPedido($id_user, $id_setor, $id_item, $qtd_solicitada, $qtd_disponivel, $qtd_contrato, $qtd_utilizado, $vl_saldo, $vl_contrato, $vl_utilizado, $valor, $total_pedido, $saldo_total, $prioridade, $obs, $pedido, $pedido_contrato);
+                // $pedido pode ser 0, será sobrescrito depois
+                $request = new Request($pedido);
+                if (!$pedido_existe) {
+                    $request->insertNewRequest($id_user, $id_setor, $id_item, $qtd_solicitada, $prioridade, $obs, $pedido_contrato);
+                }
+
+                $pedido = $request->getId();
 
                 // licitação
                 $idLic = filter_input(INPUT_POST, 'idLic');
@@ -722,11 +726,14 @@ if (Busca::isActive()) {
                     $geraContrato = 0;
                 }
 
-                Geral::insertLicitacao($numero, $uasg, $procOri, $tipo, $pedido, $idLic, $geraContrato);
+                $licitacao = new Licitacao($idLic, $numero, $uasg, $procOri, $tipo, $geraContrato);
+
+                $request->setLicitacao($licitacao);
 
                 $grupo = filter_input(INPUT_POST, 'grupo');
                 if (!empty($grupo)) {
-                    Geral::insertGrupoPedido($pedido, $grupo, $pedido_existe);
+                    $group = new SectorGroup($grupo);
+                    $request->setGroup($group);
                 }
 
                 // pedido de contrato
@@ -744,7 +751,8 @@ if (Busca::isActive()) {
                 }
                 Geral::insertPedContr($pedido, $tipo_cont, $siafi);
 
-                Geral::insertRequestSources($pedido, $id_fonte, $prioridade);
+                $moneySource = new MoneySource($id_fonte);
+                $request->setMoneySource($moneySource);
 
                 header("Location: ../lte/solicitacoes.php");
                 break;

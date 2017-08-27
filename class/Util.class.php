@@ -323,4 +323,51 @@ final class Util {
             </div>";
     }
 
+    /**
+     * Função usada para recolhimento de saldo dos demais setores para o SOF.
+     *
+     * @param int $id_setor Setor para recolher o saldo.
+     * @return bool flag indicating the success or not of this function.
+     */
+    public static function revertMoney(int $id_setor): bool {
+        $query_saldo = Query::getInstance()->exe("SELECT saldo FROM saldo_setor WHERE id_setor = " . $id_setor . " LIMIT 1;");
+
+        if ($query_saldo->num_rows < 1) {
+            Logger::error("Setor não possui saldo. Não pode ser recolhido.");
+            return false;
+        }
+        $obj_saldo = $query_saldo->fetch_object();
+        $vl_recolhido = $obj_saldo->saldo;
+
+        Query::getInstance()->exe("UPDATE saldo_setor SET saldo = '0.000' WHERE id_setor = " . $id_setor);
+
+        $hoje = date('Y-m-d');
+        $sqlBuilder = new SQLBuilder(SQLBuilder::$INSERT);
+        $sqlBuilder->setTables(['saldos_lancamentos']);
+        $sqlBuilder->setValues([null, $id_setor, $hoje, -$vl_recolhido, 5]);
+        Query::getInstance()->exe($sqlBuilder->__toString());
+
+        $query_saldo_sof = Query::getInstance()->exe("SELECT saldo FROM saldo_setor WHERE id_setor = 2 LIMIT 1;");
+        $objSaldoSof = $query_saldo_sof->fetch_object();
+        $novoSaldo = $objSaldoSof->saldo + $vl_recolhido;
+
+        Query::getInstance()->exe("UPDATE saldo_setor SET saldo = '" . $novoSaldo . "' WHERE id_setor = 2;");
+
+        $sqlBuilder->setValues([null, 2, $hoje, $vl_recolhido, 5]);
+        Query::getInstance()->exe($sqlBuilder->__toString());
+
+        return true;
+    }
+
+    /**
+     * Records a justification for balance clearances.
+     *
+     * @param string $text Justify balance to record.
+     */
+    public static function recordJustify(string $text) {
+        $text = str_replace("\"", "'", $text);
+
+        Query::getInstance()->exe("INSERT INTO saldo_justificativa VALUES(NULL, \"$text\")");
+    }
+
 }

@@ -6,7 +6,8 @@
 
 var statusSolicAlt = ['stAltAbertos', 'stAltAprovados', 'stAltReprovado'];
 $(function () {
-    $("#formPedido").submit(function () {
+    $("#formPedido").submit(function (event) {
+        event.preventDefault();
         var data = $(this).serialize();
 
         var id_pedido = document.getElementById('id_pedido').value;
@@ -18,21 +19,16 @@ $(function () {
 
         document.getElementById('overlayLoad').style.display = 'block';
         document.getElementById('overlayLoadDetPed').style.display = 'block';
-        $.ajax({
-            type: "POST",
-            url: "../php/geral.php",
-            data: data,
-            success: function () {
-                dropTableSolic(id_pedido);
-                iniSolicitacoes(false, id_pedido);
-                limpaTela();
-                document.getElementById('overlayLoad').style.display = 'none';
-                document.getElementById('overlayLoadDetPed').style.display = 'none';
-                avisoSnack('Alterações Salvas! Pedido: ' + id_pedido);
-            }
-        });
 
-        return false;
+        $.post('../php/geral.php', data).done(function (resposta) {
+            console.log(resposta);
+            dropTableSolic(id_pedido);
+            iniSolicitacoes(false, id_pedido);
+            limpaTela();
+            document.getElementById('overlayLoad').style.display = 'none';
+            document.getElementById('overlayLoadDetPed').style.display = 'none';
+            avisoSnack('Alterações Salvas! Pedido: ' + id_pedido);
+        });
     });
 
     var excluir = document.getElementById('checkExcluir');
@@ -249,6 +245,7 @@ function limpaTela() {
     document.getElementById('formPedido').reset();
     document.getElementById('rowDetPedido').style.display = "none";
 }
+
 // cancelar um item
 function cancelaItem(id_item) {
     var cancelado = document.getElementById("item_cancelado" + id_item).value;

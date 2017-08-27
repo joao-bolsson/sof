@@ -47,14 +47,9 @@ $(function () {
             }
         }
 
-        $.post('../php/geral.php', data).done(function (resposta) {
-            if (resposta) {
-                alert('O valor de R$ ' + valor + ' foi acrescentado ao saldo do setor com SUCESSO.');
-                location.reload();
-            } else {
-                alert('Ocorreu um erro no servidor. Contate o administrador.');
-                window.location.href = 'sair.php';
-            }
+        $.post('../php/geral.php', data).done(function () {
+            alert('O valor de R$ ' + valor + ' foi acrescentado ao saldo do setor com SUCESSO.');
+            location.reload();
         });
 
     });

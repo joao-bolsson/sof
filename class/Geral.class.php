@@ -25,137 +25,6 @@ final class Geral {
         // empty
     }
 
-    public static function cadAtestado(int $id_user, int $horas, string $justificativa, string $data): bool {
-        $builder = new SQLBuilder(SQLBuilder::$INSERT);
-        $builder->setTables(['usuario_atestados']);
-        $builder->setValues([NULL, $id_user, $data, $horas, $justificativa]);
-
-        $query = Query::getInstance()->exe($builder->__toString());
-        if ($query) {
-            return true;
-        }
-        return false;
-    }
-
-    public static function insertRequestSources(int $id_pedido, int $id_fonte, int $prioridade) {
-        $query_vl = Query::getInstance()->exe("SELECT valor FROM pedido WHERE id = " . $id_pedido);
-        $query_vlF = Query::getInstance()->exe("SELECT valor FROM saldo_fonte WHERE id = " . $id_fonte);
-
-        if ($query_vl->num_rows < 1 || $query_vlF->num_rows < 1) {
-            exit("Erro ao inserir as fonte de recurso.");
-        }
-
-        $vl_pedido = $query_vl->fetch_object()->valor;
-        $vl_fonte = $query_vlF->fetch_object()->valor;
-
-        if (self::existsSources($id_pedido)) {
-            // deleta a fonte atual: garante a edição corretamente
-            Query::getInstance()->exe("DELETE FROM pedido_id_fonte WHERE id_pedido = " . $id_pedido);
-        }
-
-        if ($prioridade != 5) { // rascunho, o saldo da fonte não deve ser alterado
-            $vl_fonte -= $vl_pedido;
-
-            Query::getInstance()->exe("UPDATE saldo_fonte SET valor = '" . $vl_fonte . "' WHERE id = " . $id_fonte);
-        }
-
-        // associa a fonte ao pedido
-        $sql = new SQLBuilder(SQLBuilder::$INSERT);
-        $sql->setTables(["pedido_id_fonte"]);
-        $sql->setValues([NULL, $id_pedido, $id_fonte]);
-
-        Query::getInstance()->exe($sql->__toString());
-    }
-
-    /**
-     * Função usada para recolhimento de saldo dos demais setores para o SOF.
-     *
-     * @param int $id_setor Setor para recolher o saldo.
-     * @return bool flag indicating the success or not of this function.
-     */
-    public static function revertMoney(int $id_setor): bool {
-        $query_saldo = Query::getInstance()->exe("SELECT saldo FROM saldo_setor WHERE id_setor = " . $id_setor . " LIMIT 1;");
-
-        if ($query_saldo->num_rows < 1) {
-            Logger::error("Setor não possui saldo. Não pode ser recolhido.");
-            return false;
-        }
-        $obj_saldo = $query_saldo->fetch_object();
-        $vl_recolhido = $obj_saldo->saldo;
-
-        Query::getInstance()->exe("UPDATE saldo_setor SET saldo = '0.000' WHERE id_setor = " . $id_setor);
-
-        $hoje = date('Y-m-d');
-        $sqlBuilder = new SQLBuilder(SQLBuilder::$INSERT);
-        $sqlBuilder->setTables(['saldos_lancamentos']);
-        $sqlBuilder->setValues([null, $id_setor, $hoje, -$vl_recolhido, 5]);
-        Query::getInstance()->exe($sqlBuilder->__toString());
-
-        $query_saldo_sof = Query::getInstance()->exe("SELECT saldo FROM saldo_setor WHERE id_setor = 2 LIMIT 1;");
-        $objSaldoSof = $query_saldo_sof->fetch_object();
-        $novoSaldo = $objSaldoSof->saldo + $vl_recolhido;
-
-        Query::getInstance()->exe("UPDATE saldo_setor SET saldo = '" . $novoSaldo . "' WHERE id_setor = 2;");
-
-        $sqlBuilder->setValues([null, 2, $hoje, $vl_recolhido, 5]);
-        Query::getInstance()->exe($sqlBuilder->__toString());
-
-        return true;
-    }
-
-    /**
-     * @param array $sectors Setores que terão essa fonte cadastrada para futuros lançamentos.
-     * @param string $fonte Fonte.
-     * @param string $ptres PTRES da fonte de recurso.
-     * @param string $plano Plano da fonte de recurso.
-     */
-    public static function cadSourceToSectors(array $sectors, string $fonte, string $ptres, string $plano) {
-        $len = count($sectors);
-        for ($i = 0; $i < $len; $i++) {
-            $id = $sectors[$i];
-            $values = "NULL, " . $id . ", '0', \"" . $fonte . "\", \"" . $ptres . "\", \"" . $plano . "\"";
-            $sql = "INSERT INTO saldo_fonte VALUES(" . $values . ")";
-            Query::getInstance()->exe($sql);
-        }
-    }
-
-    /**
-     *
-     * @param int $fonte Fonte de Recurso id.
-     * @param int $id_setor Setor que recebeu o saldo.
-     * @param string $valor Valor a ser liberado para o setor.
-     */
-    public static function cadSourceToBalance(int $fonte, int $id_setor, string $valor) {
-        $query = Query::getInstance()->exe("SELECT valor FROM saldo_fonte WHERE id = " . $fonte);
-        if ($query->num_rows > 0) {
-            $obj = $query->fetch_object();
-            $old_value = floatval($obj->valor);
-            $add_value = floatval($valor);
-            $novo_valor = $old_value + $add_value;
-            Query::getInstance()->exe("UPDATE saldo_fonte SET valor = '" . $novo_valor . "' WHERE id = " . $fonte);
-        }
-    }
-
-    /**
-     * Function that disable an user.
-     *
-     * @param int $id User id.
-     */
-    public static function disableUser(int $id) {
-        Query::getInstance()->exe("UPDATE usuario SET ativo = 0 WHERE id = " . $id);
-    }
-
-    /**
-     * Records a justification for balance clearances.
-     *
-     * @param string $text Justify balance to record.
-     */
-    public static function recordJustify(string $text) {
-        $text = str_replace("\"", "'", $text);
-
-        Query::getInstance()->exe("INSERT INTO saldo_justificativa VALUES(NULL, \"$text\")");
-    }
-
     public static function scanDataBase() {
         $query = Query::getInstance()->exe("SELECT id, round(valor, 3) AS valor FROM pedido;");
 
@@ -165,8 +34,17 @@ final class Geral {
             $total = $obj->valor;
             $sum = $obj_ped->soma;
             if ($total != $sum) {
+                echo "Corrige pedido: " . $obj->id . "\n";
                 Query::getInstance()->exe("UPDATE pedido SET valor = '" . $sum . "' WHERE id = " . $obj->id);
             }
+        }
+    }
+
+    public static function verifySectors() {
+        $query = Query::getInstance()->exe("SELECT id FROM setores WHERE id > 1;");
+        while ($obj = $query->fetch_object()) {
+            $sector = new Sector($obj->id);
+            $sector->updateMoney();
         }
     }
 
@@ -174,42 +52,12 @@ final class Geral {
      * Update the requests value according its items values.
      * @param array $req Array with requests to be updated.
      */
-    private static function updateRequests(array $req) {
+    public static function updateRequests(array $req) {
         $len = count($req);
         for ($i = 0; $i < $len; $i++) {
             $request = $req[$i];
             $obj = Query::getInstance()->exe("SELECT round(sum(valor), 3) AS sum FROM itens_pedido WHERE id_pedido =  " . $request)->fetch_object();
             Query::getInstance()->exe("UPDATE pedido SET valor = '" . $obj->sum . "' WHERE id = " . $request);
-        }
-    }
-
-    public static function editLog(int $id, string $entrada, string $saida) {
-        $dateTimeE = DateTime::createFromFormat('d/m/Y H:i:s', $entrada);
-        $in = $dateTimeE->format('Y-m-d H:i:s');
-
-        $dateTimeS = DateTime::createFromFormat('d/m/Y H:i:s', $saida);
-        $out = $dateTimeS->format('Y-m-d H:i:s');
-
-        Query::getInstance()->exe("UPDATE usuario_hora SET entrada = '" . $in . "', saida = '" . $out . "' WHERE id = " . $id);
-
-        // atualiza horas realizadas
-        $horas = Util::getTimeDiffHora($id);
-        Query::getInstance()->exe('UPDATE usuario_hora SET horas = ' . $horas . ' WHERE id = ' . $id);
-    }
-
-    public static function pointRegister(int $log) {
-        $id_usuario = $_SESSION['id'];
-        if ($log == 1) {
-            $ip = filter_input(INPUT_SERVER, 'REMOTE_ADDR');
-            // entrada
-            Query::getInstance()->exe('INSERT INTO usuario_hora VALUES(NULL, ' . $id_usuario . ", NOW(), NULL, NULL, '" . $ip . "')");
-        } else {
-            // saída
-            $id_last = Busca::getLastRegister();
-            Query::getInstance()->exe('UPDATE usuario_hora SET saida = NOW() WHERE id = ' . $id_last);
-            // atualiza horas realizadas
-            $horas = Util::getTimeDiffHora($id_last);
-            Query::getInstance()->exe('UPDATE usuario_hora SET horas = ' . $horas . ' WHERE id = ' . $id_last);
         }
     }
 
@@ -367,72 +215,10 @@ final class Geral {
     }
 
     /**
-     * Cadastra um usuário.
-     * @param string $nome Nome do usuário.
-     * @param string $login Login.
-     * @param string $email E-mail para contato e perda de senha.
-     * @param int $setor Id do setor do usuário.
-     * @param string $senha Senha do usuário feita pelo sistema.
-     *
-     * @return int User id.
-     */
-    public static function cadUser(string $nome, string $login, string $email, int $setor, string $senha): int {
-        $senha_crp = crypt($senha, SALT);
-
-        $query = Query::getInstance()->exe("SELECT id FROM usuario WHERE email = '" . $email . "';");
-        $id = 0;
-        if ($query->num_rows > 0) {
-            // usuário já existente, atualiza as informações e reativa
-            $id = $query->fetch_object()->id;
-
-            Query::getInstance()->exe("UPDATE usuario SET nome = '" . $nome . "', login = '" . $login . "', senha = '" . $senha_crp . "', id_setor = " . $setor . ", ativo = 1 WHERE id = " . $id);
-        } else {
-            Query::getInstance()->exe("INSERT INTO usuario VALUES(NULL, '{$nome}', '{$login}', '{$senha_crp}', {$setor}, '{$email}', 1);");
-            $id = Query::getInstance()->getInsertId();
-        }
-
-        return $id;
-    }
-
-    public static function cadPermissao(int $usuario, int $noticias, int $saldos, int $pedidos, int $recepcao) {
-        // garante reativação de usuários
-        Query::getInstance()->exe("DELETE FROM usuario_permissoes WHERE id_usuario = " . $usuario);
-        Query::getInstance()->exe("INSERT INTO usuario_permissoes VALUES({$usuario}, {$noticias}, {$saldos}, {$pedidos}, {$recepcao});");
-    }
-
-    /**
-     * Insere um grupo ao pedido.
-     * @param int $pedido Id do pedido.
-     * @param int $grupo id do grupo para inserir ao pedido.
-     */
-    public static function insertGrupoPedido(int $pedido, int $grupo, bool $existe) {
-        $sql = ($existe) ? "UPDATE pedido_grupo SET id_grupo = {$grupo} WHERE id_pedido = {$pedido} LIMIT 1;" : "INSERT INTO pedido_grupo VALUES({$pedido}, {$grupo});";
-        Query::getInstance()->exe($sql);
-    }
-
-    /**
-     *    Funçao para mudar o status do pedido para 'Enviado ao Fornecedor' (UA)
-     *
-     * @param $id_pedido int Id do pedido.
-     */
-    public static function enviaFornecedor(int $id_pedido) {
-        Query::getInstance()->exe('UPDATE pedido SET status = 9 WHERE id = ' . $id_pedido);
-    }
-
-    /**
-     *    Função para enviar um pedido ao ordenador.
-     *
-     * @return bool if success - true, else false.
-     */
-    public static function enviaOrdenador(int $id_pedido): bool {
-        Query::getInstance()->exe('UPDATE pedido SET status = 8 WHERE id = ' . $id_pedido);
-        return true;
-    }
-
-    /**
      *    Função para cadastrar fontes do pedido (status == Aguarda Orçamento)
      *
      * @return bool If inserts all datas - true, else false.
+     * @deprecated Use Request->setMoneySource()
      */
     public static function cadastraFontes(int $id_pedido, string $fonte, string $ptres, string $plano): bool {
         $fonte = Query::getInstance()->real_escape_string($fonte);
@@ -504,27 +290,6 @@ final class Geral {
     }
 
     /**
-     *    Função para alterar somente o status do pedido
-     *
-     * @param int $id_pedido Id do pedido
-     * @param int $id_setor Id do setor que fez o pedido
-     * @param string $comentario Comentário do SOF.
-     * @param int $status Novo status do pedido
-     * @return bool
-     */
-    public static function altStatus(int $id_pedido, int $id_setor, string $comentario, int $status): bool {
-        Query::getInstance()->exe("UPDATE pedido SET status = {$status} WHERE id = " . $id_pedido);
-        $query = Query::getInstance()->exe("SELECT pedido.prioridade, pedido.valor FROM pedido WHERE id = " . $id_pedido);
-        $obj = $query->fetch_object();
-        $hoje = date('Y-m-d');
-        if (strlen($comentario) > 0) {
-            $comentario = Query::getInstance()->real_escape_string($comentario);
-            Query::getInstance()->exe("INSERT INTO comentarios VALUES(NULL, {$id_pedido}, '{$hoje}', {$obj->prioridade}, {$status}, '{$obj->valor}', '{$comentario}');");
-        }
-        return true;
-    }
-
-    /**
      * Function that register the request effort.
      *
      * @param int $id_request Request id.
@@ -548,57 +313,6 @@ final class Geral {
 
             Query::getInstance()->exe("UPDATE pedido_empenho SET empenho = '{$effort}', data = '{$date}' WHERE id_pedido = " . $id_request);
         }
-        return true;
-    }
-
-    /**
-     *    Função que transfere um valor do saldo de um setor para outro
-     *
-     * @param int $ori Setor de origem do saldo.
-     * @param int $dest Setor de destino do saldo.
-     * @param float $valor Valor que será transferido.
-     * @param string $just Justificativa da transferência.
-     * @return bool
-     */
-    public static function transfereSaldo(int $ori, int $dest, float $valor, string $just): bool {
-        $valor = number_format($valor, 3, '.', '');
-        $saldo_ori = '0';
-        // selecionando o saldo do setor origem
-        $query_saldo_ori = Query::getInstance()->exe('SELECT saldo FROM saldo_setor WHERE id_setor = ' . $ori);
-        if ($query_saldo_ori->num_rows < 1) {
-            Query::getInstance()->exe("INSERT INTO saldo_setor VALUES(NULL, {$ori}, '0.000');");
-        } else {
-            $obj = $query_saldo_ori->fetch_object();
-            $saldo_ori = $obj->saldo;
-        }
-
-        if ($valor > $saldo_ori) {
-            return false;
-        }
-        $valor = number_format($valor, 3, '.', '');
-        // registrando a transferência
-        $justificativa = Query::getInstance()->real_escape_string($just);
-        Query::getInstance()->exe("INSERT INTO saldos_transferidos VALUES(NULL, {$ori}, {$dest}, '{$valor}', '{$justificativa}');");
-        // registrando na tabela de lançamentos
-        $hoje = date('Y-m-d');
-        Query::getInstance()->exe("INSERT INTO saldos_lancamentos VALUES(NULL, {$ori}, '{$hoje}', '-{$valor}', 3), (NULL, {$dest}, '{$hoje}', '{$valor}', 3);");
-        // atualizando o saldo do setor origem
-        $saldo_ori -= $valor;
-        $saldo_ori = number_format($saldo_ori, 3, '.', '');
-        Query::getInstance()->exe("UPDATE saldo_setor SET saldo = '{$saldo_ori}' WHERE id_setor = " . $ori);
-        // atualizando o saldo do setor destino
-        $saldo_dest = '0';
-        // selecionando o saldo do setor destino
-        $query_saldo_dest = Query::getInstance()->exe('SELECT saldo FROM saldo_setor WHERE id_setor = ' . $dest);
-        if ($query_saldo_dest->num_rows < 1) {
-            Query::getInstance()->exe("INSERT INTO saldo_setor VALUES(NULL, {$dest}, '0.000');");
-        } else {
-            $obj = $query_saldo_dest->fetch_object();
-            $saldo_dest = $obj->saldo;
-        }
-        $saldo_dest += $valor;
-        $saldo_dest = number_format($saldo_dest, 3, '.', '');
-        Query::getInstance()->exe("UPDATE saldo_setor SET saldo = '{$saldo_dest}' WHERE id_setor = " . $dest);
         return true;
     }
 
@@ -700,33 +414,6 @@ final class Geral {
     }
 
     /**
-     *    Função para liberação de saldo de um setor
-     *
-     * @param int $id_setor .
-     * @param string $vl .
-     * @param float $saldo_atual .
-     * @return bool
-     */
-    public static function liberaSaldo(int $id_setor, string $vl, float $saldo_atual): bool {
-        $valor = floatval($vl);
-        $saldo = $saldo_atual + $valor;
-        $saldo = number_format($saldo, 3, '.', '');
-        $verifica = Query::getInstance()->exe("SELECT saldo_setor.id FROM saldo_setor WHERE saldo_setor.id_setor = " . $id_setor);
-        if ($verifica->num_rows < 1) {
-            Query::getInstance()->exe("INSERT INTO saldo_setor VALUES(NULL, {$id_setor}, '0.000');");
-        }
-        Query::getInstance()->exe("UPDATE saldo_setor SET saldo = '{$saldo}' WHERE id_setor = " . $id_setor);
-        if ($id_setor != 2) {
-            $saldo_sof = Busca::getSaldo(2) - $valor;
-            $saldo_sof = number_format($saldo_sof, 3, '.', '');
-            Query::getInstance()->exe("UPDATE saldo_setor SET saldo = '{$saldo_sof}' WHERE id_setor = 2;");
-        }
-        $hoje = date('Y-m-d');
-        Query::getInstance()->exe("INSERT INTO saldos_lancamentos VALUES(NULL, {$id_setor}, '{$hoje}', '{$valor}', 1);");
-        return true;
-    }
-
-    /**
      *    Função para aprovar uma solicitação de adiantamento
      *
      * @param int $id
@@ -814,106 +501,7 @@ final class Geral {
         return $obj->tabela;
     }
 
-    /**
-     * Função para cadastrar uma licitação.
-     *
-     * UASG e procOri podem ser NULL.
-     *
-     * @param string $numero Número informado no formulário.
-     * @param string $uasg Uasg, se o tipo for adesao ou compra compartilhada.
-     * @param string $procOri Processo Original, se o tipo for adesao ou compra compartilhada.
-     * @param int $tipo Tipo de licitação.
-     * @param int $pedido Id do pedido.
-     * @param int $idLic id da licitação.
-     * @param int $geraContrato flag que determina se gera ou nao contrato - apenas mostra na impressao.
-     * @return bool
-     */
-    public static function insertLicitacao(string $numero, $uasg, $procOri, int $tipo, int $pedido, int $idLic, int $geraContrato): bool {
-        if ($tipo != 3 && $tipo != 4 && $tipo != 2) { // Adesão, Compra Compartilhada ou Inexibilidade
-            $uasg = "";
-            $procOri = "";
-            $geraContrato = 0;
-        }
-
-        $query = "";
-        if ($idLic == 0) {
-            $query = "INSERT INTO licitacao VALUES(NULL, {$pedido}, {$tipo}, '{$numero}', '{$uasg}', '{$procOri}', {$geraContrato});";
-        } else {
-            $query = "UPDATE licitacao SET tipo = {$tipo}, numero = '{$numero}', uasg = '{$uasg}', processo_original = '{$procOri}', gera_contrato = {$geraContrato} WHERE id = {$idLic};";
-        }
-
-        Query::getInstance()->exe($query);
-        return true;
-    }
-
-    /**
-     *   Função para enviar um pedido ao SOF
-     *
-     * @access public
-     * @param array $id_item Array com os ids dos itens do pedido.
-     * @param array $qtd Array com as quantidades dos itens do pedido.
-     * @param array $valor Array com os valores dos itens do pedido.
-     * @param int $pedido Id do pedido. Se 0, pedido novo, senão editando rascunho ou enviando ao SOF.
-     * @return bool
-     */
-    public static function insertPedido($id_user, $id_setor, $id_item, $qtd_solicitada, $qtd_disponivel, $qtd_contrato, $qtd_utilizado, $vl_saldo, $vl_contrato, $vl_utilizado, $valor, $total_pedido, $saldo_total, $prioridade, $obs, &$pedido, $pedido_contrato) {
-
-        $obs = Query::getInstance()->real_escape_string($obs);
-        $hoje = date('Y-m-d');
-        $mes = date("n");
-
-        if ($prioridade == 5) {
-            if ($pedido == 0) {
-                // NOVO
-                //inserindo os dados iniciais do pedido
-                Query::getInstance()->exe("INSERT INTO pedido VALUES(NULL, {$id_setor}, {$id_user}, '{$hoje}', '{$mes}', 1, {$prioridade}, 1, '{$total_pedido}', '{$obs}', {$pedido_contrato}, 0);");
-                $pedido = Query::getInstance()->getInsertId();
-            } else {
-                //remover resgistros antigos do rascunho
-                Query::getInstance()->exe("DELETE FROM itens_pedido WHERE id_pedido = " . $pedido);
-                Query::getInstance()->exe("UPDATE pedido SET data_pedido = '{$hoje}', ref_mes = {$mes}, prioridade = {$prioridade}, valor = '{$total_pedido}', obs = '{$obs}', pedido_contrato = {$pedido_contrato}, aprov_gerencia = 0 WHERE id = " . $pedido);
-            }
-            //inserindo os itens do pedido
-            for ($i = 0; $i < count($id_item); $i++) {
-                Query::getInstance()->exe("INSERT INTO itens_pedido VALUES(NULL, {$pedido}, {$id_item[$i]}, {$qtd_solicitada[$i]}, '{$valor[$i]}');");
-            }
-        } else {
-            // atualiza saldo
-            Query::getInstance()->exe("UPDATE saldo_setor SET saldo = '{$saldo_total}' WHERE id_setor = " . $id_setor);
-            // enviado ao sof
-            if ($pedido == 0) {
-                //inserindo os dados iniciais do pedido
-                Query::getInstance()->exe("INSERT INTO pedido VALUES(NULL, {$id_setor}, {$id_user}, '{$hoje}', '{$mes}', 0, {$prioridade}, 2, '{$total_pedido}', '{$obs}', {$pedido_contrato}, 0);");
-                $pedido = Query::getInstance()->getInsertId();
-            } else {
-                // atualizando pedido
-                Query::getInstance()->exe("UPDATE pedido SET data_pedido = '{$hoje}', ref_mes = {$mes}, alteracao = 0, prioridade = {$prioridade}, status = 2, valor = '{$total_pedido}', obs = '{$obs}', pedido_contrato = {$pedido_contrato}, aprov_gerencia = 0 WHERE id = " . $pedido);
-            }
-            //remover resgistros antigos do pedido
-            Query::getInstance()->exe("DELETE FROM itens_pedido WHERE id_pedido = " . $pedido);
-            // alterando infos dos itens solicitados
-            for ($i = 0; $i < count($id_item); $i++) {
-                Query::getInstance()->exe("INSERT INTO itens_pedido VALUES(NULL, {$pedido}, {$id_item[$i]}, {$qtd_solicitada[$i]}, '{$valor[$i]}');");
-                // qtd_disponivel == qt_saldo
-                $qtd_disponivel[$i] -= $qtd_solicitada[$i];
-                $qtd_utilizado[$i] += $qtd_solicitada[$i];
-                if ($vl_saldo[$i] == 0) {
-                    $vl_saldo[$i] = $vl_contrato[$i];
-                }
-                $vl_saldo[$i] -= $valor[$i];
-                $vl_utilizado[$i] += $valor[$i];
-                Query::getInstance()->exe("UPDATE itens SET qt_saldo = {$qtd_disponivel[$i]}, qt_utilizado = {$qtd_utilizado[$i]}, vl_saldo = '{$vl_saldo[$i]}', vl_utilizado = '{$vl_utilizado[$i]}' WHERE id = {$id_item[$i]};");
-            }
-        }
-        $error = self::checkForErrors($pedido);
-        if ($error) {
-            Logger::error("Pedido quebrado em insertPedido: " . $pedido);
-        }
-        self::updateRequests([$pedido]);
-        return true;
-    }
-
-    private static function checkForErrors(int $pedido): bool {
+    public static function checkForErrors(int $pedido): bool {
         $query = Query::getInstance()->exe("SELECT id, round(valor, 3) AS valor FROM pedido WHERE id = " . $pedido);
         $obj = $query->fetch_object();
 
@@ -925,134 +513,10 @@ final class Geral {
         return false;
     }
 
-    /**
-     *    Função para analisar um pedido, enviar comentários, alterar status, desativar itens
-     *    cancelados, retornar para o setor
-     *
-     * @param $id_item -> array com os ids dos itens utilizados no pedido
-     * @param $item_cancelado -> cada posição está associada ao array $id_item, se na posição x $id_item estiver 1, então o item na posição x de $id_item foi cancelado
-     * @return bool
-     */
-    public static function pedidoAnalisado($id_pedido, $fase, $prioridade, $id_item, $item_cancelado, $qtd_solicitada, $qt_saldo, $qt_utilizado, $vl_saldo, $vl_utilizado, $valor_item, $saldo_setor, $total_pedido, $comentario) {
-
-        $total_pedido_float = $total_pedido;
-        $query = Query::getInstance()->exe('SELECT id_setor FROM pedido WHERE id = ' . $id_pedido);
-        // selecionando o id do setor que fez o pedido
-        $obj_id = $query->fetch_object();
-        $id_setor = $obj_id->id_setor;
-        $hoje = date('Y-m-d');
-
-        $has_sources = self::existsSources($id_pedido);
-        // verificando itens cancelados, somente quando passam pela análise
-        if ($fase <= 4) {
-            if (in_array(1, $item_cancelado) || in_array(true, $item_cancelado) || $fase == 3) {
-                // só percorre os itens se tiver algum item cancelado ou se o pedido for reprovado
-                for ($i = 0; $i < count($id_item); $i++) {
-                    $qt_saldo[$i] += $qtd_solicitada[$i];
-                    $qt_utilizado[$i] -= $qtd_solicitada[$i];
-                    $vl_saldo[$i] += $valor_item[$i];
-                    $vl_utilizado[$i] -= $valor_item[$i];
-                    $cancelado = '';
-                    if ($item_cancelado[$i]) {
-                        $cancelado = ', cancelado = 1';
-                        Query::getInstance()->exe('DELETE FROM itens_pedido WHERE id_pedido = ' . $id_pedido . ' AND id_item = ' . $id_item[$i]);
-                        $total_pedido -= $valor_item[$i];
-                        $total_pedido_float -= $valor_item[$i];
-                    }
-                    Query::getInstance()->exe("UPDATE itens SET qt_saldo = '{$qt_saldo[$i]}', qt_utilizado = '{$qt_utilizado[$i]}', vl_saldo = '{$vl_saldo[$i]}', vl_utilizado = '{$vl_utilizado[$i]}'{$cancelado} WHERE id = " . $id_item[$i]);
-                    if ($has_sources) {
-                        $saldo_setor += $valor_item[$i];
-                        // se não tiver fonte, o saldo do setor não é alterado e a o valor do pedido retorna ao sof
-                    }
-                }
-            }
-        }
-        // alterar o status do pedido
-        $alteracao = 0;
-        if ($fase == 2 || $fase == 3 || $fase == 4) {
-            $total_pedido = number_format($total_pedido, 3, '.', '');
-            Query::getInstance()->exe("UPDATE pedido SET valor = '" . $total_pedido . "' WHERE id = " . $id_pedido);
-            if ($fase == 3) {
-                // reprovado
-                $alteracao = 1;
-                $prioridade = 5;
-                if ($has_sources) {
-                    // se for reprovado, devolve o valor retirado da fonte
-                    $query_fonte = Query::getInstance()->exe("SELECT saldo_fonte.id AS id_fonte, saldo_fonte.valor AS saldo_fonte, pedido.valor AS valor_pedido FROM saldo_fonte, pedido_id_fonte, pedido WHERE pedido.id = pedido_id_fonte.id_pedido AND pedido_id_fonte.id_fonte = saldo_fonte.id AND pedido.id = " . $id_pedido);
-                    if ($query->num_rows > 0) {
-                        $obj = $query_fonte->fetch_object();
-                        $new_vl = $obj->saldo_fonte + $obj->valor_pedido;
-                        $new_vl = number_format($new_vl, 3, '.', '');
-                        Query::getInstance()->exe("UPDATE saldo_fonte SET valor = '" . $new_vl . "' WHERE id_setor = " . $id_setor . " AND id = " . $obj->id_fonte);
-                    }
-                } else {
-                    // devolve o valor do pedido ao sof
-                    $saldo_sof = Busca::getSaldo(2);
-                    $saldo_sof += $total_pedido_float;
-                    $saldo_sof = number_format($saldo_sof, 3, '.', '');
-
-                    Query::getInstance()->exe("UPDATE saldo_setor SET saldo = '" . $saldo_sof . "' WHERE id_setor = 2");
-
-                    // coloca na tabela de lançamentos
-                    // valor do pedido volta ao SOF
-                    $hoje = date('Y-m-d');
-
-                    $sqlBuilder = new SQLBuilder(SQLBuilder::$INSERT);
-                    $sqlBuilder->setTables(['saldos_lancamentos']);
-                    $sqlBuilder->setValues([null, $id_setor, $hoje, -$total_pedido_float, 5]);
-                    Query::getInstance()->exe($sqlBuilder->__toString());
-
-                    $sqlBuilder->setValues([null, 2, $hoje, $total_pedido_float, 5]);
-                    Query::getInstance()->exe($sqlBuilder->__toString());
-                }
-            } else if ($fase == 4) {
-                // aprovado
-                Query::getInstance()->exe("INSERT INTO saldos_lancamentos VALUES(NULL, {$id_setor}, '{$hoje}', '-{$total_pedido}', 4);");
-                // próxima fase
-                $fase++;
-                // não precisa cadastrar fontes, elas já estão cadastradas
-                if (self::existsSources($id_pedido)) {
-                    $fase++;
-                }
-            }
-        }
-        Query::getInstance()->exe("UPDATE pedido SET status = " . $fase . ", prioridade = " . $prioridade . ", alteracao = " . $alteracao . " WHERE id = " . $id_pedido);
-        if (strlen($comentario) > 0) {
-            // inserindo comentário da análise
-            $comentario = Query::getInstance()->real_escape_string($comentario);
-            $query_vl = Query::getInstance()->exe("SELECT valor FROM pedido WHERE id = " . $id_pedido);
-            $obj_tot = $query_vl->fetch_object();
-            Query::getInstance()->exe("INSERT INTO comentarios VALUES(NULL, {$id_pedido}, '{$hoje}', {$prioridade}, {$fase}, '{$obj_tot->valor}', '{$comentario}');");
-        }
-        $error = self::checkForErrors($id_pedido);
-        if ($error) {
-            Logger::error("Pedido quebrado em pedidoAnalisado: " . $id_pedido);
-        }
-        return true;
-    }
-
-    private static function existsSources(int $id_request): bool {
-        $query = Query::getInstance()->exe("SELECT * FROM pedido_id_fonte WHERE id_pedido = " . $id_request);
+    public static function existsSources(int $id_request): bool {
+        $query = Query::getInstance()->exe("SELECT id FROM pedido_id_fonte WHERE id_pedido = " . $id_request);
 
         return $query->num_rows > 0;
-    }
-
-    /**
-     *    Função para deletar um pedido (rascunhos).
-     */
-    public static function deletePedido(int $id_pedido): string {
-        Query::getInstance()->exe("DELETE FROM pedido_id_fonte WHERE id_pedido = " . $id_pedido);
-        Query::getInstance()->exe('DELETE FROM licitacao WHERE licitacao.id_pedido = ' . $id_pedido);
-        Query::getInstance()->exe("DELETE FROM pedido_contrato WHERE pedido_contrato.id_pedido = " . $id_pedido);
-        Query::getInstance()->exe("DELETE FROM pedido_grupo WHERE pedido_grupo.id_pedido = " . $id_pedido);
-        Query::getInstance()->exe("DELETE FROM comentarios WHERE comentarios.id_pedido = " . $id_pedido);
-        Query::getInstance()->exe("DELETE FROM itens_pedido WHERE itens_pedido.id_pedido = " . $id_pedido);
-        Query::getInstance()->exe("DELETE FROM pedido_empenho WHERE pedido_empenho.id_pedido = " . $id_pedido);
-        Query::getInstance()->exe("DELETE FROM pedido_fonte WHERE pedido_fonte.id_pedido = " . $id_pedido);
-        Query::getInstance()->exe("DELETE FROM solic_alt_pedido WHERE solic_alt_pedido.id_pedido = " . $id_pedido);
-        Query::getInstance()->exe("DELETE FROM pedido_log_status WHERE pedido_log_status.id_pedido = " . $id_pedido);
-        Query::getInstance()->exe("DELETE FROM pedido WHERE pedido.id = " . $id_pedido);
-        return "true";
     }
 
 }
