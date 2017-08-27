@@ -21,11 +21,6 @@ final class Sector {
     private $today;
 
     /**
-     * @var array Array with all sector money sources.
-     */
-    private $moneySources;
-
-    /**
      * Sector constructor.
      * @param int $id Sector id.
      */
@@ -33,21 +28,7 @@ final class Sector {
         $this->id = $id;
         $this->money = 0.000;
         $this->today = date('Y-m-d');
-        $this->moneySources = [];
         $this->fillFields();
-        $this->initMoneySources();
-    }
-
-    private function initMoneySources() {
-        $query = Query::getInstance()->exe("SELECT id FROM saldo_fonte WHERE id_setor = " . $this->id . " AND valor > 0;");
-
-        if ($query->num_rows > 0) {
-            $this->moneySources = [];
-            $i = 0;
-            while ($obj = $query->fetch_object()) {
-                $this->moneySources[$i++] = new MoneySource($obj->id);
-            }
-        }
     }
 
     private function fillFields() {
@@ -71,7 +52,10 @@ final class Sector {
         if ($query->num_rows > 0) {
             $obj = $query->fetch_object();
 
-            $this->setMoney($obj->saldo);
+            if (!empty($obj->saldo)) {
+                Logger::info("Saldo do setor " . $this->id . " alterado de " . $this->money . " para " . $obj->saldo);
+                $this->setMoney($obj->saldo);
+            }
         }
     }
 
@@ -125,13 +109,6 @@ final class Sector {
      */
     public function getMoney(): float {
         return $this->money;
-    }
-
-    /**
-     * @return array
-     */
-    public function getMoneySources(): array {
-        return $this->moneySources;
     }
 
 }

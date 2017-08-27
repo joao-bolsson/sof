@@ -34,8 +34,17 @@ final class Geral {
             $total = $obj->valor;
             $sum = $obj_ped->soma;
             if ($total != $sum) {
+                echo "Corrige pedido: " . $obj->id . "\n";
                 Query::getInstance()->exe("UPDATE pedido SET valor = '" . $sum . "' WHERE id = " . $obj->id);
             }
+        }
+    }
+
+    public static function verifySectors() {
+        $query = Query::getInstance()->exe("SELECT id FROM setores WHERE id > 1;");
+        while ($obj = $query->fetch_object()) {
+            $sector = new Sector($obj->id);
+            $sector->updateMoney();
         }
     }
 
