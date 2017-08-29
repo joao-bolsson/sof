@@ -14,11 +14,6 @@ final class MoneySource {
     private $id;
 
     /**
-     * @var Sector
-     */
-    private $sector;
-
-    /**
      * @var float
      */
     private $value;
@@ -51,11 +46,10 @@ final class MoneySource {
     }
 
     private function initSource() {
-        $query = Query::getInstance()->exe("SELECT id_setor, round(valor, 3) AS valor, fonte_recurso, ptres, plano_interno FROM saldo_fonte WHERE id = " . $this->id);
+        $query = Query::getInstance()->exe("SELECT round(valor, 3) AS valor, fonte_recurso, ptres, plano_interno FROM saldo_fonte WHERE id = " . $this->id);
         if ($query->num_rows > 0) {
             $obj = $query->fetch_object();
 
-            $this->sector = new Sector($obj->id_setor);
             $this->value = $obj->valor;
             $this->resource = $obj->fonte_recurso;
             $this->ptres = $obj->ptres;
@@ -68,13 +62,6 @@ final class MoneySource {
      */
     public function getId(): int {
         return $this->id;
-    }
-
-    /**
-     * @return Sector
-     */
-    public function getSector(): Sector {
-        return $this->sector;
     }
 
     /**
