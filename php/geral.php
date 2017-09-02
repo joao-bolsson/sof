@@ -179,7 +179,8 @@ if (Busca::isActive()) {
             case 'undoFreeMoney':
                 $id_lancamento = filter_input(INPUT_POST, 'id_lancamento');
                 if (!empty($id_lancamento)) {
-                    Geral::undoFreeMoney($id_lancamento);
+                    $freeMoney = new FreeMoney($id_lancamento);
+                    $freeMoney->undo();
                 }
                 break;
 
