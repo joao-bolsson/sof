@@ -127,15 +127,6 @@ final class Geral {
         Query::getInstance()->exe('UPDATE pedido SET aprov_gerencia = 1 WHERE ' . $where);
     }
 
-    public static function insertPedContr(int $id_pedido, int $id_tipo, string $siafi) {
-        $query = Query::getInstance()->exe('SELECT id_tipo FROM pedido_contrato WHERE id_pedido = ' . $id_pedido);
-        $sql = "INSERT INTO pedido_contrato VALUES({$id_pedido}, {$id_tipo}, '{$siafi}');";
-        if ($query->num_rows > 0) {
-            $sql = "UPDATE pedido_contrato SET id_tipo = $id_tipo, siafi = '{$siafi}' WHERE id_pedido = " . $id_pedido;
-        }
-        Query::getInstance()->exe($sql);
-    }
-
     /**
      *    Função para cadastrar fontes do pedido (status == Aguarda Orçamento)
      *

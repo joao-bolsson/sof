@@ -508,6 +508,21 @@ final class Request {
         $this->group = $group;
     }
 
+    /**
+     * Sets or update the contract of this request.
+     *
+     * @param int $type Contract type.
+     * @param string $siafi Contract SIAFI.
+     */
+    public function setContract(int $type, string $siafi) {
+        $query = Query::getInstance()->exe('SELECT id_tipo FROM pedido_contrato WHERE id_pedido = ' . $this->id);
+        $sql = "INSERT INTO pedido_contrato VALUES({$this->id}, {$type}, '{$siafi}');";
+        if ($query->num_rows > 0) {
+            $sql = "UPDATE pedido_contrato SET id_tipo = $type, siafi = '{$siafi}' WHERE id_pedido = " . $this->id;
+        }
+        Query::getInstance()->exe($sql);
+    }
+
 
     /**
      * @return int Request id

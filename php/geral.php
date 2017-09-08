@@ -750,7 +750,7 @@ if (Busca::isActive()) {
                         exit("Pedido inserido. Erro ao ler o SIAFI.");
                     }
                 }
-                Geral::insertPedContr($pedido, $tipo_cont, $siafi);
+                $request->setContract($tipo_cont, $siafi);
 
                 $moneySource = new MoneySource($id_fonte);
                 $request->setMoneySource($moneySource);
