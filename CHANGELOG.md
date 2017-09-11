@@ -1,5 +1,10 @@
 ## CHANGELOG ##
 
+#### v2.2.4 - 11/09/2017 ####
+- Remove possibilidade de desfazer liberação orçamentária.
+- Insere novos objetos para representar liberações orçamentárias e pedido de contrato.
+- Coleta de bugs e análise de performance (importação de itens ainda está instável)
+
 #### v2.2.3 - 27/08/2017 ####
 - Construção de objetos para representar um pedido, um setor, uma fonte de recurso, etc. Isso deverá ajudar na padronização das funções futuramente e evitar erros de calculo.
 - Atualização de valores de pedidos errados e saldos dos setores.
