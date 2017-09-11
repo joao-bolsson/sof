@@ -179,7 +179,8 @@ if (Busca::isActive()) {
             case 'undoFreeMoney':
                 $id_lancamento = filter_input(INPUT_POST, 'id_lancamento');
                 if (!empty($id_lancamento)) {
-                    Geral::undoFreeMoney($id_lancamento);
+                    $freeMoney = new FreeMoney($id_lancamento);
+                    $freeMoney->undo();
                 }
                 break;
 
@@ -749,7 +750,7 @@ if (Busca::isActive()) {
                         exit("Pedido inserido. Erro ao ler o SIAFI.");
                     }
                 }
-                Geral::insertPedContr($pedido, $tipo_cont, $siafi);
+                $request->setContract($tipo_cont, $siafi);
 
                 $moneySource = new MoneySource($id_fonte);
                 $request->setMoneySource($moneySource);

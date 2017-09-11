@@ -21,6 +21,11 @@ final class Sector {
     private $today;
 
     /**
+     * @var array All money sources of this sector.
+     */
+    private $moneySources;
+
+    /**
      * Sector constructor.
      * @param int $id Sector id.
      */
@@ -28,7 +33,20 @@ final class Sector {
         $this->id = $id;
         $this->money = 0.000;
         $this->today = date('Y-m-d');
+        $this->moneySources = [];
         $this->fillFields();
+        $this->fillMoneySources();
+    }
+
+    private function fillMoneySources() {
+        $query = Query::getInstance()->exe("SELECT id FROM saldo_fonte WHERE id_setor = " . $this->id . " AND valor > 0;");
+        if ($query->num_rows > 0) {
+            $this->moneySources = [];
+            $i = 0;
+            while ($obj = $query->fetch_object()) {
+                $this->moneySources[$i++] = new MoneySource($obj->id);
+            }
+        }
     }
 
     private function fillFields() {
@@ -109,6 +127,13 @@ final class Sector {
      */
     public function getMoney(): float {
         return $this->money;
+    }
+
+    /**
+     * @return array
+     */
+    public function getMoneySources(): array {
+        return $this->moneySources;
     }
 
 }

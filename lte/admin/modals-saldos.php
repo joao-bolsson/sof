@@ -207,7 +207,6 @@
                 <table id="tableListLancamentos" class="table table-bordered table-striped">
                     <thead>
                     <tr>
-                        <th></th>
                         <th>Setor</th>
                         <th>Data</th>
                         <th>Valor</th>
