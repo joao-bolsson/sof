@@ -708,6 +708,8 @@ if (Busca::isActive()) {
                 $request = new Request($pedido);
                 if (!$pedido_existe) {
                     $request->insertNewRequest($id_user, $id_setor, $id_item, $qtd_solicitada, $prioridade, $obs, $pedido_contrato);
+                } else {
+                    $request->editRequest($id_item, $qtd_solicitada, $prioridade, $obs, $pedido_contrato);
                 }
 
                 $pedido = $request->getId();

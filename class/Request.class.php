@@ -242,6 +242,37 @@ final class Request {
         }
     }
 
+    /**
+     * Edit a new existing request.
+     *
+     * @param array $id_item Items that will be used in this request.
+     * @param array $qtd_solicitada Requested values for each item in $id_item.
+     * @param int $prioridade Request priority
+     * @param string $obs Request note.
+     * @param int $pedido_contrato If is a contract request - 1, else - 0.
+     */
+    public function editRequest(array $id_item, array $qtd_solicitada, int $prioridade, string $obs, int $pedido_contrato) {
+        $this->priority = $prioridade;
+        $this->contract_request = $pedido_contrato;
+        $this->obs = Query::getInstance()->real_escape_string($obs);
+
+        $this->value = 0.0;
+        $this->items = [];
+        $i = 0;
+        foreach ($id_item as $key => $value) {
+            $item = new ItemRequest($value);
+            $item->setQtdRequested($qtd_solicitada[$key]);
+            $this->items[$i++] = $item;
+            $this->value += $item->getItemValueInRequest();
+        }
+
+        if ($this->priority == 5) {
+            $this->setDraft();
+        } else {
+            $this->sendToSOF();
+        }
+    }
+
     private function fillFieldsFromDB() {
         $query = Query::getInstance()->exe("SELECT id_setor, id_usuario, data_pedido, ref_mes, alteracao, prioridade, status, round(valor, 3) AS valor, obs, pedido_contrato, aprov_gerencia FROM pedido WHERE id = " . $this->id);
 
@@ -442,6 +473,37 @@ final class Request {
             Query::getInstance()->exe('UPDATE pedido SET status = ' . $this->status . ' WHERE id = ' . $this->id);
         }
     }
+
+    /**
+     * @param int $priority New priority for this request.
+     */
+    private function setPriority(int $priority) {
+        $this->priority = $priority;
+        if ($this->id != NEW_REQUEST_ID) {
+            Query::getInstance()->exe('UPDATE pedido SET prioridade = ' . $this->priority . ' WHERE id = ' . $this->id);
+        }
+    }
+
+    /**
+     * @param int $contract_request New flag to define if this request is a request of contract.
+     */
+    private function setContractRequest(int $contract_request) {
+        $this->contract_request = $contract_request;
+        if ($this->id != NEW_REQUEST_ID) {
+            Query::getInstance()->exe('UPDATE pedido SET pedido_contrato = ' . $this->contract_request . ' WHERE id = ' . $this->id);
+        }
+    }
+
+    /**
+     * @param string $obs New observation for this request (overwrites old value)
+     */
+    private function setObs(string $obs) {
+        $this->obs = Query::getInstance()->real_escape_string($obs);
+        if ($this->id != NEW_REQUEST_ID) {
+            Query::getInstance()->exe("UPDATE pedido SET obs = '" . $this->obs . "' WHERE id = " . $this->id);
+        }
+    }
+
 
     /**
      * @param Licitacao $licitacao
