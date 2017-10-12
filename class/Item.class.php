@@ -1,6 +1,6 @@
 <?php
 /**
- *
+ * Base class for anything type of Item.
  *
  * @author João Bolsson (joaovictorbolsson@gmail.com).
  * @since 2017, 12 Oct.
@@ -11,171 +11,171 @@ class Item {
     /**
      * @var int Item id.
      */
-    private $id;
+    protected $id;
     /**
      * @var int Id item processo
      */
-    private $id_item_processo;
+    protected $id_item_processo;
 
     /**
      * @var int Id item contrato
      */
-    private $id_item_contrato;
+    protected $id_item_contrato;
 
     /**
      * @var string Cod despesa
      */
-    private $cod_despesa;
+    protected $cod_despesa;
 
     /**
      * @var string Descrição despesa
      */
-    private $descr_despesa;
+    protected $descr_despesa;
 
     /**
      * @var string Descrição tipo doc
      */
-    private $descr_tipo_doc;
+    protected $descr_tipo_doc;
 
     /**
      * @var string Número do contrato
      */
-    private $num_contrato;
+    protected $num_contrato;
 
     /**
      * @var string Número do Processo
      */
-    private $num_processo;
+    protected $num_processo;
 
     /**
      * @var string Descrição mod compra
      */
-    private $descr_mod_compra;
+    protected $descr_mod_compra;
 
     /**
      * @var string Número da Licitação
      */
-    private $num_licitacao;
+    protected $num_licitacao;
 
     /**
      * @var string Data início
      */
-    private $dt_inicio;
+    protected $dt_inicio;
 
     /**
      * @var string Data fim
      */
-    private $dt_fim;
+    protected $dt_fim;
 
     /**
      * @var string Data geração
      */
-    private $dt_geracao;
+    protected $dt_geracao;
 
     /**
      * @var string CGC Fornecedor
      */
-    private $cgc_fornecedor;
+    protected $cgc_fornecedor;
 
     /**
      * @var string Nome do fornecedor
      */
-    private $nome_fornecedor;
+    protected $nome_fornecedor;
 
     /**
      * @var string Número extrato
      */
-    private $num_extrato;
+    protected $num_extrato;
 
     /**
      * @var string Código estruturado
      */
-    private $cod_estruturado;
+    protected $cod_estruturado;
 
     /**
      * @var string Nome da Unidade
      */
-    private $nome_unidade;
+    protected $nome_unidade;
 
     /**
      * @var string Código reduzido
      */
-    private $cod_reduzido;
+    protected $cod_reduzido;
 
     /**
      * @var string Complemento item
      */
-    private $complemento_item;
+    protected $complemento_item;
 
     /**
      * @var string Descrição
      */
-    private $descricao;
+    protected $descricao;
 
     /**
      * @var int Id extrato contrato
      */
-    private $id_extrato_contr;
+    protected $id_extrato_contr;
 
     /**
      * @var float Valor unitário
      */
-    private $vl_unitario;
+    protected $vl_unitario;
 
     /**
      * @var int Quantidade Contrato
      */
-    private $qt_contrato;
+    protected $qt_contrato;
 
     /**
      * @var float Valor contrato
      */
-    private $vl_contrato;
+    protected $vl_contrato;
 
     /**
      * @var int Quantidade Utilizada
      */
-    private $qt_utilizado;
+    protected $qt_utilizado;
 
     /**
      * @var float Valor utilizado
      */
-    private $vl_utilizado;
+    protected $vl_utilizado;
 
     /**
      * @var int Quantidade Saldo
      */
-    private $qt_saldo;
+    protected $qt_saldo;
 
     /**
      * @var float Valor saldo
      */
-    private $vl_saldo;
+    protected $vl_saldo;
 
     /**
      * @var int Id da unidade
      */
-    private $id_unidade;
+    protected $id_unidade;
 
     /**
      * @var int Ano Orçamento
      */
-    private $ano_orcamento;
+    protected $ano_orcamento;
 
     /**
      * @var bool Flag that indicates if this item was cancel.
      */
-    private $cancelado;
+    protected $cancelado;
 
     /**
      * @var string Chave
      */
-    private $chave;
+    protected $chave;
 
     /**
      * @var string Seq item processo.
      */
-    private $seq_item_processo;
+    protected $seq_item_processo;
 
     /**
      * @return bool
@@ -193,7 +193,7 @@ class Item {
         $this->initItem();
     }
 
-    private function initItem() {
+    protected function initItem() {
         $query = Query::getInstance()->exe("SELECT id_item_processo, id_item_contrato, cod_despesa, descr_despesa, descr_tipo_doc, num_contrato, num_processo, descr_mod_compra, num_licitacao, dt_inicio, dt_fim, dt_geracao, cgc_fornecedor, nome_fornecedor, num_extrato, cod_estruturado, nome_unidade, cod_reduzido, complemento_item, descricao, id_extrato_contr, round(replace(vl_unitario, ',', '.'), 4) AS vl_unitario, qt_contrato, round(replace(vl_contrato, ',', '.'), 4) AS vl_contrato, qt_utilizado, round(replace(vl_utilizado, ',', '.'), 4) AS vl_utilizado, qt_saldo, round(replace(vl_saldo, ',', '.'), 4) AS vl_saldo, id_unidade, ano_orcamento, chave, seq_item_processo, cancelado FROM itens WHERE id = " . $this->id);
 
         if ($query->num_rows > 0) {
@@ -240,4 +240,73 @@ class Item {
 
     }
 
+    /**
+     * @param int $qt_saldo
+     */
+    public function setQtSaldo(int $qt_saldo) {
+        $this->qt_saldo = $qt_saldo;
+    }
+
+    /**
+     * @param int $qt_utilizado
+     */
+    public function setQtUtilizado(int $qt_utilizado) {
+        $this->qt_utilizado = $qt_utilizado;
+    }
+
+    /**
+     * @param float $vl_saldo
+     */
+    public function setVlSaldo(float $vl_saldo) {
+        $this->vl_saldo = $vl_saldo;
+    }
+
+    /**
+     * @param float $vl_utilizado
+     */
+    public function setVlUtilizado(float $vl_utilizado) {
+        $this->vl_utilizado = $vl_utilizado;
+    }
+
+    /**
+     * @return int
+     */
+    public function getQtSaldo(): int {
+        return $this->qt_saldo;
+    }
+
+    /**
+     * @return int
+     */
+    public function getQtUtilizado(): int {
+        return $this->qt_utilizado;
+    }
+
+    /**
+     * @return int
+     */
+    public function getId(): int {
+        return $this->id;
+    }
+
+    /**
+     * @return float
+     */
+    public function getVlSaldo(): float {
+        return $this->vl_saldo;
+    }
+
+    /**
+     * @return float
+     */
+    public function getVlUtilizado(): float {
+        return $this->vl_utilizado;
+    }
+
+    /**
+     * @return float
+     */
+    public function getVlContrato(): float {
+        return $this->vl_contrato;
+    }
 }

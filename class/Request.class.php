@@ -475,37 +475,6 @@ final class Request {
     }
 
     /**
-     * @param int $priority New priority for this request.
-     */
-    private function setPriority(int $priority) {
-        $this->priority = $priority;
-        if ($this->id != NEW_REQUEST_ID) {
-            Query::getInstance()->exe('UPDATE pedido SET prioridade = ' . $this->priority . ' WHERE id = ' . $this->id);
-        }
-    }
-
-    /**
-     * @param int $contract_request New flag to define if this request is a request of contract.
-     */
-    private function setContractRequest(int $contract_request) {
-        $this->contract_request = $contract_request;
-        if ($this->id != NEW_REQUEST_ID) {
-            Query::getInstance()->exe('UPDATE pedido SET pedido_contrato = ' . $this->contract_request . ' WHERE id = ' . $this->id);
-        }
-    }
-
-    /**
-     * @param string $obs New observation for this request (overwrites old value)
-     */
-    private function setObs(string $obs) {
-        $this->obs = Query::getInstance()->real_escape_string($obs);
-        if ($this->id != NEW_REQUEST_ID) {
-            Query::getInstance()->exe("UPDATE pedido SET obs = '" . $this->obs . "' WHERE id = " . $this->id);
-        }
-    }
-
-
-    /**
      * @param Licitacao $licitacao
      */
     public function setLicitacao(Licitacao $licitacao) {
