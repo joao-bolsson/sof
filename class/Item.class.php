@@ -193,9 +193,23 @@ class Item {
         }
     }
 
-    public function update() {
+    private function canUpdate(): bool {
+        $query_qtd = Query::getInstance()->exe("SELECT sum(itens_pedido.qtd) AS soma FROM itens_pedido, pedido WHERE itens_pedido.id_item = " . $this->id . " AND itens_pedido.id_pedido = pedido.id AND pedido.status != 1 AND pedido.status != 3");
+        if ($query_qtd->num_rows > 0) {
+            $obj_qtd = $query_qtd->fetch_object();
+            $sum = $obj_qtd->soma;
+            if ($this->qt_contrato < $sum || $this->qt_utilizado < $sum) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public function update(): bool {
         if ($this->id == self::$NEW_ITEM) {
             // insert
+        } else if (!$this->canUpdate()) {
+            return false;
         } else {
             // update
             $builder = new SQLBuilder(SQLBuilder::$UPDATE);
@@ -206,6 +220,7 @@ class Item {
 
             Query::getInstance()->exe($builder->__toString());
         }
+        return true;
     }
 
     protected function initItem() {
@@ -462,7 +477,7 @@ class Item {
      * @param string $complemento_item
      */
     public function setComplementoItem(string $complemento_item) {
-        $this->complemento_item = $complemento_item;
+        $this->complemento_item = Query::getInstance()->real_escape_string($complemento_item);
     }
 
     /**
@@ -484,6 +499,32 @@ class Item {
      */
     public function setVlUnitario(float $vl_unitario) {
         $this->vl_unitario = $vl_unitario;
+
+        // seleciona infos dos pedidos que contém o item editado e que não passaram da análise
+        $query = Query::getInstance()->exe("SELECT itens_pedido.id_pedido, itens_pedido.qtd, itens_pedido.valor AS valor_item, pedido.id_setor, pedido.valor AS valor_pedido, saldo_setor.saldo FROM itens_pedido, pedido, saldo_setor WHERE saldo_setor.id_setor = pedido.id_setor AND itens_pedido.id_item = {$this->id} AND itens_pedido.id_pedido = pedido.id AND pedido.status <= 2;");
+
+        $pedidos = [];
+        $i = 0;
+        while ($obj = $query->fetch_object()) {
+            $valorItem = $obj->qtd * $this->vl_unitario;
+            Query::getInstance()->exe("UPDATE itens_pedido SET itens_pedido.valor = '{$valorItem}' WHERE itens_pedido.id_item = {$this->id} AND itens_pedido.id_pedido = " . $obj->id_pedido);
+            $saldo_setor = $obj->saldo + $obj->valor_item;
+            $saldo_setor -= $valorItem;
+            $saldo_setor = number_format($saldo_setor, 3, '.', '');
+            // alterando o saldo do setor
+            Query::getInstance()->exe("UPDATE saldo_setor SET saldo_setor.saldo = '{$saldo_setor}' WHERE saldo_setor.id_setor = " . $obj->id_setor);
+
+            $pedidos[$i++] = $obj->id_pedido;
+        }
+
+        $len = count($pedidos);
+        for ($i = 0; $i < $len; $i++) {
+            $error = Request::checkForErrors($pedidos[$i]);
+            if ($error) {
+                Logger::error("Pedido quebrado em editItem: " . $pedidos[$i]);
+            }
+        }
+        Request::updateRequests($pedidos);
     }
 
     /**

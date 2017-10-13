@@ -494,6 +494,31 @@ final class Request {
         }
     }
 
+    public static function checkForErrors(int $pedido): bool {
+        $query = Query::getInstance()->exe("SELECT id, round(valor, 3) AS valor FROM pedido WHERE id = " . $pedido);
+        $obj = $query->fetch_object();
+
+        $ped = Query::getInstance()->exe("SELECT round(sum(valor), 3) AS soma FROM itens_pedido WHERE id_pedido = " . $pedido);
+        $obj_ped = $ped->fetch_object();
+        if ($obj->valor != $obj_ped->soma) {
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * Update the requests value according its items values.
+     * @param array $req Array with requests to be updated.
+     */
+    public static function updateRequests(array $req) {
+        $len = count($req);
+        for ($i = 0; $i < $len; $i++) {
+            $request = $req[$i];
+            $obj = Query::getInstance()->exe("SELECT round(sum(valor), 3) AS sum FROM itens_pedido WHERE id_pedido =  " . $request)->fetch_object();
+            Query::getInstance()->exe("UPDATE pedido SET valor = '" . $obj->sum . "' WHERE id = " . $request);
+        }
+    }
+
     /**
      * @param MoneySource $moneySource
      */

@@ -49,19 +49,6 @@ final class Geral {
     }
 
     /**
-     * Update the requests value according its items values.
-     * @param array $req Array with requests to be updated.
-     */
-    public static function updateRequests(array $req) {
-        $len = count($req);
-        for ($i = 0; $i < $len; $i++) {
-            $request = $req[$i];
-            $obj = Query::getInstance()->exe("SELECT round(sum(valor), 3) AS sum FROM itens_pedido WHERE id_pedido =  " . $request)->fetch_object();
-            Query::getInstance()->exe("UPDATE pedido SET valor = '" . $obj->sum . "' WHERE id = " . $request);
-        }
-    }
-
-    /**
      *
      * @param array $dados Informações que serão inseridas na tabela de itens.
      * @param array $campos Campos da coluna no banco que deverão ser abastecidos
@@ -193,12 +180,12 @@ final class Geral {
         }
         $len = count($pedidos);
         for ($i = 0; $i < $len; $i++) {
-            $error = self::checkForErrors($pedidos[$i]);
+            $error = Request::checkForErrors($pedidos[$i]);
             if ($error) {
                 Logger::error("Pedido quebrado em editItem: " . $pedidos[$i]);
             }
         }
-        self::updateRequests($pedidos);
+        Request::updateRequests($pedidos);
         return true;
     }
 
@@ -412,24 +399,6 @@ final class Geral {
         $query = Query::getInstance()->exe('SELECT postagens.tabela FROM postagens WHERE postagens.id = ' . $id);
         $obj = $query->fetch_object();
         return $obj->tabela;
-    }
-
-    public static function checkForErrors(int $pedido): bool {
-        $query = Query::getInstance()->exe("SELECT id, round(valor, 3) AS valor FROM pedido WHERE id = " . $pedido);
-        $obj = $query->fetch_object();
-
-        $ped = Query::getInstance()->exe("SELECT round(sum(valor), 3) AS soma FROM itens_pedido WHERE id_pedido = " . $pedido);
-        $obj_ped = $ped->fetch_object();
-        if ($obj->valor != $obj_ped->soma) {
-            return true;
-        }
-        return false;
-    }
-
-    public static function existsSources(int $id_request): bool {
-        $query = Query::getInstance()->exe("SELECT id FROM pedido_id_fonte WHERE id_pedido = " . $id_request);
-
-        return $query->num_rows > 0;
     }
 
 }
