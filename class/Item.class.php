@@ -178,19 +178,34 @@ class Item {
     protected $seq_item_processo;
 
     /**
-     * @return bool
+     * @var int Default id to define a new item.
      */
-    public function isCancelado(): bool {
-        return $this->cancelado;
-    }
+    public static $NEW_ITEM = 0;
 
     /**
      * Item constructor.
-     * @param int $id Item id from db.
+     * @param int $id Item id from db or self::NEW_ITEM if is a new item.
      */
     public function __construct(int $id) {
         $this->id = $id;
-        $this->initItem();
+        if ($this->id != self::$NEW_ITEM) {
+            $this->initItem();
+        }
+    }
+
+    public function update() {
+        if ($this->id == self::$NEW_ITEM) {
+            // insert
+        } else {
+            // update
+            $builder = new SQLBuilder(SQLBuilder::$UPDATE);
+            $builder->setTables(['itens']);
+            $builder->setColumns(['id_item_processo', 'id_item_contrato', 'cod_despesa', 'descr_despesa', 'descr_tipo_doc', 'num_contrato', 'num_processo', 'descr_mod_compra', 'num_licitacao', 'dt_inicio', 'dt_fim', 'dt_geracao', 'cgc_fornecedor', 'nome_fornecedor', 'num_extrato', 'cod_estruturado', 'nome_unidade', 'cod_reduzido', 'complemento_item', 'descricao', 'id_extrato_contr', 'vl_unitario', 'qt_contrato', 'vl_contrato', 'qt_utilizado', 'vl_utilizado', 'qt_saldo', 'vl_saldo', 'id_unidade', 'ano_orcamento', 'cancelado', 'seq_item_processo']);
+            $builder->setValues([$this->id_item_processo, $this->id_item_contrato, $this->cod_despesa, $this->descr_despesa, $this->descr_tipo_doc, $this->num_contrato, $this->num_processo, $this->descr_mod_compra, $this->num_licitacao, $this->dt_inicio, $this->dt_fim, $this->dt_geracao, $this->cgc_fornecedor, $this->nome_fornecedor, $this->num_extrato, $this->cod_estruturado, $this->nome_unidade, $this->cod_reduzido, $this->complemento_item, $this->descricao, $this->id_extrato_contr, $this->vl_unitario, $this->qt_contrato, $this->vl_contrato, $this->qt_utilizado, $this->vl_utilizado, $this->qt_saldo, $this->vl_saldo, $this->id_unidade, $this->ano_orcamento, $this->cancelado, $this->seq_item_processo]);
+            $builder->setWhere("id = " . $this->id);
+
+            Query::getInstance()->exe($builder->__toString());
+        }
     }
 
     protected function initItem() {
@@ -309,4 +324,405 @@ class Item {
     public function getVlContrato(): float {
         return $this->vl_contrato;
     }
+
+    /**
+     * @return bool
+     */
+    public function isCancelado(): bool {
+        return $this->cancelado;
+    }
+
+    /**
+     * @param int $id_item_processo
+     */
+    public function setIdItemProcesso(int $id_item_processo) {
+        $this->id_item_processo = $id_item_processo;
+    }
+
+    /**
+     * @param int $id_item_contrato
+     */
+    public function setIdItemContrato(int $id_item_contrato) {
+        $this->id_item_contrato = $id_item_contrato;
+    }
+
+    /**
+     * @param string $cod_despesa
+     */
+    public function setCodDespesa(string $cod_despesa) {
+        $this->cod_despesa = $cod_despesa;
+    }
+
+    /**
+     * @param string $descr_despesa
+     */
+    public function setDescrDespesa(string $descr_despesa) {
+        $this->descr_despesa = $descr_despesa;
+    }
+
+    /**
+     * @param string $descr_tipo_doc
+     */
+    public function setDescrTipoDoc(string $descr_tipo_doc) {
+        $this->descr_tipo_doc = $descr_tipo_doc;
+    }
+
+    /**
+     * @param string $num_contrato
+     */
+    public function setNumContrato(string $num_contrato) {
+        $this->num_contrato = $num_contrato;
+    }
+
+    /**
+     * @param string $num_processo
+     */
+    public function setNumProcesso(string $num_processo) {
+        $this->num_processo = $num_processo;
+    }
+
+    /**
+     * @param string $descr_mod_compra
+     */
+    public function setDescrModCompra(string $descr_mod_compra) {
+        $this->descr_mod_compra = $descr_mod_compra;
+    }
+
+    /**
+     * @param string $num_licitacao
+     */
+    public function setNumLicitacao(string $num_licitacao) {
+        $this->num_licitacao = $num_licitacao;
+    }
+
+    /**
+     * @param string $dt_inicio
+     */
+    public function setDtInicio(string $dt_inicio) {
+        $this->dt_inicio = $dt_inicio;
+    }
+
+    /**
+     * @param string $dt_fim
+     */
+    public function setDtFim(string $dt_fim) {
+        $this->dt_fim = $dt_fim;
+    }
+
+    /**
+     * @param string $dt_geracao
+     */
+    public function setDtGeracao(string $dt_geracao) {
+        $this->dt_geracao = $dt_geracao;
+    }
+
+    /**
+     * @param string $cgc_fornecedor
+     */
+    public function setCgcFornecedor(string $cgc_fornecedor) {
+        $this->cgc_fornecedor = $cgc_fornecedor;
+    }
+
+    /**
+     * @param string $nome_fornecedor
+     */
+    public function setNomeFornecedor(string $nome_fornecedor) {
+        $this->nome_fornecedor = $nome_fornecedor;
+    }
+
+    /**
+     * @param string $num_extrato
+     */
+    public function setNumExtrato(string $num_extrato) {
+        $this->num_extrato = $num_extrato;
+    }
+
+    /**
+     * @param string $cod_estruturado
+     */
+    public function setCodEstruturado(string $cod_estruturado) {
+        $this->cod_estruturado = $cod_estruturado;
+    }
+
+    /**
+     * @param string $nome_unidade
+     */
+    public function setNomeUnidade(string $nome_unidade) {
+        $this->nome_unidade = $nome_unidade;
+    }
+
+    /**
+     * @param string $cod_reduzido
+     */
+    public function setCodReduzido(string $cod_reduzido) {
+        $this->cod_reduzido = $cod_reduzido;
+    }
+
+    /**
+     * @param string $complemento_item
+     */
+    public function setComplementoItem(string $complemento_item) {
+        $this->complemento_item = $complemento_item;
+    }
+
+    /**
+     * @param string $descricao
+     */
+    public function setDescricao(string $descricao) {
+        $this->descricao = $descricao;
+    }
+
+    /**
+     * @param int $id_extrato_contr
+     */
+    public function setIdExtratoContr(int $id_extrato_contr) {
+        $this->id_extrato_contr = $id_extrato_contr;
+    }
+
+    /**
+     * @param float $vl_unitario
+     */
+    public function setVlUnitario(float $vl_unitario) {
+        $this->vl_unitario = $vl_unitario;
+    }
+
+    /**
+     * @param int $qt_contrato
+     */
+    public function setQtContrato(int $qt_contrato) {
+        $this->qt_contrato = $qt_contrato;
+    }
+
+    /**
+     * @param float $vl_contrato
+     */
+    public function setVlContrato(float $vl_contrato) {
+        $this->vl_contrato = $vl_contrato;
+    }
+
+    /**
+     * @param int $id_unidade
+     */
+    public function setIdUnidade(int $id_unidade) {
+        $this->id_unidade = $id_unidade;
+    }
+
+    /**
+     * @param int $ano_orcamento
+     */
+    public function setAnoOrcamento(int $ano_orcamento) {
+        $this->ano_orcamento = $ano_orcamento;
+    }
+
+    /**
+     * @param bool $cancelado
+     */
+    public function setCancelado(bool $cancelado) {
+        $this->cancelado = $cancelado;
+    }
+
+    /**
+     * @param string $chave
+     */
+    public function setChave(string $chave) {
+        $this->chave = $chave;
+    }
+
+    /**
+     * @param string $seq_item_processo
+     */
+    public function setSeqItemProcesso(string $seq_item_processo) {
+        $this->seq_item_processo = $seq_item_processo;
+    }
+
+    /**
+     * @return int
+     */
+    public function getIdItemProcesso(): int {
+        return $this->id_item_processo;
+    }
+
+    /**
+     * @return int
+     */
+    public function getIdItemContrato(): int {
+        return $this->id_item_contrato;
+    }
+
+    /**
+     * @return string
+     */
+    public function getCodDespesa(): string {
+        return $this->cod_despesa;
+    }
+
+    /**
+     * @return string
+     */
+    public function getDescrDespesa(): string {
+        return $this->descr_despesa;
+    }
+
+    /**
+     * @return string
+     */
+    public function getDescrTipoDoc(): string {
+        return $this->descr_tipo_doc;
+    }
+
+    /**
+     * @return string
+     */
+    public function getNumContrato(): string {
+        return $this->num_contrato;
+    }
+
+    /**
+     * @return string
+     */
+    public function getNumProcesso(): string {
+        return $this->num_processo;
+    }
+
+    /**
+     * @return string
+     */
+    public function getDescrModCompra(): string {
+        return $this->descr_mod_compra;
+    }
+
+    /**
+     * @return string
+     */
+    public function getNumLicitacao(): string {
+        return $this->num_licitacao;
+    }
+
+    /**
+     * @return string
+     */
+    public function getDtInicio(): string {
+        return $this->dt_inicio;
+    }
+
+    /**
+     * @return string
+     */
+    public function getDtFim(): string {
+        return $this->dt_fim;
+    }
+
+    /**
+     * @return string
+     */
+    public function getDtGeracao(): string {
+        return $this->dt_geracao;
+    }
+
+    /**
+     * @return string
+     */
+    public function getCgcFornecedor(): string {
+        return $this->cgc_fornecedor;
+    }
+
+    /**
+     * @return string
+     */
+    public function getNomeFornecedor(): string {
+        return $this->nome_fornecedor;
+    }
+
+    /**
+     * @return string
+     */
+    public function getNumExtrato(): string {
+        return $this->num_extrato;
+    }
+
+    /**
+     * @return string
+     */
+    public function getCodEstruturado(): string {
+        return $this->cod_estruturado;
+    }
+
+    /**
+     * @return string
+     */
+    public function getNomeUnidade(): string {
+        return $this->nome_unidade;
+    }
+
+    /**
+     * @return string
+     */
+    public function getCodReduzido(): string {
+        return $this->cod_reduzido;
+    }
+
+    /**
+     * @return string
+     */
+    public function getComplementoItem(): string {
+        return $this->complemento_item;
+    }
+
+    /**
+     * @return string
+     */
+    public function getDescricao(): string {
+        return $this->descricao;
+    }
+
+    /**
+     * @return int
+     */
+    public function getIdExtratoContr(): int {
+        return $this->id_extrato_contr;
+    }
+
+    /**
+     * @return float
+     */
+    public function getVlUnitario(): float {
+        return $this->vl_unitario;
+    }
+
+    /**
+     * @return int
+     */
+    public function getQtContrato(): int {
+        return $this->qt_contrato;
+    }
+
+    /**
+     * @return int
+     */
+    public function getIdUnidade(): int {
+        return $this->id_unidade;
+    }
+
+    /**
+     * @return int
+     */
+    public function getAnoOrcamento(): int {
+        return $this->ano_orcamento;
+    }
+
+    /**
+     * @return string
+     */
+    public function getChave(): string {
+        return $this->chave;
+    }
+
+    /**
+     * @return string
+     */
+    public function getSeqItemProcesso(): string {
+        return $this->seq_item_processo;
+    }
+
+
 }

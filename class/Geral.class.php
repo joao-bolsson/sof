@@ -164,7 +164,7 @@ final class Geral {
      * @return bool
      */
     public static function editItem($data): bool {
-        $query_qtd = Query::getInstance()->exe("SELECT sum(itens_pedido.qtd) AS soma FROM itens_pedido WHERE itens_pedido.id_item = " . $data->id);
+        $query_qtd = Query::getInstance()->exe("SELECT sum(itens_pedido.qtd) AS soma FROM itens_pedido, pedido WHERE itens_pedido.id_item = " . $data->id . " AND itens_pedido.id_pedido = pedido.id AND pedido.status != 1 AND pedido.status != 3");
         if ($query_qtd->num_rows > 0) {
             $obj_qtd = $query_qtd->fetch_object();
             $sum = $obj_qtd->soma;
