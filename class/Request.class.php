@@ -129,6 +129,28 @@ final class Request {
         }
     }
 
+    /**
+     * Approve by management an array of requests id.
+     *
+     * @param array $pedidos Request id to approve.
+     */
+    public static function aprovaGerencia(array $pedidos) {
+        if (empty($pedidos)) {
+            return;
+        }
+
+        $where = '';
+        $len = count($pedidos);
+        for ($i = 0; $i < $len; $i++) {
+            $where .= 'id = ' . $pedidos[$i];
+            if ($i < $len - 1) {
+                $where .= ' OR ';
+            }
+        }
+
+        Query::getInstance()->exe('UPDATE pedido SET aprov_gerencia = 1 WHERE ' . $where);
+    }
+
     private function hasSources() {
         return !empty($this->moneySource);
     }

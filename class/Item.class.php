@@ -205,9 +205,21 @@ class Item {
         return true;
     }
 
+    /**
+     * Update a item in DB or insert a new one.
+     *
+     * @return bool Is success - true, else - false.
+     */
     public function update(): bool {
         if ($this->id == self::$NEW_ITEM) {
             // insert
+            $builder = new SQLBuilder(SQLBuilder::$INSERT);
+            $builder->setTables(['itens']);
+            $builder->setColumns(['id', 'id_item_processo', 'id_item_contrato', 'cod_despesa', 'descr_despesa', 'descr_tipo_doc', 'num_contrato', 'num_processo', 'descr_mod_compra', 'num_licitacao', 'dt_inicio', 'dt_fim', 'dt_geracao', 'cgc_fornecedor', 'nome_fornecedor', 'num_extrato', 'cod_estruturado', 'nome_unidade', 'cod_reduzido', 'complemento_item', 'descricao', 'id_extrato_contr', 'vl_unitario', 'qt_contrato', 'vl_contrato', 'qt_utilizado', 'vl_utilizado', 'qt_saldo', 'vl_saldo', 'id_unidade', 'ano_orcamento', 'cancelado', 'chave', 'seq_item_processo']);
+            $builder->setValues([NULL, $this->id_item_processo, $this->id_item_contrato, $this->cod_despesa, $this->descr_despesa, $this->descr_tipo_doc, $this->num_contrato, $this->num_processo, $this->descr_mod_compra, $this->num_licitacao, $this->dt_inicio, $this->dt_fim, $this->dt_geracao, $this->cgc_fornecedor, $this->nome_fornecedor, $this->num_extrato, $this->cod_estruturado, $this->nome_unidade, $this->cod_reduzido, $this->complemento_item, $this->descricao, $this->id_extrato_contr, $this->vl_unitario, $this->qt_contrato, $this->vl_contrato, $this->qt_utilizado, $this->vl_utilizado, $this->qt_saldo, $this->vl_saldo, $this->id_unidade, $this->ano_orcamento, $this->cancelado, $this->chave, $this->seq_item_processo]);
+
+            Query::getInstance()->exe($builder->__toString());
+            $this->id = Query::getInstance()->getInsertId();
         } else if (!$this->canUpdate()) {
             return false;
         } else {
@@ -274,7 +286,7 @@ class Item {
      * @param int $qt_saldo
      */
     public function setQtSaldo(int $qt_saldo = null) {
-        if (!empty($qt_saldo)) {
+        if (!is_null($qt_saldo)) {
             $this->qt_saldo = $qt_saldo;
         }
     }
@@ -283,7 +295,7 @@ class Item {
      * @param int $qt_utilizado
      */
     public function setQtUtilizado(int $qt_utilizado = null) {
-        if (!empty($qt_utilizado)) {
+        if (!is_null($qt_utilizado)) {
             $this->qt_utilizado = $qt_utilizado;
         }
     }
@@ -292,7 +304,7 @@ class Item {
      * @param float $vl_saldo
      */
     public function setVlSaldo(float $vl_saldo = null) {
-        if (!empty($vl_saldo)) {
+        if (!is_null($vl_saldo)) {
             $this->vl_saldo = $vl_saldo;
         }
     }
@@ -301,7 +313,7 @@ class Item {
      * @param float $vl_utilizado
      */
     public function setVlUtilizado(float $vl_utilizado = null) {
-        if (!empty($vl_utilizado)) {
+        if (!is_null($vl_utilizado)) {
             $this->vl_utilizado = $vl_utilizado;
         }
     }
@@ -359,7 +371,7 @@ class Item {
      * @param int $id_item_processo
      */
     public function setIdItemProcesso(int $id_item_processo = null) {
-        if (!empty($id_item_processo)) {
+        if (!is_null($id_item_processo)) {
             $this->id_item_processo = $id_item_processo;
         }
     }
@@ -368,7 +380,7 @@ class Item {
      * @param int $id_item_contrato
      */
     public function setIdItemContrato(int $id_item_contrato = null) {
-        if (!empty($id_item_contrato)) {
+        if (!is_null($id_item_contrato)) {
             $this->id_item_contrato = $id_item_contrato;
         }
     }
@@ -377,7 +389,7 @@ class Item {
      * @param string $cod_despesa
      */
     public function setCodDespesa(string $cod_despesa = null) {
-        if (!empty($cod_despesa)) {
+        if (!is_null($cod_despesa)) {
             $this->cod_despesa = $cod_despesa;
         }
     }
@@ -386,7 +398,7 @@ class Item {
      * @param string $descr_despesa
      */
     public function setDescrDespesa(string $descr_despesa = null) {
-        if (!empty($descr_despesa)) {
+        if (!is_null($descr_despesa)) {
             $this->descr_despesa = $descr_despesa;
         }
     }
@@ -395,7 +407,7 @@ class Item {
      * @param string $descr_tipo_doc
      */
     public function setDescrTipoDoc(string $descr_tipo_doc = null) {
-        if (!empty($descr_tipo_doc)) {
+        if (!is_null($descr_tipo_doc)) {
             $this->descr_tipo_doc = $descr_tipo_doc;
         }
     }
@@ -404,7 +416,7 @@ class Item {
      * @param string $num_contrato
      */
     public function setNumContrato(string $num_contrato = null) {
-        if (!empty($num_contrato)) {
+        if (!is_null($num_contrato)) {
             $this->num_contrato = $num_contrato;
         }
     }
@@ -413,7 +425,7 @@ class Item {
      * @param string $num_processo
      */
     public function setNumProcesso(string $num_processo = null) {
-        if (!empty($num_processo)) {
+        if (!is_null($num_processo)) {
             $this->num_processo = $num_processo;
         }
     }
@@ -422,7 +434,7 @@ class Item {
      * @param string $descr_mod_compra
      */
     public function setDescrModCompra(string $descr_mod_compra = null) {
-        if (!empty($descr_mod_compra)) {
+        if (!is_null($descr_mod_compra)) {
             $this->descr_mod_compra = $descr_mod_compra;
         }
     }
@@ -431,7 +443,7 @@ class Item {
      * @param string $num_licitacao
      */
     public function setNumLicitacao(string $num_licitacao = null) {
-        if (!empty($num_licitacao)) {
+        if (!is_null($num_licitacao)) {
             $this->num_licitacao = $num_licitacao;
         }
     }
@@ -440,7 +452,7 @@ class Item {
      * @param string $dt_inicio
      */
     public function setDtInicio(string $dt_inicio = null) {
-        if (!empty($dt_inicio)) {
+        if (!is_null($dt_inicio)) {
             $this->dt_inicio = $dt_inicio;
         }
     }
@@ -449,7 +461,7 @@ class Item {
      * @param string $dt_fim
      */
     public function setDtFim(string $dt_fim = null) {
-        if (!empty($dt_fim)) {
+        if (!is_null($dt_fim)) {
             $this->dt_fim = $dt_fim;
         }
     }
@@ -458,7 +470,7 @@ class Item {
      * @param string $dt_geracao
      */
     public function setDtGeracao(string $dt_geracao = null) {
-        if (!empty($dt_geracao)) {
+        if (!is_null($dt_geracao)) {
             $this->dt_geracao = $dt_geracao;
         }
     }
@@ -467,7 +479,7 @@ class Item {
      * @param string $cgc_fornecedor
      */
     public function setCgcFornecedor(string $cgc_fornecedor = null) {
-        if (!empty($cgc_fornecedor)) {
+        if (!is_null($cgc_fornecedor)) {
             $this->cgc_fornecedor = $cgc_fornecedor;
         }
     }
@@ -476,7 +488,7 @@ class Item {
      * @param string $nome_fornecedor
      */
     public function setNomeFornecedor(string $nome_fornecedor = null) {
-        if (!empty($nome_fornecedor)) {
+        if (!is_null($nome_fornecedor)) {
             $this->nome_fornecedor = $nome_fornecedor;
         }
     }
@@ -485,7 +497,7 @@ class Item {
      * @param string $num_extrato
      */
     public function setNumExtrato(string $num_extrato = null) {
-        if (!empty($num_extrato)) {
+        if (!is_null($num_extrato)) {
             $this->num_extrato = $num_extrato;
         }
     }
@@ -494,7 +506,7 @@ class Item {
      * @param string $cod_estruturado
      */
     public function setCodEstruturado(string $cod_estruturado = null) {
-        if (!empty($cod_estruturado)) {
+        if (!is_null($cod_estruturado)) {
             $this->cod_estruturado = $cod_estruturado;
         }
     }
@@ -503,7 +515,7 @@ class Item {
      * @param string $nome_unidade
      */
     public function setNomeUnidade(string $nome_unidade = null) {
-        if (!empty($nome_unidade)) {
+        if (!is_null($nome_unidade)) {
             $this->nome_unidade = $nome_unidade;
         }
     }
@@ -512,7 +524,7 @@ class Item {
      * @param string $cod_reduzido
      */
     public function setCodReduzido(string $cod_reduzido = null) {
-        if (!empty($cod_reduzido)) {
+        if (!is_null($cod_reduzido)) {
             $this->cod_reduzido = $cod_reduzido;
         }
     }
@@ -521,7 +533,7 @@ class Item {
      * @param string $complemento_item
      */
     public function setComplementoItem(string $complemento_item = null) {
-        if (!empty($complemento_item)) {
+        if (!is_null($complemento_item)) {
             $this->complemento_item = Query::getInstance()->real_escape_string($complemento_item);
         }
     }
@@ -530,7 +542,7 @@ class Item {
      * @param string $descricao
      */
     public function setDescricao(string $descricao = null) {
-        if (!empty($descricao)) {
+        if (!is_null($descricao)) {
             $this->descricao = $descricao;
         }
     }
@@ -539,7 +551,7 @@ class Item {
      * @param int $id_extrato_contr
      */
     public function setIdExtratoContr(int $id_extrato_contr = null) {
-        if (!empty($id_extrato_contr)) {
+        if (!is_null($id_extrato_contr)) {
             $this->id_extrato_contr = $id_extrato_contr;
         }
     }
@@ -548,8 +560,11 @@ class Item {
      * @param float $vl_unitario
      */
     public function setVlUnitario(float $vl_unitario = null) {
-        if (!empty($vl_unitario)) {
+        if (!is_null($vl_unitario)) {
             $this->vl_unitario = $vl_unitario;
+            $this->vl_saldo = $this->qt_saldo * $this->vl_unitario;
+            $this->vl_contrato = $this->qt_contrato * $this->vl_unitario;
+            $this->vl_utilizado = $this->vl_utilizado * $this->vl_unitario;
 
             // seleciona infos dos pedidos que contém o item editado e que não passaram da análise
             $query = Query::getInstance()->exe("SELECT itens_pedido.id_pedido, itens_pedido.qtd, itens_pedido.valor AS valor_item, pedido.id_setor, pedido.valor AS valor_pedido, saldo_setor.saldo FROM itens_pedido, pedido, saldo_setor WHERE saldo_setor.id_setor = pedido.id_setor AND itens_pedido.id_item = {$this->id} AND itens_pedido.id_pedido = pedido.id AND pedido.status <= 2;");
@@ -583,7 +598,7 @@ class Item {
      * @param int $qt_contrato
      */
     public function setQtContrato(int $qt_contrato = null) {
-        if (!empty($qt_contrato)) {
+        if (!is_null($qt_contrato)) {
             $this->qt_contrato = $qt_contrato;
         }
     }
@@ -592,7 +607,7 @@ class Item {
      * @param float $vl_contrato
      */
     public function setVlContrato(float $vl_contrato = null) {
-        if (!empty($vl_contrato)) {
+        if (!is_null($vl_contrato)) {
             $this->vl_contrato = $vl_contrato;
         }
     }
@@ -601,7 +616,7 @@ class Item {
      * @param int $id_unidade
      */
     public function setIdUnidade(int $id_unidade = null) {
-        if (!empty($id_unidade)) {
+        if (!is_null($id_unidade)) {
             $this->id_unidade = $id_unidade;
         }
     }
@@ -610,7 +625,7 @@ class Item {
      * @param int $ano_orcamento
      */
     public function setAnoOrcamento(int $ano_orcamento = null) {
-        if (!empty($ano_orcamento)) {
+        if (!is_null($ano_orcamento)) {
             $this->ano_orcamento = $ano_orcamento;
         }
     }
@@ -626,7 +641,7 @@ class Item {
      * @param string $chave
      */
     public function setChave(string $chave = null) {
-        if (!empty($chave)) {
+        if (!is_null($chave)) {
             $this->chave = $chave;
         }
     }
@@ -635,7 +650,7 @@ class Item {
      * @param string $seq_item_processo
      */
     public function setSeqItemProcesso(string $seq_item_processo = null) {
-        if (!empty($seq_item_processo)) {
+        if (!is_null($seq_item_processo)) {
             $this->seq_item_processo = $seq_item_processo;
         }
     }

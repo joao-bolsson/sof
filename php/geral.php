@@ -104,106 +104,63 @@ if (Busca::isActive()) {
                 break;
 
             case 'formEditRegItem':
-                $id = filter_input(INPUT_POST, 'id');
-
                 $array_names = ARRAY_ITEM_FIELDS;
 
-                if ($id == 0) {
-                    // register a new item
-                    $data = [];
+                $data = [];
 
-                    $len = count($array_names);
-                    for ($i = 0; $i < $len; $i++) {
-                        $name = $array_names[$i];
-
-                        if ($name == 'id') {
-                            $data[$name] = 'NULL';
-                        } else if ($name == 'cancelado') {
-                            $data[$name] = '0';
-                        } else if ($name == 'chave') {
-                            $data[$name] = '';
-                        } else {
-                            $data[$name] = filter_input(INPUT_POST, $name);
-                        }
-                    }
-                    $data['chave'] = $data['num_processo'] . '#' . $data['cod_reduzido'] . '#' . $data['seq_item_processo'];
-                    Geral::cadItensRP($data, $array_names);
-                    unset($data);
-                } else {
-                    // update it
-                    $data = [];
-
-                    for ($i = 0; $i < count($array_names); $i++) {
-                        $name = $array_names[$i];
-                        $input = filter_input(INPUT_POST, $name);
-                        if ($input !== NULL) {
-                            $data[$name] = $input;
-                        }
-                    }
-
-                    $item = new Item($data['id']);
-                    $item->setIdItemProcesso($data['id_item_processo']);
-                    $item->setIdItemContrato($data['id_item_contrato']);
-                    $item->setCodDespesa($data['cod_despesa']);
-                    $item->setDescrDespesa($data['descr_despesa']);
-                    $item->setDescrTipoDoc($data['descr_tipo_doc']);
-                    $item->setNumContrato($data['num_contrato']);
-                    $item->setNumProcesso($data['num_processo']);
-                    $item->setDescrModCompra($data['descr_mod_compra']);
-                    $item->setNumLicitacao($data['num_licitacao']);
-                    $item->setDtInicio($data['dt_inicio']);
-                    $item->setDtFim($data['dt_fim']);
-                    $item->setDtGeracao($data['dt_geracao']);
-                    $item->setCgcFornecedor($data['cgc_fornecedor']);
-                    $item->setNomeFornecedor($data['nome_fornecedor']);
-                    $item->setNumExtrato($data['num_extrato']);
-                    $item->setCodEstruturado($data['cod_estruturado']);
-                    $item->setNomeUnidade($data['nome_unidade']);
-                    $item->setCodReduzido($data['cod_reduzido']);
-                    $item->setComplementoItem($data['complemento_item']);
-                    $item->setDescricao($data['descricao']);
-                    $item->setIdExtratoContr($data['id_extrato_contr']);
-                    $item->setVlUnitario($data['vl_unitario']);
-                    $item->setQtContrato($data['qt_contrato']);
-                    $item->setVlContrato($data['vl_contrato']);
-                    $item->setQtUtilizado($data['qt_utilizado']);
-                    $item->setVlUtilizado($data['vl_utilizado']);
-                    $item->setQtSaldo($data['qt_saldo']);
-                    $item->setVlSaldo($data['vl_saldo']);
-                    $item->setIdUnidade($data['id_unidade']);
-                    $item->setAnoOrcamento($data['ano_orcamento']);
-                    $item->setSeqItemProcesso($data['seq_item_processo']);
-
-                    unset($data);
-                    $success = $item->update();
-                    if (!$success) {
-                        echo "fail";
-                    }
-                }
-                break;
-
-            case 'cadItens':
-                $array_names = ['id', 'id_item_processo', 'id_item_contrato', 'cod_despesa', 'descr_despesa', 'descr_tipo_doc', 'num_contrato', 'num_processo', 'descr_mod_compra', 'num_licitacao', 'dt_inicio', 'dt_fim', 'dt_geracao', 'cgc_fornecedor', 'nome_fornecedor', 'num_extrato', 'cod_estruturado', 'nome_unidade', 'cod_reduzido', 'complemento_item', 'descricao', 'id_extrato_contr', 'vl_unitario', 'qt_contrato', 'vl_contrato', 'qt_utilizado', 'vl_utilizado', 'qt_saldo', 'vl_saldo', 'id_unidade', 'ano_orcamento', 'cancelado', 'chave', 'seq_item_processo'];
-
-                $dados = [];
-
-                $len = count($array_names);
-                for ($i = 0; $i < $len; $i++) {
+                for ($i = 0; $i < count($array_names); $i++) {
                     $name = $array_names[$i];
-
-                    if ($name == 'id') {
-                        $dados[$name] = 'NULL';
-                    } else if ($name == 'cancelado') {
-                        $dados[$name] = '0';
-                    } else if ($name == 'chave') {
-                        $dados[$name] = '';
-                    } else {
-                        $dados[$name] = filter_input(INPUT_POST, $name);
+                    $input = filter_input(INPUT_POST, $name);
+                    if ($input !== NULL) {
+                        $data[$name] = $input;
                     }
                 }
-                $dados['chave'] = $dados['num_processo'] . '#' . $dados['cod_reduzido'] . '#' . $dados['seq_item_processo'];
-                Geral::cadItensRP($dados, $array_names);
 
+                $item = new Item($data['id']);
+                $item->setIdItemProcesso($data['id_item_processo']);
+                $item->setIdItemContrato($data['id_item_contrato']);
+                $item->setCodDespesa($data['cod_despesa']);
+                $item->setDescrDespesa($data['descr_despesa']);
+                $item->setDescrTipoDoc($data['descr_tipo_doc']);
+                $item->setNumContrato($data['num_contrato']);
+                $item->setNumProcesso($data['num_processo']);
+                $item->setDescrModCompra($data['descr_mod_compra']);
+                $item->setNumLicitacao($data['num_licitacao']);
+                $item->setDtInicio($data['dt_inicio']);
+                $item->setDtFim($data['dt_fim']);
+                $item->setDtGeracao($data['dt_geracao']);
+                $item->setCgcFornecedor($data['cgc_fornecedor']);
+                $item->setNomeFornecedor($data['nome_fornecedor']);
+                $item->setNumExtrato($data['num_extrato']);
+                $item->setCodEstruturado($data['cod_estruturado']);
+                $item->setNomeUnidade($data['nome_unidade']);
+                $item->setCodReduzido($data['cod_reduzido']);
+                $item->setComplementoItem($data['complemento_item']);
+                $item->setDescricao($data['descricao']);
+                $item->setIdExtratoContr($data['id_extrato_contr']);
+                $item->setQtContrato($data['qt_contrato']);
+                $item->setVlContrato($data['vl_contrato']);
+                $item->setQtUtilizado($data['qt_utilizado']);
+                $item->setVlUtilizado($data['vl_utilizado']);
+                $item->setQtSaldo($data['qt_saldo']);
+                $item->setVlSaldo($data['vl_saldo']);
+                $item->setIdUnidade($data['id_unidade']);
+                $item->setAnoOrcamento($data['ano_orcamento']);
+                if ($data['id'] == Item::$NEW_ITEM) {
+                    $item->setCancelado(false);
+                    $item->setChave($data['num_processo'] . '#' . $data['cod_reduzido'] . '#' . $data['seq_item_processo']);
+                }
+                $item->setSeqItemProcesso($data['seq_item_processo']);
+                /**
+                 * This value need to be setted lastly
+                 */
+                $item->setVlUnitario($data['vl_unitario']);
+
+                unset($data);
+                $success = $item->update();
+                if (!$success) {
+                    echo "fail";
+                }
                 break;
 
             case 'undoFreeMoney':
@@ -216,7 +173,7 @@ if (Busca::isActive()) {
 
             case 'aprovaGeren':
                 $pedidos = filter_input(INPUT_POST, 'pedidos', FILTER_DEFAULT, FILTER_FORCE_ARRAY);
-                Geral::aprovaGerencia($pedidos);
+                Request::aprovaGerencia($pedidos);
                 break;
 
             case 'addUser':

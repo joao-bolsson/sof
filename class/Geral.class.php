@@ -49,51 +49,6 @@ final class Geral {
     }
 
     /**
-     *
-     * @param array $dados Informações que serão inseridas na tabela de itens.
-     * @param array $campos Campos da coluna no banco que deverão ser abastecidos
-     */
-    public static function cadItensRP(array $dados, array $campos) {
-        if (empty($dados)) {
-            exit("Nenhum dado foi recebido para o cadastro");
-        }
-        $fields = $insert_dados = '(';
-
-        $len = count($campos);
-        for ($i = 0; $i < $len; $i++) {
-            $fields .= $campos[$i];
-            $aux = Query::getInstance()->real_escape_string($dados[$campos[$i]]);
-            $info = str_replace("\"", "'", $aux);
-            $insert_dados .= "\"" . $info . "\"";
-            if ($i != $len - 1) {
-                $fields .= ', ';
-                $insert_dados .= ', ';
-            }
-        }
-        $fields .= ')';
-        $insert_dados .= ')';
-
-        Query::getInstance()->exe("INSERT IGNORE INTO itens " . $fields . " VALUES " . $insert_dados);
-    }
-
-    public static function aprovaGerencia(array $pedidos) {
-        if (empty($pedidos)) {
-            return;
-        }
-
-        $where = '';
-        $len = count($pedidos);
-        for ($i = 0; $i < $len; $i++) {
-            $where .= 'id = ' . $pedidos[$i];
-            if ($i < $len - 1) {
-                $where .= ' OR ';
-            }
-        }
-
-        Query::getInstance()->exe('UPDATE pedido SET aprov_gerencia = 1 WHERE ' . $where);
-    }
-
-    /**
      *    Função para cadastrar fontes do pedido (status == Aguarda Orçamento)
      *
      * @return bool If inserts all datas - true, else false.

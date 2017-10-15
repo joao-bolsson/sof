@@ -111,6 +111,8 @@ class SQLBuilder {
                 $value = "\"" . $value . "\"";
             } else if (is_null($value)) {
                 $value = "NULL";
+            } else if (is_bool($value)) {
+                $value = intval($value);
             }
 
             if ($this->type == self::$UPDATE) {
