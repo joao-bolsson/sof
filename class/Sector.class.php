@@ -36,6 +36,7 @@ final class Sector {
         $this->moneySources = [];
         $this->fillFields();
         $this->fillMoneySources();
+        $this->updateMoney();
     }
 
     private function fillMoneySources() {
@@ -65,15 +66,16 @@ final class Sector {
      * Update the sector balance by its sources values.
      */
     public function updateMoney() {
-        $query = Query::getInstance()->exe("SELECT round(sum(valor), 3) AS saldo FROM saldo_fonte WHERE id_setor = " . $this->id);
-
-        if ($query->num_rows > 0) {
-            $obj = $query->fetch_object();
-
-            if (!empty($obj->saldo)) {
-                Logger::info("Saldo do setor " . $this->id . " alterado de " . $this->money . " para " . $obj->saldo);
-                $this->setMoney($obj->saldo);
+        $newMoney = 0;
+        foreach ($this->moneySources as $moneySource) {
+            if ($moneySource instanceof MoneySource) {
+                $newMoney += $moneySource->getValue();
             }
+        }
+
+        if ($newMoney > 0) {
+            Logger::info("Saldo do setor " . $this->id . " alterado de " . $this->money . " para " . $newMoney);
+            $this->setMoney($newMoney);
         }
     }
 

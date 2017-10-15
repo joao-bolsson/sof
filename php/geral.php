@@ -141,12 +141,42 @@ if (Busca::isActive()) {
                         }
                     }
 
-                    $obj_data = (object)$data;
+                    $item = new Item($data['id']);
+                    $item->setIdItemProcesso($data['id_item_processo']);
+                    $item->setIdItemContrato($data['id_item_contrato']);
+                    $item->setCodDespesa($data['cod_despesa']);
+                    $item->setDescrDespesa($data['descr_despesa']);
+                    $item->setDescrTipoDoc($data['descr_tipo_doc']);
+                    $item->setNumContrato($data['num_contrato']);
+                    $item->setNumProcesso($data['num_processo']);
+                    $item->setDescrModCompra($data['descr_mod_compra']);
+                    $item->setNumLicitacao($data['num_licitacao']);
+                    $item->setDtInicio($data['dt_inicio']);
+                    $item->setDtFim($data['dt_fim']);
+                    $item->setDtGeracao($data['dt_geracao']);
+                    $item->setCgcFornecedor($data['cgc_fornecedor']);
+                    $item->setNomeFornecedor($data['nome_fornecedor']);
+                    $item->setNumExtrato($data['num_extrato']);
+                    $item->setCodEstruturado($data['cod_estruturado']);
+                    $item->setNomeUnidade($data['nome_unidade']);
+                    $item->setCodReduzido($data['cod_reduzido']);
+                    $item->setComplementoItem($data['complemento_item']);
+                    $item->setDescricao($data['descricao']);
+                    $item->setIdExtratoContr($data['id_extrato_contr']);
+                    $item->setVlUnitario($data['vl_unitario']);
+                    $item->setQtContrato($data['qt_contrato']);
+                    $item->setVlContrato($data['vl_contrato']);
+                    $item->setQtUtilizado($data['qt_utilizado']);
+                    $item->setVlUtilizado($data['vl_utilizado']);
+                    $item->setQtSaldo($data['qt_saldo']);
+                    $item->setVlSaldo($data['vl_saldo']);
+                    $item->setIdUnidade($data['id_unidade']);
+                    $item->setAnoOrcamento($data['ano_orcamento']);
+                    $item->setSeqItemProcesso($data['seq_item_processo']);
+
                     unset($data);
-                    $success = Geral::editItem($obj_data);
-                    if ($success) {
-                        Geral::editItemFactory($obj_data);
-                    } else {
+                    $success = $item->update();
+                    if (!$success) {
                         echo "fail";
                     }
                 }
@@ -283,29 +313,6 @@ if (Busca::isActive()) {
                 $ptres = filter_input(INPUT_POST, 'ptres');
                 $plano = filter_input(INPUT_POST, 'plano');
                 echo Geral::cadastraFontes($id_pedido, $fonte, $ptres, $plano);
-                break;
-
-            case 'editItem':
-                $fields = filter_input(INPUT_POST, 'fields', FILTER_DEFAULT, FILTER_FORCE_ARRAY);
-                $dados = filter_input(INPUT_POST, 'dados', FILTER_DEFAULT, FILTER_FORCE_ARRAY);
-                $array_dados = [];
-
-                for ($i = 0; $i < count($dados); $i++) {
-                    $array_dados[$fields[$i]] = $dados[$i];
-                }
-
-                $obj_dados = (object)$array_dados;
-                unset($fields);
-                unset($dados);
-                unset($array_dados);
-                $success = Geral::editItem($obj_dados);
-                if ($success) {
-                    Geral::editItemFactory($obj_dados);
-                    echo 1;
-                } else {
-                    echo 0;
-                }
-
                 break;
 
             case 'enviaEmpenho':

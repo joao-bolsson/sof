@@ -273,29 +273,37 @@ class Item {
     /**
      * @param int $qt_saldo
      */
-    public function setQtSaldo(int $qt_saldo) {
-        $this->qt_saldo = $qt_saldo;
+    public function setQtSaldo(int $qt_saldo = null) {
+        if (!empty($qt_saldo)) {
+            $this->qt_saldo = $qt_saldo;
+        }
     }
 
     /**
      * @param int $qt_utilizado
      */
-    public function setQtUtilizado(int $qt_utilizado) {
-        $this->qt_utilizado = $qt_utilizado;
+    public function setQtUtilizado(int $qt_utilizado = null) {
+        if (!empty($qt_utilizado)) {
+            $this->qt_utilizado = $qt_utilizado;
+        }
     }
 
     /**
      * @param float $vl_saldo
      */
-    public function setVlSaldo(float $vl_saldo) {
-        $this->vl_saldo = $vl_saldo;
+    public function setVlSaldo(float $vl_saldo = null) {
+        if (!empty($vl_saldo)) {
+            $this->vl_saldo = $vl_saldo;
+        }
     }
 
     /**
      * @param float $vl_utilizado
      */
-    public function setVlUtilizado(float $vl_utilizado) {
-        $this->vl_utilizado = $vl_utilizado;
+    public function setVlUtilizado(float $vl_utilizado = null) {
+        if (!empty($vl_utilizado)) {
+            $this->vl_utilizado = $vl_utilizado;
+        }
     }
 
     /**
@@ -350,230 +358,286 @@ class Item {
     /**
      * @param int $id_item_processo
      */
-    public function setIdItemProcesso(int $id_item_processo) {
-        $this->id_item_processo = $id_item_processo;
+    public function setIdItemProcesso(int $id_item_processo = null) {
+        if (!empty($id_item_processo)) {
+            $this->id_item_processo = $id_item_processo;
+        }
     }
 
     /**
      * @param int $id_item_contrato
      */
-    public function setIdItemContrato(int $id_item_contrato) {
-        $this->id_item_contrato = $id_item_contrato;
+    public function setIdItemContrato(int $id_item_contrato = null) {
+        if (!empty($id_item_contrato)) {
+            $this->id_item_contrato = $id_item_contrato;
+        }
     }
 
     /**
      * @param string $cod_despesa
      */
-    public function setCodDespesa(string $cod_despesa) {
-        $this->cod_despesa = $cod_despesa;
+    public function setCodDespesa(string $cod_despesa = null) {
+        if (!empty($cod_despesa)) {
+            $this->cod_despesa = $cod_despesa;
+        }
     }
 
     /**
      * @param string $descr_despesa
      */
-    public function setDescrDespesa(string $descr_despesa) {
-        $this->descr_despesa = $descr_despesa;
+    public function setDescrDespesa(string $descr_despesa = null) {
+        if (!empty($descr_despesa)) {
+            $this->descr_despesa = $descr_despesa;
+        }
     }
 
     /**
      * @param string $descr_tipo_doc
      */
-    public function setDescrTipoDoc(string $descr_tipo_doc) {
-        $this->descr_tipo_doc = $descr_tipo_doc;
+    public function setDescrTipoDoc(string $descr_tipo_doc = null) {
+        if (!empty($descr_tipo_doc)) {
+            $this->descr_tipo_doc = $descr_tipo_doc;
+        }
     }
 
     /**
      * @param string $num_contrato
      */
-    public function setNumContrato(string $num_contrato) {
-        $this->num_contrato = $num_contrato;
+    public function setNumContrato(string $num_contrato = null) {
+        if (!empty($num_contrato)) {
+            $this->num_contrato = $num_contrato;
+        }
     }
 
     /**
      * @param string $num_processo
      */
-    public function setNumProcesso(string $num_processo) {
-        $this->num_processo = $num_processo;
+    public function setNumProcesso(string $num_processo = null) {
+        if (!empty($num_processo)) {
+            $this->num_processo = $num_processo;
+        }
     }
 
     /**
      * @param string $descr_mod_compra
      */
-    public function setDescrModCompra(string $descr_mod_compra) {
-        $this->descr_mod_compra = $descr_mod_compra;
+    public function setDescrModCompra(string $descr_mod_compra = null) {
+        if (!empty($descr_mod_compra)) {
+            $this->descr_mod_compra = $descr_mod_compra;
+        }
     }
 
     /**
      * @param string $num_licitacao
      */
-    public function setNumLicitacao(string $num_licitacao) {
-        $this->num_licitacao = $num_licitacao;
+    public function setNumLicitacao(string $num_licitacao = null) {
+        if (!empty($num_licitacao)) {
+            $this->num_licitacao = $num_licitacao;
+        }
     }
 
     /**
      * @param string $dt_inicio
      */
-    public function setDtInicio(string $dt_inicio) {
-        $this->dt_inicio = $dt_inicio;
+    public function setDtInicio(string $dt_inicio = null) {
+        if (!empty($dt_inicio)) {
+            $this->dt_inicio = $dt_inicio;
+        }
     }
 
     /**
      * @param string $dt_fim
      */
-    public function setDtFim(string $dt_fim) {
-        $this->dt_fim = $dt_fim;
+    public function setDtFim(string $dt_fim = null) {
+        if (!empty($dt_fim)) {
+            $this->dt_fim = $dt_fim;
+        }
     }
 
     /**
      * @param string $dt_geracao
      */
-    public function setDtGeracao(string $dt_geracao) {
-        $this->dt_geracao = $dt_geracao;
+    public function setDtGeracao(string $dt_geracao = null) {
+        if (!empty($dt_geracao)) {
+            $this->dt_geracao = $dt_geracao;
+        }
     }
 
     /**
      * @param string $cgc_fornecedor
      */
-    public function setCgcFornecedor(string $cgc_fornecedor) {
-        $this->cgc_fornecedor = $cgc_fornecedor;
+    public function setCgcFornecedor(string $cgc_fornecedor = null) {
+        if (!empty($cgc_fornecedor)) {
+            $this->cgc_fornecedor = $cgc_fornecedor;
+        }
     }
 
     /**
      * @param string $nome_fornecedor
      */
-    public function setNomeFornecedor(string $nome_fornecedor) {
-        $this->nome_fornecedor = $nome_fornecedor;
+    public function setNomeFornecedor(string $nome_fornecedor = null) {
+        if (!empty($nome_fornecedor)) {
+            $this->nome_fornecedor = $nome_fornecedor;
+        }
     }
 
     /**
      * @param string $num_extrato
      */
-    public function setNumExtrato(string $num_extrato) {
-        $this->num_extrato = $num_extrato;
+    public function setNumExtrato(string $num_extrato = null) {
+        if (!empty($num_extrato)) {
+            $this->num_extrato = $num_extrato;
+        }
     }
 
     /**
      * @param string $cod_estruturado
      */
-    public function setCodEstruturado(string $cod_estruturado) {
-        $this->cod_estruturado = $cod_estruturado;
+    public function setCodEstruturado(string $cod_estruturado = null) {
+        if (!empty($cod_estruturado)) {
+            $this->cod_estruturado = $cod_estruturado;
+        }
     }
 
     /**
      * @param string $nome_unidade
      */
-    public function setNomeUnidade(string $nome_unidade) {
-        $this->nome_unidade = $nome_unidade;
+    public function setNomeUnidade(string $nome_unidade = null) {
+        if (!empty($nome_unidade)) {
+            $this->nome_unidade = $nome_unidade;
+        }
     }
 
     /**
      * @param string $cod_reduzido
      */
-    public function setCodReduzido(string $cod_reduzido) {
-        $this->cod_reduzido = $cod_reduzido;
+    public function setCodReduzido(string $cod_reduzido = null) {
+        if (!empty($cod_reduzido)) {
+            $this->cod_reduzido = $cod_reduzido;
+        }
     }
 
     /**
      * @param string $complemento_item
      */
-    public function setComplementoItem(string $complemento_item) {
-        $this->complemento_item = Query::getInstance()->real_escape_string($complemento_item);
+    public function setComplementoItem(string $complemento_item = null) {
+        if (!empty($complemento_item)) {
+            $this->complemento_item = Query::getInstance()->real_escape_string($complemento_item);
+        }
     }
 
     /**
      * @param string $descricao
      */
-    public function setDescricao(string $descricao) {
-        $this->descricao = $descricao;
+    public function setDescricao(string $descricao = null) {
+        if (!empty($descricao)) {
+            $this->descricao = $descricao;
+        }
     }
 
     /**
      * @param int $id_extrato_contr
      */
-    public function setIdExtratoContr(int $id_extrato_contr) {
-        $this->id_extrato_contr = $id_extrato_contr;
+    public function setIdExtratoContr(int $id_extrato_contr = null) {
+        if (!empty($id_extrato_contr)) {
+            $this->id_extrato_contr = $id_extrato_contr;
+        }
     }
 
     /**
      * @param float $vl_unitario
      */
-    public function setVlUnitario(float $vl_unitario) {
-        $this->vl_unitario = $vl_unitario;
+    public function setVlUnitario(float $vl_unitario = null) {
+        if (!empty($vl_unitario)) {
+            $this->vl_unitario = $vl_unitario;
 
-        // seleciona infos dos pedidos que contém o item editado e que não passaram da análise
-        $query = Query::getInstance()->exe("SELECT itens_pedido.id_pedido, itens_pedido.qtd, itens_pedido.valor AS valor_item, pedido.id_setor, pedido.valor AS valor_pedido, saldo_setor.saldo FROM itens_pedido, pedido, saldo_setor WHERE saldo_setor.id_setor = pedido.id_setor AND itens_pedido.id_item = {$this->id} AND itens_pedido.id_pedido = pedido.id AND pedido.status <= 2;");
+            // seleciona infos dos pedidos que contém o item editado e que não passaram da análise
+            $query = Query::getInstance()->exe("SELECT itens_pedido.id_pedido, itens_pedido.qtd, itens_pedido.valor AS valor_item, pedido.id_setor, pedido.valor AS valor_pedido, saldo_setor.saldo FROM itens_pedido, pedido, saldo_setor WHERE saldo_setor.id_setor = pedido.id_setor AND itens_pedido.id_item = {$this->id} AND itens_pedido.id_pedido = pedido.id AND pedido.status <= 2;");
 
-        $pedidos = [];
-        $i = 0;
-        while ($obj = $query->fetch_object()) {
-            $valorItem = $obj->qtd * $this->vl_unitario;
-            Query::getInstance()->exe("UPDATE itens_pedido SET itens_pedido.valor = '{$valorItem}' WHERE itens_pedido.id_item = {$this->id} AND itens_pedido.id_pedido = " . $obj->id_pedido);
-            $saldo_setor = $obj->saldo + $obj->valor_item;
-            $saldo_setor -= $valorItem;
-            $saldo_setor = number_format($saldo_setor, 3, '.', '');
-            // alterando o saldo do setor
-            Query::getInstance()->exe("UPDATE saldo_setor SET saldo_setor.saldo = '{$saldo_setor}' WHERE saldo_setor.id_setor = " . $obj->id_setor);
+            $pedidos = [];
+            $i = 0;
+            while ($obj = $query->fetch_object()) {
+                $valorItem = $obj->qtd * $this->vl_unitario;
+                Query::getInstance()->exe("UPDATE itens_pedido SET itens_pedido.valor = '{$valorItem}' WHERE itens_pedido.id_item = {$this->id} AND itens_pedido.id_pedido = " . $obj->id_pedido);
+                $saldo_setor = $obj->saldo + $obj->valor_item;
+                $saldo_setor -= $valorItem;
+                $saldo_setor = number_format($saldo_setor, 3, '.', '');
+                // alterando o saldo do setor
+                Query::getInstance()->exe("UPDATE saldo_setor SET saldo_setor.saldo = '{$saldo_setor}' WHERE saldo_setor.id_setor = " . $obj->id_setor);
 
-            $pedidos[$i++] = $obj->id_pedido;
-        }
-
-        $len = count($pedidos);
-        for ($i = 0; $i < $len; $i++) {
-            $error = Request::checkForErrors($pedidos[$i]);
-            if ($error) {
-                Logger::error("Pedido quebrado em editItem: " . $pedidos[$i]);
+                $pedidos[$i++] = $obj->id_pedido;
             }
+
+            $len = count($pedidos);
+            for ($i = 0; $i < $len; $i++) {
+                $error = Request::checkForErrors($pedidos[$i]);
+                if ($error) {
+                    Logger::error("Pedido quebrado em editItem: " . $pedidos[$i]);
+                }
+            }
+            Request::updateRequests($pedidos);
         }
-        Request::updateRequests($pedidos);
     }
 
     /**
      * @param int $qt_contrato
      */
-    public function setQtContrato(int $qt_contrato) {
-        $this->qt_contrato = $qt_contrato;
+    public function setQtContrato(int $qt_contrato = null) {
+        if (!empty($qt_contrato)) {
+            $this->qt_contrato = $qt_contrato;
+        }
     }
 
     /**
      * @param float $vl_contrato
      */
-    public function setVlContrato(float $vl_contrato) {
-        $this->vl_contrato = $vl_contrato;
+    public function setVlContrato(float $vl_contrato = null) {
+        if (!empty($vl_contrato)) {
+            $this->vl_contrato = $vl_contrato;
+        }
     }
 
     /**
      * @param int $id_unidade
      */
-    public function setIdUnidade(int $id_unidade) {
-        $this->id_unidade = $id_unidade;
+    public function setIdUnidade(int $id_unidade = null) {
+        if (!empty($id_unidade)) {
+            $this->id_unidade = $id_unidade;
+        }
     }
 
     /**
      * @param int $ano_orcamento
      */
-    public function setAnoOrcamento(int $ano_orcamento) {
-        $this->ano_orcamento = $ano_orcamento;
+    public function setAnoOrcamento(int $ano_orcamento = null) {
+        if (!empty($ano_orcamento)) {
+            $this->ano_orcamento = $ano_orcamento;
+        }
     }
 
     /**
      * @param bool $cancelado
      */
-    public function setCancelado(bool $cancelado) {
+    public function setCancelado(bool $cancelado = false) {
         $this->cancelado = $cancelado;
     }
 
     /**
      * @param string $chave
      */
-    public function setChave(string $chave) {
-        $this->chave = $chave;
+    public function setChave(string $chave = null) {
+        if (!empty($chave)) {
+            $this->chave = $chave;
+        }
     }
 
     /**
      * @param string $seq_item_processo
      */
-    public function setSeqItemProcesso(string $seq_item_processo) {
-        $this->seq_item_processo = $seq_item_processo;
+    public function setSeqItemProcesso(string $seq_item_processo = null) {
+        if (!empty($seq_item_processo)) {
+            $this->seq_item_processo = $seq_item_processo;
+        }
     }
 
     /**
