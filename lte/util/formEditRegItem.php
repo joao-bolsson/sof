@@ -14,7 +14,7 @@
         <?php include_once __DIR__ .'/formItem.html' ?>
     </div>
     <div class="modal-footer">
-        <button class="btn btn-primary" type="submit" style="width: 100%;"><i class="fa fa-refresh"></i>&nbsp;Atualizar / Cadastraaaaaar
+        <button class="btn btn-primary" type="submit" style="width: 100%;"><i class="fa fa-refresh"></i>&nbsp;Atualizar / Cadastrar
         </button>
     </div>
 </form>

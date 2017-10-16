@@ -129,6 +129,28 @@ final class Request {
         }
     }
 
+    /**
+     * Approve by management an array of requests id.
+     *
+     * @param array $pedidos Request id to approve.
+     */
+    public static function aprovaGerencia(array $pedidos) {
+        if (empty($pedidos)) {
+            return;
+        }
+
+        $where = '';
+        $len = count($pedidos);
+        for ($i = 0; $i < $len; $i++) {
+            $where .= 'id = ' . $pedidos[$i];
+            if ($i < $len - 1) {
+                $where .= ' OR ';
+            }
+        }
+
+        Query::getInstance()->exe('UPDATE pedido SET aprov_gerencia = 1 WHERE ' . $where);
+    }
+
     private function hasSources() {
         return !empty($this->moneySource);
     }
@@ -475,37 +497,6 @@ final class Request {
     }
 
     /**
-     * @param int $priority New priority for this request.
-     */
-    private function setPriority(int $priority) {
-        $this->priority = $priority;
-        if ($this->id != NEW_REQUEST_ID) {
-            Query::getInstance()->exe('UPDATE pedido SET prioridade = ' . $this->priority . ' WHERE id = ' . $this->id);
-        }
-    }
-
-    /**
-     * @param int $contract_request New flag to define if this request is a request of contract.
-     */
-    private function setContractRequest(int $contract_request) {
-        $this->contract_request = $contract_request;
-        if ($this->id != NEW_REQUEST_ID) {
-            Query::getInstance()->exe('UPDATE pedido SET pedido_contrato = ' . $this->contract_request . ' WHERE id = ' . $this->id);
-        }
-    }
-
-    /**
-     * @param string $obs New observation for this request (overwrites old value)
-     */
-    private function setObs(string $obs) {
-        $this->obs = Query::getInstance()->real_escape_string($obs);
-        if ($this->id != NEW_REQUEST_ID) {
-            Query::getInstance()->exe("UPDATE pedido SET obs = '" . $this->obs . "' WHERE id = " . $this->id);
-        }
-    }
-
-
-    /**
      * @param Licitacao $licitacao
      */
     public function setLicitacao(Licitacao $licitacao) {
@@ -522,6 +513,31 @@ final class Request {
             Query::getInstance()->exe("INSERT INTO licitacao VALUES(NULL, {$this->id}, {$tipo}, '{$numero}', '{$uasg}', '{$procOri}', {$geraContrato});");
         } else {
             Query::getInstance()->exe("UPDATE licitacao SET tipo = {$tipo}, numero = '{$numero}', uasg = '{$uasg}', processo_original = '{$procOri}', gera_contrato = {$geraContrato} WHERE id = {$idLic};");
+        }
+    }
+
+    public static function checkForErrors(int $pedido): bool {
+        $query = Query::getInstance()->exe("SELECT id, round(valor, 3) AS valor FROM pedido WHERE id = " . $pedido);
+        $obj = $query->fetch_object();
+
+        $ped = Query::getInstance()->exe("SELECT round(sum(valor), 3) AS soma FROM itens_pedido WHERE id_pedido = " . $pedido);
+        $obj_ped = $ped->fetch_object();
+        if ($obj->valor != $obj_ped->soma) {
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * Update the requests value according its items values.
+     * @param array $req Array with requests to be updated.
+     */
+    public static function updateRequests(array $req) {
+        $len = count($req);
+        for ($i = 0; $i < $len; $i++) {
+            $request = $req[$i];
+            $obj = Query::getInstance()->exe("SELECT round(sum(valor), 3) AS sum FROM itens_pedido WHERE id_pedido =  " . $request)->fetch_object();
+            Query::getInstance()->exe("UPDATE pedido SET valor = '" . $obj->sum . "' WHERE id = " . $request);
         }
     }
 

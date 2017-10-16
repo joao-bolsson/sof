@@ -138,9 +138,6 @@ $permissao = BuscaLTE::getPermissoes($_SESSION["id"]);
                 <li class="treeview">
                     <a href="#">
                         <i class="fa fa-file-text"></i> <span>Relatórios</span>
-                        <span class="pull-right-container">
-                            <small class="label pull-right bg-blue">Novo</small>
-                        </span>
                     </a>
                     <ul class="treeview-menu">
                         <li><a href="javascript:abreModal('#relPedidos');"><i class="fa fa-circle-o"></i>Pedidos</a>

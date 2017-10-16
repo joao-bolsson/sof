@@ -27,7 +27,7 @@ class SectorTest extends TestCase {
                             $moneyInSources += $source->getValue();
                         }
                     }
-                    $this->assertEquals($sector->getMoney(), $moneyInSources, "Setor com saldo quebrado", 3);
+                    $this->assertEquals($sector->getMoney(), $moneyInSources, "Setor com saldo quebrado: " . $sector->getId(), 3);
                 }
 
             }

@@ -49,85 +49,6 @@ final class Geral {
     }
 
     /**
-     * Update the requests value according its items values.
-     * @param array $req Array with requests to be updated.
-     */
-    public static function updateRequests(array $req) {
-        $len = count($req);
-        for ($i = 0; $i < $len; $i++) {
-            $request = $req[$i];
-            $obj = Query::getInstance()->exe("SELECT round(sum(valor), 3) AS sum FROM itens_pedido WHERE id_pedido =  " . $request)->fetch_object();
-            Query::getInstance()->exe("UPDATE pedido SET valor = '" . $obj->sum . "' WHERE id = " . $request);
-        }
-    }
-
-    /**
-     *
-     * @param array $dados Informações que serão inseridas na tabela de itens.
-     * @param array $campos Campos da coluna no banco que deverão ser abastecidos
-     */
-    public static function cadItensRP(array $dados, array $campos) {
-        if (empty($dados)) {
-            exit("Nenhum dado foi recebido para o cadastro");
-        }
-        $fields = $insert_dados = '(';
-
-        $len = count($campos);
-        for ($i = 0; $i < $len; $i++) {
-            $fields .= $campos[$i];
-            $aux = Query::getInstance()->real_escape_string($dados[$campos[$i]]);
-            $info = str_replace("\"", "'", $aux);
-            $insert_dados .= "\"" . $info . "\"";
-            if ($i != $len - 1) {
-                $fields .= ', ';
-                $insert_dados .= ', ';
-            }
-        }
-        $fields .= ')';
-        $insert_dados .= ')';
-
-        Query::getInstance()->exe("INSERT IGNORE INTO itens " . $fields . " VALUES " . $insert_dados);
-    }
-
-    public static function editItemFactory($dados) {
-        if (empty($dados)) {
-            exit('Factory data is empty');
-        }
-
-        $attach_fields = ['id_item_processo', 'id_item_contrato', 'descr_tipo_doc', 'num_contrato', 'num_processo', 'descr_mod_compra', 'num_licitacao', 'dt_inicio', 'dt_fim', 'dt_geracao', 'cgc_fornecedor', 'nome_fornecedor', 'nome_unidade', 'cod_estruturado', 'num_extrato', 'descricao', 'id_extrato_contr', 'id_unidade', 'ano_orcamento'];
-
-        $sets = ", ";
-        $len = count($attach_fields);
-        for ($i = 0; $i < $len; $i++) {
-            $aux = Query::getInstance()->real_escape_string($dados->{$attach_fields[$i]});
-            $info = str_replace("\"", "'", $aux);
-            $sets .= $attach_fields[$i] . "=\"" . $info . "\"";
-            if ($i != $len - 1) {
-                $sets .= ", ";
-            }
-        }
-
-        Query::getInstance()->exe("UPDATE itens SET cod_despesa = '" . $dados->cod_despesa . "', descr_despesa = '" . $dados->descr_despesa . "', cod_reduzido = '" . $dados->cod_reduzido . "', seq_item_processo = '" . $dados->seq_item_processo . "' {$sets} WHERE id = " . $dados->id . " LIMIT 1;");
-    }
-
-    public static function aprovaGerencia(array $pedidos) {
-        if (empty($pedidos)) {
-            return;
-        }
-
-        $where = '';
-        $len = count($pedidos);
-        for ($i = 0; $i < $len; $i++) {
-            $where .= 'id = ' . $pedidos[$i];
-            if ($i < $len - 1) {
-                $where .= ' OR ';
-            }
-        }
-
-        Query::getInstance()->exe('UPDATE pedido SET aprov_gerencia = 1 WHERE ' . $where);
-    }
-
-    /**
      *    Função para cadastrar fontes do pedido (status == Aguarda Orçamento)
      *
      * @return bool If inserts all datas - true, else false.
@@ -155,51 +76,6 @@ final class Geral {
         $descricao = Query::getInstance()->real_escape_string($descricao);
 
         Query::getInstance()->exe("INSERT INTO problemas VALUES(NULL, " . $id_setor . ", '" . $assunto . "', '" . $descricao . "');");
-    }
-
-    /**
-     * Function to edit information of an item
-     *
-     * @param object $data Object with the informations to edition.
-     * @return bool
-     */
-    public static function editItem($data): bool {
-        $query_qtd = Query::getInstance()->exe("SELECT sum(itens_pedido.qtd) AS soma FROM itens_pedido WHERE itens_pedido.id_item = " . $data->id);
-        if ($query_qtd->num_rows > 0) {
-            $obj_qtd = $query_qtd->fetch_object();
-            $sum = $obj_qtd->soma;
-            if ($data->qt_contrato < $sum || $data->qt_utilizado < $sum) {
-                return false;
-            }
-        }
-        $data->complemento_item = Query::getInstance()->real_escape_string($data->complemento_item);
-        Query::getInstance()->exe("UPDATE itens SET itens.complemento_item = '{$data->complemento_item}', itens.vl_unitario = '{$data->vl_unitario}', itens.qt_contrato = {$data->qt_contrato}, itens.qt_utilizado = {$data->qt_utilizado}, itens.vl_utilizado = '{$data->vl_utilizado}', itens.qt_saldo = {$data->qt_saldo}, itens.vl_saldo = '{$data->vl_saldo}' WHERE itens.id = " . $data->id);
-
-        // seleciona infos dos pedidos que contém o item editado e que não passaram da análise
-        $query = Query::getInstance()->exe("SELECT itens_pedido.id_pedido, itens_pedido.qtd, itens_pedido.valor AS valor_item, pedido.id_setor, pedido.valor AS valor_pedido, saldo_setor.saldo FROM itens_pedido, pedido, saldo_setor WHERE saldo_setor.id_setor = pedido.id_setor AND itens_pedido.id_item = {$data->id} AND itens_pedido.id_pedido = pedido.id AND pedido.status <= 2;");
-
-        $pedidos = [];
-        $i = 0;
-        while ($obj = $query->fetch_object()) {
-            $valorItem = $obj->qtd * $data->vl_unitario;
-            Query::getInstance()->exe("UPDATE itens_pedido SET itens_pedido.valor = '{$valorItem}' WHERE itens_pedido.id_item = {$data->id} AND itens_pedido.id_pedido = " . $obj->id_pedido);
-            $saldo_setor = $obj->saldo + $obj->valor_item;
-            $saldo_setor -= $valorItem;
-            $saldo_setor = number_format($saldo_setor, 3, '.', '');
-            // alterando o saldo do setor
-            Query::getInstance()->exe("UPDATE saldo_setor SET saldo_setor.saldo = '{$saldo_setor}' WHERE saldo_setor.id_setor = " . $obj->id_setor);
-
-            $pedidos[$i++] = $obj->id_pedido;
-        }
-        $len = count($pedidos);
-        for ($i = 0; $i < $len; $i++) {
-            $error = self::checkForErrors($pedidos[$i]);
-            if ($error) {
-                Logger::error("Pedido quebrado em editItem: " . $pedidos[$i]);
-            }
-        }
-        self::updateRequests($pedidos);
-        return true;
     }
 
     /**
@@ -412,24 +288,6 @@ final class Geral {
         $query = Query::getInstance()->exe('SELECT postagens.tabela FROM postagens WHERE postagens.id = ' . $id);
         $obj = $query->fetch_object();
         return $obj->tabela;
-    }
-
-    public static function checkForErrors(int $pedido): bool {
-        $query = Query::getInstance()->exe("SELECT id, round(valor, 3) AS valor FROM pedido WHERE id = " . $pedido);
-        $obj = $query->fetch_object();
-
-        $ped = Query::getInstance()->exe("SELECT round(sum(valor), 3) AS soma FROM itens_pedido WHERE id_pedido = " . $pedido);
-        $obj_ped = $ped->fetch_object();
-        if ($obj->valor != $obj_ped->soma) {
-            return true;
-        }
-        return false;
-    }
-
-    public static function existsSources(int $id_request): bool {
-        $query = Query::getInstance()->exe("SELECT id FROM pedido_id_fonte WHERE id_pedido = " . $id_request);
-
-        return $query->num_rows > 0;
     }
 
 }
