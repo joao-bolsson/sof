@@ -1,5 +1,9 @@
 ## CHANGELOG ##
 
+#### v2.2.5 - 15/10/2017 ####
+- Correção de bug ao editar itens
+- Melhoria geral na edição e cadastro de itens
+
 #### v2.2.4 - 11/09/2017 ####
 - Remove possibilidade de desfazer liberação orçamentária.
 - Insere novos objetos para representar liberações orçamentárias e pedido de contrato.
