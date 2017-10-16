@@ -73,7 +73,7 @@ final class Sector {
             }
         }
 
-        if ($newMoney > 0) {
+        if ($newMoney != $this->money) {
             Logger::info("Saldo do setor " . $this->id . " alterado de " . $this->money . " para " . $newMoney);
             $this->setMoney($newMoney);
         }
