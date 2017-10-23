@@ -36,7 +36,9 @@ final class Sector {
         $this->moneySources = [];
         $this->fillFields();
         $this->fillMoneySources();
-        $this->updateMoney();
+        if ($this->id !== 2) {
+            $this->updateMoney();
+        }
     }
 
     private function fillMoneySources() {
@@ -54,7 +56,7 @@ final class Sector {
         $query = Query::getInstance()->exe('SELECT round(saldo, 3) AS saldo FROM saldo_setor WHERE id_setor = ' . $this->id);
         if ($query->num_rows > 0) {
             $obj = $query->fetch_object();
-            $this->money = $obj->saldo;
+            $this->money = floatval($obj->saldo);
         } else {
             Query::getInstance()->exe("INSERT INTO saldo_setor VALUES(NULL, {$this->id}, '0.000');");
         }
@@ -73,8 +75,10 @@ final class Sector {
             }
         }
 
-        if ($newMoney != $this->money) {
-            Logger::info("Saldo do setor " . $this->id . " alterado de " . $this->money . " para " . $newMoney);
+        $epsilon = 0.001;
+
+        if (abs($newMoney - $this->money) >= $epsilon) {
+            Logger::info("Saldo do setor " . $this->id . " alterado de " . $this->money . " para " . $newMoney . " abs: " . abs($newMoney - $this->money));
             $this->setMoney($newMoney);
         }
     }
