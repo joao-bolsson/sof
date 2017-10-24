@@ -113,7 +113,7 @@ class Table {
             $body = "<tbody>";
         }
 
-        if (count($this->rows) > 0) {
+        if (!$this->isEmpty()) {
             foreach ($this->rows as $row) {
                 if ($row instanceof Row) {
                     $body .= $row;
@@ -128,6 +128,13 @@ class Table {
             $body .= "</tbody>";
         }
         return $body;
+    }
+
+    /**
+     * @return bool True if the body is empty, else - false.
+     */
+    public function isEmpty(): bool {
+        return count($this->rows) == 0;
     }
 
 }

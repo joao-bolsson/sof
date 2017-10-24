@@ -562,6 +562,9 @@ final class BuscaLTE {
             $row->addColumn(new Column(new Small('label pull-right ' . $label, $status)));
             $table->addRow($row);
         }
+        if ($table->isEmpty()) {
+            return "";
+        }
         return $table;
     }
 
@@ -597,6 +600,9 @@ final class BuscaLTE {
 
                 $table->addRow($row);
             }
+        }
+        if ($table->isEmpty()) {
+            return "";
         }
         return $table;
     }
@@ -715,6 +721,9 @@ final class BuscaLTE {
 
                 $table->addRow($row);
             }
+        }
+        if ($table->isEmpty()) {
+            return "";
         }
         return $table;
     }
