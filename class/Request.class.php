@@ -409,7 +409,7 @@ final class Request {
         }
 
         $this->update();
-        $error = Geral::checkForErrors($this->id);
+        $error = Request::checkForErrors($this->id);
         if ($error) {
             Logger::error("Pedido quebrado em pedidoAnalisado: " . $this->id);
         }
