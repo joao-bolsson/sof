@@ -183,13 +183,35 @@ class Item implements JsonSerializable {
     public static $NEW_ITEM = 0;
 
     /**
+     * ==========================
+     * Custom Attributes
+     * ==========================
+     */
+
+    protected $min_qt_contrato = 0;
+
+    protected $min_qt_utilizado = 0;
+
+    /**
      * Item constructor.
      * @param int $id Item id from db or self::NEW_ITEM if is a new item.
      */
     public function __construct(int $id) {
         $this->id = $id;
         if ($this->id != self::$NEW_ITEM) {
+            $this->setMinValues();
             $this->initItem();
+        }
+    }
+
+    private function setMinValues() {
+        $query = Query::getInstance()->exe("SELECT sum(itens_pedido.qtd) AS soma FROM itens_pedido, pedido WHERE itens_pedido.id_item = " . $this->id . " AND itens_pedido.id_pedido = pedido.id AND pedido.status != 1 AND pedido.status != 3;");
+
+        if ($query->num_rows > 0) {
+            $obj = $query->fetch_object();
+
+            $this->min_qt_contrato = $obj->soma;
+            $this->min_qt_utilizado = $obj->soma;
         }
     }
 
