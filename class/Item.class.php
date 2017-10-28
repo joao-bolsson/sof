@@ -6,7 +6,7 @@
  * @since 2017, 12 Oct.
  */
 
-class Item {
+class Item implements JsonSerializable {
 
     /**
      * @var int Item id.
@@ -191,6 +191,15 @@ class Item {
         if ($this->id != self::$NEW_ITEM) {
             $this->initItem();
         }
+    }
+
+    /**
+     * Method called when this object is encoded with json_encode.
+     *
+     * @return array
+     */
+    public function jsonSerialize() {
+        return get_object_vars($this);
     }
 
     private function canUpdate(): bool {

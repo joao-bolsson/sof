@@ -63,7 +63,7 @@ if (!is_null($admin) && isset($_SESSION['id_setor']) && ($_SESSION['id_setor'] =
 
         case 'infoItem':
             $id_item = filter_input(INPUT_POST, 'id_item');
-            echo Busca::getInfoItem($id_item);
+            echo json_encode(new Item($id_item));
             break;
 
         case 'permissoes':
