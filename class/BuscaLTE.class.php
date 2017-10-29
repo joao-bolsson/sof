@@ -547,7 +547,7 @@ final class BuscaLTE {
         $status = $array_status[$st];
         $label = 'bg-' . $array_lb[$st];
 
-        $table = new Table('', '', array(), false);
+        $table = new Table('', '', [], false);
         while ($request = $query->fetch_object()) {
             $btn_group = ($st == 2) ? self::buildButtonsSolicAltPedAdmin($request->id, $request->id_pedido) : '';
             $request->justificativa = str_replace("\"", "\'", $request->justificativa);
@@ -675,7 +675,7 @@ final class BuscaLTE {
     public static function getSolicitacoesAdmin(string $where = '', array $requests = []): string {
         $query = Query::getInstance()->exe("SELECT id, id_setor, DATE_FORMAT(data_pedido, '%d/%m/%Y') AS data_pedido, prioridade, status, valor, aprov_gerencia FROM pedido WHERE status <> 3 AND alteracao = 0 " . $where . ' ORDER BY id DESC LIMIT ' . LIMIT_MAX);
 
-        $table = new Table('', '', array(), false);
+        $table = new Table('', '', [], false);
         while ($request = $query->fetch_object()) {
             // determines if the request will add in the table
             $flag = false;
@@ -808,7 +808,7 @@ final class BuscaLTE {
     public static function getSolicAltPedidos(): string {
         $id_sector = $_SESSION['id_setor'];
         $query = Query::getInstance()->exe("SELECT solic_alt_pedido.id_pedido, DATE_FORMAT(solic_alt_pedido.data_solicitacao, '%d/%m/%Y') AS data_solicitacao, DATE_FORMAT(solic_alt_pedido.data_analise, '%d/%m/%Y') AS data_analise, solic_alt_pedido.justificativa, solic_alt_pedido.status, pedido.id_usuario FROM solic_alt_pedido, pedido WHERE pedido.id = solic_alt_pedido.id_pedido AND solic_alt_pedido.id_setor = " . $id_sector . ' ORDER BY solic_alt_pedido.id DESC LIMIT ' . LIMIT_MAX);
-        $table = new Table('', '', array(), false);
+        $table = new Table('', '', [], false);
 
         $array_status = ['Reprovado', 'Aprovado', 'Aberto'];
         $array_lb = ['red', 'green', 'orange'];
@@ -1097,6 +1097,7 @@ final class BuscaLTE {
             $setor_transf = ($lancamento->categoria == 3) ? self::getSetorTransf($lancamento->id) : '';
 
             $row = new Row();
+            $row->addComponent(new Column(''));
             $row->addComponent(new Column(ARRAY_SETORES[$lancamento->id_setor]));
             $row->addComponent(new Column($lancamento->data));
             $row->addComponent(new Column("<span style=\"color: " . $cor . ";\">" . 'R$ ' . $lancamento->valor . "</span>"));

@@ -99,9 +99,6 @@ final class Table extends Component {
                     $body .= $row;
                 }
             }
-        } else {
-            $count_h = count($this->headers);
-            $body .= "<tr><td colspan='" . $count_h . "'>Nenhum registro na tabela</td></tr>";
         }
 
         if ($this->build_body) {
