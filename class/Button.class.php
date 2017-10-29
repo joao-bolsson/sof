@@ -6,19 +6,13 @@
  * @author João Bolsson (joaovictorbolsson@gmail.com)
  * @since 2017, 21 Feb.
  */
-class Button implements Component {
+class Button extends Component {
 
     /**
      * Type of button, default: button
      * @var string
      */
     private $type;
-
-    /**
-     * Class css of this button.
-     * @var string
-     */
-    private $class;
 
     /**
      * Method onclick of this button
@@ -55,14 +49,17 @@ class Button implements Component {
      * @param string $icon Button's icon.
      */
     public function __construct(string $type = 'button', string $class = '', string $onclick = '', string $attr = '', string $title = '', string $icon = '') {
+        parent::__construct('button', $class);
         $this->type = $type;
-        $this->class = $class;
         $this->onclick = $onclick;
         $this->attr = $attr;
         $this->title = $title;
         $this->icon = $icon;
     }
 
+    /**
+     * @return string The string representation of this button.
+     */
     public function __toString(): string {
         $class = (!empty($this->class)) ? " class=\"" . $this->class . "\"" : '';
 

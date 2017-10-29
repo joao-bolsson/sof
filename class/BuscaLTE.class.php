@@ -459,7 +459,7 @@ final class BuscaLTE {
             $process->obs = str_replace("\"", "\'", $process->obs);
 
             $row = new Row();
-            $div = new Div('btn-group');
+            $div = new Component('div', 'btn-group');
             $div->addComponent(new Button('', BTN_DEFAULT, "addProcesso('', " . $process->id . ")", "data-toggle=\"tooltip\"", 'Editar', 'pencil'));
             $row->addColumn(new Column($div));
             $row->addColumn(new Column($process->num_processo));
@@ -608,7 +608,7 @@ final class BuscaLTE {
     }
 
     private static final function buildButtonsSolicAdi(int $id): string {
-        $div = new Div('btn-group');
+        $div = new Component('div', 'btn-group');
 
         $div->addComponent(new Button('', BTN_DEFAULT, "analisaAdi(" . $id . ", 1)", "data-toggle=\"tooltip\"", 'Aprovar', 'check'));
         $div->addComponent(new Button('', BTN_DEFAULT, "analisaAdi(" . $id . ", 0)", "data-toggle=\"tooltip\"", 'Reprovar', 'trash'));
@@ -639,7 +639,7 @@ final class BuscaLTE {
      * @return string
      */
     private static function buildButtons(int $id, int $status, int $id_sector): string {
-        $component = new Div('btn-group');
+        $component = new Component('div', 'btn-group');
 
         if ($status != 3 && $status != 4) {
             if ($_SESSION['id_setor'] == 12) {

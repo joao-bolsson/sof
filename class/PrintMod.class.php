@@ -9,6 +9,8 @@
 ini_set('display_errors', true);
 error_reporting(E_ALL);
 
+include_once 'report/RequestReport.class.php';
+
 spl_autoload_register(function (string $class_name) {
     include_once $class_name . '.class.php';
 });
@@ -520,177 +522,13 @@ final class PrintMod {
      * @return string Content of PDF document
      */
     public static function getRelatorioPedidos(int $id_sector, array $priority, array $status, string $dateI, string $dateF, bool $checkSIAFI, int $fonte): string {
-        $return = $where_status = $where_priority = '';
-        $where_sector = ($id_sector != 0) ? 'AND pedido.id_setor = ' . $id_sector : '';
+        $report = new RequestReport($id_sector, $dateI, $dateF);
+        $report->setPriority($priority);
+        $report->setStatus($status);
+        $report->setCheckSIAFI($checkSIAFI);
+        $report->setSource($fonte);
 
-        if (!in_array(0, $status)) {
-            $len = count($status);
-            $where_status = "AND (";
-            for ($i = 0; $i < $len; $i++) {
-                $where_status .= "pedido.status = " . $status[$i];
-                if ($i < $len - 1) {
-                    $where_status .= " OR ";
-                }
-            }
-            $where_status .= ") ";
-        }
-
-        if (!in_array(0, $priority)) {
-            $len = count($priority);
-            $where_priority = "AND (";
-            for ($i = 0; $i < $len; $i++) {
-                $where_priority .= "pedido.prioridade = " . $priority[$i];
-                if ($i < $len - 1) {
-                    $where_priority .= " OR ";
-                }
-            }
-            $where_priority .= ") ";
-        }
-        $dataIni = Util::dateFormat($dateI);
-        $dataFim = Util::dateFormat($dateF);
-        $where_effort = $tb_effort = $effort = "";
-        if (in_array(8, $status) || $checkSIAFI) {
-            $where_effort = "AND pedido_empenho.id_pedido = pedido.id";
-            $tb_effort = "pedido_empenho, ";
-            $effort = ", pedido_empenho.empenho";
-        }
-
-        $pedido_id_fonte = "";
-        $where_fonte = "";
-        $fonte_recurso = "Nenhuma";
-        if ($fonte != 0) {
-            $pedido_id_fonte = ", pedido_id_fonte";
-            $where_fonte = "pedido_id_fonte.id_pedido = pedido.id AND pedido_id_fonte.id_fonte = " . $fonte . " AND";
-            $query_fonte = Query::getInstance()->exe("SELECT fonte_recurso FROM saldo_fonte WHERE id = " . $fonte);
-            $fonte_recurso = $query_fonte->fetch_object()->fonte_recurso;
-        }
-
-        $from = "{$tb_effort} setores, pedido" . $pedido_id_fonte . ", prioridade, status WHERE " . $where_fonte . " status.id = pedido.status {$where_sector} {$where_priority} {$where_effort} AND prioridade.id = pedido.prioridade AND pedido.id_setor = setores.id {$where_status} AND pedido.data_pedido BETWEEN '{$dataIni}' AND '{$dataFim}'";
-        // retorna o total de pedidos com os parâmetros (LIMIT para mostrar)
-        $obj_count = Query::getInstance()->exe("SELECT COUNT(pedido.id) AS total FROM " . $from)->fetch_object();
-        $num_rows = $obj_count->total;
-
-        $query = Query::getInstance()->exe("SELECT pedido.id, pedido.id_setor, setores.nome AS setor, DATE_FORMAT(pedido.data_pedido, '%d/%m/%Y') AS data_pedido, prioridade.nome AS prioridade, status.nome AS status, pedido.valor {$effort} FROM " . $from . " ORDER BY pedido.id DESC LIMIT " . LIMIT_REQ_REPORT);
-
-        $title = 'Relatório de Pedidos por Setor e Nível de Prioridade';
-        $headers = ['Enviado em', 'Prioridade', 'Status', 'Valor'];
-        if (in_array(8, $status)) {
-            $title = 'Relatório de Empenhos Enviados ao Ordenador';
-            $headers = ['Prioridade', 'SIAFI'];
-        }
-        $query_tot = Query::getInstance()->exe("SELECT sum(pedido.valor) AS total FROM " . $from);
-        $tot = $query_tot->fetch_object();
-        $total = ($tot->total > 0) ? 'R$ ' . number_format($tot->total, 3, ',', '.') : 'R$ 0';
-
-        $row = new Row();
-        $row->addColumn(new Column($num_rows . ' resultados encontrados'));
-        $row->addColumn(new Column('Mostrando ' . $query->num_rows));
-        $row->addColumn(new Column('Totalizando ' . $total));
-        $return .= "
-                <fieldset class=\"preg\">
-                    <h5>DESCRIÇÃO DO RELATÓRIO</h5>
-                    <h6>" . $title . "</h6>
-                    <h6>Fonte de Recurso: " . $fonte_recurso . "</h6>
-                    <h6>Período de Emissão: " . $dateI . " à " . $dateF . "</h6>
-                </fieldset><br>
-                <fieldset class=\"preg\">
-                    <table>" . $row . "</table>
-                </fieldset>";
-        $th = ['Pedido', 'Fornecedor', 'Setor'];
-        $k = 3;
-        $len = count($headers);
-        for ($i = 0; $i < $len; $i++) {
-            $th[$k] = $headers[$i];
-            $k++;
-        }
-
-        $array_sub_totals = [];
-        $table = new Table('', 'prod', $th, true);
-        while ($request = $query->fetch_object()) {
-            if (!array_key_exists($request->id_setor, $array_sub_totals)) {
-                $array_sub_totals[$request->id_setor] = 0;
-            }
-            $array_sub_totals[$request->id_setor] += $request->valor;
-
-            $row = new Row();
-            $row->addColumn(new Column($request->id));
-            $row->addColumn(new Column(BuscaLTE::getFornecedor($request->id)));
-            $row->addColumn(new Column($request->setor));
-            if (in_array(8, $status)) {
-                $row->addColumn(new Column($request->prioridade));
-                $row->addColumn(new Column($request->empenho));
-            } else {
-                $row->addColumn(new Column($request->data_pedido));
-                $row->addColumn(new Column($request->prioridade));
-                $row->addColumn(new Column($request->status));
-                $row->addColumn(new Column('R$ ' . $request->valor));
-            }
-
-            $table->addRow($row);
-        }
-        $return .= $table;
-
-        if ($_SESSION['id_setor'] == 2) {
-            $return .= "<br><h5>As porcentagens mostradas são em relação ao Total (pag. 1) deste Relatório.</h5>
-                <fieldset class=\"preg\"><h5>SUBTOTAIS POR SETOR</h5>";
-
-            $len = count(ARRAY_SETORES);
-
-            $table = new Table('', 'prod', ['Setor', 'Total', 'Porcentagem'], true);
-            for ($k = 0; $k < $len; $k++) {
-                if (array_key_exists($k, $array_sub_totals)) {
-                    $parcial = number_format($array_sub_totals[$k], 3, ',', '.');
-                    $porcentagem = number_format(($array_sub_totals[$k] * 100) / $tot->total, 3, ',', '.');
-
-                    $row = new Row();
-                    $row->addColumn(new Column(ARRAY_SETORES[$k]));
-                    $row->addColumn(new Column($parcial));
-                    $row->addColumn(new Column($porcentagem . '%'));
-
-                    $table->addRow($row);
-                }
-            }
-            $return .= $table . '</fieldset><br>' . "<fieldset class=\"preg\"><h5>SUBTOTAIS POR GRUPO</h5>";
-
-            $query_gr = Query::getInstance()->exe("SELECT pedido_grupo.id_grupo, setores_grupos.nome AS ng, pedido.valor {$effort} FROM {$tb_effort} setores, setores_grupos, pedido " . $pedido_id_fonte . ", prioridade, status, pedido_grupo WHERE " . $where_fonte . " setores_grupos.id = pedido_grupo.id_grupo AND pedido_grupo.id_pedido = pedido.id AND status.id = pedido.status {$where_sector} {$where_priority} {$where_effort} AND prioridade.id = pedido.prioridade AND pedido.id_setor = setores.id {$where_status} AND pedido.data_pedido BETWEEN '{$dataIni}' AND '{$dataFim}'");
-
-            $array_gr = []; // guarda o somatorio do grupo
-            $gr_indexes = []; // guarda os indices do array de cima
-            $gr_names = []; // guarda o nome dos grupos
-            $k = 0;
-            while ($obj = $query_gr->fetch_object()) {
-                $index = 'gr' . $obj->id_grupo;
-                if (!array_key_exists($index, $array_gr)) {
-                    $array_gr[$index] = 0;
-                    $gr_indexes[$k] = $index;
-                    $gr_names[$index] = $obj->ng;
-                    $k++;
-                }
-                $array_gr[$index] += $obj->valor;
-            }
-
-            $count = count($gr_indexes);
-
-            $table_gr = new Table('', 'prod', ['Grupo', 'Total', 'Porcentagem'], true);
-            for ($i = 0; $i < $count; $i++) {
-                $parcial = number_format($array_gr[$gr_indexes[$i]], 3, ',', '.');
-                $porcentagem = number_format(($array_gr[$gr_indexes[$i]] * 100) / $tot->total, 3, ',', '.');
-
-                $row = new Row();
-                $row->addColumn(new Column(utf8_encode($gr_names[$gr_indexes[$i]])));
-                $row->addColumn(new Column($parcial));
-                $row->addColumn(new Column($porcentagem . '%'));
-
-                $table_gr->addRow($row);
-            }
-
-            $return .= $table_gr . '</fieldset><br>';
-        }
-
-        if (in_array(8, $status)) {
-            $return .= Controller::footerOrdenator();
-        }
-        return $return;
+        return $report;
     }
 
     /**
