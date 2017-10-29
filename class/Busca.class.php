@@ -195,11 +195,11 @@ final class Busca {
             $btn = "<button onclick=\"viewCompl('" . $problem->descricao . "');\" class=\"btn btn-default\" type=\"button\" data-toggle=\"tooltip\" title=\"Ver Descrição Informada\">Descrição</button>";
 
             $row = new Row();
-            $row->addColumn(new Column($problem->setor));
-            $row->addColumn(new Column($problem->assunto));
-            $row->addColumn(new Column($btn));
+            $row->addComponent(new Column($problem->setor));
+            $row->addComponent(new Column($problem->assunto));
+            $row->addComponent(new Column($btn));
 
-            $table->addRow($row);
+            $table->addComponent($row);
         }
         return $table;
     }

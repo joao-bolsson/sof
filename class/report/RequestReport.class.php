@@ -242,9 +242,9 @@ class RequestReport implements Report {
 
         $fieldset_results = new Component('fieldset', 'preg');
         $row = new Row();
-        $row->addColumn(new Column($this->foundEntries . ' resultados encontrados'));
-        $row->addColumn(new Column('Mostrando ' . $this->shownRows));
-        $row->addColumn(new Column('Totalizando R$ ' . number_format($this->totalMoney, 3, ',', '.')));
+        $row->addComponent(new Column($this->foundEntries . ' resultados encontrados'));
+        $row->addComponent(new Column('Mostrando ' . $this->shownRows));
+        $row->addComponent(new Column('Totalizando R$ ' . number_format($this->totalMoney, 3, ',', '.')));
 
         $fieldset_results->addComponent(new Component('table', '', $row->__toString()));
 
@@ -266,20 +266,20 @@ class RequestReport implements Report {
                 $this->array_sub_totals[$request->id_setor] += $request->valor;
 
                 $row = new Row();
-                $row->addColumn(new Column($request->id));
-                $row->addColumn(new Column(BuscaLTE::getFornecedor($request->id)));
-                $row->addColumn(new Column($request->setor));
+                $row->addComponent(new Column($request->id));
+                $row->addComponent(new Column(BuscaLTE::getFornecedor($request->id)));
+                $row->addComponent(new Column($request->setor));
                 if ($this->sentToOrderer) {
-                    $row->addColumn(new Column($request->prioridade));
-                    $row->addColumn(new Column($request->empenho));
+                    $row->addComponent(new Column($request->prioridade));
+                    $row->addComponent(new Column($request->empenho));
                 } else {
-                    $row->addColumn(new Column($request->data_pedido));
-                    $row->addColumn(new Column($request->prioridade));
-                    $row->addColumn(new Column($request->status));
-                    $row->addColumn(new Column('R$ ' . $request->valor));
+                    $row->addComponent(new Column($request->data_pedido));
+                    $row->addComponent(new Column($request->prioridade));
+                    $row->addComponent(new Column($request->status));
+                    $row->addComponent(new Column('R$ ' . $request->valor));
                 }
 
-                $table->addRow($row);
+                $table->addComponent($row);
             }
         }
 
@@ -304,11 +304,11 @@ class RequestReport implements Report {
                     $porcentagem = number_format(($this->array_sub_totals[$k] * 100) / $this->totalMoney, 3, ',', '.');
 
                     $row = new Row();
-                    $row->addColumn(new Column(ARRAY_SETORES[$k]));
-                    $row->addColumn(new Column($parcial));
-                    $row->addColumn(new Column($porcentagem . '%'));
+                    $row->addComponent(new Column(ARRAY_SETORES[$k]));
+                    $row->addComponent(new Column($parcial));
+                    $row->addComponent(new Column($porcentagem . '%'));
 
-                    $table->addRow($row);
+                    $table->addComponent($row);
                 }
             }
             $footer .= $table . '</fieldset><br>' . "<fieldset class=\"preg\"><h5>SUBTOTAIS POR GRUPO</h5>";
@@ -341,11 +341,11 @@ class RequestReport implements Report {
                 $porcentagem = number_format(($array_gr[$gr_indexes[$i]] * 100) / $this->totalMoney, 3, ',', '.');
 
                 $row = new Row();
-                $row->addColumn(new Column(utf8_encode($gr_names[$gr_indexes[$i]])));
-                $row->addColumn(new Column($parcial));
-                $row->addColumn(new Column($porcentagem . '%'));
+                $row->addComponent(new Column(utf8_encode($gr_names[$gr_indexes[$i]])));
+                $row->addComponent(new Column($parcial));
+                $row->addComponent(new Column($porcentagem . '%'));
 
-                $table_gr->addRow($row);
+                $table_gr->addComponent($row);
             }
 
             $footer .= $table_gr . '</fieldset><br>';

@@ -6,13 +6,7 @@
  * @author João Bolsson (joaovictorbolsson@gmail.com)
  * @since 2017, 20 Feb.
  */
-final class Column {
-
-    /**
-     * Column's content.
-     * @var string
-     */
-    private $content;
+final class Column extends Component {
 
     /**
      * Column's display.
@@ -26,13 +20,23 @@ final class Column {
      * @param string $display Column's dislay.
      */
     public function __construct(string $content, string $display = '') {
-        $this->content = $content;
+        parent::__construct('td', '', $content);
         $this->display = $display;
     }
 
+    /**
+     * @param Component $component Component to add
+     */
+    public function addComponent(Component $component) {
+        // empty for while
+    }
+
+    /**
+     * @return string String representation of this column.
+     */
     public function __toString() {
         $display = (!empty($this->display)) ? " style=\"display: " . $this->display . ";\"" : '';
-        return "<td" . $display . ">" . $this->content . "</td>";
+        return "<td" . $display . ">" . $this->text . "</td>";
     }
 
 }

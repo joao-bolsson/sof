@@ -6,7 +6,7 @@
  * @author João Bolsson (joaovictorbolsson@gmail.com)
  * @since 2017, 21 Feb.
  */
-class Button extends Component {
+final class Button extends Component {
 
     /**
      * Type of button, default: button

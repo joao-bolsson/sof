@@ -40,6 +40,7 @@ class Component {
         $this->tag = $tag;
         $this->class = $class;
         $this->text = $text;
+        $this->components = [];
     }
 
     /**
@@ -49,6 +50,13 @@ class Component {
     public function addComponent(Component $component) {
         $i = count($this->components);
         $this->components[$i] = $component;
+    }
+
+    /**
+     * @return bool True if the body is empty, else - false.
+     */
+    public function isEmpty(): bool {
+        return count($this->components) == 0;
     }
 
     /**

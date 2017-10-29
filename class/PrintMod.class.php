@@ -63,13 +63,13 @@ final class PrintMod {
         $table = new Table('', 'prod', ['IP', 'Entrada', 'Saída', 'Horas'], true);
         while ($obj = $query->fetch_object()) {
             $row = new Row();
-            $row->addColumn(new Column($obj->ip));
-            $row->addColumn(new Column($obj->entrada));
+            $row->addComponent(new Column($obj->ip));
+            $row->addComponent(new Column($obj->entrada));
             $obj->saida = ($obj->saida == NULL) ? '--------------------' : $obj->saida;
             $obj->horas = ($obj->horas == NULL) ? '--------------------' : number_format($obj->horas, 3, ',', '.');
-            $row->addColumn(new Column($obj->saida));
-            $row->addColumn(new Column($obj->horas));
-            $table->addRow($row);
+            $row->addComponent(new Column($obj->saida));
+            $row->addComponent(new Column($obj->horas));
+            $table->addComponent($row);
         }
 
         $atestados = self::buildTableAtestados($id_user, $dataI, $dataF);
@@ -92,11 +92,11 @@ final class PrintMod {
         if ($query->num_rows) {
             while ($obj = $query->fetch_object()) {
                 $row = new Row();
-                $row->addColumn(new Column($obj->data));
-                $row->addColumn(new Column($obj->horas));
-                $row->addColumn(new Column($obj->justificativa));
+                $row->addComponent(new Column($obj->data));
+                $row->addComponent(new Column($obj->horas));
+                $row->addComponent(new Column($obj->justificativa));
 
-                $table->addRow($row);
+                $table->addComponent($row);
             }
         }
 
@@ -116,12 +116,12 @@ final class PrintMod {
 
         while ($user = $query->fetch_object()) {
             $row = new Row();
-            $row->addColumn(new Column($user->nome));
-            $row->addColumn(new Column($user->login));
-            $row->addColumn(new Column(ARRAY_SETORES[$user->id_setor]));
-            $row->addColumn(new Column($user->email));
+            $row->addComponent(new Column($user->nome));
+            $row->addComponent(new Column($user->login));
+            $row->addComponent(new Column(ARRAY_SETORES[$user->id_setor]));
+            $row->addComponent(new Column($user->email));
 
-            $table->addRow($row);
+            $table->addComponent($row);
         }
 
         $return .= $table . '</fieldset>';
@@ -183,17 +183,17 @@ final class PrintMod {
             }
             $table = new Table('', '', $header, true);
             $row = new Row();
-            $row->addColumn(new Column($obj->tipo));
-            $row->addColumn(new Column($obj->numero));
+            $row->addComponent(new Column($obj->tipo));
+            $row->addComponent(new Column($obj->numero));
 
             if (count($header) > 2) {
                 $generate = ($obj->gera_contrato == 0) ? 'Não Gera Contrato' : 'Gera Contrato';
-                $row->addColumn(new Column($obj->uasg));
-                $row->addColumn(new Column($obj->processo_original));
-                $row->addColumn(new Column($generate));
+                $row->addComponent(new Column($obj->uasg));
+                $row->addComponent(new Column($obj->processo_original));
+                $row->addComponent(new Column($generate));
             }
 
-            $table->addRow($row);
+            $table->addComponent($row);
             $return = "<fieldset class=\"preg\">" . $table . '</fieldset><br>';
         }
 
@@ -228,11 +228,11 @@ final class PrintMod {
     private static function buildSourcesTable(stdClass $source): Table {
         $table = new Table('', '', ['Fonte de Recurso', 'PTRES', 'Plano Interno'], true);
         $row = new Row();
-        $row->addColumn(new Column($source->fonte_recurso));
-        $row->addColumn(new Column($source->ptres));
-        $row->addColumn(new Column($source->plano_interno));
+        $row->addComponent(new Column($source->fonte_recurso));
+        $row->addComponent(new Column($source->ptres));
+        $row->addComponent(new Column($source->plano_interno));
 
-        $table->addRow($row);
+        $table->addComponent($row);
         return $table;
     }
 
@@ -268,10 +268,10 @@ final class PrintMod {
         $query_ini = Query::getInstance()->exe('SELECT DISTINCT itens.num_licitacao, itens.num_processo, itens.dt_inicio, itens.dt_fim FROM itens_pedido, itens WHERE itens.id = itens_pedido.id_item AND itens_pedido.id_pedido = ' . $id_request);
         while ($bidding = $query_ini->fetch_object()) {
             $row = new Row();
-            $row->addColumn(new Column('Licitação: ' . $bidding->num_licitacao));
-            $row->addColumn(new Column('Processo: ' . $bidding->num_processo));
-            $row->addColumn(new Column('Início: ' . $bidding->dt_inicio));
-            $row->addColumn(new Column('Fim: ' . ($bidding->dt_fim == '') ? '------------' : $bidding->dt_fim));
+            $row->addComponent(new Column('Licitação: ' . $bidding->num_licitacao));
+            $row->addComponent(new Column('Processo: ' . $bidding->num_processo));
+            $row->addComponent(new Column('Início: ' . $bidding->dt_inicio));
+            $row->addComponent(new Column('Fim: ' . ($bidding->dt_fim == '') ? '------------' : $bidding->dt_fim));
             $return .= "
                 <fieldset class=\"preg\">
                     <table>" . $row . "</table>
@@ -305,15 +305,15 @@ final class PrintMod {
                     $item->complemento_item = mb_strtoupper($item->complemento_item, 'UTF-8');
                     $item->valor = number_format($item->valor, 3, ',', '.');
                     $row = new Row();
-                    $row->addColumn(new Column($item->cod_reduzido));
-                    $row->addColumn(new Column($item->seq_item_processo));
-                    $row->addColumn(new Column($item->cod_despesa));
-                    $row->addColumn(new Column($item->complemento_item));
-                    $row->addColumn(new Column($item->qtd));
-                    $row->addColumn(new Column('R$ ' . $item->vl_unitario));
-                    $row->addColumn(new Column('R$ ' . $item->valor));
+                    $row->addComponent(new Column($item->cod_reduzido));
+                    $row->addComponent(new Column($item->seq_item_processo));
+                    $row->addComponent(new Column($item->cod_despesa));
+                    $row->addComponent(new Column($item->complemento_item));
+                    $row->addComponent(new Column($item->qtd));
+                    $row->addComponent(new Column('R$ ' . $item->vl_unitario));
+                    $row->addComponent(new Column('R$ ' . $item->valor));
 
-                    $table->addRow($row);
+                    $table->addComponent($row);
                 }
                 $return .= $table . '<br>';
             }
@@ -334,13 +334,13 @@ final class PrintMod {
         if ($query_emp->num_rows > 0) {
             $effort = $query_emp->fetch_object();
             $row = new Row();
-            $row->addColumn(new Column('Data Empenho: ' . $effort->data));
-            $row->addColumn(new Column('Empenho: ' . $effort->empenho));
+            $row->addComponent(new Column('Data Empenho: ' . $effort->data));
+            $row->addComponent(new Column('Empenho: ' . $effort->empenho));
 
             $return = "<fieldset class=\"preg\"><table>" . $row . "</table></fieldset>";
         } else {
             $row = new Row();
-            $row->addColumn(new Column('Empenho: EMPENHO SIAFI PENDENTE'));
+            $row->addComponent(new Column('Empenho: EMPENHO SIAFI PENDENTE'));
             $return = "<fieldset class=\"preg\"><table>" . $row . "</table></fieldset>";
         }
 
@@ -425,8 +425,8 @@ final class PrintMod {
                     <h6>Pedidos selecionados pelo SOF</h6></fieldset><br>";
 
         $row = new Row();
-        $row->addColumn(new Column(count($requests) . ' selecionados'));
-        $row->addColumn(new Column('Totalizando ' . $total));
+        $row->addComponent(new Column(count($requests) . ' selecionados'));
+        $row->addComponent(new Column('Totalizando ' . $total));
 
         $sub_header = "<fieldset class=\"preg\"><table>" . $row . "</table></fieldset>";
 
@@ -443,21 +443,21 @@ final class PrintMod {
             }
 
             $row = new Row();
-            $row->addColumn(new Column($request->id));
-            $row->addColumn(new Column(BuscaLTE::getFornecedor($request->id)));
-            $row->addColumn(new Column($request->setor));
+            $row->addComponent(new Column($request->id));
+            $row->addComponent(new Column(BuscaLTE::getFornecedor($request->id)));
+            $row->addComponent(new Column($request->setor));
 
             if ($status == 8) {
-                $row->addColumn(new Column($request->prioridade));
-                $row->addColumn(new Column($request->empenho));
+                $row->addComponent(new Column($request->prioridade));
+                $row->addComponent(new Column($request->empenho));
             } else {
-                $row->addColumn(new Column($request->data_pedido));
-                $row->addColumn(new Column($request->prioridade));
-                $row->addColumn(new Column($request->status));
-                $row->addColumn(new Column('R$ ' . $request->valor));
+                $row->addComponent(new Column($request->data_pedido));
+                $row->addComponent(new Column($request->prioridade));
+                $row->addComponent(new Column($request->status));
+                $row->addComponent(new Column('R$ ' . $request->valor));
             }
 
-            $table->addRow($row);
+            $table->addComponent($row);
         }
         if ($query->num_rows > 0 && !$flag && $i == count($requests)) {
             $return .= $sub_header . $table;
@@ -497,12 +497,12 @@ final class PrintMod {
         $table = new Table('', 'prod', ['Setor', 'Data', 'Valor', 'Categoria'], true);
         while ($obj = $query->fetch_object()) {
             $row = new Row();
-            $row->addColumn(new Column(ARRAY_SETORES[$obj->id_setor]));
-            $row->addColumn(new Column($obj->data));
-            $row->addColumn(new Column('R$ ' . number_format($obj->valor, 3, ',', '.')));
-            $row->addColumn(new Column(ucfirst(ARRAY_CATEGORIA[$obj->categoria])));
+            $row->addComponent(new Column(ARRAY_SETORES[$obj->id_setor]));
+            $row->addComponent(new Column($obj->data));
+            $row->addComponent(new Column('R$ ' . number_format($obj->valor, 3, ',', '.')));
+            $row->addComponent(new Column(ucfirst(ARRAY_CATEGORIA[$obj->categoria])));
 
-            $table->addRow($row);
+            $table->addComponent($row);
         }
 
         $return .= $table;
@@ -544,22 +544,22 @@ final class PrintMod {
             $query = Query::getInstance()->exe('SELECT processos.num_processo, processos_tipo.nome AS tipo, processos_tipo.id AS id_tipo, processos.estante, processos.prateleira, processos.entrada, processos.saida, processos.responsavel, processos.retorno, processos.obs FROM processos, processos_tipo WHERE processos.tipo = processos_tipo.id AND processos.tipo = ' . $tipo_proc->id . ' ORDER BY processos.tipo ASC');
             if ($query->num_rows > 0) {
                 $row = new Row();
-                $row->addColumn(new Column('Tipo: ' . $tipo_proc->nome));
+                $row->addComponent(new Column('Tipo: ' . $tipo_proc->nome));
                 $return .= "<fieldset class=\"preg\"><table>" . $row . "</table></fieldset><br>";
                 $table = new Table('', 'prod', ['Processo', 'Tipo', 'Estante', 'Prateleira', 'Entrada', 'Saída', 'Responsável', 'Retorno', 'Obs'], true);
                 while ($processo = $query->fetch_object()) {
                     $row = new Row();
-                    $row->addColumn(new Column($processo->num_processo));
-                    $row->addColumn(new Column($processo->tipo));
-                    $row->addColumn(new Column($processo->estante));
-                    $row->addColumn(new Column($processo->prateleira));
-                    $row->addColumn(new Column($processo->entrada));
-                    $row->addColumn(new Column($processo->saida));
-                    $row->addColumn(new Column($processo->responsavel));
-                    $row->addColumn(new Column($processo->retorno));
-                    $row->addColumn(new Column($processo->obs));
+                    $row->addComponent(new Column($processo->num_processo));
+                    $row->addComponent(new Column($processo->tipo));
+                    $row->addComponent(new Column($processo->estante));
+                    $row->addComponent(new Column($processo->prateleira));
+                    $row->addComponent(new Column($processo->entrada));
+                    $row->addComponent(new Column($processo->saida));
+                    $row->addComponent(new Column($processo->responsavel));
+                    $row->addComponent(new Column($processo->retorno));
+                    $row->addComponent(new Column($processo->obs));
 
-                    $table->addRow($row);
+                    $table->addComponent($row);
                 }
                 $return .= $table . '<br>';
             }
@@ -570,12 +570,12 @@ final class PrintMod {
             $table = new Table('', 'prod', ['Processo', 'Tipo', 'Estante', 'Prateleira'], true);
             while ($processo = $query_all->fetch_object()) {
                 $row = new Row();
-                $row->addColumn(new Column($processo->num_processo));
-                $row->addColumn(new Column('______________________'));
-                $row->addColumn(new Column('______________________'));
-                $row->addColumn(new Column('______________________'));
+                $row->addComponent(new Column($processo->num_processo));
+                $row->addComponent(new Column('______________________'));
+                $row->addComponent(new Column('______________________'));
+                $row->addComponent(new Column('______________________'));
 
-                $table->addRow($row);
+                $table->addComponent($row);
             }
             $return .= $table;
         }

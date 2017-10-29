@@ -6,25 +6,13 @@
  * @author João Bolsson (joaovictorbolsson@gmail.com)
  * @since 2017, 20 Feb.
  */
-class Table {
-
-    /**
-     * Rows in this table.
-     * @var array of Rows
-     */
-    private $rows;
+final class Table extends Component {
 
     /**
      * Table's id.
      * @var string
      */
     private $id;
-
-    /**
-     * Classes of this table.
-     * @var string
-     */
-    private $class;
 
     /**
      * Strings array with the header's fields.
@@ -47,23 +35,15 @@ class Table {
      * @param bool $build_body if true: the table must have the tag <tbody>, else - just its rows.
      */
     public function __construct(string $id = '', string $class = '', array $headers = [], bool $build_body = false) {
-        $this->rows = array();
+        parent::__construct('table', $class);
         $this->id = $id;
-        $this->class = $class;
         $this->headers = $headers;
         $this->build_body = $build_body;
     }
 
     /**
-     * Add a Row element in this table.
-     *
-     * @param Row $row Row in this table.
+     * @return string String representation of this table.
      */
-    public function addRow(Row $row) {
-        $index = count($this->rows);
-        $this->rows[$index] = $row;
-    }
-
     public function __toString(): string {
         $table = "";
         $must_close = false;
@@ -114,7 +94,7 @@ class Table {
         }
 
         if (!$this->isEmpty()) {
-            foreach ($this->rows as $row) {
+            foreach ($this->components as $row) {
                 if ($row instanceof Row) {
                     $body .= $row;
                 }
@@ -128,13 +108,6 @@ class Table {
             $body .= "</tbody>";
         }
         return $body;
-    }
-
-    /**
-     * @return bool True if the body is empty, else - false.
-     */
-    public function isEmpty(): bool {
-        return count($this->rows) == 0;
     }
 
 }
