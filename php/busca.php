@@ -38,11 +38,6 @@ if (!is_null($admin) && isset($_SESSION['id_setor']) && ($_SESSION['id_setor'] =
 
     switch ($form) {
 
-        case 'fillSourcesToSector':
-            $id_setor = filter_input(INPUT_POST, 'id_setor');
-            echo Busca::getSourcesForSector($id_setor);
-            break;
-
         case 'editLog':
             $id = filter_input(INPUT_POST, 'id');
             echo Busca::getInfoLog($id);
@@ -63,7 +58,7 @@ if (!is_null($admin) && isset($_SESSION['id_setor']) && ($_SESSION['id_setor'] =
 
         case 'infoItem':
             $id_item = filter_input(INPUT_POST, 'id_item');
-            echo Busca::getInfoItem($id_item);
+            echo json_encode(new Item($id_item));
             break;
 
         case 'permissoes':
@@ -88,7 +83,7 @@ if (!is_null($admin) && isset($_SESSION['id_setor']) && ($_SESSION['id_setor'] =
         case 'infoPedido':
             $id_pedido = filter_input(INPUT_POST, 'id_pedido');
             $id_setor = filter_input(INPUT_POST, 'id_setor');
-             echo Busca::getInfoPedidoAnalise($id_pedido, $id_setor);
+            echo Busca::getInfoPedidoAnalise($id_pedido, $id_setor);
             break;
 
         case 'fillTransfSource':
@@ -102,6 +97,11 @@ if (!is_null($admin) && isset($_SESSION['id_setor']) && ($_SESSION['id_setor'] =
 } else if (!is_null($users) && isset($_SESSION['id_setor']) && $_SESSION['id_setor'] != 0) {
 
     switch ($form) {
+
+        case 'fillSourcesToSector':
+            $id_setor = filter_input(INPUT_POST, 'id_setor');
+            echo Busca::getSourcesForSector($id_setor);
+            break;
 
         case 'fillSaldo':
             echo number_format(Busca::getSaldo($_SESSION['id_setor']), 3, ',', '.');

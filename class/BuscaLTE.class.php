@@ -76,13 +76,13 @@ final class BuscaLTE {
         $table = new Table('', '', [], false);
         while ($obj = $query->fetch_object()) {
             $row = new Row();
-            $row->addColumn(new Column($obj->nome));
-            $row->addColumn(new Column($obj->entrada));
+            $row->addComponent(new Column($obj->nome));
+            $row->addComponent(new Column($obj->entrada));
             $obj->saida = ($obj->saida == NULL) ? '--------------------' : $obj->saida;
-            $row->addColumn(new Column($obj->saida));
-            $row->addColumn(new Column(self::buildButtonsAdminTool($obj->id)));
+            $row->addComponent(new Column($obj->saida));
+            $row->addComponent(new Column(self::buildButtonsAdminTool($obj->id)));
 
-            $table->addRow($row);
+            $table->addComponent($row);
         }
 
         return $table;
@@ -99,13 +99,13 @@ final class BuscaLTE {
             $color = ($info == 1) ? 'green' : 'red';
 
             $row = new Row();
-            $row->addColumn(new Column($obj->nome));
-            $row->addColumn(new Column(new Small('label bg-' . $color, $status)));
+            $row->addComponent(new Column($obj->nome));
+            $row->addComponent(new Column(new Small('label bg-' . $color, $status)));
             $array = self::formatTimeLast($info, $obj->id_usuario);
-            $row->addColumn(new Column($array['time']));
-            $row->addColumn(new Column($array['date']));
+            $row->addComponent(new Column($array['time']));
+            $row->addComponent(new Column($array['date']));
 
-            $table->addRow($row);
+            $table->addComponent($row);
         }
 
         return $table;
@@ -126,7 +126,7 @@ final class BuscaLTE {
                         " . $pag->nome . "
                     </label>
                 </div>";
-            $row->addColumn(new Column($radio));
+            $row->addComponent(new Column($radio));
         }
         return $row;
     }
@@ -149,11 +149,11 @@ final class BuscaLTE {
 
             $row = new Row();
 
-            $row->addColumn(new Column($post->data));
-            $row->addColumn(new Column($post->titulo));
-            $row->addColumn(new Column($btn_group));
+            $row->addComponent(new Column($post->data));
+            $row->addComponent(new Column($post->titulo));
+            $row->addComponent(new Column($btn_group));
 
-            $table->addRow($row);
+            $table->addComponent($row);
         }
         return $table;
     }
@@ -190,7 +190,7 @@ final class BuscaLTE {
         while ($obj = $query->fetch_object()) {
             $input = "<div class=\"form-group\">
                         <input type=\"radio\" name=\"tipoCont\" id=\"tipoCont" . $obj->id . "\" class=\"minimal\" value=\"" . $obj->id . "\">&nbsp;" . $obj->nome . "</div>";
-            $row->addColumn(new Column($input));
+            $row->addComponent(new Column($input));
         }
 
         return $row;
@@ -442,7 +442,7 @@ final class BuscaLTE {
                         <input type=\"radio\" name=\"st\" id=\"st" . ARRAY_PRIORIDADE[$i] . "\" class=\"minimal\" value=\"" . $i . "\"> " . ARRAY_PRIORIDADE[$i] . "
                     </div>";
 
-            $row->addColumn(new Column($form_group));
+            $row->addComponent(new Column($form_group));
         }
         return $row;
     }
@@ -459,19 +459,19 @@ final class BuscaLTE {
             $process->obs = str_replace("\"", "\'", $process->obs);
 
             $row = new Row();
-            $div = new Div('btn-group');
+            $div = new Component('div', 'btn-group');
             $div->addComponent(new Button('', BTN_DEFAULT, "addProcesso('', " . $process->id . ")", "data-toggle=\"tooltip\"", 'Editar', 'pencil'));
-            $row->addColumn(new Column($div));
-            $row->addColumn(new Column($process->num_processo));
-            $row->addColumn(new Column($process->tipo));
-            $row->addColumn(new Column($process->estante));
-            $row->addColumn(new Column($process->prateleira));
-            $row->addColumn(new Column($process->entrada));
-            $row->addColumn(new Column($process->saida));
-            $row->addColumn(new Column($process->responsavel));
-            $row->addColumn(new Column($process->retorno));
-            $row->addColumn(new Column(new Button('', BTN_DEFAULT, "viewCompl('" . $process->obs . "')", "data-toggle=\"tooltip\"", 'Ver Observação', 'eye')));
-            $table->addRow($row);
+            $row->addComponent(new Column($div));
+            $row->addComponent(new Column($process->num_processo));
+            $row->addComponent(new Column($process->tipo));
+            $row->addComponent(new Column($process->estante));
+            $row->addComponent(new Column($process->prateleira));
+            $row->addComponent(new Column($process->entrada));
+            $row->addComponent(new Column($process->saida));
+            $row->addComponent(new Column($process->responsavel));
+            $row->addComponent(new Column($process->retorno));
+            $row->addComponent(new Column(new Button('', BTN_DEFAULT, "viewCompl('" . $process->obs . "')", "data-toggle=\"tooltip\"", 'Ver Observação', 'eye')));
+            $table->addComponent($row);
         }
         return $table;
     }
@@ -547,20 +547,20 @@ final class BuscaLTE {
         $status = $array_status[$st];
         $label = 'bg-' . $array_lb[$st];
 
-        $table = new Table('', '', array(), false);
+        $table = new Table('', '', [], false);
         while ($request = $query->fetch_object()) {
             $btn_group = ($st == 2) ? self::buildButtonsSolicAltPedAdmin($request->id, $request->id_pedido) : '';
             $request->justificativa = str_replace("\"", "\'", $request->justificativa);
 
             $row = new Row();
-            $row->addColumn(new Column($btn_group));
-            $row->addColumn(new Column($request->id_pedido));
-            $row->addColumn(new Column($request->nome));
-            $row->addColumn(new Column($request->data_solicitacao));
-            $row->addColumn(new Column(($st == 2) ? '--------------' : $request->data_analise));
-            $row->addColumn(new Column(new Button('', 'btn btn-sm btn-primary', "showInformation('solic_alt_pedido', 'justificativa', $request->id);", "data-toggle=\"tooltip\"", 'Ver Justificativa', 'eye')));
-            $row->addColumn(new Column(new Small('label pull-right ' . $label, $status)));
-            $table->addRow($row);
+            $row->addComponent(new Column($btn_group));
+            $row->addComponent(new Column($request->id_pedido));
+            $row->addComponent(new Column($request->nome));
+            $row->addComponent(new Column($request->data_solicitacao));
+            $row->addComponent(new Column(($st == 2) ? '--------------' : $request->data_analise));
+            $row->addComponent(new Column(new Button('', 'btn btn-sm btn-primary', "showInformation('solic_alt_pedido', 'justificativa', $request->id);", "data-toggle=\"tooltip\"", 'Ver Justificativa', 'eye')));
+            $row->addComponent(new Column(new Small('label pull-right ' . $label, $status)));
+            $table->addComponent($row);
         }
         if ($table->isEmpty()) {
             return "";
@@ -590,15 +590,15 @@ final class BuscaLTE {
                 $solic->valor_adiantado = number_format($solic->valor_adiantado, 3, ',', '.');
 
                 $row = new Row();
-                $row->addColumn(new Column($btn_group));
-                $row->addColumn(new Column($solic->nome));
-                $row->addColumn(new Column($solic->data_solicitacao));
-                $row->addColumn(new Column(($st == 2) ? '---------------' : $solic->data_analise));
-                $row->addColumn(new Column($solic->valor_adiantado));
-                $row->addColumn(new Column(new Button('', 'btn btn-sm btn-primary', "viewCompl('" . $solic->justificativa . "')", "data-toggle=\"tooltip\"", 'Ver Justificativa', 'eye')));
-                $row->addColumn(new Column(new Small('label pull-right bg-' . $label, $status)));
+                $row->addComponent(new Column($btn_group));
+                $row->addComponent(new Column($solic->nome));
+                $row->addComponent(new Column($solic->data_solicitacao));
+                $row->addComponent(new Column(($st == 2) ? '---------------' : $solic->data_analise));
+                $row->addComponent(new Column($solic->valor_adiantado));
+                $row->addComponent(new Column(new Button('', 'btn btn-sm btn-primary', "viewCompl('" . $solic->justificativa . "')", "data-toggle=\"tooltip\"", 'Ver Justificativa', 'eye')));
+                $row->addComponent(new Column(new Small('label pull-right bg-' . $label, $status)));
 
-                $table->addRow($row);
+                $table->addComponent($row);
             }
         }
         if ($table->isEmpty()) {
@@ -608,7 +608,7 @@ final class BuscaLTE {
     }
 
     private static final function buildButtonsSolicAdi(int $id): string {
-        $div = new Div('btn-group');
+        $div = new Component('div', 'btn-group');
 
         $div->addComponent(new Button('', BTN_DEFAULT, "analisaAdi(" . $id . ", 1)", "data-toggle=\"tooltip\"", 'Aprovar', 'check'));
         $div->addComponent(new Button('', BTN_DEFAULT, "analisaAdi(" . $id . ", 0)", "data-toggle=\"tooltip\"", 'Reprovar', 'trash'));
@@ -639,7 +639,7 @@ final class BuscaLTE {
      * @return string
      */
     private static function buildButtons(int $id, int $status, int $id_sector): string {
-        $component = new Div('btn-group');
+        $component = new Component('div', 'btn-group');
 
         if ($status != 3 && $status != 4) {
             if ($_SESSION['id_setor'] == 12) {
@@ -675,7 +675,7 @@ final class BuscaLTE {
     public static function getSolicitacoesAdmin(string $where = '', array $requests = []): string {
         $query = Query::getInstance()->exe("SELECT id, id_setor, DATE_FORMAT(data_pedido, '%d/%m/%Y') AS data_pedido, prioridade, status, valor, aprov_gerencia FROM pedido WHERE status <> 3 AND alteracao = 0 " . $where . ' ORDER BY id DESC LIMIT ' . LIMIT_MAX);
 
-        $table = new Table('', '', array(), false);
+        $table = new Table('', '', [], false);
         while ($request = $query->fetch_object()) {
             // determines if the request will add in the table
             $flag = false;
@@ -708,18 +708,18 @@ final class BuscaLTE {
 
                 $row = new Row('rowPedido' . $request->id);
 
-                $row->addColumn(new Column($check_all));
-                $row->addColumn(new Column($buttons));
-                $row->addColumn(new Column($request->id));
-                $row->addColumn(new Column(ARRAY_SETORES[$request->id_setor]));
-                $row->addColumn(new Column($request->data_pedido));
-                $row->addColumn(new Column(ARRAY_PRIORIDADE[$request->prioridade]));
-                $row->addColumn(new Column(ARRAY_STATUS[$request->status]));
-                $row->addColumn(new Column("R$ " . $request->valor));
-                $row->addColumn(new Column($btnVerEmpenho));
-                $row->addColumn(new Column(self::getFornecedor($request->id)));
+                $row->addComponent(new Column($check_all));
+                $row->addComponent(new Column($buttons));
+                $row->addComponent(new Column($request->id));
+                $row->addComponent(new Column(ARRAY_SETORES[$request->id_setor]));
+                $row->addComponent(new Column($request->data_pedido));
+                $row->addComponent(new Column(ARRAY_PRIORIDADE[$request->prioridade]));
+                $row->addComponent(new Column(ARRAY_STATUS[$request->status]));
+                $row->addComponent(new Column("R$ " . $request->valor));
+                $row->addComponent(new Column($btnVerEmpenho));
+                $row->addComponent(new Column(self::getFornecedor($request->id)));
 
-                $table->addRow($row);
+                $table->addComponent($row);
             }
         }
         if ($table->isEmpty()) {
@@ -769,33 +769,33 @@ final class BuscaLTE {
 
             $row = new Row('row_item' . $item->id_itens);
 
-            $row->addColumn(new Column($btn_group));
-            $row->addColumn(new Column($item->cod_despesa));
-            $row->addColumn(new Column($item->descr_despesa));
-            $row->addColumn(new Column($item->num_extrato));
-            $row->addColumn(new Column($item->num_contrato));
-            $row->addColumn(new Column($item->num_processo));
-            $row->addColumn(new Column($item->descr_mod_compra));
-            $row->addColumn(new Column($item->num_licitacao));
-            $row->addColumn(new Column($item->dt_inicio));
-            $row->addColumn(new Column(($item->dt_fim == '') ? '----------' : $item->dt_fim));
-            $row->addColumn(new Column($item->cgc_fornecedor));
-            $row->addColumn(new Column($item->nome_fornecedor));
-            $row->addColumn(new Column($item->cod_reduzido));
-            $row->addColumn(new Column($item->seq_item_processo));
-            $row->addColumn(new Column($item->descricao));
-            $row->addColumn(new Column('R$ ' . $item->vl_unitario));
-            $row->addColumn(new Column($item->qt_contrato));
-            $row->addColumn(new Column($item->vl_contrato));
-            $row->addColumn(new Column($item->qt_utilizado));
-            $row->addColumn(new Column($item->vl_utilizado));
-            $row->addColumn(new Column($item->qt_saldo));
-            $row->addColumn(new Column($item->vl_saldo));
-            $row->addColumn(new Column($item->qtd_solicitada));
-            $row->addColumn(new Column('R$ ' . $item->valor));
-            $row->addColumn(new Column($inputs));
+            $row->addComponent(new Column($btn_group));
+            $row->addComponent(new Column($item->cod_despesa));
+            $row->addComponent(new Column($item->descr_despesa));
+            $row->addComponent(new Column($item->num_extrato));
+            $row->addComponent(new Column($item->num_contrato));
+            $row->addComponent(new Column($item->num_processo));
+            $row->addComponent(new Column($item->descr_mod_compra));
+            $row->addComponent(new Column($item->num_licitacao));
+            $row->addComponent(new Column($item->dt_inicio));
+            $row->addComponent(new Column(($item->dt_fim == '') ? '----------' : $item->dt_fim));
+            $row->addComponent(new Column($item->cgc_fornecedor));
+            $row->addComponent(new Column($item->nome_fornecedor));
+            $row->addComponent(new Column($item->cod_reduzido));
+            $row->addComponent(new Column($item->seq_item_processo));
+            $row->addComponent(new Column($item->descricao));
+            $row->addComponent(new Column('R$ ' . $item->vl_unitario));
+            $row->addComponent(new Column($item->qt_contrato));
+            $row->addComponent(new Column($item->vl_contrato));
+            $row->addComponent(new Column($item->qt_utilizado));
+            $row->addComponent(new Column($item->vl_utilizado));
+            $row->addComponent(new Column($item->qt_saldo));
+            $row->addComponent(new Column($item->vl_saldo));
+            $row->addComponent(new Column($item->qtd_solicitada));
+            $row->addComponent(new Column('R$ ' . $item->valor));
+            $row->addComponent(new Column($inputs));
 
-            $table->addRow($row);
+            $table->addComponent($row);
         }
         return $table;
     }
@@ -808,7 +808,7 @@ final class BuscaLTE {
     public static function getSolicAltPedidos(): string {
         $id_sector = $_SESSION['id_setor'];
         $query = Query::getInstance()->exe("SELECT solic_alt_pedido.id_pedido, DATE_FORMAT(solic_alt_pedido.data_solicitacao, '%d/%m/%Y') AS data_solicitacao, DATE_FORMAT(solic_alt_pedido.data_analise, '%d/%m/%Y') AS data_analise, solic_alt_pedido.justificativa, solic_alt_pedido.status, pedido.id_usuario FROM solic_alt_pedido, pedido WHERE pedido.id = solic_alt_pedido.id_pedido AND solic_alt_pedido.id_setor = " . $id_sector . ' ORDER BY solic_alt_pedido.id DESC LIMIT ' . LIMIT_MAX);
-        $table = new Table('', '', array(), false);
+        $table = new Table('', '', [], false);
 
         $array_status = ['Reprovado', 'Aprovado', 'Aberto'];
         $array_lb = ['red', 'green', 'orange'];
@@ -819,13 +819,13 @@ final class BuscaLTE {
             $request->justificativa = str_replace("\"", "\'", $request->justificativa);
             if ($request->id_usuario == $_SESSION['id']) {
                 $row = new Row();
-                $row->addColumn(new Column($request->id_pedido));
-                $row->addColumn(new Column($request->data_solicitacao));
-                $row->addColumn(new Column(($request->status == 2) ? '--------------' : $request->data_analise));
-                $row->addColumn(new Column(new Button('', BTN_DEFAULT, "viewCompl('" . $request->justificativa . "')", "data-toggle=\"tooltip\"", 'Ver Justificativa', 'eye')));
-                $row->addColumn(new Column(new Small('label ' . $label, $status)));
+                $row->addComponent(new Column($request->id_pedido));
+                $row->addComponent(new Column($request->data_solicitacao));
+                $row->addComponent(new Column(($request->status == 2) ? '--------------' : $request->data_analise));
+                $row->addComponent(new Column(new Button('', BTN_DEFAULT, "viewCompl('" . $request->justificativa . "')", "data-toggle=\"tooltip\"", 'Ver Justificativa', 'eye')));
+                $row->addComponent(new Column(new Small('label ' . $label, $status)));
 
-                $table->addRow($row);
+                $table->addComponent($row);
             }
         }
         return $table;
@@ -850,13 +850,13 @@ final class BuscaLTE {
             $request->valor_adiantado = number_format($request->valor_adiantado, 3, ',', '.');
 
             $row = new Row();
-            $row->addColumn(new Column($request->data_solicitacao));
-            $row->addColumn(new Column(($request->status == 2) ? '--------------' : $request->data_analise));
-            $row->addColumn(new Column($request->valor_adiantado));
-            $row->addColumn(new Column(new Button('', BTN_DEFAULT, "viewCompl('" . $request->justificativa . "')", "data-toggle=\"tooltip\"", 'Ver Justificativa', 'eye')));
-            $row->addColumn(new Column(new Small('label ' . $label, $status)));
+            $row->addComponent(new Column($request->data_solicitacao));
+            $row->addComponent(new Column(($request->status == 2) ? '--------------' : $request->data_analise));
+            $row->addComponent(new Column($request->valor_adiantado));
+            $row->addComponent(new Column(new Button('', BTN_DEFAULT, "viewCompl('" . $request->justificativa . "')", "data-toggle=\"tooltip\"", 'Ver Justificativa', 'eye')));
+            $row->addComponent(new Column(new Small('label ' . $label, $status)));
 
-            $table->addRow($row);
+            $table->addComponent($row);
         }
         return $table;
     }
@@ -875,22 +875,22 @@ final class BuscaLTE {
             $btn = (!isset($_SESSION['editmode'])) ? new Button('', BTN_DEFAULT, "checkItemPedido(" . $item->id . ", '" . $item->vl_unitario . "', " . $item->qt_saldo . ")", "data-toggle=\"tooltip\"", 'Adicionar', 'plus') : new Button('', BTN_DEFAULT, "editaItem(" . $item->id . ")", "data-toggle=\"tooltip\"", 'Editar Informações', 'pencil');
             $input_qtd = (!isset($_SESSION['editmode'])) ? "<input type=\"number\" id=\"qtd" . $item->id . "\" min=\"1\" max=\"" . $item->qt_saldo . "\">" : '';
             $row = new Row();
-            $row->addColumn(new Column($btn));
-            $row->addColumn(new Column($item->nome_fornecedor));
-            $row->addColumn(new Column($item->cod_reduzido));
+            $row->addComponent(new Column($btn));
+            $row->addComponent(new Column($item->nome_fornecedor));
+            $row->addComponent(new Column($item->cod_reduzido));
             if (!isset($_SESSION['editmode'])) {
-                $row->addColumn(new Column($input_qtd));
+                $row->addComponent(new Column($input_qtd));
             }
-            $row->addColumn(new Column(new Button('', BTN_DEFAULT, "viewCompl('" . $item->complemento_item . "')", "data-toggle=\"tooltip\"", 'Ver Detalhes', 'eye')));
-            $row->addColumn(new Column($item->complemento_item, 'none'));
-            $row->addColumn(new Column($item->vl_unitario));
-            $row->addColumn(new Column($item->qt_saldo));
-            $row->addColumn(new Column($item->qt_utilizado));
-            $row->addColumn(new Column($item->vl_saldo));
-            $row->addColumn(new Column($item->vl_utilizado));
-            $row->addColumn(new Column($item->qt_contrato));
+            $row->addComponent(new Column(new Button('', BTN_DEFAULT, "viewCompl('" . $item->complemento_item . "')", "data-toggle=\"tooltip\"", 'Ver Detalhes', 'eye')));
+            $row->addComponent(new Column($item->complemento_item, 'none'));
+            $row->addComponent(new Column($item->vl_unitario));
+            $row->addComponent(new Column($item->qt_saldo));
+            $row->addComponent(new Column($item->qt_utilizado));
+            $row->addComponent(new Column($item->vl_saldo));
+            $row->addComponent(new Column($item->vl_utilizado));
+            $row->addComponent(new Column($item->qt_contrato));
 
-            $table->addRow($row);
+            $table->addComponent($row);
         }
         return $table;
     }
@@ -920,16 +920,16 @@ final class BuscaLTE {
 
         $row = new Row('row' . $id_item);
 
-        $row->addColumn(new Column(new Button('', BTN_DEFAULT, "removeTableRow(" . $id_item . ", '" . $valor . "')", "data-toggle=\"tooltip\"", 'Remover do Pedido', 'trash')));
-        $row->addColumn(new Column($item->num_processo));
-        $row->addColumn(new Column($item->cod_reduzido));
-        $row->addColumn(new Column(new Button('', BTN_DEFAULT, "viewCompl('" . $item->complemento_item . "')", "data-toggle=\"tooltip\"", 'Ver Complemento do Item', 'eye')));
-        $row->addColumn(new Column('R$ ' . $item->vl_unitario));
-        $row->addColumn(new Column($item->nome_fornecedor));
-        $row->addColumn(new Column($item->num_licitacao));
-        $row->addColumn(new Column($qtd));
-        $row->addColumn(new Column('R$ ' . $valor));
-        $row->addColumn(new Column($inputs));
+        $row->addComponent(new Column(new Button('', BTN_DEFAULT, "removeTableRow(" . $id_item . ", '" . $valor . "')", "data-toggle=\"tooltip\"", 'Remover do Pedido', 'trash')));
+        $row->addComponent(new Column($item->num_processo));
+        $row->addComponent(new Column($item->cod_reduzido));
+        $row->addComponent(new Column(new Button('', BTN_DEFAULT, "viewCompl('" . $item->complemento_item . "')", "data-toggle=\"tooltip\"", 'Ver Complemento do Item', 'eye')));
+        $row->addComponent(new Column('R$ ' . $item->vl_unitario));
+        $row->addComponent(new Column($item->nome_fornecedor));
+        $row->addComponent(new Column($item->num_licitacao));
+        $row->addComponent(new Column($qtd));
+        $row->addComponent(new Column('R$ ' . $valor));
+        $row->addComponent(new Column($inputs));
 
         return $row;
     }
@@ -964,13 +964,13 @@ final class BuscaLTE {
             $draft->valor = number_format($draft->valor, 3, ',', '.');
 
             $row = new Row();
-            $row->addColumn(new Column($draft->id));
-            $row->addColumn(new Column(new Small('label bg-gray', ARRAY_STATUS[$draft->status])));
-            $row->addColumn(new Column($draft->data_pedido));
-            $row->addColumn(new Column('R$ ' . $draft->valor));
-            $row->addColumn(new Column(self::buildButtonsDraft($draft->id_usuario, $draft->id)));
+            $row->addComponent(new Column($draft->id));
+            $row->addComponent(new Column(new Small('label bg-gray', ARRAY_STATUS[$draft->status])));
+            $row->addComponent(new Column($draft->data_pedido));
+            $row->addComponent(new Column('R$ ' . $draft->valor));
+            $row->addComponent(new Column(self::buildButtonsDraft($draft->id_usuario, $draft->id)));
 
-            $table->addRow($row);
+            $table->addComponent($row);
         }
         return $table;
     }
@@ -1012,16 +1012,16 @@ final class BuscaLTE {
 
                 $row = new Row('ped' . $pedido->id);
 
-                $row->addColumn(new Column($pedido->id));
-                $row->addColumn(new Column($pedido->data_pedido));
-                $row->addColumn(new Column(ARRAY_PRIORIDADE[$pedido->prioridade]));
-                $row->addColumn(new Column(new Small('label bg-gray', ARRAY_STATUS[$pedido->status])));
-                $row->addColumn(new Column($empenho));
-                $row->addColumn(new Column('R$ ' . $pedido->valor));
-                $row->addColumn(new Column(self::getFornecedor($pedido->id)));
-                $row->addColumn(new Column(self::buildButtonsMyRequests($pedido->id, $pedido->status, $pedido->id_usuario)));
+                $row->addComponent(new Column($pedido->id));
+                $row->addComponent(new Column($pedido->data_pedido));
+                $row->addComponent(new Column(ARRAY_PRIORIDADE[$pedido->prioridade]));
+                $row->addComponent(new Column(new Small('label bg-gray', ARRAY_STATUS[$pedido->status])));
+                $row->addComponent(new Column($empenho));
+                $row->addComponent(new Column('R$ ' . $pedido->valor));
+                $row->addComponent(new Column(self::getFornecedor($pedido->id)));
+                $row->addComponent(new Column(self::buildButtonsMyRequests($pedido->id, $pedido->status, $pedido->id_usuario)));
 
-                $table->addRow($row);
+                $table->addComponent($row);
             }
         }
         return $table;
@@ -1060,10 +1060,10 @@ final class BuscaLTE {
         $table = new Table('', '', [], false);
         while ($process = $query->fetch_object()) {
             $row = new Row();
-            $row->addColumn(new Column($process->num_processo));
-            $row->addColumn(new Column(new Button('', 'btn btn-primary', $onclick . "('" . $process->num_processo . "', 0)", "data-toggle=\"tooltip\"", $title, $icon)));
+            $row->addComponent(new Column($process->num_processo));
+            $row->addComponent(new Column(new Button('', 'btn btn-primary', $onclick . "('" . $process->num_processo . "', 0)", "data-toggle=\"tooltip\"", $title, $icon)));
 
-            $table->addRow($row);
+            $table->addComponent($row);
         }
         return $table;
     }
@@ -1097,13 +1097,14 @@ final class BuscaLTE {
             $setor_transf = ($lancamento->categoria == 3) ? self::getSetorTransf($lancamento->id) : '';
 
             $row = new Row();
-            $row->addColumn(new Column(ARRAY_SETORES[$lancamento->id_setor]));
-            $row->addColumn(new Column($lancamento->data));
-            $row->addColumn(new Column("<span style=\"color: " . $cor . ";\">" . 'R$ ' . $lancamento->valor . "</span>"));
-            $row->addColumn(new Column(ARRAY_CATEGORIA[$lancamento->categoria]));
-            $row->addColumn(new Column($setor_transf));
+            $row->addComponent(new Column(''));
+            $row->addComponent(new Column(ARRAY_SETORES[$lancamento->id_setor]));
+            $row->addComponent(new Column($lancamento->data));
+            $row->addComponent(new Column("<span style=\"color: " . $cor . ";\">" . 'R$ ' . $lancamento->valor . "</span>"));
+            $row->addComponent(new Column(ARRAY_CATEGORIA[$lancamento->categoria]));
+            $row->addComponent(new Column($setor_transf));
 
-            $table->addRow($row);
+            $table->addComponent($row);
         }
         return $table;
     }

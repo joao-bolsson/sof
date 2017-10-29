@@ -6,25 +6,34 @@
  * @author João Bolsson (joaovictorbolsson@gmail.com)
  * @since 2017, 21 Feb.
  */
-class Small {
+final class Small extends Component {
 
-    private $class, $text, $attr, $title;
+    private $attr, $title;
 
     /**
      * Construct a Small element.
-     * 
+     *
      * @param string $class Small's class.
      * @param string $text Text that will be show inside <small></small>
      * @param string $attr Other attributes for tag <small>
      * @param string $title Small's title.
      */
     public function __construct(string $class = '', string $text = '', string $attr = '', string $title = '') {
-        $this->class = $class;
-        $this->text = $text;
+        parent::__construct('small', $class, $text);
         $this->attr = $attr;
         $this->title = $title;
     }
 
+    /**
+     * @param Component $component Component to add.
+     */
+    public function addComponent(Component $component) {
+        // empty
+    }
+
+    /**
+     * @return string String representation of this small element.
+     */
     public function __toString(): string {
         $class = (!empty($this->class)) ? " class=\"" . $this->class . "\"" : '';
 

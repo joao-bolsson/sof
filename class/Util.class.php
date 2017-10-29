@@ -285,10 +285,10 @@ final class Util {
             $tipo_doc = ($tipo["extension"] == "jpg" || $tipo["extension"] == "png" || $tipo["extension"] == "jpeg") ? 'Imagem' : 'Documento';
             if ($arquivo != "." && $arquivo != "..") {
                 $row = new Row();
-                $row->addColumn(new Column(new Small('label bg-' . $label, $tipo_doc)));
-                $row->addColumn(new Column("<a href=\"" . $pasta . $arquivo . "\" target=\"_blank\">" . $arquivo . "</a>"));
+                $row->addComponent(new Column(new Small('label bg-' . $label, $tipo_doc)));
+                $row->addComponent(new Column("<a href=\"" . $pasta . $arquivo . "\" target=\"_blank\">" . $arquivo . "</a>"));
 
-                $table->addRow($row);
+                $table->addComponent($row);
             }
         }
         $diretorio->close();

@@ -44,8 +44,9 @@ final class Busca {
                 $options .= "<option value=\"" . $obj->id . "\">" . $obj->fonte_recurso . "</option>";
             }
             return $options;
+        } else {
+            return "<option value=\"0\">Ignorar Fontes</option>";
         }
-        return "";
     }
 
     public static function hasSourcesForRequest(int $id_fonte, string $value): bool {
@@ -194,25 +195,13 @@ final class Busca {
             $btn = "<button onclick=\"viewCompl('" . $problem->descricao . "');\" class=\"btn btn-default\" type=\"button\" data-toggle=\"tooltip\" title=\"Ver Descrição Informada\">Descrição</button>";
 
             $row = new Row();
-            $row->addColumn(new Column($problem->setor));
-            $row->addColumn(new Column($problem->assunto));
-            $row->addColumn(new Column($btn));
+            $row->addComponent(new Column($problem->setor));
+            $row->addComponent(new Column($problem->assunto));
+            $row->addComponent(new Column($btn));
 
-            $table->addRow($row);
+            $table->addComponent($row);
         }
         return $table;
-    }
-
-    /**
-     * Function that returns informations of an item to possible edition.
-     *
-     * @param int $id_item Item's id in the table items.
-     * @return string
-     */
-    public static function getInfoItem($id_item): string {
-        $query = Query::getInstance()->exe("SELECT cod_despesa, descr_despesa, cod_reduzido, dt_fim, complemento_item, replace(vl_unitario, ',', '.') AS vl_unitario, qt_contrato, replace(vl_contrato, ',', '.') AS vl_contrato, qt_utilizado, replace(vl_utilizado, ',', '.') AS vl_utilizado, qt_saldo, replace(vl_saldo, ',', '.') AS vl_saldo, seq_item_processo, id_item_processo, id_item_contrato, descr_tipo_doc, num_contrato, num_processo, descr_mod_compra, num_licitacao, dt_inicio, dt_fim, dt_geracao, cgc_fornecedor, nome_fornecedor, nome_unidade, cod_estruturado, num_extrato, descricao, id_extrato_contr, id_unidade, ano_orcamento FROM itens WHERE id = " . $id_item);
-        $obj = $query->fetch_object();
-        return json_encode($obj);
     }
 
     /**

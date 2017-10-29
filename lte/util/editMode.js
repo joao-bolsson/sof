@@ -33,6 +33,8 @@ $(function () {
 
     modalInfoItem.on('hidden.bs.modal', function () {
         document.getElementById('id').value = 0;
+        $("#qt_contrato").attr("min", 0);
+        $("#qt_utilizado").attr("min", 0);
         document.getElementById('formEditRegItem').reset();
     });
 });
@@ -81,5 +83,8 @@ function editaItem(id_item) {
         document.getElementById('id_extrato_contr').value = obj.id_extrato_contr;
         document.getElementById('id_unidade').value = obj.id_unidade;
         document.getElementById('ano_orcamento').value = obj.ano_orcamento;
+
+        $("#qt_contrato").attr("min", obj.min_qt_contrato);
+        $("#qt_utilizado").attr("min", obj.min_qt_utilizado);
     });
 }
