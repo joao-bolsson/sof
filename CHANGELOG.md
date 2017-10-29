@@ -1,5 +1,12 @@
 ## CHANGELOG ##
 
+#### v2.2.6 - 29/10/2017 ####
+- Corrige bug que zerava o saldo do sof e atualizava constantemente o saldo dos setores.
+- Corrige bug ao reprovar pedido.
+- Corrige bug ao mostrar o painel das solicitações (mensagem do DataTables)
+- Coloca valor mínimo nas quantidades (de contrato e utilizada) ao editar item (evita conflito de informações)]
+- Agrega relatório de fontes com relatório de pedidos.
+
 #### v2.2.5 - 15/10/2017 ####
 - Correção de bug ao editar itens
 - Melhoria geral na edição e cadastro de itens
