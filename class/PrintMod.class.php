@@ -24,40 +24,6 @@ final class PrintMod {
         // empty
     }
 
-    public static function relSources(int $setor, int $fonte, string $dI, string $dF): string {
-        $dataI = Util::dateFormat($dI);
-        $dataF = Util::dateFormat($dF);
-
-        $query = Query::getInstance()->exe("SELECT pedido.id, DATE_FORMAT(pedido.data_pedido, '%d/%m/%Y') AS data_pedido, prioridade, status, valor FROM pedido, pedido_id_fonte WHERE pedido_id_fonte.id_pedido = pedido.id AND pedido_id_fonte.id_fonte = " . $fonte . " AND pedido.data_pedido BETWEEN '" . $dataI . "' AND '" . $dataF . "';");
-
-        $query_fonte = Query::getInstance()->exe("SELECT fonte_recurso FROM saldo_fonte WHERE id = " . $fonte);
-        $fonte_recurso = $query_fonte->fetch_object()->fonte_recurso;
-
-        $return = "
-            <fieldset class=\"preg\">
-                    <h5>DESCRIÇÃO DO RELATÓRIO</h5>
-                    <h6>Relatório de Fontes de Recurso</h6>
-                    <h5>Fonte: " . $fonte_recurso . "</h5>
-                    <h5>Setor: " . ARRAY_SETORES[$setor] . "</h5>
-                    <h5>Período: " . $dI . " - " . $dF . "</h5>
-                </fieldset><br>";
-
-        $table = new Table('', 'prod', ['ID', 'Data', 'Prioridade', 'Status', 'Valor'], true);
-
-        while ($obj = $query->fetch_object()) {
-            $row = new Row();
-            $row->addColumn(new Column($obj->id));
-            $row->addColumn(new Column($obj->data_pedido));
-            $row->addColumn(new Column(ARRAY_PRIORIDADE[$obj->prioridade]));
-            $row->addColumn(new Column(ARRAY_STATUS[$obj->status]));
-            $valor = number_format($obj->valor, 3, ',', '.');
-            $row->addColumn(new Column("R$ " . $valor));
-            $table->addRow($row);
-        }
-        $return .= $table->__toString();
-        return $return;
-    }
-
     /**
      * @param int $id_user User id.
      * @param string $period Period in the format DD/MM/YYYY - DD/MM/YYYY.
@@ -550,9 +516,10 @@ final class PrintMod {
      * @param string $dateI Initial date of report.
      * @param string $dateF Final date of report.
      * @param bool $checkSIAFI Request contains SIAFI.
+     * @param int $fonte Source id.
      * @return string Content of PDF document
      */
-    public static function getRelatorioPedidos(int $id_sector, array $priority, array $status, string $dateI, string $dateF, bool $checkSIAFI): string {
+    public static function getRelatorioPedidos(int $id_sector, array $priority, array $status, string $dateI, string $dateF, bool $checkSIAFI, int $fonte): string {
         $return = $where_status = $where_priority = '';
         $where_sector = ($id_sector != 0) ? 'AND pedido.id_setor = ' . $id_sector : '';
 
@@ -588,11 +555,22 @@ final class PrintMod {
             $effort = ", pedido_empenho.empenho";
         }
 
+        $pedido_id_fonte = "";
+        $where_fonte = "";
+        $fonte_recurso = "Nenhuma";
+        if ($fonte != 0) {
+            $pedido_id_fonte = ", pedido_id_fonte";
+            $where_fonte = "pedido_id_fonte.id_pedido = pedido.id AND pedido_id_fonte.id_fonte = " . $fonte . " AND";
+            $query_fonte = Query::getInstance()->exe("SELECT fonte_recurso FROM saldo_fonte WHERE id = " . $fonte);
+            $fonte_recurso = $query_fonte->fetch_object()->fonte_recurso;
+        }
+
+        $from = "{$tb_effort} setores, pedido" . $pedido_id_fonte . ", prioridade, status WHERE " . $where_fonte . " status.id = pedido.status {$where_sector} {$where_priority} {$where_effort} AND prioridade.id = pedido.prioridade AND pedido.id_setor = setores.id {$where_status} AND pedido.data_pedido BETWEEN '{$dataIni}' AND '{$dataFim}'";
         // retorna o total de pedidos com os parâmetros (LIMIT para mostrar)
-        $obj_count = Query::getInstance()->exe("SELECT COUNT(pedido.id) AS total FROM {$tb_effort} setores, pedido, prioridade, status WHERE status.id = pedido.status {$where_sector} {$where_priority} {$where_effort} AND prioridade.id = pedido.prioridade AND pedido.id_setor = setores.id {$where_status} AND pedido.data_pedido BETWEEN '{$dataIni}' AND '{$dataFim}'")->fetch_object();
+        $obj_count = Query::getInstance()->exe("SELECT COUNT(pedido.id) AS total FROM " . $from)->fetch_object();
         $num_rows = $obj_count->total;
 
-        $query = Query::getInstance()->exe("SELECT pedido.id, pedido.id_setor, setores.nome AS setor, DATE_FORMAT(pedido.data_pedido, '%d/%m/%Y') AS data_pedido, prioridade.nome AS prioridade, status.nome AS status, pedido.valor {$effort} FROM {$tb_effort} setores, pedido, prioridade, status WHERE status.id = pedido.status {$where_sector} {$where_priority} {$where_effort} AND prioridade.id = pedido.prioridade AND pedido.id_setor = setores.id {$where_status} AND pedido.data_pedido BETWEEN '{$dataIni}' AND '{$dataFim}' ORDER BY pedido.id DESC LIMIT " . LIMIT_REQ_REPORT);
+        $query = Query::getInstance()->exe("SELECT pedido.id, pedido.id_setor, setores.nome AS setor, DATE_FORMAT(pedido.data_pedido, '%d/%m/%Y') AS data_pedido, prioridade.nome AS prioridade, status.nome AS status, pedido.valor {$effort} FROM " . $from . " ORDER BY pedido.id DESC LIMIT " . LIMIT_REQ_REPORT);
 
         $title = 'Relatório de Pedidos por Setor e Nível de Prioridade';
         $headers = ['Enviado em', 'Prioridade', 'Status', 'Valor'];
@@ -600,7 +578,7 @@ final class PrintMod {
             $title = 'Relatório de Empenhos Enviados ao Ordenador';
             $headers = ['Prioridade', 'SIAFI'];
         }
-        $query_tot = Query::getInstance()->exe("SELECT sum(pedido.valor) AS total FROM {$tb_effort} pedido WHERE 1 > 0 {$where_sector} {$where_priority} {$where_effort} AND pedido.alteracao = 0 {$where_status} AND pedido.data_pedido BETWEEN '{$dataIni}' AND '{$dataFim}';");
+        $query_tot = Query::getInstance()->exe("SELECT sum(pedido.valor) AS total FROM " . $from);
         $tot = $query_tot->fetch_object();
         $total = ($tot->total > 0) ? 'R$ ' . number_format($tot->total, 3, ',', '.') : 'R$ 0';
 
@@ -612,6 +590,7 @@ final class PrintMod {
                 <fieldset class=\"preg\">
                     <h5>DESCRIÇÃO DO RELATÓRIO</h5>
                     <h6>" . $title . "</h6>
+                    <h6>Fonte de Recurso: " . $fonte_recurso . "</h6>
                     <h6>Período de Emissão: " . $dateI . " à " . $dateF . "</h6>
                 </fieldset><br>
                 <fieldset class=\"preg\">
@@ -673,7 +652,7 @@ final class PrintMod {
             }
             $return .= $table . '</fieldset><br>' . "<fieldset class=\"preg\"><h5>SUBTOTAIS POR GRUPO</h5>";
 
-            $query_gr = Query::getInstance()->exe("SELECT pedido_grupo.id_grupo, setores_grupos.nome AS ng, pedido.valor {$effort} FROM {$tb_effort} setores, setores_grupos, pedido, prioridade, status, pedido_grupo WHERE setores_grupos.id = pedido_grupo.id_grupo AND pedido_grupo.id_pedido = pedido.id AND status.id = pedido.status {$where_sector} {$where_priority} {$where_effort} AND prioridade.id = pedido.prioridade AND pedido.id_setor = setores.id {$where_status} AND pedido.data_pedido BETWEEN '{$dataIni}' AND '{$dataFim}'");
+            $query_gr = Query::getInstance()->exe("SELECT pedido_grupo.id_grupo, setores_grupos.nome AS ng, pedido.valor {$effort} FROM {$tb_effort} setores, setores_grupos, pedido " . $pedido_id_fonte . ", prioridade, status, pedido_grupo WHERE " . $where_fonte . " setores_grupos.id = pedido_grupo.id_grupo AND pedido_grupo.id_pedido = pedido.id AND status.id = pedido.status {$where_sector} {$where_priority} {$where_effort} AND prioridade.id = pedido.prioridade AND pedido.id_setor = setores.id {$where_status} AND pedido.data_pedido BETWEEN '{$dataIni}' AND '{$dataFim}'");
 
             $array_gr = []; // guarda o somatorio do grupo
             $gr_indexes = []; // guarda os indices do array de cima

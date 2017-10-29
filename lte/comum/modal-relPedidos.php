@@ -22,15 +22,19 @@
                     </div>
                     <div class="form-group">
                         <label>Setor</label>
-                        <select class="form-control" name="setor" required>
+                        <select id="selectSetorRelFonte" class="form-control" name="setor" required>
                             <?php
                             if ($_SESSION['id_setor'] == 2) {
-                                echo "<option value=\"0\">Todos</option>";
                                 echo BuscaLTE::getOptionsSetores();
                             } else {
-                                echo "<option value=\"" . $_SESSION['id_setor'] . "\">" . ARRAY_SETORES[$_SESSION['id_setor']] . "</option>";
+                                echo BuscaLTE::getOptionsSetores([$_SESSION['id_setor']]);
                             }
                             ?>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Fonte</label>
+                        <select id="selectFonte" class="form-control" name="fonte" required>
                         </select>
                     </div>
                     <div class="form-group">

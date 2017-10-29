@@ -44,8 +44,9 @@ final class Busca {
                 $options .= "<option value=\"" . $obj->id . "\">" . $obj->fonte_recurso . "</option>";
             }
             return $options;
+        } else {
+            return "<option value=\"0\">Ignorar Fontes</option>";
         }
-        return "";
     }
 
     public static function hasSourcesForRequest(int $id_fonte, string $value): bool {

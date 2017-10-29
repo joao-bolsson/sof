@@ -16,11 +16,6 @@ $(function () {
         document.getElementById("formEnviaEmpenho").reset();
     });
 
-    $('#selectSetorRelFonte').change(function () {
-        var setor = document.getElementById('selectSetorRelFonte').value;
-        fillSourcesToSector(setor);
-    });
-
     $('#relLibOrc').on('shown.bs.modal', function () {
         $('.select2').select2();
         $(".date").inputmask("dd/mm/yyyy", {"placeholder": "dd/mm/yyyy"});
@@ -79,20 +74,6 @@ $(function () {
         });
     });
 });
-
-function fillSourcesToSector(id_setor) {
-    $.post('../php/busca.php', {
-        admin: 1,
-        form: 'fillSourcesToSector',
-        id_setor: id_setor
-    }).done(function (resposta) {
-        if (resposta) {
-            $('#selectFonte').html(resposta);
-        } else {
-            alert('Ocorreu um erro no servidor. Contate o administrador.');
-        }
-    });
-}
 
 // button onclick
 function cadEmpenho(id_pedido, empenho, data) {

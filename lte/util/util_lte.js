@@ -36,9 +36,14 @@ $(function () {
         document.getElementById('altInfo').reset();
     });
 
+    $('#selectSetorRelFonte').change(function () {
+        changeSelectedSector();
+    });
+
     var relPedidos = document.getElementById('relPedidos');
     if (relPedidos !== null) {
         $('#relPedidos').on('shown.bs.modal', function () {
+            changeSelectedSector();
             $('.select2').select2();
             $(".date").inputmask("dd/mm/yyyy", {"placeholder": "dd/mm/yyyy"});
         });
@@ -126,6 +131,29 @@ $(function () {
     });
 
 });
+
+/**
+ * Function used only in modal to requests report.
+ */
+function changeSelectedSector() {
+    var setor = document.getElementById('selectSetorRelFonte').value;
+    fillSourcesToSector(setor);
+}
+
+function fillSourcesToSector(id_setor) {
+    console.log('fill sources to sector: ' + id_setor);
+    $.post('../php/busca.php', {
+        users: 1,
+        form: 'fillSourcesToSector',
+        id_setor: id_setor
+    }).done(function (resposta) {
+        if (resposta) {
+            $('#selectFonte').html(resposta);
+        } else {
+            alert('Ocorreu um erro no servidor. Contate o administrador.');
+        }
+    });
+}
 
 function imprimir(id_pedido) {
     $('button').blur();
