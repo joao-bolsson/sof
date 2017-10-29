@@ -36,6 +36,14 @@ $(function () {
         document.getElementById('altInfo').reset();
     });
 
+    var relPedidos = document.getElementById('relPedidos');
+    if (relPedidos !== null) {
+        $('#relPedidos').on('shown.bs.modal', function () {
+            $('.select2').select2();
+            $(".date").inputmask("dd/mm/yyyy", {"placeholder": "dd/mm/yyyy"});
+        });
+    }
+
     $('#altInfo').submit(function (event) {
         event.preventDefault();
 

@@ -142,8 +142,8 @@ $permissao = BuscaLTE::getPermissoes($_SESSION["id"]);
                     <ul class="treeview-menu">
                         <li><a href="javascript:abreModal('#relPedidos');"><i class="fa fa-circle-o"></i>Pedidos</a>
                         </li>
-                        <li><a href="javascript:relListUsers();"><i class="fa fa-circle-o"></i> Usuários</a></li>
-                        <li><a href="javascript:abreModal('#relLibOrc');"><i class="fa fa-circle-o"></i> Liberações
+                        <li><a href="javascript:relListUsers();"><i class="fa fa-circle-o"></i>Usuários</a></li>
+                        <li><a href="javascript:abreModal('#relLibOrc');"><i class="fa fa-circle-o"></i>Liberações
                                 Orçamentárias</a></li>
                         <li><a href="javascript:abreModal('#relFontes');"><i class="fa fa-circle-o"></i>Fontes</a>
                         </li>
