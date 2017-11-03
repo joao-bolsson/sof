@@ -103,7 +103,7 @@ $(function () {
         });
     }
 
-    var status = ['stNormal', 'stPreferencial', 'stUrgente', 'stEmergencial', 'stRascunho'];
+    var status = ['stNormal', 'stPreferencial', 'stUrgente', 'stEmergencial', 'stRascunho', 'stHoje'];
     for (var i = 0; i < status.length; i++) {
         var element = document.getElementById(status[i]);
         if (element !== null) {
@@ -112,7 +112,7 @@ $(function () {
                 checkboxClass: 'icheckbox_minimal-blue',
                 radioClass: 'iradio_minimal-blue'
             });
-            if (i === status.length - 1) {
+            if (status[i] === 'stRascunho') {
                 checkSt.iCheck('check');
             }
         }

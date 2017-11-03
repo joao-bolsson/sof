@@ -6,7 +6,7 @@ defined('COPYRIGHT') or define('COPYRIGHT', "<strong>Copyright © 2016-2017 <a h
 
 defined('ARRAY_STATUS') or define('ARRAY_STATUS', [NULL, 'Rascunho', 'Em Análise', 'Reprovado', 'Aprovado', 'Aguarda Orçamento', 'Aguarda SIAFI', 'Empenhado', 'Enviado ao Ordenador', 'Enviado ao Fornecedor', 'Recebido da Unidade de Apoio']);
 
-defined('ARRAY_PRIORIDADE') or define('ARRAY_PRIORIDADE', [NULL, 'Normal', 'Preferencial', 'Urgente', 'Emergencial', 'Rascunho']);
+defined('ARRAY_PRIORIDADE') or define('ARRAY_PRIORIDADE', [NULL, 'Normal', 'Preferencial', 'Urgente', 'Emergencial', 'Rascunho', 'Hoje']);
 
 defined('ARRAY_SETORES') or define('ARRAY_SETORES', [NULL, 'Público', 'Setor de Orçamento e Finanças', 'Farmácia de Medicamentos', 'Farmácia de Materiais', 'Almoxarifado Geral', 'Divisão de Logística', 'Traumato', 'Dispensas de Licitação', 'Nutrição', 'Divisão Administrativa Financeira', 'NVE', 'Unidade de Apoio', 'Psiquiatria', 'Radiologia', 'SGPTI', 'Protese Auditiva']);
 
