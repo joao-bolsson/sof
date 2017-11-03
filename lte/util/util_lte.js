@@ -40,6 +40,11 @@ $(function () {
         changeSelectedSector();
     });
 
+    $('#relLibOrc').on('shown.bs.modal', function () {
+        $('.select2').select2();
+        $(".date").inputmask("dd/mm/yyyy", {"placeholder": "dd/mm/yyyy"});
+    });
+
     var relPedidos = document.getElementById('relPedidos');
     if (relPedidos !== null) {
         $('#relPedidos').on('shown.bs.modal', function () {
@@ -120,12 +125,10 @@ $(function () {
 
     var modalListProcessos = $('#listProcessos');
     modalListProcessos.on('shown.bs.modal', function () {
-        console.log('show proc');
         iniDataTable('#tableListProcessos');
     });
 
     modalListProcessos.on('hidden.bs.modal', function () {
-        console.log('hidden proc');
         $('#tbodyListProcessos').html("");
         $('#tableListProcessos').DataTable().destroy();
     });
@@ -367,8 +370,6 @@ function printChecks() {
     for (var i = 0; i < len; i++) {
         if (pedidosRelCustom[i] !== 0) {
             pedidos.push(pedidosRelCustom[i]);
-        } else {
-            console.log('zero');
         }
     }
     if (pedidos.length < 1) {
@@ -396,8 +397,6 @@ function aprovGerencia() {
             if (i !== len - 1) {
                 str += ', ';
             }
-        } else {
-            console.log('zero');
         }
     }
     str += ']';
@@ -429,7 +428,6 @@ function checkImp() {
     }
     for (var i = 0; i < len; i++) {
         if (pedidosRelCustom[i] !== 0) {
-            console.log('tem algum selecionado');
             if (btn !== null) {
                 btn.disabled = false;
             }
@@ -439,7 +437,6 @@ function checkImp() {
             return;
         }
     }
-    console.log('nenhum selecionado');
     if (btn !== null) {
         btn.disabled = true;
     }
@@ -455,7 +452,6 @@ function dropTableSolic(id_pedido) {
         $('#tableSolicitacoes').DataTable().destroy();
     }
     if (id_pedido !== null) {
-        console.log('is not null: ' + id_pedido);
         var row = document.getElementById('rowPedido' + id_pedido);
         if (row.parentNode) {
             row.parentNode.removeChild(row);
