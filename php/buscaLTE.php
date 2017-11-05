@@ -141,8 +141,6 @@ if (!is_null($admin) && isset($_SESSION['id_setor']) && ($_SESSION['id_setor'] =
                     $where = 'AND id > ' . $limit1 . ' AND id < ' . $limit2;
                 } else if ($limit1 > $limit2) {
                     $where = 'AND id > ' . $limit2 . ' AND id < ' . $limit1;
-                } else if ($id_pedido != 0) {
-                    $where = 'AND id = ' . $id_pedido;
                 }
             }
 

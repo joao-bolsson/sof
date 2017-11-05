@@ -62,11 +62,6 @@ class RequestReport implements Report {
     private $sql;
 
     /**
-     * @var array
-     */
-    private $array_sub_totals;
-
-    /**
      * @var bool True if this report is of the requests sent to orderer, else - false.
      */
     private $sentToOrderer;
@@ -120,11 +115,10 @@ class RequestReport implements Report {
 
         $this->title = 'Relatório de Pedidos por Setor e Nível de Prioridade';
         $this->sql = "";
-        $this->array_sub_totals = [];
-        $this->headers = ['Pedido', 'Fornecedor', 'Setor', 'Enviado em', 'Prioridade', 'Status', 'Valor'];
+        $this->headers = ['Pedido', 'Fornecedor', 'Enviado em', 'Prioridade', 'Status', 'Valor'];
 
         // where values
-        $this->where_sector = ($this->sector != 0) ? 'AND pedido.id_setor = ' . $this->sector : '';
+        $this->where_sector = 'AND pedido.id_setor = ' . $this->sector;
         $this->where_status = "";
         $this->where_priority = "";
         $this->where_sector = "";
@@ -163,7 +157,7 @@ class RequestReport implements Report {
         $this->sentToOrderer = in_array(8, $this->status);
         if ($this->sentToOrderer) {
             $this->title = 'Relatório de Empenhos Enviados ao Ordenador';
-            $this->headers = ['Pedido', 'Fornecedor', 'Setor', 'Prioridade', 'SIAFI'];
+            $this->headers = ['Pedido', 'Fornecedor', 'Prioridade', 'SIAFI'];
 
             // where values
             $this->where_effort = "AND pedido_empenho.id_pedido = pedido.id";
@@ -212,12 +206,12 @@ class RequestReport implements Report {
         $dataIni = Util::dateFormat($this->dateS);
         $dataFim = Util::dateFormat($this->dateE);
 
-        $from = "{$this->tb_effort} setores, pedido" . $this->request_source_id . ", prioridade, status WHERE " . $this->where_source . " status.id = pedido.status {$this->where_sector} {$this->where_priority} {$this->where_effort} AND prioridade.id = pedido.prioridade AND pedido.id_setor = setores.id {$this->where_status} AND pedido.data_pedido BETWEEN '{$dataIni}' AND '{$dataFim}'";
+        $from = "{$this->tb_effort} pedido" . $this->request_source_id . ", prioridade, status WHERE " . $this->where_source . " status.id = pedido.status {$this->where_sector} {$this->where_priority} {$this->where_effort} AND prioridade.id = pedido.prioridade {$this->where_status} AND pedido.data_pedido BETWEEN '{$dataIni}' AND '{$dataFim}'";
 
         $obj_count = Query::getInstance()->exe("SELECT COUNT(pedido.id) AS total FROM " . $from)->fetch_object();
         $this->foundEntries = $obj_count->total;
 
-        $this->sql = "SELECT pedido.id, pedido.id_setor, setores.nome AS setor, DATE_FORMAT(pedido.data_pedido, '%d/%m/%Y') AS data_pedido, prioridade.nome AS prioridade, status.nome AS status, pedido.valor {$this->effort} FROM " . $from . " ORDER BY pedido.id DESC LIMIT " . LIMIT_REQ_REPORT;
+        $this->sql = "SELECT pedido.id, DATE_FORMAT(pedido.data_pedido, '%d/%m/%Y') AS data_pedido, prioridade.nome AS prioridade, status.nome AS status, pedido.valor {$this->effort} FROM " . $from . " ORDER BY pedido.id DESC LIMIT " . LIMIT_REQ_REPORT;
 
         $query = Query::getInstance()->exe($this->sql);
 
@@ -238,6 +232,7 @@ class RequestReport implements Report {
         if ($this->source != null) {
             $fieldset->addComponent(new Component('h6', '', 'Fonte de Recurso: ' . $this->source->getResource()));
         }
+        $fieldset->addComponent(new Component('h6', '', 'Setor: ' . ARRAY_SETORES[$this->sector]));
         $fieldset->addComponent(new Component('h6', '', 'Período de Emissão: ' . $this->dateS . ' à ' . $this->dateE));
 
         $fieldset_results = new Component('fieldset', 'preg');
@@ -260,15 +255,9 @@ class RequestReport implements Report {
         $query = Query::getInstance()->exe($this->sql);
         if ($query) {
             while ($request = $query->fetch_object()) {
-                if (!array_key_exists($request->id_setor, $this->array_sub_totals)) {
-                    $this->array_sub_totals[$request->id_setor] = 0;
-                }
-                $this->array_sub_totals[$request->id_setor] += $request->valor;
-
                 $row = new Row();
                 $row->addComponent(new Column($request->id));
                 $row->addComponent(new Column(BuscaLTE::getFornecedor($request->id)));
-                $row->addComponent(new Column($request->setor));
                 if ($this->sentToOrderer) {
                     $row->addComponent(new Column($request->prioridade));
                     $row->addComponent(new Column($request->empenho));
@@ -292,26 +281,7 @@ class RequestReport implements Report {
     public function buildFooter(): string {
         $footer = "";
         if ($_SESSION['id_setor'] == 2) {
-            $footer = "<br><h5>As porcentagens mostradas são em relação ao Total (pag. 1) deste Relatório.</h5>
-                <fieldset class=\"preg\"><h5>SUBTOTAIS POR SETOR</h5>";
-
-            $len = count(ARRAY_SETORES);
-
-            $table = new Table('', 'prod', ['Setor', 'Total', 'Porcentagem'], true);
-            for ($k = 0; $k < $len; $k++) {
-                if (array_key_exists($k, $this->array_sub_totals)) {
-                    $parcial = number_format($this->array_sub_totals[$k], 3, ',', '.');
-                    $porcentagem = number_format(($this->array_sub_totals[$k] * 100) / $this->totalMoney, 3, ',', '.');
-
-                    $row = new Row();
-                    $row->addComponent(new Column(ARRAY_SETORES[$k]));
-                    $row->addComponent(new Column($parcial));
-                    $row->addComponent(new Column($porcentagem . '%'));
-
-                    $table->addComponent($row);
-                }
-            }
-            $footer .= $table . '</fieldset><br>' . "<fieldset class=\"preg\"><h5>SUBTOTAIS POR GRUPO</h5>";
+            $footer = "<fieldset class=\"preg\"><h5>SUBTOTAIS POR GRUPO</h5>";
 
             $dataIni = Util::dateFormat($this->dateS);
             $dataFim = Util::dateFormat($this->dateE);

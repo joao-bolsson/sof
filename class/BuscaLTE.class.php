@@ -347,8 +347,10 @@ final class BuscaLTE {
         $return = '';
         $count = count(ARRAY_PRIORIDADE);
 
-        for ($i = 1; $i < $count - 1; $i++) {
-            $return .= "<option value=\"" . $i . "\">" . ARRAY_PRIORIDADE[$i] . '</option>';
+        for ($i = 1; $i < $count; $i++) {
+            if (ARRAY_PRIORIDADE[$i] != 'Rascunho') {
+                $return .= "<option value=\"" . $i . "\">" . ARRAY_PRIORIDADE[$i] . '</option>';
+            }
         }
         return $return;
     }

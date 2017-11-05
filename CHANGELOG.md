@@ -1,5 +1,9 @@
 ## CHANGELOG ##
 
+#### v2.2.7 - 04/11/2017 ####
+- Adiciona prioridade "Hoje" para realização de pedidos.
+- Formatação de relatório de pedidos (retirada de informações desnecessárias)
+
 #### v2.2.6 - 29/10/2017 ####
 - Corrige bug que zerava o saldo do sof e atualizava constantemente o saldo dos setores.
 - Corrige bug ao reprovar pedido.
