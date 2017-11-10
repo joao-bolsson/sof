@@ -81,8 +81,9 @@
         </div>
     </div>
 </div>
-<?php include_once __DIR__ . "/../comum/modal-relLibOrc.php" ?>
-<?php include_once __DIR__ . "/../comum/modal-relPedidos.php" ?>
+<?php include_once __DIR__ . "/../report-modals/comum/modal-relLibOrc.php" ?>
+<?php include_once __DIR__ . "/../report-modals/comum/modal-relPedidos.php" ?>
+<?php include_once __DIR__ . "/../report-modals/sof/relSIAFI.php" ?>
 <div class="modal fade" id="importItens" role="dialog">
     <div class="modal-dialog">
         <div class="modal-content">

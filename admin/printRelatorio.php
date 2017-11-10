@@ -6,6 +6,7 @@ error_reporting(E_ALL);
 session_start();
 
 include_once '../class/PrintMod.class.php';
+include_once '../class/report/ReportSIAFI.class.php';
 require_once '../defines.php';
 require_once MPDF_PATH . '/vendor/autoload.php';
 
@@ -45,6 +46,14 @@ if (!is_null($type)) {
     if ($type === INPUT_POST) {
         $tipo = filter_input(INPUT_POST, 'tipo');
         switch ($tipo) {
+
+            case 'siafi':
+                $id_setor = filter_input(INPUT_POST, 'setor');
+                $fonte = filter_input(INPUT_POST, 'fonte');
+
+                $report = new ReportSIAFI($id_setor, $fonte);
+                $html .= $report;
+                break;
 
             case 'pedidos':
                 $id_setor = filter_input(INPUT_POST, 'setor');
