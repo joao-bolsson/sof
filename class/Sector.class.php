@@ -36,9 +36,7 @@ final class Sector {
         $this->moneySources = [];
         $this->fillFields();
         $this->fillMoneySources();
-        if ($this->id !== 2) {
-            $this->updateMoney();
-        }
+        $this->updateMoney();
     }
 
     private function fillMoneySources() {
@@ -68,18 +66,21 @@ final class Sector {
      * Update the sector balance by its sources values.
      */
     public function updateMoney() {
-        $newMoney = 0;
-        foreach ($this->moneySources as $moneySource) {
-            if ($moneySource instanceof MoneySource) {
-                $newMoney += $moneySource->getValue();
+        // only used for other sector (exclude SOF)
+        if ($this->id !== 2) {
+            $newMoney = 0;
+            foreach ($this->moneySources as $moneySource) {
+                if ($moneySource instanceof MoneySource) {
+                    $newMoney += $moneySource->getValue();
+                }
             }
-        }
 
-        $epsilon = 0.001;
+            $epsilon = 0.001;
 
-        if (abs($newMoney - $this->money) >= $epsilon) {
-            Logger::info("Saldo do setor " . $this->id . " alterado de " . $this->money . " para " . $newMoney . " abs: " . abs($newMoney - $this->money));
-            $this->setMoney($newMoney);
+            if (abs($newMoney - $this->money) >= $epsilon) {
+                Logger::info("Saldo do setor " . $this->id . " alterado de " . $this->money . " para " . $newMoney . " abs: " . abs($newMoney - $this->money));
+                $this->setMoney($newMoney);
+            }
         }
     }
 

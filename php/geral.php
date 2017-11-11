@@ -276,7 +276,9 @@ if (Busca::isActive()) {
                 $id_pedido = filter_input(INPUT_POST, 'id_pedido');
                 $empenho = filter_input(INPUT_POST, 'empenho');
                 $data = Util::dateFormat(filter_input(INPUT_POST, 'data'));
-                echo $cadastra = Geral::cadastraEmpenho($id_pedido, $empenho, $data);
+
+                $request = new Request($id_pedido);
+                echo $cadastra = $request->setSIAFI($empenho, $data);
                 break;
 
             case 'transfereSaldo':

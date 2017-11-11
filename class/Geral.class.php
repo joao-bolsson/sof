@@ -48,6 +48,17 @@ final class Geral {
         }
     }
 
+    public static function checkSIAFI() {
+        $query = Query::getInstance()->exe("SELECT pedido_contrato.id_pedido, pedido_empenho.empenho FROM pedido_contrato, pedido_empenho WHERE pedido_contrato.id_pedido = pedido_empenho.id_pedido AND pedido_contrato.id_tipo = 1;");
+        if ($query->num_rows > 0) {
+            while ($obj = $query->fetch_object()) {
+                if (!empty($obj->empenho)) {
+                    Query::getInstance()->exe("UPDATE pedido_contrato SET siafi = '" . $obj->empenho . "' WHERE id_pedido = " . $obj->id_pedido);
+                }
+            }
+        }
+    }
+
     /**
      *    Função para cadastrar fontes do pedido (status == Aguarda Orçamento)
      *
@@ -76,33 +87,6 @@ final class Geral {
         $descricao = Query::getInstance()->real_escape_string($descricao);
 
         Query::getInstance()->exe("INSERT INTO problemas VALUES(NULL, " . $id_setor . ", '" . $assunto . "', '" . $descricao . "');");
-    }
-
-    /**
-     * Function that register the request effort.
-     *
-     * @param int $id_request Request id.
-     * @param string $effort Effort to be registered.
-     * @param string $date Effort date.
-     * @return bool
-     */
-    public static function cadastraEmpenho(int $id_request, string $effort, string $date): bool {
-        $effort = Query::getInstance()->real_escape_string($effort);
-
-        $query_check = Query::getInstance()->exe('SELECT pedido_empenho.id, pedido.status FROM pedido_empenho, pedido WHERE pedido_empenho.id_pedido= pedido.id AND pedido.id = ' . $id_request);
-
-        if ($query_check->num_rows < 1) {
-            Query::getInstance()->exe("INSERT INTO pedido_empenho VALUES(NULL, {$id_request}, '{$effort}', '{$date}');");
-            Query::getInstance()->exe('UPDATE pedido SET status = 7 WHERE id = ' . $id_request);
-        } else {
-            $obj = $query_check->fetch_object();
-            if ($obj->status == 6) {
-                Query::getInstance()->exe('UPDATE pedido SET status = 7 WHERE id = ' . $id_request);
-            }
-
-            Query::getInstance()->exe("UPDATE pedido_empenho SET empenho = '{$effort}', data = '{$date}' WHERE id_pedido = " . $id_request);
-        }
-        return true;
     }
 
     /**
