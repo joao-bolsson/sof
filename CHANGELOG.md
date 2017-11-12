@@ -1,5 +1,10 @@
 ## CHANGELOG ##
 
+#### v2.2.8 - 12/11/2017 ####
+- Corrige inconsistência na informação de SIAFI no banco
+- Muda formato de datas em itens para facilitar relatórios futuros
+- Implementa relatório SIAFI por setor, fonte de recurso, número de processo e vigência
+
 #### v2.2.7 - 04/11/2017 ####
 - Adiciona prioridade "Hoje" para realização de pedidos.
 - Formatação de relatório de pedidos (retirada de informações desnecessárias)
