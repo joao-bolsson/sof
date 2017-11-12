@@ -10,7 +10,7 @@
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
                             aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title">Relatório SIAFI (em construção)</h4>
+                <h4 class="modal-title">Relatório SIAFI</h4>
             </div>
             <form action="../admin/printRelatorio.php" method="post" target="_blank">
                 <input type="hidden" name="tipo" value="siafi"/>
@@ -33,6 +33,26 @@
                                 name="num_processo" required>
                             <?= BuscaLTE::getOptionsProcessos(); ?>
                         </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Data Início</label>
+                        <div class="input-group">
+                            <div class="input-group-addon">
+                                <i class="fa fa-calendar"></i>
+                            </div>
+                            <input type="text" class="form-control date" name="dataI" required
+                                   data-inputmask="'alias': 'dd/mm/yyyy'" data-mask>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Data Fim</label>
+                        <div class="input-group">
+                            <div class="input-group-addon">
+                                <i class="fa fa-calendar"></i>
+                            </div>
+                            <input type="text" class="form-control date" name="dataF" required
+                                   data-inputmask="'alias': 'dd/mm/yyyy'" data-mask>
+                        </div>
                     </div>
                 </div>
                 <div class="modal-footer">
