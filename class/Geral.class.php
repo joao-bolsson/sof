@@ -59,6 +59,25 @@ final class Geral {
         }
     }
 
+    public static function storeDates() {
+        $query = Query::getInstance()->exe("SELECT id, dt_inicio, dt_fim, dt_geracao FROM itens;");
+        if ($query->num_rows > 0) {
+            while ($obj = $query->fetch_object()) {
+                $dt_inicio = Util::dateFormat($obj->dt_inicio);
+                $dt_fim = Util::dateFormat($obj->dt_fim);
+                $dt_geracao = Util::dateFormat($obj->dt_geracao);
+
+                $builder = new SQLBuilder(SQLBuilder::$UPDATE);
+                $builder->setTables(['itens']);
+                $builder->setColumns(['dt_inicio', 'dt_fim', 'dt_geracao']);
+                $builder->setValues([$dt_inicio, $dt_fim, $dt_geracao]);
+                $builder->setWhere('id = ' . $obj->id);
+
+                Query::getInstance()->exe($builder->__toString());
+            }
+        }
+    }
+
     /**
      *    Função para cadastrar fontes do pedido (status == Aguarda Orçamento)
      *

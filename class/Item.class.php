@@ -242,12 +242,16 @@ class Item implements JsonSerializable {
      * @return bool Is success - true, else - false.
      */
     public function update(): bool {
+        $dt_inicio = Util::dateFormat($this->dt_inicio);
+        $dt_fim = Util::dateFormat($this->dt_fim);
+        $dt_geracao = Util::dateFormat($this->dt_geracao);
+
         if ($this->id == self::$NEW_ITEM) {
             // insert
             $builder = new SQLBuilder(SQLBuilder::$INSERT);
             $builder->setTables(['itens']);
             $builder->setColumns(['id', 'id_item_processo', 'id_item_contrato', 'cod_despesa', 'descr_despesa', 'descr_tipo_doc', 'num_contrato', 'num_processo', 'descr_mod_compra', 'num_licitacao', 'dt_inicio', 'dt_fim', 'dt_geracao', 'cgc_fornecedor', 'nome_fornecedor', 'num_extrato', 'cod_estruturado', 'nome_unidade', 'cod_reduzido', 'complemento_item', 'descricao', 'id_extrato_contr', 'vl_unitario', 'qt_contrato', 'vl_contrato', 'qt_utilizado', 'vl_utilizado', 'qt_saldo', 'vl_saldo', 'id_unidade', 'ano_orcamento', 'cancelado', 'chave', 'seq_item_processo']);
-            $builder->setValues([NULL, $this->id_item_processo, $this->id_item_contrato, $this->cod_despesa, $this->descr_despesa, $this->descr_tipo_doc, $this->num_contrato, $this->num_processo, $this->descr_mod_compra, $this->num_licitacao, $this->dt_inicio, $this->dt_fim, $this->dt_geracao, $this->cgc_fornecedor, $this->nome_fornecedor, $this->num_extrato, $this->cod_estruturado, $this->nome_unidade, $this->cod_reduzido, $this->complemento_item, $this->descricao, $this->id_extrato_contr, $this->vl_unitario, $this->qt_contrato, $this->vl_contrato, $this->qt_utilizado, $this->vl_utilizado, $this->qt_saldo, $this->vl_saldo, $this->id_unidade, $this->ano_orcamento, $this->cancelado, $this->chave, $this->seq_item_processo]);
+            $builder->setValues([NULL, $this->id_item_processo, $this->id_item_contrato, $this->cod_despesa, $this->descr_despesa, $this->descr_tipo_doc, $this->num_contrato, $this->num_processo, $this->descr_mod_compra, $this->num_licitacao, $dt_inicio, $dt_fim, $dt_geracao, $this->cgc_fornecedor, $this->nome_fornecedor, $this->num_extrato, $this->cod_estruturado, $this->nome_unidade, $this->cod_reduzido, $this->complemento_item, $this->descricao, $this->id_extrato_contr, $this->vl_unitario, $this->qt_contrato, $this->vl_contrato, $this->qt_utilizado, $this->vl_utilizado, $this->qt_saldo, $this->vl_saldo, $this->id_unidade, $this->ano_orcamento, $this->cancelado, $this->chave, $this->seq_item_processo]);
 
             Query::getInstance()->exe($builder->__toString());
             $this->id = Query::getInstance()->getInsertId();
@@ -258,7 +262,7 @@ class Item implements JsonSerializable {
             $builder = new SQLBuilder(SQLBuilder::$UPDATE);
             $builder->setTables(['itens']);
             $builder->setColumns(['id_item_processo', 'id_item_contrato', 'cod_despesa', 'descr_despesa', 'descr_tipo_doc', 'num_contrato', 'num_processo', 'descr_mod_compra', 'num_licitacao', 'dt_inicio', 'dt_fim', 'dt_geracao', 'cgc_fornecedor', 'nome_fornecedor', 'num_extrato', 'cod_estruturado', 'nome_unidade', 'cod_reduzido', 'complemento_item', 'descricao', 'id_extrato_contr', 'vl_unitario', 'qt_contrato', 'vl_contrato', 'qt_utilizado', 'vl_utilizado', 'qt_saldo', 'vl_saldo', 'id_unidade', 'ano_orcamento', 'cancelado', 'seq_item_processo']);
-            $builder->setValues([$this->id_item_processo, $this->id_item_contrato, $this->cod_despesa, $this->descr_despesa, $this->descr_tipo_doc, $this->num_contrato, $this->num_processo, $this->descr_mod_compra, $this->num_licitacao, $this->dt_inicio, $this->dt_fim, $this->dt_geracao, $this->cgc_fornecedor, $this->nome_fornecedor, $this->num_extrato, $this->cod_estruturado, $this->nome_unidade, $this->cod_reduzido, $this->complemento_item, $this->descricao, $this->id_extrato_contr, $this->vl_unitario, $this->qt_contrato, $this->vl_contrato, $this->qt_utilizado, $this->vl_utilizado, $this->qt_saldo, $this->vl_saldo, $this->id_unidade, $this->ano_orcamento, $this->cancelado, $this->seq_item_processo]);
+            $builder->setValues([$this->id_item_processo, $this->id_item_contrato, $this->cod_despesa, $this->descr_despesa, $this->descr_tipo_doc, $this->num_contrato, $this->num_processo, $this->descr_mod_compra, $this->num_licitacao, $dt_inicio, $dt_fim, $dt_geracao, $this->cgc_fornecedor, $this->nome_fornecedor, $this->num_extrato, $this->cod_estruturado, $this->nome_unidade, $this->cod_reduzido, $this->complemento_item, $this->descricao, $this->id_extrato_contr, $this->vl_unitario, $this->qt_contrato, $this->vl_contrato, $this->qt_utilizado, $this->vl_utilizado, $this->qt_saldo, $this->vl_saldo, $this->id_unidade, $this->ano_orcamento, $this->cancelado, $this->seq_item_processo]);
             $builder->setWhere("id = " . $this->id);
 
             Query::getInstance()->exe($builder->__toString());
@@ -267,7 +271,7 @@ class Item implements JsonSerializable {
     }
 
     protected function initItem() {
-        $query = Query::getInstance()->exe("SELECT id_item_processo, id_item_contrato, cod_despesa, descr_despesa, descr_tipo_doc, num_contrato, num_processo, descr_mod_compra, num_licitacao, dt_inicio, dt_fim, dt_geracao, cgc_fornecedor, nome_fornecedor, num_extrato, cod_estruturado, nome_unidade, cod_reduzido, complemento_item, descricao, id_extrato_contr, round(replace(vl_unitario, ',', '.'), 4) AS vl_unitario, qt_contrato, round(replace(vl_contrato, ',', '.'), 4) AS vl_contrato, qt_utilizado, round(replace(vl_utilizado, ',', '.'), 4) AS vl_utilizado, qt_saldo, round(replace(vl_saldo, ',', '.'), 4) AS vl_saldo, id_unidade, ano_orcamento, chave, seq_item_processo, cancelado FROM itens WHERE id = " . $this->id);
+        $query = Query::getInstance()->exe("SELECT id_item_processo, id_item_contrato, cod_despesa, descr_despesa, descr_tipo_doc, num_contrato, num_processo, descr_mod_compra, num_licitacao, DATE_FORMAT(dt_inicio, '%d/%m/%Y') AS dt_inicio, DATE_FORMAT(dt_fim, '%d/%m/%Y') AS dt_fim, DATE_FORMAT(dt_geracao, '%d/%m/%Y') AS dt_geracao, cgc_fornecedor, nome_fornecedor, num_extrato, cod_estruturado, nome_unidade, cod_reduzido, complemento_item, descricao, id_extrato_contr, round(replace(vl_unitario, ',', '.'), 4) AS vl_unitario, qt_contrato, round(replace(vl_contrato, ',', '.'), 4) AS vl_contrato, qt_utilizado, round(replace(vl_utilizado, ',', '.'), 4) AS vl_utilizado, qt_saldo, round(replace(vl_saldo, ',', '.'), 4) AS vl_saldo, id_unidade, ano_orcamento, chave, seq_item_processo, cancelado FROM itens WHERE id = " . $this->id);
 
         if ($query->num_rows > 0) {
             $obj = $query->fetch_object();
@@ -480,7 +484,7 @@ class Item implements JsonSerializable {
     }
 
     /**
-     * @param string $dt_inicio
+     * @param string $dt_inicio (Kepp format dd/mm/YYYY)
      */
     public function setDtInicio(string $dt_inicio = null) {
         if (!is_null($dt_inicio)) {
@@ -489,7 +493,7 @@ class Item implements JsonSerializable {
     }
 
     /**
-     * @param string $dt_fim
+     * @param string $dt_fim (Kepp format dd/mm/YYYY)
      */
     public function setDtFim(string $dt_fim = null) {
         if (!is_null($dt_fim)) {
@@ -498,7 +502,7 @@ class Item implements JsonSerializable {
     }
 
     /**
-     * @param string $dt_geracao
+     * @param string $dt_geracao (Kepp format dd/mm/YYYY)
      */
     public function setDtGeracao(string $dt_geracao = null) {
         if (!is_null($dt_geracao)) {
