@@ -27,6 +27,13 @@
                         <select id="selectFonteSIAFI" class="form-control" name="fonte" required>
                         </select>
                     </div>
+                    <div class="form-group">
+                        <label>Processo (selecione apenas 1)</label>
+                        <select class="form-control select2" multiple="multiple" data-placeholder="Selecione"
+                                name="num_processo" required>
+                            <?= BuscaLTE::getOptionsProcessos(); ?>
+                        </select>
+                    </div>
                 </div>
                 <div class="modal-footer">
                     <button class="btn btn-primary" type="submit" style="width: 100%;"><i

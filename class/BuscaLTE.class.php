@@ -1070,6 +1070,18 @@ final class BuscaLTE {
         return $table;
     }
 
+    public static function getOptionsProcessos(): string {
+        $query = Query::getInstance()->exe("SELECT DISTINCT num_processo FROM itens WHERE num_processo;");
+
+        $options = "";
+        if ($query) {
+            while ($obj = $query->fetch_object()) {
+                $options .= "<option value='" . $obj->num_processo . "'>" . $obj->num_processo . "</option>";
+            }
+        }
+        return $options;
+    }
+
     private static function getSetorTransf(int $id_lancamento) {
         $query = Query::getInstance()->exe('SELECT id_setor, valor FROM saldos_lancamentos WHERE id = ' . $id_lancamento);
         $obj = $query->fetch_object();

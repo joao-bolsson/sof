@@ -19,6 +19,11 @@ class ReportSIAFI implements Report {
     private $source;
 
     /**
+     * @var string Num processo.
+     */
+    private $num_processo;
+
+    /**
      * @var string The main sql to execute to build the report.
      */
     private $sql;
@@ -29,8 +34,9 @@ class ReportSIAFI implements Report {
      * @param int $sector Sector id.
      * @param int $source MoneySource id.
      */
-    public function __construct(int $sector, int $source) {
+    public function __construct(int $sector, int $source, string $num_processo) {
         $this->sector = $sector;
+        $this->num_processo = $num_processo;
         $this->source = new MoneySource($source);
     }
 
@@ -54,7 +60,7 @@ class ReportSIAFI implements Report {
         $fieldset = new Component('fieldset', 'prod');
         $table = new Table('', 'prod', ['Pedido', 'SIAFI', 'Data de Empenho'], true);
 
-        $this->sql = "SELECT pedido_empenho.id_pedido, pedido_empenho.empenho, DATE_FORMAT(pedido_empenho.data, '%d/%m/%Y') AS data FROM pedido_empenho, pedido_id_fonte WHERE pedido_empenho.id_pedido = pedido_id_fonte.id_pedido AND pedido_id_fonte.id_fonte = " . $this->source->getId();
+        $this->sql = "SELECT pedido_empenho.id_pedido, pedido_empenho.empenho, DATE_FORMAT(pedido_empenho.data, '%d/%m/%Y') AS data FROM pedido_empenho, pedido_id_fonte WHERE pedido_empenho.id_pedido = pedido_id_fonte.id_pedido AND pedido_id_fonte.id_fonte = " . $this->source->getId() . " AND pedido_empenho.id_pedido IN (SELECT DISTINCT itens_pedido.id_pedido FROM itens_pedido, itens WHERE itens_pedido.id_item = itens.id AND itens.num_processo='" . $this->num_processo . "');";
         $query = Query::getInstance()->exe($this->sql);
         if ($query->num_rows > 0) {
             while ($obj = $query->fetch_object()) {

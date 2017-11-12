@@ -50,8 +50,9 @@ if (!is_null($type)) {
             case 'siafi':
                 $id_setor = filter_input(INPUT_POST, 'setor');
                 $fonte = filter_input(INPUT_POST, 'fonte');
+                $num_processo = filter_input(INPUT_POST, 'num_processo');
 
-                $report = new ReportSIAFI($id_setor, $fonte);
+                $report = new ReportSIAFI($id_setor, $fonte, $num_processo);
                 $html .= $report;
                 break;
 
