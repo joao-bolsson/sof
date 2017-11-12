@@ -101,6 +101,27 @@ final class Request {
     private $group;
 
     /**
+     * ================
+     * Empenho
+     * ================
+     */
+
+    /**
+     * @var int SIAFI type (see table pedido_contrato).
+     */
+    private $type;
+
+    /**
+     * @var string SIAFI.
+     */
+    private $siafi;
+
+    /**
+     * @var string SIAFI date.
+     */
+    private $siafi_date;
+
+    /**
      * Default construct.
      * @param int $id Id request (0 for a no existing request in db).
      */
@@ -117,6 +138,7 @@ final class Request {
             $this->fillItens();
             $this->initMoneySource();
             $this->initGroup();
+            $this->initSIAFI();
         }
     }
 
@@ -601,6 +623,62 @@ final class Request {
         Query::getInstance()->exe($sql);
     }
 
+
+    /**
+     * Sets a SIAFI number for this request.
+     *
+     * @param string $siafi SIAFI.
+     * @param string $date Date SIAFI.
+     * @return bool If success - true, else - false.
+     */
+    public function setSIAFI(string $siafi, string $date): bool {
+        $this->siafi = $siafi;
+        $this->siafi_date = $date;
+
+        $query_check = Query::getInstance()->exe('SELECT pedido_empenho.id, pedido.status FROM pedido_empenho, pedido WHERE pedido_empenho.id_pedido= pedido.id AND pedido.id = ' . $this->id);
+
+        if ($query_check->num_rows < 1) {
+            Query::getInstance()->exe("INSERT INTO pedido_empenho VALUES(NULL, " . $this->id . ", '" . $this->siafi . "', '" . $this->siafi_date . "');");
+            $this->setStatus(7);
+        } else {
+            $obj = $query_check->fetch_object();
+            if ($obj->status == 6) {
+                $this->setStatus(7);
+            }
+
+            Query::getInstance()->exe("UPDATE pedido_empenho SET empenho = '" . $this->siafi . "', data = '" . $this->siafi_date . "' WHERE id_pedido = " . $this->id);
+        }
+
+        if ($this->type == 1 && !empty($this->siafi)) {
+            // se for empenho, atualiza o contrato
+            Query::getInstance()->exe("UPDATE pedido_contrato SET siafi = '" . $this->siafi . "' WHERE id_pedido = " . $this->id);
+        }
+        return true;
+    }
+
+    /**
+     * Initialize all values about SIAFI (effort).
+     */
+    private function initSIAFI() {
+        // captura o tipo de contrato (EMPENHO, REFORÇO ou ANULAÇÃO)
+        $query_contract = Query::getInstance()->exe("SELECT id_tipo FROM pedido_contrato WHERE id_pedido = " . $this->id . " LIMIT 1;");
+
+        if ($query_contract->num_rows > 0) {
+            // always must execute this code
+            $obj = $query_contract->fetch_object();
+            $this->type = $obj->id_tipo;
+        }
+
+        // captura o empenho (tabela pedido_empenho), se tiver
+        $query_emp = Query::getInstance()->exe("SELECT empenho, data FROM pedido_empenho WHERE id_pedido = " . $this->id . " LIMIT 1;");
+
+        if ($query_emp->num_rows > 0) {
+            $obj = $query_emp->fetch_object();
+
+            $this->siafi = $obj->empenho;
+            $this->siafi_date = $obj->data;
+        }
+    }
 
     /**
      * @return int Request id

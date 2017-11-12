@@ -9,3 +9,7 @@ include_once '../class/Geral.class.php';
 
 Geral::scanDataBase();
 Geral::verifySectors();
+Geral::checkSIAFI();
+
+// trecho temporário
+Geral::storeDates();

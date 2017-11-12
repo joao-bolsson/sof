@@ -23,4 +23,9 @@ interface Report {
      */
     function buildFooter(): string;
 
+    /**
+     * @return string The string representation of the report.
+     */
+    function __toString(): string;
+
 }

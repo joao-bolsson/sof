@@ -40,6 +40,10 @@ $(function () {
         changeSelectedSector();
     });
 
+    $('#selectSetorRelSIAFI').change(function () {
+        changeSelectedSectorSIAFI();
+    });
+
     $('#relLibOrc').on('shown.bs.modal', function () {
         $('.select2').select2();
         $(".date").inputmask("dd/mm/yyyy", {"placeholder": "dd/mm/yyyy"});
@@ -49,6 +53,15 @@ $(function () {
     if (relPedidos !== null) {
         $('#relPedidos').on('shown.bs.modal', function () {
             changeSelectedSector();
+            $('.select2').select2();
+            $(".date").inputmask("dd/mm/yyyy", {"placeholder": "dd/mm/yyyy"});
+        });
+    }
+
+    var relSIAFI = document.getElementById('relSIAFI');
+    if (relSIAFI !== null) {
+        $('#relSIAFI').on('shown.bs.modal', function () {
+            changeSelectedSectorSIAFI();
             $('.select2').select2();
             $(".date").inputmask("dd/mm/yyyy", {"placeholder": "dd/mm/yyyy"});
         });
@@ -143,8 +156,12 @@ function changeSelectedSector() {
     fillSourcesToSector(setor);
 }
 
+function changeSelectedSectorSIAFI() {
+    var setor = document.getElementById('selectSetorRelSIAFI').value;
+    fillSourcesToSectorSIAFI(setor);
+}
+
 function fillSourcesToSector(id_setor) {
-    console.log('fill sources to sector: ' + id_setor);
     $.post('../php/busca.php', {
         users: 1,
         form: 'fillSourcesToSector',
@@ -152,6 +169,20 @@ function fillSourcesToSector(id_setor) {
     }).done(function (resposta) {
         if (resposta) {
             $('#selectFonte').html(resposta);
+        } else {
+            alert('Ocorreu um erro no servidor. Contate o administrador.');
+        }
+    });
+}
+
+function fillSourcesToSectorSIAFI(id_setor) {
+    $.post('../php/busca.php', {
+        users: 1,
+        form: 'fillSourcesToSector',
+        id_setor: id_setor
+    }).done(function (resposta) {
+        if (resposta) {
+            $('#selectFonteSIAFI').html(resposta);
         } else {
             alert('Ocorreu um erro no servidor. Contate o administrador.');
         }

@@ -265,13 +265,13 @@ final class PrintMod {
     public static function getContentPedido(int $id_request): string {
         $return = '';
         // PRIMEIRO FAZEMOS O CABEÇALHO REFERENTE AO NUM_LICITACAO
-        $query_ini = Query::getInstance()->exe('SELECT DISTINCT itens.num_licitacao, itens.num_processo, itens.dt_inicio, itens.dt_fim FROM itens_pedido, itens WHERE itens.id = itens_pedido.id_item AND itens_pedido.id_pedido = ' . $id_request);
+        $query_ini = Query::getInstance()->exe("SELECT DISTINCT itens.num_licitacao, itens.num_processo, DATE_FORMAT(itens.dt_inicio, '%d/%m/%Y') AS dt_inicio, DATE_FORMAT(itens.dt_fim, '%d/%m/%Y') AS dt_fim FROM itens_pedido, itens WHERE itens.id = itens_pedido.id_item AND itens_pedido.id_pedido = " . $id_request);
         while ($bidding = $query_ini->fetch_object()) {
             $row = new Row();
             $row->addComponent(new Column('Licitação: ' . $bidding->num_licitacao));
             $row->addComponent(new Column('Processo: ' . $bidding->num_processo));
             $row->addComponent(new Column('Início: ' . $bidding->dt_inicio));
-            $row->addComponent(new Column('Fim: ' . ($bidding->dt_fim == '') ? '------------' : $bidding->dt_fim));
+            $row->addComponent(new Column('Fim: ' . (empty($bidding->dt_fim) ? '------------' : $bidding->dt_fim)));
             $return .= "
                 <fieldset class=\"preg\">
                     <table>" . $row . "</table>
