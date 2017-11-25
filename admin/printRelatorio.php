@@ -5,7 +5,9 @@ error_reporting(E_ALL);
 
 session_start();
 
+include_once '../class/BuscaLTE.class.php';
 include_once '../class/PrintMod.class.php';
+include_once '../class/report/ReportSIAFIPart.class.php';
 include_once '../class/report/ReportSIAFI.class.php';
 require_once '../defines.php';
 require_once MPDF_PATH . '/vendor/autoload.php';
@@ -50,7 +52,7 @@ if (!is_null($type)) {
             case 'siafi':
                 $id_setor = filter_input(INPUT_POST, 'setor');
                 $fonte = filter_input(INPUT_POST, 'fonte');
-                $num_processo = filter_input(INPUT_POST, 'num_processo');
+                $num_processo = filter_input(INPUT_POST, 'num_processo', FILTER_DEFAULT, FILTER_FORCE_ARRAY);
                 $dataI = filter_input(INPUT_POST, 'dataI');
                 $dataF = filter_input(INPUT_POST, 'dataF');
 

@@ -1070,14 +1070,25 @@ final class BuscaLTE {
         return $table;
     }
 
-    public static function getOptionsProcessos(): string {
+
+    public static function getAllProcess(): array {
         $query = Query::getInstance()->exe("SELECT DISTINCT num_processo FROM itens WHERE num_processo;");
 
-        $options = "";
+        $options = [];
         if ($query) {
+            $i = 0;
             while ($obj = $query->fetch_object()) {
-                $options .= "<option value='" . $obj->num_processo . "'>" . $obj->num_processo . "</option>";
+                $options[$i++] = $obj->num_processo;
             }
+        }
+        return $options;
+    }
+
+    public static function getOptionsProcessos(): string {
+        $array = BuscaLTE::getAllProcess();
+        $options = "";
+        foreach ($array as $num_processo) {
+            $options .= "<option value='" . $num_processo . "'>" . $num_processo . "</option>";
         }
         return $options;
     }
