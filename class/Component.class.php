@@ -63,15 +63,20 @@ class Component {
      * @return string The string representation os this component.
      */
     public function __toString() {
-        $class = (!empty($this->class)) ? " class=\"" . $this->class . "\"" : '';
+        $component = '';
+        if (!empty($this->tag)) {
+            $class = (!empty($this->class)) ? " class=\"" . $this->class . "\"" : '';
 
-        $component = "<" . $this->tag . $class . ">" . $this->text;
+            $component = "<" . $this->tag . $class . ">" . $this->text;
+        }
 
         foreach ($this->components as $comp) {
             $component .= $comp;
         }
 
-        $component .= "</" . $this->tag . ">";
+        if (!empty($this->tag)) {
+            $component .= "</" . $this->tag . ">";
+        }
         return $component;
     }
 }

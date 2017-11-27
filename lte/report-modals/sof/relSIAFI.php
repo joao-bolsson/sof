@@ -28,9 +28,10 @@
                         </select>
                     </div>
                     <div class="form-group">
-                        <label>Processo (selecione apenas 1)</label>
+                        <label>Processo</label>
                         <select class="form-control select2" multiple="multiple" data-placeholder="Selecione"
-                                name="num_processo" required>
+                                name="num_processo[]" required>
+                            <option value="Todos">Todos</option>
                             <?= BuscaLTE::getOptionsProcessos(); ?>
                         </select>
                     </div>

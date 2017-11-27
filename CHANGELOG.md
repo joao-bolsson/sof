@@ -1,5 +1,8 @@
 ## CHANGELOG ##
 
+#### v2.2.9 - 27/11/2017 ####
+- Permite seleção de mais de um processo ao gerar relatório SIAFI.
+
 #### v2.2.8 - 12/11/2017 ####
 - Corrige inconsistência na informação de SIAFI no banco
 - Muda formato de datas em itens para facilitar relatórios futuros
