@@ -248,7 +248,7 @@ EOF
 
     public function testConstraintFileNotExists()
     {
-        $file = dirname(__DIR__) . DIRECTORY_SEPARATOR . '_files' . DIRECTORY_SEPARATOR . 'ClassWithNonPublicAttributes.php';
+        $file = \dirname(__DIR__) . DIRECTORY_SEPARATOR . '_files' . DIRECTORY_SEPARATOR . 'ClassWithNonPublicAttributes.php';
 
         $constraint = Assert::logicalNot(
             Assert::fileExists()
@@ -278,7 +278,7 @@ EOF
 
     public function testConstraintFileNotExists2()
     {
-        $file = dirname(__DIR__) . DIRECTORY_SEPARATOR . '_files' . DIRECTORY_SEPARATOR . 'ClassWithNonPublicAttributes.php';
+        $file = \dirname(__DIR__) . DIRECTORY_SEPARATOR . '_files' . DIRECTORY_SEPARATOR . 'ClassWithNonPublicAttributes.php';
 
         $constraint = Assert::logicalNot(
             Assert::fileExists()
@@ -579,8 +579,8 @@ EOF
         $a      = new \stdClass;
         $a->foo = 'bar';
         $b      = new \stdClass;
-        $ahash  = spl_object_hash($a);
-        $bhash  = spl_object_hash($b);
+        $ahash  = \spl_object_hash($a);
+        $bhash  = \spl_object_hash($b);
 
         $c               = new \stdClass;
         $c->foo          = 'bar';
@@ -604,8 +604,8 @@ EOF
         $storage1->attach($b);
         $storage2 = new \SplObjectStorage;
         $storage2->attach($b);
-        $storage1hash = spl_object_hash($storage1);
-        $storage2hash = spl_object_hash($storage2);
+        $storage1hash = \spl_object_hash($storage1);
+        $storage2hash = \spl_object_hash($storage2);
 
         $dom1                     = new \DOMDocument;
         $dom1->preserveWhiteSpace = false;
@@ -640,15 +640,12 @@ Failed asserting that two strings are equal.
 --- Expected
 +++ Actual
 @@ @@
- 'a
--b
-+p
-
+ 'a\\n
+-b\\n
++p\\n
 @@ @@
- i
--j
-+w
- k'
+-j\\n
++w\\n
 
 EOF
             ],
@@ -670,7 +667,6 @@ Failed asserting that two arrays are equal.
  Array (
 -    0 => 0
 +    0 => 1
- )
 
 EOF
             ],
@@ -682,7 +678,6 @@ Failed asserting that two arrays are equal.
  Array (
 -    0 => true
 +    0 => 'true'
- )
 
 EOF
             ],
@@ -696,10 +691,6 @@ Failed asserting that two arrays are equal.
      1 => Array (
 -        0 => 1
 +        0 => 4
-     )
-     2 => Array (...)
-     3 => 3
- )
 
 EOF
             ],
@@ -720,7 +711,6 @@ Failed asserting that two objects are equal.
 @@ @@
  stdClass Object (
 -    'foo' => 'bar'
- )
 
 EOF
             ],
@@ -738,21 +728,12 @@ Failed asserting that two objects are equal.
          1 => Array (
 -            0 => 1
 +            0 => 4
-
 @@ @@
-         'foo' => 'a
--        b
-+        p
-
+-        b\\n
++        p\\n
 @@ @@
-         i
--        j
-+        w
-         k'
-     )
-     'self' => stdClass Object (...)
-     'c' => stdClass Object (...)
- )
+-        j\\n
++        w\\n
 
 EOF
             ],
@@ -800,10 +781,6 @@ Failed asserting that two objects are equal.
 -    '$bhash' => Array &1 (
 +SplObjectStorage Object &$storage2hash (
 +    '$bhash' => Array &0 (
-         'obj' => stdClass Object &$bhash ()
-         'inf' => null
-     )
- )
 
 EOF
             ];
@@ -823,10 +800,6 @@ Failed asserting that two objects are equal.
 -    '$bhash' => Array &1 (
 +SplObjectStorage Object &$storage2hash (
 +    '$bhash' => Array &0 (
-         'obj' => stdClass Object &$bhash ()
-         'inf' => null
-     )
- )
 
 EOF
             ];
@@ -980,8 +953,8 @@ Failed asserting that two strings are identical.
 --- Expected
 +++ Actual
 @@ @@
--a
-+b
+-'a'
++'b'
 
 EOF
                 ,
@@ -1239,11 +1212,11 @@ EOF
 
     public function resources()
     {
-        $fh = fopen(__FILE__, 'r');
-        fclose($fh);
+        $fh = \fopen(__FILE__, 'r');
+        \fclose($fh);
 
         return [
-            'open resource'     => [fopen(__FILE__, 'r')],
+            'open resource'     => [\fopen(__FILE__, 'r')],
             'closed resource'   => [$fh],
         ];
     }
@@ -1257,7 +1230,7 @@ EOF
 
         $this->assertTrue($constraint->evaluate($resource, '', true));
 
-        @fclose($resource);
+        @\fclose($resource);
     }
 
     public function testConstraintIsNotType()
@@ -2284,7 +2257,7 @@ EOF
         $this->assertTrue($constraint->evaluate('ORYGINAŁ', '', true));
         $this->assertTrue($constraint->evaluate('oryginał', '', true));
         $this->assertEquals('contains "oryginał"', $constraint->toString());
-        $this->assertEquals(1, count($constraint));
+        $this->assertEquals(1, \count($constraint));
 
         $this->expectException(ExpectationFailedException::class);
 
@@ -2299,7 +2272,7 @@ EOF
         $this->assertFalse($constraint->evaluate('ORYGINAŁ', '', true));
         $this->assertTrue($constraint->evaluate('oryginał', '', true));
         $this->assertEquals('contains "oryginał"', $constraint->toString());
-        $this->assertEquals(1, count($constraint));
+        $this->assertEquals(1, \count($constraint));
 
         $this->expectException(ExpectationFailedException::class);
 
@@ -2368,7 +2341,7 @@ EOF
         $this->assertFalse($constraint->evaluate('ORYGINAŁ', '', true));
         $this->assertFalse($constraint->evaluate('oryginał', '', true));
         $this->assertEquals('does not contain "oryginał"', $constraint->toString());
-        $this->assertEquals(1, count($constraint));
+        $this->assertEquals(1, \count($constraint));
 
         $this->expectException(ExpectationFailedException::class);
 
@@ -2385,7 +2358,7 @@ EOF
         $this->assertTrue($constraint->evaluate('ORYGINAŁ', '', true));
         $this->assertFalse($constraint->evaluate('oryginał', '', true));
         $this->assertEquals('does not contain "oryginał"', $constraint->toString());
-        $this->assertEquals(1, count($constraint));
+        $this->assertEquals(1, \count($constraint));
 
         $this->expectException(ExpectationFailedException::class);
 
@@ -3033,6 +3006,6 @@ EOF
      */
     private function trimnl($string)
     {
-        return preg_replace('/[ ]*\n/', "\n", $string);
+        return \preg_replace('/[ ]*\n/', "\n", $string);
     }
 }
