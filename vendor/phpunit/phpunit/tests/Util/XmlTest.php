@@ -10,8 +10,8 @@
 
 namespace PHPUnit\Util;
 
-use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\Exception;
+use PHPUnit\Framework\TestCase;
 
 class XmlTest extends TestCase
 {
@@ -31,9 +31,9 @@ class XmlTest extends TestCase
         } catch (Exception $e) {
         }
 
-        $this->assertNull($e, sprintf(
+        $this->assertNull($e, \sprintf(
             'PHPUnit_Util_XML::prepareString("\x%02x") should not crash DomDocument',
-            ord($char)
+            \ord($char)
         ));
     }
 
@@ -42,7 +42,7 @@ class XmlTest extends TestCase
         $data = [];
 
         for ($i = 0; $i < 256; $i++) {
-            $data[] = [chr($i)];
+            $data[] = [\chr($i)];
         }
 
         return $data;
@@ -88,5 +88,30 @@ class XmlTest extends TestCase
         $actual = Xml::xmlToVariable($dom->documentElement);
 
         $this->assertSame($expected, $actual);
+    }
+
+    public function testXmlToVariableCanHandleMultipleOfTheSameArgumentType()
+    {
+        $xml = '<object class="SampleClass"><arguments><string>a</string><string>b</string><string>c</string></arguments></object>';
+        $dom = new \DOMDocument();
+        $dom->loadXML($xml);
+
+        $expected = ['a' => 'a', 'b' => 'b', 'c' => 'c'];
+
+        $actual = Xml::xmlToVariable($dom->documentElement);
+
+        $this->assertSame($expected, (array) $actual);
+    }
+
+    public function testXmlToVariableCanConstructObjectsWithConstructorArgumentsRecursively()
+    {
+        $xml = '<object class="Exception"><arguments><string>one</string><integer>0</integer><object class="Exception"><arguments><string>two</string></arguments></object></arguments></object>';
+        $dom = new \DOMDocument();
+        $dom->loadXML($xml);
+
+        $actual = Xml::xmlToVariable($dom->documentElement);
+
+        $this->assertEquals('one', $actual->getMessage());
+        $this->assertEquals('two', $actual->getPrevious()->getMessage());
     }
 }

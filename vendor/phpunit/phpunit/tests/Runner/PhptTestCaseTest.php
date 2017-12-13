@@ -50,6 +50,11 @@ EOF;
     /**
      * @var string
      */
+    private $dirname;
+
+    /**
+     * @var string
+     */
     private $filename;
 
     /**
@@ -58,14 +63,15 @@ EOF;
     private $testCase;
 
     /**
-     * @var AbstractPhpProcess|\PHPUnit_Framework_MockObject_MockObject
+     * @var AbstractPhpProcess|\PHPUnit\Framework\MockObject\MockObject
      */
     private $phpProcess;
 
     protected function setUp()
     {
-        $this->filename = sys_get_temp_dir() . '/phpunit.phpt';
-        touch($this->filename);
+        $this->dirname  = \sys_get_temp_dir();
+        $this->filename = $this->dirname . '/phpunit.phpt';
+        \touch($this->filename);
 
         $this->phpProcess = $this->getMockForAbstractClass(AbstractPhpProcess::class, [], '', false);
         $this->testCase   = new PhptTestCase($this->filename, $this->phpProcess);
@@ -73,7 +79,7 @@ EOF;
 
     protected function tearDown()
     {
-        @unlink($this->filename);
+        @\unlink($this->filename);
 
         $this->filename = null;
         $this->testCase = null;
@@ -86,12 +92,31 @@ EOF;
      */
     private function setPhpContent($content)
     {
-        file_put_contents($this->filename, $content);
+        \file_put_contents($this->filename, $content);
+    }
+
+    /**
+     * Ensures the correct line ending is used for comparison
+     *
+     * @param string $content
+     *
+     * @return string
+     */
+    private function ensureCorrectEndOfLine($content)
+    {
+        return \strtr(
+            $content,
+            [
+                "\r\n" => PHP_EOL,
+                "\r"   => PHP_EOL,
+                "\n"   => PHP_EOL
+            ]
+        );
     }
 
     public function testShouldRunFileSectionAsTest()
     {
-        $this->setPhpContent(self::EXPECT_CONTENT);
+        $this->setPhpContent($this->ensureCorrectEndOfLine(self::EXPECT_CONTENT));
 
         $fileSection = '<?php echo "Hello PHPUnit!"; ?>' . PHP_EOL;
 
@@ -99,6 +124,49 @@ EOF;
              ->expects($this->once())
              ->method('runJob')
              ->with($fileSection)
+             ->will($this->returnValue(['stdout' => '', 'stderr' => '']));
+
+        $this->testCase->run();
+    }
+
+    public function testRenderFileSection()
+    {
+        $this->setPhpContent($this->ensureCorrectEndOfLine(
+            <<<EOF
+--TEST--
+Something to decribe it
+--FILE--
+<?php echo __DIR__ . __FILE__; ?>
+--EXPECT--
+Something
+EOF
+        ));
+
+        $renderedCode = "<?php echo '" . $this->dirname . "' . '" . $this->filename . "'; ?>" . PHP_EOL;
+
+        $this->phpProcess
+             ->expects($this->once())
+             ->method('runJob')
+             ->with($renderedCode)
+             ->will($this->returnValue(['stdout' => '', 'stderr' => '']));
+
+        $this->testCase->run();
+    }
+
+    public function testRenderSkipifSection()
+    {
+        $phptContent = self::EXPECT_CONTENT . PHP_EOL;
+        $phptContent .= '--SKIPIF--' . PHP_EOL;
+        $phptContent .= "<?php echo 'skip: ' . __FILE__; ?>" . PHP_EOL;
+
+        $this->setPhpContent($phptContent);
+
+        $renderedCode = "<?php echo 'skip: ' . '" . $this->filename . "'; ?>" . PHP_EOL;
+
+        $this->phpProcess
+             ->expects($this->at(0))
+             ->method('runJob')
+             ->with($renderedCode)
              ->will($this->returnValue(['stdout' => '', 'stderr' => '']));
 
         $this->testCase->run();

@@ -10,13 +10,13 @@
 
 namespace PHPUnit\Util\PHP;
 
-use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\Exception;
+use PHPUnit\Framework\TestCase;
 
 class AbstractPhpProcessTest extends TestCase
 {
     /**
-     * @var AbstractPhpProcess|\PHPUnit_Framework_MockObject_MockObject
+     * @var AbstractPhpProcess|\PHPUnit\Framework\MockObject\MockObject
      */
     private $phpProcess;
 
@@ -59,7 +59,7 @@ class AbstractPhpProcessTest extends TestCase
             'display_errors=1',
         ];
 
-        $expectedCommandFormat  = '%s -d allow_url_fopen=1 -d auto_append_file= -d display_errors=1';
+        $expectedCommandFormat  = '%s -d %callow_url_fopen=1%c -d %cauto_append_file=%c -d %cdisplay_errors=1%c';
         $actualCommand          = $this->phpProcess->getCommand($settings);
 
         $this->assertStringMatchesFormat($expectedCommandFormat, $actualCommand);
@@ -87,8 +87,9 @@ class AbstractPhpProcessTest extends TestCase
 
     public function testShouldHaveFileToCreateCommand()
     {
-        $expectedCommandFormat  = '%s -%c \'file.php\'';
-        $actualCommand          = $this->phpProcess->getCommand([], 'file.php');
+        $argumentEscapingCharacter = DIRECTORY_SEPARATOR === '\\' ? '"' : '\'';
+        $expectedCommandFormat     = \sprintf('%%s -%%c %1$sfile.php%1$s', $argumentEscapingCharacter);
+        $actualCommand             = $this->phpProcess->getCommand([], 'file.php');
 
         $this->assertStringMatchesFormat($expectedCommandFormat, $actualCommand);
     }

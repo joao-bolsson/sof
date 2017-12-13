@@ -70,8 +70,8 @@ abstract class RowBased implements Operation
 
             /* @var $table ITable */
             $databaseTableMetaData = $databaseDataSet->getTableMetaData($table->getTableMetaData()->getTableName());
-            $query = $this->buildOperationQuery($databaseTableMetaData, $table, $connection);
-            $disablePrimaryKeys = $this->disablePrimaryKeys($databaseTableMetaData, $table, $connection);
+            $query                 = $this->buildOperationQuery($databaseTableMetaData, $table, $connection);
+            $disablePrimaryKeys    = $this->disablePrimaryKeys($databaseTableMetaData, $table, $connection);
 
             if ($query === false) {
                 if ($table->getRowCount() > 0) {
@@ -91,7 +91,7 @@ abstract class RowBased implements Operation
 
                 try {
                     $statement->execute($args);
-                } catch (Exception $e) {
+                } catch (\Exception $e) {
                     throw new Exception(
                         $this->operationName, $query, $args, $table, $e->getMessage()
                     );

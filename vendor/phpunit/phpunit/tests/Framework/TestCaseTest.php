@@ -10,23 +10,42 @@
 
 namespace PHPUnit\Framework;
 
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Runner\BaseTestRunner;
-
-$GLOBALS['a']  = 'a';
-$_ENV['b']     = 'b';
-$_POST['c']    = 'c';
-$_GET['d']     = 'd';
-$_COOKIE['e']  = 'e';
-$_SERVER['f']  = 'f';
-$_FILES['g']   = 'g';
-$_REQUEST['h'] = 'h';
-$GLOBALS['i']  = 'i';
 
 class TestCaseTest extends TestCase
 {
     protected $backupGlobalsBlacklist = ['i', 'singleton'];
 
-    protected static $_testStatic = 0;
+    protected static $testStatic = 0;
+
+    public static function setUpBeforeClass()
+    {
+        $GLOBALS['a']  = 'a';
+        $_ENV['b']     = 'b';
+        $_POST['c']    = 'c';
+        $_GET['d']     = 'd';
+        $_COOKIE['e']  = 'e';
+        $_SERVER['f']  = 'f';
+        $_FILES['g']   = 'g';
+        $_REQUEST['h'] = 'h';
+        $GLOBALS['i']  = 'i';
+    }
+
+    public static function tearDownAfterClass()
+    {
+        unset(
+            $GLOBALS['a'],
+            $_ENV['b'],
+            $_POST['c'],
+            $_GET['d'],
+            $_COOKIE['e'],
+            $_SERVER['f'],
+            $_FILES['g'],
+            $_REQUEST['h'],
+            $GLOBALS['i']
+        );
+    }
 
     public function testCaseToString()
     {
@@ -377,7 +396,7 @@ class TestCaseTest extends TestCase
     public function testStaticAttributesBackupPre()
     {
         $GLOBALS['singleton'] = \Singleton::getInstance();
-        self::$_testStatic    = 123;
+        self::$testStatic     = 123;
     }
 
     /**
@@ -386,7 +405,7 @@ class TestCaseTest extends TestCase
     public function testStaticAttributesBackupPost()
     {
         $this->assertNotSame($GLOBALS['singleton'], \Singleton::getInstance());
-        $this->assertSame(0, self::$_testStatic);
+        $this->assertSame(0, self::$testStatic);
     }
 
     public function testIsInIsolationReturnsFalse()
@@ -480,6 +499,18 @@ class TestCaseTest extends TestCase
         );
     }
 
+    public function testSkipsIfRequiresNonExistingOsFamily()
+    {
+        $test   = new \RequirementsTest('testAlwaysSkip4');
+        $result = $test->run();
+
+        $this->assertEquals(1, $result->skippedCount());
+        $this->assertEquals(
+            'Operating system DOESNOTEXIST is required.',
+            $test->getStatusMessage()
+        );
+    }
+
     public function testSkipsIfRequiresNonExistingFunction()
     {
         $test   = new \RequirementsTest('testNine');
@@ -562,17 +593,17 @@ class TestCaseTest extends TestCase
 
     public function testCurrentWorkingDirectoryIsRestored()
     {
-        $expectedCwd = getcwd();
+        $expectedCwd = \getcwd();
 
         $test = new \ChangeCurrentWorkingDirectoryTest('testSomethingThatChangesTheCwd');
         $test->run();
 
-        $this->assertSame($expectedCwd, getcwd());
+        $this->assertSame($expectedCwd, \getcwd());
     }
 
     /**
      * @requires PHP 7
-     * @expectedException TypeError
+     * @expectedException \TypeError
      */
     public function testTypeErrorCanBeExpected()
     {
@@ -585,7 +616,7 @@ class TestCaseTest extends TestCase
         $mock = $this->createMock(\Mockable::class);
 
         $this->assertInstanceOf(\Mockable::class, $mock);
-        $this->assertInstanceOf(\PHPUnit_Framework_MockObject_MockObject::class, $mock);
+        $this->assertInstanceOf(MockObject::class, $mock);
     }
 
     public function testCreateMockMocksAllMethods()
@@ -644,5 +675,45 @@ class TestCaseTest extends TestCase
 
         $this->assertFalse($mock->foo());
         $this->assertNull($mock->bar());
+    }
+
+    public function testProvidingOfAutoreferencedArray()
+    {
+        $test = new \TestAutoreferenced('testJsonEncodeException', $this->getAutoreferencedArray());
+        $test->runBare();
+
+        $this->assertInternalType('array', $test->myTestData);
+        $this->assertArrayHasKey('data', $test->myTestData);
+        $this->assertEquals($test->myTestData['data'][0], $test->myTestData['data']);
+    }
+
+    /**
+     * @return array<string, array>
+     */
+    private function getAutoreferencedArray()
+    {
+        $recursionData   = [];
+        $recursionData[] = &$recursionData;
+
+        return [
+            'RECURSION' => [
+                'data' => $recursionData
+            ]
+        ];
+    }
+
+    public function testProvidingArrayThatMixesObjectsAndScalars()
+    {
+        $data = [
+            [123],
+            ['foo'],
+            [$this->createMock(\Mockable::class)],
+        ];
+
+        $test = new \TestAutoreferenced('testJsonEncodeException', [$data]);
+        $test->runBare();
+
+        $this->assertInternalType('array', $test->myTestData);
+        $this->assertSame($data, $test->myTestData);
     }
 }
