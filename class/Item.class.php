@@ -201,6 +201,25 @@ class Item implements JsonSerializable {
         if ($this->id != self::$NEW_ITEM) {
             $this->setMinValues();
             $this->initItem();
+            $this->fixEncoding();
+        }
+    }
+
+    /**
+     * Fix encoding problems.
+     */
+    private function fixEncoding() {
+        $toCheck = ['descr_despesa', 'descr_tipo_doc', 'descr_mod_compra', 'nome_fornecedor', 'nome_unidade', 'complemento_item', 'descricao'];
+
+        $len = count($toCheck);
+        for ($i = 0; $i < $len; $i++) {
+            $attr = $toCheck[$i];
+            $mb = mb_detect_encoding($this->{$toCheck[$i]}, 'UTF-8, ISO-8859-1');
+
+            if ($mb == 'ISO-8859-1') {
+                $this->{$attr} = utf8_encode($this->{$toCheck[$i]});
+                Logger::info("Convertido: " . $this->{$toCheck[$i]});
+            }
         }
     }
 
