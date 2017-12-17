@@ -104,7 +104,7 @@ final class PrintMod {
     }
 
     public static function getRelUsers(): string {
-        $query = Query::getInstance()->exe('SELECT nome, login, id_setor, email FROM usuario ORDER BY nome ASC');
+        $query = Query::getInstance()->exe('SELECT nome, login, id_setor, email FROM usuario WHERE ativo = 1 ORDER BY nome ASC;');
         $return = "
             <fieldset class=\"preg\">
                     <h5>DESCRIÇÃO DO RELATÓRIO</h5>

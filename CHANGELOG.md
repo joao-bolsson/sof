@@ -4,6 +4,7 @@
 - Corrige bug de codificação de caracteres ao editar itens
 - Corrige bug na remoção dos pedidos
 - Cria mecanismo para alternar entre diferentes bancos dentro do site (2017 e 2018)
+- Corrige relatório de usuários: mostra apenas os ativos no sistema.
 
 #### v2.2.9 - 27/11/2017 ####
 - Permite seleção de mais de um processo ao gerar relatório SIAFI.
