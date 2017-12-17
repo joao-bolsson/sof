@@ -23,22 +23,31 @@ $permissao = BuscaLTE::getPermissoes($_SESSION["id"]);
         </div>
         <!-- sidebar menu: : style can be found in sidebar.less -->
         <ul class="sidebar-menu">
+            <?php
+            if (isset($_SESSION['database']) && $_SESSION['database'] == 'main') { ?>
+                <li>
+                    <a href="hora.php">
+                        <i class="fa fa-clock-o"></i> <span>Ponto Eletrônico</span>
+                    </a>
+                </li>
+            <?php } ?>
             <li>
-                <a href="hora.php">
-                    <i class="fa fa-clock-o"></i> <span>Ponto Eletrônico</span>
+                <a href="javascript:abreModal('#changeDB');">
+                    <i class="fa fa-database"></i> <span>Trocar Banco</span>
                 </a>
             </li>
-            <?php if ($permissao->noticias): ?>
+            <?php
+            if (isset($_SESSION['database']) && $_SESSION['database'] == 'main' && $permissao->noticias) { ?>
                 <li>
                     <a href="posts.php">
                         <i class="fa fa-newspaper-o"></i> <span>Postar</span>
                     </a>
                 </li>
-            <?php endif; ?>
+            <?php } ?>
             <?php if ($permissao->pedidos): ?>
                 <li>
                     <a href="editmode.php">
-                        <i class="fa fa-database"></i> <span>Cadastrar / Editar Itens</span>
+                        <i class="fa fa-hdd-o"></i> <span>Cadastrar / Editar Itens</span>
                     </a>
                 </li>
             <?php endif; ?>
@@ -87,16 +96,19 @@ $permissao = BuscaLTE::getPermissoes($_SESSION["id"]);
                                 <i class="fa fa-user"></i> <span>Alterar Usuário</span>
                             </a>
                         </li>
-                        <li>
-                            <a href="javascript:abreModal('#cadUser');">
-                                <i class="fa fa-user-plus"></i> <span>Adicionar Usuário</span>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="javascript:abreModal('#manageUsers');">
-                                <i class="fa fa-user-times"></i> <span>Desativar Usuário</span>
-                            </a>
-                        </li>
+                        <?php
+                        if (isset($_SESSION['database']) && $_SESSION['database'] == 'main') { ?>
+                            <li>
+                                <a href="javascript:abreModal('#cadUser');">
+                                    <i class="fa fa-user-plus"></i> <span>Adicionar Usuário</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="javascript:abreModal('#manageUsers');">
+                                    <i class="fa fa-user-times"></i> <span>Desativar Usuário</span>
+                                </a>
+                            </li>
+                        <?php } ?>
                     </ul>
                 </li>
             <?php endif; ?>

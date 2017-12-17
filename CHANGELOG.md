@@ -1,5 +1,10 @@
 ## CHANGELOG ##
 
+#### v2.2.10 - 17/12/2017 ####
+- Corrige bug de codificação de caracteres ao editar itens
+- Corrige bug na remoção dos pedidos
+- Cria mecanismo para alternar entre diferentes bancos dentro do site (2017 e 2018)
+
 #### v2.2.9 - 27/11/2017 ####
 - Permite seleção de mais de um processo ao gerar relatório SIAFI.
 

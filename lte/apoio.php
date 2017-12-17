@@ -66,23 +66,7 @@ require_once '../defines.php';
                     </button>
                 </div>
 
-                <!-- Navbar Right Menu -->
-                <div class="navbar-custom-menu">
-                    <ul class="nav navbar-nav">
-                        <!-- User Account Menu -->
-                        <!-- User Account: style can be found in dropdown.less -->
-                        <li class="dropdown user user-menu">
-                            <a href="javascript:abreModal('#myInfos');" class="dropdown-toggle">
-                                <img src="dist/img/user.png" class="user-image" alt="User Image">
-                                <span id="userLogado" class="hidden-xs"><?= $_SESSION["nome"] ?></span>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="../admin/sair.php"><i class="fa fa-power-off"></i></a>
-                        </li>
-                    </ul>
-                </div>
-                <!-- /.navbar-custom-menu -->
+                <?php include_once 'navbar-user.php' ?>
             </div>
             <!-- /.container-fluid -->
         </nav>

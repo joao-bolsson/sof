@@ -585,7 +585,19 @@ function iniDataTable(tabela) {
             "sortDescending": ": activate to sort column descending"
         }
     };
-    if (tabela == '#tableItensPedido' || tabela == '#tableProcessos') {
+
+    if (tabela == '#tableItensPedido') {
+        $(tabela).DataTable({
+            "destroy": true,
+            "scrollX": true,
+            "columnDefs": [
+                {"width": "15%", "targets": 0},
+                {"width": "15%", "targets": 5}
+            ],
+            "lengthMenu": [[-1], ["Todas"]],
+            language: language
+        });
+    } else if (tabela == '#tableProcessos') {
         $(tabela).DataTable({
             "destroy": true,
             "scrollX": true,
