@@ -9,6 +9,8 @@
 ini_set('display_errors', true);
 error_reporting(E_ALL);
 
+defined('MAIN_DATABASE') or define('MAIN_DATABASE', 'main');
+
 final class Conexao {
 
     private $mysqli;
@@ -27,15 +29,34 @@ final class Conexao {
      * Gets a configuration section in config file.
      *
      * @param string $section Section to read.
+     * @return array An array with the config specifies.
      */
-    private static function getConfig(string $section) {
+    private static function getConfig(string $section): array {
         $array = parse_ini_file(__DIR__ . "/../config.ini", true);
         return $array[$section];
     }
 
     private function __construct() {
-        $config = self::getConfig('main');
+        $db = MAIN_DATABASE;
+        if (isset($_SESSION['database'])) {
+            $db = $_SESSION['database'];
+        }
+        $this->changeDatabase($db);
+    }
 
+    /**
+     * Change the referenced database.
+     *
+     * @param string $db Database name to change.
+     */
+    public function changeDatabase(string $db) {
+        $config = self::getConfig($db);
+
+        $_SESSION['database'] = $db;
+        $this->setDatabaseFromConfig($config);
+    }
+
+    private function setDatabaseFromConfig(array $config) {
         $this->server = $config["server"];
         $this->user = $config["user"];
         $this->password = $config["pass"];

@@ -96,6 +96,12 @@ final class Login {
      */
     public function changeUser(int $id_user) {
         $query = Query::getInstance()->exe("SELECT {$this->campoNome}, {$this->campoLogin}, {$this->campoEmail}, {$this->campoSetor} FROM {$this->tabela} WHERE {$this->campoID} = {$id_user} LIMIT 1") or exit("Erro ao buscar usuário.");
+
+        $db = "";
+        if (isset($_SESSION['database'])) {
+            $db = $_SESSION['database'];
+        }
+
         session_unset();
         session_destroy();
         session_start();
@@ -109,6 +115,10 @@ final class Login {
             $_SESSION['nome_setor'] = Login::getNomeSetor($usuario->{$this->campoSetor});
             if ($usuario->{$this->campoSetor} == 2) {
                 $_SESSION["admin"] = true;
+            }
+
+            if (!empty($db)) {
+                $_SESSION['database'] = $db;
             }
         }
     }

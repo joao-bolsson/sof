@@ -5,6 +5,45 @@
  * Used by anyone.
  */
 ?>
+<div aria-hidden="true" class="modal fade" id="changeDB" role="dialog" tabindex="-1">
+    <div class="modal-dialog" style="width: 40%;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                            aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">Alterar Banco de Dados</h4>
+            </div>
+            <form action="../php/geral.php" method="POST">
+                <input type="hidden" name="form" value="changeDB"/>
+                <input type="hidden" name="admin" value="1"/>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label>Bancos</label>
+                        <select class="form-control" name="db" required>
+                            <?php
+                            $options = "";
+                            $len = count(ARRAY_DATABASES);
+                            for ($i = 0; $i < $len; $i++) {
+                                $selected = "";
+                                if (isset($_SESSION['database']) && $_SESSION['database'] == ARRAY_DATABASES[$i]) {
+                                    $selected = "selected";
+                                }
+                                $options .= "<option value='" . ARRAY_DATABASES[$i] . "' " . $selected . ">" . ARRAY_DATABASES[$i] . "</option>";
+                            }
+                            echo $options;
+                            ?>
+                        </select>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-primary" type="submit" style="width: 100%;"><i
+                                class="fa fa-refresh"></i>&nbsp;Trocar
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
 <div class="modal fade" id="myInfos" role="dialog">
     <div class="modal-dialog" style="width: 40%;">
         <div class="modal-content">

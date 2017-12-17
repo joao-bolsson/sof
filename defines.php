@@ -23,3 +23,5 @@ defined('MPDF_PATH') or define('MPDF_PATH', __DIR__ . '/pdf');
 
 defined('BTN_DEFAULT') or define('BTN_DEFAULT', 'btn btn-default');
 defined('MAX_UPLOAD_SIZE') or define('MAX_UPLOAD_SIZE', 3);
+
+defined('ARRAY_DATABASES') or define('ARRAY_DATABASES', ['main', 'sof_2017']);

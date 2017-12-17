@@ -46,6 +46,16 @@ if (Busca::isActive()) {
     if (!is_null($admin) && isset($_SESSION["id_setor"]) && ($_SESSION["id_setor"] == 2 || $_SESSION["id_setor"] == 12)) {
         switch ($form) {
 
+            case 'changeDB':
+                $db = filter_input(INPUT_POST, 'db');
+                if (in_array($db, ARRAY_DATABASES)) {
+                    Conexao::getInstance()->changeDatabase($db);
+                    header("Location: ../lte/");
+                } else {
+                    echo "Banco inválido!";
+                }
+                break;
+
             case 'atestado':
                 $id_user = filter_input(INPUT_POST, 'user');
                 $horas = filter_input(INPUT_POST, 'horas');
