@@ -406,6 +406,9 @@ if (Busca::isActive()) {
                 unset($dados);
                 $insert = true;
                 $len = count($array_sql);
+                if (isset($_SESSION['database'])) {
+                    $nome_final .= "-" . $_SESSION['database'];
+                }
                 $sqlFileName = "../toImport/" . $nome_final . ".sql";
                 for ($i = 0; $i < $len; $i++) {
                     $query = $array_sql[$i];
