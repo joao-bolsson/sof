@@ -404,7 +404,6 @@ if (Busca::isActive()) {
                 // prepara a importação dos itens (insert)
                 $array_sql = $obj_Util->prepareImport($dados);
                 unset($dados);
-                $insert = true;
                 $len = count($array_sql);
                 if (isset($_SESSION['database'])) {
                     $nome_final .= "-" . $_SESSION['database'];
@@ -416,24 +415,7 @@ if (Busca::isActive()) {
                 }
                 unset($array_sql);
 
-                $descricao = "Novo arquivo para importar em toImport";
-
-                $from = $obj_Util->mail->Username;
-                $nome_from = utf8_decode("Setor de Orçamento e Finanças do HUSM");
-                $altBody = "Importação SOFHUSM ";
-
-                $obj_Util->preparaEmail($from, $nome_from, "joaovictorbolsson@gmail.com", "João", utf8_decode("Nova importação"), $altBody, $descricao);
-
-                //send the message, check for errors
-                if (!$obj_Util->mail->send()) {
-                    Logger::error("Erro ao enviar notificação por e-mail.");
-                }
-
-                if ($insert) {
-                    header("Location: ../lte/");
-                } else {
-                    exit("Ocorreu um erro ao importar os itens. Contate o administrador.");
-                }
+                header("Location: ../lte/");
                 break;
 
             case 'analisaSolicAlt':

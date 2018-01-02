@@ -257,7 +257,15 @@ class RequestReport implements Report {
             while ($request = $query->fetch_object()) {
                 $row = new Row();
                 $row->addComponent(new Column($request->id));
-                $row->addComponent(new Column(BuscaLTE::getFornecedor($request->id)));
+                $forn = BuscaLTE::getFornecedor($request->id);
+
+                $mb = mb_detect_encoding($forn, 'UTF-8, ISO-8859-1');
+
+                if ($mb == 'ISO-8859-1') {
+                    $forn = utf8_encode($forn);
+                }
+
+                $row->addComponent(new Column($forn));
                 if ($this->sentToOrderer) {
                     $row->addComponent(new Column($request->prioridade));
                     $row->addComponent(new Column($request->empenho));
