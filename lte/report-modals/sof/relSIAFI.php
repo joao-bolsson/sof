@@ -24,7 +24,8 @@
                     </div>
                     <div class="form-group">
                         <label>Fonte</label>
-                        <select id="selectFonteSIAFI" class="form-control" name="fonte" required>
+                        <select id="selectFonteSIAFI" class="form-control select2" name="fonte[]" multiple="multiple"
+                                data-placeholder="Selecione" required>
                         </select>
                     </div>
                     <div class="form-group">

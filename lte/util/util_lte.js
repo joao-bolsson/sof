@@ -183,6 +183,7 @@ function fillSourcesToSectorSIAFI(id_setor) {
     }).done(function (resposta) {
         if (resposta) {
             $('#selectFonteSIAFI').html(resposta);
+            $('#selectFonteSIAFI').select2();
         } else {
             alert('Ocorreu um erro no servidor. Contate o administrador.');
         }
