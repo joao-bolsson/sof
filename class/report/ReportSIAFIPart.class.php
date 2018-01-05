@@ -25,7 +25,7 @@ final class ReportSIAFIPart extends Component implements Report {
         parent::__construct('', '');
         $this->num_processo = $num_processo;
 
-        $this->table = new Table('', 'prod', ['Pedido', 'SIAFI', 'Valor', 'Vigência'], true);
+        $this->table = new Table('', 'prod', ['Pedido', 'SIAFI', 'Valor', 'Vigência', 'Licitação'], true);
     }
 
     public function buildHeader(): string {

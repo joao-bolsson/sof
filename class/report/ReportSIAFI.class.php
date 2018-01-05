@@ -91,7 +91,7 @@ class ReportSIAFI implements Report {
         }
         $where_num .= ")";
 
-        $this->sql = "SELECT pedido_empenho.id_pedido, pedido_empenho.empenho, DATE_FORMAT(pedido_empenho.data, '%d/%m/%Y') AS data, (SELECT itens.num_processo FROM itens, itens_pedido WHERE itens.id = itens_pedido.id_item AND itens_pedido.id_pedido = pedido_empenho.id_pedido LIMIT 1) AS num_processo, DATE_FORMAT((SELECT dt_inicio FROM itens, itens_pedido WHERE itens.id = itens_pedido.id_item AND itens_pedido.id_pedido = pedido_empenho.id_pedido LIMIT 1), '%d/%m/%Y') AS dt_inicio, DATE_FORMAT((SELECT dt_fim FROM itens, itens_pedido WHERE itens.id = itens_pedido.id_item AND itens_pedido.id_pedido = pedido_empenho.id_pedido LIMIT 1), '%d/%m/%Y') AS dt_fim, pedido.valor FROM pedido_empenho, pedido_id_fonte, pedido WHERE pedido.id = pedido_empenho.id_pedido AND (pedido.data_pedido BETWEEN '" . $dateS . "' AND '" . $dateE . "') AND pedido_empenho.id_pedido = pedido_id_fonte.id_pedido AND pedido_id_fonte.id_fonte = " . $this->source->getId() . " AND pedido_empenho.id_pedido IN (SELECT DISTINCT itens_pedido.id_pedido FROM itens_pedido, itens WHERE itens_pedido.id_item = itens.id AND " . $where_num . ") ORDER BY num_processo ASC;";
+        $this->sql = "SELECT pedido_empenho.id_pedido, pedido_empenho.empenho, DATE_FORMAT(pedido_empenho.data, '%d/%m/%Y') AS data, (SELECT itens.num_processo FROM itens, itens_pedido WHERE itens.id = itens_pedido.id_item AND itens_pedido.id_pedido = pedido_empenho.id_pedido LIMIT 1) AS num_processo, DATE_FORMAT((SELECT dt_inicio FROM itens, itens_pedido WHERE itens.id = itens_pedido.id_item AND itens_pedido.id_pedido = pedido_empenho.id_pedido LIMIT 1), '%d/%m/%Y') AS dt_inicio, DATE_FORMAT((SELECT dt_fim FROM itens, itens_pedido WHERE itens.id = itens_pedido.id_item AND itens_pedido.id_pedido = pedido_empenho.id_pedido LIMIT 1), '%d/%m/%Y') AS dt_fim, pedido.valor, licitacao_tipo.nome AS licitacao FROM pedido_empenho, pedido_id_fonte, pedido, licitacao, licitacao_tipo WHERE pedido.id = licitacao.id_pedido AND licitacao.tipo = licitacao_tipo.id AND pedido.id = pedido_empenho.id_pedido AND (pedido.data_pedido BETWEEN '" . $dateS . "' AND '" . $dateE . "') AND pedido_empenho.id_pedido = pedido_id_fonte.id_pedido AND pedido_id_fonte.id_fonte = " . $this->source->getId() . " AND pedido_empenho.id_pedido IN (SELECT DISTINCT itens_pedido.id_pedido FROM itens_pedido, itens WHERE itens_pedido.id_item = itens.id AND " . $where_num . ") ORDER BY num_processo ASC;";
 
         $query = Query::getInstance()->exe($this->sql);
         if ($query->num_rows > 0) {
@@ -109,6 +109,7 @@ class ReportSIAFI implements Report {
                 $obj->valor = number_format($obj->valor, 3, ',', '.');
                 $row->addComponent(new Column("R$ " . $obj->valor));
                 $row->addComponent(new Column($obj->dt_inicio . " à " . $obj->dt_fim));
+                $row->addComponent(new Column($obj->licitacao));
 
                 $part = $parts[$obj->num_processo];
                 if ($part instanceof ReportSIAFIPart) {
