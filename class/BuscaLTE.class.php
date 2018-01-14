@@ -344,7 +344,7 @@ final class BuscaLTE {
      * @return string
      */
     public static function getOptionsPrioridades(): string {
-        $return = '';
+        $return = "<option value=\"0\">Todas</option>";
         $count = count(ARRAY_PRIORIDADE);
 
         for ($i = 1; $i < $count; $i++) {
