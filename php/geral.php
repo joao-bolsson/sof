@@ -456,6 +456,10 @@ if (Busca::isActive()) {
                 $prioridade = filter_input(INPUT_POST, 'prioridade');
                 $comentario = filter_input(INPUT_POST, 'comentario');
 
+                // never must happen (requests without items)
+                if (is_null($item_cancelado)) {
+                    $item_cancelado = [];
+                }
                 $pedido = new Request($id_pedido);
                 $pedido->manage($fase, $item_cancelado);
                 $pedido->addComment($comentario);
