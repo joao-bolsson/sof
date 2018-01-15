@@ -1,5 +1,13 @@
 ## CHANGELOG ##
 
+#### v2.3.0 - 15/01/2018 ####
+- Corrige bug ao editar itens (valor utilizado sempre incorreto)
+- Opção "Todas" no campo de prioridades para relatório de pedidos
+- Permite edição de itens cancelados e cancelar/descancear itens pela ferramenta de edição
+- Corrige bug ao remover pedido sem itens
+- Retira limite de linhas de relatório de pedidos e outros
+- Finaliza relatório SIAFI com seleção de múltiplas fontes
+
 #### v2.2.10 - 17/12/2017 ####
 - Corrige bug de codificação de caracteres ao editar itens
 - Corrige bug na remoção dos pedidos
