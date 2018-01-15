@@ -870,7 +870,12 @@ final class BuscaLTE {
      * @return string
      */
     public static function getConteudoProcesso(string $search): string {
-        $query = Query::getInstance()->exe("SELECT id, id_item_processo, nome_fornecedor, cod_reduzido, complemento_item, replace(vl_unitario, ',', '.') AS vl_unitario, qt_contrato, qt_utilizado, vl_utilizado, qt_saldo, vl_saldo FROM itens WHERE num_processo LIKE '%" . $search . "%' AND cancelado = 0");
+        $sql = "SELECT id, id_item_processo, nome_fornecedor, cod_reduzido, complemento_item, replace(vl_unitario, ',', '.') AS vl_unitario, qt_contrato, qt_utilizado, vl_utilizado, qt_saldo, vl_saldo FROM itens WHERE num_processo LIKE '%" . $search . "%'";
+
+        if (!isset($_SESSION['editmode'])) {
+            $sql .= " AND cancelado = 0";
+        }
+        $query = Query::getInstance()->exe($sql);
         $table = new Table('', '', [], false);
         while ($item = $query->fetch_object()) {
             $item->complemento_item = str_replace("\"", "\'", $item->complemento_item);

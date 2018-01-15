@@ -28,10 +28,15 @@ $(function () {
 
     var modalInfoItem = $('#infoItem');
     modalInfoItem.on('shown.bs.modal', function () {
+        $("#checkCancel").iCheck({
+            checkboxClass: 'icheckbox_flat-blue',
+            radioClass: 'iradio_flat-blue'
+        });
         $(".date").inputmask("dd/mm/yyyy", {"placeholder": "dd/mm/yyyy"});
     });
 
     modalInfoItem.on('hidden.bs.modal', function () {
+        $("#checkCancel").iCheck('destroy');
         document.getElementById('id').value = 0;
         $("#qt_contrato").attr("min", 0);
         $("#qt_utilizado").attr("min", 0);
@@ -83,6 +88,13 @@ function editaItem(id_item) {
         document.getElementById('id_extrato_contr').value = obj.id_extrato_contr;
         document.getElementById('id_unidade').value = obj.id_unidade;
         document.getElementById('ano_orcamento').value = obj.ano_orcamento;
+
+        var state = 'uncheck';
+        if (Boolean(Number(obj.cancelado))) {
+            state = 'check';
+        }
+
+        $("#checkCancel").iCheck(state);
 
         $("#qt_contrato").attr("min", obj.min_qt_contrato);
         $("#qt_utilizado").attr("min", obj.min_qt_utilizado);

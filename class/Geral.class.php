@@ -25,59 +25,6 @@ final class Geral {
         // empty
     }
 
-    public static function scanDataBase() {
-        $query = Query::getInstance()->exe("SELECT id, round(valor, 3) AS valor FROM pedido;");
-
-        while ($obj = $query->fetch_object()) {
-            $ped = Query::getInstance()->exe("SELECT round(sum(valor), 3) AS soma FROM itens_pedido WHERE id_pedido = " . $obj->id);
-            $obj_ped = $ped->fetch_object();
-            $total = $obj->valor;
-            $sum = $obj_ped->soma;
-            if ($total != $sum) {
-                echo "Corrige pedido: " . $obj->id . "\n";
-                Query::getInstance()->exe("UPDATE pedido SET valor = '" . $sum . "' WHERE id = " . $obj->id);
-            }
-        }
-    }
-
-    public static function verifySectors() {
-        $query = Query::getInstance()->exe("SELECT id FROM setores WHERE id > 1;");
-        while ($obj = $query->fetch_object()) {
-            $sector = new Sector($obj->id);
-            $sector->updateMoney();
-        }
-    }
-
-    public static function checkSIAFI() {
-        $query = Query::getInstance()->exe("SELECT pedido_contrato.id_pedido, pedido_empenho.empenho FROM pedido_contrato, pedido_empenho WHERE pedido_contrato.id_pedido = pedido_empenho.id_pedido AND pedido_contrato.id_tipo = 1;");
-        if ($query->num_rows > 0) {
-            while ($obj = $query->fetch_object()) {
-                if (!empty($obj->empenho)) {
-                    Query::getInstance()->exe("UPDATE pedido_contrato SET siafi = '" . $obj->empenho . "' WHERE id_pedido = " . $obj->id_pedido);
-                }
-            }
-        }
-    }
-
-    public static function storeDates() {
-        $query = Query::getInstance()->exe("SELECT id, dt_inicio, dt_fim, dt_geracao FROM itens;");
-        if ($query->num_rows > 0) {
-            while ($obj = $query->fetch_object()) {
-                $dt_inicio = Util::dateFormat($obj->dt_inicio);
-                $dt_fim = Util::dateFormat($obj->dt_fim);
-                $dt_geracao = Util::dateFormat($obj->dt_geracao);
-
-                $builder = new SQLBuilder(SQLBuilder::$UPDATE);
-                $builder->setTables(['itens']);
-                $builder->setColumns(['dt_inicio', 'dt_fim', 'dt_geracao']);
-                $builder->setValues([$dt_inicio, $dt_fim, $dt_geracao]);
-                $builder->setWhere('id = ' . $obj->id);
-
-                Query::getInstance()->exe($builder->__toString());
-            }
-        }
-    }
-
     /**
      *    Função para cadastrar fontes do pedido (status == Aguarda Orçamento)
      *

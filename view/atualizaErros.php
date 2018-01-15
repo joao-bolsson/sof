@@ -5,11 +5,9 @@ error_reporting(E_ALL);
 
 session_start();
 
-include_once '../class/Geral.class.php';
+include_once '../class/UpdateErrors.class.php';
 
-Geral::scanDataBase();
-Geral::verifySectors();
-Geral::checkSIAFI();
-
-// trecho temporário
-Geral::storeDates();
+UpdateErrors::scanDataBase();
+UpdateErrors::verifySectors();
+UpdateErrors::checkSIAFI();
+UpdateErrors::checkItems();

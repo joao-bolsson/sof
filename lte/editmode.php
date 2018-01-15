@@ -38,6 +38,8 @@ if (!isset($_SESSION['editmode'])) {
     <link rel="stylesheet" href="plugins/font-awesome-4.7.0/css/font-awesome.min.css">
     <!-- Ionicons -->
     <link rel="stylesheet" href="plugins/ionicons/css/ionicons.min.css">
+    <!-- iCheck for checkboxes and radio inputs -->
+    <link rel="stylesheet" href="plugins/iCheck/all.css">
     <!-- Theme style -->
     <link rel="stylesheet" href="dist/css/AdminLTE.min.css">
     <!-- AdminLTE Skins. Choose a skin from the css/skins
@@ -87,7 +89,7 @@ if (!isset($_SESSION['editmode'])) {
                     </ul>
                 </div>
 
-                <?php include_once 'navbar-user.php'?>
+                <?php include_once 'navbar-user.php' ?>
                 <!-- /.navbar-custom-menu -->
             </div>
             <!-- /.container-fluid -->
@@ -198,6 +200,8 @@ if (!isset($_SESSION['editmode'])) {
 <script src="bootstrap/js/bootstrap.min.js"></script>
 <!-- SlimScroll -->
 <script src="plugins/slimScroll/jquery.slimscroll.min.js"></script>
+<!-- iCheck 1.0.1 -->
+<script src="plugins/iCheck/icheck.min.js"></script>
 <!-- FastClick -->
 <script src="plugins/fastclick/fastclick.js"></script>
 <!-- AdminLTE App -->
