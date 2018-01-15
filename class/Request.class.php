@@ -366,6 +366,35 @@ final class Request {
         }
     }
 
+    private function restoreValue(float $value) {
+        if ($this->hasSources()) {
+            // devolve o valor para a fonte
+            $query_fonte = Query::getInstance()->exe("SELECT saldo_fonte.id AS id_fonte, saldo_fonte.valor AS saldo_fonte FROM saldo_fonte, pedido_id_fonte WHERE pedido_id_fonte.id_fonte = saldo_fonte.id AND pedido_id_fonte.id_pedido = " . $this->id);
+            if ($query_fonte->num_rows > 0) {
+                $obj = $query_fonte->fetch_object();
+                $new_vl = $obj->saldo_fonte + $value;
+                $new_vl = number_format($new_vl, 3, '.', '');
+                Query::getInstance()->exe("UPDATE saldo_fonte SET valor = '" . $new_vl . "' WHERE id_setor = " . $this->id_sector . " AND id = " . $obj->id_fonte);
+                $this->updateSectorMoney();
+            }
+        } else {
+            // devolve o valor ao sof
+            $sof = new Sector(2);
+            $oldMoney = $sof->getMoney();
+            $sof->setMoney($oldMoney + $value);
+
+            // coloca na tabela de lançamentos
+
+            $sqlBuilder = new SQLBuilder(SQLBuilder::$INSERT);
+            $sqlBuilder->setTables(['saldos_lancamentos']);
+            $sqlBuilder->setValues([null, $this->id_sector, $this->today, -$value, 5]);
+            Query::getInstance()->exe($sqlBuilder->__toString());
+
+            $sqlBuilder->setValues([null, $sof->getId(), $this->today, $value, 5]);
+            Query::getInstance()->exe($sqlBuilder->__toString());
+        }
+    }
+
     private function updateItens() {
         $toDelete = [];
         $i = 0;
@@ -376,6 +405,8 @@ final class Request {
                     $cancelado = ', cancelado = 1';
                     $this->value -= $item->getItemValueInRequest();
                     $toDelete[$i++] = $item->getId();
+
+                    $this->restoreValue($item->getItemValueInRequest());
                 }
                 Query::getInstance()->exe("UPDATE itens SET qt_saldo = '{$item->getQtSaldo()}', qt_utilizado = '{$item->getQtUtilizado()}', vl_saldo = '{$item->getVlSaldo()}', vl_utilizado = '{$item->getVlUtilizado()}'{$cancelado} WHERE id = " . $item->getId());
             }
@@ -388,6 +419,35 @@ final class Request {
 
             Query::getInstance()->exe("UPDATE pedido SET valor = '" . $this->value . "' WHERE id = " . $this->id);
         }
+    }
+
+    /**
+     * @param array $item_cancelado Array with items id that was canceled.
+     */
+    public function cancelItems(array $item_cancelado) {
+        foreach ($this->items as &$item) {
+            if ($item instanceof ItemRequest) {
+                if (in_array($item->getId(), $item_cancelado)) {
+                    $qtRequested = $item->getQtRequested();
+                    $vlItemInRequest = $item->getItemValueInRequest();
+
+                    $oldQtSaldo = $item->getQtSaldo();
+                    $item->setQtSaldo($oldQtSaldo + $qtRequested);
+
+                    $oldQtUtilizado = $item->getQtUtilizado();
+                    $item->setQtUtilizado($oldQtUtilizado - $qtRequested);
+
+                    $oldVlSaldo = $item->getVlSaldo();
+                    $item->setVlSaldo($oldVlSaldo + $vlItemInRequest);
+
+                    $oldVlUtilizado = $item->getVlUtilizado();
+                    $item->setVlUtilizado($oldVlUtilizado - $vlItemInRequest);
+
+                    $item->setCancelado(true);
+                }
+            }
+        }
+        $this->updateItens();
     }
 
     /**
@@ -433,7 +493,7 @@ final class Request {
         $this->update();
         $error = Request::checkForErrors($this->id);
         if ($error) {
-            Logger::error("Pedido quebrado em pedidoAnalisado: " . $this->id);
+            Logger::error("Pedido quebrado em manage: " . $this->id);
         }
     }
 
@@ -452,32 +512,7 @@ final class Request {
         $this->change = 1;
         $this->priority = 5;
 
-        if ($this->hasSources()) {
-            // devolve o valor do pedido para a fonte
-            $query_fonte = Query::getInstance()->exe("SELECT saldo_fonte.id AS id_fonte, saldo_fonte.valor AS saldo_fonte FROM saldo_fonte, pedido_id_fonte WHERE pedido_id_fonte.id_fonte = saldo_fonte.id AND pedido_id_fonte.id_pedido = " . $this->id);
-            if ($query_fonte->num_rows > 0) {
-                $obj = $query_fonte->fetch_object();
-                $new_vl = $obj->saldo_fonte + $this->value;
-                $new_vl = number_format($new_vl, 3, '.', '');
-                Query::getInstance()->exe("UPDATE saldo_fonte SET valor = '" . $new_vl . "' WHERE id_setor = " . $this->id_sector . " AND id = " . $obj->id_fonte);
-                $this->updateSectorMoney();
-            }
-        } else {
-            // devolve o valor do pedido ao sof
-            $sof = new Sector(2);
-            $oldMoney = $sof->getMoney();
-            $sof->setMoney($oldMoney + $this->value);
-
-            // coloca na tabela de lançamentos
-
-            $sqlBuilder = new SQLBuilder(SQLBuilder::$INSERT);
-            $sqlBuilder->setTables(['saldos_lancamentos']);
-            $sqlBuilder->setValues([null, $this->id_sector, $this->today, -$this->value, 5]);
-            Query::getInstance()->exe($sqlBuilder->__toString());
-
-            $sqlBuilder->setValues([null, $sof->getId(), $this->today, $this->value, 5]);
-            Query::getInstance()->exe($sqlBuilder->__toString());
-        }
+        $this->restoreValue($this->value);
     }
 
     private function approve() {

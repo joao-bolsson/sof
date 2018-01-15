@@ -218,7 +218,6 @@ class Item implements JsonSerializable {
 
             if ($mb == 'ISO-8859-1') {
                 $this->{$attr} = utf8_encode($this->{$toCheck[$i]});
-                Logger::info("Convertido: " . $this->{$toCheck[$i]});
             }
         }
     }
@@ -285,8 +284,24 @@ class Item implements JsonSerializable {
             $builder->setWhere("id = " . $this->id);
 
             Query::getInstance()->exe($builder->__toString());
+
+            $this->maybeUpdateCanceled();
         }
         return true;
+    }
+
+    private function maybeUpdateCanceled() {
+        if ($this->cancelado) {
+            $query = Query::getInstance()->exe("SELECT pedido.id FROM pedido, itens_pedido WHERE pedido.id = itens_pedido.id_pedido AND itens_pedido.id_item = " . $this->id . " AND pedido.status <= 2;");
+
+            if ($query->num_rows > 0) {
+                while ($obj = $query->fetch_object()) {
+                    $request = new Request($obj->id);
+
+                    $request->cancelItems([$this->id]);
+                }
+            }
+        }
     }
 
     protected function initItem() {
@@ -618,7 +633,7 @@ class Item implements JsonSerializable {
             $this->vl_unitario = $vl_unitario;
             $this->vl_saldo = $this->qt_saldo * $this->vl_unitario;
             $this->vl_contrato = $this->qt_contrato * $this->vl_unitario;
-            $this->vl_utilizado = $this->vl_utilizado * $this->vl_unitario;
+            $this->vl_utilizado = $this->qt_utilizado * $this->vl_unitario;
 
             // seleciona infos dos pedidos que contém o item editado e que não passaram da análise
             $query = Query::getInstance()->exe("SELECT itens_pedido.id_pedido, itens_pedido.qtd, itens_pedido.valor AS valor_item, pedido.id_setor, pedido.valor AS valor_pedido, saldo_setor.saldo FROM itens_pedido, pedido, saldo_setor WHERE saldo_setor.id_setor = pedido.id_setor AND itens_pedido.id_item = {$this->id} AND itens_pedido.id_pedido = pedido.id AND pedido.status <= 2;");

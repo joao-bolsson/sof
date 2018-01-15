@@ -123,6 +123,11 @@ if (Busca::isActive()) {
                     $input = filter_input(INPUT_POST, $name);
                     if ($input !== NULL) {
                         $data[$name] = $input;
+                        if ($name == 'cancelado') {
+                            $data[$name] = true;
+                        }
+                    } else if ($name == 'cancelado') {
+                        $data[$name] = false;
                     }
                 }
 
@@ -156,8 +161,8 @@ if (Busca::isActive()) {
                 $item->setVlSaldo($data['vl_saldo']);
                 $item->setIdUnidade($data['id_unidade']);
                 $item->setAnoOrcamento($data['ano_orcamento']);
+                $item->setCancelado($data['cancelado']);
                 if ($data['id'] == Item::$NEW_ITEM) {
-                    $item->setCancelado(false);
                     $item->setChave($data['num_processo'] . '#' . $data['cod_reduzido'] . '#' . $data['seq_item_processo']);
                 }
                 $item->setSeqItemProcesso($data['seq_item_processo']);
@@ -456,6 +461,10 @@ if (Busca::isActive()) {
                 $prioridade = filter_input(INPUT_POST, 'prioridade');
                 $comentario = filter_input(INPUT_POST, 'comentario');
 
+                // never must happen (requests without items)
+                if (is_null($item_cancelado)) {
+                    $item_cancelado = [];
+                }
                 $pedido = new Request($id_pedido);
                 $pedido->manage($fase, $item_cancelado);
                 $pedido->addComment($comentario);

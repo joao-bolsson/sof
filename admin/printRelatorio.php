@@ -51,7 +51,7 @@ if (!is_null($type)) {
 
             case 'siafi':
                 $id_setor = filter_input(INPUT_POST, 'setor');
-                $fonte = filter_input(INPUT_POST, 'fonte');
+                $fonte = filter_input(INPUT_POST, 'fonte', FILTER_DEFAULT, FILTER_FORCE_ARRAY);
                 $num_processo = filter_input(INPUT_POST, 'num_processo', FILTER_DEFAULT, FILTER_FORCE_ARRAY);
                 $dataI = filter_input(INPUT_POST, 'dataI');
                 $dataF = filter_input(INPUT_POST, 'dataF');
@@ -63,6 +63,19 @@ if (!is_null($type)) {
             case 'pedidos':
                 $id_setor = filter_input(INPUT_POST, 'setor');
                 $prioridade = filter_input(INPUT_POST, 'prioridade', FILTER_DEFAULT, FILTER_FORCE_ARRAY);
+
+                if (in_array(0, $prioridade)) {
+                    $prioridade = [];
+                    $count = count(ARRAY_PRIORIDADE);
+
+                    $index = 0;
+                    for ($i = 1; $i < $count; $i++) {
+                        if (ARRAY_PRIORIDADE[$i] != 'Rascunho') {
+                            $prioridade[$index++] = $i;
+                        }
+                    }
+                }
+
                 $status = filter_input(INPUT_POST, 'status', FILTER_DEFAULT, FILTER_FORCE_ARRAY);
                 $dataI = filter_input(INPUT_POST, 'dataI');
                 $dataF = filter_input(INPUT_POST, 'dataF');

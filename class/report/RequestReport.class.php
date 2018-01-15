@@ -211,11 +211,7 @@ class RequestReport implements Report {
         $obj_count = Query::getInstance()->exe("SELECT COUNT(pedido.id) AS total FROM " . $from)->fetch_object();
         $this->foundEntries = $obj_count->total;
 
-        $this->sql = "SELECT pedido.id, DATE_FORMAT(pedido.data_pedido, '%d/%m/%Y') AS data_pedido, prioridade.nome AS prioridade, status.nome AS status, pedido.valor {$this->effort} FROM " . $from . " ORDER BY pedido.id DESC LIMIT " . LIMIT_REQ_REPORT;
-
-        $query = Query::getInstance()->exe($this->sql);
-
-        $this->shownRows = $query->num_rows;
+        $this->sql = "SELECT pedido.id, DATE_FORMAT(pedido.data_pedido, '%d/%m/%Y') AS data_pedido, prioridade.nome AS prioridade, status.nome AS status, pedido.valor {$this->effort} FROM " . $from . " ORDER BY pedido.id DESC";
 
         $query_tot = Query::getInstance()->exe("SELECT round(replace(sum(pedido.valor), ',', '.'), 3) AS total FROM " . $from);
         $tot = $query_tot->fetch_object();
@@ -238,7 +234,6 @@ class RequestReport implements Report {
         $fieldset_results = new Component('fieldset', 'preg');
         $row = new Row();
         $row->addComponent(new Column($this->foundEntries . ' resultados encontrados'));
-        $row->addComponent(new Column('Mostrando ' . $this->shownRows));
         $row->addComponent(new Column('Totalizando R$ ' . number_format($this->totalMoney, 3, ',', '.')));
 
         $fieldset_results->addComponent(new Component('table', '', $row->__toString()));

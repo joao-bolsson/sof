@@ -7,9 +7,9 @@
 final class ReportSIAFIPart extends Component implements Report {
 
     /**
-     * @var string Process number of this part.
+     * @var string Part name.
      */
-    private $num_processo;
+    private $name;
 
     /**
      * @var Table Table to show on this part.
@@ -17,26 +17,42 @@ final class ReportSIAFIPart extends Component implements Report {
     private $table;
 
     /**
+     * @var array Array with sub-parts.
+     */
+    private $parts;
+
+    /**
      * Default constructor.
      *
-     * @param string $num_processo Process number.
+     * @param string $name Part name.
      */
-    public function __construct(string $num_processo) {
+    public function __construct(string $name) {
         parent::__construct('', '');
-        $this->num_processo = $num_processo;
+        $this->name = $name;
 
-        $this->table = new Table('', 'prod', ['Pedido', 'SIAFI', 'Valor', 'Vigência'], true);
+        $this->table = new Table('', 'prod', ['Pedido', 'SIAFI', 'Valor', 'Vigência', 'Licitação'], true);
+        $this->parts = [];
     }
 
     public function buildHeader(): string {
         $fieldset = new Component('fieldset', '');
-        $fieldset->addComponent(new Component('h6', '', 'Processo: ' . $this->num_processo));
+        $fieldset->addComponent(new Component('h6', '', $this->name));
 
         return $fieldset;
     }
 
     public function buildBody(): string {
-        return $this->table;
+        $body = "";
+        if (!$this->table->isEmpty()) {
+            $body .= $this->table->__toString();
+        }
+
+        foreach ($this->parts as $part) {
+            if ($part instanceof ReportSIAFIPart) {
+                $body .= $part->__toString();
+            }
+        }
+        return $body;
     }
 
     public function buildFooter(): string {
@@ -44,22 +60,44 @@ final class ReportSIAFIPart extends Component implements Report {
     }
 
     public function __toString(): string {
-        if (!$this->table->isEmpty()) {
-
-            $part = $this->buildHeader();
-
-            $part .= "<br>" . $this->buildBody();
-
-            $part .= $this->buildFooter();
-
-            return $part;
+        if ($this->table->isEmpty() && count($this->parts) == 0) {
+            return "";
         }
-        return "";
+        $part = $this->buildHeader();
+
+        $part .= "<br>" . $this->buildBody();
+
+        $part .= $this->buildFooter();
+
+        return $part;
+    }
+
+    /**
+     * Gets a part by name.
+     *
+     * @param string $name The part name
+     * @return ReportSIAFIPart The sub-part.
+     */
+    public function getPart(string $name): ReportSIAFIPart {
+        foreach ($this->parts as $part) {
+            if ($part instanceof ReportSIAFIPart) {
+                if ($part->name == $name) {
+                    return $part;
+                }
+            }
+        }
+
+        $part = new ReportSIAFIPart($name);
+        $this->addComponent($part);
+        return $part;
     }
 
     public function addComponent(Component $component) {
         if ($component instanceof Row) {
             $this->table->addComponent($component);
+        } else if ($component instanceof ReportSIAFIPart) {
+            $len = count($this->parts);
+            $this->parts[$len] = $component;
         }
     }
 

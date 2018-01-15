@@ -11,15 +11,30 @@ use PHPUnit\Framework\TestCase;
 class ItemTest extends TestCase {
 
     /**
-     * Test if some methods works with null parameters.
+     * Test to correct a past bug.
+     *
      * @test
      */
-    public function testNull() {
-        $item = new Item(1);
-        $this->assertNotNull($item->getChave(), "Chave é null");
+    public function testVlUtilizado() {
+        $query = Query::getInstance()->exe("SELECT id FROM itens;");
+        $error = false;
+        $i = 0;
+        if ($query->num_rows > 0) {
+            while ($obj = $query->fetch_object()) {
+                $item = new Item($obj->id);
+                $actual = $item->getVlUtilizado();
+                $expected = ($item->getQtUtilizado() * $item->getVlUnitario());
 
-        $item->setChave(null); // this cann't update
-        $this->assertNotNull($item->getChave(), "Chave é null");
+                $epsilon = 0.001;
+
+                if (abs($expected - $actual) >= $epsilon) {
+                    $error = true;
+                    $i++;
+                    echo "Item quebrado: " . $item->getId() . " Expected: " . $expected . " Actual: " . $actual . "\n";
+                }
+            }
+        }
+        $this->assertFalse($error, "Itens quebrados: " . $i);
     }
 
 }
