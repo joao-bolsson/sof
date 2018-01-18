@@ -39,6 +39,12 @@ class Component {
     public function __construct(string $tag, string $class, string $text = '') {
         $this->tag = $tag;
         $this->class = $class;
+
+        $mb = mb_detect_encoding($text, 'UTF-8, ISO-8859-1');
+        if ($mb == 'ISO-8859-1') {
+            $text = utf8_encode($text);
+        }
+
         $this->text = $text;
         $this->components = [];
     }
