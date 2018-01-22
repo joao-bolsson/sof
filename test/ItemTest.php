@@ -16,6 +16,7 @@ class ItemTest extends TestCase {
      * @test
      */
     public function testVlUtilizado() {
+        echo "[ItemTest:testVlUtilizado]\n";
         $query = Query::getInstance()->exe("SELECT id FROM itens;");
         $error = false;
         $i = 0;

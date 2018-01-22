@@ -14,6 +14,7 @@ class SectorTest extends TestCase {
      * @test
      */
     public function testMoney() {
+        echo "[SectorTest:testMoney]\n";
         $query = Query::getInstance()->exe("SELECT id FROM setores WHERE id > 1");
         if ($query->num_rows > 0) {
             while ($obj = $query->fetch_object()) {
