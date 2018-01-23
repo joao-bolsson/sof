@@ -11,3 +11,4 @@ UpdateErrors::scanDataBase();
 UpdateErrors::verifySectors();
 UpdateErrors::checkSIAFI();
 UpdateErrors::checkItems();
+UpdateErrors::refactorSources();
