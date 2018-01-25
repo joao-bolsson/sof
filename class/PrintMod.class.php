@@ -518,10 +518,10 @@ final class PrintMod {
      * @param string $dateI Initial date of report.
      * @param string $dateF Final date of report.
      * @param bool $checkSIAFI Request contains SIAFI.
-     * @param int $fonte Source id.
+     * @param string $fonte Source id.
      * @return string Content of PDF document
      */
-    public static function getRelatorioPedidos(int $id_sector, array $priority, array $status, string $dateI, string $dateF, bool $checkSIAFI, int $fonte): string {
+    public static function getRelatorioPedidos(int $id_sector, array $priority, array $status, string $dateI, string $dateF, bool $checkSIAFI, string $fonte): string {
         $report = new RequestReport($id_sector, $dateI, $dateF);
         $report->setPriority($priority);
         $report->setStatus($status);

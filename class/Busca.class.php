@@ -36,12 +36,12 @@ final class Busca {
     }
 
     public static function getSourcesForSector(int $id_setor): string {
-        $query = Query::getInstance()->exe("SELECT id, fonte_recurso FROM saldo_fonte WHERE id_setor = " . $id_setor . " ORDER BY id DESC LIMIT 300");
+        $query = Query::getInstance()->exe("SELECT DISTINCT fonte_recurso FROM pedido_fonte, pedido WHERE pedido_fonte.id_pedido = pedido.id AND pedido.id_setor = " . $id_setor . " LIMIT 300;");
         if ($query->num_rows > 0) {
             $options = "";
 
             while ($obj = $query->fetch_object()) {
-                $options .= "<option value=\"" . $obj->id . "\">" . $obj->fonte_recurso . "</option>";
+                $options .= "<option value=\"" . $obj->fonte_recurso . "\">" . $obj->fonte_recurso . "</option>";
             }
             return $options;
         } else {
@@ -217,8 +217,7 @@ final class Busca {
         $obj_in = $query_in->fetch_object();
         $obj_out = $query_out->fetch_object();
 
-        $array = array('entrada' => "Total de Entradas: R$ " . number_format($obj_in->soma, 3, ',', '.'),
-            'saida' => "Total de Saídas: R$ " . number_format($obj_out->soma, 3, ',', '.'));
+        $array = array('entrada' => "Total de Entradas: R$ " . number_format($obj_in->soma, 3, ',', '.'), 'saida' => "Total de Saídas: R$ " . number_format($obj_out->soma, 3, ',', '.'));
 
         return json_encode($array);
     }

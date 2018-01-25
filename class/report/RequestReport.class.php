@@ -41,7 +41,7 @@ class RequestReport implements Report {
     private $checkSIAFI;
 
     /**
-     * @var MoneySource The money source.
+     * @var string The money source.
      */
     private $source;
 
@@ -191,14 +191,14 @@ class RequestReport implements Report {
     }
 
     /**
-     * @param int $source Referenced source.
+     * @param string $source Referenced source.
      */
-    public function setSource(int $source) {
-        if ($source != 0) {
-            $this->source = new MoneySource($source);
+    public function setSource(string $source) {
+        if (!empty($source)) {
+            $this->source = $source;
 
-            $this->request_source_id = ", pedido_id_fonte";
-            $this->where_source = "pedido_id_fonte.id_pedido = pedido.id AND pedido_id_fonte.id_fonte = " . $this->source->getId() . " AND";
+            $this->request_source_id = ", pedido_fonte";
+            $this->where_source = "pedido_fonte.id_pedido = pedido.id AND pedido_fonte.fonte_recurso = \"" . $this->source . "\" AND";
         }
     }
 
@@ -226,7 +226,7 @@ class RequestReport implements Report {
         $fieldset->addComponent(new Component('h5', '', 'DESCRIÇÃO DO RELATÓRIO'));
         $fieldset->addComponent(new Component('h6', '', $this->title));
         if ($this->source != null) {
-            $fieldset->addComponent(new Component('h6', '', 'Fonte de Recurso: ' . $this->source->getResource()));
+            $fieldset->addComponent(new Component('h6', '', 'Fonte de Recurso: ' . $this->source));
         }
         $fieldset->addComponent(new Component('h6', '', 'Setor: ' . ARRAY_SETORES[$this->sector]));
         $fieldset->addComponent(new Component('h6', '', 'Período de Emissão: ' . $this->dateS . ' à ' . $this->dateE));
