@@ -44,23 +44,27 @@ if (isset($_SESSION['imprimirPedido']) && $_SESSION['imprimirPedido'] && $_SESSI
         </fieldset><br>";
     $html_rel .= PrintMod::getComentarios($id_pedido);
     $html = $html_style . $html_header . $html_itens . $html_rel . "</body>";
-    $mpdf = new \Mpdf\Mpdf();
     date_default_timezone_set('America/Sao_Paulo');
-    //definimos o tipo de exibicao
-    $mpdf->SetDisplayMode('fullpage');
-    if ($pedido_rascunho) {
-        $mpdf->useOnlyCoreFonts = true;
-        $mpdf->watermark_font = 'DejaVuSansCondensed';
-        $mpdf->showWatermarkText = true;
-        $mpdf->SetWatermarkText('RASCUNHO');
+    try {
+        $mpdf = new \Mpdf\Mpdf();
+        //definimos o tipo de exibicao
+        $mpdf->SetDisplayMode('fullpage');
+        if ($pedido_rascunho) {
+            $mpdf->useOnlyCoreFonts = true;
+            $mpdf->watermark_font = 'DejaVuSansCondensed';
+            $mpdf->showWatermarkText = true;
+            $mpdf->SetWatermarkText('RASCUNHO');
+        }
+        $data = date('j/m/Y  H:i');
+        //definimos oque vai conter no rodape do pdf
+        $mpdf->SetFooter($data . '||Página {PAGENO}/{nb}');
+        //e escreve o conteudo html vindo de nossa página html em nosso arquivo
+        $mpdf->WriteHTML($html);
+        //fechamos nossa instancia ao pdf
+        $mpdf->Output();
+    } catch (\Mpdf\MpdfException $ex) {
+        Logger::error("Exception on printRel: " . $ex);
     }
-    $data = date('j/m/Y  H:i');
-    //definimos oque vai conter no rodape do pdf
-    $mpdf->SetFooter($data . '||Página {PAGENO}/{nb}');
-    //e escreve o conteudo html vindo de nossa página html em nosso arquivo
-    $mpdf->WriteHTML($html);
-    //fechamos nossa instancia ao pdf
-    $mpdf->Output();
     //pausamos a tela para exibir oque foi feito
     exit();
 }

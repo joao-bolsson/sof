@@ -31,17 +31,22 @@ if (isset($_SESSION["relatorioProcessos"]) && $_SESSION["relatorioProcessos"] &&
 
     $html = $html_style . $html_header . $html_itens . "</body>";
 
-    $mpdf = new \Mpdf\Mpdf();
-    date_default_timezone_set('America/Sao_Paulo');
-    //definimos o tipo de exibicao
-    $mpdf->SetDisplayMode('fullpage');
-    $data = date('j/m/Y  H:i');
-    //definimos oque vai conter no rodape do pdf
-    $mpdf->SetFooter("{$data}||Pagina {PAGENO}/{nb}");
-    //e escreve o conteudo html vindo de nossa página html em nosso arquivo
-    $mpdf->WriteHTML($html);
-    //fechamos nossa instancia ao pdf
-    $mpdf->Output();
+    try {
+        $mpdf = new \Mpdf\Mpdf();
+        date_default_timezone_set('America/Sao_Paulo');
+        //definimos o tipo de exibicao
+        $mpdf->SetDisplayMode('fullpage');
+        $data = date('j/m/Y  H:i');
+        //definimos oque vai conter no rodape do pdf
+        $mpdf->SetFooter("{$data}||Pagina {PAGENO}/{nb}");
+        //e escreve o conteudo html vindo de nossa página html em nosso arquivo
+        $mpdf->WriteHTML($html);
+        //fechamos nossa instancia ao pdf
+        $mpdf->Output();
+    } catch (\Mpdf\MpdfException $ex) {
+        Logger::error("Exception on printRel: " . $ex);
+    }
+
     //pausamos a tela para exibir oque foi feito
     exit();
 }
