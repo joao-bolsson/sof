@@ -12,7 +12,7 @@ include_once '../class/report/ReportSIAFI.class.php';
 require_once '../defines.php';
 require_once MPDF_PATH . '/vendor/autoload.php';
 
-$mpdf = new mPDF();
+$mpdf = new \Mpdf\Mpdf();
 date_default_timezone_set('America/Sao_Paulo');
 
 $html_style = "

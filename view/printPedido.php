@@ -44,7 +44,7 @@ if (isset($_SESSION['imprimirPedido']) && $_SESSION['imprimirPedido'] && $_SESSI
         </fieldset><br>";
     $html_rel .= PrintMod::getComentarios($id_pedido);
     $html = $html_style . $html_header . $html_itens . $html_rel . "</body>";
-    $mpdf = new mPDF();
+    $mpdf = new \Mpdf\Mpdf();
     date_default_timezone_set('America/Sao_Paulo');
     //definimos o tipo de exibicao
     $mpdf->SetDisplayMode('fullpage');

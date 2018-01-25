@@ -8,6 +8,7 @@ class ComposerStaticInit56f8d2788aa9ee151f1621ddc1ac0f51
 {
     public static $files = array (
         '6124b4c8570aa390c21fafd04a26c69f' => __DIR__ . '/..' . '/myclabs/deep-copy/src/DeepCopy/deep_copy.php',
+        '5255c38a0faeba867671b61dfda6d864' => __DIR__ . '/..' . '/paragonie/random_compat/lib/random.php',
     );
 
     public static $prefixLengthsPsr4 = array (
@@ -22,6 +23,14 @@ class ComposerStaticInit56f8d2788aa9ee151f1621ddc1ac0f51
         'S' => 
         array (
             'Symfony\\Component\\Yaml\\' => 23,
+        ),
+        'P' => 
+        array (
+            'Psr\\Log\\' => 8,
+        ),
+        'M' => 
+        array (
+            'Mpdf\\' => 5,
         ),
         'D' => 
         array (
@@ -44,6 +53,14 @@ class ComposerStaticInit56f8d2788aa9ee151f1621ddc1ac0f51
         'Symfony\\Component\\Yaml\\' => 
         array (
             0 => __DIR__ . '/..' . '/symfony/yaml',
+        ),
+        'Psr\\Log\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/psr/log/Psr/Log',
+        ),
+        'Mpdf\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/mpdf/mpdf/src',
         ),
         'Doctrine\\Instantiator\\' => 
         array (
@@ -70,9 +87,14 @@ class ComposerStaticInit56f8d2788aa9ee151f1621ddc1ac0f51
     );
 
     public static $classMap = array (
+        'FPDF_TPL' => __DIR__ . '/..' . '/setasign/fpdi/fpdf_tpl.php',
+        'FPDI' => __DIR__ . '/..' . '/setasign/fpdi/fpdi.php',
         'File_Iterator' => __DIR__ . '/..' . '/phpunit/php-file-iterator/src/Iterator.php',
         'File_Iterator_Facade' => __DIR__ . '/..' . '/phpunit/php-file-iterator/src/Facade.php',
         'File_Iterator_Factory' => __DIR__ . '/..' . '/phpunit/php-file-iterator/src/Factory.php',
+        'FilterASCII85' => __DIR__ . '/..' . '/setasign/fpdi/filters/FilterASCII85.php',
+        'FilterASCIIHexDecode' => __DIR__ . '/..' . '/setasign/fpdi/filters/FilterASCIIHexDecode.php',
+        'FilterLZW' => __DIR__ . '/..' . '/setasign/fpdi/filters/FilterLZW.php',
         'PHPUnit\\DbUnit\\AbstractTester' => __DIR__ . '/..' . '/phpunit/dbunit/src/AbstractTester.php',
         'PHPUnit\\DbUnit\\Constraint\\DataSetIsEqual' => __DIR__ . '/..' . '/phpunit/dbunit/src/Constraint/DataSetIsEqual.php',
         'PHPUnit\\DbUnit\\Constraint\\TableIsEqual' => __DIR__ . '/..' . '/phpunit/dbunit/src/Constraint/TableIsEqual.php',
@@ -694,6 +716,8 @@ class ComposerStaticInit56f8d2788aa9ee151f1621ddc1ac0f51
         'TheSeer\\Tokenizer\\TokenCollectionException' => __DIR__ . '/..' . '/theseer/tokenizer/src/TokenCollectionException.php',
         'TheSeer\\Tokenizer\\Tokenizer' => __DIR__ . '/..' . '/theseer/tokenizer/src/Tokenizer.php',
         'TheSeer\\Tokenizer\\XMLSerializer' => __DIR__ . '/..' . '/theseer/tokenizer/src/XMLSerializer.php',
+        'fpdi_pdf_parser' => __DIR__ . '/..' . '/setasign/fpdi/fpdi_pdf_parser.php',
+        'pdf_context' => __DIR__ . '/..' . '/setasign/fpdi/pdf_context.php',
     );
 
     public static function getInitializer(ClassLoader $loader)
