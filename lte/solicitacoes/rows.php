@@ -7,7 +7,6 @@
  */
 
 $select_grupo = BuscaLTE::getOptionsGrupos($_SESSION["id_setor"]);
-$select_sources = BuscaLTE::getOptionsSources($_SESSION["id_setor"]);
 ?>
 <div class="row">
     <div class="col-xs-12">
@@ -147,15 +146,6 @@ $select_sources = BuscaLTE::getOptionsSources($_SESSION["id_setor"]);
                             <label>Selecione o grupo</label>
                             <select id="grupo" class="form-control select2" name="grupo" required>
                                 <?= $select_grupo ?>
-                            </select>
-                        </div>
-                    <?php endif ?>
-                    <?php if (strlen($select_sources) > 0): ?>
-                        <h2>Fonte de Recurso</h2>
-                        <div class="form-group">
-                            <label>Selecione a fonte</label>
-                            <select id="source" class="form-control select2" name="fonte" required>
-                                <?= $select_sources ?>
                             </select>
                         </div>
                     <?php endif ?>
