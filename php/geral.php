@@ -309,12 +309,6 @@ if (Busca::isActive()) {
 
                 $transfere = $sof->transferMoneyTo($sector, $valor, $just);
 
-                $fonte = filter_input(INPUT_POST, 'fonte');
-
-                $moneySource = new MoneySource($fonte);
-                $oldValue = $moneySource->getValue();
-                $moneySource->setValue($oldValue + $valor);
-
                 if ($transfere) {
                     echo "success";
                 } else {

@@ -1127,7 +1127,6 @@ final class BuscaLTE {
             $setor_transf = ($lancamento->categoria == 3) ? self::getSetorTransf($lancamento->id) : '';
 
             $row = new Row();
-            $row->addComponent(new Column(''));
             $row->addComponent(new Column(ARRAY_SETORES[$lancamento->id_setor]));
             $row->addComponent(new Column($lancamento->data));
             $row->addComponent(new Column("<span style=\"color: " . $cor . ";\">" . 'R$ ' . $lancamento->valor . "</span>"));
