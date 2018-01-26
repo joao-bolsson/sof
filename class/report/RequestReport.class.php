@@ -121,7 +121,6 @@ class RequestReport implements Report {
         $this->where_sector = 'AND pedido.id_setor = ' . $this->sector;
         $this->where_status = "";
         $this->where_priority = "";
-        $this->where_sector = "";
         $this->where_effort = "";
         $this->tb_effort = "";
         $this->effort = "";
@@ -247,6 +246,7 @@ class RequestReport implements Report {
     public function buildBody(): string {
         $table = new Table('', 'prod', $this->headers, true);
 
+        Logger::info($this->sql);
         $query = Query::getInstance()->exe($this->sql);
         if ($query) {
             while ($request = $query->fetch_object()) {
