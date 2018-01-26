@@ -374,6 +374,10 @@ final class Request {
                 $new_vl = $obj->saldo_fonte + $value;
                 $new_vl = number_format($new_vl, 3, '.', '');
                 Query::getInstance()->exe("UPDATE saldo_fonte SET valor = '" . $new_vl . "' WHERE id_setor = " . $this->id_sector . " AND id = " . $obj->id_fonte);
+
+                $sector = new Sector($this->id_sector);
+                $newMoney = $sector->getMoney() + $value;
+                $sector->setMoney($newMoney);
             }
         } else {
             // devolve o valor ao sof
