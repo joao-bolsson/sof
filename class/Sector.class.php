@@ -36,7 +36,6 @@ final class Sector {
         $this->moneySources = [];
         $this->fillFields();
         $this->fillMoneySources();
-        $this->updateMoney();
     }
 
     private function fillMoneySources() {

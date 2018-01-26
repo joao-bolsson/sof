@@ -208,7 +208,6 @@ final class Request {
     }
 
     private function sendToSOF() {
-        $this->updateSectorMoney();
         $this->status = 2;
         $this->change = 0;
         // enviado ao sof
@@ -375,7 +374,6 @@ final class Request {
                 $new_vl = $obj->saldo_fonte + $value;
                 $new_vl = number_format($new_vl, 3, '.', '');
                 Query::getInstance()->exe("UPDATE saldo_fonte SET valor = '" . $new_vl . "' WHERE id_setor = " . $this->id_sector . " AND id = " . $obj->id_fonte);
-                $this->updateSectorMoney();
             }
         } else {
             // devolve o valor ao sof
@@ -495,12 +493,6 @@ final class Request {
         if ($error) {
             Logger::error("Pedido quebrado em manage: " . $this->id);
         }
-    }
-
-    private function updateSectorMoney() {
-        $sector = new Sector($this->id_sector);
-
-        $sector->updateMoney();
     }
 
     private function update() {
