@@ -42,6 +42,20 @@ final class Table extends Component {
     }
 
     /**
+     * @return array Table headers
+     */
+    public function getHeaders(): array {
+        return $this->headers;
+    }
+
+    /**
+     * @param array $headers
+     */
+    public function setHeaders(array $headers) {
+        $this->headers = $headers;
+    }
+
+    /**
      * @return string String representation of this table.
      */
     public function __toString(): string {

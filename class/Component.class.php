@@ -66,6 +66,13 @@ class Component {
     }
 
     /**
+     * @return array Components.
+     */
+    public function getComponents(): array {
+        return $this->components;
+    }
+
+    /**
      * @return string The string representation os this component.
      */
     public function __toString() {

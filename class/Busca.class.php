@@ -37,16 +37,14 @@ final class Busca {
 
     public static function getSourcesForSector(int $id_setor): string {
         $query = Query::getInstance()->exe("SELECT DISTINCT fonte_recurso FROM pedido_fonte, pedido WHERE pedido_fonte.id_pedido = pedido.id AND pedido.id_setor = " . $id_setor . " LIMIT 300;");
+        $options = "<option value=\"0\">Ignorar Fontes</option>";
         if ($query->num_rows > 0) {
-            $options = "";
 
             while ($obj = $query->fetch_object()) {
                 $options .= "<option value=\"" . $obj->fonte_recurso . "\">" . $obj->fonte_recurso . "</option>";
             }
-            return $options;
-        } else {
-            return "<option value=\"0\">Ignorar Fontes</option>";
         }
+        return $options;
     }
 
     public static function getSources(int $id): string {
