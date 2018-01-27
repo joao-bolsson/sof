@@ -711,6 +711,13 @@ if (Busca::isActive()) {
                 }
                 $request->setContract($tipo_cont, $siafi);
 
+                $checkPlanoTrabalho = filter_input(INPUT_POST, 'checkPlanoTrabalho');
+                if (!empty($checkPlanoTrabalho)) {
+                    $plan = filter_input(INPUT_POST, 'planoTrabalho');
+
+                    $request->setWorkPlan($plan);
+                }
+
                 header("Location: ../lte/solicitacoes.php");
                 break;
             default:

@@ -154,6 +154,8 @@ function fillSaldo() {
 }
 
 function limpaTelaSolic() {
+    $('#checkPlanoTrabalho').iCheck('uncheck');
+    checkPlan(false);
     fillSaldo();
     document.getElementById('pedido').value = 0;
     document.getElementById('conteudoPedido').innerHTML = '';
@@ -303,17 +305,22 @@ function editaPedido(id_pedido) {
     populaLicitacao(id_pedido);
     populaGrupo(id_pedido);
     populaContrato(id_pedido);
-    populaSources(id_pedido);
+    populaPlano(id_pedido);
 }
 
-function populaSources(id_pedido) {
+function populaPlano(id_pedido) {
     $.post('../php/busca.php', {
         users: 1,
-        form: 'populaSources',
+        form: 'populaPlano',
         id_pedido: id_pedido
     }).done(function (resposta) {
-        if (resposta) {
-            $('#source').val(resposta).trigger('change');
+        if (resposta.length > 0) {
+            $('#checkPlanoTrabalho').iCheck('check');
+            checkPlan(true);
+            document.getElementById('planoTrabalho').value = resposta;
+        } else {
+            $('#checkPlanoTrabalho').iCheck('uncheck');
+            checkPlan(false);
         }
     });
 }

@@ -159,11 +159,28 @@ final class PrintMod {
                     </tr>
                 </table>";
         $return .= ($request->aprov_gerencia) ? '<p><b>Aprovado Pela Gerência</b></p>' : '';
+
+        $workPlan = self::getWorkPlan($id_request);
+        if (!empty($workPlan)) {
+            $return .= "<p><b>Plano de Trabalho: </b> " . $workPlan . " </p>";
+        }
+
         $return .= "<p><b>Observação da Unidade Solicitante: </b></p>
                 <p style=\"font-weight: normal !important;\">	" . $request->obs . "</p>
             </fieldset><br>";
         $return .= self::getTableFontesAndLicitacao($id_request);
         return $return;
+    }
+
+    private static function getWorkPlan(int $id_request): string {
+        $query = Query::getInstance()->exe("SELECT plano FROM pedido_plano WHERE id_pedido = " . $id_request);
+
+        if ($query->num_rows > 0) {
+            $obj = $query->fetch_object();
+
+            return $obj->plano;
+        }
+        return "";
     }
 
     private static function getTableFontesAndLicitacao(int $id_request): string {

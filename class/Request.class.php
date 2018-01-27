@@ -122,6 +122,11 @@ final class Request {
     private $siafi_date;
 
     /**
+     * @var string Work plan.
+     */
+    private $workPlan;
+
+    /**
      * Default construct.
      * @param int $id Id request (0 for a no existing request in db).
      */
@@ -133,12 +138,23 @@ final class Request {
         $this->approv_manager = 0;
         $this->moneySource = NULL;
         $this->group = NULL;
+        $this->workPlan = "";
         if ($this->id != NEW_REQUEST_ID) {
             $this->fillFieldsFromDB();
             $this->fillItens();
             $this->initMoneySource();
             $this->initGroup();
             $this->initSIAFI();
+            $this->initWorkPlan();
+        }
+    }
+
+    private function initWorkPlan() {
+        $query = Query::getInstance()->exe("SELECT plano FROM pedido_plano WHERE id_pedido = " . $this->id . " LIMIT 1;");
+
+        if ($query->num_rows > 0) {
+            $obj = $query->fetch_object();
+            $this->workPlan = $obj->plano;
         }
     }
 
@@ -686,6 +702,25 @@ final class Request {
         }
         return true;
     }
+
+    /**
+     * @param string $workPlan
+     */
+    public function setWorkPlan(string $workPlan) {
+        if (empty($this->workPlan)) {
+            // INSERT
+            $builder = new SQLBuilder(SQLBuilder::$INSERT);
+            $builder->setTables(['pedido_plano']);
+            $builder->setValues([$this->id, $workPlan]);
+
+            Query::getInstance()->exe($builder->__toString());
+        } else {
+            // UPDATE
+            Query::getInstance()->exe("UPDATE pedido_plano SET plano = '" . $workPlan . "' WHERE id_pedido = " . $this->id);
+        }
+        $this->workPlan = $workPlan;
+    }
+
 
     /**
      * Initialize all values about SIAFI (effort).

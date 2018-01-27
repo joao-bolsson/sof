@@ -130,13 +130,12 @@ final class Busca {
         return $return;
     }
 
-    public static function getInfoSources(int $id_request) {
-        $query = Query::getInstance()->exe("SELECT id_fonte FROM pedido_id_fonte WHERE id_pedido = " . $id_request);
+    public static function getInfoPlano(int $id_request): string {
+        $query = Query::getInstance()->exe("SELECT plano FROM pedido_plano WHERE id_pedido = " . $id_request);
         if ($query->num_rows > 0) {
-            return $query->fetch_object()->id_fonte;
+            return $query->fetch_object()->plano;
         }
-        Logger::error("Get info sources returning 0: impossible");
-        return 0;
+        return "";
     }
 
     public static function getInfoContrato(int $id_request) {

@@ -64,15 +64,17 @@ $select_grupo = BuscaLTE::getOptionsGrupos($_SESSION["id_setor"]);
                 <div class="box-body">
                     <table class="table table-bordered table-striped">
                         <thead>
-                        <th></th>
-                        <th>NUM_PROCESSO</th>
-                        <th>COD_REDUZIDO</th>
-                        <th>COMPLEMENTO_ITEM</th>
-                        <th>VL_UNITARIO</th>
-                        <th>NOME_FORNECEDOR</th>
-                        <th>NUM_LICITACAO</th>
-                        <th>QT_SOLICITADA</th>
-                        <th>VALOR</th>
+                        <tr>
+                            <th></th>
+                            <th>NUM_PROCESSO</th>
+                            <th>COD_REDUZIDO</th>
+                            <th>COMPLEMENTO_ITEM</th>
+                            <th>VL_UNITARIO</th>
+                            <th>NOME_FORNECEDOR</th>
+                            <th>NUM_LICITACAO</th>
+                            <th>QT_SOLICITADA</th>
+                            <th>VALOR</th>
+                        </tr>
                         </thead>
                         <tbody id="conteudoPedido"></tbody>
                     </table>
@@ -164,9 +166,10 @@ $select_grupo = BuscaLTE::getOptionsGrupos($_SESSION["id_setor"]);
                     </div>
                     <div class="input-group">
                         <span class="input-group-addon">
-                          <input id="checkPlanoTrabalho" class="minimal" type="checkbox" name="checkPlanoTrabalho">
+                          <input id="checkPlanoTrabalho" type="checkbox" name="checkPlanoTrabalho">
                         </span>
-                        <input id="planoTrabalho" class="form-control" type="text" placeholder="Plano de Trabalho" name="planoTrabalho" disabled>
+                        <input id="planoTrabalho" class="form-control" type="text" placeholder="Plano de Trabalho"
+                               name="planoTrabalho" disabled>
                     </div>
                     <!-- /input-group -->
                 </div><!-- ./card-inner -->

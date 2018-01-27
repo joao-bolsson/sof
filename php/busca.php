@@ -111,10 +111,10 @@ if (!is_null($admin) && isset($_SESSION['id_setor']) && ($_SESSION['id_setor'] =
             echo Busca::getSaldo($_SESSION['id_setor']);
             break;
 
-        case 'populaSources':
+        case 'populaPlano':
             $id_pedido = filter_input(INPUT_POST, 'id_pedido');
             if (!empty($id_pedido)) {
-                echo Busca::getInfoSources($id_pedido);
+                echo Busca::getInfoPlano($id_pedido);
             }
             break;
 
