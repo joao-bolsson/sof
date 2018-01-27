@@ -162,6 +162,13 @@ $select_grupo = BuscaLTE::getOptionsGrupos($_SESSION["id_setor"]);
                         <label>SIAFI</label>
                         <input class="form-control" id="siafi" name="siafi" type="text">
                     </div>
+                    <div class="input-group">
+                        <span class="input-group-addon">
+                          <input id="checkPlanoTrabalho" class="minimal" type="checkbox" name="checkPlanoTrabalho">
+                        </span>
+                        <input id="planoTrabalho" class="form-control" type="text" placeholder="Plano de Trabalho" name="planoTrabalho" disabled>
+                    </div>
+                    <!-- /input-group -->
                 </div><!-- ./card-inner -->
                 <div class="box-footer">
                     <button id="btnLimpa" class="btn btn-default" type="button" style="width: 49%;"
