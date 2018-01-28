@@ -510,39 +510,50 @@ final class PrintMod {
     }
 
     public static function getRelatorioLib(int $id_sector, array $category, string $dateI, string $dateF): string {
-        $return = "<fieldset class=\"preg\">
-                <h5>DESCRIÇÃO DO RELATÓRIO</h5>
-                <h6>Relatório de Liberações Orçamentárias</h6>
-                <h6>Período de Emissão: " . $dateI . " à " . $dateF . "</h6></fieldset><br>";
-
         $where_sector = ($id_sector != 0) ? 'AND id_setor = ' . $id_sector : '';
         $where_category = ' AND (';
 
+        $categories = "";
         $len = count($category);
         for ($i = 0; $i < $len; $i++) {
+            $categories .= ucfirst(ARRAY_CATEGORIA[$category[$i]]);
             $where_category .= 'categoria = ' . $category[$i];
             if ($i != $len - 1) {
                 $where_category .= ' OR ';
+                $categories .= ", ";
             }
         }
         $where_category .= ')';
+
+        $return = "<fieldset class=\"preg\">
+                <h5>DESCRIÇÃO DO RELATÓRIO</h5>
+                <h6>Relatório de Liberações Orçamentárias</h6>
+                <h6>Período de Emissão: " . $dateI . " à " . $dateF . "</h6>
+                <h6>Setor: " . ARRAY_SETORES[$id_sector] . "</h6>
+                <h6>Categoria: " . $categories . "</h6></fieldset><br>";
+
         $dataIni = Util::dateFormat($dateI);
         $dataFim = Util::dateFormat($dateF);
 
-        $query = Query::getInstance()->exe("SELECT id_setor, DATE_FORMAT(data, '%d/%m/%Y') AS data, valor, categoria FROM saldos_lancamentos WHERE data BETWEEN '" . $dataIni . "' AND '" . $dataFim . "' " . $where_sector . $where_category . ' ORDER BY id ASC');
+        $query = Query::getInstance()->exe("SELECT DATE_FORMAT(data, '%d/%m/%Y') AS data, valor, categoria FROM saldos_lancamentos WHERE data BETWEEN '" . $dataIni . "' AND '" . $dataFim . "' " . $where_sector . $where_category . ' ORDER BY id ASC');
 
-        $table = new Table('', 'prod', ['Setor', 'Data', 'Valor', 'Categoria'], true);
+        $table = new Table('', 'prod', ['Data', 'Valor'], true);
+        $sum = 0;
         while ($obj = $query->fetch_object()) {
+            $sum += $obj->valor;
+
             $row = new Row();
-            $row->addComponent(new Column(ARRAY_SETORES[$obj->id_setor]));
             $row->addComponent(new Column($obj->data));
             $row->addComponent(new Column('R$ ' . number_format($obj->valor, 3, ',', '.')));
-            $row->addComponent(new Column(ucfirst(ARRAY_CATEGORIA[$obj->categoria])));
 
             $table->addComponent($row);
         }
 
         $return .= $table;
+
+        $return .= "<fieldset class='preg'>
+<h5>Somatório: " . number_format($sum, 3, ',', '.') . "</h5>
+</fieldset>";
         return $return;
     }
 
