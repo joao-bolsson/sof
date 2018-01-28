@@ -1126,7 +1126,18 @@ final class BuscaLTE {
             $cor = ($lancamento->valor < 0) ? 'red' : 'green';
             $setor_transf = ($lancamento->categoria == 3) ? self::getSetorTransf($lancamento->id) : '';
 
+            $btn = ($_SESSION['id_setor'] == 2 && $lancamento->categoria != 4 && $lancamento->categoria != 2) ? new Button('', BTN_DEFAULT, "undoFreeMoney(" . $lancamento->id . ")", "data-toggle=\"tooltip\"", 'Desfazer', 'undo') : '';
+
+            $db = "";
+            if (isset($_SESSION['database'])) {
+                $db = $_SESSION['database'];
+            }
+
+            if (!empty($db) && $db != 'main') {
+                $btn = "";
+            }
             $row = new Row();
+            $row->addComponent(new Column($btn));
             $row->addComponent(new Column(ARRAY_SETORES[$lancamento->id_setor]));
             $row->addComponent(new Column($lancamento->data));
             $row->addComponent(new Column("<span style=\"color: " . $cor . ";\">" . 'R$ ' . $lancamento->valor . "</span>"));
