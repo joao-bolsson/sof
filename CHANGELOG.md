@@ -1,5 +1,15 @@
 ## CHANGELOG ##
 
+#### v2.3.1 - 29/01/2018 ####
+- Desvinculação de pedidos com fontes e transferências de saldos com fontes
+- Melhoria do relatório de liberações orçamentárias (melhor descrição do relatório e retirada de campos redundantes)
+- Realização de pedidos marcados com Plano de trabalho
+- Ajustes no layout do relatório de pedidos
+- Correção de bug no relatório de pedidos (mostrava pedidos que não eram do Setor selecionado)
+- Possibilidade de desfazer liberação orçamentária (disponível somente ao usar o banco principal)
+
+Nota: O banco principal (main) é o banco do ano corrente
+
 #### v2.3.0 - 15/01/2018 ####
 - Corrige bug ao editar itens (valor utilizado sempre incorreto)
 - Opção "Todas" no campo de prioridades para relatório de pedidos

@@ -10,9 +10,7 @@ include_once '../class/PrintMod.class.php';
 include_once '../class/report/ReportSIAFIPart.class.php';
 include_once '../class/report/ReportSIAFI.class.php';
 require_once '../defines.php';
-require_once MPDF_PATH . '/vendor/autoload.php';
 
-$mpdf = new mPDF();
 date_default_timezone_set('America/Sao_Paulo');
 
 $html_style = "
@@ -122,14 +120,21 @@ if (!is_null($type)) {
 }
 
 $html .= "</body>";
-//definimos o tipo de exibicao
-$mpdf->SetDisplayMode('fullpage');
-$data = date('j/m/Y  H:i');
-//definimos oque vai conter no rodape do pdf
-$mpdf->SetFooter("{$data}||Página {PAGENO}/{nb}");
-//e escreve o conteudo html vindo de nossa página html em nosso arquivo
-$mpdf->WriteHTML($html);
-//fechamos nossa instancia ao pdf
-$mpdf->Output();
+require_once MPDF_PATH . '/vendor/autoload.php';
+try {
+    $mpdf = new \Mpdf\Mpdf();
+    //definimos o tipo de exibicao
+    $mpdf->SetDisplayMode('fullpage');
+    $data = date('j/m/Y  H:i');
+    //definimos oque vai conter no rodape do pdf
+    $mpdf->SetFooter("{$data}||Página {PAGENO}/{nb}");
+    //e escreve o conteudo html vindo de nossa página html em nosso arquivo
+    $mpdf->WriteHTML($html);
+    //fechamos nossa instancia ao pdf
+    $mpdf->Output();
+} catch (\Mpdf\MpdfException $ex) {
+    Logger::error("Exception on printRel: " . $ex);
+}
+
 //pausamos a tela para exibir oque foi feito
 exit();

@@ -88,7 +88,11 @@ $html_header = "
   <hr/>";
 
 $date = new DateTime(Util::dateFormat($dataF));
-$date->add(new DateInterval('P15D'));
+try {
+    $date->add(new DateInterval('P15D'));
+} catch (\Exception $e) {
+    Logger::error("Exception in printSolicTax");
+}
 $data_prox = $date->format('d/m/Y');
 $html = "
   <fieldset>
@@ -138,17 +142,22 @@ $html = "
   </fieldset>";
 
 $html = $html_style . $html_header . $html . "</body>";
-$mpdf = new mPDF();
-date_default_timezone_set('America/Sao_Paulo');
-//definimos o tipo de exibicao
-$mpdf->SetDisplayMode('fullpage');
 
-$data = date('j/m/Y  H:i');
-//definimos oque vai conter no rodape do pdf
-$mpdf->SetFooter($data . '||Página {PAGENO}/{nb}');
-//e escreve todo conteudo html vindo de nossa página html em nosso arquivo
-$mpdf->WriteHTML($html);
-//fechamos nossa instancia ao pdf
-$mpdf->Output();
+try {
+    $mpdf = new \Mpdf\Mpdf();
+    date_default_timezone_set('America/Sao_Paulo');
+    //definimos o tipo de exibicao
+    $mpdf->SetDisplayMode('fullpage');
+
+    $data = date('j/m/Y  H:i');
+    //definimos oque vai conter no rodape do pdf
+    $mpdf->SetFooter($data . '||Página {PAGENO}/{nb}');
+    //e escreve todo conteudo html vindo de nossa página html em nosso arquivo
+    $mpdf->WriteHTML($html);
+    //fechamos nossa instancia ao pdf
+    $mpdf->Output();
+} catch (\Mpdf\MpdfException $ex) {
+    Logger::error("Exception on printRel: " . $ex);
+}
 
 exit();

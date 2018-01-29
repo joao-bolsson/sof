@@ -12,6 +12,17 @@ $(function () {
         };
     }
 
+    var checkPlanTrab = $('#checkPlanoTrabalho');
+
+    checkPlanTrab.on('ifChecked', function () {
+        checkPlan(true);
+    });
+
+    checkPlanTrab.on('ifUnchecked', function () {
+        checkPlan(false);
+    });
+
+
     var element_gera = document.getElementById('gera');
 
     if (element_gera !== null) {
@@ -47,6 +58,12 @@ $(function () {
         }
     }
 });
+
+function checkPlan(status) {
+    document.getElementById('planoTrabalho').value = "";
+    document.getElementById('planoTrabalho').disabled = !status;
+    document.getElementById('planoTrabalho').required = !status;
+}
 
 function changeTipoLic(element) {
     var selected = element.value;
@@ -98,6 +115,12 @@ function iniPagSolicitacoes() {
         checkboxClass: 'icheckbox_minimal-blue',
         radioClass: 'iradio_minimal-blue'
     });
+
+    $('#checkPlanoTrabalho').iCheck({
+        checkboxClass: 'icheckbox_minimal-blue',
+        radioClass: 'iradio_minimal-blue'
+    });
+
     for (var i = 1; i <= 3; i++) {
         var tipoCont = $('#tipoCont' + i);
         tipoCont.iCheck({
@@ -131,6 +154,8 @@ function fillSaldo() {
 }
 
 function limpaTelaSolic() {
+    $('#checkPlanoTrabalho').iCheck('uncheck');
+    checkPlan(false);
     fillSaldo();
     document.getElementById('pedido').value = 0;
     document.getElementById('conteudoPedido').innerHTML = '';
@@ -280,17 +305,22 @@ function editaPedido(id_pedido) {
     populaLicitacao(id_pedido);
     populaGrupo(id_pedido);
     populaContrato(id_pedido);
-    populaSources(id_pedido);
+    populaPlano(id_pedido);
 }
 
-function populaSources(id_pedido) {
+function populaPlano(id_pedido) {
     $.post('../php/busca.php', {
         users: 1,
-        form: 'populaSources',
+        form: 'populaPlano',
         id_pedido: id_pedido
     }).done(function (resposta) {
-        if (resposta) {
-            $('#source').val(resposta).trigger('change');
+        if (resposta.length > 0) {
+            $('#checkPlanoTrabalho').iCheck('check');
+            checkPlan(true);
+            document.getElementById('planoTrabalho').value = resposta;
+        } else {
+            $('#checkPlanoTrabalho').iCheck('uncheck');
+            checkPlan(false);
         }
     });
 }

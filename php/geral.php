@@ -309,12 +309,6 @@ if (Busca::isActive()) {
 
                 $transfere = $sof->transferMoneyTo($sector, $valor, $just);
 
-                $fonte = filter_input(INPUT_POST, 'fonte');
-
-                $moneySource = new MoneySource($fonte);
-                $oldValue = $moneySource->getValue();
-                $moneySource->setValue($oldValue + $valor);
-
                 if ($transfere) {
                     echo "success";
                 } else {
@@ -650,13 +644,6 @@ if (Busca::isActive()) {
                     exit("Pedido zerado. Esse pedido não será inserido no sistema. Volte e recarregue a página.");
                 }
 
-                $id_fonte = filter_input(INPUT_POST, 'fonte');
-                if (!is_null($id_fonte)) {
-                    if (!Busca::hasSourcesForRequest($id_fonte, $total_pedido)) {
-                        exit("Erro: O Saldo da fonte selecionada não é suficiente para realizar o pedido.");
-                    }
-                }
-
                 $prioridade = filter_input(INPUT_POST, 'st');
                 $obs = filter_input(INPUT_POST, 'obs');
 
@@ -724,8 +711,12 @@ if (Busca::isActive()) {
                 }
                 $request->setContract($tipo_cont, $siafi);
 
-                $moneySource = new MoneySource($id_fonte);
-                $request->setMoneySource($moneySource);
+                $checkPlanoTrabalho = filter_input(INPUT_POST, 'checkPlanoTrabalho');
+                if (!empty($checkPlanoTrabalho)) {
+                    $plan = filter_input(INPUT_POST, 'planoTrabalho');
+
+                    $request->setWorkPlan($plan);
+                }
 
                 header("Location: ../lte/solicitacoes.php");
                 break;

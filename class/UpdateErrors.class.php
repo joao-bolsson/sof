@@ -10,6 +10,21 @@ spl_autoload_register(function (string $class_name) {
 
 class UpdateErrors {
 
+    public static function refactorSources() {
+        $query = Query::getInstance()->exe("SELECT saldo_fonte.fonte_recurso, saldo_fonte.ptres, saldo_fonte.plano_interno, pedido_id_fonte.id_pedido FROM pedido_id_fonte, saldo_fonte WHERE pedido_id_fonte.id_fonte = saldo_fonte.id AND pedido_id_fonte.id_pedido NOT IN (SELECT pedido_fonte.id_pedido FROM pedido_fonte);");
+
+        if ($query->num_rows > 0) {
+            while ($obj = $query->fetch_object()) {
+                $builder = new SQLBuilder(SQLBuilder::$INSERT);
+                $builder->setTables(['pedido_fonte']);
+                $builder->setValues([NULL, $obj->id_pedido, $obj->fonte_recurso, $obj->ptres, $obj->plano_interno]);
+
+                echo $builder->__toString() . "\n";
+                Query::getInstance()->exe($builder->__toString());
+            }
+        }
+    }
+
     /**
      * Temporary code.
      */

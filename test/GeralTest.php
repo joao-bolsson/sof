@@ -2,6 +2,8 @@
 
 use PHPUnit\Framework\TestCase;
 
+require __DIR__ . "/../class/Query.class.php";
+
 /**
  * Test class Geral and the data in DB.
  *
@@ -14,6 +16,7 @@ class GeralTest extends TestCase {
      * Tests the requests total with its sum of items values.
      */
     public function testRequestsValues() {
+        echo "[GeralTest:testRequestsValues]\n";
         $query = Query::getInstance()->exe("SELECT id, round(valor, 3) AS valor FROM pedido;");
 
         $error = false;

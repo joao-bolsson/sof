@@ -36,28 +36,15 @@ final class Busca {
     }
 
     public static function getSourcesForSector(int $id_setor): string {
-        $query = Query::getInstance()->exe("SELECT id, fonte_recurso FROM saldo_fonte WHERE id_setor = " . $id_setor . " ORDER BY id DESC LIMIT 300");
+        $query = Query::getInstance()->exe("SELECT DISTINCT fonte_recurso FROM pedido_fonte, pedido WHERE pedido_fonte.id_pedido = pedido.id AND pedido.id_setor = " . $id_setor . " LIMIT 300;");
+        $options = "<option value=\"0\">Ignorar Fontes</option>";
         if ($query->num_rows > 0) {
-            $options = "";
 
             while ($obj = $query->fetch_object()) {
-                $options .= "<option value=\"" . $obj->id . "\">" . $obj->fonte_recurso . "</option>";
-            }
-            return $options;
-        } else {
-            return "<option value=\"0\">Ignorar Fontes</option>";
-        }
-    }
-
-    public static function hasSourcesForRequest(int $id_fonte, string $value): bool {
-        $query = Query::getInstance()->exe("SELECT valor FROM saldo_fonte WHERE id = " . $id_fonte);
-        if ($query->num_rows > 0) {
-            $obj = $query->fetch_object();
-            if ($value < $obj->valor) {
-                return true;
+                $options .= "<option value=\"" . $obj->fonte_recurso . "\">" . $obj->fonte_recurso . "</option>";
             }
         }
-        return false;
+        return $options;
     }
 
     public static function getSources(int $id): string {
@@ -143,13 +130,12 @@ final class Busca {
         return $return;
     }
 
-    public static function getInfoSources(int $id_request) {
-        $query = Query::getInstance()->exe("SELECT id_fonte FROM pedido_id_fonte WHERE id_pedido = " . $id_request);
+    public static function getInfoPlano(int $id_request): string {
+        $query = Query::getInstance()->exe("SELECT plano FROM pedido_plano WHERE id_pedido = " . $id_request);
         if ($query->num_rows > 0) {
-            return $query->fetch_object()->id_fonte;
+            return $query->fetch_object()->plano;
         }
-        Logger::error("Get info sources returning 0: impossible");
-        return 0;
+        return "";
     }
 
     public static function getInfoContrato(int $id_request) {
@@ -228,8 +214,7 @@ final class Busca {
         $obj_in = $query_in->fetch_object();
         $obj_out = $query_out->fetch_object();
 
-        $array = array('entrada' => "Total de Entradas: R$ " . number_format($obj_in->soma, 3, ',', '.'),
-            'saida' => "Total de Saídas: R$ " . number_format($obj_out->soma, 3, ',', '.'));
+        $array = array('entrada' => "Total de Entradas: R$ " . number_format($obj_in->soma, 3, ',', '.'), 'saida' => "Total de Saídas: R$ " . number_format($obj_out->soma, 3, ',', '.'));
 
         return json_encode($array);
     }

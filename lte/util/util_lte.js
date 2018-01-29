@@ -615,7 +615,7 @@ function iniDataTable(tabela) {
             "order": [[2, "desc"]],
             "autoWidth": true,
             "columnDefs": [
-                {"width": "15%", "targets": 1}
+                {"width": "20%", "targets": 1}
             ],
             language: language
         });

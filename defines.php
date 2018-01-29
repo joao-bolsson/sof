@@ -1,10 +1,10 @@
 <?php
 
 defined('SALT') or define('SALT', '$1$j:[]bols$');
-defined('VERSION') or define('VERSION', '2.3.0');
+defined('VERSION') or define('VERSION', '2.3.1');
 defined('COPYRIGHT') or define('COPYRIGHT', "<strong>Copyright © 2016-2017 <a href=\"https://github.com/joao-bolsson\">João Bolsson</a>.</strong> All rights reserved.");
 
-defined('ARRAY_STATUS') or define('ARRAY_STATUS', [NULL, 'Rascunho', 'Em Análise', 'Reprovado', 'Aprovado', 'Aguarda Orçamento', 'Aguarda SIAFI', 'Empenhado', 'Enviado ao Ordenador', 'Enviado ao Fornecedor', 'Recebido da Unidade de Apoio']);
+defined('ARRAY_STATUS') or define('ARRAY_STATUS', [NULL, 'Rascunho', 'Em Análise', 'Reprovado', 'Aprovado', 'Aguarda Orçamento', 'Aguarda SIAFI', 'Empenhado', 'Enviado ao Ordenador', 'Enviado ao SOF', 'Recebido da Unidade de Apoio']);
 
 defined('ARRAY_PRIORIDADE') or define('ARRAY_PRIORIDADE', [NULL, 'Normal', 'Preferencial', 'Urgente', 'Emergencial', 'Rascunho', 'Hoje']);
 
@@ -18,7 +18,7 @@ defined('LIMIT_MAX') or define('LIMIT_MAX', 100);
 defined('LIMIT_LOGS') or define('LIMIT_LOGS', 50);
 defined('LIMIT_HOURS_REPORT') or define('LIMIT_HOURS_REPORT', 100);
 
-defined('MPDF_PATH') or define('MPDF_PATH', __DIR__ . '/pdf');
+defined('MPDF_PATH') or define('MPDF_PATH', __DIR__);
 
 defined('BTN_DEFAULT') or define('BTN_DEFAULT', 'btn btn-default');
 defined('MAX_UPLOAD_SIZE') or define('MAX_UPLOAD_SIZE', 3);

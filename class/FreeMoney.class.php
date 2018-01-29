@@ -65,6 +65,8 @@ final class FreeMoney {
             return;
         }
 
+        Logger::info("Desfaz liberação: " . $this->id . " tipo: " . $this->category . " valor: " . $this->value . " setor: " . $this->sector->getId());
+
         if ($this->category == 3) { // transferencia
             $this->undoTransf();
             return;
@@ -96,14 +98,10 @@ final class FreeMoney {
         }
 
         $otherFreeMoney = new FreeMoney($otherId);
-        $otherNewMoney = $otherFreeMoney->sector->getMoney();
-        $otherFreeMoney->sector->setMoney($otherNewMoney - $this->value);
-
-        $newMoney = $this->sector->getMoney();
-        $this->sector->setMoney($newMoney - $this->value);
 
         // apaga os registros
-        Query::getInstance()->exe("DELETE FROM saldos_lancamentos WHERE saldos_lancamentos.id = " . $this->id . " OR saldos_lancamentos.id = " . $otherId);
+        Query::getInstance()->exe("DELETE FROM saldos_lancamentos WHERE saldos_lancamentos.id = " . $this->id);
+        Query::getInstance()->exe("DELETE FROM saldos_lancamentos WHERE saldos_lancamentos.id = " . $otherId);
 
         $id_ori = $id_dest = 0;
         if ($this->value > 0) { // destino
@@ -113,6 +111,12 @@ final class FreeMoney {
             $id_ori = $otherFreeMoney->sector->getId();
             $id_dest = $this->sector->getId();
         }
+
+        $oldMoney = $this->sector->getMoney();
+        $this->sector->setMoney($oldMoney - $this->value);
+
+        $otherOldMoney = $otherFreeMoney->sector->getMoney();
+        $otherFreeMoney->sector->setMoney($otherOldMoney + $this->value);
 
         Query::getInstance()->exe("DELETE FROM saldos_transferidos WHERE saldos_transferidos.id_setor_ori = " . $id_ori . " AND saldos_transferidos.id_setor_dest = " . $id_dest . " AND saldos_transferidos.valor = '" . $this->value . "' LIMIT 1;");
     }

@@ -23,9 +23,6 @@
                         <button class="btn btn-primary" type="button" onclick="abreModal('#regJustify')"><i
                                     class="fa fa-plus"></i> Justificativa
                         </button>
-                        <button class="btn btn-primary" type="button" onclick="abreModal('#cadFontesTransf')"><i
-                                    class="fa fa-plus"></i> Fonte
-                        </button>
                     </div>
                     <div class="form-group">
                         <label>Setor Origem</label>
@@ -51,12 +48,6 @@
                         <select class="form-control select2" name="just"
                                 data-placeholder="Selecione o motivo da transferência" required>
                             <?= BuscaLTE::getJustifies(); ?>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label>Fonte de Recurso</label>
-                        <select class="form-control select2" id="transfSource" name="fonte"
-                                data-placeholder="Selecione a fonte de recurso" required>
                         </select>
                     </div>
                 </div>
@@ -179,7 +170,7 @@
     </div>
 </div>
 <div aria-hidden="true" class="modal fade" id="listLancamentos" role="dialog" tabindex="-1">
-    <div class="modal-dialog modal-lg">
+    <div class="modal-dialog" style="width: 90%;">
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
@@ -207,6 +198,7 @@
                 <table id="tableListLancamentos" class="table table-bordered table-striped">
                     <thead>
                     <tr>
+                        <th></th>
                         <th>Setor</th>
                         <th>Data</th>
                         <th>Valor</th>

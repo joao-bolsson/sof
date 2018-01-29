@@ -23,7 +23,7 @@
                             if ($_SESSION['id_setor'] != 2) {
                                 echo "<option value='" . $_SESSION['id_setor'] . "'>" . ARRAY_SETORES[$_SESSION['id_setor']] . "</option>";
                             } else {
-                                echo "<option value=\"0\">Todos</option>" . BuscaLTE::getOptionsSetores();
+                                echo BuscaLTE::getOptionsSetores();
                             }
                             ?>
                         </select>

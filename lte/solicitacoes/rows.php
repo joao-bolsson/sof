@@ -7,7 +7,6 @@
  */
 
 $select_grupo = BuscaLTE::getOptionsGrupos($_SESSION["id_setor"]);
-$select_sources = BuscaLTE::getOptionsSources($_SESSION["id_setor"]);
 ?>
 <div class="row">
     <div class="col-xs-12">
@@ -65,15 +64,17 @@ $select_sources = BuscaLTE::getOptionsSources($_SESSION["id_setor"]);
                 <div class="box-body">
                     <table class="table table-bordered table-striped">
                         <thead>
-                        <th></th>
-                        <th>NUM_PROCESSO</th>
-                        <th>COD_REDUZIDO</th>
-                        <th>COMPLEMENTO_ITEM</th>
-                        <th>VL_UNITARIO</th>
-                        <th>NOME_FORNECEDOR</th>
-                        <th>NUM_LICITACAO</th>
-                        <th>QT_SOLICITADA</th>
-                        <th>VALOR</th>
+                        <tr>
+                            <th></th>
+                            <th>NUM_PROCESSO</th>
+                            <th>COD_REDUZIDO</th>
+                            <th>COMPLEMENTO_ITEM</th>
+                            <th>VL_UNITARIO</th>
+                            <th>NOME_FORNECEDOR</th>
+                            <th>NUM_LICITACAO</th>
+                            <th>QT_SOLICITADA</th>
+                            <th>VALOR</th>
+                        </tr>
                         </thead>
                         <tbody id="conteudoPedido"></tbody>
                     </table>
@@ -150,15 +151,6 @@ $select_sources = BuscaLTE::getOptionsSources($_SESSION["id_setor"]);
                             </select>
                         </div>
                     <?php endif ?>
-                    <?php if (strlen($select_sources) > 0): ?>
-                        <h2>Fonte de Recurso</h2>
-                        <div class="form-group">
-                            <label>Selecione a fonte</label>
-                            <select id="source" class="form-control select2" name="fonte" required>
-                                <?= $select_sources ?>
-                            </select>
-                        </div>
-                    <?php endif ?>
                     <div class="form-group">
                         <input class="minimal" id="checkPedContr" name="pedidoContrato" type="checkbox">
                         Pedido de Contrato
@@ -172,6 +164,14 @@ $select_sources = BuscaLTE::getOptionsSources($_SESSION["id_setor"]);
                         <label>SIAFI</label>
                         <input class="form-control" id="siafi" name="siafi" type="text">
                     </div>
+                    <div class="input-group">
+                        <span class="input-group-addon">
+                          <input id="checkPlanoTrabalho" type="checkbox" name="checkPlanoTrabalho">
+                        </span>
+                        <input id="planoTrabalho" class="form-control" type="text" placeholder="Plano de Trabalho"
+                               name="planoTrabalho" disabled>
+                    </div>
+                    <!-- /input-group -->
                 </div><!-- ./card-inner -->
                 <div class="box-footer">
                     <button id="btnLimpa" class="btn btn-default" type="button" style="width: 49%;"

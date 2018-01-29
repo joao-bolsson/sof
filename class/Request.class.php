@@ -122,6 +122,11 @@ final class Request {
     private $siafi_date;
 
     /**
+     * @var string Work plan.
+     */
+    private $workPlan;
+
+    /**
      * Default construct.
      * @param int $id Id request (0 for a no existing request in db).
      */
@@ -133,12 +138,23 @@ final class Request {
         $this->approv_manager = 0;
         $this->moneySource = NULL;
         $this->group = NULL;
+        $this->workPlan = "";
         if ($this->id != NEW_REQUEST_ID) {
             $this->fillFieldsFromDB();
             $this->fillItens();
             $this->initMoneySource();
             $this->initGroup();
             $this->initSIAFI();
+            $this->initWorkPlan();
+        }
+    }
+
+    private function initWorkPlan() {
+        $query = Query::getInstance()->exe("SELECT plano FROM pedido_plano WHERE id_pedido = " . $this->id . " LIMIT 1;");
+
+        if ($query->num_rows > 0) {
+            $obj = $query->fetch_object();
+            $this->workPlan = $obj->plano;
         }
     }
 
@@ -208,7 +224,6 @@ final class Request {
     }
 
     private function sendToSOF() {
-        $this->updateSectorMoney();
         $this->status = 2;
         $this->change = 0;
         // enviado ao sof
@@ -375,7 +390,10 @@ final class Request {
                 $new_vl = $obj->saldo_fonte + $value;
                 $new_vl = number_format($new_vl, 3, '.', '');
                 Query::getInstance()->exe("UPDATE saldo_fonte SET valor = '" . $new_vl . "' WHERE id_setor = " . $this->id_sector . " AND id = " . $obj->id_fonte);
-                $this->updateSectorMoney();
+
+                $sector = new Sector($this->id_sector);
+                $newMoney = $sector->getMoney() + $value;
+                $sector->setMoney($newMoney);
             }
         } else {
             // devolve o valor ao sof
@@ -495,12 +513,6 @@ final class Request {
         if ($error) {
             Logger::error("Pedido quebrado em manage: " . $this->id);
         }
-    }
-
-    private function updateSectorMoney() {
-        $sector = new Sector($this->id_sector);
-
-        $sector->updateMoney();
     }
 
     private function update() {
@@ -690,6 +702,25 @@ final class Request {
         }
         return true;
     }
+
+    /**
+     * @param string $workPlan
+     */
+    public function setWorkPlan(string $workPlan) {
+        if (empty($this->workPlan)) {
+            // INSERT
+            $builder = new SQLBuilder(SQLBuilder::$INSERT);
+            $builder->setTables(['pedido_plano']);
+            $builder->setValues([$this->id, $workPlan]);
+
+            Query::getInstance()->exe($builder->__toString());
+        } else {
+            // UPDATE
+            Query::getInstance()->exe("UPDATE pedido_plano SET plano = '" . $workPlan . "' WHERE id_pedido = " . $this->id);
+        }
+        $this->workPlan = $workPlan;
+    }
+
 
     /**
      * Initialize all values about SIAFI (effort).

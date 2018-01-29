@@ -159,44 +159,92 @@ final class PrintMod {
                     </tr>
                 </table>";
         $return .= ($request->aprov_gerencia) ? '<p><b>Aprovado Pela Gerência</b></p>' : '';
+
+        $workPlan = self::getWorkPlan($id_request);
+        if (!empty($workPlan)) {
+            $return .= "<p><b>Plano de Trabalho: </b> " . $workPlan . " </p>";
+        }
+
         $return .= "<p><b>Observação da Unidade Solicitante: </b></p>
                 <p style=\"font-weight: normal !important;\">	" . $request->obs . "</p>
             </fieldset><br>";
-        $return .= self::getTableFontes($id_request);
-        $return .= self::getTableLicitacao($id_request);
+        $return .= self::getTableFontesAndLicitacao($id_request);
         return $return;
     }
 
-    private static function getTableLicitacao(int $id_request): string {
-        $return = "<fieldset><h5>PEDIDO SEM LICITAÇÃO</h5></fieldset><br>";
+    private static function getWorkPlan(int $id_request): string {
+        $query = Query::getInstance()->exe("SELECT plano FROM pedido_plano WHERE id_pedido = " . $id_request);
 
-        $query = Query::getInstance()->exe("SELECT licitacao.tipo AS id_tipo, licitacao_tipo.nome AS tipo, licitacao.numero, licitacao.uasg, licitacao.processo_original, licitacao.gera_contrato FROM licitacao, licitacao_tipo WHERE licitacao_tipo.id = licitacao.tipo AND licitacao.id_pedido = " . $id_request . ' LIMIT 1');
         if ($query->num_rows > 0) {
             $obj = $query->fetch_object();
 
+            return $obj->plano;
+        }
+        return "";
+    }
+
+    private static function getTableFontesAndLicitacao(int $id_request): string {
+        $query = Query::getInstance()->exe("SELECT licitacao.tipo AS id_tipo, licitacao_tipo.nome AS tipo, licitacao.numero, licitacao.uasg, licitacao.processo_original, licitacao.gera_contrato FROM licitacao, licitacao_tipo WHERE licitacao_tipo.id = licitacao.tipo AND licitacao.id_pedido = " . $id_request . ' LIMIT 1');
+
+        $tableFontes = self::getTableFontes($id_request);
+        $tableLicitacao = new Table('', '', [], true);
+
+        $tipo = 0;
+        if ($query->num_rows > 0) {
+            $obj = $query->fetch_object();
+
+            $tipo = $obj->id_tipo;
+            $showSources = $tipo == 6 && !$tableFontes->isEmpty();
             $header = ['Tipo de Licitação', 'Número'];
-            if ($obj->id_tipo == 3 || $obj->id_tipo == 4 || $obj->id_tipo == 2) {
-                $i = count($header);
+            $i = count($header);
+            if ($tipo == 3 || $tipo == 4 || $tipo == 2) {
                 $header[$i] = 'UASG';
                 $header[$i + 1] = 'Processo Original';
                 $header[$i + 2] = 'Contrato';
+            } else if ($showSources) {
+                $headers = $tableFontes->getHeaders();
+                foreach ($headers as $h) {
+                    $header[$i++] = $h;
+                }
             }
-            $table = new Table('', '', $header, true);
+            $tableLicitacao->setHeaders($header);
             $row = new Row();
             $row->addComponent(new Column($obj->tipo));
             $row->addComponent(new Column($obj->numero));
 
-            if (count($header) > 2) {
+            if (count($header) > 2 && !$showSources) {
                 $generate = ($obj->gera_contrato == 0) ? 'Não Gera Contrato' : 'Gera Contrato';
                 $row->addComponent(new Column($obj->uasg));
                 $row->addComponent(new Column($obj->processo_original));
                 $row->addComponent(new Column($generate));
             }
 
-            $table->addComponent($row);
-            $return = "<fieldset class=\"preg\">" . $table . '</fieldset><br>';
+            if ($showSources) {
+                $comps = $tableFontes->getComponents();
+                foreach ($comps as $comp) {
+                    if ($comp instanceof Row) {
+                        $columns = $comp->getComponents();
+                        foreach ($columns as $col) {
+                            $row->addComponent($col);
+                        }
+                    }
+                }
+            }
+            $tableLicitacao->addComponent($row);
         }
 
+        $return = "";
+        if ($tableFontes->isEmpty()) {
+            $return .= '<fieldset><h5>PEDIDO AGUARDA FONTE DE RECURSO</h5></fieldset><br>';
+        } else if ($tipo != 6) {
+            $return .= "<fieldset class=\"preg\">" . $tableFontes . "</fieldset><br>";
+        }
+
+        if ($tableLicitacao->isEmpty()) {
+            $return .= "<fieldset><h5>PEDIDO SEM LICITAÇÃO</h5></fieldset><br>";
+        } else {
+            $return .= "<fieldset class=\"preg\">" . $tableLicitacao . "</fieldset><br>";
+        }
         return $return;
     }
 
@@ -204,35 +252,22 @@ final class PrintMod {
      * Function to returns the resource sources of a request.
      *
      * @param int $id_request Request id.
-     * @return string Resource source.
+     * @return Table Resource source.
      */
-    private static function getTableFontes(int $id_request): string {
+    private static function getTableFontes(int $id_request): Table {
         $query = Query::getInstance()->exe('SELECT fonte_recurso, ptres, plano_interno FROM pedido_fonte WHERE id_pedido = ' . $id_request);
+        $table = new Table('', '', ['Fonte de Recurso', 'PTRES', 'Plano Interno'], true);
+
         if ($query->num_rows > 0) {
             $source = $query->fetch_object();
-            $table = self::buildSourcesTable($source);
 
-            return "<fieldset class = \"preg\">" . $table . '</fieldset><br>';
-        } else {
-            $query_f = Query::getInstance()->exe("SELECT saldo_fonte.id, saldo_fonte.fonte_recurso, saldo_fonte.ptres, saldo_fonte.plano_interno FROM saldo_fonte, pedido_id_fonte WHERE saldo_fonte.id = pedido_id_fonte.id_fonte AND pedido_id_fonte.id_pedido = " . $id_request);
-            if ($query_f->num_rows > 0) {
-                $source = $query_f->fetch_object();
-                $table = self::buildSourcesTable($source);
+            $row = new Row();
+            $row->addComponent(new Column($source->fonte_recurso));
+            $row->addComponent(new Column($source->ptres));
+            $row->addComponent(new Column($source->plano_interno));
 
-                return "<fieldset class = \"preg\">" . $table . '</fieldset><br>';
-            }
+            $table->addComponent($row);
         }
-        return '<fieldset><h5>PEDIDO AGUARDA FONTE DE RECURSO</h5></fieldset><br>';
-    }
-
-    private static function buildSourcesTable(stdClass $source): Table {
-        $table = new Table('', '', ['Fonte de Recurso', 'PTRES', 'Plano Interno'], true);
-        $row = new Row();
-        $row->addComponent(new Column($source->fonte_recurso));
-        $row->addComponent(new Column($source->ptres));
-        $row->addComponent(new Column($source->plano_interno));
-
-        $table->addComponent($row);
         return $table;
     }
 
@@ -308,7 +343,9 @@ final class PrintMod {
                     $row->addComponent(new Column($item->cod_reduzido));
                     $row->addComponent(new Column($item->seq_item_processo));
                     $row->addComponent(new Column($item->cod_despesa));
-                    $row->addComponent(new Column($item->complemento_item));
+                    $compl = new Column($item->complemento_item);
+                    $compl->setFontSize(7);
+                    $row->addComponent($compl);
                     $row->addComponent(new Column($item->qtd));
                     $row->addComponent(new Column('R$ ' . $item->vl_unitario));
                     $row->addComponent(new Column('R$ ' . $item->valor));
@@ -473,39 +510,50 @@ final class PrintMod {
     }
 
     public static function getRelatorioLib(int $id_sector, array $category, string $dateI, string $dateF): string {
-        $return = "<fieldset class=\"preg\">
-                <h5>DESCRIÇÃO DO RELATÓRIO</h5>
-                <h6>Relatório de Liberações Orçamentárias</h6>
-                <h6>Período de Emissão: " . $dateI . " à " . $dateF . "</h6></fieldset><br>";
-
         $where_sector = ($id_sector != 0) ? 'AND id_setor = ' . $id_sector : '';
         $where_category = ' AND (';
 
+        $categories = "";
         $len = count($category);
         for ($i = 0; $i < $len; $i++) {
+            $categories .= ucfirst(ARRAY_CATEGORIA[$category[$i]]);
             $where_category .= 'categoria = ' . $category[$i];
             if ($i != $len - 1) {
                 $where_category .= ' OR ';
+                $categories .= ", ";
             }
         }
         $where_category .= ')';
+
+        $return = "<fieldset class=\"preg\">
+                <h5>DESCRIÇÃO DO RELATÓRIO</h5>
+                <h6>Relatório de Liberações Orçamentárias</h6>
+                <h6>Período de Emissão: " . $dateI . " à " . $dateF . "</h6>
+                <h6>Setor: " . ARRAY_SETORES[$id_sector] . "</h6>
+                <h6>Categoria: " . $categories . "</h6></fieldset><br>";
+
         $dataIni = Util::dateFormat($dateI);
         $dataFim = Util::dateFormat($dateF);
 
-        $query = Query::getInstance()->exe("SELECT id_setor, DATE_FORMAT(data, '%d/%m/%Y') AS data, valor, categoria FROM saldos_lancamentos WHERE data BETWEEN '" . $dataIni . "' AND '" . $dataFim . "' " . $where_sector . $where_category . ' ORDER BY id ASC');
+        $query = Query::getInstance()->exe("SELECT DATE_FORMAT(data, '%d/%m/%Y') AS data, valor, categoria FROM saldos_lancamentos WHERE data BETWEEN '" . $dataIni . "' AND '" . $dataFim . "' " . $where_sector . $where_category . ' ORDER BY id ASC');
 
-        $table = new Table('', 'prod', ['Setor', 'Data', 'Valor', 'Categoria'], true);
+        $table = new Table('', 'prod', ['Data', 'Valor'], true);
+        $sum = 0;
         while ($obj = $query->fetch_object()) {
+            $sum += $obj->valor;
+
             $row = new Row();
-            $row->addComponent(new Column(ARRAY_SETORES[$obj->id_setor]));
             $row->addComponent(new Column($obj->data));
             $row->addComponent(new Column('R$ ' . number_format($obj->valor, 3, ',', '.')));
-            $row->addComponent(new Column(ucfirst(ARRAY_CATEGORIA[$obj->categoria])));
 
             $table->addComponent($row);
         }
 
         $return .= $table;
+
+        $return .= "<fieldset class='preg'>
+<h5>Somatório: " . number_format($sum, 3, ',', '.') . "</h5>
+</fieldset>";
         return $return;
     }
 
@@ -518,10 +566,10 @@ final class PrintMod {
      * @param string $dateI Initial date of report.
      * @param string $dateF Final date of report.
      * @param bool $checkSIAFI Request contains SIAFI.
-     * @param int $fonte Source id.
+     * @param string $fonte Source id.
      * @return string Content of PDF document
      */
-    public static function getRelatorioPedidos(int $id_sector, array $priority, array $status, string $dateI, string $dateF, bool $checkSIAFI, int $fonte): string {
+    public static function getRelatorioPedidos(int $id_sector, array $priority, array $status, string $dateI, string $dateF, bool $checkSIAFI, string $fonte): string {
         $report = new RequestReport($id_sector, $dateI, $dateF);
         $report->setPriority($priority);
         $report->setStatus($status);
