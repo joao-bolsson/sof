@@ -122,7 +122,7 @@ if (!is_null($type)) {
 $html .= "</body>";
 require_once MPDF_PATH . '/vendor/autoload.php';
 try {
-    $mpdf = new \Mpdf\Mpdf();
+    $mpdf = new \Mpdf\Mpdf(['tempDir' => TEMP_FOLDER]);
     //definimos o tipo de exibicao
     $mpdf->SetDisplayMode('fullpage');
     $data = date('j/m/Y  H:i');

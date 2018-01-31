@@ -32,7 +32,7 @@ if (isset($_SESSION["relatorioProcessos"]) && $_SESSION["relatorioProcessos"] &&
     $html = $html_style . $html_header . $html_itens . "</body>";
 
     try {
-        $mpdf = new \Mpdf\Mpdf();
+        $mpdf = new \Mpdf\Mpdf(['tempDir' => TEMP_FOLDER]);
         date_default_timezone_set('America/Sao_Paulo');
         //definimos o tipo de exibicao
         $mpdf->SetDisplayMode('fullpage');

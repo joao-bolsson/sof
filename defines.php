@@ -19,6 +19,7 @@ defined('LIMIT_LOGS') or define('LIMIT_LOGS', 50);
 defined('LIMIT_HOURS_REPORT') or define('LIMIT_HOURS_REPORT', 100);
 
 defined('MPDF_PATH') or define('MPDF_PATH', __DIR__);
+defined('TEMP_FOLDER') or define('TEMP_FOLDER', __DIR__ . '/temp/');
 
 defined('BTN_DEFAULT') or define('BTN_DEFAULT', 'btn btn-default');
 defined('MAX_UPLOAD_SIZE') or define('MAX_UPLOAD_SIZE', 3);

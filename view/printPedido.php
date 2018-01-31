@@ -46,7 +46,7 @@ if (isset($_SESSION['imprimirPedido']) && $_SESSION['imprimirPedido'] && $_SESSI
     $html = $html_style . $html_header . $html_itens . $html_rel . "</body>";
     date_default_timezone_set('America/Sao_Paulo');
     try {
-        $mpdf = new \Mpdf\Mpdf();
+        $mpdf = new \Mpdf\Mpdf(['tempDir' => TEMP_FOLDER]);
         //definimos o tipo de exibicao
         $mpdf->SetDisplayMode('fullpage');
         if ($pedido_rascunho) {
