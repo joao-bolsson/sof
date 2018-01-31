@@ -1,19 +1,22 @@
 <?php
+/**
+ * @author João Bolsson (joaovictorbolsson@gmail.com)
+ * @since 2018, Jan 31
+ */
 session_start();
 
 ini_set('display_errors', true);
 error_reporting(E_ALL);
-
-if (!isset($_SESSION['slide1']) || !isset($_SESSION['slide2'])) {
-    header("Location: ../");
-}
 
 spl_autoload_register(function (string $class_name) {
     include_once '../class/' . $class_name . '.class.php';
 });
 
 $controller = Controller::getInstance();
-
+$id = 0;
+if (isset($_SESSION["id_depoimentos"])) {
+    $id = $_SESSION["id_depoimentos"];
+}
 ?>
 <!DOCTYPE html>
 <html lang="pt">
@@ -21,32 +24,25 @@ $controller = Controller::getInstance();
     <meta charset="UTF-8">
     <meta content="IE=edge" http-equiv="X-UA-Compatible">
     <meta content="initial-scale=1.0, maximum-scale=1.0, user-scalable=no, width=device-width" name="viewport">
-    <title>Setor de Orçamento e Finanças – HUSM</title>
-
+    <title>Comemorações | Setor de Orçamento e Finanças – HUSM</title>
+    <link href="../plugins/animate/animate.min.css" rel="stylesheet">
     <!-- css -->
     <link href="../material/css/base.min.css" rel="stylesheet">
 
     <!-- css for doc -->
     <link href="../material/css/project.min.css" rel="stylesheet">
-
-    <link rel="stylesheet" type="text/css" href="../sof_files/estilo.min.css">
-    <link rel="stylesheet" type="text/css" href="../sof_files/style.min.css">
-    <link href="../plugins/animate/animate.min.css" rel="stylesheet">
+    <link href="../sof_files/estilo.min.css" rel="stylesheet">
+    <!-- CSS rules for styling the element inside the editor such as p, h1, h2, etc. -->
+    <link href="../plugins/froala/css/froala_style.min.css" rel="stylesheet" type="text/css"/>
     <!-- favicon -->
     <link rel="icon" href="../favicon.ico">
-
 </head>
 <body class="page-brand">
-<header class="header header-transparent header-waterfall">
+<header class="header header-transparent header-waterfall ">
     <ul class="nav nav-list pull-left">
         <li id="limenu">
             <a data-toggle="menu" href="#doc_menu">
                 <span class="icon icon-lg">menu</span><span class="text-white">MENU</span>
-            </a>
-        </li>
-        <li>
-            <a class="btn btn-flat waves-attach waves-light" href="javascript:abreModal('#modalPesquisar');">
-                <span class="text-white"><span class="icon icon-lg">search</span>PESQUISAR</span>
             </a>
         </li>
     </ul>
@@ -67,7 +63,7 @@ $controller = Controller::getInstance();
                 </li>
                 <li>
                     <a class="collaosed waves-attach" data-toggle="collapse" href="#osetor"><span
-                                class="text-black"><span class="icon">account_balance</span>O SETOR</a>
+                            class="text-black"><span class="icon">account_balance</span>O SETOR</a>
                     <ul class="menu-collapse collapse" id="osetor">
                         <li>
                             <a class="waves-attach" href="sof.php">SOF</a>
@@ -82,7 +78,7 @@ $controller = Controller::getInstance();
                 </li>
                 <li>
                     <a class="collapsed waves-attach" data-toggle="collapse" href="#servicossof"><span
-                                class="text-black"><span class="icon">payment</span>SERVIÇOS DO SOF</a>
+                            class="text-black"><span class="icon">payment</span>SERVIÇOS DO SOF</a>
                     <ul class="menu-collapse collapse" id="servicossof">
                         <li>
                             <a class="waves-attach" href="<?= $controller->hrefSolic() ?>">SOLICITAÇÕES DE EMPENHO</a>
@@ -94,7 +90,7 @@ $controller = Controller::getInstance();
                 </li>
                 <li>
                     <a class="collapsed waves-attach" data-toggle="collapse" href="#mconsultas"><span
-                                class="text-black"><span class="icon">build</span>CONSULTAS</a>
+                            class="text-black"><span class="icon">build</span>CONSULTAS</a>
                     <ul class="menu-collapse collapse" id="mconsultas">
                         <li>
                             <a class="waves-attach" href="consultaspe.php">PÚBLICO EXTERNO</a>
@@ -103,11 +99,11 @@ $controller = Controller::getInstance();
                 </li>
                 <li>
                     <a class="waves-attach waves-light" href="relatorios.php"><span class="text-black"><span
-                                    class="icon">folder</span>RELATÓRIOS</span></a>
+                                class="icon">folder</span>RELATÓRIOS</span></a>
                 </li>
                 <li>
                     <a class="collapsed waves-attach" data-toggle="collapse" href="#mlinks"><span
-                                class="text-black"><span class="icon">near_me</span>LINKS ÚTEIS</a>
+                            class="text-black"><span class="icon">near_me</span>LINKS ÚTEIS</a>
                     <ul class="menu-collapse collapse" id="mlinks">
                         <li>
                             <a class="waves-attach" href="linksexternos.php">LINKS EXTERNOS</a>
@@ -125,7 +121,7 @@ $controller = Controller::getInstance();
                 </li>
                 <li>
                     <a class="collapsed waves-attach" data-toggle="collapse" href="#mencontros"><span
-                                class="text-black"><span class="icon">place</span>ENCONTROS</a>
+                            class="text-black"><span class="icon">place</span>ENCONTROS</a>
                     <ul class="menu-collapse collapse" id="mencontros">
                         <li>
                             <a class="waves-attach" href="boaspraticas.php">BOAS PRÁTICAS</a>
@@ -140,7 +136,7 @@ $controller = Controller::getInstance();
                 </li>
                 <li>
                     <a class="waves-attach waves-light" href="faleconosco.php"><span class="text-black"><span
-                                    class="icon">chat</span>CONTATO</span></a>
+                                class="icon">chat</span>CONTATO</span></a>
                 </li>
             </ul>
         </div>
@@ -150,10 +146,9 @@ $controller = Controller::getInstance();
     <div class="content-heading">
         <div class="container">
             <div class="row">
-                <h1 class="heading module wow slideInRight animated"><img src="../sof_files/logo_blue.png"
-                                                                          alt="Setor de Orçamento e Finanças – HUSM"/>
-                </h1>
-                <div class="text-header module wow slideInLeft animated">
+                <h1 class="heading module wow fadeIn animated"><img src="../sof_files/logo_blue.png"
+                                                                    alt="Setor de Orçamento e Finanças – HUSM"/></h1>
+                <div class="text-header module wow fadeIn animated">
                     <p>Setor de Orçamento e Finanças</p>
                     <span>Hospital Universitário de Santa Maria</span>
                 </div>
@@ -167,13 +162,13 @@ $controller = Controller::getInstance();
                     <ul class="nav nav-list">
                         <li class="active">
                             <a class="waves-attach" href="index.php"><span class="text-white"><span
-                                            class="icon">home</span>INÍCIO</span></a>
+                                        class="icon">home</span>INÍCIO</span></a>
                         </li>
                         <li>
                             <div class="dropdown dropdown-inline">
                                 <a class="waves-attach" data-toggle="dropdown"><span class="text-white"><span
-                                                class="icon">store_mall_directory</span>O SETOR</span><span
-                                            class="icon margin-left-sm">keyboard_arrow_down</span></a>
+                                            class="icon">store_mall_directory</span>O SETOR</span><span
+                                        class="icon margin-left-sm">keyboard_arrow_down</span></a>
                                 <ul class="dropdown-menu nav">
                                     <li>
                                         <a class="waves-attach" href="sof.php">SOF</a>
@@ -190,8 +185,8 @@ $controller = Controller::getInstance();
                         <li>
                             <div class="dropdown dropdown-inline">
                                 <a class="waves-attach" data-toggle="dropdown"><span class="text-white"><span
-                                                class="icon">payments</span>SERVIÇOS SOF</span><span
-                                            class="icon margin-left-sm">keyboard_arrow_down</span></a>
+                                            class="icon">payments</span>SERVIÇOS SOF</span><span
+                                        class="icon margin-left-sm">keyboard_arrow_down</span></a>
                                 <ul class="dropdown-menu nav">
                                     <li>
                                         <a class="waves-attach" href="<?= $controller->hrefSolic() ?>">Solicitações de
@@ -206,8 +201,8 @@ $controller = Controller::getInstance();
                         <li>
                             <div class="dropdown dropdown-inline">
                                 <a class="waves-attach" data-toggle="dropdown"><span class="text-white"><span
-                                                class="icon">build</span>CONSULTAS</span><span
-                                            class="icon margin-left-sm">keyboard_arrow_down</span></a>
+                                            class="icon">build</span>CONSULTAS</span><span
+                                        class="icon margin-left-sm">keyboard_arrow_down</span></a>
                                 <ul class="dropdown-menu nav">
                                     <li>
                                         <a class="waves-attach" href="consultaspe.php">Público Externo</a>
@@ -217,13 +212,13 @@ $controller = Controller::getInstance();
                         </li>
                         <li>
                             <a class="waves-attach waves-light" href="relatorios.php"><span class="text-white"><span
-                                            class="icon">folder</span>RELATÓRIOS</span></a>
+                                        class="icon">folder</span>RELATÓRIOS</span></a>
                         </li>
                         <li>
                             <div class="dropdown dropdown-inline">
                                 <a class="waves-attach" data-toggle="dropdown"><span class="text-white"><span
-                                                class="icon">near_me</span>LINKS ÚTEIS</span><span
-                                            class="icon margin-left-sm">keyboard_arrow_down</span></a>
+                                            class="icon">near_me</span>LINKS ÚTEIS</span><span
+                                        class="icon margin-left-sm">keyboard_arrow_down</span></a>
                                 <ul class="dropdown-menu nav">
                                     <li>
                                         <a class="waves-attach" href="linksexternos.php">Links Externos</a>
@@ -239,13 +234,13 @@ $controller = Controller::getInstance();
                         </li>
                         <li>
                             <a class="waves-attach waves-light" href="noticia.php"><span class="text-white"><span
-                                            class="icon">event</span>NOTÍCIAS</span></a>
+                                        class="icon">event</span>NOTÍCIAS</span></a>
                         </li>
                         <li>
                             <div class="dropdown dropdown-inline">
                                 <a class="waves-attach" data-toggle="dropdown"><span class="text-white"><span
-                                                class="icon">place</span>ENCONTROS</span><span
-                                            class="icon margin-left-sm">keyboard_arrow_down</span></a>
+                                            class="icon">place</span>ENCONTROS</span><span
+                                        class="icon margin-left-sm">keyboard_arrow_down</span></a>
                                 <ul class="dropdown-menu nav">
                                     <li>
                                         <a class="waves-attach" href="boaspraticas.php">Boas Práticas</a>
@@ -256,135 +251,49 @@ $controller = Controller::getInstance();
                                     <li>
                                         <a class="waves-attach" href="dinamicas.php">Dinâmicas de grupos</a>
                                     </li>
-                                    <li>
-                                        <a class="waves-attach" href="depoimentos.php">Depoimentos</a>
-                                    </li>
                                 </ul>
                             </div>
                         </li>
                         <li>
                             <a class="waves-attach waves-light" href="faleconosco.php"><span class="text-white"><span
-                                            class="icon">chat</span>CONTATO</span></a>
+                                        class="icon">chat</span>CONTATO</span></a>
                         </li>
                     </ul>
                 </nav>
-                <div>
-                    <div class="card-wrap col-lg-4 col-sm-6 pull-left margin-bottom">
-                        <div class="card">
-                            <div class="card-main">
-                                <div class="card-header card-brand">
-                                    <div class="card-header-side pull-left">
-                                        <p class="card-heading">O SETOR</p>
-                                    </div>
-                                </div><!--  ./card-header -->
-                                <div class="card-inner" style="padding-left: 30px; padding-right: 30px;">
-                                    <p style="text-align: justify; text-indent: 2em;">O Setor de Orçamento e Finanças -
-                                        SOF subordina-se à Superintendência do Hospital Universitário de Santa Maria -
-                                        HUSM
-                                        por meio da Gerência Administrativa - GA, estando diretamente ligado à Divisão
-                                        Administrativa Financeira – DAF.
-                                        Suas atividades tiveram início em 01 de janeiro de 2015, após a Empresa
-                                        Brasileira de Serviços Hospitalares – EBSERH assumir a gestão do HUSM.</p>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="card">
-                            <div class="card-main">
-                                <div class="card-header card-brand">
-                                    <div class="card-header-side pull-left">
-                                        <p class="card-heading">MISSÃO</p>
-                                    </div>
-                                </div><!--  ./card-header -->
-                                <div class="card-inner" style="padding-left: 30px; padding-right: 30px;">
-                                    <p style="text-align: justify; text-indent: 2em;">
-                                        Realizar a gestão orçamentária e financeira do HUSM, executando com
-                                        responsabilidade, economicidade, celeridade, qualidade
-                                        e resolutividade os três estágios da despesa pública -<b>empenho, liquidação e
-                                            pagamento</b>- em atendimento às necessidades da
-                                        instituição. </p>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="card">
-                            <div class="card-main">
-                                <div class="card-header card-brand">
-                                    <div class="card-header-side pull-left">
-                                        <p class="card-heading">VISÃO</p>
-                                    </div>
-                                </div><!--  ./card-header -->
-                                <div class="card-inner" style="padding-left: 30px; padding-right: 30px;">
-                                    <p style="text-align: justify; text-indent: 2em;">
-                                        Ser referência em planejamento, execução e controle orçamentário e financeiro,
-                                        contribuindo para o desenvolvimento da qualidade em saúde,
-                                        ensino, pesquisa e extensão. </p>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="card">
-                            <div class="card-main">
-                                <div class="card-header card-brand">
-                                    <div class="card-header-side pull-left">
-                                        <p class="card-heading">VALORES</p>
-                                    </div>
-                                </div><!--  ./card-header -->
-                                <div class="card-inner" style="padding-left: 30px; padding-right: 30px;">
-                                    <p style="text-align: justify; text-indent: 2em;">
-                                        Valorização da Equipe de Trabalho, Transparência nas Ações, Sinergia na Execução
-                                        das Tarefas, Empatia no Atendimento, Pró-atividade
-                                        e Dinamismo. </p>
-                                </div>
-                            </div>
-                        </div>
-                    </div><!-- ./pull-left-->
-                    <div class="card-wrap col-lg-4 col-sm-6 pull-right margin-bottom">
-                        <div id="destaque">
-                            <div class="card">
-                                <div class="card-main">
-                                    <div class="card-header card-brand">
-                                        <div class="card-header-side pull-left">
-                                            <p class="card-heading">ÚLTIMAS NOTÍCIAS</p>
-                                        </div>
-                                    </div><!--  ./card-header -->
-                                    <div class="card-inner padding-no margin-no">
-                                        <div class="slider">
-                                            <div class="mascara">
-                                                <ul>
-                                                    <?php echo $_SESSION['slide1'] ?>
-                                                </ul>
-                                            </div>
-                                            <div class="barra-progresso"></div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="card">
-                                <div class="card-main">
-                                    <div class="card-header card-brand">
-                                        <div class="card-header-side pull-left">
-                                            <p class="card-heading">NOTÍCIAS EM DESTAQUE</p>
-                                        </div>
-                                    </div><!--  ./card-header -->
-                                    <div class="card-inner padding-no margin-no">
-                                        <div class="slider">
-                                            <div class="mascara">
-                                                <ul>
-                                                    <?php echo $_SESSION['slide2'] ?>
-                                                </ul>
-                                            </div>
-                                            <div class="barra-progresso"></div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div> <!--/ fim destaque -->
-                    </div><!-- ./pull-right -->
-                </div>
         </div><!-- ./row -->
+        <div class="row">
+            <div class="card margin-top-no">
+                <div class="card-main">
+                    <div class="card-header card-brand">
+                        <div class="card-header-side pull-left">
+                            <p class="card-heading">Depoimentos</p>
+                        </div>
+                    </div><!--  ./card-header -->
+                    <div class="card-inner margin-top-no">
+                        <div class="card-table">
+                            <div class="table-responsive">
+                                <table class="table">
+                                    <thead>
+                                    <th>Título</th>
+                                    <th class="pull-right">Data de Publicação</th>
+                                    </thead>
+                                    <tbody id="noticias">
+                                    <?php
+                                    echo Busca::getPostagens('depoimentos');
+                                    unset($_SESSION["id_depoimentos"]);
+                                    ?>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div><!-- ./card-main -->
+            </div> <!-- ./card -->
+        </div>
         </section>
     </div>
     </div>
 </main>
-
 <footer class="footer">
     <div class="col-md-4 col-sm-6">
         <div class="container" style="text-align: center; margin-left: 100px;">
@@ -417,35 +326,13 @@ $controller = Controller::getInstance();
     </div>
 </footer>
 
-<div class="modal fade" id="modalPesquisar" role="dialog">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-heading">
-                <a class="modal-close" data-dismiss="modal">×</a>
-                <h2 class="modal-title content-sub-heading"></h2>
-            </div>
-            <div class="form-group form-group-label">
-                <label class="floating-label padding-left" for="search" style="font-size: 14pt;"><span class="icon">search</span>&nbsp;Digite
-                    aqui sua procura</label>
-                <input class="form-control padding-left" id="search" name="search" type="text" required
-                       style="font-size: 14pt;">
-            </div>
-            <div class="modal-footer">
-                <button class="btn waves-attach" type="button" onclick="pesquisar();" style="width: 100%;"><span
-                            class="icon" style="font-weight: bold;">search</span></button>
-            </div>
-            <div id="conteudo" class="modal-inner">
-
-            </div>
-        </div>
-    </div>
-</div>
-
 <!-- js -->
 <script src="../plugins/jQuery/jquery.min.js"></script>
 <script src="../material/js/base.min.js"></script>
-<script src="../ini.min.js"></script>
+
 <!-- js for doc -->
 <script src="../material/js/project.min.js"></script>
+
+<script type="text/javascript" src="../ini.min.js"></script>
 </body>
 </html>
