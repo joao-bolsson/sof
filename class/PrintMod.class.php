@@ -337,12 +337,17 @@ final class PrintMod {
 
                 $table = new Table('', 'prod', ['Código', 'ItemRequest', 'Natureza', 'Descrição', 'Quantidade', 'Valor Unitário', 'Valor Total'], true);
                 while ($item = $query_items->fetch_object()) {
-                    $item->complemento_item = mb_strtoupper($item->complemento_item, 'UTF-8');
+                    $mb = mb_detect_encoding($item->complemento_item, 'UTF-8, ISO-8859-1');
+                    $item->complemento_item = mb_strtoupper($item->complemento_item, $mb);
                     $item->valor = number_format($item->valor, 3, ',', '.');
                     $row = new Row();
                     $row->addComponent(new Column($item->cod_reduzido));
                     $row->addComponent(new Column($item->seq_item_processo));
                     $row->addComponent(new Column($item->cod_despesa));
+
+                    // fix #124 problematic CO²<K, by example
+                    $item->complemento_item = str_replace("<", "< ", $item->complemento_item);
+
                     $compl = new Column($item->complemento_item);
                     $compl->setFontSize(7);
                     $row->addComponent($compl);
