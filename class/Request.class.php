@@ -552,6 +552,7 @@ final class Request {
         Query::getInstance()->exe("DELETE FROM pedido_fonte WHERE pedido_fonte.id_pedido = " . $id);
         Query::getInstance()->exe("DELETE FROM solic_alt_pedido WHERE solic_alt_pedido.id_pedido = " . $id);
         Query::getInstance()->exe("DELETE FROM pedido_log_status WHERE pedido_log_status.id_pedido = " . $id);
+	Query::getInstance()->exe("DELETE FROM pedido_plano WHERE pedido_plano.id_pedido = " . $id);
         Query::getInstance()->exe("DELETE FROM pedido WHERE pedido.id = " . $id);
     }
 
