@@ -10,13 +10,13 @@ $controller = Controller::getInstance();
     <ul class="nav nav-list">
         <li class="active">
             <a class="waves-attach" href="index.php"><span class="text-white"><span
-                        class="icon">home</span>INÍCIO</span></a>
+                            class="icon">home</span>INÍCIO</span></a>
         </li>
         <li>
             <div class="dropdown dropdown-inline">
                 <a class="waves-attach" data-toggle="dropdown"><span class="text-white"><span
-                            class="icon">store_mall_directory</span>O SETOR</span><span
-                        class="icon margin-left-sm">keyboard_arrow_down</span></a>
+                                class="icon">store_mall_directory</span>O SETOR</span><span
+                            class="icon margin-left-sm">keyboard_arrow_down</span></a>
                 <ul class="dropdown-menu nav">
                     <li>
                         <a class="waves-attach" href="sof.php">SOF</a>
@@ -33,11 +33,11 @@ $controller = Controller::getInstance();
         <li>
             <div class="dropdown dropdown-inline">
                 <a class="waves-attach" data-toggle="dropdown"><span class="text-white"><span
-                            class="icon">payments</span>SERVIÇOS SOF</span><span
-                        class="icon margin-left-sm">keyboard_arrow_down</span></a>
+                                class="icon">payments</span>SERVIÇOS SOF</span><span
+                            class="icon margin-left-sm">keyboard_arrow_down</span></a>
                 <ul class="dropdown-menu nav">
                     <li>
-                        <a class="waves-attach" href="<?= $controller->hrefSolic() ?>">Solicitações de
+                        <a class="waves-attach" href="../lte/login.php">Solicitações de
                             Empenho</a>
                     </li>
                     <li>
@@ -49,8 +49,8 @@ $controller = Controller::getInstance();
         <li>
             <div class="dropdown dropdown-inline">
                 <a class="waves-attach" data-toggle="dropdown"><span class="text-white"><span
-                            class="icon">build</span>CONSULTAS</span><span
-                        class="icon margin-left-sm">keyboard_arrow_down</span></a>
+                                class="icon">build</span>CONSULTAS</span><span
+                            class="icon margin-left-sm">keyboard_arrow_down</span></a>
                 <ul class="dropdown-menu nav">
                     <li>
                         <a class="waves-attach" href="consultaspe.php">Público Externo</a>
@@ -60,13 +60,13 @@ $controller = Controller::getInstance();
         </li>
         <li>
             <a class="waves-attach waves-light" href="relatorios.php"><span class="text-white"><span
-                        class="icon">folder</span>RELATÓRIOS</span></a>
+                            class="icon">folder</span>RELATÓRIOS</span></a>
         </li>
         <li>
             <div class="dropdown dropdown-inline">
                 <a class="waves-attach" data-toggle="dropdown"><span class="text-white"><span
-                            class="icon">near_me</span>LINKS ÚTEIS</span><span
-                        class="icon margin-left-sm">keyboard_arrow_down</span></a>
+                                class="icon">near_me</span>LINKS ÚTEIS</span><span
+                            class="icon margin-left-sm">keyboard_arrow_down</span></a>
                 <ul class="dropdown-menu nav">
                     <li>
                         <a class="waves-attach" href="linksexternos.php">Links Externos</a>
@@ -82,13 +82,13 @@ $controller = Controller::getInstance();
         </li>
         <li>
             <a class="waves-attach waves-light" href="noticia.php"><span class="text-white"><span
-                        class="icon">event</span>NOTÍCIAS</span></a>
+                            class="icon">event</span>NOTÍCIAS</span></a>
         </li>
         <li>
             <div class="dropdown dropdown-inline">
                 <a class="waves-attach" data-toggle="dropdown"><span class="text-white"><span
-                            class="icon">place</span>ENCONTROS</span><span
-                        class="icon margin-left-sm">keyboard_arrow_down</span></a>
+                                class="icon">place</span>ENCONTROS</span><span
+                            class="icon margin-left-sm">keyboard_arrow_down</span></a>
                 <ul class="dropdown-menu nav">
                     <li>
                         <a class="waves-attach" href="boaspraticas.php">Boas Práticas</a>
@@ -107,7 +107,7 @@ $controller = Controller::getInstance();
         </li>
         <li>
             <a class="waves-attach waves-light" href="faleconosco.php"><span class="text-white"><span
-                        class="icon">chat</span>CONTATO</span></a>
+                            class="icon">chat</span>CONTATO</span></a>
         </li>
     </ul>
 </nav>
