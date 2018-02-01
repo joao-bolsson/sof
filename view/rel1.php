@@ -42,96 +42,7 @@ $controller = Controller::getInstance();
         </ul>
     </nav>
 </header>
-<nav aria-hidden="true" class="menu" id="doc_menu" tabindex="-1">
-    <div class="menu-scroll">
-        <div class="menu-content">
-            <h1 class="menu-logo"><img src="../sof_files/logo_blue.png" alt="Setor de Orçamento e Finanças – HUSM"/>
-            </h1>
-            <ul class="nav">
-                <li>
-                    <a class="waves-attach" href="index.php"><span class="text-black"><span class="icon">home</span>INÍCIO</span></a>
-                </li>
-                <li>
-                    <a class="collaosed waves-attach" data-toggle="collapse" href="#osetor"><span
-                                class="text-black"><span class="icon">account_balance</span>O SETOR</a>
-                    <ul class="menu-collapse collapse" id="osetor">
-                        <li>
-                            <a class="waves-attach" href="sof.php">SOF</a>
-                        </li>
-                        <li>
-                            <a class="waves-attach" href="recepcao.php">Recepção</a>
-                        </li>
-                        <li>
-                            <a class="waves-attach" href="unidades.php">Unidades</a>
-                        </li>
-                    </ul>
-                </li>
-                <li>
-                    <a class="collapsed waves-attach" data-toggle="collapse" href="#servicossof"><span
-                                class="text-black"><span class="icon">payment</span>SERVIÇOS DO SOF</a>
-                    <ul class="menu-collapse collapse" id="servicossof">
-                        <li>
-                            <a class="waves-attach" href="javascript:abreModal('#construindo');">SOLICITAÇÕES</a>
-                        </li>
-                    </ul>
-                </li>
-                <li>
-                    <a class="collapsed waves-attach" data-toggle="collapse" href="#mconsultas"><span
-                                class="text-black"><span class="icon">build</span>CONSULTAS</a>
-                    <ul class="menu-collapse collapse" id="mconsultas">
-                        <li>
-                            <a class="waves-attach" href="consultaspe.php">PÚBLICO EXTERNO</a>
-                        </li>
-                        <li>
-                            <a class="waves-attach" href="javascript:abreModal('#construindo');">PÚBLICO INTERNO</a>
-                        </li>
-                    </ul>
-                </li>
-                <li>
-                    <a class="waves-attach waves-light" href="relatorios.php"><span class="text-black"><span
-                                    class="icon">folder</span>RELATÓRIOS</span></a>
-                </li>
-                <li>
-                    <a class="collapsed waves-attach" data-toggle="collapse" href="#mlinks"><span
-                                class="text-black"><span class="icon">near_me</span>LINKS ÚTEIS</a>
-                    <ul class="menu-collapse collapse" id="mlinks">
-                        <li>
-                            <a class="waves-attach" href="linksexternos.php">LINKS EXTERNOS</a>
-                        </li>
-                        <li>
-                            <a class="waves-attach" href="linksinternos.php">LINKS INTERNOS</a>
-                        </li>
-                        <li>
-                            <a class="waves-attach" href="tutoriais.php">POPs E TUTORIAIS</a>
-                        </li>
-                    </ul>
-                </li>
-                <li>
-                    <a class="waves-attach waves-light" href="noticia.php"><span class="text-black"><span class="icon">event</span>NOTÍCIAS</span></a>
-                </li>
-                <li>
-                    <a class="collapsed waves-attach" data-toggle="collapse" href="#mencontros"><span
-                                class="text-black"><span class="icon">place</span>ENCONTROS</a>
-                    <ul class="menu-collapse collapse" id="mencontros">
-                        <li>
-                            <a class="waves-attach" href="boaspraticas.php">BOAS PRÁTICAS</a>
-                        </li>
-                        <li>
-                            <a class="waves-attach" href="comemoracoes.php">COMEMORAÇÕES</a>
-                        </li>
-                        <li>
-                            <a class="waves-attach" href="dinamicas.php">DINÂMICAS DE GRUPO</a>
-                        </li>
-                    </ul>
-                </li>
-                <li>
-                    <a class="waves-attach waves-light" href="faleconosco.php"><span class="text-black"><span
-                                    class="icon">chat</span>CONTATO</span></a>
-                </li>
-            </ul>
-        </div>
-    </div>
-</nav>
+<?php include_once 'navbar-hidden.php' ?>
 <main class="content">
     <div class="content-heading">
         <div class="container">
@@ -149,150 +60,51 @@ $controller = Controller::getInstance();
     <div class="container">
         <div class="row">
             <section class="content-inner margin-top-no">
-                <nav class="tab-nav ui-tab-tab">
-                    <ul class="nav nav-list">
-                        <li class="active">
-                            <a class="waves-attach" href="index.php"><span class="text-white"><span
-                                            class="icon">home</span>INÍCIO</span></a>
-                        </li>
-                        <li>
-                            <div class="dropdown dropdown-inline">
-                                <a class="waves-attach" data-toggle="dropdown"><span class="text-white"><span
-                                                class="icon">store_mall_directory</span>O SETOR</span><span
-                                            class="icon margin-left-sm">keyboard_arrow_down</span></a>
-                                <ul class="dropdown-menu nav">
-                                    <li>
-                                        <a class="waves-attach" href="sof.php">SOF</a>
-                                    </li>
-                                    <li>
-                                        <a class="waves-attach" href="recepcao.php">Recepção</a>
-                                    </li>
-                                    <li>
-                                        <a class="waves-attach" href="unidades.php">Unidades</a>
-                                    </li>
-                                </ul>
+                <?php include_once 'navbar.php' ?>
+                <div class="card margin-top-no">
+                    <div class="card-main">
+                        <div class="card-header card-brand">
+                            <div class="card-header-side pull-left">
+                                <p class="card-heading">CADERNO DE EXECUÇÃO ORÇAMENTÁRIA DO HUSM</p>
                             </div>
-                        </li>
-                        <li>
-                            <div class="dropdown dropdown-inline">
-                                <a class="waves-attach" data-toggle="dropdown"><span class="text-white"><span
-                                                class="icon">payments</span>SERVIÇOS SOF</span><span
-                                            class="icon margin-left-sm">keyboard_arrow_down</span></a>
-                                <ul class="dropdown-menu nav">
-                                    <li>
-                                        <a class="waves-attach" href="<?= $controller->hrefSolic() ?>">Solicitações de
-                                            Empenho</a>
-                                    </li>
-                                    <li>
-                                        <a class="waves-attach" href="consultaspi.php">Solicitações Gerais</a>
-                                    </li>
-                                </ul>
-                            </div>
-                        </li>
-                        <li>
-                            <div class="dropdown dropdown-inline">
-                                <a class="waves-attach" data-toggle="dropdown"><span class="text-white"><span
-                                                class="icon">build</span>CONSULTAS</span><span
-                                            class="icon margin-left-sm">keyboard_arrow_down</span></a>
-                                <ul class="dropdown-menu nav">
-                                    <li>
-                                        <a class="waves-attach" href="consultaspe.php">Público Externo</a>
-                                    </li>
-                                </ul>
-                            </div>
-                        </li>
-                        <li>
-                            <a class="waves-attach waves-light" href="relatorios.php"><span class="text-white"><span
-                                            class="icon">folder</span>RELATÓRIOS</span></a>
-                        </li>
-                        <li>
-                            <div class="dropdown dropdown-inline">
-                                <a class="waves-attach" data-toggle="dropdown"><span class="text-white"><span
-                                                class="icon">near_me</span>LINKS ÚTEIS</span><span
-                                            class="icon margin-left-sm">keyboard_arrow_down</span></a>
-                                <ul class="dropdown-menu nav">
-                                    <li>
-                                        <a class="waves-attach" href="linksexternos.php">Links Externos</a>
-                                    </li>
-                                    <li>
-                                        <a class="waves-attach" href="linksinternos.php">Links Internos</a>
-                                    </li>
-                                    <li>
-                                        <a class="waves-attach" href="tutoriais.php">POPs e Tutoriais</a>
-                                    </li>
-                                </ul>
-                            </div>
-                        </li>
-                        <li>
-                            <a class="waves-attach waves-light" href="noticia.php"><span class="text-white"><span
-                                            class="icon">event</span>NOTÍCIAS</span></a>
-                        </li>
-                        <li>
-                            <div class="dropdown dropdown-inline">
-                                <a class="waves-attach" data-toggle="dropdown"><span class="text-white"><span
-                                                class="icon">place</span>ENCONTROS</span><span
-                                            class="icon margin-left-sm">keyboard_arrow_down</span></a>
-                                <ul class="dropdown-menu nav">
-                                    <li>
-                                        <a class="waves-attach" href="boaspraticas.php">Boas Práticas</a>
-                                    </li>
-                                    <li>
-                                        <a class="waves-attach" href="comemoracoes.php">Comemorações</a>
-                                    </li>
-                                    <li>
-                                        <a class="waves-attach" href="dinamicas.php">Dinâmicas de grupos</a>
-                                    </li>
-                                </ul>
-                            </div>
-                        </li>
-                        <li>
-                            <a class="waves-attach waves-light" href="faleconosco.php"><span class="text-white"><span
-                                            class="icon">chat</span>CONTATO</span></a>
-                        </li>
-                    </ul>
-                </nav>
-        </div><!-- ./row -->
-        <div class="row">
-            <div class="card margin-top-no">
-                <div class="card-main">
-                    <div class="card-header card-brand">
-                        <div class="card-header-side pull-left">
-                            <p class="card-heading">CADERNO DE EXECUÇÃO ORÇAMENTÁRIA DO HUSM</p>
+                        </div><!--  ./card-header -->
+                        <div class="card-inner" style="text-indent: 1.5em; text-align: justify; font-size: 12pt;">
+                            <p>Com o objetivo de respaldar a Equipe de Governança do Hospital Universitário de Santa
+                                Maria
+                                na tomada de decisão, bem como de informar ao público interno e externo acerca do
+                                comprometimento orçamentário do hospital, foi criado o I Caderno de Execução
+                                Orçamentária do
+                                HUSM, referente ao 1º Quadrimestre de 2015, enquanto filial da Empresa Brasileira de
+                                Serviços Hospitalares–EBSERH.<br><br>
+                                <strong>O Caderno está estruturado da seguinte forma</strong>:<br><br>
+                                – tabelas com valores comprometidos por solicitante do gasto e descrição da despesa, bem
+                                como modalidade de fornecimento – contratos e registro de preços;<br><br>
+                                – valores comprometidos por modalidade de licitação;<br><br>
+                                – gráficos que ilustram totais, percentuais, médias, grupos de maior relevância,
+                                perpassando
+                                pela taxa de crescimento e a tendência da execução orçamentária do período.<br><br>
+                                <strong>Publicações:</strong>
+                            </p>
+                            <ul>
+                                <li><a href="../uploads/caderno_execucao_orcamentaria_husm_demo.pdf"
+                                       target="_blank"><strong>I Caderno de Execução Orçamentária do HUSM – 1º
+                                            Quadrimestre
+                                            de 2015 (versão demo)</strong></a></li>
+                            </ul>
+                            <p><br>
+                                Solicite seu exemplar completo <a href="faleconosco.php">clicando aqui</a>.<br>
+                            </p>
                         </div>
-                    </div><!--  ./card-header -->
-                    <div class="card-inner" style="text-indent: 1.5em; text-align: justify; font-size: 12pt;">
-                        <p>Com o objetivo de respaldar a Equipe de Governança do Hospital Universitário de Santa Maria
-                            na tomada de decisão, bem como de informar ao público interno e externo acerca do
-                            comprometimento orçamentário do hospital, foi criado o I Caderno de Execução Orçamentária do
-                            HUSM, referente ao 1º Quadrimestre de 2015, enquanto filial da Empresa Brasileira de
-                            Serviços Hospitalares–EBSERH.<br><br>
-                            <strong>O Caderno está estruturado da seguinte forma</strong>:<br><br>
-                            – tabelas com valores comprometidos por solicitante do gasto e descrição da despesa, bem
-                            como modalidade de fornecimento – contratos e registro de preços;<br><br>
-                            – valores comprometidos por modalidade de licitação;<br><br>
-                            – gráficos que ilustram totais, percentuais, médias, grupos de maior relevância, perpassando
-                            pela taxa de crescimento e a tendência da execução orçamentária do período.<br><br>
-                            <strong>Publicações:</strong>
-                        </p>
-                        <ul>
-                            <li><a href="../uploads/caderno_execucao_orcamentaria_husm_demo.pdf"
-                                   target="_blank"><strong>I Caderno de Execução Orçamentária do HUSM – 1º Quadrimestre
-                                        de 2015 (versão demo)</strong></a></li>
-                        </ul>
-                        <p><br>
-                            Solicite seu exemplar completo <a href="faleconosco.php">clicando aqui</a>.<br>
-                        </p>
-                    </div>
-                    <div class="card-action">
-                        <div class="card-action-btn pull-left">
-                            <a class="btn btn-brand waves-attach waves-effect" href="relatorios.php"><span class="icon">reply</span>&nbsp;Voltar</a>
+                        <div class="card-action">
+                            <div class="card-action-btn pull-left">
+                                <a class="btn btn-brand waves-attach waves-effect" href="relatorios.php"><span
+                                            class="icon">reply</span>&nbsp;Voltar</a>
+                            </div>
                         </div>
-                    </div>
-                </div><!-- ./card-main -->
-            </div> <!-- ./card -->
+                    </div><!-- ./card-main -->
+                </div> <!-- ./card -->
+            </section>
         </div>
-        </section>
-    </div>
     </div>
 </main>
 <footer class="footer">

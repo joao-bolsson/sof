@@ -1,4 +1,8 @@
 <?php
+/**
+ * @author João Bolsson (joaovictorbolsson@gmail.com)
+ * @since 2018, Jan 31
+ */
 session_start();
 
 ini_set('display_errors', true);
@@ -10,8 +14,8 @@ spl_autoload_register(function (string $class_name) {
 
 $controller = Controller::getInstance();
 $id = 0;
-if (isset($_SESSION["id_comemoracoes"])) {
-    $id = $_SESSION["id_comemoracoes"];
+if (isset($_SESSION["id_depoimentos"])) {
+    $id = $_SESSION["id_depoimentos"];
 }
 ?>
 <!DOCTYPE html>
@@ -70,7 +74,7 @@ if (isset($_SESSION["id_comemoracoes"])) {
                     <div class="card-main">
                         <div class="card-header card-brand">
                             <div class="card-header-side pull-left">
-                                <p class="card-heading">Comemorações</p>
+                                <p class="card-heading">Depoimentos</p>
                             </div>
                         </div><!--  ./card-header -->
                         <div class="card-inner margin-top-no">
@@ -85,8 +89,8 @@ if (isset($_SESSION["id_comemoracoes"])) {
                                         </thead>
                                         <tbody id="noticias">
                                         <?php
-                                        echo Busca::getPostagens('comemoracoes');
-                                        unset($_SESSION["id_comemoracoes"]);
+                                        echo Busca::getPostagens('depoimentos');
+                                        unset($_SESSION["id_depoimentos"]);
                                         ?>
                                         </tbody>
                                     </table>

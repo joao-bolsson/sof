@@ -42,94 +42,7 @@ $controller = Controller::getInstance();
         </ul>
     </nav>
 </header>
-<nav aria-hidden="true" class="menu" id="doc_menu" tabindex="-1">
-    <div class="menu-scroll">
-        <div class="menu-content">
-            <h1 class="menu-logo"><img src="../sof_files/logo_blue.png" alt="Setor de Orçamento e Finanças – HUSM"/>
-            </h1>
-            <ul class="nav">
-                <li>
-                    <a class="waves-attach" href="index.php"><span class="text-black"><span class="icon">home</span>INÍCIO</span></a>
-                </li>
-                <li>
-                    <a class="collaosed waves-attach" data-toggle="collapse" href="#osetor"><span
-                                class="text-black"><span class="icon">account_balance</span>O SETOR</a>
-                    <ul class="menu-collapse collapse" id="osetor">
-                        <li>
-                            <a class="waves-attach" href="sof.php">SOF</a>
-                        </li>
-                        <li>
-                            <a class="waves-attach" href="recepcao.php">Recepção</a>
-                        </li>
-                        <li>
-                            <a class="waves-attach" href="unidades.php">Unidades</a>
-                        </li>
-                    </ul>
-                </li>
-                <li>
-                    <a class="collapsed waves-attach" data-toggle="collapse" href="#servicossof"><span
-                                class="text-black"><span class="icon">payment</span>SERVIÇOS DO SOF</a>
-                    <ul class="menu-collapse collapse" id="servicossof">
-                        <li>
-                            <a class="waves-attach" href="<?= $controller->hrefSolic() ?>">SOLICITAÇÕES DE EMPENHO</a>
-                        </li>
-                        <li>
-                            <a class="waves-attach" href="consultaspi.php">SOLICITAÇÕES GERAIS</a>
-                        </li>
-                    </ul>
-                </li>
-                <li>
-                    <a class="collapsed waves-attach" data-toggle="collapse" href="#mconsultas"><span
-                                class="text-black"><span class="icon">build</span>CONSULTAS</a>
-                    <ul class="menu-collapse collapse" id="mconsultas">
-
-                    </ul>
-                </li>
-                <li>
-                    <a class="waves-attach waves-light" href="relatorios.php"><span class="text-black"><span
-                                    class="icon">folder</span>RELATÓRIOS</span></a>
-                </li>
-                <li>
-                    <a class="collapsed waves-attach" data-toggle="collapse" href="#mlinks"><span
-                                class="text-black"><span class="icon">near_me</span>LINKS ÚTEIS</a>
-                    <ul class="menu-collapse collapse" id="mlinks">
-                        <li>
-                            <a class="waves-attach" href="linksexternos.php">LINKS EXTERNOS</a>
-                        </li>
-                        <li>
-                            <a class="waves-attach" href="linksinternos.php">LINKS INTERNOS</a>
-                        </li>
-                        <li>
-                            <a class="waves-attach" href="tutoriais.php">POPs E TUTORIAIS</a>
-                        </li>
-                    </ul>
-                </li>
-                <li>
-                    <a class="waves-attach waves-light" href="noticia.php"><span class="text-black"><span class="icon">event</span>NOTÍCIAS</span></a>
-                </li>
-                <li>
-                    <a class="collapsed waves-attach" data-toggle="collapse" href="#mencontros"><span
-                                class="text-black"><span class="icon">place</span>ENCONTROS</a>
-                    <ul class="menu-collapse collapse" id="mencontros">
-                        <li>
-                            <a class="waves-attach" href="boaspraticas.php">BOAS PRÁTICAS</a>
-                        </li>
-                        <li>
-                            <a class="waves-attach" href="comemoracoes.php">COMEMORAÇÕES</a>
-                        </li>
-                        <li>
-                            <a class="waves-attach" href="dinamicas.php">DINÂMICAS DE GRUPO</a>
-                        </li>
-                    </ul>
-                </li>
-                <li>
-                    <a class="waves-attach waves-light" href="faleconosco.php"><span class="text-black"><span
-                                    class="icon">chat</span>CONTATO</span></a>
-                </li>
-            </ul>
-        </div>
-    </div>
-</nav>
+<?php include_once 'navbar-hidden.php' ?>
 <main class="content">
     <div class="content-heading">
         <div class="container">
@@ -146,181 +59,81 @@ $controller = Controller::getInstance();
     <div class="container">
         <div class="row">
             <section class="content-inner margin-top-no">
-                <nav class="tab-nav ui-tab-tab">
-                    <ul class="nav nav-list">
-                        <li class="active">
-                            <a class="waves-attach" href="index.php"><span class="text-white"><span
-                                            class="icon">home</span>INÍCIO</span></a>
-                        </li>
-                        <li>
-                            <div class="dropdown dropdown-inline">
-                                <a class="waves-attach" data-toggle="dropdown"><span class="text-white"><span
-                                                class="icon">store_mall_directory</span>O SETOR</span><span
-                                            class="icon margin-left-sm">keyboard_arrow_down</span></a>
-                                <ul class="dropdown-menu nav">
-                                    <li>
-                                        <a class="waves-attach" href="sof.php">SOF</a>
-                                    </li>
-                                    <li>
-                                        <a class="waves-attach" href="recepcao.php">Recepção</a>
-                                    </li>
-                                    <li>
-                                        <a class="waves-attach" href="unidades.php">Unidades</a>
-                                    </li>
+                <?php include_once 'navbar.php' ?>
+                <div class="col-lg-3 col-sm-6 pull-left">
+                    <div class="card margin-top-no">
+                        <div class="card-main">
+                            <div class="card-header card-brand">
+                                <div class="card-header-side pull-left">
+                                    <p class="card-heading">Unidade de Programação Orçamentária e Financeira</p>
+                                </div>
+                            </div><!--  ./card-header -->
+                            <div class="card-inner">
+                                <ul class="nav">
+                                    <li class="tile"><a class="btn btn-brand-accent btn-flat waves-attach waves-effect"
+                                                        data-toggle="modal" href="#progApresentacao"><span
+                                                    class="icon icon-lg">accessibility</span>APRESENTAÇÃO</a></li>
+                                    <li><a class="btn btn-brand-accent btn-flat waves-attach waves-effect"
+                                           data-toggle="modal" href="#servicoAnalise"><span class="icon icon-lg">find_in_page</span>SERVIÇO
+                                            DE ANÁLISE</a></li>
+                                    <li class="tile"><a class="btn btn-brand-accent btn-flat waves-attach waves-effect"
+                                                        data-toggle="modal" href="#sieRegPrecos"><span
+                                                    class="icon icon-lg">attach_money</span>SERVIÇO
+                                            DE EMPENHO SIE – REGISTRO DE PREÇOS</a></li>
+                                    <li><a class="btn btn-brand-accent btn-flat waves-attach waves-effect"
+                                           data-toggle="modal" href="#sieContratos"><span class="icon icon-lg">insert_drive_file</span>SERVIÇO
+                                            DE EMPENHOS SIE – CONTRATOS</a></li>
+                                    <li class="tile"><a class="btn btn-brand-accent btn-flat waves-attach waves-effect"
+                                                        data-toggle="modal" href="#empenhoSIAFI"><span
+                                                    class="icon icon-lg">grade</span>SERVIÇO
+                                            DE EMPENHOS SIAFI</a></li>
+                                    <li><a class="btn btn-brand-accent btn-flat waves-attach waves-effect"
+                                           data-toggle="modal" href="#servicoOrcamento"><span
+                                                    class="icon icon-lg">build</span>SERVIÇO DE ORÇAMENTO</a></li>
                                 </ul>
                             </div>
-                        </li>
-                        <li>
-                            <div class="dropdown dropdown-inline">
-                                <a class="waves-attach" data-toggle="dropdown"><span class="text-white"><span
-                                                class="icon">payments</span>SERVIÇOS SOF</span><span
-                                            class="icon margin-left-sm">keyboard_arrow_down</span></a>
-                                <ul class="dropdown-menu nav">
-                                    <li>
-                                        <a class="waves-attach" href="<?= $controller->hrefSolic() ?>">Solicitações de
-                                            Empenho</a>
-                                    </li>
-                                    <li>
-                                        <a class="waves-attach" href="consultaspi.php">Solicitações Gerais</a>
-                                    </li>
+                        </div><!-- ./card-main -->
+                    </div> <!-- ./card -->
+                </div>
+                <div class="col-lg-3 col-sm-6 pull-right">
+                    <div class="card margin-top-no">
+                        <div class="card-main">
+                            <div class="card-header card-brand">
+                                <div class="card-header-side pull-left">
+                                    <p class="card-heading">Unidade de Liquidação e Pagamento da Despesa</p>
+                                </div>
+                            </div><!--  ./card-header -->
+                            <div class="card-inner">
+                                <ul class="nav">
+                                    <li class="tile"><a class="btn btn-brand-accent btn-flat waves-attach waves-effect"
+                                                        data-toggle="modal" href="#liqApresentacao"><span
+                                                    class="icon icon-lg">accessibility</span>APRESENTAÇÃO</a></li>
+                                    <li><a class="btn btn-brand-accent btn-flat waves-attach waves-effect"
+                                           data-toggle="modal" href="#servicoRelatorios"><span class="icon icon-lg">description</span>SERVIÇO
+                                            DE RELATÓRIOS</a></li>
+                                    <li class="tile"><a class="btn btn-brand-accent btn-flat waves-attach waves-effect"
+                                                        data-toggle="modal" href="#servicoLiqContratos"><span
+                                                    class="icon icon-lg">insert_drive_file</span>SERVIÇO DE LIQUIDAÇÃO
+                                            DE
+                                            NOTAS FISCAIS – CONTRATOS</a></li>
+                                    <li><a class="btn btn-brand-accent btn-flat waves-attach waves-effect"
+                                           data-toggle="modal" href="#liqRegPrecos"><span
+                                                    class="icon icon-lg">attach_money</span>SERVIÇO DE LIQUIDAÇÃO –
+                                            REGISTRO
+                                            DE PREÇOS</a></li>
+                                    <li class="tile"><a class="btn btn-brand-accent btn-flat waves-attach waves-effect"
+                                                        data-toggle="modal" href="#servicoPagamentos"><span
+                                                    class="icon icon-lg">payment</span>SERVIÇO DE PAGAMENTOS</a></li>
+                                    <li><a class="btn btn-brand-accent btn-flat waves-attach waves-effect"
+                                           data-toggle="modal" href="#suprimentosFundo"><span class="icon icon-lg">local_shipping</span>SERVIÇO
+                                            DE SUPRIMENTO DE FUNDOS</a></li>
                                 </ul>
                             </div>
-                        </li>
-                        <li>
-                            <div class="dropdown dropdown-inline">
-                                <a class="waves-attach" data-toggle="dropdown"><span class="text-white"><span
-                                                class="icon">build</span>CONSULTAS</span><span
-                                            class="icon margin-left-sm">keyboard_arrow_down</span></a>
-                                <ul class="dropdown-menu nav">
-                                    <li>
-                                        <a class="waves-attach" href="consultaspe.php">Público Externo</a>
-                                    </li>
-                                </ul>
-                            </div>
-                        </li>
-                        <li>
-                            <a class="waves-attach waves-light" href="relatorios.php"><span class="text-white"><span
-                                            class="icon">folder</span>RELATÓRIOS</span></a>
-                        </li>
-                        <li>
-                            <div class="dropdown dropdown-inline">
-                                <a class="waves-attach" data-toggle="dropdown"><span class="text-white"><span
-                                                class="icon">near_me</span>LINKS ÚTEIS</span><span
-                                            class="icon margin-left-sm">keyboard_arrow_down</span></a>
-                                <ul class="dropdown-menu nav">
-                                    <li>
-                                        <a class="waves-attach" href="linksexternos.php">Links Externos</a>
-                                    </li>
-                                    <li>
-                                        <a class="waves-attach" href="linksinternos.php">Links Internos</a>
-                                    </li>
-                                    <li>
-                                        <a class="waves-attach" href="tutoriais.php">POPs e Tutoriais</a>
-                                    </li>
-                                </ul>
-                            </div>
-                        </li>
-                        <li>
-                            <a class="waves-attach waves-light" href="noticia.php"><span class="text-white"><span
-                                            class="icon">event</span>NOTÍCIAS</span></a>
-                        </li>
-                        <li>
-                            <div class="dropdown dropdown-inline">
-                                <a class="waves-attach" data-toggle="dropdown"><span class="text-white"><span
-                                                class="icon">place</span>ENCONTROS</span><span
-                                            class="icon margin-left-sm">keyboard_arrow_down</span></a>
-                                <ul class="dropdown-menu nav">
-                                    <li>
-                                        <a class="waves-attach" href="boaspraticas.php">Boas Práticas</a>
-                                    </li>
-                                    <li>
-                                        <a class="waves-attach" href="comemoracoes.php">Comemorações</a>
-                                    </li>
-                                    <li>
-                                        <a class="waves-attach" href="dinamicas.php">Dinâmicas de grupos</a>
-                                    </li>
-                                </ul>
-                            </div>
-                        </li>
-                        <li>
-                            <a class="waves-attach waves-light" href="faleconosco.php"><span class="text-white"><span
-                                            class="icon">chat</span>CONTATO</span></a>
-                        </li>
-                    </ul>
-                </nav>
-        </div><!-- ./row -->
-        <div class="row">
-            <div class="col-lg-3 col-sm-6 pull-left">
-                <div class="card margin-top-no">
-                    <div class="card-main">
-                        <div class="card-header card-brand">
-                            <div class="card-header-side pull-left">
-                                <p class="card-heading">Unidade de Programação Orçamentária e Financeira</p>
-                            </div>
-                        </div><!--  ./card-header -->
-                        <div class="card-inner">
-                            <ul class="nav">
-                                <li class="tile"><a class="btn btn-brand-accent btn-flat waves-attach waves-effect"
-                                                    data-toggle="modal" href="#progApresentacao"><span
-                                                class="icon icon-lg">accessibility</span>APRESENTAÇÃO</a></li>
-                                <li><a class="btn btn-brand-accent btn-flat waves-attach waves-effect"
-                                       data-toggle="modal" href="#servicoAnalise"><span class="icon icon-lg">find_in_page</span>SERVIÇO
-                                        DE ANÁLISE</a></li>
-                                <li class="tile"><a class="btn btn-brand-accent btn-flat waves-attach waves-effect"
-                                                    data-toggle="modal" href="#sieRegPrecos"><span class="icon icon-lg">attach_money</span>SERVIÇO
-                                        DE EMPENHO SIE – REGISTRO DE PREÇOS</a></li>
-                                <li><a class="btn btn-brand-accent btn-flat waves-attach waves-effect"
-                                       data-toggle="modal" href="#sieContratos"><span class="icon icon-lg">insert_drive_file</span>SERVIÇO
-                                        DE EMPENHOS SIE – CONTRATOS</a></li>
-                                <li class="tile"><a class="btn btn-brand-accent btn-flat waves-attach waves-effect"
-                                                    data-toggle="modal" href="#empenhoSIAFI"><span class="icon icon-lg">grade</span>SERVIÇO
-                                        DE EMPENHOS SIAFI</a></li>
-                                <li><a class="btn btn-brand-accent btn-flat waves-attach waves-effect"
-                                       data-toggle="modal" href="#servicoOrcamento"><span
-                                                class="icon icon-lg">build</span>SERVIÇO DE ORÇAMENTO</a></li>
-                            </ul>
-                        </div>
-                    </div><!-- ./card-main -->
-                </div> <!-- ./card -->
-            </div>
-            <div class="col-lg-3 col-sm-6 pull-right">
-                <div class="card margin-top-no">
-                    <div class="card-main">
-                        <div class="card-header card-brand">
-                            <div class="card-header-side pull-left">
-                                <p class="card-heading">Unidade de Liquidação e Pagamento da Despesa</p>
-                            </div>
-                        </div><!--  ./card-header -->
-                        <div class="card-inner">
-                            <ul class="nav">
-                                <li class="tile"><a class="btn btn-brand-accent btn-flat waves-attach waves-effect"
-                                                    data-toggle="modal" href="#liqApresentacao"><span
-                                                class="icon icon-lg">accessibility</span>APRESENTAÇÃO</a></li>
-                                <li><a class="btn btn-brand-accent btn-flat waves-attach waves-effect"
-                                       data-toggle="modal" href="#servicoRelatorios"><span class="icon icon-lg">description</span>SERVIÇO
-                                        DE RELATÓRIOS</a></li>
-                                <li class="tile"><a class="btn btn-brand-accent btn-flat waves-attach waves-effect"
-                                                    data-toggle="modal" href="#servicoLiqContratos"><span
-                                                class="icon icon-lg">insert_drive_file</span>SERVIÇO DE LIQUIDAÇÃO DE
-                                        NOTAS FISCAIS – CONTRATOS</a></li>
-                                <li><a class="btn btn-brand-accent btn-flat waves-attach waves-effect"
-                                       data-toggle="modal" href="#liqRegPrecos"><span
-                                                class="icon icon-lg">attach_money</span>SERVIÇO DE LIQUIDAÇÃO – REGISTRO
-                                        DE PREÇOS</a></li>
-                                <li class="tile"><a class="btn btn-brand-accent btn-flat waves-attach waves-effect"
-                                                    data-toggle="modal" href="#servicoPagamentos"><span
-                                                class="icon icon-lg">payment</span>SERVIÇO DE PAGAMENTOS</a></li>
-                                <li><a class="btn btn-brand-accent btn-flat waves-attach waves-effect"
-                                       data-toggle="modal" href="#suprimentosFundo"><span class="icon icon-lg">local_shipping</span>SERVIÇO
-                                        DE SUPRIMENTO DE FUNDOS</a></li>
-                            </ul>
-                        </div>
-                    </div><!-- ./card-main -->
-                </div> <!-- ./card -->
-            </div>
+                        </div><!-- ./card-main -->
+                    </div> <!-- ./card -->
+                </div>
+            </section>
         </div>
-        </section>
-    </div>
     </div>
 </main>
 <footer class="footer">

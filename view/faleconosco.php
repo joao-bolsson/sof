@@ -43,94 +43,7 @@ $controller = Controller::getInstance();
         </ul>
     </nav>
 </header>
-<nav aria-hidden="true" class="menu" id="doc_menu" tabindex="-1">
-    <div class="menu-scroll">
-        <div class="menu-content">
-            <h1 class="menu-logo"><img src="../sof_files/logo_blue.png" alt="Setor de Orçamento e Finanças – HUSM"/>
-            </h1>
-            <ul class="nav">
-                <li>
-                    <a class="waves-attach" href="index.php"><span class="text-black"><span class="icon">home</span>INÍCIO</span></a>
-                </li>
-                <li>
-                    <a class="collaosed waves-attach" data-toggle="collapse" href="#osetor"><span
-                                class="text-black"><span class="icon">account_balance</span>O SETOR</a>
-                    <ul class="menu-collapse collapse" id="osetor">
-                        <li>
-                            <a class="waves-attach" href="sof.php">SOF</a>
-                        </li>
-                        <li>
-                            <a class="waves-attach" href="recepcao.php">Recepção</a>
-                        </li>
-                        <li>
-                            <a class="waves-attach" href="unidades.php">Unidades</a>
-                        </li>
-                    </ul>
-                </li>
-                <li>
-                    <a class="collapsed waves-attach" data-toggle="collapse" href="#servicossof"><span
-                                class="text-black"><span class="icon">payment</span>SERVIÇOS DO SOF</a>
-                    <ul class="menu-collapse collapse" id="servicossof">
-                        <li>
-                            <a class="waves-attach" href="<?= $controller->hrefSolic() ?>">SOLICITAÇÕES DE EMPENHO</a>
-                        </li>
-                        <li>
-                            <a class="waves-attach" href="consultaspi.php">SOLICITAÇÕES GERAIS</a>
-                        </li>
-                    </ul>
-                </li>
-                <li>
-                    <a class="collapsed waves-attach" data-toggle="collapse" href="#mconsultas"><span
-                                class="text-black"><span class="icon">build</span>CONSULTAS</a>
-                    <ul class="menu-collapse collapse" id="mconsultas">
-
-                    </ul>
-                </li>
-                <li>
-                    <a class="waves-attach waves-light" href="relatorios.php"><span class="text-black"><span
-                                    class="icon">folder</span>RELATÓRIOS</span></a>
-                </li>
-                <li>
-                    <a class="collapsed waves-attach" data-toggle="collapse" href="#mlinks"><span
-                                class="text-black"><span class="icon">near_me</span>LINKS ÚTEIS</a>
-                    <ul class="menu-collapse collapse" id="mlinks">
-                        <li>
-                            <a class="waves-attach" href="linksexternos.php">LINKS EXTERNOS</a>
-                        </li>
-                        <li>
-                            <a class="waves-attach" href="linksinternos.php">LINKS INTERNOS</a>
-                        </li>
-                        <li>
-                            <a class="waves-attach" href="tutoriais.php">POPs E TUTORIAIS</a>
-                        </li>
-                    </ul>
-                </li>
-                <li>
-                    <a class="waves-attach waves-light" href="noticia.php"><span class="text-black"><span class="icon">event</span>NOTÍCIAS</span></a>
-                </li>
-                <li>
-                    <a class="collapsed waves-attach" data-toggle="collapse" href="#mencontros"><span
-                                class="text-black"><span class="icon">place</span>ENCONTROS</a>
-                    <ul class="menu-collapse collapse" id="mencontros">
-                        <li>
-                            <a class="waves-attach" href="boaspraticas.php">BOAS PRÁTICAS</a>
-                        </li>
-                        <li>
-                            <a class="waves-attach" href="comemoracoes.php">COMEMORAÇÕES</a>
-                        </li>
-                        <li>
-                            <a class="waves-attach" href="dinamicas.php">DINÂMICAS DE GRUPO</a>
-                        </li>
-                    </ul>
-                </li>
-                <li>
-                    <a class="waves-attach waves-light" href="faleconosco.php"><span class="text-black"><span
-                                    class="icon">chat</span>CONTATO</span></a>
-                </li>
-            </ul>
-        </div>
-    </div>
-</nav>
+<?php include_once 'navbar-hidden.php' ?>
 <main class="content">
     <div class="content-heading">
         <div class="container">
@@ -147,113 +60,10 @@ $controller = Controller::getInstance();
     <div class="container">
         <div class="row">
             <section class="content-inner margin-top-no">
-                <nav class="tab-nav ui-tab-tab">
-                    <ul class="nav nav-list">
-                        <li class="active">
-                            <a class="waves-attach" href="index.php"><span class="text-white"><span
-                                            class="icon">home</span>INÍCIO</span></a>
-                        </li>
-                        <li>
-                            <div class="dropdown dropdown-inline">
-                                <a class="waves-attach" data-toggle="dropdown"><span class="text-white"><span
-                                                class="icon">store_mall_directory</span>O SETOR</span><span
-                                            class="icon margin-left-sm">keyboard_arrow_down</span></a>
-                                <ul class="dropdown-menu nav">
-                                    <li>
-                                        <a class="waves-attach" href="sof.php">SOF</a>
-                                    </li>
-                                    <li>
-                                        <a class="waves-attach" href="recepcao.php">Recepção</a>
-                                    </li>
-                                    <li>
-                                        <a class="waves-attach" href="unidades.php">Unidades</a>
-                                    </li>
-                                </ul>
-                            </div>
-                        </li>
-                        <li>
-                            <div class="dropdown dropdown-inline">
-                                <a class="waves-attach" data-toggle="dropdown"><span class="text-white"><span
-                                                class="icon">payments</span>SERVIÇOS SOF</span><span
-                                            class="icon margin-left-sm">keyboard_arrow_down</span></a>
-                                <ul class="dropdown-menu nav">
-                                    <li>
-                                        <a class="waves-attach" href="<?= $controller->hrefSolic() ?>">Solicitações de
-                                            Empenho</a>
-                                    </li>
-                                    <li>
-                                        <a class="waves-attach" href="consultaspi.php">Solicitações Gerais</a>
-                                    </li>
-                                </ul>
-                            </div>
-                        </li>
-                        <li>
-                            <div class="dropdown dropdown-inline">
-                                <a class="waves-attach" data-toggle="dropdown"><span class="text-white"><span
-                                                class="icon">build</span>CONSULTAS</span><span
-                                            class="icon margin-left-sm">keyboard_arrow_down</span></a>
-                                <ul class="dropdown-menu nav">
-                                    <li>
-                                        <a class="waves-attach" href="consultaspe.php">Público Externo</a>
-                                    </li>
-                                </ul>
-                            </div>
-                        </li>
-                        <li>
-                            <a class="waves-attach waves-light" href="relatorios.php"><span class="text-white"><span
-                                            class="icon">folder</span>RELATÓRIOS</span></a>
-                        </li>
-                        <li>
-                            <div class="dropdown dropdown-inline">
-                                <a class="waves-attach" data-toggle="dropdown"><span class="text-white"><span
-                                                class="icon">near_me</span>LINKS ÚTEIS</span><span
-                                            class="icon margin-left-sm">keyboard_arrow_down</span></a>
-                                <ul class="dropdown-menu nav">
-                                    <li>
-                                        <a class="waves-attach" href="linksexternos.php">Links Externos</a>
-                                    </li>
-                                    <li>
-                                        <a class="waves-attach" href="linksinternos.php">Links Internos</a>
-                                    </li>
-                                    <li>
-                                        <a class="waves-attach" href="tutoriais.php">POPs e Tutoriais</a>
-                                    </li>
-                                </ul>
-                            </div>
-                        </li>
-                        <li>
-                            <a class="waves-attach waves-light" href="noticia.php"><span class="text-white"><span
-                                            class="icon">event</span>NOTÍCIAS</span></a>
-                        </li>
-                        <li>
-                            <div class="dropdown dropdown-inline">
-                                <a class="waves-attach" data-toggle="dropdown"><span class="text-white"><span
-                                                class="icon">place</span>ENCONTROS</span><span
-                                            class="icon margin-left-sm">keyboard_arrow_down</span></a>
-                                <ul class="dropdown-menu nav">
-                                    <li>
-                                        <a class="waves-attach" href="boaspraticas.php">Boas Práticas</a>
-                                    </li>
-                                    <li>
-                                        <a class="waves-attach" href="comemoracoes.php">Comemorações</a>
-                                    </li>
-                                    <li>
-                                        <a class="waves-attach" href="dinamicas.php">Dinâmicas de grupos</a>
-                                    </li>
-                                </ul>
-                            </div>
-                        </li>
-                        <li>
-                            <a class="waves-attach waves-light" href="faleconosco.php"><span class="text-white"><span
-                                            class="icon">chat</span>CONTATO</span></a>
-                        </li>
-                    </ul>
-                </nav>
-        </div><!-- ./row -->
-        <div class="row">
-            <?php
-            if (isset($_SESSION["email_sucesso"])) {
-                echo "
+                <?php
+                include_once 'navbar.php';
+                if (isset($_SESSION["email_sucesso"])) {
+                    echo "
    <div id=\"aviso\" class=\"tile tile-orange\" style=\"margin-top: -3%;\">
     <div class=\"tile-side pull-left\">
       <div class=\"avatar avatar-sm avatar-orange\">
@@ -272,61 +82,62 @@ $controller = Controller::getInstance();
     </div>
   </div>
   ";
-                unset($_SESSION["email_sucesso"]);
-            }
-            ?>
-            <div class="card margin-top-no">
-                <div class="card-main">
-                    <div class="card-header card-brand">
-                        <div class="card-header-side pull-left">
-                            <p class="card-heading">Formulário para Contato</p>
-                        </div>
-                    </div><!--  ./card-header -->
-                    <form enctype="multipart/form-data" action="../php/geral.php" method="post">
-                        <input type="hidden" name="form" value="faleconosco">
-                        <div class="card-inner">
-                            <div class="form-group form-group-label">
-                                <label class="floating-label" for="nome">Nome Completo*</label>
-                                <input class="form-control" id="nome" name="nome" type="text" required>
+                    unset($_SESSION["email_sucesso"]);
+                }
+                ?>
+                <div class="card margin-top-no">
+                    <div class="card-main">
+                        <div class="card-header card-brand">
+                            <div class="card-header-side pull-left">
+                                <p class="card-heading">Formulário para Contato</p>
                             </div>
-                            <div class="form-group form-group-label">
-                                <label class="floating-label" for="email">E-mail*</label>
-                                <input class="form-control" id="email" name="email" type="email" required>
-                            </div>
-                            <div class="form-group form-group-label">
-                                <label class="floating-label" for="assunto">Assunto</label>
-                                <input class="form-control" id="assunto" name="assunto" type="text">
-                            </div>
-                            <div class="form-group form-group-label">
-                                <label class="floating-label" for="mensagem">Mensagem</label>
-                                <textarea class="form-control textarea-autosize" id="mensagem" name="mensagem"
-                                          rows="1"></textarea>
-                            </div>
-                            <input id="qtd-arquivos" name="qtd-arquivos" type="hidden" value="0">
-                            <button class="btn waves-attach" type="button" onclick="addInputsArquivo();"><span
-                                        class="text-black"><span class="icon">add</span>Anexar Arquivos</span></button>
-                            <div class="form-group">
-                                <table class="table margin-top-no" id="arquivos">
-
-                                </table>
-                                <p class="help-block">Max. 32MB</p>
-                            </div>
-                            <span class="label label-orange" style="font-size: 11pt;"><span class="icon">warning</span>Se quiser excluir um arquivo anexado, por favor, comece excluindo de baixo para cima</span><br><br>
-                            <span class="label">* Campo Obrigatório</span>
-                        </div><!-- ./card-inner -->
-                        <div class="card-action">
-                            <div class="card-action-btn">
-                                <button class="btn btn-brand waves-attach" type="submit" style="width: 100%;"><span
-                                            class="icon">check</span>&nbsp;Enviar
+                        </div><!--  ./card-header -->
+                        <form enctype="multipart/form-data" action="../php/geral.php" method="post">
+                            <input type="hidden" name="form" value="faleconosco">
+                            <div class="card-inner">
+                                <div class="form-group form-group-label">
+                                    <label class="floating-label" for="nome">Nome Completo*</label>
+                                    <input class="form-control" id="nome" name="nome" type="text" required>
+                                </div>
+                                <div class="form-group form-group-label">
+                                    <label class="floating-label" for="email">E-mail*</label>
+                                    <input class="form-control" id="email" name="email" type="email" required>
+                                </div>
+                                <div class="form-group form-group-label">
+                                    <label class="floating-label" for="assunto">Assunto</label>
+                                    <input class="form-control" id="assunto" name="assunto" type="text">
+                                </div>
+                                <div class="form-group form-group-label">
+                                    <label class="floating-label" for="mensagem">Mensagem</label>
+                                    <textarea class="form-control textarea-autosize" id="mensagem" name="mensagem"
+                                              rows="1"></textarea>
+                                </div>
+                                <input id="qtd-arquivos" name="qtd-arquivos" type="hidden" value="0">
+                                <button class="btn waves-attach" type="button" onclick="addInputsArquivo();"><span
+                                            class="text-black"><span class="icon">add</span>Anexar Arquivos</span>
                                 </button>
+                                <div class="form-group">
+                                    <table class="table margin-top-no" id="arquivos">
+
+                                    </table>
+                                    <p class="help-block">Max. 32MB</p>
+                                </div>
+                                <span class="label label-orange" style="font-size: 11pt;"><span
+                                            class="icon">warning</span>Se quiser excluir um arquivo anexado, por favor, comece excluindo de baixo para cima</span><br><br>
+                                <span class="label">* Campo Obrigatório</span>
+                            </div><!-- ./card-inner -->
+                            <div class="card-action">
+                                <div class="card-action-btn">
+                                    <button class="btn btn-brand waves-attach" type="submit" style="width: 100%;"><span
+                                                class="icon">check</span>&nbsp;Enviar
+                                    </button>
+                                </div>
                             </div>
-                        </div>
-                    </form>
-                </div><!-- ./card-main -->
-            </div> <!-- ./card -->
+                        </form>
+                    </div><!-- ./card-main -->
+                </div> <!-- ./card -->
+            </section>
         </div>
-        </section>
-    </div>
     </div>
 </main>
 <footer class="footer">

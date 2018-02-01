@@ -149,8 +149,8 @@ final class BuscaLTE {
 
             $row = new Row();
 
-            $row->addComponent(new Column($post->data));
             $row->addComponent(new Column($post->titulo));
+            $row->addComponent(new Column($post->data));
             $row->addComponent(new Column($btn_group));
 
             $table->addComponent($row);

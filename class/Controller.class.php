@@ -58,15 +58,6 @@ class Controller {
     }
 
     /**
-     * Link that must be in "Solicitações de Empenho" or "Login"
-     */
-    public final function hrefSolic(): string {
-        $return = ($_SESSION['id_setor'] == 0) ? "javascript:abreModal('#login');" : "../lte/solicitacoes.php";
-
-        return $return;
-    }
-
-    /**
      * @return string Footer to docs to ordenator.
      */
     public static final function footerOrdenator(): string {
