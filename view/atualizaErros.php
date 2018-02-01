@@ -7,8 +7,8 @@ session_start();
 
 include_once '../class/UpdateErrors.class.php';
 
-UpdateErrors::scanDataBase();
-UpdateErrors::verifySectors();
-UpdateErrors::checkSIAFI();
-UpdateErrors::checkItems();
-UpdateErrors::refactorSources();
+//UpdateErrors::scanDataBase();
+//UpdateErrors::verifySectors();
+//UpdateErrors::checkSIAFI();
+//UpdateErrors::checkItems();
+//UpdateErrors::refactorSources();

@@ -146,142 +146,41 @@ $controller = Controller::getInstance();
     <div class="container">
         <div class="row">
             <section class="content-inner margin-top-no">
-                <nav class="tab-nav ui-tab-tab">
-                    <ul class="nav nav-list">
-                        <li class="active">
-                            <a class="waves-attach" href="index.php"><span class="text-white"><span
-                                            class="icon">home</span>INÍCIO</span></a>
-                        </li>
-                        <li>
-                            <div class="dropdown dropdown-inline">
-                                <a class="waves-attach" data-toggle="dropdown"><span class="text-white"><span
-                                                class="icon">store_mall_directory</span>O SETOR</span><span
-                                            class="icon margin-left-sm">keyboard_arrow_down</span></a>
-                                <ul class="dropdown-menu nav">
-                                    <li>
-                                        <a class="waves-attach" href="sof.php">SOF</a>
-                                    </li>
-                                    <li>
-                                        <a class="waves-attach" href="recepcao.php">Recepção</a>
-                                    </li>
-                                    <li>
-                                        <a class="waves-attach" href="unidades.php">Unidades</a>
-                                    </li>
-                                </ul>
+                <?php include_once 'navbar.php' ?>
+                <div class="card margin-top-no">
+                    <div class="card-main">
+                        <div class="card-header card-brand">
+                            <div class="card-header-side pull-left">
+                                <p class="card-heading">SETOR DE ORÇAMENTO E FINANÇAS</p>
                             </div>
-                        </li>
-                        <li>
-                            <div class="dropdown dropdown-inline">
-                                <a class="waves-attach" data-toggle="dropdown"><span class="text-white"><span
-                                                class="icon">payments</span>SERVIÇOS SOF</span><span
-                                            class="icon margin-left-sm">keyboard_arrow_down</span></a>
-                                <ul class="dropdown-menu nav">
-                                    <li>
-                                        <a class="waves-attach" href="<?= $controller->hrefSolic() ?>">Solicitações de
-                                            Empenho</a>
-                                    </li>
-                                    <li>
-                                        <a class="waves-attach" href="consultaspi.php">Solicitações Gerais</a>
-                                    </li>
-                                </ul>
-                            </div>
-                        </li>
-                        <li>
-                            <div class="dropdown dropdown-inline">
-                                <a class="waves-attach" data-toggle="dropdown"><span class="text-white"><span
-                                                class="icon">build</span>CONSULTAS</span><span
-                                            class="icon margin-left-sm">keyboard_arrow_down</span></a>
-                                <ul class="dropdown-menu nav">
-                                    <li>
-                                        <a class="waves-attach" href="consultaspe.php">Público Externo</a>
-                                    </li>
-                                </ul>
-                            </div>
-                        </li>
-                        <li>
-                            <a class="waves-attach waves-light" href="relatorios.php"><span class="text-white"><span
-                                            class="icon">folder</span>RELATÓRIOS</span></a>
-                        </li>
-                        <li>
-                            <div class="dropdown dropdown-inline">
-                                <a class="waves-attach" data-toggle="dropdown"><span class="text-white"><span
-                                                class="icon">near_me</span>LINKS ÚTEIS</span><span
-                                            class="icon margin-left-sm">keyboard_arrow_down</span></a>
-                                <ul class="dropdown-menu nav">
-                                    <li>
-                                        <a class="waves-attach" href="linksexternos.php">Links Externos</a>
-                                    </li>
-                                    <li>
-                                        <a class="waves-attach" href="linksinternos.php">Links Internos</a>
-                                    </li>
-                                    <li>
-                                        <a class="waves-attach" href="tutoriais.php">POPs e Tutoriais</a>
-                                    </li>
-                                </ul>
-                            </div>
-                        </li>
-                        <li>
-                            <a class="waves-attach waves-light" href="noticia.php"><span class="text-white"><span
-                                            class="icon">event</span>NOTÍCIAS</span></a>
-                        </li>
-                        <li>
-                            <div class="dropdown dropdown-inline">
-                                <a class="waves-attach" data-toggle="dropdown"><span class="text-white"><span
-                                                class="icon">place</span>ENCONTROS</span><span
-                                            class="icon margin-left-sm">keyboard_arrow_down</span></a>
-                                <ul class="dropdown-menu nav">
-                                    <li>
-                                        <a class="waves-attach" href="boaspraticas.php">Boas Práticas</a>
-                                    </li>
-                                    <li>
-                                        <a class="waves-attach" href="comemoracoes.php">Comemorações</a>
-                                    </li>
-                                    <li>
-                                        <a class="waves-attach" href="dinamicas.php">Dinâmicas de grupos</a>
-                                    </li>
-                                </ul>
-                            </div>
-                        </li>
-                        <li>
-                            <a class="waves-attach waves-light" href="faleconosco.php"><span class="text-white"><span
-                                            class="icon">chat</span>CONTATO</span></a>
-                        </li>
-                    </ul>
-                </nav>
-        </div><!-- ./row -->
-        <div class="row">
-            <div class="card margin-top-no">
-                <div class="card-main">
-                    <div class="card-header card-brand">
-                        <div class="card-header-side pull-left">
-                            <p class="card-heading">SETOR DE ORÇAMENTO E FINANÇAS</p>
+                        </div><!--  ./card-header -->
+                        <div class="card-inner" style="text-indent: 1.5em; text-align: justify; font-size: 12pt;">
+                            <p>O Setor de Orçamento e Finanças do HUSM tem como atribuições:</p>
+                            <ul>
+                                <li>Realizar a gestão orçamentária e financeira do hospital, de acordo com as diretrizes
+                                    da
+                                    EBSERH sede;
+                                </li>
+                                <li>Proceder, sem prejuízo da competência atribuída a outras áreas, o acompanhamento
+                                    gerencial, físico e financeiro da execução orçamentária.
+                                </li>
+                            </ul>
+                            <p>Nesse viés, e de forma genérica, o SOF é responsável por receber o orçamento e
+                                gerenciá-lo de
+                                acordo com os pedidos de compras ou solicitações de serviços, autorizando os gastos por
+                                meio
+                                da emissão de empenhos. Após a prestação dos serviços ou a entrega dos insumos serem
+                                comprovadas, o setor recebe as notas fiscais e efetiva o pagamento aos fornecedores,
+                                conforme a disponibilidade de recursos financeiros.</p>
+                            <p><strong>Clique na imagem abaixo para visualizar o Organograma:</strong></p>
+                            <a style="margin-left: 25%;" href="../uploads/Organograma1.png"><img
+                                        src="../uploads/Organograma1.png" alt="Organograma" width="600" height="336"
+                                        class="aligncenter size-medium wp-image-619"></a>
                         </div>
-                    </div><!--  ./card-header -->
-                    <div class="card-inner" style="text-indent: 1.5em; text-align: justify; font-size: 12pt;">
-                        <p>O Setor de Orçamento e Finanças do HUSM tem como atribuições:</p>
-                        <ul>
-                            <li>Realizar a gestão orçamentária e financeira do hospital, de acordo com as diretrizes da
-                                EBSERH sede;
-                            </li>
-                            <li>Proceder, sem prejuízo da competência atribuída a outras áreas, o acompanhamento
-                                gerencial, físico e financeiro da execução orçamentária.
-                            </li>
-                        </ul>
-                        <p>Nesse viés, e de forma genérica, o SOF é responsável por receber o orçamento e gerenciá-lo de
-                            acordo com os pedidos de compras ou solicitações de serviços, autorizando os gastos por meio
-                            da emissão de empenhos. Após a prestação dos serviços ou a entrega dos insumos serem
-                            comprovadas, o setor recebe as notas fiscais e efetiva o pagamento aos fornecedores,
-                            conforme a disponibilidade de recursos financeiros.</p>
-                        <p><strong>Clique na imagem abaixo para visualizar o Organograma:</strong></p>
-                        <a style="margin-left: 25%;" href="../uploads/Organograma1.png"><img
-                                    src="../uploads/Organograma1.png" alt="Organograma" width="600" height="336"
-                                    class="aligncenter size-medium wp-image-619"></a>
-                    </div>
-                </div><!-- ./card-main -->
-            </div> <!-- ./card -->
+                    </div><!-- ./card-main -->
+                </div> <!-- ./card -->
+            </section>
         </div>
-        </section>
-    </div>
     </div>
 </main>
 <footer class="footer">
