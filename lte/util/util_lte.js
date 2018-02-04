@@ -316,6 +316,7 @@ function iniSolicitacoes(flag, id_pedido) {
     }
     if (element.innerHTML.length > 0) {
         $('#tableSolicitacoes').DataTable().destroy();
+        destroyChecks();
     }
     var pedidos = getIdsPedido();
     $.post('../php/buscaLTE.php', {
@@ -341,6 +342,21 @@ function iniSolicitacoes(flag, id_pedido) {
     });
 }
 
+function destroyChecks() {
+    var elements = document.getElementsByName('checkPedRel');
+    var len = elements.length;
+    for (var i = 0; i < len; i++) {
+        var id_pedido = elements[i].value;
+        var id_e = 'checkPedRel' + id_pedido;
+        var input = document.getElementById(id_e);
+        if (input !== null) {
+            var check = $('#' + id_e);
+            check.iCheck('uncheck');
+            check.iCheck('destroy');
+        }
+    }
+}
+
 function loadChecks() {
     var elements = document.getElementsByName('checkPedRel');
     var len = elements.length;
@@ -350,7 +366,6 @@ function loadChecks() {
         var input = document.getElementById(id_e);
         if (input !== null) {
             var check = $('#' + id_e);
-            check.iCheck('destroy');
             check.iCheck({
                 checkboxClass: 'icheckbox_flat-blue',
                 radioClass: 'iradio_flat-blue'
