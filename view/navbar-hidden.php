@@ -90,6 +90,9 @@ $controller = Controller::getInstance();
                         <li>
                             <a class="waves-attach" href="depoimentos.php">DEPOIMENTOS</a>
                         </li>
+                        <li>
+                            <a class="waves-attach" href="acoes_sociais.php">AÇÕES SOCIAIS</a>
+                        </li>
                     </ul>
                 </li>
                 <li>

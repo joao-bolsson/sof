@@ -102,6 +102,9 @@ $controller = Controller::getInstance();
                     <li>
                         <a class="waves-attach" href="depoimentos.php">Depoimentos</a>
                     </li>
+                    <li>
+                        <a class="waves-attach" href="acoes_sociais.php">Ações Sociais</a>
+                    </li>
                 </ul>
             </div>
         </li>
