@@ -26,7 +26,7 @@ if (isset($_SESSION["id_acoes_sociais"])) {
     <meta charset="UTF-8">
     <meta content="IE=edge" http-equiv="X-UA-Compatible">
     <meta content="initial-scale=1.0, maximum-scale=1.0, user-scalable=no, width=device-width" name="viewport">
-    <title>Comemorações | Setor de Orçamento e Finanças – HUSM</title>
+    <title>Ações Sociais | Setor de Orçamento e Finanças – HUSM</title>
     <link href="../plugins/animate/animate.min.css" rel="stylesheet">
     <!-- css -->
     <link href="../material/css/base.min.css" rel="stylesheet">
@@ -76,7 +76,7 @@ if (isset($_SESSION["id_acoes_sociais"])) {
                     <div class="card-main">
                         <div class="card-header card-brand">
                             <div class="card-header-side pull-left">
-                                <p class="card-heading">Comemorações</p>
+                                <p class="card-heading">Ações Sociais</p>
                             </div>
                         </div><!--  ./card-header -->
                         <div class="card-inner margin-top-no">

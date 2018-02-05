@@ -24,7 +24,7 @@ if (isset($_SESSION["id_depoimentos"])) {
     <meta charset="UTF-8">
     <meta content="IE=edge" http-equiv="X-UA-Compatible">
     <meta content="initial-scale=1.0, maximum-scale=1.0, user-scalable=no, width=device-width" name="viewport">
-    <title>Comemorações | Setor de Orçamento e Finanças – HUSM</title>
+    <title>Depoimentos | Setor de Orçamento e Finanças – HUSM</title>
     <link href="../plugins/animate/animate.min.css" rel="stylesheet">
     <!-- css -->
     <link href="../material/css/base.min.css" rel="stylesheet">
