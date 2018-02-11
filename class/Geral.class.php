@@ -29,9 +29,11 @@ final class Geral {
      *    Função para cadastrar fontes do pedido (status == Aguarda Orçamento)
      *
      * @return bool If inserts all datas - true, else false.
-     * @deprecated Use Request->setMoneySource()
      */
     public static function cadastraFontes(int $id_pedido, string $fonte, string $ptres, string $plano): bool {
+        // garante a edição e evita informações duplicadas
+        Query::getInstance()->exe("DELETE FROM pedido_fonte WHERE id_pedido=" . $id_pedido);
+
         $fonte = Query::getInstance()->real_escape_string($fonte);
         $ptres = Query::getInstance()->real_escape_string($ptres);
         $plano = Query::getInstance()->real_escape_string($plano);

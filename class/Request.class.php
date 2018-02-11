@@ -91,11 +91,6 @@ final class Request {
     private $licitacao;
 
     /**
-     * @var MoneySource
-     */
-    private $moneySource;
-
-    /**
      * @var SectorGroup
      */
     private $group;
@@ -136,13 +131,11 @@ final class Request {
         $this->id = $id;
         $this->value = 0;
         $this->approv_manager = 0;
-        $this->moneySource = NULL;
         $this->group = NULL;
         $this->workPlan = "";
         if ($this->id != NEW_REQUEST_ID) {
             $this->fillFieldsFromDB();
             $this->fillItens();
-            $this->initMoneySource();
             $this->initGroup();
             $this->initSIAFI();
             $this->initWorkPlan();
@@ -187,19 +180,6 @@ final class Request {
         }
 
         Query::getInstance()->exe('UPDATE pedido SET aprov_gerencia = 1 WHERE ' . $where);
-    }
-
-    private function hasSources() {
-        return !empty($this->moneySource);
-    }
-
-    private function initMoneySource() {
-        $query = Query::getInstance()->exe("SELECT id_fonte FROM pedido_id_fonte WHERE id_pedido = " . $this->id);
-        if ($query->num_rows > 0) {
-            $obj = $query->fetch_object();
-
-            $this->moneySource = new MoneySource($obj->id_fonte);
-        }
     }
 
     private function setDraft() {
@@ -382,35 +362,10 @@ final class Request {
     }
 
     private function restoreValue(float $value) {
-        if ($this->hasSources()) {
-            // devolve o valor para a fonte
-            $query_fonte = Query::getInstance()->exe("SELECT saldo_fonte.id AS id_fonte, saldo_fonte.valor AS saldo_fonte FROM saldo_fonte, pedido_id_fonte WHERE pedido_id_fonte.id_fonte = saldo_fonte.id AND pedido_id_fonte.id_pedido = " . $this->id);
-            if ($query_fonte->num_rows > 0) {
-                $obj = $query_fonte->fetch_object();
-                $new_vl = $obj->saldo_fonte + $value;
-                $new_vl = number_format($new_vl, 3, '.', '');
-                Query::getInstance()->exe("UPDATE saldo_fonte SET valor = '" . $new_vl . "' WHERE id_setor = " . $this->id_sector . " AND id = " . $obj->id_fonte);
-
-                $sector = new Sector($this->id_sector);
-                $newMoney = $sector->getMoney() + $value;
-                $sector->setMoney($newMoney);
-            }
-        } else {
-            // devolve o valor ao sof
-            $sof = new Sector(2);
-            $oldMoney = $sof->getMoney();
-            $sof->setMoney($oldMoney + $value);
-
-            // coloca na tabela de lançamentos
-
-            $sqlBuilder = new SQLBuilder(SQLBuilder::$INSERT);
-            $sqlBuilder->setTables(['saldos_lancamentos']);
-            $sqlBuilder->setValues([null, $this->id_sector, $this->today, -$value, 5]);
-            Query::getInstance()->exe($sqlBuilder->__toString());
-
-            $sqlBuilder->setValues([null, $sof->getId(), $this->today, $value, 5]);
-            Query::getInstance()->exe($sqlBuilder->__toString());
-        }
+        // devolve o valor para o setor
+        $sector = new Sector($this->id_sector);
+        $newMoney = $sector->getMoney() + $value;
+        $sector->setMoney($newMoney);
     }
 
     private function updateItens() {
@@ -496,7 +451,9 @@ final class Request {
                     $oldVlUtilizado = $item->getVlUtilizado();
                     $item->setVlUtilizado($oldVlUtilizado - $vlItemInRequest);
 
-                    $item->setCancelado($item_cancelado[$key]);
+                    if (array_key_exists($key, $item_cancelado)) {
+                        $item->setCancelado($item_cancelado[$key]);
+                    }
                 }
             }
             $this->updateItens();
@@ -531,10 +488,6 @@ final class Request {
         Query::getInstance()->exe("INSERT INTO saldos_lancamentos VALUES(NULL, {$this->id_sector}, '{$this->today}', '-{$this->value}', 4);");
         // próxima fase
         $this->status++;
-        // não precisa cadastrar fontes, elas já estão cadastradas
-        if ($this->hasSources()) {
-            $this->status++;
-        }
     }
 
     /**
@@ -552,7 +505,7 @@ final class Request {
         Query::getInstance()->exe("DELETE FROM pedido_fonte WHERE pedido_fonte.id_pedido = " . $id);
         Query::getInstance()->exe("DELETE FROM solic_alt_pedido WHERE solic_alt_pedido.id_pedido = " . $id);
         Query::getInstance()->exe("DELETE FROM pedido_log_status WHERE pedido_log_status.id_pedido = " . $id);
-	Query::getInstance()->exe("DELETE FROM pedido_plano WHERE pedido_plano.id_pedido = " . $id);
+        Query::getInstance()->exe("DELETE FROM pedido_plano WHERE pedido_plano.id_pedido = " . $id);
         Query::getInstance()->exe("DELETE FROM pedido WHERE pedido.id = " . $id);
     }
 
@@ -562,7 +515,10 @@ final class Request {
     public function setStatus(int $status) {
         $this->status = $status;
         if ($this->id != NEW_REQUEST_ID) {
-            Query::getInstance()->exe('UPDATE pedido SET status = ' . $this->status . ' WHERE id = ' . $this->id);
+            if ($this->status == 3) {
+                $this->reprove();
+            }
+            $this->update();
         }
     }
 
@@ -609,30 +565,6 @@ final class Request {
             $obj = Query::getInstance()->exe("SELECT round(sum(valor), 3) AS sum FROM itens_pedido WHERE id_pedido =  " . $request)->fetch_object();
             Query::getInstance()->exe("UPDATE pedido SET valor = '" . $obj->sum . "' WHERE id = " . $request);
         }
-    }
-
-    /**
-     * @param MoneySource $moneySource
-     */
-    public function setMoneySource(MoneySource $moneySource) {
-        if ($this->hasSources()) {
-            // deleta a fonte atual: garante a edição corretamente
-            Query::getInstance()->exe("DELETE FROM pedido_id_fonte WHERE id_pedido = " . $this->id);
-        }
-        $this->moneySource = $moneySource;
-
-        if ($this->priority != 5) {
-            // rascunho, o saldo da fonte não deve ser alterado
-            $oldValue = $moneySource->getValue();
-            $moneySource->setValue($oldValue - $this->value);
-        }
-
-        // associa a fonte ao pedido
-        $sql = new SQLBuilder(SQLBuilder::$INSERT);
-        $sql->setTables(["pedido_id_fonte"]);
-        $sql->setValues([NULL, $this->id, $moneySource->getId()]);
-
-        Query::getInstance()->exe($sql->__toString());
     }
 
     /**

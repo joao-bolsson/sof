@@ -26,6 +26,24 @@ final class BuscaLTE {
         // empty
     }
 
+    public static function getEmpenho(int $id_pedido): string {
+        $query = Query::getInstance()->exe("SELECT empenho, data FROM pedido_empenho WHERE id_pedido = " . $id_pedido);
+        $obj = "";
+        if ($query->num_rows > 0) {
+            $obj = $query->fetch_object();
+        }
+        return json_encode($obj);
+    }
+
+    public static function getSources(int $id_pedido): string {
+        $query = Query::getInstance()->exe("SELECT fonte_recurso, ptres, plano_interno FROM pedido_fonte WHERE id_pedido = " . $id_pedido);
+        $obj = "";
+        if ($query->num_rows > 0) {
+            $obj = $query->fetch_object();
+        }
+        return json_encode($obj);
+    }
+
     /**
      * @return string Justifies options to make a transference.
      */

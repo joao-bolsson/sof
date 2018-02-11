@@ -35,7 +35,7 @@
                 </div>
                 <div class="modal-footer">
                     <button class="btn btn-primary" type="submit" style="width: 100%;"><i
-                                class="fa fa-send"></i>Cadastrar
+                                class="fa fa-send"></i>Cadastrar / Editar
                     </button>
                 </div>
             </form>
@@ -74,7 +74,7 @@
                 </div>
                 <div class="modal-footer">
                     <button class="btn btn-primary" type="submit" style="width: 100%;"><i
-                                class="fa fa-send"></i>&nbsp;Cadastrar
+                                class="fa fa-send"></i>&nbsp;Cadastrar / Editar
                     </button>
                 </div>
             </form>

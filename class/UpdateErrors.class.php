@@ -60,14 +60,6 @@ class UpdateErrors {
         }
     }
 
-    public static function verifySectors() {
-        $query = Query::getInstance()->exe("SELECT id FROM setores WHERE id > 1;");
-        while ($obj = $query->fetch_object()) {
-            $sector = new Sector($obj->id);
-            $sector->updateMoney();
-        }
-    }
-
     public static function checkSIAFI() {
         $query = Query::getInstance()->exe("SELECT pedido_contrato.id_pedido, pedido_empenho.empenho FROM pedido_contrato, pedido_empenho WHERE pedido_contrato.id_pedido = pedido_empenho.id_pedido AND pedido_contrato.id_tipo = 1;");
         if ($query->num_rows > 0) {

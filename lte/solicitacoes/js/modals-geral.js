@@ -13,11 +13,8 @@ $(function () {
             form: 'iniSolicAltPedSetor'
         }).done(function (resposta) {
             $('#tbodySolicAltPedido').html(resposta);
+            iniDataTable('#tableSolicAltPedido');
         });
-    });
-
-    modalAltPed.on('shown.bs.modal', function () {
-        iniDataTable('#tableSolicAltPedido');
     });
 
     modalAltPed.on('hidden.bs.modal', function () {
@@ -33,11 +30,8 @@ $(function () {
             form: 'listAdiantamentos'
         }).done(function (resposta) {
             $('#tbodyListAdiantamentos').html(resposta);
+            iniDataTable('#tableListAdiantamentos');
         });
-    });
-
-    modalAdi.on('shown.bs.modal', function () {
-        iniDataTable('#tableListAdiantamentos');
     });
 
     modalAdi.on('hidden.bs.modal', function () {
@@ -53,11 +47,8 @@ $(function () {
             form: 'listRascunhos'
         }).done(function (resposta) {
             $('#tbodyListRascunhos').html(resposta);
+            iniDataTable('#tableListRascunhos');
         });
-    });
-
-    modalRascunhos.on('shown.bs.modal', function () {
-        iniDataTable('#tableListRascunhos');
     });
 
     modalRascunhos.on('hidden.bs.modal', function () {
@@ -73,11 +64,8 @@ $(function () {
             form: 'listPedidos'
         }).done(function (resposta) {
             $('#tbodyListPedidos').html(resposta);
+            iniDataTable('#tableListPedidos');
         });
-    });
-
-    modalPedidos.on('shown.bs.modal', function () {
-        iniDataTable('#tableListPedidos');
     });
 
     modalPedidos.on('hidden.bs.modal', function () {

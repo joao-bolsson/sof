@@ -433,7 +433,7 @@ if (Busca::isActive()) {
 
                 $pedido = new Request($id_pedido);
 
-                $pedido->setStatus($status);
+                $pedido->manage($status, []);
                 $pedido->addComment($comentario);
 
                 $analisado = true;
