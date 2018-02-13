@@ -1,5 +1,12 @@
 ## CHANGELOG ##
 
+#### v2.3.2 - 13/02/2018 ####
+- Corrige bug ao salvar informações no site
+- Permite a alteração de pedidos mesmo após a análise (precisa alterar o status e reprovar o pedido). As informações salvas de empenho e fontes são mantidas. Ao reprovar o pedido basta voltar para o setor que fez o pedido e continuar a edição dos "Rascunhos". Quando o pedido for enviado ao SOF novamente ele estará "Em Análise".
+- Adiciona nova página "Ações Sociais"
+- Adiciona nova página "Depoimentos"
+- Corrige bug ao imprimir determinados pedidos (caracteres inválidos)
+
 #### v2.3.1 - 29/01/2018 ####
 - Desvinculação de pedidos com fontes e transferências de saldos com fontes
 - Melhoria do relatório de liberações orçamentárias (melhor descrição do relatório e retirada de campos redundantes)

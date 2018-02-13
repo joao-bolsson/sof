@@ -71,16 +71,38 @@ $(function () {
 });
 
 // button onclick
-function cadEmpenho(id_pedido, empenho, data) {
+function cadEmpenho(id_pedido) {
     $('#cadEmpenho').modal();
 
     $("input[name='id_pedido']", "#formEnviaEmpenho").val(id_pedido);
-    $("input[name='empenho']", "#formEnviaEmpenho").val(empenho);
-    $("input[name='data']", "#formEnviaEmpenho").val(data);
+
+    $.post('../php/buscaLTE.php', {
+        admin: 1,
+        form: 'cadEmpenho',
+        id_pedido: id_pedido
+    }).done(function (resposta) {
+        if (resposta) {
+            var obj = jQuery.parseJSON(resposta);
+            $("input[name='empenho']", "#formEnviaEmpenho").val(obj.empenho);
+            $("input[name='data']", "#formEnviaEmpenho").val(obj.data);
+        }
+    });
 }
 
 // button onclick
 function cadFontes(id_pedido) {
     $('#cadFontes').modal();
     $("input[name='id_pedido']", "#formEnviaFontes").val(id_pedido);
+    $.post('../php/buscaLTE.php', {
+        admin: 1,
+        form: 'cadFontes',
+        id_pedido: id_pedido
+    }).done(function (resposta) {
+        if (resposta) {
+            var obj = jQuery.parseJSON(resposta);
+            $("input[name='fonte']", "#formEnviaFontes").val(obj.fonte_recurso);
+            $("input[name='ptres']", "#formEnviaFontes").val(obj.ptres);
+            $("input[name='plano']", "#formEnviaFontes").val(obj.plano_interno);
+        }
+    });
 }

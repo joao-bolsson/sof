@@ -39,6 +39,16 @@ if (!is_null($admin) && isset($_SESSION['id_setor']) && ($_SESSION['id_setor'] =
 
     switch ($form) {
 
+        case 'cadEmpenho':
+            $id_pedido = filter_input(INPUT_POST, 'id_pedido');
+            echo BuscaLTE::getEmpenho($id_pedido);
+            break;
+
+        case 'cadFontes':
+            $id_pedido = filter_input(INPUT_POST, 'id_pedido');
+            echo BuscaLTE::getSources($id_pedido);
+            break;
+
         case 'getUsers':
             echo BuscaLTE::getUsers();
             break;
