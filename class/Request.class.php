@@ -595,12 +595,9 @@ final class Request {
      * @param string $siafi Contract SIAFI.
      */
     public function setContract(int $type, string $siafi) {
-        $query = Query::getInstance()->exe('SELECT id_tipo FROM pedido_contrato WHERE id_pedido = ' . $this->id);
-        $sql = "INSERT INTO pedido_contrato VALUES({$this->id}, {$type}, '{$siafi}');";
-        if ($query->num_rows > 0) {
-            $sql = "UPDATE pedido_contrato SET id_tipo = $type, siafi = '{$siafi}' WHERE id_pedido = " . $this->id;
-        }
-        Query::getInstance()->exe($sql);
+        Query::getInstance()->exe("DELETE FROM pedido_contrato WHERE id_pedido = " . $this->id);
+
+        Query::getInstance()->exe("INSERT INTO pedido_contrato VALUES({$this->id}, {$type}, '{$siafi}');");
     }
 
 
@@ -615,19 +612,16 @@ final class Request {
         $this->siafi = $siafi;
         $this->siafi_date = $date;
 
-        $query_check = Query::getInstance()->exe('SELECT pedido_empenho.id, pedido.status FROM pedido_empenho, pedido WHERE pedido_empenho.id_pedido= pedido.id AND pedido.id = ' . $this->id);
+        // DELETE, garante a edição
+        Query::getInstance()->exe("DELETE FROM pedido_empenho WHERE id_pedido = " . $this->id);
+        // insere o empenho
+        Query::getInstance()->exe("INSERT INTO pedido_empenho VALUES(NULL, " . $this->id . ", '" . $this->siafi . "', '" . $this->siafi_date . "');");
 
-        if ($query_check->num_rows < 1) {
-            Query::getInstance()->exe("INSERT INTO pedido_empenho VALUES(NULL, " . $this->id . ", '" . $this->siafi . "', '" . $this->siafi_date . "');");
-            $this->setStatus(7);
-        } else {
-            $obj = $query_check->fetch_object();
-            if ($obj->status == 6) {
-                $this->setStatus(7);
-            }
-
-            Query::getInstance()->exe("UPDATE pedido_empenho SET empenho = '" . $this->siafi . "', data = '" . $this->siafi_date . "' WHERE id_pedido = " . $this->id);
+        if ($this->status == 6) {
+            $this->status++;
         }
+
+        $this->update();
 
         if ($this->type == 1 && !empty($this->siafi)) {
             // se for empenho, atualiza o contrato

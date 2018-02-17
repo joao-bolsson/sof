@@ -27,7 +27,7 @@ final class BuscaLTE {
     }
 
     public static function getEmpenho(int $id_pedido): string {
-        $query = Query::getInstance()->exe("SELECT empenho, data FROM pedido_empenho WHERE id_pedido = " . $id_pedido);
+        $query = Query::getInstance()->exe("SELECT empenho, DATE_FORMAT(data, '%d/%m/%Y') AS data FROM pedido_empenho WHERE id_pedido = " . $id_pedido);
         $obj = "";
         if ($query->num_rows > 0) {
             $obj = $query->fetch_object();
