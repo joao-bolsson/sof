@@ -191,75 +191,6 @@ if (Busca::isActive()) {
                 Request::aprovaGerencia($pedidos);
                 break;
 
-            case 'addUser':
-                $nome = filter_input(INPUT_POST, 'nome');
-                $login = filter_input(INPUT_POST, 'login');
-                $email = filter_input(INPUT_POST, 'email');
-                $setor = filter_input(INPUT_POST, 'setor');
-                // teste para variavel indefinida
-                if (empty($nome) || empty($login) || empty($email) || empty($setor)) {
-                    echo "Erro: variáveis indefinidas ou vazias.";
-                    break;
-                }
-
-                if (is_null($obj_Util)) {
-                    $obj_Util = Util::getInstance();
-                }
-                $senha = Util::criaSenha();
-
-                $user = new User(0);
-                $user->createOrUpdate($nome, $login, $email, $setor, $senha);
-
-                $noticias = 0;
-                $saldos = 0;
-                $pedidos = 0;
-                $recepcao = 0;
-
-                if ($setor == 2) {
-                    $noticias = !is_null(filter_input(INPUT_POST, 'noticias'));
-                    $saldos = !is_null(filter_input(INPUT_POST, 'saldos'));
-                    $pedidos = !is_null(filter_input(INPUT_POST, 'pedidos'));
-                    $recepcao = !is_null(filter_input(INPUT_POST, 'recepcao'));
-
-                    if ($recepcao) {
-                        $noticias = 0;
-                        $saldos = 0;
-                        $pedidos = 0;
-                    }
-
-                    if ($noticias || $saldos || $pedidos) {
-                        $recepcao = 0;
-                    }
-                }
-
-                $user->setPermissions($noticias, $saldos, $pedidos, $recepcao);
-
-                $from = $obj_Util->mail->Username;
-                $nome_from = utf8_decode("Setor de Orçamento e Finanças do HUSM");
-                $assunto = "Cadastro SOFHUSM";
-                $altBody = "Olá! Você foi cadastrado(a) no sistema do SOFHUSM.";
-                $body = "Seu login: " . $login . "
-                        <br>Sua senha: <strong>" . $senha . "</strong> (negrito)";
-                $body .= utf8_decode("
-			<br>
-			<br> Não responda à esse e-mail.
-			<br>
-			<br>Caso tenha problemas, contate orcamentofinancashusm@gmail.com
-			<br>
-			<br>Atenciosamente,
-			<br>equipe do SOF.");
-
-                $obj_Util->preparaEmail($from, $nome_from, $email, "Usuário", $assunto, $altBody, $body);
-
-                //send the message, check for errors
-                if ($obj_Util->mail->send()) {
-                    header("Location: ../lte/");
-                } else {
-                    echo "Usuário e permissões cadastradas. Erro ao enviar o e-mail com a senha : " . $senha;
-                }
-
-                break;
-
             case 'enviaForn':
                 $id = filter_input(INPUT_POST, 'id_pedido');
                 if (empty($id)) {
@@ -725,6 +656,75 @@ if (Busca::isActive()) {
         }
     } else {
         switch ($form) {
+
+            case 'addUser':
+                $nome = filter_input(INPUT_POST, 'nome');
+                $login = filter_input(INPUT_POST, 'login');
+                $email = filter_input(INPUT_POST, 'email');
+                $setor = filter_input(INPUT_POST, 'setor');
+                // teste para variavel indefinida
+                if (empty($nome) || empty($login) || empty($email) || empty($setor)) {
+                    echo "Erro: variáveis indefinidas ou vazias.";
+                    break;
+                }
+
+                if (is_null($obj_Util)) {
+                    $obj_Util = Util::getInstance();
+                }
+                $senha = Util::criaSenha();
+
+                $user = new User(0);
+                $user->createOrUpdate($nome, $login, $email, $setor, $senha);
+
+                $noticias = 0;
+                $saldos = 0;
+                $pedidos = 0;
+                $recepcao = 0;
+
+                if ($setor == 2) {
+                    $noticias = !is_null(filter_input(INPUT_POST, 'noticias'));
+                    $saldos = !is_null(filter_input(INPUT_POST, 'saldos'));
+                    $pedidos = !is_null(filter_input(INPUT_POST, 'pedidos'));
+                    $recepcao = !is_null(filter_input(INPUT_POST, 'recepcao'));
+
+                    if ($recepcao) {
+                        $noticias = 0;
+                        $saldos = 0;
+                        $pedidos = 0;
+                    }
+
+                    if ($noticias || $saldos || $pedidos) {
+                        $recepcao = 0;
+                    }
+                }
+
+                $user->setPermissions($noticias, $saldos, $pedidos, $recepcao);
+
+                $from = $obj_Util->mail->Username;
+                $nome_from = utf8_decode("Setor de Orçamento e Finanças do HUSM");
+                $assunto = "Cadastro SOFHUSM";
+                $altBody = "Olá! Você foi cadastrado(a) no sistema do SOFHUSM.";
+                $body = "Seu login: " . $login . "
+                        <br>Sua senha: <strong>" . $senha . "</strong> (negrito)";
+                $body .= utf8_decode("
+			<br>
+			<br> Não responda à esse e-mail.
+			<br>
+			<br>Caso tenha problemas, contate orcamentofinancashusm@gmail.com
+			<br>
+			<br>Atenciosamente,
+			<br>equipe do SOF.");
+
+                $obj_Util->preparaEmail($from, $nome_from, $email, "Usuário", $assunto, $altBody, $body);
+
+                //send the message, check for errors
+                if ($obj_Util->mail->send()) {
+                    header("Location: ../lte/");
+                } else {
+                    echo "Usuário e permissões cadastradas. Erro ao enviar o e-mail com a senha : " . $senha;
+                }
+
+                break;
 
             // resetando senha
 
