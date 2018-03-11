@@ -1,5 +1,9 @@
 ## CHANGELOG ##
 
+#### v2.3.3 - 11/03/2018 ####
+- Corrige bug ao editar empenhos
+- Permite empresas acessarem o site para visualizarem arquivos
+
 #### v2.3.2 - 13/02/2018 ####
 - Corrige bug ao salvar informações no site
 - Permite a alteração de pedidos mesmo após a análise (precisa alterar o status e reprovar o pedido). As informações salvas de empenho e fontes são mantidas. Ao reprovar o pedido basta voltar para o setor que fez o pedido e continuar a edição dos "Rascunhos". Quando o pedido for enviado ao SOF novamente ele estará "Em Análise".
