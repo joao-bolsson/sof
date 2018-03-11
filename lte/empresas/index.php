@@ -116,11 +116,15 @@ require_once '../../defines.php';
                             $label = 'blue';
                             $tipo_doc = 'Documento';
                             if ($arquivo != "." && $arquivo != "..") {
-                                $row = new Row();
-                                $row->addComponent(new Column(new Small('label bg-' . $label, $tipo_doc)));
-                                $row->addComponent(new Column("<a href=\"" . $pasta . $arquivo . "\" target=\"_blank\">" . $arquivo . "</a>"));
+                                $cnpj = str_replace([".", "-", "/"], "", $_SESSION['login']);
+                                $file_name = str_replace([".xps", '-', '.'], "", $arquivo);
+                                if ($cnpj == $file_name) {
+                                    $row = new Row();
+                                    $row->addComponent(new Column(new Small('label bg-' . $label, $tipo_doc)));
+                                    $row->addComponent(new Column("<a href=\"" . $pasta . $arquivo . "\" target=\"_blank\">" . $arquivo . "</a>"));
 
-                                $table->addComponent($row);
+                                    $table->addComponent($row);
+                                }
                             }
                         }
                         $diretorio->close();
