@@ -46,7 +46,6 @@
                 </div>
                 <form action="../php/geral.php" method="POST">
                     <input type="hidden" name="form" value="addUser"/>
-                    <input type="hidden" name="admin" value="1"/>
                     <div class="modal-body">
                         <div class="form-group">
                             <label>Nome</label>

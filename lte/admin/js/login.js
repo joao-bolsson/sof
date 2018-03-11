@@ -5,6 +5,11 @@
  */
 
 $(function () {
+
+    $("#cadUser").on('shown.bs.modal', function () {
+        $("#login").inputmask('99.999.999/9999-99');
+    });
+
     $("#formLogin").submit(function (event) {
         document.getElementById("loader").style.display = 'block';
         event.preventDefault();

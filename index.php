@@ -30,6 +30,8 @@ if (isset($_SESSION['id_setor']) && $_SESSION['id_setor'] == 12) {
     } else {
         header('Location: lte/hora.php');
     }
+} else if (isset($_SESSION["id_setor"]) && $_SESSION["id_setor"] == 17) {
+    header('Location: lte/empresas/');
 } else if (isset($_SESSION["id_setor"]) && $_SESSION["id_setor"] != 0) {
     header("Location: lte/solicitacoes.php");
 } else {

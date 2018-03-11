@@ -1,3 +1,7 @@
+<?php
+include_once '../defines.php';
+?>
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -47,7 +51,8 @@
                 </div>
                 <div class="row">
                     <div class="col-xs-8">
-                        <a href="javascript:abreModal('#esqueceuSenha');">Esqueceu a senha?</a>
+                        <a href="javascript:abreModal('#esqueceuSenha');">Esqueceu a senha?</a><br>
+                        <a href="javascript:abreModal('#cadUser');">Registre-se</a>
                     </div>
                     <div class="col-xs-4">
                         <button type="submit" class="btn btn-primary btn-block btn-flat">Entrar</button>
@@ -58,6 +63,48 @@
         </div>
         <div id="loader" class="overlay" style="display: none;">
             <i class="fa fa-refresh fa-spin"></i>
+        </div>
+    </div>
+</div>
+
+<div aria-hidden="true" class="modal fade" id="cadUser" role="dialog" tabindex="-1">
+    <div class="modal-dialog" style="width: 40%;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                            aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">Adicionar Usuário</h4>
+            </div>
+            <form action="../php/geral.php" method="POST">
+                <input type="hidden" name="form" value="addUser"/>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label>Nome</label>
+                        <input type="text" class="form-control" name="nome" placeholder="Nome" maxlength="40"
+                               required>
+                    </div>
+                    <div class="form-group">
+                        <label>Login</label>
+                        <input type="text" class="form-control" id="login" name="login" placeholder="Login" maxlength="30" required>
+                    </div>
+                    <div class="form-group">
+                        <label>E-mail</label>
+                        <input type="email" class="form-control" name="email" placeholder="E-mail"
+                               maxlength="40" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Setor</label>
+                        <select class="form-control" name="setor" required>
+                            <option value="17">Empresas</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-primary" type="submit" style="width: 100%;"><i
+                                class="fa fa-send"></i>&nbsp;Cadastrar
+                    </button>
+                </div>
+            </form>
         </div>
     </div>
 </div>
@@ -120,5 +167,9 @@
 <!-- page scripts -->
 <script type="text/javascript" src="util/util_lte.min.js"></script>
 <script src="admin/js/login.min.js"></script>
+
+<script src="plugins/input-mask/jquery.inputmask.js"></script>
+<script src="plugins/input-mask/jquery.inputmask.date.extensions.js"></script>
+<script src="plugins/input-mask/jquery.inputmask.extensions.js"></script>
 </body>
 </html>

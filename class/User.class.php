@@ -105,7 +105,7 @@ final class User {
         $this->email = $email;
         $this->id_sector = $setor;
 
-        $query = Query::getInstance()->exe("SELECT id FROM usuario WHERE email = '" . $this->email . "';");
+        $query = Query::getInstance()->exe("SELECT id FROM usuario WHERE email = '" . $this->email . "' AND ativo = 0;");
         if ($query->num_rows > 0) {
             // usuário já existente, atualiza as informações e reativa
             $this->id = $query->fetch_object()->id;
