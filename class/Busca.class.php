@@ -172,7 +172,7 @@ final class Busca {
      */
     public static function getProblemas(): string {
         $query = Query::getInstance()->exe('SELECT setores.nome AS setor, problemas.assunto, problemas.descricao FROM setores, problemas WHERE setores.id = problemas.id_setor ORDER BY problemas.id DESC');
-        $table = new Table('', '', array(), false);
+        $table = new Table('', '', [], false);
 
         while ($problem = $query->fetch_object()) {
             $problem->descricao = Query::getInstance()->real_escape_string($problem->descricao);
