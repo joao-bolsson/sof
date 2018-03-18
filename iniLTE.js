@@ -45,6 +45,7 @@ function iniAdminSolicitacoes() {
         }
         if (permissao.pedidos == 1) {
             iniSolicitacoes(false, 0);
+            iniProcVenc();
         }
     });
 }

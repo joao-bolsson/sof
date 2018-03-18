@@ -113,10 +113,33 @@ if (isset($_SESSION['editmode'])) {
             if ($permissao->saldos) {
                 include_once "admin/body_saldos.php";
                 ?>
-                <div class="alert alert-info alert-dismissible">
-                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
-                    <h4><i class="icon fa fa-info"></i> Informação!</h4>
-                    Pregões em vencimento:
+                <div class="row">
+                    <div class="col-xs-12">
+                        <div class="box box-warning box-solid">
+                            <div class="box-header">
+                                <h3 class="box-title">Processos em Vencimento</h3>
+                                <div class="box-tools pull-right">
+                                    <button type="button" class="btn btn-box-tool" data-widget="collapse"><i
+                                                class="fa fa-minus"></i>
+                                    </button>
+                                </div>
+                            </div><!-- /.box-header -->
+                            <div class="box-body">
+                                <table id="tableProcVenc" class="table table-bordered table-striped">
+                                    <thead>
+                                    <tr>
+                                        <th>Processo</th>
+                                        <th>Data Fim</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody id="tbodyProcVenc"></tbody>
+                                </table>
+                            </div>
+                            <div id="overlayLoadVenc" class="overlay" style="display: none;">
+                                <i class="fa fa-refresh fa-spin"></i>
+                            </div>
+                        </div>
+                    </div>
                 </div>
                 <?php
             }
