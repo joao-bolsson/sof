@@ -39,6 +39,10 @@ if (!is_null($admin) && isset($_SESSION['id_setor']) && ($_SESSION['id_setor'] =
 
     switch ($form) {
 
+        case 'procNaoDev':
+            echo BuscaLTE::getProcNaoDev();
+            break;
+
         case 'tableProcVenc':
             echo BuscaLTE::loadProcsVenc();
             break;
