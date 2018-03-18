@@ -26,6 +26,55 @@ final class BuscaLTE {
         // empty
     }
 
+    /**
+     * Look for proccess that was not returned to SOF.
+     *
+     * @return string Table with the informations.
+     */
+    public static function getProcNaoDev(): string {
+        $table = new Table('', 'table table-bordered table-striped', ['Processo', 'Saída', 'Responsável'], true);
+
+        $query = Query::getInstance()->exe("SELECT num_processo, saida, responsavel FROM processos WHERE saida != '----------' AND retorno = '----------';");
+
+        if ($query->num_rows > 0) {
+            while ($obj = $query->fetch_object()) {
+                $row = new Row();
+                $row->addComponent(new Column($obj->num_processo));
+                $row->addComponent(new Column($obj->saida));
+                $row->addComponent(new Column($obj->responsavel));
+
+                $table->addComponent($row);
+            }
+        }
+
+        return $table->__toString();
+    }
+
+    /**
+     * The proccess that will be finished in the current month.
+     *
+     * @return string Table's body with the informations.
+     */
+    public static function loadProcsVenc(): string {
+        $table = new Table('', '', [], false);
+
+        $mes = date('n');
+        $ano = date('Y');
+
+        $query = Query::getInstance()->exe("SELECT DISTINCT num_processo, DATE_FORMAT(dt_fim, '%d/%m/%Y') AS dt_fim FROM itens WHERE MONTH(dt_fim) = " . $mes . " AND YEAR(dt_fim) = " . $ano);
+
+        if ($query->num_rows > 0) {
+            while ($obj = $query->fetch_object()) {
+                $row = new Row();
+                $row->addComponent(new Column($obj->num_processo));
+                $row->addComponent(new Column($obj->dt_fim));
+
+                $table->addComponent($row);
+            }
+        }
+        return $table->__toString();
+    }
+
     public static function getEmpenho(int $id_pedido): string {
         $query = Query::getInstance()->exe("SELECT empenho, DATE_FORMAT(data, '%d/%m/%Y') AS data FROM pedido_empenho WHERE id_pedido = " . $id_pedido);
         $obj = "";

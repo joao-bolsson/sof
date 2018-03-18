@@ -39,6 +39,14 @@ if (!is_null($admin) && isset($_SESSION['id_setor']) && ($_SESSION['id_setor'] =
 
     switch ($form) {
 
+        case 'procNaoDev':
+            echo BuscaLTE::getProcNaoDev();
+            break;
+
+        case 'tableProcVenc':
+            echo BuscaLTE::loadProcsVenc();
+            break;
+
         case 'cadEmpenho':
             $id_pedido = filter_input(INPUT_POST, 'id_pedido');
             echo BuscaLTE::getEmpenho($id_pedido);

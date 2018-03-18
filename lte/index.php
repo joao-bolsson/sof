@@ -84,7 +84,7 @@ if (isset($_SESSION['editmode'])) {
                 <span class="icon-bar"></span>
             </a>
 
-            <?php include_once 'navbar-user.php'?>
+            <?php include_once 'navbar-user.php' ?>
         </nav>
     </header>
     <?php include_once "aside-menu.php"; ?>
@@ -112,6 +112,36 @@ if (isset($_SESSION['editmode'])) {
 
             if ($permissao->saldos) {
                 include_once "admin/body_saldos.php";
+                ?>
+                <div class="row">
+                    <div class="col-xs-12">
+                        <div class="box box-warning box-solid">
+                            <div class="box-header">
+                                <h3 class="box-title">Processos em Vencimento</h3>
+                                <div class="box-tools pull-right">
+                                    <button type="button" class="btn btn-box-tool" data-widget="collapse"><i
+                                                class="fa fa-minus"></i>
+                                    </button>
+                                </div>
+                            </div><!-- /.box-header -->
+                            <div class="box-body">
+                                <table id="tableProcVenc" class="table table-bordered table-striped">
+                                    <thead>
+                                    <tr>
+                                        <th>Processo</th>
+                                        <th>Data Fim</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody id="tbodyProcVenc"></tbody>
+                                </table>
+                            </div>
+                            <div id="overlayLoadVenc" class="overlay" style="display: none;">
+                                <i class="fa fa-refresh fa-spin"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <?php
             }
 
             if ($permissao->pedidos) {

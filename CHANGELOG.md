@@ -1,5 +1,9 @@
 ## CHANGELOG ##
 
+#### v2.3.4 - 18/03/2018 ####
+- Relatório de Processos não devolvidos (recepção)
+- Alerta para vencimento de pregões no mês atual
+
 #### v2.3.3 - 11/03/2018 ####
 - Corrige bug ao editar empenhos
 - Permite empresas acessarem o site para visualizarem arquivos

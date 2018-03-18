@@ -182,6 +182,11 @@ $permissao = BuscaLTE::getPermissoes($_SESSION["id"]);
                         <i class="fa fa-pie-chart"></i> <span>Relatório</span>
                     </a>
                 </li>
+                <li>
+                    <a href="javascript:abreModal('#procNaoDev');">
+                        <i class="fa fa-close"></i> <span>Processos Não Devolvidos</span>
+                    </a>
+                </li>
             <?php endif; ?>
         </ul>
     </section>

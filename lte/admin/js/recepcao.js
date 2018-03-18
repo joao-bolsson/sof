@@ -5,6 +5,21 @@
  */
 
 $(function () {
+    var modalProcNaoDev = $('#procNaoDev');
+
+    modalProcNaoDev.on('shown.bs.modal', function () {
+        $.post('../php/buscaLTE.php', {
+            admin: 1,
+            form: 'procNaoDev'
+        }).done(function (resposta) {
+            document.getElementById('tbodyProcNaoDev').innerHTML = resposta;
+        });
+    });
+
+    modalProcNaoDev.on('hidden.bs.modal', function () {
+        document.getElementById('tbodyProcNaoDev').innerHTML = "Aguarde...";
+    });
+
     $("#formRelatorioRecepcao").submit(function (event) {
         event.preventDefault();
         var data = $(this).serialize();

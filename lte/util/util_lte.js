@@ -292,6 +292,29 @@ function loadMore() {
     iniSolicitacoes(true);
 }
 
+function iniProcVenc() {
+    var element = document.getElementById('tbodyProcVenc');
+    if (element === null) {
+        return;
+    }
+    var load = document.getElementById('overlayLoadVenc');
+    if (load !== null) {
+        load.style.display = 'block';
+    }
+    $.post('../php/buscaLTE.php', {
+        admin: 1,
+        form: 'tableProcVenc'
+    }).done(function (resposta) {
+        if (resposta.length > 0) {
+            element.innerHTML += resposta;
+        }
+        iniDataTable('#tableProcVenc');
+        if (load !== null) {
+            load.style.display = 'none';
+        }
+    });
+}
+
 function iniSolicitacoes(flag, id_pedido) {
     $(".date").inputmask("dd/mm/yyyy", {"placeholder": "dd/mm/yyyy"});
     var element = document.getElementById('conteudoSolicitacoes');
@@ -637,6 +660,13 @@ function iniDataTable(tabela) {
         $(tabela).on('page.dt', function () {
             selectAll(false);
         }).DataTable();
+    } else if (tabela == '#tableProcVenc') {
+        $(tabela).DataTable({
+            "order": [[1, "asc"]],
+            "autoWidth": true,
+            "lengthMenu": [5, 10, 25, 50, 100],
+            language: language
+        });
     } else {
         $(tabela).DataTable({
             "destroy": true,
