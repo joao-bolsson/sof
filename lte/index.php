@@ -84,7 +84,7 @@ if (isset($_SESSION['editmode'])) {
                 <span class="icon-bar"></span>
             </a>
 
-            <?php include_once 'navbar-user.php'?>
+            <?php include_once 'navbar-user.php' ?>
         </nav>
     </header>
     <?php include_once "aside-menu.php"; ?>
@@ -112,6 +112,13 @@ if (isset($_SESSION['editmode'])) {
 
             if ($permissao->saldos) {
                 include_once "admin/body_saldos.php";
+                ?>
+                <div class="alert alert-info alert-dismissible">
+                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                    <h4><i class="icon fa fa-info"></i> Informação!</h4>
+                    Pregões em vencimento:
+                </div>
+                <?php
             }
 
             if ($permissao->pedidos) {
