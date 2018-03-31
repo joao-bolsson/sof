@@ -117,7 +117,7 @@ if (isset($_SESSION['editmode'])) {
                     <div class="col-xs-12">
                         <div class="box box-warning box-solid">
                             <div class="box-header">
-                                <h3 class="box-title">Processos em Vencimento</h3>
+                                <h3 class="box-title">Pedidos em Vencimento</h3>
                                 <div class="box-tools pull-right">
                                     <button type="button" class="btn btn-box-tool" data-widget="collapse"><i
                                                 class="fa fa-minus"></i>
@@ -128,6 +128,8 @@ if (isset($_SESSION['editmode'])) {
                                 <table id="tableProcVenc" class="table table-bordered table-striped">
                                     <thead>
                                     <tr>
+                                        <th>Pedido</th>
+                                        <th>Status</th>
                                         <th>Processo</th>
                                         <th>Data Fim</th>
                                     </tr>
