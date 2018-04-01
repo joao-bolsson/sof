@@ -1,5 +1,8 @@
 ## CHANGELOG ##
 
+#### v2.3.5 - 01/04/2018 ####
+- Mostra os pedidos que irão vencer no mês atual ao invés dos pregões
+
 #### v2.3.4 - 18/03/2018 ####
 - Relatório de Processos não devolvidos (recepção)
 - Alerta para vencimento de pregões no mês atual

@@ -662,7 +662,7 @@ function iniDataTable(tabela) {
         }).DataTable();
     } else if (tabela == '#tableProcVenc') {
         $(tabela).DataTable({
-            "order": [[1, "asc"]],
+            "order": [[3, "asc"]],
             "autoWidth": true,
             "lengthMenu": [5, 10, 25, 50, 100],
             language: language
