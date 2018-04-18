@@ -129,7 +129,6 @@ if (isset($_SESSION['editmode'])) {
                                     <thead>
                                     <tr>
                                         <th>Pedido</th>
-                                        <th>Status</th>
                                         <th>Processo</th>
                                         <th>Data Fim</th>
                                     </tr>
