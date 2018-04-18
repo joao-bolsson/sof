@@ -61,7 +61,7 @@ final class BuscaLTE {
         $mes = date('n');
         $ano = date('Y');
 
-        $query = Query::getInstance()->exe("SELECT DISTINCT itens_pedido.id_pedido, itens.num_processo, DATE_FORMAT(itens.dt_fim, '%d/%m/%Y') AS dt_fim, pedido.status FROM pedido, itens, itens_pedido WHERE pedido.status = 2 AND pedido.id = itens_pedido.id_pedido AND itens.id = itens_pedido.id_item AND MONTH(itens.dt_fim) = " . $mes . " AND YEAR(itens.dt_fim) = " . $ano);
+        $query = Query::getInstance()->exe("SELECT DISTINCT itens_pedido.id_pedido, itens.num_processo, DATE_FORMAT(itens.dt_fim, '%d/%m/%Y') AS dt_fim, pedido.status FROM pedido, itens, itens_pedido WHERE pedido.status = 2 AND pedido.id = itens_pedido.id_pedido AND itens.id = itens_pedido.id_item AND MONTH(itens.dt_fim) = " . $mes . " AND YEAR(itens.dt_fim) = " . $ano . " ORDER BY dt_fim ASC;");
 
         if ($query->num_rows > 0) {
             while ($obj = $query->fetch_object()) {

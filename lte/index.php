@@ -125,6 +125,10 @@ if (isset($_SESSION['editmode'])) {
                                 </div>
                             </div><!-- /.box-header -->
                             <div class="box-body">
+                                <div class="margin">
+                                    <button class="btn btn-primary" type="button" onclick="printDueDate()"><i class="fa fa-print"></i>Imprimir Todos
+                                    </button>
+                                </div>
                                 <table id="tableProcVenc" class="table table-bordered table-striped">
                                     <thead>
                                     <tr>

@@ -599,6 +599,10 @@ function mostra(row) {
     div.style.display = display;
 }
 
+function printDueDate() {
+    window.open("../admin/printDueDate.php");
+}
+
 function iniDataTable(tabela) {
     var language = {
         "decimal": "",
