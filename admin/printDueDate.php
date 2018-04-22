@@ -27,7 +27,7 @@ $html_header = "
   <hr/>";
 $html = $html_style . $html_header;
 
-$html .= BuscaLTE::loadProcsVenc();
+$html .= BuscaLTE::buildRelProcsVenc();
 
 $html .= "</body>";
 
