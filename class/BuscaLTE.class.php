@@ -50,19 +50,50 @@ final class BuscaLTE {
         return $table->__toString();
     }
 
+    public static function buildRelProcsVenc():string {
+        $mes = date('n');
+        $ano = date('Y');
+
+        $query = Query::getInstance()->exe("SELECT DISTINCT itens_pedido.id_pedido, pedido.valor, itens.num_processo, DATE_FORMAT(itens.dt_fim, '%d/%m/%Y') AS dt_fim, pedido.status FROM pedido, itens, itens_pedido WHERE pedido.status = 2 AND pedido.id = itens_pedido.id_pedido AND itens.id = itens_pedido.id_item AND MONTH(itens.dt_fim) = " . $mes . " AND YEAR(itens.dt_fim) = " . $ano . " ORDER BY dt_fim;");
+
+        $sum = 0;
+        $rel = "
+            <fieldset class=\"preg\">
+                    <h5>DESCRIÇÃO DO RELATÓRIO</h5>
+                    <h6>Pedidos em Vencimento para " . $mes . "/" . $ano . "</h6>";
+
+        $table = new Table('', '', ['Pedido', 'Valor', 'Processo', 'Data Fim'], true);
+        if ($query->num_rows > 0) {
+            while ($obj = $query->fetch_object()) {
+                $sum += floatval($obj->valor);
+
+                $row = new Row();
+                $row->addComponent(new Column($obj->id_pedido));
+                $row->addComponent(new Column(number_format($obj->valor, 3, ',', '.')));
+                $row->addComponent(new Column($obj->num_processo));
+                $row->addComponent(new Column($obj->dt_fim));
+
+                $table->addComponent($row);
+            }
+        }
+
+        $rel .= "<h6>Totalizando: R$ " . number_format($sum, 3, ',', '.') . "</h6>
+                </fieldset><br>";
+        return $rel . $table->__toString();
+    }
+
     /**
      * The proccess that will be finished in the current month.
      *
      * @return string Table's body with the informations.
      */
     public static function loadProcsVenc(): string {
-        $table = new Table('', '', [], false);
-
         $mes = date('n');
         $ano = date('Y');
 
-        $query = Query::getInstance()->exe("SELECT DISTINCT itens_pedido.id_pedido, itens.num_processo, DATE_FORMAT(itens.dt_fim, '%d/%m/%Y') AS dt_fim, pedido.status FROM pedido, itens, itens_pedido WHERE pedido.status = 2 AND pedido.id = itens_pedido.id_pedido AND itens.id = itens_pedido.id_item AND MONTH(itens.dt_fim) = " . $mes . " AND YEAR(itens.dt_fim) = " . $ano . " ORDER BY dt_fim ASC;");
+        $query = Query::getInstance()->exe("SELECT DISTINCT itens_pedido.id_pedido, itens.num_processo, DATE_FORMAT(itens.dt_fim, '%d/%m/%Y') AS dt_fim, pedido.status FROM pedido, itens, itens_pedido WHERE pedido.status = 2 AND pedido.id = itens_pedido.id_pedido AND itens.id = itens_pedido.id_item AND MONTH(itens.dt_fim) = " . $mes . " AND YEAR(itens.dt_fim) = " . $ano . " ORDER BY dt_fim;");
 
+        $table = new Table('', '', [], false);
         if ($query->num_rows > 0) {
             while ($obj = $query->fetch_object()) {
                 $row = new Row();
@@ -73,6 +104,7 @@ final class BuscaLTE {
                 $table->addComponent($row);
             }
         }
+
         return $table->__toString();
     }
 
@@ -1009,15 +1041,13 @@ final class BuscaLTE {
         return $row;
     }
 
-    private static final function buildButtonsDraft(int $id_usuario, int $id): string {
+    private static final function buildButtonsDraft(int $id): string {
         $group = "<div class=\"btn-group\">";
 
         $btnEdit = $btnDel = '';
-        if ($id_usuario == $_SESSION['id']) {
-            $btnEdit = new Button('', BTN_DEFAULT . ' btn-sm', "editaPedido(" . $id . ")", "data-toggle=\"tooltip\"", 'Editar', 'pencil');
+        $btnEdit = new Button('', BTN_DEFAULT . ' btn-sm', "editaPedido(" . $id . ")", "data-toggle=\"tooltip\"", 'Editar', 'pencil');
 
-            $btnDel = new Button('', BTN_DEFAULT . ' btn-sm', "deletePedido(" . $id . ")", "data-toggle=\"tooltip\"", 'Excluir', 'trash');
-        }
+        $btnDel = new Button('', BTN_DEFAULT . ' btn-sm', "deletePedido(" . $id . ")", "data-toggle=\"tooltip\"", 'Excluir', 'trash');
 
         $btnPrint = new Button('', BTN_DEFAULT . ' btn-sm', "imprimir(" . $id . ")", "data-toggle=\"tooltip\"", 'Imprimir', 'print');
 
@@ -1032,7 +1062,7 @@ final class BuscaLTE {
      */
     public static function getRascunhos(): string {
         $id_sector = $_SESSION['id_setor'];
-        $query = Query::getInstance()->exe("SELECT id, DATE_FORMAT(data_pedido, '%d/%m/%Y') AS data_pedido, pedido.valor, status, pedido.id_usuario FROM pedido WHERE id_setor = " . $id_sector . ' AND alteracao = 1 ORDER BY id DESC LIMIT ' . LIMIT_MAX);
+        $query = Query::getInstance()->exe("SELECT id, DATE_FORMAT(data_pedido, '%d/%m/%Y') AS data_pedido, pedido.valor, status FROM pedido WHERE id_setor = " . $id_sector . ' AND alteracao = 1 ORDER BY id DESC LIMIT ' . LIMIT_MAX);
 
         $table = new Table('', '', [], false);
         while ($draft = $query->fetch_object()) {
@@ -1043,7 +1073,7 @@ final class BuscaLTE {
             $row->addComponent(new Column(new Small('label bg-gray', ARRAY_STATUS[$draft->status])));
             $row->addComponent(new Column($draft->data_pedido));
             $row->addComponent(new Column('R$ ' . $draft->valor));
-            $row->addComponent(new Column(self::buildButtonsDraft($draft->id_usuario, $draft->id)));
+            $row->addComponent(new Column(self::buildButtonsDraft($draft->id)));
 
             $table->addComponent($row);
         }

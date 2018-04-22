@@ -1,5 +1,11 @@
 ## CHANGELOG ##
 
+#### v2.3.6 - 22/04/2018 ####
+- Imprime lista de pedidos em vencimento com somatório e descrição do relatório
+- Mostra somente pedidos em vencimento que estão em análise
+- Elimina restrição de usuário na edição de pedidos reprovados e rascunhos
+- Modifica importação de itens: apenas faz o upload do arquivo com os dados, fica mais rápido assim
+
 #### v2.3.5 - 01/04/2018 ####
 - Mostra os pedidos que irão vencer no mês atual ao invés dos pregões
 

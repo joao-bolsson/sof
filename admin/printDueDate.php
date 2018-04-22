@@ -27,18 +27,7 @@ $html_header = "
   <hr/>";
 $html = $html_style . $html_header;
 
-$tbody = BuscaLTE::loadProcsVenc();
-
-$html .= "<table>
-                                   <thead>
-                                    <tr>
-                                        <th>Pedido</th>
-                                        <th>Processo</th>
-                                        <th>Data Fim</th>
-                                    </tr>
-                                    </thead>
-                                    <tbody>" . $tbody . "</tbody>
-                                </table>";
+$html .= BuscaLTE::buildRelProcsVenc();
 
 $html .= "</body>";
 
