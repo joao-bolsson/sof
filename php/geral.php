@@ -326,24 +326,28 @@ if (Busca::isActive()) {
                     // Cria um nome baseado no UNIX TIMESTAMP atual e com extensão .tsv
                     $nome_final = md5(time()) . '.tsv';
                 }
-                $dados = $obj_Util->readFile($_FILES["file"]['tmp_name']);
-                unset($_FILES["file"]);
-                if (count($dados) < 1) {
-                    exit("Empty file!");
-                }
-                // prepara a importação dos itens (insert)
-                $array_sql = $obj_Util->prepareImport($dados);
-                unset($dados);
-                $len = count($array_sql);
                 if (isset($_SESSION['database'])) {
                     $nome_final .= "-" . $_SESSION['database'];
                 }
-                $sqlFileName = "../toImport/" . $nome_final . ".sql";
-                for ($i = 0; $i < $len; $i++) {
-                    $query = $array_sql[$i];
-                    file_put_contents($sqlFileName, $query, FILE_APPEND);
-                }
-                unset($array_sql);
+                $dir = "../toImport/";
+                move_uploaded_file($_FILES["file"]['tmp_name'], $dir . $nome_final);
+                //                $dados = $obj_Util->readFile($_FILES["file"]['tmp_name']);
+                //                unset($_FILES["file"]);
+                //                if (count($dados) < 1) {
+                //                    exit("Empty file!");
+                //                }
+                // prepara a importação dos itens (insert)
+                //                $array_sql = $obj_Util->prepareImport($dados);
+                //                unset($dados);
+                //                $len = count($array_sql);
+
+
+                //                $sqlFileName = $dir . $nome_final . ".sql";
+                //                for ($i = 0; $i < $len; $i++) {
+                //                    $query = $array_sql[$i];
+                //                    file_put_contents($sqlFileName, $query, FILE_APPEND);
+                //                }
+                //                unset($array_sql);
 
                 header("Location: ../lte/");
                 break;
