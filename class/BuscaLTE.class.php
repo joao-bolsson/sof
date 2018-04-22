@@ -1009,15 +1009,13 @@ final class BuscaLTE {
         return $row;
     }
 
-    private static final function buildButtonsDraft(int $id_usuario, int $id): string {
+    private static final function buildButtonsDraft(int $id): string {
         $group = "<div class=\"btn-group\">";
 
         $btnEdit = $btnDel = '';
-        if ($id_usuario == $_SESSION['id']) {
-            $btnEdit = new Button('', BTN_DEFAULT . ' btn-sm', "editaPedido(" . $id . ")", "data-toggle=\"tooltip\"", 'Editar', 'pencil');
+        $btnEdit = new Button('', BTN_DEFAULT . ' btn-sm', "editaPedido(" . $id . ")", "data-toggle=\"tooltip\"", 'Editar', 'pencil');
 
-            $btnDel = new Button('', BTN_DEFAULT . ' btn-sm', "deletePedido(" . $id . ")", "data-toggle=\"tooltip\"", 'Excluir', 'trash');
-        }
+        $btnDel = new Button('', BTN_DEFAULT . ' btn-sm', "deletePedido(" . $id . ")", "data-toggle=\"tooltip\"", 'Excluir', 'trash');
 
         $btnPrint = new Button('', BTN_DEFAULT . ' btn-sm', "imprimir(" . $id . ")", "data-toggle=\"tooltip\"", 'Imprimir', 'print');
 
@@ -1032,7 +1030,7 @@ final class BuscaLTE {
      */
     public static function getRascunhos(): string {
         $id_sector = $_SESSION['id_setor'];
-        $query = Query::getInstance()->exe("SELECT id, DATE_FORMAT(data_pedido, '%d/%m/%Y') AS data_pedido, pedido.valor, status, pedido.id_usuario FROM pedido WHERE id_setor = " . $id_sector . ' AND alteracao = 1 ORDER BY id DESC LIMIT ' . LIMIT_MAX);
+        $query = Query::getInstance()->exe("SELECT id, DATE_FORMAT(data_pedido, '%d/%m/%Y') AS data_pedido, pedido.valor, status FROM pedido WHERE id_setor = " . $id_sector . ' AND alteracao = 1 ORDER BY id DESC LIMIT ' . LIMIT_MAX);
 
         $table = new Table('', '', [], false);
         while ($draft = $query->fetch_object()) {
@@ -1043,7 +1041,7 @@ final class BuscaLTE {
             $row->addComponent(new Column(new Small('label bg-gray', ARRAY_STATUS[$draft->status])));
             $row->addComponent(new Column($draft->data_pedido));
             $row->addComponent(new Column('R$ ' . $draft->valor));
-            $row->addComponent(new Column(self::buildButtonsDraft($draft->id_usuario, $draft->id)));
+            $row->addComponent(new Column(self::buildButtonsDraft($draft->id)));
 
             $table->addComponent($row);
         }
