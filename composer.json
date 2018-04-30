@@ -5,6 +5,7 @@
         "phpunit/dbunit": "^3.0"
     },
     "require": {
+        "php": ">= 7.0",
         "erusev/parsedown": "^1.6",
         "mpdf/mpdf": "^7.0"
     }

@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Importação</title>
+</head>
+<body>
+<input type="file" id="inputCSV" onchange="pegaCSV(this)">
+<div id="CSVsaida"></div>
+</body>
+<script>
+    const leitorDeCSV = new FileReader();
+
+    window.onload = function init() {
+        leitorDeCSV.onload = leCSV;
+    }
+
+    function pegaCSV(inputFile) {
+        const file = inputFile.files[0];
+        leitorDeCSV.readAsText(file);
+    }
+
+    function leCSV(evt) {
+        const fileArr = evt.target.result.split('\n');
+        let strDiv = '<table>';
+
+        for (let i = 0; i < fileArr.length; i++) {
+            strDiv += '<tr>';
+            const fileLine = fileArr[i].split('	');
+            for (let j = 0; j < fileLine.length; j++) {
+                strDiv += '<td>' + fileLine[j].trim() + '</td>';
+            }
+            strDiv += '</tr>';
+        }
+
+        strDiv += '</table>';
+
+        const CSVsaida = document.getElementById('CSVsaida');
+        CSVsaida.innerHTML = strDiv;
+    }
+</script>
+
+</html>
