@@ -661,6 +661,19 @@ if (Busca::isActive()) {
     } else {
         switch ($form) {
 
+            case 'importItensTest':
+                $data = filter_input(INPUT_POST, 'array_sql', FILTER_DEFAULT, FILTER_FORCE_ARRAY);
+
+                Logger::info("================\nImporting itens (test code) array size: " . count($data));
+                $i = 0;
+                foreach ($data as $sql) {
+                    Logger::info("Line: " . $i++);
+                    Query::getInstance()->exe($sql);
+                }
+                Logger::info("Finish\n=================");
+                echo "finish";
+                break;
+
             case 'addUser':
                 $nome = filter_input(INPUT_POST, 'nome');
                 $login = filter_input(INPUT_POST, 'login');
