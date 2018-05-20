@@ -313,18 +313,27 @@ final class PrintMod {
                 </fieldset><br>";
             $query_forn = Query::getInstance()->exe('SELECT DISTINCT itens.cgc_fornecedor, itens.nome_fornecedor, itens.num_contrato FROM itens, itens_pedido WHERE itens.id = itens_pedido.id_item AND itens_pedido.id_pedido = ' . $id_request . ' AND itens.num_licitacao = ' . $bidding->num_licitacao);
 
+            $fornecedores = [];
+
+            while($provider = $query_forn->fetch_object()) {
+                $fornecedores[$provider->cgc_fornecedor] = $provider->nome_fornecedor;
+            }
+
+            $query_forn = Query::getInstance()->exe('SELECT DISTINCT itens.cgc_fornecedor, itens.num_contrato FROM itens, itens_pedido WHERE itens.id = itens_pedido.id_item AND itens_pedido.id_pedido = ' . $id_request . ' AND itens.num_licitacao = ' . $bidding->num_licitacao);
+
             // --------------------------------------------------------
             //                FORNECEDORES REFERENTES À LICITAÇÃO
             // --------------------------------------------------------
             while ($provider = $query_forn->fetch_object()) {
-                $provider->nome_fornecedor = substr($provider->nome_fornecedor, 0, 40);
-                $provider->nome_fornecedor = strtoupper($provider->nome_fornecedor);
-                $provider->nome_fornecedor = utf8_encode($provider->nome_fornecedor);
+                $nome_fornecedor = $fornecedores[$provider->cgc_fornecedor];
+                $nome_fornecedor = substr($nome_fornecedor, 0, 40);
+                $nome_fornecedor = strtoupper($nome_fornecedor);
+                $nome_fornecedor = utf8_encode($nome_fornecedor);
                 $return .= "
                     <fieldset style=\"border-bottom: 1px solid black; padding: 5px;\">
                         <table>
                             <tr>
-                                <td style=\"text-align: left; font-weight: bold;\">" . $provider->nome_fornecedor . "</td>
+                                <td style=\"text-align: left; font-weight: bold;\">" . $nome_fornecedor . "</td>
                                 <td>CNPJ: " . $provider->cgc_fornecedor . "</td>
                                 <td>Contrato: " . $provider->num_contrato . "</td>
                             </tr>
