@@ -246,7 +246,6 @@ class RequestReport implements Report {
     public function buildBody(): string {
         $table = new Table('', 'prod', $this->headers, true);
 
-        Logger::info($this->sql);
         $query = Query::getInstance()->exe($this->sql);
         if ($query) {
             while ($request = $query->fetch_object()) {
