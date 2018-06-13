@@ -3,7 +3,7 @@
  *  Interface usada pelo Setor de Orçamento para editar um item.
  *
  * @author João Bolsson (joaovictorbolsson@gmail.com).
- * @since 2017, 03 Feb.
+ * @since 2018, 12 Jun.
  */
 ini_set('display_errors', true);
 error_reporting(E_ALL);
@@ -18,9 +18,6 @@ if (!isset($_SESSION["id_setor"]) || $_SESSION["id_setor"] != 2 || !$permissao->
 }
 require_once '../defines.php';
 
-if (!isset($_SESSION['editmode'])) {
-    $_SESSION['editmode'] = true;
-}
 ?>
 <!DOCTYPE html>
 <html>
@@ -59,7 +56,6 @@ if (!isset($_SESSION['editmode'])) {
     <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
     <![endif]-->
 </head>
-<!-- ADD THE CLASS layout-top-nav TO REMOVE THE SIDEBAR. -->
 <body class="hold-transition skin-blue layout-top-nav">
 <div class="wrapper">
 
@@ -77,13 +73,18 @@ if (!isset($_SESSION['editmode'])) {
                 <div class="collapse navbar-collapse pull-left" id="navbar-collapse">
                     <ul class="nav navbar-nav">
                         <li>
-                            <a href="javascript:listProcessos('users');">
-                                <i class="fa fa-tags"></i> Processos
+                            <a href="#">
+                                <i class="fa fa-book"></i> Cadastrar Contrato
                             </a>
                         </li>
                         <li>
-                            <a href="javascript:abreModal('#infoItem');">
-                                <i class="fa fa-database"></i> Cadastrar Item
+                            <a href="#">
+                                <i class="fa fa-bank"></i> Cadastrar Empresa
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#">
+                                <i class="fa fa-money"></i> Mensalidade
                             </a>
                         </li>
                     </ul>
@@ -105,7 +106,7 @@ if (!isset($_SESSION['editmode'])) {
                 </h1>
                 <ol class="breadcrumb">
                     <li><a href="index.php"><i class="fa fa-dashboard"></i> Início</a></li>
-                    <li class="active">Editar Itens</li>
+                    <li class="active">Contratos</li>
                 </ol>
             </section>
 
@@ -113,27 +114,22 @@ if (!isset($_SESSION['editmode'])) {
             <section class="content">
                 <div class="box box-primary">
                     <div class="box-header with-border">
-                        <h3 class="box-title">Itens do Processo: <span id="numProc">--------------------</span></h3>
+                        <h3 class="box-title">Contratos</h3>
                     </div>
                     <input id="searchProcesso" type="hidden">
                     <div class="box-body">
-                        <table class="table table-bordered table-striped" id="tableProcessos">
+                        <table class="table table-bordered table-striped" id="tableContratos">
                             <thead>
                             <tr>
-                                <th></th>
-                                <th>Fornecedor</th>
-                                <th>Cod Reduzido</th>
-                                <th>Complemento</th>
-                                <th style="display: none;"></th>
-                                <th>Vl Unitário</th>
-                                <th>Qt Saldo</th>
-                                <th>Qt Utilizado</th>
-                                <th>Vl Saldo</th>
-                                <th>Vl Utilizado</th>
-                                <th>Qt Contrato</th>
+                                <th>Opções</th>
+                                <th>Contrato</th>
+                                <th>Empresa</th>
+                                <th>Vigência</th>
+                                <th>Mensalidade</th>
+                                <th>Saldo Disponível</th>
                             </tr>
                             </thead>
-                            <tbody id="conteudoProcesso"></tbody>
+                            <tbody id="conteudoContrato"></tbody>
                         </table>
                     </div><!-- ./box-body -->
                     <div id="overlayLoad" class="overlay" style="display: none;">
@@ -157,34 +153,6 @@ if (!isset($_SESSION['editmode'])) {
         </div>
         <!-- /.container -->
     </footer>
-    <div class="modal fade" id="infoItem" role="dialog">
-        <div class="modal-dialog modal-lg">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
-                                aria-hidden="true">&times;</span></button>
-                    <h4 class="modal-title">Informações do Item</h4>
-                </div>
-                <span id="editmode" style="display: none;"></span>
-                <?php include_once "util/formEditRegItem.php"; ?>
-            </div>
-        </div>
-    </div>
-    <div id="viewCompl" class="modal fade" tabindex="-1" role="dialog" data-backdrop="static">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
-                                aria-hidden="true">&times;</span></button>
-                    <h4 class="modal-title">Informação</h4>
-                </div>
-                <div id="complementoItem" class="modal-body"></div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-primary" data-dismiss="modal">Fechar</button>
-                </div>
-            </div><!-- /.modal-content -->
-        </div><!-- /.modal-dialog -->
-    </div><!-- /.modal -->
     <?php
     include_once "util/modals-util.php";
     ?>
@@ -217,7 +185,7 @@ if (!isset($_SESSION['editmode'])) {
 <!-- page script -->
 <script type="text/javascript" src="util/util_lte.min.js"></script>
 <script type="text/javascript" src="../iniLTE.min.js"></script>
-<script type="text/javascript" src="util/contratos.min.js"></script>
+<script type="text/javascript" src="util/editMode.js"></script>
 </body>
 </html>
 

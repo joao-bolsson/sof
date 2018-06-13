@@ -51,6 +51,11 @@ $permissao = BuscaLTE::getPermissoes($_SESSION["id"]);
                     </a>
                 </li>
             <?php endif; ?>
+            <li>
+                <a href="contratos.php">
+                    <i class="fa fa-money"></i> <span>Contratos</span>
+                </a>
+            </li>
             <?php if ($permissao->saldos): ?>
                 <li>
                     <a href="javascript:mostraSolicAdiant();">
