@@ -73,7 +73,7 @@ require_once '../defines.php';
                 <div class="collapse navbar-collapse pull-left" id="navbar-collapse">
                     <ul class="nav navbar-nav">
                         <li>
-                            <a href="#">
+                            <a href="javascript:abreModal('#cadContrato');">
                                 <i class="fa fa-book"></i> Cadastrar Contrato
                             </a>
                         </li>
@@ -156,6 +156,51 @@ require_once '../defines.php';
     <?php
     include_once "util/modals-util.php";
     ?>
+
+    <div aria-hidden="true" class="modal fade" id="cadContrato" role="dialog" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                                aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">Cadastrar Contrato</h4>
+                </div>
+                <form id="formContr" action="../php/geral.php" method="POST">
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <label>Número</label>
+                            <input type="text" class="form-control" name="numContr" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Vigência</label>
+                            <div class="input-group">
+                                <div class="input-group-addon">
+                                    <i class="fa fa-calendar"></i>
+                                </div>
+                                <input type="text" class="form-control date" name="vigencia" required
+                                       data-inputmask="'alias': 'dd/mm/yyyy'" data-mask>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>Teto</label>
+                            <div class="input-group">
+                                <div class="input-group-addon">
+                                    <i class="fa fa-dollar"></i>
+                                </div>
+                                <input type="number" class="form-control" name="teto" step="0.01" min="0.0" required>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn btn-primary" type="submit" style="width: 100%;"><i
+                                    class="fa fa-send"></i>&nbsp;Cadastrar
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
 </div>
 <!-- ./wrapper -->
 
@@ -185,7 +230,7 @@ require_once '../defines.php';
 <!-- page script -->
 <script type="text/javascript" src="util/util_lte.min.js"></script>
 <script type="text/javascript" src="../iniLTE.min.js"></script>
-<script type="text/javascript" src="util/editMode.js"></script>
+<script type="text/javascript" src="util/contratos.min.js"></script>
 </body>
 </html>
 

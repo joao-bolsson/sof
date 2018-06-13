@@ -5,5 +5,11 @@
  */
 
 $(function () {
-    // empty, for while
+    $('#cadContrato').on('shown.bs.modal', function () {
+        $(".date").inputmask("dd/mm/yyyy", {"placeholder": "dd/mm/yyyy"});
+    });
+
+    $('#cadContrato').on('hidden.bs.modal', function () {
+        $('#formContr').trigger("reset");
+    });
 });
