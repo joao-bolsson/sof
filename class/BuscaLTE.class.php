@@ -582,7 +582,7 @@ final class BuscaLTE {
      * @return string The permissions for user registration.
      */
     public static function getCheckPermissoes(): string {
-        $query = Query::getInstance()->exe("SELECT column_name AS nome FROM information_schema.columns WHERE table_name = 'usuario_permissoes' AND column_name <> 'id_usuario'");
+        $query = Query::getInstance()->exe("SELECT DISTINCT column_name AS nome FROM information_schema.columns WHERE table_name = 'usuario_permissoes' AND column_name <> 'id_usuario'");
         $return = "";
         $i = 1;
         while ($obj = $query->fetch_object()) {

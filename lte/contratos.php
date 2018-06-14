@@ -78,7 +78,7 @@ require_once '../defines.php';
                             </a>
                         </li>
                         <li>
-                            <a href="#">
+                            <a href="javascript:abreModal('#cadEmpresa');">
                                 <i class="fa fa-bank"></i> Cadastrar Empresa
                             </a>
                         </li>
@@ -156,6 +156,48 @@ require_once '../defines.php';
     <?php
     include_once "util/modals-util.php";
     ?>
+
+    <div aria-hidden="true" class="modal fade" id="cadEmpresa" role="dialog" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                                aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">Cadastrar Empresa</h4>
+                </div>
+                <form id="formEmpresa" action="../php/geral.php" method="POST">
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <label>Nome</label>
+                            <input type="text" class="form-control" name="nome" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Contatos</label>
+                            <select class="form-control" name="contratos[]" required>
+                                <option value="1">100/2014</option>
+                            </select>
+                        </div>
+                        <?php
+                        $query = Query::getInstance()->exe("SELECT * FROM grupo;");
+
+                        while ($obj = $query->fetch_object()) {
+                            echo "<div class=\"form-group\" style=\"display: inline-block; margin-right: 5px;\">
+                            <label>
+                                <input type=\"checkbox\" name=\"group{$obj->id}\" class=\"minimal\"/> {$obj->nome}
+                            </label>
+                        </div>";
+                        }
+                        ?>
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn btn-primary" type="submit" style="width: 100%;"><i
+                                    class="fa fa-send"></i>&nbsp;Cadastrar
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
 
     <div aria-hidden="true" class="modal fade" id="cadContrato" role="dialog" tabindex="-1">
         <div class="modal-dialog">
