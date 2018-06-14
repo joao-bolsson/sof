@@ -83,7 +83,7 @@ require_once '../defines.php';
                             </a>
                         </li>
                         <li>
-                            <a href="#">
+                            <a href="javascript:abreModal('#cadMensalidade');">
                                 <i class="fa fa-money"></i> Mensalidade
                             </a>
                         </li>
@@ -172,7 +172,7 @@ require_once '../defines.php';
                             <input type="text" class="form-control" name="nome" required>
                         </div>
                         <div class="form-group">
-                            <label>Contatos</label>
+                            <label>Contratos</label>
                             <select class="form-control" name="contratos[]" required>
                                 <option value="1">100/2014</option>
                             </select>
@@ -243,6 +243,68 @@ require_once '../defines.php';
         </div>
     </div>
 
+    <div aria-hidden="true" class="modal fade" id="cadMensalidade" role="dialog" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                                aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">Mensalidade</h4>
+                </div>
+                <form id="formMensalidade" action="../php/geral.php" method="POST">
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <label>Contrato</label>
+                            <select class="form-control" name="contrato" required>
+                                <option value="1">100/2014</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Ano</label>
+                            <select class="form-control" name="ano" required>
+                                <?php
+                                $query = Query::getInstance()->exe("SELECT * FROM ano ORDER BY ano DESC;");
+                                while ($obj = $query->fetch_object()) {
+                                    echo "<option value=\"{$obj->id}\">{$obj->ano}</option>";
+                                }
+                                ?>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Mês</label>
+                            <select class="form-control" name="mes" required>
+                                <?php
+                                $query = Query::getInstance()->exe("SELECT id, sigla_mes FROM mes LIMIT 12;");
+                                while ($obj = $query->fetch_object()) {
+                                    echo "<option value=\"{$obj->id}\">{$obj->sigla_mes}</option>";
+                                }
+                                ?>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Valor</label>
+                            <div class="input-group">
+                                <div class="input-group-addon">
+                                    <i class="fa fa-dollar"></i>
+                                </div>
+                                <input type="number" class="form-control" name="valor" step="0.01" min="0.0" required>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>
+                                <input type="checkbox" name="nota" class="minimal"/> Com Nota
+                            </label>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn btn-primary" type="submit" style="width: 100%;"><i
+                                    class="fa fa-send"></i>&nbsp;Cadastrar
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
 </div>
 <!-- ./wrapper -->
 

@@ -20,14 +20,21 @@ $(function () {
         });
     });
 
+    $('#cadEmpresa').on('hidden.bs.modal', function () {
+        $('#formEmpresa').trigger("reset");
+        $('.minimal').iCheck('destroy');
+    });
 
-    // for (var k = 1; k <= 4; k++) {
-    //     var perm = document.getElementById('perm' + k);
-    //     if (perm !== null) {
-    //         $('.minimal').iCheck({
-    //             checkboxClass: 'icheckbox_minimal-blue',
-    //             radioClass: 'iradio_minimal-blue'
-    //         });
-    //     }
-    // }
+    $('#cadMensalidade').on('shown.bs.modal', function () {
+        $('.minimal').iCheck({
+            checkboxClass: 'icheckbox_minimal-blue',
+            radioClass: 'iradio_minimal-blue'
+        });
+    });
+
+    $('#cadMensalidade').on('hidden.bs.modal', function () {
+        $('#formMensalidade').trigger("reset");
+        $('.minimal').iCheck('destroy');
+    });
+
 });
