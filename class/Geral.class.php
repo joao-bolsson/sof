@@ -25,6 +25,13 @@ final class Geral {
         // empty
     }
 
+    public static function cadContract(string $numero, float $teto, string $vigencia): bool {
+        $numero = Query::getInstance()->real_escape_string($numero);
+        Query::getInstance()->exe("INSERT INTO contrato VALUES(NULL, '" . $numero . "', '" . $teto . "', '" . $vigencia . "');");
+        // TODO: capturar erro da execucao da query e retornar false
+        return true;
+    }
+
     /**
      *    Função para cadastrar fontes do pedido (status == Aguarda Orçamento)
      *

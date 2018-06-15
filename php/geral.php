@@ -46,6 +46,16 @@ if (Busca::isActive()) {
     if (!is_null($admin) && isset($_SESSION["id_setor"]) && ($_SESSION["id_setor"] == 2 || $_SESSION["id_setor"] == 12)) {
         switch ($form) {
 
+            case 'formContr':
+                $numero = filter_input(INPUT_POST, 'numero');
+                $vigencia = filter_input(INPUT_POST, 'vigencia');
+                $teto = floatval(filter_input(INPUT_POST, 'teto'));
+
+                $data = Util::dateFormat($vigencia);
+
+                $cad = Geral::cadContract($numero, $teto, $data);
+                echo $cad;
+                break;
             case 'changeDB':
                 $db = filter_input(INPUT_POST, 'db');
                 if (in_array($db, ARRAY_DATABASES)) {

@@ -29,6 +29,8 @@ require_once '../defines.php';
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
     <!-- Bootstrap 3.3.6 -->
     <link rel="stylesheet" href="bootstrap/css/bootstrap.min.css">
+    <!-- Select2 -->
+    <link rel="stylesheet" href="plugins/select2/select2.min.css">
     <!-- DataTables -->
     <link rel="stylesheet" href="plugins/datatables/dataTables.bootstrap.css">
     <!-- Font Awesome -->
@@ -173,7 +175,7 @@ require_once '../defines.php';
                         </div>
                         <div class="form-group">
                             <label>Contratos</label>
-                            <select class="form-control" name="contratos[]" required>
+                            <select class="form-control select2" name="contratos[]" multiple required>
                                 <option value="1">100/2014</option>
                             </select>
                         </div>
@@ -207,11 +209,13 @@ require_once '../defines.php';
                                 aria-hidden="true">&times;</span></button>
                     <h4 class="modal-title">Cadastrar Contrato</h4>
                 </div>
-                <form id="formContr" action="../php/geral.php" method="POST">
+                <form id="formContr" method="POST">
+                    <input type="hidden" name="admin" value="1">
+                    <input type="hidden" name="form" value="formContr">
                     <div class="modal-body">
                         <div class="form-group">
                             <label>Número</label>
-                            <input type="text" class="form-control" name="numContr" required>
+                            <input type="text" class="form-control" name="numero" required>
                         </div>
                         <div class="form-group">
                             <label>Vigência</label>
@@ -321,6 +325,8 @@ require_once '../defines.php';
 <script src="plugins/iCheck/icheck.min.js"></script>
 <!-- FastClick -->
 <script src="plugins/fastclick/fastclick.js"></script>
+<!-- Select2 -->
+<script src="plugins/select2/select2.full.min.js"></script>
 <!-- AdminLTE App -->
 <script src="dist/js/app.min.js"></script>
 <!-- AdminLTE for demo purposes -->
