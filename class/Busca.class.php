@@ -22,6 +22,16 @@ final class Busca {
         // empty
     }
 
+    public static function fillContracts(): string {
+        $query = Query::getInstance()->exe("SELECT id, numero FROM contrato;");
+
+        $opts = "";
+        while ($obj = $query->fetch_object()) {
+            $opts .= "<option value=\"{$obj->id}\">{$obj->numero}</option>";
+        }
+        return $opts;
+    }
+
     public static function getOptionsSectorHasSources() {
         $query = Query::getInstance()->exe("SELECT DISTINCT saldo_fonte.id_setor, setores.nome FROM saldo_fonte, setores WHERE setores.id = saldo_fonte.id_setor");
         if ($query->num_rows > 0) {

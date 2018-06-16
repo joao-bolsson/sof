@@ -46,6 +46,15 @@ if (Busca::isActive()) {
     if (!is_null($admin) && isset($_SESSION["id_setor"]) && ($_SESSION["id_setor"] == 2 || $_SESSION["id_setor"] == 12)) {
         switch ($form) {
 
+            case 'formEmpresa':
+                $nome = filter_input(INPUT_POST, 'nome');
+                $contratos = filter_input(INPUT_POST, 'contratos', FILTER_DEFAULT, FILTER_FORCE_ARRAY);
+                $grupos = filter_input(INPUT_POST, 'grupos', FILTER_DEFAULT, FILTER_FORCE_ARRAY);
+
+                $cad = Geral::cadEmpresa($nome, $contratos, $grupos);
+                echo $cad;
+                break;
+
             case 'formContr':
                 $numero = filter_input(INPUT_POST, 'numero');
                 $vigencia = filter_input(INPUT_POST, 'vigencia');

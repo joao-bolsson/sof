@@ -167,7 +167,9 @@ require_once '../defines.php';
                                 aria-hidden="true">&times;</span></button>
                     <h4 class="modal-title">Cadastrar Empresa</h4>
                 </div>
-                <form id="formEmpresa" action="../php/geral.php" method="POST">
+                <form id="formEmpresa" method="POST">
+                    <input type="hidden" name="admin" value="1">
+                    <input type="hidden" name="form" value="formEmpresa">
                     <div class="modal-body">
                         <div class="form-group">
                             <label>Nome</label>
@@ -175,21 +177,21 @@ require_once '../defines.php';
                         </div>
                         <div class="form-group">
                             <label>Contratos</label>
-                            <select class="form-control select2" name="contratos[]" multiple required>
-                                <option value="1">100/2014</option>
+                            <select id="selectContr" class="form-control select2" name="contratos[]" multiple required>
                             </select>
                         </div>
-                        <?php
-                        $query = Query::getInstance()->exe("SELECT * FROM grupo;");
+                        <div class="form-group">
+                            <label>Grupos</label>
+                            <select class="form-control select2" name="grupos[]" multiple required>
+                                <?php
+                                $query = Query::getInstance()->exe("SELECT * FROM grupo;");
 
-                        while ($obj = $query->fetch_object()) {
-                            echo "<div class=\"form-group\" style=\"display: inline-block; margin-right: 5px;\">
-                            <label>
-                                <input type=\"checkbox\" name=\"group{$obj->id}\" class=\"minimal\"/> {$obj->nome}
-                            </label>
-                        </div>";
-                        }
-                        ?>
+                                while ($obj = $query->fetch_object()) {
+                                    echo "<option value=\"{$obj->id}\">{$obj->nome}</option>";
+                                }
+                                ?>
+                            </select>
+                        </div>
                     </div>
                     <div class="modal-footer">
                         <button class="btn btn-primary" type="submit" style="width: 100%;"><i

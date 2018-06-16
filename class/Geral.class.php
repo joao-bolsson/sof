@@ -25,6 +25,36 @@ final class Geral {
         // empty
     }
 
+    public static function cadEmpresa(string $nome, array $contratos, array $grupos): bool {
+        $nome = Query::getInstance()->real_escape_string($nome);
+        Query::getInstance()->exe("INSERT INTO empresa VALUES(NULL, '" . $nome . "');");
+        $id = Query::getInstance()->getInsertId();
+
+        if (!empty($grupos)) {
+            $sql = "INSERT INTO empresa_grupo VALUES";
+            foreach ($grupos AS $grupo) {
+                $sql .= "(" . $grupo . ", " . $id . "),";
+            }
+            $pos = strrpos($sql, ",");
+            $sql[$pos] = ";";
+            // insere os grupos
+            Query::getInstance()->exe($sql);
+        }
+
+        if (!empty($contratos)) {
+            $sql = "INSERT INTO contrato_empresa VALUES";
+            foreach ($contratos AS $contrato) {
+                $sql .= "(" . $id . ", " . $contrato . "),";
+            }
+            $pos = strrpos($sql, ",");
+            $sql[$pos] = ";";
+            // insere os contratos
+            Query::getInstance()->exe($sql);
+        }
+        // TODO: capturar erro da execucao da query e retornar false
+        return true;
+    }
+
     public static function cadContract(string $numero, float $teto, string $vigencia): bool {
         $numero = Query::getInstance()->real_escape_string($numero);
         Query::getInstance()->exe("INSERT INTO contrato VALUES(NULL, '" . $numero . "', '" . $teto . "', '" . $vigencia . "');");

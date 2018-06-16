@@ -38,6 +38,10 @@ if (!is_null($admin) && isset($_SESSION['id_setor']) && ($_SESSION['id_setor'] =
 
     switch ($form) {
 
+        case 'fillContratos':
+            echo Busca::fillContracts();
+            break;
+
         case 'editLog':
             $id = filter_input(INPUT_POST, 'id');
             echo Busca::getInfoLog($id);
