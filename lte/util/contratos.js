@@ -24,12 +24,15 @@ $(function () {
         });
     });
 
+    $('#selectGroupTable').change();
+
     $('#cadContrato').on('shown.bs.modal', function () {
         $(".date").inputmask("dd/mm/yyyy", {"placeholder": "dd/mm/yyyy"});
     });
 
     $('#cadContrato').on('hidden.bs.modal', function () {
         $('#formContr').trigger("reset");
+        $("#formContr input[name=id]").val(0);
     });
 
     $('#formContr').submit(function (event) {
@@ -42,6 +45,7 @@ $(function () {
                 msg = "Contrato cadastrado!";
             }
             avisoSnack(msg);
+            $('#selectGroupTable').change();
         }).always(function () {
             $("#cadContrato").modal('hide');
         });
@@ -117,3 +121,20 @@ $(function () {
     });
 
 });
+
+function editContract(contrato) {
+    $.post('../php/busca.php', {
+        admin: 1,
+        form: 'editContract',
+        id: contrato
+    }).done(function (resposta) {
+        var obj = jQuery.parseJSON(resposta);
+        $("#formContr input[name=id]").val(contrato);
+        $("#formContr input[name=numero]").val(obj.numero);
+        $("#formContr input[name=vigencia]").val(obj.vigencia);
+        $("#formContr input[name=teto]").val(obj.teto);
+        $("#formContr input[name=mensalidade]").val(obj.mensalidade);
+
+        $('#cadContrato').modal('show');
+    })
+}

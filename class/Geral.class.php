@@ -66,13 +66,19 @@ final class Geral {
         return true;
     }
 
-    public static function cadContract(string $numero, float $teto, string $vigencia, float $mensalidade): bool {
+    public static function cadContract(int $id, string $numero, float $teto, string $vigencia, float $mensalidade): bool {
         $numero = Query::getInstance()->real_escape_string($numero);
 
         $builder = new SQLBuilder(SQLBuilder::$INSERT);
         $builder->setTables(['contrato']);
-        $builder->setValues([NULL, $numero, $teto, $vigencia, $mensalidade]);
-
+        if ($id == 0) {
+            $builder->setValues([NULL, $numero, $teto, $vigencia, $mensalidade]);
+        } else {
+            $builder->setType(SQLBuilder::$UPDATE);
+            $builder->setColumns(['numero', 'teto', 'vigencia', 'mensalidade']);
+            $builder->setValues([$numero, $teto, $vigencia, $mensalidade]);
+            $builder->setWhere("id = " . $id);
+        }
         Query::getInstance()->exe($builder->__toString());
         return true;
     }

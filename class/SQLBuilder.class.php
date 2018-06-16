@@ -38,6 +38,13 @@ class SQLBuilder {
     }
 
     /**
+     * @param int $type
+     */
+    public function setType(int $type) {
+        $this->type = $type;
+    }
+
+    /**
      * Optional method.
      *
      * Don't put WHERE keyword.

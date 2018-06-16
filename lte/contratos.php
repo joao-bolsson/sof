@@ -227,6 +227,7 @@ require_once '../defines.php';
                 <form id="formContr" method="POST">
                     <input type="hidden" name="admin" value="1">
                     <input type="hidden" name="form" value="formContr">
+                    <input type="hidden" name="id" value="0">
                     <div class="modal-body">
                         <div class="form-group">
                             <label>Número</label>

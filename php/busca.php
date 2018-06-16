@@ -38,6 +38,11 @@ if (!is_null($admin) && isset($_SESSION['id_setor']) && ($_SESSION['id_setor'] =
 
     switch ($form) {
 
+        case 'editContract':
+            $id = filter_input(INPUT_POST, 'id');
+            echo json_encode(Busca::editContract($id));
+            break;
+
         case 'fillTableProc':
             $grupo = filter_input(INPUT_POST, 'group');
             echo Busca::fillTableProc($grupo);

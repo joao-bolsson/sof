@@ -24,13 +24,19 @@ final class Busca {
         // empty
     }
 
+    public static function editContract(int $id) {
+        $query = Query::getInstance()->exe("SELECT numero, teto, DATE_FORMAT(vigencia, '%d/%m/%Y') AS vigencia, mensalidade FROM contrato WHERE id = " . $id);
+
+        return $query->fetch_object();
+    }
+
     public static function fillTableProc(int $group): string {
         $query = Query::getInstance()->exe("SELECT contrato.id, contrato.numero, DATE_FORMAT(contrato.vigencia, '%d/%m/%Y') AS vigencia, contrato.mensalidade, contrato.teto, empresa.nome FROM contrato, contrato_empresa, empresa_grupo, empresa WHERE contrato.id = contrato_empresa.id_contrato AND contrato_empresa.id_empresa = empresa_grupo.id_empresa AND empresa_grupo.id_grupo = " . $group . " AND empresa.id = contrato_empresa.id_empresa;");
 
         $table = new Table('', '', [], false);
 
         if ($query->num_rows > 0) {
-            while($obj = $query->fetch_object()) {
+            while ($obj = $query->fetch_object()) {
                 $row = new Row();
 
                 $edit = new Button('', BTN_DEFAULT, "editContract(" . $obj->id . ")", "data-toggle=\"tooltip\"", 'Editar', 'pencil');
