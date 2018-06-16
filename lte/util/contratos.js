@@ -5,6 +5,25 @@
  */
 
 $(function () {
+    $('#selectGroupTable').select2();
+
+    iniDataTable('#tableContratos');
+
+    $('#selectGroupTable').change(function () {
+
+        $('#overlayLoad').css("display", "block");
+        $('#tableContratos').DataTable().destroy();
+        $.post('../php/busca.php', {
+            admin: 1,
+            form: 'fillTableProc',
+            group: this.value
+        }).done(function (resposta) {
+            $('#conteudoContrato').html(resposta);
+            iniDataTable('#tableContratos');
+            $('#overlayLoad').css("display", "none");
+        });
+    });
+
     $('#cadContrato').on('shown.bs.modal', function () {
         $(".date").inputmask("dd/mm/yyyy", {"placeholder": "dd/mm/yyyy"});
     });

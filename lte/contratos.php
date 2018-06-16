@@ -118,8 +118,21 @@ require_once '../defines.php';
                     <div class="box-header with-border">
                         <h3 class="box-title">Contratos</h3>
                     </div>
-                    <input id="searchProcesso" type="hidden">
                     <div class="box-body">
+                        <div class="margin">
+                            <div class="form-group">
+                                <label>Grupo</label>
+                                <select id="selectGroupTable" class="form-control select2" required>
+                                    <?php
+                                    $query = Query::getInstance()->exe("SELECT * FROM grupo;");
+
+                                    while ($obj = $query->fetch_object()) {
+                                        echo "<option value=\"{$obj->id}\">{$obj->nome}</option>";
+                                    }
+                                    ?>
+                                </select>
+                            </div>
+                        </div>
                         <table class="table table-bordered table-striped" id="tableContratos">
                             <thead>
                             <tr>
@@ -244,7 +257,8 @@ require_once '../defines.php';
                                 <div class="input-group-addon">
                                     <i class="fa fa-money"></i>
                                 </div>
-                                <input type="number" class="form-control" name="mensalidade" step="0.01" min="0.0" required>
+                                <input type="number" class="form-control" name="mensalidade" step="0.01" min="0.0"
+                                       required>
                             </div>
                         </div>
                     </div>

@@ -38,6 +38,11 @@ if (!is_null($admin) && isset($_SESSION['id_setor']) && ($_SESSION['id_setor'] =
 
     switch ($form) {
 
+        case 'fillTableProc':
+            $grupo = filter_input(INPUT_POST, 'group');
+            echo Busca::fillTableProc($grupo);
+            break;
+
         case 'fillContratos':
             echo Busca::fillContracts();
             break;

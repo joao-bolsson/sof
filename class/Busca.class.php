@@ -22,6 +22,29 @@ final class Busca {
         // empty
     }
 
+    public static function fillTableProc(int $group): string {
+        $query = Query::getInstance()->exe("SELECT contrato.id, contrato.numero, contrato.vigencia, contrato.mensalidade, contrato.teto, empresa.nome FROM contrato, contrato_empresa, empresa_grupo, empresa WHERE contrato.id = contrato_empresa.id_contrato AND contrato_empresa.id_empresa = empresa_grupo.id_empresa AND empresa_grupo.id_grupo = " . $group . " AND empresa.id = contrato_empresa.id_empresa;");
+
+        $table = new Table('', '', [], false);
+
+        if ($query->num_rows > 0) {
+            while($obj = $query->fetch_object()) {
+                $row = new Row();
+
+                $row->addComponent(new Column("opt"));
+                $row->addComponent(new Column($obj->numero));
+                $row->addComponent(new Column($obj->nome));
+                $row->addComponent(new Column($obj->vigencia));
+                $row->addComponent(new Column("R$ " . $obj->mensalidade));
+                $row->addComponent(new Column("R$ 0,00"));
+
+                $table->addComponent($row);
+            }
+        }
+
+        return $table->__toString();
+    }
+
     public static function fillContracts(): string {
         $query = Query::getInstance()->exe("SELECT id, numero FROM contrato;");
 
