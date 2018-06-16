@@ -26,7 +26,8 @@ CREATE TABLE `contrato` (
   `id` int(10) UNSIGNED NOT NULL,
   `numero` varchar(10) NOT NULL,
   `teto` float(11,2) NOT NULL,
-  `vigencia` date NOT NULL
+  `vigencia` date NOT NULL,
+  `mensalidade` float(11,2) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 CREATE TABLE `contrato_empresa` (

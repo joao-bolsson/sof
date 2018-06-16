@@ -238,6 +238,15 @@ require_once '../defines.php';
                                 <input type="number" class="form-control" name="teto" step="0.01" min="0.0" required>
                             </div>
                         </div>
+                        <div class="form-group">
+                            <label>Mensalidade</label>
+                            <div class="input-group">
+                                <div class="input-group-addon">
+                                    <i class="fa fa-money"></i>
+                                </div>
+                                <input type="number" class="form-control" name="mensalidade" step="0.01" min="0.0" required>
+                            </div>
+                        </div>
                     </div>
                     <div class="modal-footer">
                         <button class="btn btn-primary" type="submit" style="width: 100%;"><i

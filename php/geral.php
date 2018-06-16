@@ -70,10 +70,11 @@ if (Busca::isActive()) {
                 $numero = filter_input(INPUT_POST, 'numero');
                 $vigencia = filter_input(INPUT_POST, 'vigencia');
                 $teto = floatval(filter_input(INPUT_POST, 'teto'));
+                $mensalidade = floatval(filter_input(INPUT_POST, 'mensalidade'));
 
                 $data = Util::dateFormat($vigencia);
 
-                $cad = Geral::cadContract($numero, $teto, $data);
+                $cad = Geral::cadContract($numero, $teto, $data, $mensalidade);
                 echo $cad;
                 break;
             case 'changeDB':

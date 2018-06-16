@@ -33,8 +33,6 @@ final class Geral {
         $builder->setTables(['mensalidade']);
         $builder->setValues([$contr, $mes, $ano, $valor, $nota]);
 
-        Logger::info("SQL: " . $builder->__toString());
-
         Query::getInstance()->exe($builder->__toString());
         return true;
     }
@@ -68,9 +66,14 @@ final class Geral {
         return true;
     }
 
-    public static function cadContract(string $numero, float $teto, string $vigencia): bool {
+    public static function cadContract(string $numero, float $teto, string $vigencia, float $mensalidade): bool {
         $numero = Query::getInstance()->real_escape_string($numero);
-        Query::getInstance()->exe("INSERT INTO contrato VALUES(NULL, '" . $numero . "', '" . $teto . "', '" . $vigencia . "');");
+
+        $builder = new SQLBuilder(SQLBuilder::$INSERT);
+        $builder->setTables(['contrato']);
+        $builder->setValues([NULL, $numero, $teto, $vigencia, $mensalidade]);
+
+        Query::getInstance()->exe($builder->__toString());
         return true;
     }
 
