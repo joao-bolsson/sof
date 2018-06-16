@@ -13,6 +13,8 @@ spl_autoload_register(function (string $class_name) {
     include_once $class_name . '.class.php';
 });
 
+require_once '../defines.php';
+
 final class Busca {
 
     /**
@@ -23,7 +25,7 @@ final class Busca {
     }
 
     public static function fillTableProc(int $group): string {
-        $query = Query::getInstance()->exe("SELECT contrato.id, contrato.numero, contrato.vigencia, contrato.mensalidade, contrato.teto, empresa.nome FROM contrato, contrato_empresa, empresa_grupo, empresa WHERE contrato.id = contrato_empresa.id_contrato AND contrato_empresa.id_empresa = empresa_grupo.id_empresa AND empresa_grupo.id_grupo = " . $group . " AND empresa.id = contrato_empresa.id_empresa;");
+        $query = Query::getInstance()->exe("SELECT contrato.id, contrato.numero, DATE_FORMAT(contrato.vigencia, '%d/%m/%Y') AS vigencia, contrato.mensalidade, contrato.teto, empresa.nome FROM contrato, contrato_empresa, empresa_grupo, empresa WHERE contrato.id = contrato_empresa.id_contrato AND contrato_empresa.id_empresa = empresa_grupo.id_empresa AND empresa_grupo.id_grupo = " . $group . " AND empresa.id = contrato_empresa.id_empresa;");
 
         $table = new Table('', '', [], false);
 
@@ -31,7 +33,15 @@ final class Busca {
             while($obj = $query->fetch_object()) {
                 $row = new Row();
 
-                $row->addComponent(new Column("opt"));
+                $edit = new Button('', BTN_DEFAULT, "editContract(" . $obj->id . ")", "data-toggle=\"tooltip\"", 'Editar', 'pencil');
+
+                $add = new Button('', BTN_DEFAULT, "addMensalidade(" . $obj->id . ")", "data-toggle=\"tooltip\"", 'Adicionar Mensalidade', 'plus');
+
+                $print = new Button('', BTN_DEFAULT, "printContract(" . $obj->id . "", "data-toggle=\"tooltip\"", 'Imprimir', 'print');
+
+                $buttons = "<div class='btn-group'>" . $edit . $add . $print . "</div>";
+
+                $row->addComponent(new Column($buttons));
                 $row->addComponent(new Column($obj->numero));
                 $row->addComponent(new Column($obj->nome));
                 $row->addComponent(new Column($obj->vigencia));
