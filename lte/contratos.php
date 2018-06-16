@@ -249,7 +249,7 @@ require_once '../defines.php';
         </div>
     </div>
 
-    <div aria-hidden="true" class="modal fade" id="cadMensalidade" role="dialog" tabindex="-1">
+    <div aria-hidden="true" class="modal fade" id="cadMensalidade" role="dialog">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
@@ -257,12 +257,13 @@ require_once '../defines.php';
                                 aria-hidden="true">&times;</span></button>
                     <h4 class="modal-title">Mensalidade</h4>
                 </div>
-                <form id="formMensalidade" action="../php/geral.php" method="POST">
+                <form id="formMensalidade" method="POST">
+                    <input type="hidden" name="admin" value="1">
+                    <input type="hidden" name="form" value="formMensalidade">
                     <div class="modal-body">
                         <div class="form-group">
                             <label>Contrato</label>
-                            <select class="form-control" name="contrato" required>
-                                <option value="1">100/2014</option>
+                            <select id="selectContrMens" class="form-control select2" name="contrato" required>
                             </select>
                         </div>
                         <div class="form-group">

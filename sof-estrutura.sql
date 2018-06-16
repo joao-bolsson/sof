@@ -118,7 +118,7 @@ CREATE TABLE `mensalidade` (
   `id_contr` int(10) UNSIGNED NOT NULL,
   `id_mes` tinyint(3) UNSIGNED NOT NULL,
   `id_ano` tinyint(3) UNSIGNED NOT NULL,
-  `valor` float NOT NULL,
+  `valor` float(11,2) NOT NULL,
   `nota` tinyint(1) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 

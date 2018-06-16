@@ -16,6 +16,8 @@ spl_autoload_register(function (string $class_name) {
     include_once $class_name . '.class.php';
 });
 
+// TODO: capturar erro da execucao da query e retornar false em alguns metodos com retorno estatico
+
 final class Geral {
 
     /**
@@ -23,6 +25,18 @@ final class Geral {
      */
     private function __construct() {
         // empty
+    }
+
+    public static function cadMensalidade(int $contr, int $ano, int $mes, float $valor, bool $nota): bool {
+        $builder = new SQLBuilder(SQLBuilder::$INSERT);
+
+        $builder->setTables(['mensalidade']);
+        $builder->setValues([$contr, $mes, $ano, $valor, $nota]);
+
+        Logger::info("SQL: " . $builder->__toString());
+
+        Query::getInstance()->exe($builder->__toString());
+        return true;
     }
 
     public static function cadEmpresa(string $nome, array $contratos, array $grupos): bool {
@@ -51,14 +65,12 @@ final class Geral {
             // insere os contratos
             Query::getInstance()->exe($sql);
         }
-        // TODO: capturar erro da execucao da query e retornar false
         return true;
     }
 
     public static function cadContract(string $numero, float $teto, string $vigencia): bool {
         $numero = Query::getInstance()->real_escape_string($numero);
         Query::getInstance()->exe("INSERT INTO contrato VALUES(NULL, '" . $numero . "', '" . $teto . "', '" . $vigencia . "');");
-        // TODO: capturar erro da execucao da query e retornar false
         return true;
     }
 

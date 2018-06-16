@@ -42,6 +42,7 @@ $(function () {
     $('#cadEmpresa').on('hidden.bs.modal', function () {
         $('#formEmpresa').trigger("reset");
         $('.minimal').iCheck('destroy');
+        $('.select2').select2('destroy');
     });
 
     $('#formEmpresa').submit(function (event) {
@@ -64,11 +65,36 @@ $(function () {
             checkboxClass: 'icheckbox_minimal-blue',
             radioClass: 'iradio_minimal-blue'
         });
+
+        $.post('../php/busca.php', {
+            admin: 1,
+            form: 'fillContratos'
+        }).done(function (resposta) {
+            document.getElementById('selectContrMens').innerHTML = resposta;
+        }).always(function () {
+            $('.select2').select2();
+        });
     });
 
     $('#cadMensalidade').on('hidden.bs.modal', function () {
         $('#formMensalidade').trigger("reset");
-        $('.minimal').iCheck('destroy');
+        $('.minimal').iCheck('destroy')
+        $('.select2').select2('destroy');
+    });
+
+    $('#formMensalidade').submit(function (event) {
+        event.preventDefault();
+
+        var data = $(this).serialize();
+        $.post('../php/geral.php', data).done(function (resposta) {
+            var msg = "Ocorreu um erro no servidor. Contate o administrador.";
+            if (resposta) {
+                msg = "Mensalidade cadastrada!";
+            }
+            avisoSnack(msg);
+        }).always(function () {
+            $("#cadMensalidade").modal('hide');
+        });
     });
 
 });
