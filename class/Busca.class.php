@@ -13,7 +13,7 @@ spl_autoload_register(function (string $class_name) {
     include_once $class_name . '.class.php';
 });
 
-require_once '../defines.php';
+require_once __DIR__ . '/../defines.php';
 
 final class Busca {
 
