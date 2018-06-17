@@ -91,7 +91,7 @@ final class BuscaLTE {
         $mes = date('n');
         $ano = date('Y');
 
-        $query = Query::getInstance()->exe("SELECT DISTINCT itens_pedido.id_pedido, itens.num_processo, DATE_FORMAT(itens.dt_fim, '%d/%m/%Y') AS dt_fim, pedido.status FROM pedido, itens, itens_pedido WHERE pedido.status = 2 AND pedido.id = itens_pedido.id_pedido AND itens.id = itens_pedido.id_item AND MONTH(itens.dt_fim) = " . $mes . " AND YEAR(itens.dt_fim) = " . $ano . " ORDER BY dt_fim;");
+        $query = Query::getInstance()->exe("SELECT DISTINCT itens_pedido.id_pedido, itens.num_processo, itens.nome_fornecedor, DATE_FORMAT(itens.dt_fim, '%d/%m/%Y') AS dt_fim, pedido.status FROM pedido, itens, itens_pedido WHERE pedido.status = 2 AND pedido.id = itens_pedido.id_pedido AND itens.id = itens_pedido.id_item AND MONTH(itens.dt_fim) = " . $mes . " AND YEAR(itens.dt_fim) = " . $ano . " ORDER BY dt_fim;");
 
         $table = new Table('', '', [], false);
         if ($query->num_rows > 0) {
@@ -99,6 +99,7 @@ final class BuscaLTE {
                 $row = new Row();
                 $row->addComponent(new Column($obj->id_pedido));
                 $row->addComponent(new Column($obj->num_processo));
+                $row->addComponent(new Column($obj->nome_fornecedor));
                 $row->addComponent(new Column($obj->dt_fim));
 
                 $table->addComponent($row);
@@ -582,7 +583,7 @@ final class BuscaLTE {
      * @return string The permissions for user registration.
      */
     public static function getCheckPermissoes(): string {
-        $query = Query::getInstance()->exe("SELECT column_name AS nome FROM information_schema.columns WHERE table_name = 'usuario_permissoes' AND column_name <> 'id_usuario'");
+        $query = Query::getInstance()->exe("SELECT DISTINCT column_name AS nome FROM information_schema.columns WHERE table_name = 'usuario_permissoes' AND column_name <> 'id_usuario'");
         $return = "";
         $i = 1;
         while ($obj = $query->fetch_object()) {

@@ -217,7 +217,7 @@ if (!isset($_SESSION['editmode'])) {
 <!-- page script -->
 <script type="text/javascript" src="util/util_lte.min.js"></script>
 <script type="text/javascript" src="../iniLTE.min.js"></script>
-<script type="text/javascript" src="util/editMode.min.js"></script>
+<script type="text/javascript" src="util/contratos.min.js"></script>
 </body>
 </html>
 

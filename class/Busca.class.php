@@ -13,6 +13,8 @@ spl_autoload_register(function (string $class_name) {
     include_once $class_name . '.class.php';
 });
 
+require_once __DIR__ . '/../defines.php';
+
 final class Busca {
 
     /**
@@ -20,6 +22,53 @@ final class Busca {
      */
     private function __construct() {
         // empty
+    }
+
+    public static function editContract(int $id) {
+        $query = Query::getInstance()->exe("SELECT numero, teto, DATE_FORMAT(vigencia, '%d/%m/%Y') AS vigencia, mensalidade FROM contrato WHERE id = " . $id);
+
+        return $query->fetch_object();
+    }
+
+    public static function fillTableProc(int $group): string {
+        $query = Query::getInstance()->exe("SELECT contrato.id, contrato.numero, DATE_FORMAT(contrato.vigencia, '%d/%m/%Y') AS vigencia, contrato.mensalidade, contrato.teto, empresa.nome FROM contrato, contrato_empresa, empresa_grupo, empresa WHERE contrato.id = contrato_empresa.id_contrato AND contrato_empresa.id_empresa = empresa_grupo.id_empresa AND empresa_grupo.id_grupo = " . $group . " AND empresa.id = contrato_empresa.id_empresa;");
+
+        $table = new Table('', '', [], false);
+
+        if ($query->num_rows > 0) {
+            while ($obj = $query->fetch_object()) {
+                $row = new Row();
+
+                $edit = new Button('', BTN_DEFAULT, "editContract(" . $obj->id . ")", "data-toggle=\"tooltip\"", 'Editar', 'pencil');
+
+                $add = new Button('', BTN_DEFAULT, "addMensalidade(" . $obj->id . ", " . $obj->mensalidade . ")", "data-toggle=\"tooltip\"", 'Adicionar Mensalidade', 'plus');
+
+                $print = new Button('', BTN_DEFAULT, "printContract(" . $obj->id . ")", "data-toggle=\"tooltip\"", 'Imprimir', 'print');
+
+                $buttons = "<div class='btn-group'>" . $edit . $add . $print . "</div>";
+
+                $row->addComponent(new Column($buttons));
+                $row->addComponent(new Column($obj->numero));
+                $row->addComponent(new Column($obj->nome));
+                $row->addComponent(new Column($obj->vigencia));
+                $row->addComponent(new Column("R$ " . $obj->mensalidade));
+                $row->addComponent(new Column("R$ 0,00"));
+
+                $table->addComponent($row);
+            }
+        }
+
+        return $table->__toString();
+    }
+
+    public static function fillContracts(): string {
+        $query = Query::getInstance()->exe("SELECT id, numero FROM contrato;");
+
+        $opts = "";
+        while ($obj = $query->fetch_object()) {
+            $opts .= "<option value=\"{$obj->id}\">{$obj->numero}</option>";
+        }
+        return $opts;
     }
 
     public static function getOptionsSectorHasSources() {

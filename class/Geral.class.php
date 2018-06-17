@@ -16,6 +16,8 @@ spl_autoload_register(function (string $class_name) {
     include_once $class_name . '.class.php';
 });
 
+// TODO: capturar erro da execucao da query e retornar false em alguns metodos com retorno estatico
+
 final class Geral {
 
     /**
@@ -23,6 +25,72 @@ final class Geral {
      */
     private function __construct() {
         // empty
+    }
+
+    public static function cadMensalidade(int $contr, int $ano, int $mes, float $valor, bool $nota): bool {
+        $builder = new SQLBuilder(SQLBuilder::$INSERT);
+        $builder->setTables(['mensalidade']);
+
+        $query = Query::getInstance()->exe("SELECT nota FROM mensalidade WHERE id_contr = " . $contr . " AND id_mes = " . $mes . " AND id_ano = " . $ano);
+
+        if ($query->num_rows > 0) {
+            // update
+            $builder->setType(SQLBuilder::$UPDATE);
+            $builder->setColumns(['valor', 'nota']);
+            $builder->setValues([$valor, $nota]);
+            $builder->setWhere("id_contr = " . $contr . " AND id_mes = " . $mes . " AND id_ano = " . $ano);
+        } else {
+            $builder->setValues([$contr, $mes, $ano, $valor, $nota]);
+        }
+
+        Query::getInstance()->exe($builder->__toString());
+        return true;
+    }
+
+    public static function cadEmpresa(string $nome, array $contratos, array $grupos): bool {
+        $nome = Query::getInstance()->real_escape_string($nome);
+        Query::getInstance()->exe("INSERT INTO empresa VALUES(NULL, '" . $nome . "');");
+        $id = Query::getInstance()->getInsertId();
+
+        if (!empty($grupos)) {
+            $sql = "INSERT INTO empresa_grupo VALUES";
+            foreach ($grupos AS $grupo) {
+                $sql .= "(" . $grupo . ", " . $id . "),";
+            }
+            $pos = strrpos($sql, ",");
+            $sql[$pos] = ";";
+            // insere os grupos
+            Query::getInstance()->exe($sql);
+        }
+
+        if (!empty($contratos)) {
+            $sql = "INSERT INTO contrato_empresa VALUES";
+            foreach ($contratos AS $contrato) {
+                $sql .= "(" . $id . ", " . $contrato . "),";
+            }
+            $pos = strrpos($sql, ",");
+            $sql[$pos] = ";";
+            // insere os contratos
+            Query::getInstance()->exe($sql);
+        }
+        return true;
+    }
+
+    public static function cadContract(int $id, string $numero, float $teto, string $vigencia, float $mensalidade): bool {
+        $numero = Query::getInstance()->real_escape_string($numero);
+
+        $builder = new SQLBuilder(SQLBuilder::$INSERT);
+        $builder->setTables(['contrato']);
+        if ($id == 0) {
+            $builder->setValues([NULL, $numero, $teto, $vigencia, $mensalidade]);
+        } else {
+            $builder->setType(SQLBuilder::$UPDATE);
+            $builder->setColumns(['numero', 'teto', 'vigencia', 'mensalidade']);
+            $builder->setValues([$numero, $teto, $vigencia, $mensalidade]);
+            $builder->setWhere("id = " . $id);
+        }
+        Query::getInstance()->exe($builder->__toString());
+        return true;
     }
 
     /**
