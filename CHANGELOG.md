@@ -1,5 +1,9 @@
 ## CHANGELOG ##
 
+#### v2.3.7 - 17/06/2018 ####
+- Adiciona nome do fornecedor nos pedidos em vencimento
+- Funcionalidade para gerenciar contratos de empresas
+
 #### v2.3.6 - 22/04/2018 ####
 - Imprime lista de pedidos em vencimento com somatório e descrição do relatório
 - Mostra somente pedidos em vencimento que estão em análise
