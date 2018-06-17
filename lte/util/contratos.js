@@ -78,6 +78,7 @@ $(function () {
                 msg = "Empresa cadastrada!";
             }
             avisoSnack(msg);
+            $('#selectGroupTable').change();
         }).always(function () {
             $("#cadEmpresa").modal('hide');
         });
@@ -88,6 +89,9 @@ $(function () {
             checkboxClass: 'icheckbox_minimal-blue',
             radioClass: 'iradio_minimal-blue'
         });
+
+        var now = new Date();
+        $("#formMensalidade select[name=mes]").val(now.getMonth());
 
         $.post('../php/busca.php', {
             admin: 1,
@@ -136,5 +140,11 @@ function editContract(contrato) {
         $("#formContr input[name=mensalidade]").val(obj.mensalidade);
 
         $('#cadContrato').modal('show');
-    })
+    });
+}
+
+function addMensalidade(contrato, mensalidade) {
+    $("#formMensalidade select[name=contrato]").val(contrato);
+    $("#formMensalidade input[name=valor]").val(mensalidade);
+    $('#cadMensalidade').modal('show');
 }

@@ -41,7 +41,7 @@ final class Busca {
 
                 $edit = new Button('', BTN_DEFAULT, "editContract(" . $obj->id . ")", "data-toggle=\"tooltip\"", 'Editar', 'pencil');
 
-                $add = new Button('', BTN_DEFAULT, "addMensalidade(" . $obj->id . ")", "data-toggle=\"tooltip\"", 'Adicionar Mensalidade', 'plus');
+                $add = new Button('', BTN_DEFAULT, "addMensalidade(" . $obj->id . ", " . $obj->mensalidade . ")", "data-toggle=\"tooltip\"", 'Adicionar Mensalidade', 'plus');
 
                 $print = new Button('', BTN_DEFAULT, "printContract(" . $obj->id . "", "data-toggle=\"tooltip\"", 'Imprimir', 'print');
 
