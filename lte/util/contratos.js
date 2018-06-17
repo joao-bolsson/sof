@@ -148,3 +148,7 @@ function addMensalidade(contrato, mensalidade) {
     $("#formMensalidade input[name=valor]").val(mensalidade);
     $('#cadMensalidade').modal('show');
 }
+
+function printContract(contrato) {
+    window.open("printContrato.php?id=" + contrato);
+}
