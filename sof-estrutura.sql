@@ -42,7 +42,8 @@ CREATE TABLE `contrato_tipo` (
 
 CREATE TABLE `empresa` (
   `id` smallint(5) UNSIGNED NOT NULL,
-  `nome` varchar(70) NOT NULL
+  `nome` varchar(70) NOT NULL,
+  `cnpj` varchar(20) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 CREATE TABLE `empresa_grupo` (
@@ -120,7 +121,8 @@ CREATE TABLE `mensalidade` (
   `id_mes` tinyint(3) UNSIGNED NOT NULL,
   `id_ano` tinyint(3) UNSIGNED NOT NULL,
   `valor` float(11,2) NOT NULL,
-  `nota` tinyint(1) NOT NULL
+  `nota` tinyint(1) NOT NULL,
+  `reajuste` float(11,2) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 CREATE TABLE `mes` (
