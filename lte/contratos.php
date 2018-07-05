@@ -330,6 +330,20 @@ require_once '../defines.php';
                                 <input type="checkbox" name="nota" class="minimal"/> Com Nota
                             </label>
                         </div>
+                        <div class="form-group">
+                            <label>
+                                <input type="checkbox" name="checkReajuste" class="minimal"/> Reajuste
+                            </label>
+                        </div>
+                        <div class="form-group">
+                            <label>Reajuste</label>
+                            <div class="input-group">
+                                <div class="input-group-addon">
+                                    <i class="fa fa-dollar"></i>
+                                </div>
+                                <input type="number" class="form-control" name="valorReajuste" step="0.01" min="0.0" disabled>
+                            </div>
+                        </div>
                     </div>
                     <div class="modal-footer">
                         <button class="btn btn-primary" type="submit" style="width: 100%;"><i

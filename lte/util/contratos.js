@@ -110,6 +110,19 @@ $(function () {
         $('.select2').select2('destroy');
     });
 
+    var checkReajuste = $("#formMensalidade input[name=checkReajuste]");
+    var inputReajuste = $("#formMensalidade input[name=valorReajuste]");
+
+    checkReajuste.on('ifChecked', function () {
+        inputReajuste.prop('disabled', false);
+        inputReajuste.prop('required', true);
+    });
+
+    checkReajuste.on('ifUnchecked', function () {
+        inputReajuste.prop('disabled', true);
+        inputReajuste.prop('required', false);
+    });
+
     $('#formMensalidade').submit(function (event) {
         event.preventDefault();
 
