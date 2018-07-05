@@ -189,6 +189,10 @@ require_once '../defines.php';
                             <input type="text" class="form-control" name="nome" required>
                         </div>
                         <div class="form-group">
+                            <label>CNPJ</label>
+                            <input type="text" class="form-control" name="cnpj" data-inputmask="'alias': '99.999.999/9999-99'" data-mask required>
+                        </div>
+                        <div class="form-group">
                             <label>Contratos</label>
                             <select id="selectContr" class="form-control select2" name="contratos[]" multiple required>
                             </select>
@@ -367,7 +371,7 @@ require_once '../defines.php';
 <!-- page script -->
 <script type="text/javascript" src="util/util_lte.min.js"></script>
 <script type="text/javascript" src="../iniLTE.min.js"></script>
-<script type="text/javascript" src="util/contratos.min.js"></script>
+<script type="text/javascript" src="util/contratos.js"></script>
 </body>
 </html>
 

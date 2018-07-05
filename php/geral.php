@@ -59,10 +59,11 @@ if (Busca::isActive()) {
 
             case 'formEmpresa':
                 $nome = filter_input(INPUT_POST, 'nome');
+                $cnpj = filter_input(INPUT_POST, 'cnpj');
                 $contratos = filter_input(INPUT_POST, 'contratos', FILTER_DEFAULT, FILTER_FORCE_ARRAY);
                 $grupos = filter_input(INPUT_POST, 'grupos', FILTER_DEFAULT, FILTER_FORCE_ARRAY);
 
-                $cad = Geral::cadEmpresa($nome, $contratos, $grupos);
+                $cad = Geral::cadEmpresa($nome, $cnpj, $contratos, $grupos);
                 echo $cad;
                 break;
 

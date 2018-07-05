@@ -47,9 +47,14 @@ final class Geral {
         return true;
     }
 
-    public static function cadEmpresa(string $nome, array $contratos, array $grupos): bool {
+    public static function cadEmpresa(string $nome, string $cnpj, array $contratos, array $grupos): bool {
         $nome = Query::getInstance()->real_escape_string($nome);
-        Query::getInstance()->exe("INSERT INTO empresa VALUES(NULL, '" . $nome . "');");
+
+        $builder = new SQLBuilder(SQLBuilder::$INSERT);
+        $builder->setTables(['empresa']);
+        $builder->setValues([NULL, $nome, $cnpj]);
+
+        Query::getInstance()->exe($builder->__toString());
         $id = Query::getInstance()->getInsertId();
 
         if (!empty($grupos)) {

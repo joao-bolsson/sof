@@ -52,6 +52,7 @@ $(function () {
     });
 
     $('#cadEmpresa').on('shown.bs.modal', function () {
+        $("#formEmpresa input[name=cnpj]").inputmask("99.999.999/9999-99", {"placeholder": "99.999.999/9999-99"});
         $.post('../php/busca.php', {
             admin: 1,
             form: 'fillContratos'
