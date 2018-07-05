@@ -104,14 +104,17 @@ $(function () {
         });
     });
 
+    var checkReajuste = $("#formMensalidade input[name=checkReajuste]");
+    var inputReajuste = $("#formMensalidade input[name=valorReajuste]");
+    
     $('#cadMensalidade').on('hidden.bs.modal', function () {
         $('#formMensalidade').trigger("reset");
         $('.minimal').iCheck('destroy')
         $('.select2').select2('destroy');
-    });
 
-    var checkReajuste = $("#formMensalidade input[name=checkReajuste]");
-    var inputReajuste = $("#formMensalidade input[name=valorReajuste]");
+        inputReajuste.prop('disabled', true);
+        inputReajuste.prop('required', false);
+    });
 
     checkReajuste.on('ifChecked', function () {
         inputReajuste.prop('disabled', false);

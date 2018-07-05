@@ -52,8 +52,13 @@ if (Busca::isActive()) {
                 $mes = filter_input(INPUT_POST, 'mes');
                 $valor = filter_input(INPUT_POST, 'valor');
                 $nota = !empty(filter_input(INPUT_POST, 'nota'));
+                $reajuste = filter_input(INPUT_POST, 'valorReajuste');
 
-                $cad = Geral::cadMensalidade($contrato, $ano, $mes, $valor, $nota);
+                if (empty($reajuste)) {
+                    $reajuste = floatval(0);
+                }
+
+                $cad = Geral::cadMensalidade($contrato, $ano, $mes, $valor, $nota, $reajuste);
                 echo $cad;
                 break;
 
