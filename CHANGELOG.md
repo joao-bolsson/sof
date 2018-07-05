@@ -1,5 +1,9 @@
 ## CHANGELOG ##
 
+#### v2.3.8 - 05/07/2018 ####
+- Cadastra reajuste de mensalidade (opcional)
+- Cadastra CNPJ da empresa
+
 #### v2.3.7 - 17/06/2018 ####
 - Adiciona nome do fornecedor nos pedidos em vencimento
 - Funcionalidade para gerenciar contratos de empresas
