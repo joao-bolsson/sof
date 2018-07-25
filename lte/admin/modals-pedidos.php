@@ -7,6 +7,8 @@
  */
 
 ?>
+
+relEmpForn
 <div aria-hidden="true" class="modal fade" id="cadEmpenho" role="dialog" tabindex="-1">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -84,6 +86,46 @@
 <?php include_once __DIR__ . "/../report-modals/comum/modal-relLibOrc.php" ?>
 <?php include_once __DIR__ . "/../report-modals/comum/modal-relPedidos.php" ?>
 <?php include_once __DIR__ . "/../report-modals/sof/relSIAFI.php" ?>
+<div aria-hidden="true" class="modal fade" id="relEmpForn" role="dialog" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                            aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">Empenho/Fornecedor</h4>
+            </div>
+            <form action="../view/empForn.php" method="post">
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label>Data Início</label>
+                        <div class="input-group">
+                            <div class="input-group-addon">
+                                <i class="fa fa-calendar"></i>
+                            </div>
+                            <input type="text" class="form-control date" name="dataI" required
+                                   data-inputmask="'alias': 'dd/mm/yyyy'" data-mask>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Data Fim</label>
+                        <div class="input-group">
+                            <div class="input-group-addon">
+                                <i class="fa fa-calendar"></i>
+                            </div>
+                            <input type="text" class="form-control date" name="dataF" required
+                                   data-inputmask="'alias': 'dd/mm/yyyy'" data-mask>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-primary" type="submit" style="width: 100%;"><i
+                                class="fa fa-refresh"></i>&nbsp;Gerar
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
 <div class="modal fade" id="importItens" role="dialog">
     <div class="modal-dialog">
         <div class="modal-content">
