@@ -9,6 +9,8 @@ error_reporting(E_ALL);
 
 session_start();
 
+require_once '../defines.php';
+
 spl_autoload_register(function (string $class_name) {
     include_once '../class/' . $class_name . '.class.php';
 });
@@ -19,13 +21,14 @@ $dataF = Util::dateFormat(filter_input(INPUT_POST, 'dataF'));
 // Definimos o nome do arquivo que será exportado
 $arquivo = 'planilha.xls';
 
-$table = new Table('', '', ['Pedido', 'Empenho', 'Data de Empenho', 'Fornecedor'], true);
+$table = new Table('', '', ['Pedido', 'Setor','Empenho', 'Data de Empenho', 'Fornecedor'], true);
 
-$query = Query::getInstance()->exe("SELECT pedido_empenho.id_pedido, pedido_empenho.empenho, DATE_FORMAT(pedido_empenho.data, '%d/%m/%Y') AS data, (SELECT itens.nome_fornecedor FROM itens, itens_pedido WHERE itens.id = itens_pedido.id_item AND itens_pedido.id_pedido = pedido_empenho.id_pedido LIMIT 1) AS fornecedor FROM pedido_empenho WHERE pedido_empenho.data BETWEEN '" . $dataI . "' AND '" . $dataF . "';");
+$query = Query::getInstance()->exe("SELECT pedido.id_setor, pedido_empenho.id_pedido, pedido_empenho.empenho, DATE_FORMAT(pedido_empenho.data, '%d/%m/%Y') AS data, (SELECT itens.nome_fornecedor FROM itens, itens_pedido WHERE itens.id = itens_pedido.id_item AND itens_pedido.id_pedido = pedido_empenho.id_pedido LIMIT 1) AS fornecedor FROM pedido_empenho, pedido WHERE pedido.id = pedido_empenho.id_pedido AND pedido_empenho.data BETWEEN '" . $dataI . "' AND '" . $dataF . "';");
 
 while ($obj = $query->fetch_object()) {
     $row = new Row();
     $row->addComponent(new Column($obj->id_pedido));
+    $row->addComponent(new Column(ARRAY_SETORES[$obj->id_setor]));
     $row->addComponent(new Column($obj->empenho));
     $row->addComponent(new Column($obj->data));
     $row->addComponent(new Column($obj->fornecedor));
