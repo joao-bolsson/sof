@@ -311,15 +311,15 @@ final class PrintMod {
                 <fieldset class=\"preg\">
                     <table>" . $row . "</table>
                 </fieldset><br>";
-            $query_forn = Query::getInstance()->exe('SELECT DISTINCT itens.cgc_fornecedor, itens.nome_fornecedor, itens.num_contrato FROM itens, itens_pedido WHERE itens.id = itens_pedido.id_item AND itens_pedido.id_pedido = ' . $id_request . ' AND itens.num_licitacao = ' . $bidding->num_licitacao);
+            $query_forn = Query::getInstance()->exe("SELECT DISTINCT itens.cgc_fornecedor, itens.nome_fornecedor, itens.num_contrato FROM itens, itens_pedido WHERE itens.id = itens_pedido.id_item AND itens_pedido.id_pedido = " . $id_request . " AND itens.num_licitacao = '" . $bidding->num_licitacao . "'");
 
             $fornecedores = [];
 
-            while($provider = $query_forn->fetch_object()) {
+            while ($provider = $query_forn->fetch_object()) {
                 $fornecedores[$provider->cgc_fornecedor] = $provider->nome_fornecedor;
             }
 
-            $query_forn = Query::getInstance()->exe('SELECT DISTINCT itens.cgc_fornecedor, itens.num_contrato FROM itens, itens_pedido WHERE itens.id = itens_pedido.id_item AND itens_pedido.id_pedido = ' . $id_request . ' AND itens.num_licitacao = ' . $bidding->num_licitacao);
+            $query_forn = Query::getInstance()->exe("SELECT DISTINCT itens.cgc_fornecedor, itens.num_contrato FROM itens, itens_pedido WHERE itens.id = itens_pedido.id_item AND itens_pedido.id_pedido = " . $id_request . " AND itens.num_licitacao = '" . $bidding->num_licitacao . "'");
 
             // --------------------------------------------------------
             //                FORNECEDORES REFERENTES À LICITAÇÃO
