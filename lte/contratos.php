@@ -86,7 +86,7 @@ require_once '../defines.php';
                         </li>
                         <li>
                             <a href="javascript:abreModal('#cadMensalidade');">
-                                <i class="fa fa-money"></i> Mensalidade
+                                <i class="fa fa-money"></i> Controle de Movimento do Contrato
                             </a>
                         </li>
                     </ul>
@@ -283,7 +283,7 @@ require_once '../defines.php';
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
                                 aria-hidden="true">&times;</span></button>
-                    <h4 class="modal-title">Mensalidade</h4>
+                    <h4 class="modal-title">Controle de Movimento do Contrato</h4>
                 </div>
                 <form id="formMensalidade" method="POST">
                     <input type="hidden" name="admin" value="1">
