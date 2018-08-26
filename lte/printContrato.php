@@ -28,13 +28,9 @@ $html_header = "
             <img src=\"" . $img . "\"/>
           </p>
           <hr/>";
-$html_itens = "
-        <fieldset>
-            <h5>MENSALIDADES</h5>
-        </fieldset><br>";
-//$html_itens .= PrintMod::getContentPedido($id_pedido);
+$html_rel = PrintMod::getRelContrato($contrato);
 
-$html = $html_style . $html_header . $html_itens . "</body>";
+$html = $html_style . $html_header . $html_rel . "</body>";
 date_default_timezone_set('America/Sao_Paulo');
 try {
     $mpdf = new \Mpdf\Mpdf(['tempDir' => TEMP_FOLDER]);
