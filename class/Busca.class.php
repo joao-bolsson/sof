@@ -47,12 +47,16 @@ final class Busca {
 
                 $buttons = "<div class='btn-group'>" . $edit . $add . $print . "</div>";
 
+                $query_saldo = Query::getInstance()->exe("SELECT (SELECT teto FROM contrato WHERE id = " . $obj->id . ") - SUM(valor) AS saldo FROM mensalidade WHERE id_contr = " . $obj->id);
+
+                $saldo = $query_saldo->fetch_object()->saldo;
+
                 $row->addComponent(new Column($buttons));
                 $row->addComponent(new Column($obj->numero));
                 $row->addComponent(new Column($obj->nome));
                 $row->addComponent(new Column($obj->vigencia));
                 $row->addComponent(new Column("R$ " . $obj->mensalidade));
-                $row->addComponent(new Column("R$ 0,00"));
+                $row->addComponent(new Column("R$ " . $saldo));
 
                 $table->addComponent($row);
             }

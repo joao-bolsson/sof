@@ -103,6 +103,57 @@ final class PrintMod {
         return $table;
     }
 
+    /**
+     * @param int $id Contract id.
+     * @return string The complete report about a contract.
+     */
+    public static function getRelContrato(int $id): string {
+        $query = Query::getInstance()->exe("SELECT numero, teto, DATE_FORMAT(vigencia, '%d/%m/%Y') AS vigencia, mensalidade FROM contrato WHERE id = " . $id);
+
+        if (!$query) {
+            return "ERRO";
+        }
+        $contract = $query->fetch_object();
+
+        $query_sum = Query::getInstance()->exe("SELECT (SELECT teto FROM contrato WHERE id = " . $id . ") - SUM(valor) AS saldo, SUM(valor) AS sum FROM mensalidade WHERE id_contr = " . $id);
+        $values = $query_sum->fetch_object();
+
+        $rel = "
+            <fieldset class=\"preg\">
+                    <h5>RELATÓRIO DE CONTRATO</h5>
+                </fieldset><br>
+            <fieldset>
+                <table style=\"font-size: 8pt; margin: 5px;\">
+                    <tr>
+                        <td style=\"text-align: left;\"><b>Contrato:</b> " . $contract->numero . "</td>
+                        <td><b>Teto:</b> R$ " . $contract->teto . "</td>
+                        <td><b>Vigência:</b> " . $contract->vigencia . "</td>
+                        <td><b>Mensalidade:</b> R$" . $contract->mensalidade . "</td>
+                    </tr>
+                </table>
+                <p><b>Total de Mensalidades:</b> R$ " . $values->sum . "</p>
+                <p><b>Saldo Disponível:</b> R$ " . $values->saldo . "</p>
+            </fieldset><br>";
+
+        $table = new Table('', 'prod', ['Período', 'Valor', 'Nota', 'Reajuste'], true);
+
+        $query_mensalidade = Query::getInstance()->exe("SELECT mes.sigla_mes, ano.ano, valor, nota, reajuste FROM mes, ano, mensalidade WHERE id_contr = " . $id . " AND mensalidade.id_mes = mes.id AND mensalidade.id_ano = ano.id");
+
+        while ($obj = $query_mensalidade->fetch_object()) {
+            $row = new Row();
+            $row->addComponent(new Column($obj->sigla_mes . "/" . $obj->ano));
+            $row->addComponent(new Column("R$ " . $obj->valor));
+            $row->addComponent(new Column($obj->nota ? "Sim" : "Não"));
+            $row->addComponent(new Column("R$ " . $obj->reajuste));
+
+            $table->addComponent($row);
+        }
+
+        $rel .= "<fieldset>" . $table->__toString() . "</fieldset>";
+
+        return $rel;
+    }
+
     public static function getRelUsers(): string {
         $query = Query::getInstance()->exe('SELECT nome, login, id_setor, email FROM usuario WHERE ativo = 1 ORDER BY nome ASC;');
         $return = "
