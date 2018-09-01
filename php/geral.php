@@ -75,13 +75,15 @@ if (Busca::isActive()) {
             case 'formContr':
                 $id = filter_input(INPUT_POST, 'id');
                 $numero = filter_input(INPUT_POST, 'numero');
-                $vigencia = filter_input(INPUT_POST, 'vigencia');
+                $dt_inicio = filter_input(INPUT_POST, 'dt_inicio');
+                $dt_fim = filter_input(INPUT_POST, 'dt_fim');
                 $teto = floatval(filter_input(INPUT_POST, 'teto'));
                 $mensalidade = floatval(filter_input(INPUT_POST, 'mensalidade'));
 
-                $data = Util::dateFormat($vigencia);
+                $dt_inicio = Util::dateFormat($dt_inicio);
+                $dt_fim = Util::dateFormat($dt_fim);
 
-                $cad = Geral::cadContract($id, $numero, $teto, $data, $mensalidade);
+                $cad = Geral::cadContract($id, $numero, $teto, $dt_inicio, $dt_fim, $mensalidade);
                 echo $cad;
                 break;
             case 'changeDB':

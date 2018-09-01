@@ -81,17 +81,17 @@ final class Geral {
         return true;
     }
 
-    public static function cadContract(int $id, string $numero, float $teto, string $vigencia, float $mensalidade): bool {
+    public static function cadContract(int $id, string $numero, float $teto, string $dt_inicio, string $dt_fim, float $mensalidade): bool {
         $numero = Query::getInstance()->real_escape_string($numero);
 
         $builder = new SQLBuilder(SQLBuilder::$INSERT);
         $builder->setTables(['contrato']);
         if ($id == 0) {
-            $builder->setValues([NULL, $numero, $teto, $vigencia, $mensalidade]);
+            $builder->setValues([NULL, $numero, $teto, $dt_inicio, $dt_fim, $mensalidade]);
         } else {
             $builder->setType(SQLBuilder::$UPDATE);
-            $builder->setColumns(['numero', 'teto', 'vigencia', 'mensalidade']);
-            $builder->setValues([$numero, $teto, $vigencia, $mensalidade]);
+            $builder->setColumns(['numero', 'teto', 'dt_inicio', 'dt_fim', 'mensalidade']);
+            $builder->setValues([$numero, $teto, $dt_inicio, $dt_fim, $mensalidade]);
             $builder->setWhere("id = " . $id);
         }
         Query::getInstance()->exe($builder->__toString());

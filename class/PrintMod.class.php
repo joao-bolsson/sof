@@ -108,9 +108,10 @@ final class PrintMod {
      * @return string The complete report about a contract.
      */
     public static function getRelContrato(int $id): string {
-        $query = Query::getInstance()->exe("SELECT numero, teto, DATE_FORMAT(vigencia, '%d/%m/%Y') AS vigencia, mensalidade FROM contrato WHERE id = " . $id);
+        $query = Query::getInstance()->exe("SELECT numero, teto, DATE_FORMAT(dt_inicio, '%d/%m/%Y') AS dt_inicio, DATE_FORMAT(dt_fim, '%d/%m/%Y') AS dt_fim, mensalidade FROM contrato WHERE id = " . $id);
 
         if (!$query) {
+            Logger::error("Erro na query para relatório de contrato");
             return "ERRO";
         }
         $contract = $query->fetch_object();
@@ -127,7 +128,7 @@ final class PrintMod {
                     <tr>
                         <td style=\"text-align: left;\"><b>Contrato:</b> " . $contract->numero . "</td>
                         <td><b>Teto:</b> R$ " . $contract->teto . "</td>
-                        <td><b>Vigência:</b> " . $contract->vigencia . "</td>
+                        <td><b>Vigência:</b> " . $contract->dt_inicio . " - " . $contract->dt_fim . "</td>
                         <td><b>Mensalidade:</b> R$" . $contract->mensalidade . "</td>
                     </tr>
                 </table>
