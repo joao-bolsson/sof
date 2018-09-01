@@ -1,5 +1,10 @@
 ## CHANGELOG ##
 
+#### v2.3.9 - 01/09/2018 ####
+- Adiciona vigência completa (início e fim) de contratos
+- Relatório de contratos
+- Ajustes na página inicial de contratos
+
 #### v2.3.8 - 05/07/2018 ####
 - Cadastra reajuste de mensalidade (opcional)
 - Cadastra CNPJ da empresa
