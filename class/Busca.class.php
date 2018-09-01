@@ -25,13 +25,13 @@ final class Busca {
     }
 
     public static function editContract(int $id) {
-        $query = Query::getInstance()->exe("SELECT numero, teto, DATE_FORMAT(vigencia, '%d/%m/%Y') AS vigencia, mensalidade FROM contrato WHERE id = " . $id);
+        $query = Query::getInstance()->exe("SELECT numero, teto, DATE_FORMAT(dt_inicio, '%d/%m/%Y') AS dt_inicio, DATE_FORMAT(dt_fim, '%d/%m/%Y') AS dt_fim, mensalidade FROM contrato WHERE id = " . $id);
 
         return $query->fetch_object();
     }
 
     public static function fillTableProc(int $group): string {
-        $query = Query::getInstance()->exe("SELECT contrato.id, contrato.numero, DATE_FORMAT(contrato.vigencia, '%d/%m/%Y') AS vigencia, contrato.mensalidade, contrato.teto, empresa.nome FROM contrato, contrato_empresa, empresa_grupo, empresa WHERE contrato.id = contrato_empresa.id_contrato AND contrato_empresa.id_empresa = empresa_grupo.id_empresa AND empresa_grupo.id_grupo = " . $group . " AND empresa.id = contrato_empresa.id_empresa;");
+        $query = Query::getInstance()->exe("SELECT contrato.id, contrato.numero, DATE_FORMAT(contrato.dt_inicio, '%d/%m/%Y') AS dt_inicio, DATE_FORMAT(contrato.dt_fim, '%d/%m/%Y') AS dt_fim, contrato.mensalidade, contrato.teto, empresa.nome FROM contrato, contrato_empresa, empresa_grupo, empresa WHERE contrato.id = contrato_empresa.id_contrato AND contrato_empresa.id_empresa = empresa_grupo.id_empresa AND empresa_grupo.id_grupo = " . $group . " AND empresa.id = contrato_empresa.id_empresa;");
 
         $table = new Table('', '', [], false);
 
@@ -50,11 +50,14 @@ final class Busca {
                 $query_saldo = Query::getInstance()->exe("SELECT (SELECT teto FROM contrato WHERE id = " . $obj->id . ") - SUM(valor) AS saldo FROM mensalidade WHERE id_contr = " . $obj->id);
 
                 $saldo = $query_saldo->fetch_object()->saldo;
+                if (empty($saldo)) {
+                    $saldo = $obj->teto;
+                }
 
                 $row->addComponent(new Column($buttons));
                 $row->addComponent(new Column($obj->numero));
                 $row->addComponent(new Column($obj->nome));
-                $row->addComponent(new Column($obj->vigencia));
+                $row->addComponent(new Column($obj->dt_inicio . " - " . $obj->dt_fim));
                 $row->addComponent(new Column("R$ " . $obj->mensalidade));
                 $row->addComponent(new Column("R$ " . $saldo));
 

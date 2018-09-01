@@ -106,7 +106,7 @@ $(function () {
 
     var checkReajuste = $("#formMensalidade input[name=checkReajuste]");
     var inputReajuste = $("#formMensalidade input[name=valorReajuste]");
-    
+
     $('#cadMensalidade').on('hidden.bs.modal', function () {
         $('#formMensalidade').trigger("reset");
         $('.minimal').iCheck('destroy')
@@ -152,7 +152,8 @@ function editContract(contrato) {
         var obj = jQuery.parseJSON(resposta);
         $("#formContr input[name=id]").val(contrato);
         $("#formContr input[name=numero]").val(obj.numero);
-        $("#formContr input[name=vigencia]").val(obj.vigencia);
+        $("#formContr input[name=dt_inicio]").val(obj.dt_inicio);
+        $("#formContr input[name=dt_fim]").val(obj.dt_fim);
         $("#formContr input[name=teto]").val(obj.teto);
         $("#formContr input[name=mensalidade]").val(obj.mensalidade);
 

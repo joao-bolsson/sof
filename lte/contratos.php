@@ -190,7 +190,8 @@ require_once '../defines.php';
                         </div>
                         <div class="form-group">
                             <label>CNPJ</label>
-                            <input type="text" class="form-control" name="cnpj" data-inputmask="'alias': '99.999.999/9999-99'" data-mask required>
+                            <input type="text" class="form-control" name="cnpj"
+                                   data-inputmask="'alias': '99.999.999/9999-99'" data-mask required>
                         </div>
                         <div class="form-group">
                             <label>Contratos</label>
@@ -238,12 +239,22 @@ require_once '../defines.php';
                             <input type="text" class="form-control" name="numero" required>
                         </div>
                         <div class="form-group">
-                            <label>Vigência</label>
+                            <label>Data Início</label>
                             <div class="input-group">
                                 <div class="input-group-addon">
                                     <i class="fa fa-calendar"></i>
                                 </div>
-                                <input type="text" class="form-control date" name="vigencia" required
+                                <input type="text" class="form-control date" name="dt_inicio" required
+                                       data-inputmask="'alias': 'dd/mm/yyyy'" data-mask>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>Data Fim</label>
+                            <div class="input-group">
+                                <div class="input-group-addon">
+                                    <i class="fa fa-calendar"></i>
+                                </div>
+                                <input type="text" class="form-control date" name="dt_fim" required
                                        data-inputmask="'alias': 'dd/mm/yyyy'" data-mask>
                             </div>
                         </div>
@@ -341,7 +352,8 @@ require_once '../defines.php';
                                 <div class="input-group-addon">
                                     <i class="fa fa-dollar"></i>
                                 </div>
-                                <input type="number" class="form-control" name="valorReajuste" step="0.01" min="0.0" disabled>
+                                <input type="number" class="form-control" name="valorReajuste" step="0.01" min="0.0"
+                                       disabled>
                             </div>
                         </div>
                     </div>
