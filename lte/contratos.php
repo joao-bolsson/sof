@@ -12,9 +12,18 @@ session_start();
 spl_autoload_register(function (string $class_name) {
     include_once '../class/' . $class_name . '.class.php';
 });
-$permissao = BuscaLTE::getPermissoes($_SESSION["id"]);
-if (!isset($_SESSION["id_setor"]) || $_SESSION["id_setor"] != 2 || !$permissao->pedidos) {
-    header("Location: ../");
+
+if (!isset($_SESSION["id_setor"]) || $_SESSION["id_setor"] != 2) {
+
+    if (!isset($_SESSION["id"]) || $_SESSION["id"] == NULL) {
+        header("Location: ../");
+    } else {
+        $permissao = BuscaLTE::getPermissoes($_SESSION["id"]);
+
+        if (!$permissao->pedidos) {
+            header("Location: ../");
+        }
+    }
 }
 require_once '../defines.php';
 

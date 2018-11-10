@@ -57,7 +57,17 @@ final class Busca {
                 $row->addComponent(new Column($buttons));
                 $row->addComponent(new Column($obj->numero));
                 $row->addComponent(new Column($obj->nome));
-                $row->addComponent(new Column($obj->dt_inicio . " - " . $obj->dt_fim));
+
+                $vigencia = "";
+                if ($obj->dt_inicio != NULL) {
+                    $vigencia .= $obj->dt_inicio . " - ";
+                }
+
+                if ($obj->dt_fim != null) {
+                    $vigencia .= $obj->dt_fim;
+                }
+
+                $row->addComponent(new Column($vigencia));
                 $row->addComponent(new Column("R$ " . $obj->mensalidade));
                 $row->addComponent(new Column("R$ " . $saldo));
 
