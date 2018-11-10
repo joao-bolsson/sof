@@ -45,6 +45,13 @@ final class Conexao {
     }
 
     /**
+     * @return string
+     */
+    public function getDatabase() {
+        return $this->database;
+    }
+
+    /**
      * Change the referenced database.
      *
      * @param string $db Database name to change.

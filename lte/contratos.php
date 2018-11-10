@@ -336,14 +336,24 @@ require_once '../defines.php';
                                 <input type="number" class="form-control" name="valor" step="0.01" min="0.0" required>
                             </div>
                         </div>
-                        <div class="form-group">
+                        <div class="form-group" style="display: inline-block">
                             <label>
                                 <input type="checkbox" name="nota" class="minimal"/> Com Nota
                             </label>
                         </div>
-                        <div class="form-group">
+                        <div class="form-group" style="display: inline-block">
                             <label>
                                 <input type="checkbox" name="checkReajuste" class="minimal"/> Reajuste
+                            </label>
+                        </div>
+                        <div class="form-group" style="display: inline-block">
+                            <label>
+                                <input type="checkbox" name="checkAgOrc" class="minimal"/> Aguarda Orçamento
+                            </label>
+                        </div>
+                        <div class="form-group" style="display: inline-block">
+                            <label>
+                                <input type="checkbox" name="checkPaga" class="minimal"/> Paga
                             </label>
                         </div>
                         <div class="form-group">

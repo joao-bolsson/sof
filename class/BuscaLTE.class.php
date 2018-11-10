@@ -50,7 +50,7 @@ final class BuscaLTE {
         return $table->__toString();
     }
 
-    public static function buildRelProcsVenc():string {
+    public static function buildRelProcsVenc(): string {
         $mes = date('n');
         $ano = date('Y');
 
@@ -583,7 +583,7 @@ final class BuscaLTE {
      * @return string The permissions for user registration.
      */
     public static function getCheckPermissoes(): string {
-        $query = Query::getInstance()->exe("SELECT DISTINCT column_name AS nome FROM information_schema.columns WHERE table_name = 'usuario_permissoes' AND column_name <> 'id_usuario'");
+        $query = Query::getInstance()->exe("SELECT DISTINCT column_name AS nome FROM information_schema.columns WHERE table_name = 'usuario_permissoes' AND column_name <> 'id_usuario' AND table_schema = '" . Conexao::getInstance()->getDatabase() . "';");
         $return = "";
         $i = 1;
         while ($obj = $query->fetch_object()) {
