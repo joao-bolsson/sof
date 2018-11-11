@@ -1,5 +1,9 @@
 ## CHANGELOG ##
 
+#### v2.3.10 - 11/11/2018 ####
+- Separa pedidos em vencimento por setor
+- Adiciona novos campos (paga e aguarda orçamento) no cadastro de mensalidade de contratos
+
 #### v2.3.9 - 01/09/2018 ####
 - Adiciona vigência completa (início e fim) de contratos
 - Relatório de contratos

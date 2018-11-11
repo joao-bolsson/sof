@@ -50,11 +50,11 @@ final class BuscaLTE {
         return $table->__toString();
     }
 
-    public static function buildRelProcsVenc():string {
+    public static function buildRelProcsVenc(): string {
         $mes = date('n');
         $ano = date('Y');
 
-        $query = Query::getInstance()->exe("SELECT DISTINCT itens_pedido.id_pedido, pedido.valor, itens.num_processo, DATE_FORMAT(itens.dt_fim, '%d/%m/%Y') AS dt_fim, pedido.status FROM pedido, itens, itens_pedido WHERE pedido.status = 2 AND pedido.id = itens_pedido.id_pedido AND itens.id = itens_pedido.id_item AND MONTH(itens.dt_fim) = " . $mes . " AND YEAR(itens.dt_fim) = " . $ano . " ORDER BY dt_fim;");
+        $query = Query::getInstance()->exe("SELECT DISTINCT itens_pedido.id_pedido, pedido.valor, itens.num_processo, DATE_FORMAT(itens.dt_fim, '%d/%m/%Y') AS dt_fim, pedido.status, setores.nome AS setor FROM pedido, itens, itens_pedido, setores WHERE pedido.id_setor = setores.id AND pedido.status = 2 AND pedido.id = itens_pedido.id_pedido AND itens.id = itens_pedido.id_item AND MONTH(itens.dt_fim) = " . $mes . " AND YEAR(itens.dt_fim) = " . $ano . " ORDER BY dt_fim DESC;");
 
         $sum = 0;
         $rel = "
@@ -62,9 +62,14 @@ final class BuscaLTE {
                     <h5>DESCRIÇÃO DO RELATÓRIO</h5>
                     <h6>Pedidos em Vencimento para " . $mes . "/" . $ano . "</h6>";
 
-        $table = new Table('', '', ['Pedido', 'Valor', 'Processo', 'Data Fim'], true);
+
+        $table_setores = [];
+
         if ($query->num_rows > 0) {
             while ($obj = $query->fetch_object()) {
+                if (!array_key_exists($obj->setor, $table_setores)) {
+                    $table_setores[$obj->setor] = new Table('', '', ['Pedido', 'Valor', 'Processo', 'Data Fim'], true);
+                }
                 $sum += floatval($obj->valor);
 
                 $row = new Row();
@@ -73,13 +78,27 @@ final class BuscaLTE {
                 $row->addComponent(new Column($obj->num_processo));
                 $row->addComponent(new Column($obj->dt_fim));
 
-                $table->addComponent($row);
+                $table = $table_setores[$obj->setor];
+                if ($table instanceof Table) {
+                    $table->addComponent($row);
+                }
             }
         }
 
         $rel .= "<h6>Totalizando: R$ " . number_format($sum, 3, ',', '.') . "</h6>
                 </fieldset><br>";
-        return $rel . $table->__toString();
+
+        $tables = "";
+
+        foreach ($table_setores as $key => $value) {
+            if ($value instanceof Table) {
+                $tables .= "
+            <fieldset class=\"preg\">
+                    <h5>SETOR: " . $key . " | Pedidos: " . count($value->getComponents()) . "</h5>   </fieldset>";
+                $tables .= $value->__toString();
+            }
+        }
+        return $rel . $tables;
     }
 
     /**
@@ -91,13 +110,14 @@ final class BuscaLTE {
         $mes = date('n');
         $ano = date('Y');
 
-        $query = Query::getInstance()->exe("SELECT DISTINCT itens_pedido.id_pedido, itens.num_processo, itens.nome_fornecedor, DATE_FORMAT(itens.dt_fim, '%d/%m/%Y') AS dt_fim, pedido.status FROM pedido, itens, itens_pedido WHERE pedido.status = 2 AND pedido.id = itens_pedido.id_pedido AND itens.id = itens_pedido.id_item AND MONTH(itens.dt_fim) = " . $mes . " AND YEAR(itens.dt_fim) = " . $ano . " ORDER BY dt_fim;");
+        $query = Query::getInstance()->exe("SELECT DISTINCT itens_pedido.id_pedido, itens.num_processo, itens.nome_fornecedor, DATE_FORMAT(itens.dt_fim, '%d/%m/%Y') AS dt_fim, pedido.status, setores.nome AS setor FROM pedido, itens, itens_pedido, setores WHERE pedido.id_setor = setores.id AND pedido.status = 2 AND pedido.id = itens_pedido.id_pedido AND itens.id = itens_pedido.id_item AND MONTH(itens.dt_fim) = " . $mes . " AND YEAR(itens.dt_fim) = " . $ano . " ORDER BY dt_fim;");
 
         $table = new Table('', '', [], false);
         if ($query->num_rows > 0) {
             while ($obj = $query->fetch_object()) {
                 $row = new Row();
                 $row->addComponent(new Column($obj->id_pedido));
+                $row->addComponent(new Column($obj->setor));
                 $row->addComponent(new Column($obj->num_processo));
                 $row->addComponent(new Column($obj->nome_fornecedor));
                 $row->addComponent(new Column($obj->dt_fim));
@@ -583,7 +603,7 @@ final class BuscaLTE {
      * @return string The permissions for user registration.
      */
     public static function getCheckPermissoes(): string {
-        $query = Query::getInstance()->exe("SELECT DISTINCT column_name AS nome FROM information_schema.columns WHERE table_name = 'usuario_permissoes' AND column_name <> 'id_usuario'");
+        $query = Query::getInstance()->exe("SELECT DISTINCT column_name AS nome FROM information_schema.columns WHERE table_name = 'usuario_permissoes' AND column_name <> 'id_usuario' AND table_schema = '" . Conexao::getInstance()->getDatabase() . "';");
         $return = "";
         $i = 1;
         while ($obj = $query->fetch_object()) {

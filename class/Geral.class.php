@@ -27,7 +27,7 @@ final class Geral {
         // empty
     }
 
-    public static function cadMensalidade(int $contr, int $ano, int $mes, float $valor, bool $nota, float $reajuste): bool {
+    public static function cadMensalidade(int $contr, int $ano, int $mes, float $valor, bool $nota, float $reajuste, bool $aguardaOrc, bool $paga): bool {
         $builder = new SQLBuilder(SQLBuilder::$INSERT);
         $builder->setTables(['mensalidade']);
 
@@ -36,11 +36,11 @@ final class Geral {
         if ($query->num_rows > 0) {
             // update
             $builder->setType(SQLBuilder::$UPDATE);
-            $builder->setColumns(['valor', 'nota', 'reajuste']);
-            $builder->setValues([$valor, $nota, $reajuste]);
+            $builder->setColumns(['valor', 'nota', 'reajuste', 'aguardaOrcamento', 'paga']);
+            $builder->setValues([$valor, $nota, $reajuste, $aguardaOrc, $paga]);
             $builder->setWhere("id_contr = " . $contr . " AND id_mes = " . $mes . " AND id_ano = " . $ano);
         } else {
-            $builder->setValues([$contr, $mes, $ano, $valor, $nota, $reajuste]);
+            $builder->setValues([$contr, $mes, $ano, $valor, $nota, $reajuste, $aguardaOrc, $paga]);
         }
 
         Query::getInstance()->exe($builder->__toString());

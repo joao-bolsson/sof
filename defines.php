@@ -1,7 +1,7 @@
 <?php
 
 defined('SALT') or define('SALT', '$1$j:[]bols$');
-defined('VERSION') or define('VERSION', '2.3.9');
+defined('VERSION') or define('VERSION', '2.3.10');
 defined('COPYRIGHT') or define('COPYRIGHT', "<strong>Copyright © 2016-2018 <a href=\"https://github.com/joao-bolsson\">João Bolsson</a>.</strong>");
 
 defined('ARRAY_STATUS') or define('ARRAY_STATUS', [NULL, 'Rascunho', 'Em Análise', 'Reprovado', 'Aprovado', 'Aguarda Orçamento', 'Aguarda SIAFI', 'Empenhado', 'Enviado ao Ordenador', 'Enviado ao SOF', 'Recebido da Unidade de Apoio']);

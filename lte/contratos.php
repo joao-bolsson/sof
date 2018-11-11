@@ -12,9 +12,18 @@ session_start();
 spl_autoload_register(function (string $class_name) {
     include_once '../class/' . $class_name . '.class.php';
 });
-$permissao = BuscaLTE::getPermissoes($_SESSION["id"]);
-if (!isset($_SESSION["id_setor"]) || $_SESSION["id_setor"] != 2 || !$permissao->pedidos) {
-    header("Location: ../");
+
+if (!isset($_SESSION["id_setor"]) || $_SESSION["id_setor"] != 2) {
+
+    if (!isset($_SESSION["id"]) || $_SESSION["id"] == NULL) {
+        header("Location: ../");
+    } else {
+        $permissao = BuscaLTE::getPermissoes($_SESSION["id"]);
+
+        if (!$permissao->pedidos) {
+            header("Location: ../");
+        }
+    }
 }
 require_once '../defines.php';
 
@@ -336,14 +345,24 @@ require_once '../defines.php';
                                 <input type="number" class="form-control" name="valor" step="0.01" min="0.0" required>
                             </div>
                         </div>
-                        <div class="form-group">
+                        <div class="form-group" style="display: inline-block">
                             <label>
                                 <input type="checkbox" name="nota" class="minimal"/> Com Nota
                             </label>
                         </div>
-                        <div class="form-group">
+                        <div class="form-group" style="display: inline-block">
                             <label>
                                 <input type="checkbox" name="checkReajuste" class="minimal"/> Reajuste
+                            </label>
+                        </div>
+                        <div class="form-group" style="display: inline-block">
+                            <label>
+                                <input type="checkbox" name="checkAgOrc" class="minimal"/> Aguarda Orçamento
+                            </label>
+                        </div>
+                        <div class="form-group" style="display: inline-block">
+                            <label>
+                                <input type="checkbox" name="checkPaga" class="minimal"/> Paga
                             </label>
                         </div>
                         <div class="form-group">

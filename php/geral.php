@@ -54,11 +54,14 @@ if (Busca::isActive()) {
                 $nota = !empty(filter_input(INPUT_POST, 'nota'));
                 $reajuste = filter_input(INPUT_POST, 'valorReajuste');
 
+                $aguardaOrc = !empty(filter_input(INPUT_POST, 'checkAgOrc'));
+                $paga = !empty(filter_input(INPUT_POST, 'checkPaga'));
+
                 if (empty($reajuste)) {
                     $reajuste = floatval(0);
                 }
 
-                $cad = Geral::cadMensalidade($contrato, $ano, $mes, $valor, $nota, $reajuste);
+                $cad = Geral::cadMensalidade($contrato, $ano, $mes, $valor, $nota, $reajuste, $aguardaOrc, $paga);
                 echo $cad;
                 break;
 
