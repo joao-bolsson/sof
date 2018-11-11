@@ -133,6 +133,7 @@ if (isset($_SESSION['editmode'])) {
                                     <thead>
                                     <tr>
                                         <th>Pedido</th>
+                                        <th>Setor</th>
                                         <th>Processo</th>
                                         <th>Fornecedor</th>
                                         <th>Data Fim</th>
