@@ -28,6 +28,20 @@ final class Geral {
     }
 
     public static function cadMensalidade(int $contr, int $ano, int $mes, float $valor, bool $nota, float $reajuste, bool $aguardaOrc, bool $paga): bool {
+
+        $query_saldo = Query::getInstance()->exe("SELECT (SELECT teto FROM contrato WHERE id = " . $contr . ") - SUM(valor) AS saldo FROM mensalidade WHERE id_contr = " . $contr);
+
+        $saldo = $query_saldo->fetch_object()->saldo;
+        if (empty($saldo)) {
+            // saldo ok
+            $saldo = $valor + 1;
+        }
+
+        if ($valor > $saldo) {
+            Logger::error("Can't insert mensalidade, value is bigger than saldo");
+            return false;
+        }
+
         $builder = new SQLBuilder(SQLBuilder::$INSERT);
         $builder->setTables(['mensalidade']);
 

@@ -131,7 +131,7 @@ $(function () {
 
         var data = $(this).serialize();
         $.post('../php/geral.php', data).done(function (resposta) {
-            var msg = "Ocorreu um erro no servidor. Contate o administrador.";
+            var msg = "Saldo do contrato insuficiente.";
             if (resposta) {
                 msg = "Mensalidade cadastrada!";
             }

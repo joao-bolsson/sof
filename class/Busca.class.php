@@ -79,7 +79,7 @@ final class Busca {
     }
 
     public static function fillContracts(): string {
-        $query = Query::getInstance()->exe("SELECT id, numero FROM contrato;");
+        $query = Query::getInstance()->exe("SELECT id, numero FROM contrato WHERE id NOT IN (SELECT id_contrato FROM contrato_empresa);");
 
         $opts = "";
         while ($obj = $query->fetch_object()) {
