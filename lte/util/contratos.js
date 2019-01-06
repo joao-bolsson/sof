@@ -131,10 +131,10 @@ $(function () {
 
     $('#cadMensalidade').on('hidden.bs.modal', function () {
         $('#formMensalidade').trigger("reset");
-        $('.minimal').iCheck('destroy')
+        $('.minimal').iCheck('destroy');
 
-        inputReajuste.prop('disabled', true);
-        inputReajuste.prop('required', false);
+        $("#formMensalidade input[name=checkReajuste]").prop('disabled', true);
+        $("#formMensalidade input[name=checkReajuste]").prop('required', false);
 
         if ($('#mensalidades').is(':visible')) {
             $('#mensalidades').modal('hide');
@@ -145,6 +145,13 @@ $(function () {
         event.preventDefault();
 
         var data = $(this).serialize();
+
+        /**
+         * Workaround to gets the disabled select value.
+         * @type {string}
+         */
+        data += "&contrato=" + $("#formMensalidade select[name=contrato]").val();
+
         $.post('../php/geral.php', data).done(function (resposta) {
             var msg = "Saldo do contrato insuficiente.";
             if (resposta) {

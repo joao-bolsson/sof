@@ -306,7 +306,7 @@ require_once '../defines.php';
                     <div class="modal-body">
                         <div class="form-group">
                             <label>Contrato</label>
-                            <select id="selectContrMens" class="form-control" name="contrato"
+                            <select id="selectContrMens" class="form-control" name="contrato" disabled
                                     required>
                                 <?= Busca::getAllContracts() ?>
                             </select>
