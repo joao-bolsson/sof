@@ -38,6 +38,11 @@ if (!is_null($admin) && isset($_SESSION['id_setor']) && ($_SESSION['id_setor'] =
 
     switch ($form) {
 
+        case 'selectGroupMens':
+            $id = filter_input(INPUT_POST, 'id_contr');
+            echo Busca::getAlGroupsByContract($id);
+            break;
+
         case 'getAllContracts':
             echo Busca::getAllContracts();
             break;

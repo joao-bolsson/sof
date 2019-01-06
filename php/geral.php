@@ -48,6 +48,7 @@ if (Busca::isActive()) {
 
             case 'formMensalidade':
                 $contrato = filter_input(INPUT_POST, 'contrato');
+                $grupo = filter_input(INPUT_POST, 'grupo');
                 $ano = filter_input(INPUT_POST, 'ano');
                 $mes = filter_input(INPUT_POST, 'mes');
                 $valor = filter_input(INPUT_POST, 'valor');
@@ -61,7 +62,7 @@ if (Busca::isActive()) {
                     $reajuste = floatval(0);
                 }
 
-                $cad = Geral::cadMensalidade($contrato, $ano, $mes, $valor, $nota, $reajuste, $aguardaOrc, $paga);
+                $cad = Geral::cadMensalidade($contrato, $ano, $mes, $grupo, $valor, $nota, $reajuste, $aguardaOrc, $paga);
                 echo $cad;
                 break;
 

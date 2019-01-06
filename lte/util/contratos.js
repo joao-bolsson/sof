@@ -100,10 +100,34 @@ $(function () {
             checkboxClass: 'icheckbox_minimal-blue',
             radioClass: 'iradio_minimal-blue'
         });
-    });
 
-    var checkReajuste = $("#formMensalidade input[name=checkReajuste]");
-    var inputReajuste = $("#formMensalidade input[name=valorReajuste]");
+        var id_contr = document.getElementById('selectContrMens').value;
+
+        $.post('../php/busca.php', {
+            admin: 1,
+            form: 'selectGroupMens',
+            id_contr: id_contr
+        }).done(function (resposta) {
+            document.getElementById('selectGroupMens').innerHTML = resposta;
+        });
+
+        var now = new Date();
+
+        $("#formMensalidade select[name=mes]").val(now.getMonth() + 1);
+
+        var checkReajuste = $("#formMensalidade input[name=checkReajuste]");
+        var inputReajuste = $("#formMensalidade input[name=valorReajuste]");
+
+        checkReajuste.on('ifChecked', function () {
+            inputReajuste.prop('disabled', false);
+            inputReajuste.prop('required', true);
+        });
+
+        checkReajuste.on('ifUnchecked', function () {
+            inputReajuste.prop('disabled', true);
+            inputReajuste.prop('required', false);
+        });
+    });
 
     $('#cadMensalidade').on('hidden.bs.modal', function () {
         $('#formMensalidade').trigger("reset");
@@ -115,16 +139,6 @@ $(function () {
         if ($('#mensalidades').is(':visible')) {
             $('#mensalidades').modal('hide');
         }
-    });
-
-    checkReajuste.on('ifChecked', function () {
-        inputReajuste.prop('disabled', false);
-        inputReajuste.prop('required', true);
-    });
-
-    checkReajuste.on('ifUnchecked', function () {
-        inputReajuste.prop('disabled', true);
-        inputReajuste.prop('required', false);
     });
 
     $('#formMensalidade').submit(function (event) {
@@ -168,10 +182,16 @@ function editMens(id_contr, id_mes, id_ano) {
         id_mes: id_mes,
         id_ano: id_ano
     }).done(function (resposta) {
-        $('#cadMensalidade').modal('show');
         var obj = jQuery.parseJSON(resposta);
 
         $("#formMensalidade select[name=contrato]").val(id_contr);
+
+        /**
+         * Need to show the modal now because the operations in shown.bs.modal.
+         */
+        $('#cadMensalidade').modal('show');
+
+        $("#formMensalidade select[name=grupo]").val(obj.id_grupo);
         $("#formMensalidade select[name=ano]").val(id_ano);
         $("#formMensalidade select[name=mes]").val(id_mes);
         $("#formMensalidade input[name=valor]").val(obj.valor);

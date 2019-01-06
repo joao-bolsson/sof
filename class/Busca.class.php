@@ -25,7 +25,7 @@ final class Busca {
     }
 
     public static function getEditMens(int $id_contr, int $id_ano, int $id_mes) {
-        $query = Query::getInstance()->exe("SELECT valor, nota, reajuste, aguardaOrcamento, paga FROM mensalidade WHERE id_contr = " . $id_contr . " AND id_ano = " . $id_ano . " AND id_mes = " . $id_mes . ";");
+        $query = Query::getInstance()->exe("SELECT id_grupo, valor, nota, reajuste, aguardaOrcamento, paga FROM mensalidade WHERE id_contr = " . $id_contr . " AND id_ano = " . $id_ano . " AND id_mes = " . $id_mes . ";");
 
         return $query->fetch_object();
     }
@@ -47,8 +47,6 @@ final class Busca {
             $params = $id_contr . ", " . $obj->id_mes . ", " . $obj->id_ano;
 
             $btn_edit = new Button('', BTN_DEFAULT, "editMens(" . $params . ")", "data-toggle=\"tooltip\"", 'Editar Mensalidade', 'pencil');
-
-            $btn_remove = new Button('', BTN_DEFAULT, "removeMens(" . $params . ")", "data-toggle=\"tooltip\"", 'Excluir', 'cancel');
 
             $btns = $btn_edit;
 
@@ -111,6 +109,16 @@ final class Busca {
         }
 
         return $table->__toString();
+    }
+
+    public static function getAlGroupsByContract(int $id_contr): string {
+        $query = Query::getInstance()->exe("SELECT grupo.id, grupo.nome FROM grupo, empresa_grupo, contrato_empresa WHERE grupo.id = empresa_grupo.id_grupo AND empresa_grupo.id_empresa = contrato_empresa.id_empresa AND contrato_empresa.id_contrato = " . $id_contr . ";");
+
+        $opts = "";
+        while ($obj = $query->fetch_object()) {
+            $opts .= "<option value=\"{$obj->id}\">{$obj->nome}</option>";
+        }
+        return $opts;
     }
 
     public static function getAllContracts(): string {

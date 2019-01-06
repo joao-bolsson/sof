@@ -93,11 +93,6 @@ require_once '../defines.php';
                                 <i class="fa fa-bank"></i> Cadastrar Empresa
                             </a>
                         </li>
-                        <li>
-                            <a href="javascript:abreModal('#cadMensalidade');">
-                                <i class="fa fa-money"></i> Controle de Movimento do Contrato
-                            </a>
-                        </li>
                     </ul>
                 </div>
 
@@ -311,9 +306,14 @@ require_once '../defines.php';
                     <div class="modal-body">
                         <div class="form-group">
                             <label>Contrato</label>
-                            <select id="selectContrMens" class="form-control" name="contrato" readonly="readonly"
+                            <select id="selectContrMens" class="form-control" name="contrato"
                                     required>
                                 <?= Busca::getAllContracts() ?>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Grupo</label>
+                            <select id="selectGroupMens" class="form-control" name="grupo" required>
                             </select>
                         </div>
                         <div class="form-group">

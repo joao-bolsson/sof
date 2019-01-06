@@ -27,7 +27,7 @@ final class Geral {
         // empty
     }
 
-    public static function cadMensalidade(int $contr, int $ano, int $mes, float $valor, bool $nota, float $reajuste, bool $aguardaOrc, bool $paga): bool {
+    public static function cadMensalidade(int $contr, int $ano, int $mes, int $grupo, float $valor, bool $nota, float $reajuste, bool $aguardaOrc, bool $paga): bool {
         // garante update
         Query::getInstance()->exe("DELETE FROM mensalidade WHERE id_contr = " . $contr . " AND id_mes = " . $mes . " AND id_ano = " . $ano);
 
@@ -47,7 +47,7 @@ final class Geral {
             return false;
         }
 
-        $builder->setValues([$contr, $mes, $ano, $valor, $nota, $reajuste, $aguardaOrc, $paga]);
+        $builder->setValues([$contr, $mes, $ano, $grupo, $valor, $nota, $reajuste, $aguardaOrc, $paga]);
 
         Query::getInstance()->exe($builder->__toString());
         return true;
