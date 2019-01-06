@@ -311,7 +311,8 @@ require_once '../defines.php';
                     <div class="modal-body">
                         <div class="form-group">
                             <label>Contrato</label>
-                            <select id="selectContrMens" class="form-control" name="contrato" readonly="readonly" required>
+                            <select id="selectContrMens" class="form-control" name="contrato" readonly="readonly"
+                                    required>
                                 <?= Busca::getAllContracts() ?>
                             </select>
                         </div>
@@ -387,7 +388,7 @@ require_once '../defines.php';
         </div>
     </div>
 
-    <div aria-hidden="true" class="modal fade" tabindex="-1" id="mensalidades" role="dialog" data-backdrop="static">
+    <div aria-hidden="true" class="modal fade" tabindex="-1" id="mensalidades" role="dialog">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header">

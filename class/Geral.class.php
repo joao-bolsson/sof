@@ -28,12 +28,11 @@ final class Geral {
     }
 
     public static function cadMensalidade(int $contr, int $ano, int $mes, float $valor, bool $nota, float $reajuste, bool $aguardaOrc, bool $paga): bool {
+        // garante update
+        Query::getInstance()->exe("DELETE FROM mensalidade WHERE id_contr = " . $contr . " AND id_mes = " . $mes . " AND id_ano = " . $ano);
+
         $builder = new SQLBuilder(SQLBuilder::$INSERT);
         $builder->setTables(['mensalidade']);
-
-        $query = Query::getInstance()->exe("SELECT valor FROM mensalidade WHERE id_contr = " . $contr . " AND id_mes = " . $mes . " AND id_ano = " . $ano);
-
-        $update = $query->num_rows > 0;
 
         $query_saldo = Query::getInstance()->exe("SELECT (SELECT teto FROM contrato WHERE id = " . $contr . ") - SUM(valor) AS saldo FROM mensalidade WHERE id_contr = " . $contr);
 
@@ -41,10 +40,6 @@ final class Geral {
         if (empty($saldo)) {
             // saldo ok
             $saldo = $valor + 1;
-        } else if ($update) {
-            $oldValue = $query->fetch_object()->valor;
-
-            $saldo -= $oldValue;
         }
 
         if ($valor > $saldo) {
@@ -52,15 +47,7 @@ final class Geral {
             return false;
         }
 
-        if ($update) {
-            // update
-            $builder->setType(SQLBuilder::$UPDATE);
-            $builder->setColumns(['valor', 'nota', 'reajuste', 'aguardaOrcamento', 'paga']);
-            $builder->setValues([$valor, $nota, $reajuste, $aguardaOrc, $paga]);
-            $builder->setWhere("id_contr = " . $contr . " AND id_mes = " . $mes . " AND id_ano = " . $ano);
-        } else {
-            $builder->setValues([$contr, $mes, $ano, $valor, $nota, $reajuste, $aguardaOrc, $paga]);
-        }
+        $builder->setValues([$contr, $mes, $ano, $valor, $nota, $reajuste, $aguardaOrc, $paga]);
 
         Query::getInstance()->exe($builder->__toString());
         return true;
