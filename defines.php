@@ -24,4 +24,4 @@ defined('TEMP_FOLDER') or define('TEMP_FOLDER', __DIR__ . '/temp/');
 defined('BTN_DEFAULT') or define('BTN_DEFAULT', 'btn btn-default');
 defined('MAX_UPLOAD_SIZE') or define('MAX_UPLOAD_SIZE', 3);
 
-defined('ARRAY_DATABASES') or define('ARRAY_DATABASES', ['main', 'sof_2018','sof_2017']);
+defined('ARRAY_DATABASES') or define('ARRAY_DATABASES', ['main', 'sof_2018', 'sof_2017']);
