@@ -14,6 +14,10 @@ require_once '../defines.php';
 require_once MPDF_PATH . '/vendor/autoload.php';
 
 $contrato = filter_input(INPUT_GET, 'id');
+$nota = !empty(filter_input(INPUT_GET, 'nota'));
+$reajuste = !empty(filter_input(INPUT_GET, 'checkReajuste'));
+$aguardaOrc = !empty(filter_input(INPUT_GET, 'checkAgOrc'));
+$paga = !empty(filter_input(INPUT_GET, 'checkPaga'));
 
 $html_style = "
         <link rel=\"stylesheet\" type=\"text/css\" href=\"../relatorios.css\"/>
@@ -28,7 +32,7 @@ $html_header = "
             <img src=\"" . $img . "\"/>
           </p>
           <hr/>";
-$html_rel = PrintMod::getRelContrato($contrato);
+$html_rel = PrintMod::getRelContrato($contrato, $nota, $reajuste, $aguardaOrc, $paga);
 
 $html = $html_style . $html_header . $html_rel . "</body>";
 date_default_timezone_set('America/Sao_Paulo');

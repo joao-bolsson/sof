@@ -141,6 +141,28 @@ $(function () {
         }
     });
 
+    $('#printRel').on('shown.bs.modal', function () {
+        $('.minimal').iCheck({
+            checkboxClass: 'icheckbox_minimal-blue',
+            radioClass: 'iradio_minimal-blue'
+        });
+    });
+
+    $('#printRel').on('hidden.bs.modal', function () {
+        $('#formRel').trigger("reset");
+        $('.minimal').iCheck('destroy');
+    });
+
+    $('#formRel').submit(function (event) {
+        event.preventDefault();
+
+        $("#printRel").modal('hide');
+
+        var data = $(this).serialize();
+
+        window.open("printContrato.php?" + data);
+    });
+
     $('#formMensalidade').submit(function (event) {
         event.preventDefault();
 
@@ -247,5 +269,6 @@ function addMensalidade(contrato, mensalidade) {
 }
 
 function printContract(contrato) {
-    window.open("printContrato.php?id=" + contrato);
+    $("#formRel input[name=id]").val(contrato);
+    $('#printRel').modal('show');
 }

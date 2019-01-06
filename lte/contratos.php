@@ -292,6 +292,48 @@ require_once '../defines.php';
         </div>
     </div>
 
+    <div aria-hidden="true" class="modal fade" id="printRel" role="dialog" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                                aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">Relatório</h4>
+                </div>
+                <form id="formRel" method="POST">
+                    <input type="hidden" name="id" value="0">
+                    <div class="modal-body">
+                        <div class="form-group" style="display: inline-block">
+                            <label>
+                                <input type="checkbox" name="nota" class="minimal"/> Com Nota
+                            </label>
+                        </div>
+                        <div class="form-group" style="display: inline-block">
+                            <label>
+                                <input type="checkbox" name="checkReajuste" class="minimal"/> Reajuste
+                            </label>
+                        </div>
+                        <div class="form-group" style="display: inline-block">
+                            <label>
+                                <input type="checkbox" name="checkAgOrc" class="minimal"/> Aguarda Orçamento
+                            </label>
+                        </div>
+                        <div class="form-group" style="display: inline-block">
+                            <label>
+                                <input type="checkbox" name="checkPaga" class="minimal"/> Paga
+                            </label>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn btn-primary" type="submit" style="width: 100%;"><i
+                                    class="fa fa-print"></i>&nbsp;Imprimir
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
     <div aria-hidden="true" class="modal fade" id="cadMensalidade" role="dialog">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -445,7 +487,7 @@ require_once '../defines.php';
 <!-- page script -->
 <script type="text/javascript" src="util/util_lte.min.js"></script>
 <script type="text/javascript" src="../iniLTE.min.js"></script>
-<script type="text/javascript" src="util/contratos.min.js"></script>
+<script type="text/javascript" src="util/contratos.js"></script>
 </body>
 </html>
 
