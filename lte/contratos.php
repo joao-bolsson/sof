@@ -93,11 +93,6 @@ require_once '../defines.php';
                                 <i class="fa fa-bank"></i> Cadastrar Empresa
                             </a>
                         </li>
-                        <li>
-                            <a href="javascript:abreModal('#cadMensalidade');">
-                                <i class="fa fa-money"></i> Controle de Movimento do Contrato
-                            </a>
-                        </li>
                     </ul>
                 </div>
 
@@ -297,6 +292,48 @@ require_once '../defines.php';
         </div>
     </div>
 
+    <div aria-hidden="true" class="modal fade" id="printRel" role="dialog" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                                aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">Relatório</h4>
+                </div>
+                <form id="formRel" method="POST">
+                    <input type="hidden" name="id" value="0">
+                    <div class="modal-body">
+                        <div class="form-group" style="display: inline-block">
+                            <label>
+                                <input type="checkbox" name="nota" class="minimal"/> Com Nota
+                            </label>
+                        </div>
+                        <div class="form-group" style="display: inline-block">
+                            <label>
+                                <input type="checkbox" name="checkReajuste" class="minimal"/> Reajuste
+                            </label>
+                        </div>
+                        <div class="form-group" style="display: inline-block">
+                            <label>
+                                <input type="checkbox" name="checkAgOrc" class="minimal"/> Aguarda Orçamento
+                            </label>
+                        </div>
+                        <div class="form-group" style="display: inline-block">
+                            <label>
+                                <input type="checkbox" name="checkPaga" class="minimal"/> Paga
+                            </label>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn btn-primary" type="submit" style="width: 100%;"><i
+                                    class="fa fa-print"></i>&nbsp;Imprimir
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
     <div aria-hidden="true" class="modal fade" id="cadMensalidade" role="dialog">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -311,7 +348,14 @@ require_once '../defines.php';
                     <div class="modal-body">
                         <div class="form-group">
                             <label>Contrato</label>
-                            <select id="selectContrMens" class="form-control select2" name="contrato" required>
+                            <select id="selectContrMens" class="form-control" name="contrato" disabled
+                                    required>
+                                <?= Busca::getAllContracts() ?>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Grupo</label>
+                            <select id="selectGroupMens" class="form-control" name="grupo" required>
                             </select>
                         </div>
                         <div class="form-group">
@@ -385,6 +429,33 @@ require_once '../defines.php';
             </div>
         </div>
     </div>
+
+    <div aria-hidden="true" class="modal fade" tabindex="-1" id="mensalidades" role="dialog">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                                aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">Mensalidades</h4>
+                </div>
+                <div class="modal-body">
+                    <input class="form-control" disabled type="text" value="Contrato: 004/2017">
+                    <table class="table table-bordered table-striped" id="tableMensalidades">
+                        <thead>
+                        <tr>
+                            <th>Opções</th>
+                            <th>Período</th>
+                            <th>Valor</th>
+                            <th>Nota</th>
+                            <th>Reajuste</th>
+                        </tr>
+                        </thead>
+                        <tbody id="conteudoMensalidades"></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 <!-- ./wrapper -->
 
@@ -416,7 +487,7 @@ require_once '../defines.php';
 <!-- page script -->
 <script type="text/javascript" src="util/util_lte.min.js"></script>
 <script type="text/javascript" src="../iniLTE.min.js"></script>
-<script type="text/javascript" src="util/contratos.min.js"></script>
+<script type="text/javascript" src="util/contratos.js"></script>
 </body>
 </html>
 

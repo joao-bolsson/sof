@@ -1,8 +1,8 @@
 <?php
 
 defined('SALT') or define('SALT', '$1$j:[]bols$');
-defined('VERSION') or define('VERSION', '2.3.10');
-defined('COPYRIGHT') or define('COPYRIGHT', "<strong>Copyright © 2016-2018 <a href=\"https://github.com/joao-bolsson\">João Bolsson</a>.</strong>");
+defined('VERSION') or define('VERSION', '2.4.0');
+defined('COPYRIGHT') or define('COPYRIGHT', "<strong>Copyright © 2016-2019 <a href=\"https://github.com/joao-bolsson\">João Bolsson</a>.</strong>");
 
 defined('ARRAY_STATUS') or define('ARRAY_STATUS', [NULL, 'Rascunho', 'Em Análise', 'Reprovado', 'Aprovado', 'Aguarda Orçamento', 'Aguarda SIAFI', 'Empenhado', 'Enviado ao Ordenador', 'Enviado ao SOF', 'Recebido da Unidade de Apoio']);
 
@@ -24,4 +24,4 @@ defined('TEMP_FOLDER') or define('TEMP_FOLDER', __DIR__ . '/temp/');
 defined('BTN_DEFAULT') or define('BTN_DEFAULT', 'btn btn-default');
 defined('MAX_UPLOAD_SIZE') or define('MAX_UPLOAD_SIZE', 3);
 
-defined('ARRAY_DATABASES') or define('ARRAY_DATABASES', ['main', 'sof_2017']);
+defined('ARRAY_DATABASES') or define('ARRAY_DATABASES', ['main', 'sof_2018', 'sof_2017']);

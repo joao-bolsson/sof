@@ -1,5 +1,12 @@
 ## CHANGELOG ##
 
+#### v2.4.0 - 06/01/2019 ####
+- Editar NFs lançadas
+- Corrige bug o checkbox 'Reajuste' que não estava operando
+- Adiciona grupo para o qual a mensalidade é resignada
+- Adiciona filtros para geração de relatórios do contrato (com nota, paga, etc)
+- Criação do banco de dados para 2019
+
 #### v2.3.10 - 11/11/2018 ####
 - Separa pedidos em vencimento por setor
 - Adiciona novos campos (paga e aguarda orçamento) no cadastro de mensalidade de contratos

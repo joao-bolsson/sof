@@ -107,7 +107,7 @@ final class PrintMod {
      * @param int $id Contract id.
      * @return string The complete report about a contract.
      */
-    public static function getRelContrato(int $id): string {
+    public static function getRelContrato(int $id, bool $notaB, bool $reajusteB, bool $aguardaOrcamentoB, bool $pagaB): string {
         $query = Query::getInstance()->exe("SELECT numero, teto, DATE_FORMAT(dt_inicio, '%d/%m/%Y') AS dt_inicio, DATE_FORMAT(dt_fim, '%d/%m/%Y') AS dt_fim, mensalidade FROM contrato WHERE id = " . $id);
 
         if (!$query) {
@@ -116,7 +116,12 @@ final class PrintMod {
         }
         $contract = $query->fetch_object();
 
-        $query_sum = Query::getInstance()->exe("SELECT (SELECT teto FROM contrato WHERE id = " . $id . ") - SUM(valor) AS saldo, SUM(valor) AS sum FROM mensalidade WHERE id_contr = " . $id);
+        $nota = $notaB ? 1 : 0;
+        $reajusteDif = $reajusteB ? ">" : "<=";
+        $aguardaOrcamento = $aguardaOrcamentoB ? 1 : 0;
+        $paga = $pagaB ? 1 : 0;
+
+        $query_sum = Query::getInstance()->exe("SELECT (SELECT teto FROM contrato WHERE id = " . $id . ") - SUM(valor) AS saldo, SUM(valor) AS sum FROM mensalidade WHERE id_contr = " . $id . " AND nota = " . $nota . " AND reajuste " . $reajusteDif . " 0 AND aguardaOrcamento = " . $aguardaOrcamento . " AND paga = " . $paga);
         $values = $query_sum->fetch_object();
 
         $rel = "
@@ -134,11 +139,19 @@ final class PrintMod {
                 </table>
                 <p><b>Total de Mensalidades:</b> R$ " . $values->sum . "</p>
                 <p><b>Saldo Disponível:</b> R$ " . $values->saldo . "</p>
+                <table style=\"font-size: 8pt; margin: 5px;\">
+                    <tr>
+                        <td><b>Nota:</b> " . ($notaB ? "Sim" : "Não") . "</td>
+                        <td><b>Reajuste:</b> " . ($reajusteB ? "Sim" : "Não") . "</td>
+                        <td><b>Aguarda Orçamento:</b> " . ($aguardaOrcamentoB ? "Sim" : "Não") . "</td>
+                        <td><b>Paga:</b> " . ($pagaB ? "Sim" : "Não") . "</td>
+                    </tr>
+                </table>
             </fieldset><br>";
 
         $table = new Table('', 'prod', ['Período', 'Valor', 'Nota', 'Reajuste'], true);
 
-        $query_mensalidade = Query::getInstance()->exe("SELECT mes.sigla_mes, ano.ano, valor, nota, reajuste FROM mes, ano, mensalidade WHERE id_contr = " . $id . " AND mensalidade.id_mes = mes.id AND mensalidade.id_ano = ano.id");
+        $query_mensalidade = Query::getInstance()->exe("SELECT mes.sigla_mes, ano.ano, valor, nota, reajuste FROM mes, ano, mensalidade WHERE id_contr = " . $id . " AND mensalidade.id_mes = mes.id AND mensalidade.id_ano = ano.id AND nota = " . $nota . " AND reajuste " . $reajusteDif . " 0 AND aguardaOrcamento = " . $aguardaOrcamento . " AND paga = " . $paga);
 
         while ($obj = $query_mensalidade->fetch_object()) {
             $row = new Row();

@@ -27,21 +27,27 @@ final class Geral {
         // empty
     }
 
-    public static function cadMensalidade(int $contr, int $ano, int $mes, float $valor, bool $nota, float $reajuste, bool $aguardaOrc, bool $paga): bool {
+    public static function cadMensalidade(int $contr, int $ano, int $mes, int $grupo, float $valor, bool $nota, float $reajuste, bool $aguardaOrc, bool $paga): bool {
+        // garante update
+        Query::getInstance()->exe("DELETE FROM mensalidade WHERE id_contr = " . $contr . " AND id_mes = " . $mes . " AND id_ano = " . $ano);
+
         $builder = new SQLBuilder(SQLBuilder::$INSERT);
         $builder->setTables(['mensalidade']);
 
-        $query = Query::getInstance()->exe("SELECT nota FROM mensalidade WHERE id_contr = " . $contr . " AND id_mes = " . $mes . " AND id_ano = " . $ano);
+        $query_saldo = Query::getInstance()->exe("SELECT (SELECT teto FROM contrato WHERE id = " . $contr . ") - SUM(valor) AS saldo FROM mensalidade WHERE id_contr = " . $contr);
 
-        if ($query->num_rows > 0) {
-            // update
-            $builder->setType(SQLBuilder::$UPDATE);
-            $builder->setColumns(['valor', 'nota', 'reajuste', 'aguardaOrcamento', 'paga']);
-            $builder->setValues([$valor, $nota, $reajuste, $aguardaOrc, $paga]);
-            $builder->setWhere("id_contr = " . $contr . " AND id_mes = " . $mes . " AND id_ano = " . $ano);
-        } else {
-            $builder->setValues([$contr, $mes, $ano, $valor, $nota, $reajuste, $aguardaOrc, $paga]);
+        $saldo = $query_saldo->fetch_object()->saldo;
+        if (empty($saldo)) {
+            // saldo ok
+            $saldo = $valor + 1;
         }
+
+        if ($valor > $saldo) {
+            Logger::error("Can't insert mensalidade, value is bigger than saldo");
+            return false;
+        }
+
+        $builder->setValues([$contr, $mes, $ano, $grupo, $valor, $nota, $reajuste, $aguardaOrc, $paga]);
 
         Query::getInstance()->exe($builder->__toString());
         return true;
