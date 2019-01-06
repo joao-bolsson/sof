@@ -311,7 +311,8 @@ require_once '../defines.php';
                     <div class="modal-body">
                         <div class="form-group">
                             <label>Contrato</label>
-                            <select id="selectContrMens" class="form-control select2" name="contrato" required>
+                            <select id="selectContrMens" class="form-control" name="contrato" readonly="readonly" required>
+                                <?= Busca::getAllContracts() ?>
                             </select>
                         </div>
                         <div class="form-group">
@@ -382,6 +383,33 @@ require_once '../defines.php';
                         </button>
                     </div>
                 </form>
+            </div>
+        </div>
+    </div>
+
+    <div aria-hidden="true" class="modal fade" tabindex="-1" id="mensalidades" role="dialog" data-backdrop="static">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                                aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">Mensalidades</h4>
+                </div>
+                <div class="modal-body">
+                    <input class="form-control" disabled type="text" value="Contrato: 004/2017">
+                    <table class="table table-bordered table-striped" id="tableMensalidades">
+                        <thead>
+                        <tr>
+                            <th>Opções</th>
+                            <th>Período</th>
+                            <th>Valor</th>
+                            <th>Nota</th>
+                            <th>Reajuste</th>
+                        </tr>
+                        </thead>
+                        <tbody id="conteudoMensalidades"></tbody>
+                    </table>
+                </div>
             </div>
         </div>
     </div>

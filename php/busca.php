@@ -38,6 +38,23 @@ if (!is_null($admin) && isset($_SESSION['id_setor']) && ($_SESSION['id_setor'] =
 
     switch ($form) {
 
+        case 'getAllContracts':
+            echo Busca::getAllContracts();
+            break;
+
+        case 'editMens':
+            $id_contr = filter_input(INPUT_POST, 'id_contr');
+            $id_ano = filter_input(INPUT_POST, 'id_ano');
+            $id_mes = filter_input(INPUT_POST, 'id_mes');
+
+            echo json_encode(Busca::getEditMens($id_contr, $id_ano, $id_mes));
+            break;
+
+        case 'showMensalidades':
+            $id = filter_input(INPUT_POST, 'id_contr');
+            echo Busca::fillTableMens($id);
+            break;
+
         case 'editContract':
             $id = filter_input(INPUT_POST, 'id');
             echo json_encode(Busca::editContract($id));

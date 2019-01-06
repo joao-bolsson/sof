@@ -4,24 +4,27 @@
  * @since 2018, 12 Jun.
  */
 
+function reloadTableContr(group) {
+    $('#overlayLoad').css("display", "block");
+    $('#tableContratos').DataTable().destroy();
+    $.post('../php/busca.php', {
+        admin: 1,
+        form: 'fillTableProc',
+        group: group
+    }).done(function (resposta) {
+        $('#conteudoContrato').html(resposta);
+        iniDataTable('#tableContratos');
+        $('#overlayLoad').css("display", "none");
+    });
+}
+
 $(function () {
     $('#selectGroupTable').select2();
 
     iniDataTable('#tableContratos');
 
     $('#selectGroupTable').change(function () {
-
-        $('#overlayLoad').css("display", "block");
-        $('#tableContratos').DataTable().destroy();
-        $.post('../php/busca.php', {
-            admin: 1,
-            form: 'fillTableProc',
-            group: this.value
-        }).done(function (resposta) {
-            $('#conteudoContrato').html(resposta);
-            iniDataTable('#tableContratos');
-            $('#overlayLoad').css("display", "none");
-        });
+        reloadTableContr(this.value);
     });
 
     $('#selectGroupTable').change();
@@ -48,6 +51,13 @@ $(function () {
             $('#selectGroupTable').change();
         }).always(function () {
             $("#cadContrato").modal('hide');
+        });
+
+        $.post('../php/busca.php', {
+            admin: 1,
+            form: 'getAllContracts'
+        }).done(function (resposta) {
+            document.getElementById('selectContrMens').innerHTML = resposta;
         });
     });
 
@@ -90,18 +100,6 @@ $(function () {
             checkboxClass: 'icheckbox_minimal-blue',
             radioClass: 'iradio_minimal-blue'
         });
-
-        var now = new Date();
-        $("#formMensalidade select[name=mes]").val(now.getMonth());
-
-        $.post('../php/busca.php', {
-            admin: 1,
-            form: 'fillContratos'
-        }).done(function (resposta) {
-            document.getElementById('selectContrMens').innerHTML = resposta;
-        }).always(function () {
-            $('.select2').select2();
-        });
     });
 
     var checkReajuste = $("#formMensalidade input[name=checkReajuste]");
@@ -110,10 +108,13 @@ $(function () {
     $('#cadMensalidade').on('hidden.bs.modal', function () {
         $('#formMensalidade').trigger("reset");
         $('.minimal').iCheck('destroy')
-        $('.select2').select2('destroy');
 
         inputReajuste.prop('disabled', true);
         inputReajuste.prop('required', false);
+
+        if ($('#mensalidades').is(':visible')) {
+            $('#mensalidades').modal('hide');
+        }
     });
 
     checkReajuste.on('ifChecked', function () {
@@ -136,12 +137,63 @@ $(function () {
                 msg = "Mensalidade cadastrada!";
             }
             avisoSnack(msg);
+
+            var group = $('#selectGroupTable').val();
+
+            reloadTableContr(group);
         }).always(function () {
             $("#cadMensalidade").modal('hide');
         });
     });
 
 });
+
+function showMensalidades(contrato) {
+    $.post('../php/busca.php', {
+        admin: 1,
+        form: 'showMensalidades',
+        id_contr: contrato
+    }).done(function (resposta) {
+        document.getElementById('conteudoMensalidades').innerHTML = resposta;
+    }).always(function () {
+        $('#mensalidades').modal('show');
+    });
+}
+
+function editMens(id_contr, id_mes, id_ano) {
+    $.post('../php/busca.php', {
+        admin: 1,
+        form: 'editMens',
+        id_contr: id_contr,
+        id_mes: id_mes,
+        id_ano: id_ano
+    }).done(function (resposta) {
+        $('#cadMensalidade').modal('show');
+        var obj = jQuery.parseJSON(resposta);
+
+        $("#formMensalidade select[name=contrato]").val(id_contr);
+        $("#formMensalidade select[name=ano]").val(id_ano);
+        $("#formMensalidade select[name=mes]").val(id_mes);
+        $("#formMensalidade input[name=valor]").val(obj.valor);
+
+        if (obj.reajuste > 0) {
+            $("#formMensalidade input[name=checkReajuste]").attr('selected', 'selected');
+            $("#formMensalidade input[name=valorReajuste]").val(obj.reajuste);
+        }
+
+        if (obj.nota) {
+            $("#formMensalidade input[name=nota]").iCheck('check');
+        }
+
+        if (obj.aguardaOrcamento) {
+            $("#formMensalidade input[name=checkAgOrc]").iCheck('check');
+        }
+
+        if (obj.paga) {
+            $("#formMensalidade input[name=checkPaga]").iCheck('check');
+        }
+    });
+}
 
 function editContract(contrato) {
     $.post('../php/busca.php', {
