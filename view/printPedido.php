@@ -50,7 +50,6 @@ if (isset($_SESSION['imprimirPedido']) && $_SESSION['imprimirPedido'] && $_SESSI
         //definimos o tipo de exibicao
         $mpdf->SetDisplayMode('fullpage');
         if ($pedido_rascunho) {
-            $mpdf->useOnlyCoreFonts = true;
             $mpdf->watermark_font = 'DejaVuSansCondensed';
             $mpdf->showWatermarkText = true;
             $mpdf->SetWatermarkText('RASCUNHO');

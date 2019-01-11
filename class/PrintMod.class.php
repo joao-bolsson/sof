@@ -201,7 +201,7 @@ final class PrintMod {
      * @return string
      */
     public static function getHeader(int $id_request): string {
-        $query = Query::getInstance()->exe("SELECT pedido.id, DATE_FORMAT(pedido.data_pedido, '%d/%m/%Y') AS data_pedido, EXTRACT(YEAR FROM pedido.data_pedido) AS ano, mes.sigla_mes AS ref_mes, status.nome AS status, pedido.valor AS valor, pedido.obs, pedido.pedido_contrato, prioridade.nome AS prioridade, pedido.aprov_gerencia, pedido.id_usuario FROM prioridade, pedido, mes, status WHERE pedido.prioridade = prioridade.id AND status.id = pedido.status AND pedido.id = " . $id_request . ' AND mes.id = pedido.ref_mes');
+        $query = Query::getInstance()->exe("SELECT pedido.id, DATE_FORMAT(pedido.data_pedido, '%d/%m/%Y') AS data_pedido, EXTRACT(YEAR FROM pedido.data_pedido) AS ano, mes.sigla_mes AS ref_mes, status.nome AS status, pedido.valor AS valor, pedido.obs, pedido.pedido_contrato, prioridade.nome AS prioridade, pedido.aprov_gerencia, pedido.id_usuario, pedido.procSei, pedido.pedSei FROM prioridade, pedido, mes, status WHERE pedido.prioridade = prioridade.id AND status.id = pedido.status AND pedido.id = " . $id_request . ' AND mes.id = pedido.ref_mes');
         $request = $query->fetch_object();
         $lblRequest = ($request->pedido_contrato) ? 'Pedido de Contrato' : 'Pedido';
         $request->valor = number_format($request->valor, 3, ',', '.');
@@ -221,6 +221,10 @@ final class PrintMod {
                     <tr>
                         <td style=\"text-align: left;\">" . self::getGrupoPedido($id_request) . "</td>
                         <td style=\"text-align: right;\">" . self::getEmpenho($id_request) . "</td>
+                    </tr>
+                    <tr>
+                        <td style=\"text-align: left;\"><b>Processo SEI: </b>" . $request->procSei . "</td>
+                        <td style=\"text-align: left;\"><b>Número SEI: </b>" . $request->pedSei . "</td>
                     </tr>
                 </table>";
         $return .= ($request->aprov_gerencia) ? '<p><b>Aprovado Pela Gerência</b></p>' : '';

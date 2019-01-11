@@ -171,6 +171,22 @@ $select_grupo = BuscaLTE::getOptionsGrupos($_SESSION["id_setor"]);
                         <input id="planoTrabalho" class="form-control" type="text" placeholder="Plano de Trabalho"
                                name="planoTrabalho" disabled>
                     </div>
+                    <table class="table table-bordered table-striped">
+                        <tr>
+                            <td>
+                                <div class="form-group">
+                                    <label>Processo SEI</label>
+                                    <input class="form-control" id="procSei" name="procSei" type="text">
+                                </div>
+                            </td>
+                            <td>
+                                <div class="form-group">
+                                    <label>Pedido SEI</label>
+                                    <input class="form-control" id="pedSei" name="pedSei" type="text">
+                                </div>
+                            </td>
+                        </tr>
+                    </table>
                     <!-- /input-group -->
                 </div><!-- ./card-inner -->
                 <div class="box-footer">

@@ -564,7 +564,7 @@ final class Busca {
      * @return string
      */
     public static function getPopulaRascunho(int $id_request, int $id_sector): string {
-        $query = Query::getInstance()->exe('SELECT saldo_setor.saldo, pedido.valor, pedido.obs FROM saldo_setor, pedido WHERE pedido.id = ' . $id_request . ' AND saldo_setor.id_setor = ' . $id_sector);
+        $query = Query::getInstance()->exe('SELECT saldo_setor.saldo, pedido.valor, pedido.obs, pedido.procSei, pedido.pedSei FROM saldo_setor, pedido WHERE pedido.id = ' . $id_request . ' AND saldo_setor.id_setor = ' . $id_sector);
         $request = $query->fetch_object();
         return json_encode($request);
     }

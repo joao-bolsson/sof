@@ -121,6 +121,9 @@ final class Request {
      */
     private $workPlan;
 
+    private $procSei;
+    private $pedSei;
+
     /**
      * Default construct.
      * @param int $id Id request (0 for a no existing request in db).
@@ -187,12 +190,12 @@ final class Request {
             $this->change = 1;
             $this->status = 1;
             //inserindo os dados iniciais do pedido
-            Query::getInstance()->exe("INSERT INTO pedido VALUES(NULL, {$this->id_sector}, {$this->id_user}, '{$this->today}', '{$this->mes}', {$this->change}, {$this->priority}, {$this->status}, '{$this->value}', '{$this->obs}', {$this->contract_request}, {$this->approv_manager});");
+            Query::getInstance()->exe("INSERT INTO pedido VALUES(NULL, {$this->id_sector}, {$this->id_user}, '{$this->today}', '{$this->mes}', {$this->change}, {$this->priority}, {$this->status}, '{$this->value}', '{$this->obs}', {$this->contract_request}, {$this->approv_manager}, '{$this->procSei}', '{$this->pedSei}');");
             $this->id = Query::getInstance()->getInsertId();
         } else {
             //remover resgistros antigos do rascunho
             Query::getInstance()->exe("DELETE FROM itens_pedido WHERE id_pedido = " . $this->id);
-            Query::getInstance()->exe("UPDATE pedido SET data_pedido = '{$this->today}', ref_mes = {$this->mes}, prioridade = {$this->priority}, valor = '{$this->value}', obs = '{$this->obs}', pedido_contrato = {$this->contract_request}, aprov_gerencia = {$this->approv_manager} WHERE id = " . $this->id);
+            Query::getInstance()->exe("UPDATE pedido SET data_pedido = '{$this->today}', ref_mes = {$this->mes}, prioridade = {$this->priority}, valor = '{$this->value}', obs = '{$this->obs}', pedido_contrato = {$this->contract_request}, aprov_gerencia = {$this->approv_manager}, procSei = '{$this->procSei}', pedSei = '{$this->pedSei}' WHERE id = " . $this->id);
         }
 
         //inserindo os itens do pedido
@@ -209,11 +212,11 @@ final class Request {
         // enviado ao sof
         if ($this->id == NEW_REQUEST_ID) {
             //inserindo os dados iniciais do pedido
-            Query::getInstance()->exe("INSERT INTO pedido VALUES(NULL, {$this->id_sector}, {$this->id_user}, '{$this->today}', '{$this->mes}', {$this->change}, {$this->priority}, {$this->status}, '{$this->value}', '{$this->obs}', {$this->contract_request}, {$this->approv_manager});");
+            Query::getInstance()->exe("INSERT INTO pedido VALUES(NULL, {$this->id_sector}, {$this->id_user}, '{$this->today}', '{$this->mes}', {$this->change}, {$this->priority}, {$this->status}, '{$this->value}', '{$this->obs}', {$this->contract_request}, {$this->approv_manager}, '{$this->procSei}', '{$this->pedSei}');");
             $this->id = Query::getInstance()->getInsertId();
         } else {
             // atualizando pedido
-            Query::getInstance()->exe("UPDATE pedido SET data_pedido = '{$this->today}', ref_mes = {$this->mes}, alteracao = {$this->change}, prioridade = {$this->priority}, status = {$this->status}, valor = '{$this->value}', obs = '{$this->obs}', pedido_contrato = {$this->contract_request}, aprov_gerencia = {$this->approv_manager} WHERE id = " . $this->id);
+            Query::getInstance()->exe("UPDATE pedido SET data_pedido = '{$this->today}', ref_mes = {$this->mes}, alteracao = {$this->change}, prioridade = {$this->priority}, status = {$this->status}, valor = '{$this->value}', obs = '{$this->obs}', pedido_contrato = {$this->contract_request}, aprov_gerencia = {$this->approv_manager}, procSei = '{$this->procSei}', pedSei = '{$this->pedSei}' WHERE id = " . $this->id);
         }
         //remover resgistros antigos do pedido
         Query::getInstance()->exe("DELETE FROM itens_pedido WHERE id_pedido = " . $this->id);
@@ -257,8 +260,9 @@ final class Request {
      * @param string $obs Request note.
      * @param int $pedido_contrato If is a contract request - 1, else - 0.
      */
-    public function insertNewRequest(int $id_user, int $id_setor, array $id_item, array $qtd_solicitada, int $prioridade, string $obs, int $pedido_contrato) {
-
+    public function insertNewRequest(int $id_user, int $id_setor, array $id_item, array $qtd_solicitada, int $prioridade, string $obs, int $pedido_contrato, string $procSei, string $pedSei) {
+        $this->procSei = $procSei;
+        $this->pedSei = $pedSei;
         $this->priority = $prioridade;
         $this->id_sector = $id_setor;
         $this->id_user = $id_user;
@@ -290,7 +294,9 @@ final class Request {
      * @param string $obs Request note.
      * @param int $pedido_contrato If is a contract request - 1, else - 0.
      */
-    public function editRequest(array $id_item, array $qtd_solicitada, int $prioridade, string $obs, int $pedido_contrato) {
+    public function editRequest(array $id_item, array $qtd_solicitada, int $prioridade, string $obs, int $pedido_contrato, string $procSei, string $pedSei) {
+        $this->procSei = $procSei;
+        $this->pedSei = $pedSei;
         $this->priority = $prioridade;
         $this->contract_request = $pedido_contrato;
         $this->obs = Query::getInstance()->real_escape_string($obs);

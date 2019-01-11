@@ -292,6 +292,9 @@ function editaPedido(id_pedido) {
         $('#text_saldo_total').html('R$ ' + parseFloat(obj.saldo - obj.valor).toFixed(3));
         // obs
         document.getElementById('obs').value = obj.obs;
+
+        document.getElementById('procSei').value = obj.procSei;
+        document.getElementById('pedSei').value = obj.pedSei;
     });
     document.getElementById('pedido').value = id_pedido;
     $('#listRascunhos').modal('hide');

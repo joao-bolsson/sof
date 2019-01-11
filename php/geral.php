@@ -640,12 +640,15 @@ if (Busca::isActive()) {
                     $pedido_contrato = 1;
                 }
 
+                $procSei = filter_input(INPUT_POST, 'procSei');
+                $pedSei = filter_input(INPUT_POST, 'pedSei');
+
                 // $pedido pode ser 0, será sobrescrito depois
                 $request = new Request($pedido);
                 if (!$pedido_existe) {
-                    $request->insertNewRequest($id_user, $id_setor, $id_item, $qtd_solicitada, $prioridade, $obs, $pedido_contrato);
+                    $request->insertNewRequest($id_user, $id_setor, $id_item, $qtd_solicitada, $prioridade, $obs, $pedido_contrato, $procSei, $pedSei);
                 } else {
-                    $request->editRequest($id_item, $qtd_solicitada, $prioridade, $obs, $pedido_contrato);
+                    $request->editRequest($id_item, $qtd_solicitada, $prioridade, $obs, $pedido_contrato, $procSei, $pedSei);
                 }
 
                 $pedido = $request->getId();
