@@ -346,7 +346,7 @@ require_once '../defines.php';
     <script src="plugins/input-mask/jquery.inputmask.extensions.js"></script>
 <?php endif; ?>
 <!-- page script -->
-<script type="text/javascript" src="util/util_lte.min.js"></script>
+<script type="text/javascript" src="js/util_lte.min.js"></script>
 <script type="text/javascript" src="../iniLTE.min.js"></script>
 <script type="text/javascript" src="js/hora.min.js"></script>
 </body>

@@ -172,7 +172,7 @@ require_once '../../defines.php';
 <script src="../plugins/datatables/jquery.dataTables.min.js"></script>
 <script src="../plugins/datatables/dataTables.bootstrap.min.js"></script>
 <!-- page script -->
-<script type="text/javascript" src="../util/util_lte.min.js"></script>
+<script type="text/javascript" src="../js/util_lte.min.js"></script>
 <script>
     var language = {
         "decimal": "",
