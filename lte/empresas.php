@@ -9,16 +9,16 @@ error_reporting(E_ALL);
 
 session_start();
 spl_autoload_register(function (string $class_name) {
-    include_once '../../class/' . $class_name . '.class.php';
+    include_once '../class/' . $class_name . '.class.php';
 });
 if (!isset($_SESSION["id_setor"]) || $_SESSION["id_setor"] != 17) {
-    header("Location: ../../");
+    header("Location: ../");
 }
 $is_admin = ($_SESSION['id'] == 1 || $_SESSION['id'] == 11);
-require_once '../../defines.php';
+require_once '../defines.php';
 ?>
 <!DOCTYPE html>
-<html>
+<html lang="pt">
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -26,24 +26,24 @@ require_once '../../defines.php';
     <!-- Tell the browser to be responsive to screen width -->
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
     <!-- Bootstrap 3.3.6 -->
-    <link rel="stylesheet" href="../bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="bootstrap/css/bootstrap.min.css">
     <!-- DataTables -->
-    <link rel="stylesheet" href="../plugins/datatables/dataTables.bootstrap.css">
+    <link rel="stylesheet" href="plugins/datatables/dataTables.bootstrap.css">
     <!-- Font Awesome -->
-    <link rel="stylesheet" href="../plugins/font-awesome-4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="plugins/font-awesome-4.7.0/css/font-awesome.min.css">
     <!-- Ionicons -->
-    <link rel="stylesheet" href="../plugins/ionicons/css/ionicons.min.css">
+    <link rel="stylesheet" href="plugins/ionicons/css/ionicons.min.css">
     <!-- Theme style -->
-    <link rel="stylesheet" href="../dist/css/AdminLTE.min.css">
+    <link rel="stylesheet" href="dist/css/AdminLTE.min.css">
     <!-- AdminLTE Skins. Choose a skin from the css/skins
          folder instead of downloading all of them to reduce the load. -->
-    <link rel="stylesheet" href="../dist/css/skins/_all-skins.min.css">
+    <link rel="stylesheet" href="dist/css/skins/_all-skins.min.css">
     <!-- Custom snackbar style -->
-    <link rel="stylesheet" href="../dist/css/snackbar.min.css">
+    <link rel="stylesheet" href="dist/css/snackbar.min.css">
     <!-- Pace style -->
-    <link rel="stylesheet" href="../plugins/pace/pace.min.css">
+    <link rel="stylesheet" href="plugins/pace/pace.min.css">
 
-    <link rel="icon" href="../../favicon.ico">
+    <link rel="icon" href="../favicon.ico">
 
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -68,23 +68,7 @@ require_once '../../defines.php';
 
                 <div class="collapse navbar-collapse pull-left" id="navbar-collapse">
                 </div>
-
-                <div class="navbar-custom-menu">
-                    <ul class="nav navbar-nav">
-                        <?php
-                        if (isset($_SESSION['database']) && $_SESSION['database'] == 'main') { ?>
-                            <li class="dropdown user user-menu">
-                                <a href="javascript:abreModal('#myInfos');" class="dropdown-toggle">
-                                    <img src="../dist/img/user.png" class="user-image" alt="User Image">
-                                    <span id="userLogado" class="hidden-xs"><?= $_SESSION["nome"] ?></span>
-                                </a>
-                            </li>
-                        <?php } ?>
-                        <li>
-                            <a href="../../admin/sair.php"><i class="fa fa-power-off"></i></a>
-                        </li>
-                    </ul>
-                </div>
+                <?php include_once 'navbar-user.php'; ?>
             </div>
         </nav>
     </header>
@@ -106,7 +90,7 @@ require_once '../../defines.php';
                     </div>
                     <div class="box-body">
                         <?php
-                        $pasta = '../../comprovantes/';
+                        $pasta = '../comprovantes/';
                         $diretorio = dir($pasta);
 
                         $table = new Table('files', 'table table-bordered table-striped', ['Tipo', 'Nome'], true);
@@ -145,34 +129,34 @@ require_once '../../defines.php';
         </div>
     </footer>
     <?php
-    include_once "../util/modals-util.php";
+    include_once "util/modals-util.php";
     ?>
 </div>
 <!-- jQuery 2.2.3 -->
-<script src="../plugins/jQuery/jquery-2.2.3.min.js"></script>
+<script src="plugins/jQuery/jquery-2.2.3.min.js"></script>
 <!-- DataTables -->
-<script src="../plugins/datatables/jquery.dataTables.min.js"></script>
-<script src="../plugins/datatables/dataTables.bootstrap.min.js"></script>
+<script src="plugins/datatables/jquery.dataTables.min.js"></script>
+<script src="plugins/datatables/dataTables.bootstrap.min.js"></script>
 <!-- Bootstrap 3.3.6 -->
-<script src="../bootstrap/js/bootstrap.min.js"></script>
+<script src="bootstrap/js/bootstrap.min.js"></script>
 <!-- date-range-picker -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.11.2/moment.min.js"></script>
-<script src="../plugins/daterangepicker/daterangepicker.js"></script>
+<script src="plugins/daterangepicker/daterangepicker.js"></script>
 <!-- SlimScroll -->
-<script src="../plugins/slimScroll/jquery.slimscroll.min.js"></script>
+<script src="plugins/slimScroll/jquery.slimscroll.min.js"></script>
 <!-- FastClick -->
-<script src="../plugins/fastclick/fastclick.js"></script>
+<script src="plugins/fastclick/fastclick.js"></script>
 <!-- AdminLTE App -->
-<script src="../dist/js/app.min.js"></script>
+<script src="dist/js/app.min.js"></script>
 <!-- AdminLTE for demo purposes -->
-<script src="../dist/js/demo.js"></script>
+<script src="dist/js/demo.js"></script>
 <!-- PACE -->
-<script src="../plugins/pace/pace.min.js"></script>
+<script src="plugins/pace/pace.min.js"></script>
 <!-- DataTables -->
-<script src="../plugins/datatables/jquery.dataTables.min.js"></script>
-<script src="../plugins/datatables/dataTables.bootstrap.min.js"></script>
+<script src="plugins/datatables/jquery.dataTables.min.js"></script>
+<script src="plugins/datatables/dataTables.bootstrap.min.js"></script>
 <!-- page script -->
-<script type="text/javascript" src="../js/util_lte.min.js"></script>
+<script type="text/javascript" src="js/util_lte.min.js"></script>
 <script>
     var language = {
         "decimal": "",
@@ -207,8 +191,3 @@ require_once '../../defines.php';
 </script>
 </body>
 </html>
-
-
-
-
-
