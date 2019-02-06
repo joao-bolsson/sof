@@ -543,8 +543,8 @@ if (isset($_SESSION['editmode'])) {
                 </div>
             </div>
         </div>
-        <?php include_once __DIR__ . "/report-modals/comum/modal-relLibOrc.php" ?>
-        <?php include_once __DIR__ . "/report-modals/comum/modal-relPedidos.php" ?>
+        <?php include_once __DIR__ . "/util/modal-relLibOrc.php" ?>
+        <?php include_once __DIR__ . "/util/modal-relPedidos.php" ?>
         <div aria-hidden="true" class="modal fade" id="relSIAFI" role="dialog" tabindex="-1">
             <div class="modal-dialog">
                 <div class="modal-content">
