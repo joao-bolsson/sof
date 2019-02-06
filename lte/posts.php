@@ -321,7 +321,7 @@ require_once '../defines.php';
 
 <!-- page script -->
 <script type="text/javascript" src="js/util_lte.js"></script>
-<script type="text/javascript" src="posts/posts.js"></script>
+<script type="text/javascript" src="js/posts.min.js"></script>
 </body>
 </html>
 

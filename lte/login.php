@@ -166,7 +166,7 @@ include_once '../defines.php';
 
 <!-- page scripts -->
 <script type="text/javascript" src="js/util_lte.min.js"></script>
-<script src="admin/js/login.min.js"></script>
+<script src="js/login.min.js"></script>
 
 <script src="plugins/input-mask/jquery.inputmask.js"></script>
 <script src="plugins/input-mask/jquery.inputmask.date.extensions.js"></script>
