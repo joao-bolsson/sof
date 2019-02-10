@@ -215,9 +215,9 @@ if (!isset($_SESSION['editmode'])) {
 <!-- PACE -->
 <script src="plugins/pace/pace.min.js"></script>
 <!-- page script -->
-<script type="text/javascript" src="util/util_lte.min.js"></script>
+<script type="text/javascript" src="js/util_lte.min.js"></script>
 <script type="text/javascript" src="../iniLTE.min.js"></script>
-<script type="text/javascript" src="util/editMode.min.js"></script>
+<script type="text/javascript" src="js/editMode.min.js"></script>
 </body>
 </html>
 

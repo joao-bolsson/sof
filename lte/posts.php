@@ -320,8 +320,8 @@ require_once '../defines.php';
 <script type="text/javascript" src="../plugins/froala/js/languages/pt_br.min.js"></script>
 
 <!-- page script -->
-<script type="text/javascript" src="util/util_lte.js"></script>
-<script type="text/javascript" src="posts/posts.js"></script>
+<script type="text/javascript" src="js/util_lte.js"></script>
+<script type="text/javascript" src="js/posts.min.js"></script>
 </body>
 </html>
 

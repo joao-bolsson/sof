@@ -12,20 +12,20 @@ module.exports = function (grunt) {
                 files: {
                     'ini.min.js': ['ini.js'],
                     'iniLTE.min.js': ['iniLTE.js'],
-                    'lte/hora/js/hora.min.js': ['lte/hora/js/hora.js'],
-                    'lte/admin/js/admin.min.js': ['lte/admin/js/admin.js'],
-                    'lte/admin/js/modals-pedidos.min.js': ['lte/admin/js/modals-pedidos.js'],
-                    'lte/admin/js/saldos.min.js': ['lte/admin/js/saldos.js'],
-                    'lte/admin/js/recepcao.min.js': ['lte/admin/js/recepcao.js'],
-                    'lte/admin/js/login.min.js': ['lte/admin/js/login.js'],
-                    'lte/admin/js/body-pedidos.min.js': ['lte/admin/js/body-pedidos.js'],
-                    'lte/solicitacoes/js/rows.min.js': ['lte/solicitacoes/js/rows.js'],
-                    'lte/solicitacoes/js/modals-geral.min.js': ['lte/solicitacoes/js/modals-geral.js'],
-                    'lte/util/util_lte.min.js': ['lte/util/util_lte.js'],
-                    'lte/util/editMode.min.js': ['lte/util/editMode.js'],
-                    'lte/posts/posts.min.js': ['lte/posts/posts.js'],
-                    'lte/apoio/apoio.min.js': ['lte/apoio/apoio.js'],
-                    'lte/util/contratos.min.js': ['lte/util/contratos.js']
+                    'lte/js/hora.min.js': ['lte/js/hora.js'],
+                    'lte/js/admin.min.js': ['lte/js/admin.js'],
+                    'lte/js/modals-pedidos.min.js': ['lte/js/modals-pedidos.js'],
+                    'lte/js/saldos.min.js': ['lte/js/saldos.js'],
+                    'lte/js/recepcao.min.js': ['lte/js/recepcao.js'],
+                    'lte/js/login.min.js': ['lte/js/login.js'],
+                    'lte/js/body-pedidos.min.js': ['lte/js/body-pedidos.js'],
+                    'lte/js/rows.min.js': ['lte/js/rows.js'],
+                    'lte/js/modals-geral.min.js': ['lte/js/modals-geral.js'],
+                    'lte/js/util_lte.min.js': ['lte/js/util_lte.js'],
+                    'lte/js/editMode.min.js': ['lte/js/editMode.js'],
+                    'lte/js/posts.min.js': ['lte/js/posts.js'],
+                    'lte/js/apoio.min.js': ['lte/js/apoio.js'],
+                    'lte/js/contratos.min.js': ['lte/js/contratos.js']
                 }
             }
         } // uglify
