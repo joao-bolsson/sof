@@ -101,7 +101,7 @@ require_once '../defines.php';
                             $tipo_doc = 'Documento';
                             if ($arquivo != "." && $arquivo != "..") {
                                 $cnpj = str_replace([".", "-", "/"], "", $_SESSION['login']);
-                                $file_name = str_replace([".xps", '-', '.'], "", $arquivo);
+                                $file_name = str_replace([".xps", ".pdf", '-', '.'], "", $arquivo);
                                 if ($cnpj == $file_name) {
                                     $row = new Row();
                                     $row->addComponent(new Column(new Small('label bg-' . $label, $tipo_doc)));
