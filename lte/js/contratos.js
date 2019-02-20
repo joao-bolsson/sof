@@ -244,6 +244,24 @@ function editMens(id_contr, id_mes, id_ano) {
     });
 }
 
+function remContract(contrato) {
+    $.post('../php/geral.php', {
+        admin: 1,
+        form: 'remContract',
+        id: contrato
+    }).done(function (resp) {
+        console.log("resp: " + resp);
+        if (resp === "ok") {
+            alert("Contrato removido.");
+        } else {
+            alert("Ocorreu um erro no servidor!");
+        }
+        var group = $('#selectGroupTable').val();
+
+        reloadTableContr(group);
+    });
+}
+
 function editContract(contrato) {
     $.post('../php/busca.php', {
         admin: 1,

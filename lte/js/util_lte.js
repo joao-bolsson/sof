@@ -629,7 +629,19 @@ function iniDataTable(tabela) {
         }
     };
 
-    if (tabela == '#tableItensPedido') {
+    if (tabela === "#tableContratos") {
+        $(tabela).DataTable({
+            "destroy": true,
+            "order": [[0, "desc"]],
+            "columnDefs": [
+                {"width": "20%", "targets": 0},
+                {"width": "5%", "targets": 1},
+                {"width": "30%", "targets": 2},
+                {"width": "15%", "targets": 3}
+            ],
+            language: language
+        });
+    } else if (tabela == '#tableItensPedido') {
         $(tabela).DataTable({
             "destroy": true,
             "scrollX": true,

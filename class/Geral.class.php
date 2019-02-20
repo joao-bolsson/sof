@@ -27,6 +27,23 @@ final class Geral {
         // empty
     }
 
+    /**
+     * Removes a contract by the given id.
+     *
+     * @param int $id Contract id.
+     * @return bool If operation succeed - true, else - false.
+     */
+    public static function remContract(int $id): bool {
+        Query::getInstance()->exe("DELETE FROM contrato_empresa WHERE id_contrato = " . $id);
+        Query::getInstance()->exe("DELETE FROM mensalidade WHERE id_contr = " . $id);
+        $query = Query::getInstance()->exe("DELETE FROM contrato WHERE id = " . $id);
+
+        if ($query) {
+            return true;
+        }
+        return false;
+    }
+
     public static function cadMensalidade(int $contr, int $ano, int $mes, int $grupo, float $valor, bool $nota, float $reajuste, bool $aguardaOrc, bool $paga): bool {
         // garante update
         Query::getInstance()->exe("DELETE FROM mensalidade WHERE id_contr = " . $contr . " AND id_mes = " . $mes . " AND id_ano = " . $ano);

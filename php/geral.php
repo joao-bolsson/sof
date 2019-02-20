@@ -46,6 +46,16 @@ if (Busca::isActive()) {
     if (!is_null($admin) && isset($_SESSION["id_setor"]) && ($_SESSION["id_setor"] == 2 || $_SESSION["id_setor"] == 12)) {
         switch ($form) {
 
+            case 'remContract':
+                $contrato = filter_input(INPUT_POST, 'id');
+                $rem = Geral::remContract($contrato);
+                if ($rem) {
+                    echo "ok";
+                } else {
+                    echo "error";
+                }
+                break;
+
             case 'formMensalidade':
                 $contrato = filter_input(INPUT_POST, 'contrato');
                 $grupo = filter_input(INPUT_POST, 'grupo');

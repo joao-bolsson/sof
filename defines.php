@@ -22,6 +22,7 @@ defined('MPDF_PATH') or define('MPDF_PATH', __DIR__);
 defined('TEMP_FOLDER') or define('TEMP_FOLDER', __DIR__ . '/temp/');
 
 defined('BTN_DEFAULT') or define('BTN_DEFAULT', 'btn btn-default');
+defined('BTN_DANGER') or define('BTN_DANGER', 'btn btn-danger');
 defined('MAX_UPLOAD_SIZE') or define('MAX_UPLOAD_SIZE', 3);
 
 defined('ARRAY_DATABASES') or define('ARRAY_DATABASES', ['main', 'sof_2018', 'sof_2017']);

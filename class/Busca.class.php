@@ -78,7 +78,9 @@ final class Busca {
 
                 $print = new Button('', BTN_DEFAULT, "printContract(" . $obj->id . ")", "data-toggle=\"tooltip\"", 'Imprimir', 'print');
 
-                $buttons = "<div class='btn-group'>" . $edit . $add . $see_mens . $print . "</div>";
+                $del = new Button('', BTN_DANGER, "remContract(" . $obj->id . ")", "data-toggle=\"tooltip\"", 'Excluir', 'close');
+
+                $buttons = "<div class='btn-group'>" . $edit . $add . $see_mens . $print . $del . "</div>";
 
                 $query_saldo = Query::getInstance()->exe("SELECT (SELECT teto FROM contrato WHERE id = " . $obj->id . ") - SUM(valor) AS saldo FROM mensalidade WHERE id_contr = " . $obj->id);
 
