@@ -129,10 +129,15 @@ $controller = Controller::getInstance();
                             <div style="align: center; margin-left: 23%;">
                                 <iframe src="https://www.youtube.com/embed/T9Ez5Ivn0Us?rel=0" width="560" height="315"
                                         frameborder="0" allowfullscreen="allowfullscreen"></iframe>
-                            </p>
+                            </div>
+
+                            <p><strong>Acesso às empresas (comprovantes de rendimento)</strong></p>
+                            <div style="align: center; margin-left: 23%;">
+                                <iframe src="https://www.youtube.com/embed/VrfPMdj3WxE" width="560" height="315"
+                                        frameborder="0" allowfullscreen="allowfullscreen"></iframe>
+                            </div>
                         </div>
                     </div>
-                </div>
             </section>
         </div>
     </div>
