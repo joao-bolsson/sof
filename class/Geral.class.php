@@ -44,10 +44,7 @@ final class Geral {
         return false;
     }
 
-    public static function cadMensalidade(int $contr, int $ano, int $mes, int $grupo, float $valor, bool $nota, float $reajuste, bool $aguardaOrc, bool $paga): bool {
-        // garante update
-        Query::getInstance()->exe("DELETE FROM mensalidade WHERE id_contr = " . $contr . " AND id_mes = " . $mes . " AND id_ano = " . $ano);
-
+    public static function cadMensalidade(int $id, int $contr, int $ano, int $mes, int $grupo, float $valor, bool $nota, float $reajuste, bool $aguardaOrc, bool $paga): bool {
         $builder = new SQLBuilder(SQLBuilder::$INSERT);
         $builder->setTables(['mensalidade']);
 
@@ -64,7 +61,15 @@ final class Geral {
             return false;
         }
 
-        $builder->setValues([$contr, $mes, $ano, $grupo, $valor, $nota, $reajuste, $aguardaOrc, $paga]);
+        if ($id > 0) {
+            $builder->setType(SQLBuilder::$UPDATE);
+            $builder->setColumns(['id_contr', 'id_mes', 'id_ano', 'id_grupo', 'valor', 'nota', 'reajuste', 'aguardaOrcamento', 'paga']);
+            $builder->setValues([$contr, $mes, $ano, $grupo, $valor, $nota, $reajuste, $aguardaOrc, $paga]);
+            $builder->setWhere("id=" . $id);
+        } else {
+            // insert new entry
+            $builder->setValues([NULL, $contr, $mes, $ano, $grupo, $valor, $nota, $reajuste, $aguardaOrc, $paga]);
+        }
 
         Query::getInstance()->exe($builder->__toString());
         return true;
@@ -254,7 +259,7 @@ final class Geral {
      *    Função para aprovar uma solicitação de adiantamento
      *
      * @param int $id
-     * @param int $acao 0 -> reprovado | 1 -> aprovado
+     * @param int $acao 0 -> reprovado ,1 -> aprovado
      * @return bool
      */
     public static function analisaAdi(int $id, int $acao): bool {

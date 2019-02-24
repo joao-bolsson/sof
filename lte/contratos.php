@@ -345,6 +345,7 @@ require_once '../defines.php';
                 <form id="formMensalidade" method="POST">
                     <input type="hidden" name="admin" value="1">
                     <input type="hidden" name="form" value="formMensalidade">
+                    <input type="hidden" name="id" value="0">
                     <div class="modal-body">
                         <div class="form-group">
                             <label>Contrato</label>

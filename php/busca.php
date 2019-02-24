@@ -48,11 +48,9 @@ if (!is_null($admin) && isset($_SESSION['id_setor']) && ($_SESSION['id_setor'] =
             break;
 
         case 'editMens':
-            $id_contr = filter_input(INPUT_POST, 'id_contr');
-            $id_ano = filter_input(INPUT_POST, 'id_ano');
-            $id_mes = filter_input(INPUT_POST, 'id_mes');
+            $id = filter_input(INPUT_POST, 'id');
 
-            echo json_encode(Busca::getEditMens($id_contr, $id_ano, $id_mes));
+            echo json_encode(Busca::getEditMens($id));
             break;
 
         case 'showMensalidades':
