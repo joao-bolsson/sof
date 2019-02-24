@@ -24,8 +24,8 @@ final class Busca {
         // empty
     }
 
-    public static function getEditMens(int $id_contr, int $id_ano, int $id_mes) {
-        $query = Query::getInstance()->exe("SELECT id_grupo, valor, nota, reajuste, aguardaOrcamento, paga FROM mensalidade WHERE id_contr = " . $id_contr . " AND id_ano = " . $id_ano . " AND id_mes = " . $id_mes . ";");
+    public static function getEditMens(int $id) {
+        $query = Query::getInstance()->exe("SELECT id_grupo, valor, nota, reajuste, aguardaOrcamento, paga FROM mensalidade WHERE id = " . $id);
 
         return $query->fetch_object();
     }
@@ -39,12 +39,12 @@ final class Busca {
     public static function fillTableMens(int $id_contr): string {
         $table = new Table('', '', [], true);
 
-        $query_mensalidade = Query::getInstance()->exe("SELECT mensalidade.id_mes, mensalidade.id_ano, mes.sigla_mes, ano.ano, valor, nota, reajuste FROM mes, ano, mensalidade WHERE id_contr = " . $id_contr . " AND mensalidade.id_mes = mes.id AND mensalidade.id_ano = ano.id");
+        $query_mensalidade = Query::getInstance()->exe("SELECT mensalidade.id, mensalidade.id_mes, mensalidade.id_ano, mes.sigla_mes, ano.ano, valor, nota, reajuste FROM mes, ano, mensalidade WHERE id_contr = " . $id_contr . " AND mensalidade.id_mes = mes.id AND mensalidade.id_ano = ano.id");
 
         while ($obj = $query_mensalidade->fetch_object()) {
             $row = new Row();
 
-            $params = $id_contr . ", " . $obj->id_mes . ", " . $obj->id_ano;
+            $params = $obj->id . ", " . $id_contr . ", " . $obj->id_mes . ", " . $obj->id_ano;
 
             $btn_edit = new Button('', BTN_DEFAULT, "editMens(" . $params . ")", "data-toggle=\"tooltip\"", 'Editar Mensalidade', 'pencil');
 
@@ -78,7 +78,9 @@ final class Busca {
 
                 $print = new Button('', BTN_DEFAULT, "printContract(" . $obj->id . ")", "data-toggle=\"tooltip\"", 'Imprimir', 'print');
 
-                $buttons = "<div class='btn-group'>" . $edit . $add . $see_mens . $print . "</div>";
+                $del = new Button('', BTN_DANGER, "remContract(" . $obj->id . ")", "data-toggle=\"tooltip\"", 'Excluir', 'close');
+
+                $buttons = "<div class='btn-group'>" . $edit . $add . $see_mens . $print . $del . "</div>";
 
                 $query_saldo = Query::getInstance()->exe("SELECT (SELECT teto FROM contrato WHERE id = " . $obj->id . ") - SUM(valor) AS saldo FROM mensalidade WHERE id_contr = " . $obj->id);
 

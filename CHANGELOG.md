@@ -1,5 +1,11 @@
 ## CHANGELOG ##
 
+#### v2.4.1 - 24/02/2019 ####
+- Suporte para mais de uma nota por mês
+- Organização da estrutura interna do sistema
+- Relatório de contrato mostrando todas as notas
+- Suporte para exclusão de contratos
+
 #### v2.4.0 - 06/01/2019 ####
 - Editar NFs lançadas
 - Corrige bug o checkbox 'Reajuste' que não estava operando

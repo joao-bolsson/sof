@@ -46,7 +46,18 @@ if (Busca::isActive()) {
     if (!is_null($admin) && isset($_SESSION["id_setor"]) && ($_SESSION["id_setor"] == 2 || $_SESSION["id_setor"] == 12)) {
         switch ($form) {
 
+            case 'remContract':
+                $contrato = filter_input(INPUT_POST, 'id');
+                $rem = Geral::remContract($contrato);
+                if ($rem) {
+                    echo "ok";
+                } else {
+                    echo "error";
+                }
+                break;
+
             case 'formMensalidade':
+                $id = filter_input(INPUT_POST, 'id');
                 $contrato = filter_input(INPUT_POST, 'contrato');
                 $grupo = filter_input(INPUT_POST, 'grupo');
                 $ano = filter_input(INPUT_POST, 'ano');
@@ -62,7 +73,7 @@ if (Busca::isActive()) {
                     $reajuste = floatval(0);
                 }
 
-                $cad = Geral::cadMensalidade($contrato, $ano, $mes, $grupo, $valor, $nota, $reajuste, $aguardaOrc, $paga);
+                $cad = Geral::cadMensalidade($id, $contrato, $ano, $mes, $grupo, $valor, $nota, $reajuste, $aguardaOrc, $paga);
                 echo $cad;
                 break;
 

@@ -30,7 +30,7 @@ $(function () {
     $('#selectGroupTable').change();
 
     $('#cadContrato').on('shown.bs.modal', function () {
-        $(".date").inputmask("dd/mm/yyyy", {"placeholder": "dd/mm/yyyy"});
+        $("#cadContrato .date").inputmask("dd/mm/yyyy", {"placeholder": "dd/mm/yyyy"});
     });
 
     $('#cadContrato').on('hidden.bs.modal', function () {
@@ -69,14 +69,14 @@ $(function () {
         }).done(function (resposta) {
             document.getElementById('selectContr').innerHTML = resposta;
         }).always(function () {
-            $('.select2').select2();
+            $('#cadEmpresa .select2').select2();
         });
     });
 
     $('#cadEmpresa').on('hidden.bs.modal', function () {
         $('#formEmpresa').trigger("reset");
-        $('.minimal').iCheck('destroy');
-        $('.select2').select2('destroy');
+        $('#cadEmpresa .minimal').iCheck('destroy');
+        $('#cadEmpresa .select2').select2('destroy');
     });
 
     $('#formEmpresa').submit(function (event) {
@@ -96,7 +96,7 @@ $(function () {
     });
 
     $('#cadMensalidade').on('shown.bs.modal', function () {
-        $('.minimal').iCheck({
+        $('#formMensalidade .minimal').iCheck({
             checkboxClass: 'icheckbox_minimal-blue',
             radioClass: 'iradio_minimal-blue'
         });
@@ -131,7 +131,8 @@ $(function () {
 
     $('#cadMensalidade').on('hidden.bs.modal', function () {
         $('#formMensalidade').trigger("reset");
-        $('.minimal').iCheck('destroy');
+        $("#formMensalidade input[name=id]").val(0);
+        $('#formMensalidade .minimal').iCheck('destroy');
 
         $("#formMensalidade input[name=checkReajuste]").prop('disabled', true);
         $("#formMensalidade input[name=checkReajuste]").prop('required', false);
@@ -142,7 +143,7 @@ $(function () {
     });
 
     $('#printRel').on('shown.bs.modal', function () {
-        $('.minimal').iCheck({
+        $('#printRel .minimal').iCheck({
             checkboxClass: 'icheckbox_minimal-blue',
             radioClass: 'iradio_minimal-blue'
         });
@@ -150,7 +151,7 @@ $(function () {
 
     $('#printRel').on('hidden.bs.modal', function () {
         $('#formRel').trigger("reset");
-        $('.minimal').iCheck('destroy');
+        $('#printRel .minimal').iCheck('destroy');
     });
 
     $('#formRel').submit(function (event) {
@@ -203,13 +204,11 @@ function showMensalidades(contrato) {
     });
 }
 
-function editMens(id_contr, id_mes, id_ano) {
+function editMens(id, id_contr, id_mes, id_ano) {
     $.post('../php/busca.php', {
         admin: 1,
         form: 'editMens',
-        id_contr: id_contr,
-        id_mes: id_mes,
-        id_ano: id_ano
+        id: id,
     }).done(function (resposta) {
         var obj = jQuery.parseJSON(resposta);
 
@@ -220,6 +219,7 @@ function editMens(id_contr, id_mes, id_ano) {
          */
         $('#cadMensalidade').modal('show');
 
+        $("#formMensalidade input[name=id]").val(id);
         $("#formMensalidade select[name=grupo]").val(obj.id_grupo);
         $("#formMensalidade select[name=ano]").val(id_ano);
         $("#formMensalidade select[name=mes]").val(id_mes);
@@ -230,17 +230,35 @@ function editMens(id_contr, id_mes, id_ano) {
             $("#formMensalidade input[name=valorReajuste]").val(obj.reajuste);
         }
 
-        if (obj.nota) {
+        if (obj.nota === "1") {
             $("#formMensalidade input[name=nota]").iCheck('check');
         }
 
-        if (obj.aguardaOrcamento) {
+        if (obj.aguardaOrcamento === "1") {
             $("#formMensalidade input[name=checkAgOrc]").iCheck('check');
         }
 
-        if (obj.paga) {
+        if (obj.paga === "1") {
             $("#formMensalidade input[name=checkPaga]").iCheck('check');
         }
+    });
+}
+
+function remContract(contrato) {
+    $.post('../php/geral.php', {
+        admin: 1,
+        form: 'remContract',
+        id: contrato
+    }).done(function (resp) {
+        console.log("resp: " + resp);
+        if (resp === "ok") {
+            alert("Contrato removido.");
+        } else {
+            alert("Ocorreu um erro no servidor!");
+        }
+        var group = $('#selectGroupTable').val();
+
+        reloadTableContr(group);
     });
 }
 

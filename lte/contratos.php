@@ -305,6 +305,11 @@ require_once '../defines.php';
                     <div class="modal-body">
                         <div class="form-group" style="display: inline-block">
                             <label>
+                                <input type="checkbox" name="tudo" class="minimal"/> Tudo
+                            </label>
+                        </div>
+                        <div class="form-group" style="display: inline-block">
+                            <label>
                                 <input type="checkbox" name="nota" class="minimal"/> Com Nota
                             </label>
                         </div>
@@ -345,6 +350,7 @@ require_once '../defines.php';
                 <form id="formMensalidade" method="POST">
                     <input type="hidden" name="admin" value="1">
                     <input type="hidden" name="form" value="formMensalidade">
+                    <input type="hidden" name="id" value="0">
                     <div class="modal-body">
                         <div class="form-group">
                             <label>Contrato</label>
@@ -487,7 +493,7 @@ require_once '../defines.php';
 <!-- page script -->
 <script type="text/javascript" src="js/util_lte.min.js"></script>
 <script type="text/javascript" src="../iniLTE.min.js"></script>
-<script type="text/javascript" src="js/contratos.js"></script>
+<script type="text/javascript" src="js/contratos.min.js"></script>
 </body>
 </html>
 
