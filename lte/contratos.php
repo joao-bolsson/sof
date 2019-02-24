@@ -305,6 +305,11 @@ require_once '../defines.php';
                     <div class="modal-body">
                         <div class="form-group" style="display: inline-block">
                             <label>
+                                <input type="checkbox" name="tudo" class="minimal"/> Tudo
+                            </label>
+                        </div>
+                        <div class="form-group" style="display: inline-block">
+                            <label>
                                 <input type="checkbox" name="nota" class="minimal"/> Com Nota
                             </label>
                         </div>
