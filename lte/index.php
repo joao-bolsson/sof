@@ -1313,9 +1313,6 @@ if (isset($_SESSION['editmode'])) {
 <script src="plugins/input-mask/jquery.inputmask.extensions.js"></script>
 <!-- PACE -->
 <script src="plugins/pace/pace.min.js"></script>
-<!-- page script -->
-<script type="text/javascript" src="js/util_lte.min.js"></script>
-<script type="text/javascript" src="../iniLTE.min.js"></script>
 
 <?php if ($_SESSION['login'] == 'joao' || $_SESSION['login'] == 'iara'): ?>
     <script type="text/javascript" src="js/admin.min.js"></script>
@@ -1328,11 +1325,15 @@ if (isset($_SESSION['editmode'])) {
 <?php endif; ?>
 
 <?php if ($permissao->saldos): ?>
-    <script type=\"text/javascript\" src="js/saldos.min.js"></script>
+    <script type="text/javascript" src="js/saldos.min.js"></script>
 <?php endif; ?>
 
 <?php if ($permissao->recepcao): ?>
-    <script type=\"text/javascript\" src="js/recepcao.min.js"></script>
+    <script type="text/javascript" src="js/recepcao.min.js"></script>
 <?php endif; ?>
+
+<!-- page script -->
+<script type="text/javascript" src="js/util_lte.min.js"></script>
+<script type="text/javascript" src="../iniLTE.min.js"></script>
 </body>
 </html>
