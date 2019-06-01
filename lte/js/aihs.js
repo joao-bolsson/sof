@@ -4,6 +4,13 @@
  * @since 2019, 01 Jun.
  */
 
+$(function () {
+    $("#cadAIHS").on('shown.bs.modal', function () {
+        $(".date").inputmask("dd/mm/yyyy", {"placeholder": "dd/mm/yyyy"});
+    });
+
+});
+
 /**
  * Function called to edit a log.
  */

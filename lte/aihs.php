@@ -32,8 +32,6 @@ require_once '../defines.php';
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
     <!-- Bootstrap 3.3.6 -->
     <link rel="stylesheet" href="bootstrap/css/bootstrap.min.css">
-    <!-- daterange picker -->
-    <link rel="stylesheet" href="plugins/daterangepicker/daterangepicker.css">
     <!-- DataTables -->
     <link rel="stylesheet" href="plugins/datatables/dataTables.bootstrap.css">
     <!-- Font Awesome -->
@@ -102,7 +100,7 @@ require_once '../defines.php';
                     </div>
                     <div class="box-body">
                         <div class="margin">
-                            <button class="btn btn-primary" type="button" onclick="addAIHS()"><i
+                            <button class="btn btn-primary" type="button" onclick="abreModal('#cadAIHS');"><i
                                         class="fa fa-sign-in"></i>&nbsp;Adicionar
                             </button>
                         </div>
@@ -117,15 +115,75 @@ require_once '../defines.php';
                             </thead>
                             <tbody id="tboodyAIHS"></tbody>
                         </table>
-                    </div><!-- ./box-body -->
+                    </div>
                 </div>
-                <!-- /.box -->
             </section>
-            <!-- /.content -->
         </div>
-        <!-- /.container -->
     </div>
-    <!-- /.content-wrapper -->
+    <div aria-hidden="true" class="modal fade" id="cadAIHS" role="dialog" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                                aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">Formulário Apresentadas</h4>
+                </div>
+                <form id="formCadAIHS">
+                    <input type="hidden" name="admin" value="1"/>
+                    <input type="hidden" name="form" value="cadAIHS"/>
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <label>Data de Lançamento</label>
+                            <input class="form-control date" name="data" type="text" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Competência</label>
+                            <select class="form-control" name="mes" required>
+                                <?php
+                                $query = Query::getInstance()->exe("SELECT id, sigla_mes FROM mes LIMIT 12;");
+                                while ($obj = $query->fetch_object()) {
+                                    echo "<option value=\"{$obj->id}\">{$obj->sigla_mes}</option>";
+                                }
+                                ?>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Quantidade</label>
+                            <input class="form-control" type="number" min="0" step="1" name="qtd" required/>
+                        </div>
+                        <div class="form-group">
+                            <label>Valor</label>
+                            <input class="form-control" type="number" min="0" step="0.01" name="valor" required/>
+                        </div>
+                        <div class="form-group">
+                            <label>Tipo</label>
+                            <select class="form-control" name="tipo" required>
+                                <?php
+                                $query = Query::getInstance()->exe("SELECT id, sigla_mes FROM mes LIMIT 12;");
+                                while ($obj = $query->fetch_object()) {
+                                    echo "<option value=\"{$obj->id}\">{$obj->sigla_mes}</option>";
+                                }
+                                ?>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Grupo</label>
+                            <input id="grupo" class="form-control" name="grupo" disabled/>
+                        </div>
+                        <div class="form-group">
+                            <label>Descrição (sub-grupo)</label>
+                            <input id="descr" class="form-control" name="sub-grupo" disabled/>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn btn-primary" type="submit" style="width: 100%;"><i
+                                    class="fa fa-send"></i>&nbsp;Cadastrar
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
     <div id="snackbar"></div>
     <footer class="main-footer">
         <div class="container">
@@ -149,9 +207,6 @@ require_once '../defines.php';
 <script src="plugins/datatables/dataTables.bootstrap.min.js"></script>
 <!-- Bootstrap 3.3.6 -->
 <script src="bootstrap/js/bootstrap.min.js"></script>
-<!-- date-range-picker -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.11.2/moment.min.js"></script>
-<script src="plugins/daterangepicker/daterangepicker.js"></script>
 <!-- SlimScroll -->
 <script src="plugins/slimScroll/jquery.slimscroll.min.js"></script>
 <!-- FastClick -->
@@ -162,6 +217,11 @@ require_once '../defines.php';
 <script src="dist/js/demo.js"></script>
 <!-- PACE -->
 <script src="plugins/pace/pace.min.js"></script>
+
+<!-- InputMask -->
+<script src="plugins/input-mask/jquery.inputmask.js"></script>
+<script src="plugins/input-mask/jquery.inputmask.date.extensions.js"></script>
+<script src="plugins/input-mask/jquery.inputmask.extensions.js"></script>
 
 <!-- page script -->
 <script type="text/javascript" src="js/util_lte.min.js"></script>
