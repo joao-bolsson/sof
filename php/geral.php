@@ -549,6 +549,27 @@ if (Busca::isActive()) {
     } else if ($users !== NULL && isset($_SESSION["id_setor"]) && $_SESSION["id_setor"] != 0) {
         switch ($form) {
 
+            case 'cadAIHS':
+                $data = filter_input(INPUT_POST, 'data');
+                $mes = filter_input(INPUT_POST, 'mes');
+                $qtd = filter_input(INPUT_POST, 'qtd');
+                $valor = filter_input(INPUT_POST, 'valor');
+                $tipo = filter_input(INPUT_POST, 'tipo');
+                $grupo = filter_input(INPUT_POST, 'grupo');
+                $descricao = filter_input(INPUT_POST, 'descricao');
+
+                // can be empty if disabled
+                if (empty($grupo)) {
+                    $grupo = "";
+                }
+                if (empty($descricao)) {
+                    $descricao = "";
+                }
+
+                Geral::cadAIHS($data, $mes, $qtd, $valor, $tipo, $grupo, $descricao);
+                echo "ok";
+                break;
+
             case 'altUser':
                 $user = filter_input(INPUT_POST, 'user');
                 if (!is_null($user)) {

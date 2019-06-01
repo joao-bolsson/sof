@@ -129,7 +129,7 @@ require_once '../defines.php';
                     <h4 class="modal-title">Formulário Apresentadas</h4>
                 </div>
                 <form id="formCadAIHS">
-                    <input type="hidden" name="admin" value="1"/>
+                    <input type="hidden" name="users" value="1"/>
                     <input type="hidden" name="form" value="cadAIHS"/>
                     <div class="modal-body">
                         <div class="form-group">
@@ -172,7 +172,7 @@ require_once '../defines.php';
                         </div>
                         <div class="form-group">
                             <label>Descrição (sub-grupo)</label>
-                            <input id="descr" class="form-control" name="sub-grupo" disabled/>
+                            <input id="descr" class="form-control" name="descricao" disabled/>
                         </div>
                     </div>
                     <div class="modal-footer">

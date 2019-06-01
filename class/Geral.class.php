@@ -27,6 +27,16 @@ final class Geral {
         // empty
     }
 
+    public static function cadAIHS(string $data, int $mes, int $qtd, float $valor, int $tipo, string $grupo, string $descricao) {
+        $dt = Util::dateFormat($data);
+
+        $builder = new SQLBuilder(SQLBuilder::$INSERT);
+        $builder->setTables(['aihs']);
+        $builder->setValues([NULL, $dt, $mes, $qtd, $valor, $tipo, $grupo, $descricao]);
+
+        Query::getInstance()->exe($builder->__toString());
+    }
+
     /**
      * Removes a contract by the given id.
      *

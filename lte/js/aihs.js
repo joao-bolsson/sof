@@ -9,6 +9,22 @@ $(function () {
         $(".date").inputmask("dd/mm/yyyy", {"placeholder": "dd/mm/yyyy"});
     });
 
+    $('#formCadAIHS').submit(function (event) {
+        event.preventDefault();
+
+        var data = $(this).serialize();
+
+        $.post('../php/geral.php', data).done(function (resposta) {
+            var msg = "Erro interno no servidor";
+            if (resposta) {
+                msg = "Sucesso!";
+            }
+            avisoSnack(msg);
+        }).always(function () {
+            $("#cadAIHS").modal('hide');
+        });
+    });
+
 });
 
 function changeAIHSType() {
