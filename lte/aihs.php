@@ -58,7 +58,7 @@ require_once '../defines.php';
     <![endif]-->
 </head>
 <!-- ADD THE CLASS layout-top-nav TO REMOVE THE SIDEBAR. -->
-<body class="hold-transition skin-blue layout-top-nav" onload="refreshPage()">
+<body class="hold-transition skin-blue layout-top-nav">
 <div class="wrapper">
 
     <header class="main-header">
@@ -157,11 +157,11 @@ require_once '../defines.php';
                         </div>
                         <div class="form-group">
                             <label>Tipo</label>
-                            <select class="form-control" name="tipo" required>
+                            <select id="tipo" class="form-control" name="tipo" onchange="changeAIHSType();" required>
                                 <?php
-                                $query = Query::getInstance()->exe("SELECT id, sigla_mes FROM mes LIMIT 12;");
+                                $query = Query::getInstance()->exe("SELECT id, nome FROM aihs_tipos;");
                                 while ($obj = $query->fetch_object()) {
-                                    echo "<option value=\"{$obj->id}\">{$obj->sigla_mes}</option>";
+                                    echo "<option value=\"{$obj->id}\">{$obj->nome}</option>";
                                 }
                                 ?>
                             </select>

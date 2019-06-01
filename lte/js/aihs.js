@@ -11,22 +11,15 @@ $(function () {
 
 });
 
-/**
- * Function called to edit a log.
- */
-function editLog(id) {
-    $.post('../php/busca.php', {
-        admin: 1,
-        form: 'editLog',
-        id: id
-    }, function (resposta) {
-        document.getElementById('idLog').value = id;
-        var obj = jQuery.parseJSON(resposta);
-        document.getElementById('nomeEdit').value = obj.nome;
-        document.getElementById('entradaEdit').value = obj.entrada;
-        document.getElementById('saidaEdit').value = obj.saida;
-        $('#editLog').modal();
-    });
+function changeAIHSType() {
+    var tipo = document.getElementById("tipo").value;
+
+    var disabled = !(tipo >= 5 && tipo <= 9);
+
+    document.getElementById("grupo").disabled = disabled;
+    document.getElementById("grupo").required = !disabled;
+    document.getElementById("descr").disabled = disabled;
+    document.getElementById("descr").required = !disabled;
 }
 
 function iniDataTable(tabela) {
