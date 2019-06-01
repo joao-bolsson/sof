@@ -23,39 +23,44 @@ $permissao = BuscaLTE::getPermissoes($_SESSION["id"]);
         </div>
         <!-- sidebar menu: : style can be found in sidebar.less -->
         <ul class="sidebar-menu">
-            <?php
-            if (isset($_SESSION['database']) && $_SESSION['database'] == 'main') { ?>
+            <?php if (isset($_SESSION['database']) && $_SESSION['database'] == 'main'): ?>
                 <li>
                     <a href="hora.php">
                         <i class="fa fa-clock-o"></i> <span>Ponto Eletrônico</span>
                     </a>
                 </li>
-            <?php } ?>
+            <?php endif; ?>
+            <?php if ($permissao->aihs): ?>
+                <li>
+                    <a href="aihs.php">
+                        <i class="fa fa-clock-o"></i> <span>AIHs</span>
+                    </a>
+                </li>
+            <?php endif; ?>
             <li>
                 <a href="javascript:abreModal('#changeDB');">
                     <i class="fa fa-database"></i> <span>Trocar Banco</span>
                 </a>
             </li>
-            <?php
-            if (isset($_SESSION['database']) && $_SESSION['database'] == 'main' && $permissao->noticias) { ?>
+            <?php if (isset($_SESSION['database']) && $_SESSION['database'] == 'main' && $permissao->noticias): ?>
                 <li>
                     <a href="posts.php">
                         <i class="fa fa-newspaper-o"></i> <span>Postar</span>
                     </a>
                 </li>
-            <?php } ?>
+            <?php endif; ?>
             <?php if ($permissao->pedidos): ?>
                 <li>
                     <a href="editmode.php">
                         <i class="fa fa-hdd-o"></i> <span>Cadastrar / Editar Itens</span>
                     </a>
                 </li>
+                <li>
+                    <a href="contratos.php">
+                        <i class="fa fa-money"></i> <span>Contratos</span>
+                    </a>
+                </li>
             <?php endif; ?>
-            <li>
-                <a href="contratos.php">
-                    <i class="fa fa-money"></i> <span>Contratos</span>
-                </a>
-            </li>
             <?php if ($permissao->saldos): ?>
                 <li>
                     <a href="javascript:mostraSolicAdiant();">
