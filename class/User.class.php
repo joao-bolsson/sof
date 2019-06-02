@@ -53,6 +53,8 @@ final class User {
      */
     private $recepcao;
 
+    private $aihs;
+
     /**
      * User constructor.
      * @param int $id User id
@@ -78,7 +80,7 @@ final class User {
     }
 
     private function loadPermissions() {
-        $query = Query::getInstance()->exe("SELECT noticias, saldos, pedidos, recepcao FROM usuario_permissoes WHERE id_usuario = " . $this->id);
+        $query = Query::getInstance()->exe("SELECT noticias, saldos, pedidos, recepcao, aihs FROM usuario_permissoes WHERE id_usuario = " . $this->id);
         if ($query->num_rows > 0) {
             $obj = $query->fetch_object();
 
@@ -86,6 +88,7 @@ final class User {
             $this->saldos = $obj->saldos;
             $this->pedidos = $obj->pedidos;
             $this->recepcao = $obj->recepcao;
+            $this->aihs = $obj->aihs;
         }
     }
 
@@ -124,16 +127,23 @@ final class User {
      * @param int $saldos Permissions to access the sectors money.
      * @param int $pedidos Permission to access the requests.
      * @param int $recepcao Permission to access the reception.
+     * @param int $aihs Permission to access AIHs.
      */
-    public function setPermissions(int $noticias, int $saldos, int $pedidos, int $recepcao) {
+    public function setPermissions(int $noticias, int $saldos, int $pedidos, int $recepcao, int $aihs) {
         $this->noticias = $noticias;
         $this->saldos = $saldos;
         $this->pedidos = $pedidos;
         $this->recepcao = $recepcao;
+        $this->aihs = $aihs;
 
         // garante reativação de usuários
         Query::getInstance()->exe("DELETE FROM usuario_permissoes WHERE id_usuario = " . $this->id);
-        Query::getInstance()->exe("INSERT INTO usuario_permissoes VALUES({$this->id}, {$this->noticias}, {$this->saldos}, {$this->pedidos}, {$this->recepcao});");
+
+        $builder = new SQLBuilder(SQLBuilder::$INSERT);
+        $builder->setTables(['usuario_permissoes']);
+        $builder->setValues([$this->id, $this->noticias, $this->saldos, $this->pedidos, $this->recepcao, $this->aihs]);
+
+        Query::getInstance()->exe($builder->__toString());
     }
 
     /**

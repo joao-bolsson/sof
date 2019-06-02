@@ -782,6 +782,7 @@ if (Busca::isActive()) {
                     $saldos = !is_null(filter_input(INPUT_POST, 'saldos'));
                     $pedidos = !is_null(filter_input(INPUT_POST, 'pedidos'));
                     $recepcao = !is_null(filter_input(INPUT_POST, 'recepcao'));
+                    $aihs = !is_null(filter_input(INPUT_POST, 'aihs'));
 
                     if ($recepcao) {
                         $noticias = 0;
@@ -794,7 +795,7 @@ if (Busca::isActive()) {
                     }
                 }
 
-                $user->setPermissions($noticias, $saldos, $pedidos, $recepcao);
+                $user->setPermissions($noticias, $saldos, $pedidos, $recepcao, $aihs);
 
                 $from = $obj_Util->mail->Username;
                 $nome_from = utf8_decode("Setor de Orçamento e Finanças do HUSM");
