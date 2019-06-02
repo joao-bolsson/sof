@@ -15,7 +15,7 @@ $(function () {
     });
 
     // checkbox permissions to add new user
-    for (var k = 1; k <= 4; k++) {
+    for (var k = 1; k <= 5; k++) {
         var perm = document.getElementById('perm' + k);
         if (perm !== null) {
             $('#perm' + k).iCheck({

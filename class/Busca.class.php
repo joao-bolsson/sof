@@ -369,7 +369,7 @@ final class Busca {
      * @return object Object with user's permissions in system.
      */
     public static function getPermissoes(int $id_user) {
-        $query = Query::getInstance()->exe('SELECT noticias, saldos, pedidos, recepcao FROM usuario_permissoes WHERE id_usuario = ' . $id_user);
+        $query = Query::getInstance()->exe('SELECT noticias, saldos, pedidos, recepcao, aihs FROM usuario_permissoes WHERE id_usuario = ' . $id_user);
         $obj_permissions = $query->fetch_object();
         return $obj_permissions;
     }

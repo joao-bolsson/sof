@@ -549,6 +549,27 @@ if (Busca::isActive()) {
     } else if ($users !== NULL && isset($_SESSION["id_setor"]) && $_SESSION["id_setor"] != 0) {
         switch ($form) {
 
+            case 'cadAIHS':
+                $data = filter_input(INPUT_POST, 'data');
+                $mes = filter_input(INPUT_POST, 'mes');
+                $qtd = filter_input(INPUT_POST, 'qtd');
+                $valor = filter_input(INPUT_POST, 'valor');
+                $tipo = filter_input(INPUT_POST, 'tipo');
+                $grupo = filter_input(INPUT_POST, 'grupo');
+                $descricao = filter_input(INPUT_POST, 'descricao');
+
+                // can be empty if disabled
+                if (empty($grupo)) {
+                    $grupo = "";
+                }
+                if (empty($descricao)) {
+                    $descricao = "";
+                }
+
+                Geral::cadAIHS($data, $mes, $qtd, $valor, $tipo, $grupo, $descricao);
+                echo "ok";
+                break;
+
             case 'altUser':
                 $user = filter_input(INPUT_POST, 'user');
                 if (!is_null($user)) {
@@ -761,6 +782,7 @@ if (Busca::isActive()) {
                     $saldos = !is_null(filter_input(INPUT_POST, 'saldos'));
                     $pedidos = !is_null(filter_input(INPUT_POST, 'pedidos'));
                     $recepcao = !is_null(filter_input(INPUT_POST, 'recepcao'));
+                    $aihs = !is_null(filter_input(INPUT_POST, 'aihs'));
 
                     if ($recepcao) {
                         $noticias = 0;
@@ -773,7 +795,7 @@ if (Busca::isActive()) {
                     }
                 }
 
-                $user->setPermissions($noticias, $saldos, $pedidos, $recepcao);
+                $user->setPermissions($noticias, $saldos, $pedidos, $recepcao, $aihs);
 
                 $from = $obj_Util->mail->Username;
                 $nome_from = utf8_decode("Setor de Orçamento e Finanças do HUSM");
