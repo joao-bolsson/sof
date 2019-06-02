@@ -104,17 +104,17 @@ require_once '../defines.php';
                                         class="fa fa-sign-in"></i>&nbsp;Adicionar
                             </button>
                         </div>
-                        <table class="table table-bordered table-striped">
-                            <thead>
-                            <tr>
-                                <th>Nome</th>
-                                <th>Entrada/Saída</th>
-                                <th>Hora</th>
-                                <th>Data</th>
-                            </tr>
-                            </thead>
-                            <tbody id="tboodyAIHS"></tbody>
-                        </table>
+<!--                        <table class="table table-bordered table-striped">-->
+<!--                            <thead>-->
+<!--                            <tr>-->
+<!--                                <th>Nome</th>-->
+<!--                                <th>Entrada/Saída</th>-->
+<!--                                <th>Hora</th>-->
+<!--                                <th>Data</th>-->
+<!--                            </tr>-->
+<!--                            </thead>-->
+<!--                            <tbody id="tboodyAIHS"></tbody>-->
+<!--                        </table>-->
                     </div>
                 </div>
             </section>
