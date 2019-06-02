@@ -1,5 +1,8 @@
 ## CHANGELOG ##
 
+#### v2.4.2 - 02/06/2019 ####
+- Inicio de implementação de AIHs (somente formulário inicial)
+
 #### v2.4.1 - 24/02/2019 ####
 - Suporte para mais de uma nota por mês
 - Organização da estrutura interna do sistema

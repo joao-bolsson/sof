@@ -104,17 +104,17 @@ require_once '../defines.php';
                                         class="fa fa-sign-in"></i>&nbsp;Adicionar
                             </button>
                         </div>
-<!--                        <table class="table table-bordered table-striped">-->
-<!--                            <thead>-->
-<!--                            <tr>-->
-<!--                                <th>Nome</th>-->
-<!--                                <th>Entrada/Saída</th>-->
-<!--                                <th>Hora</th>-->
-<!--                                <th>Data</th>-->
-<!--                            </tr>-->
-<!--                            </thead>-->
-<!--                            <tbody id="tboodyAIHS"></tbody>-->
-<!--                        </table>-->
+                        <!--                        <table class="table table-bordered table-striped">-->
+                        <!--                            <thead>-->
+                        <!--                            <tr>-->
+                        <!--                                <th>Nome</th>-->
+                        <!--                                <th>Entrada/Saída</th>-->
+                        <!--                                <th>Hora</th>-->
+                        <!--                                <th>Data</th>-->
+                        <!--                            </tr>-->
+                        <!--                            </thead>-->
+                        <!--                            <tbody id="tboodyAIHS"></tbody>-->
+                        <!--                        </table>-->
                     </div>
                 </div>
             </section>
@@ -132,6 +132,17 @@ require_once '../defines.php';
                     <input type="hidden" name="users" value="1"/>
                     <input type="hidden" name="form" value="cadAIHS"/>
                     <div class="modal-body">
+                        <div class="form-group">
+                            <label>Tipo</label>
+                            <select id="tipo" class="form-control" name="tipo" onchange="changeAIHSType();" required>
+                                <?php
+                                $query = Query::getInstance()->exe("SELECT id, nome FROM aihs_tipos;");
+                                while ($obj = $query->fetch_object()) {
+                                    echo "<option value=\"{$obj->id}\">{$obj->nome}</option>";
+                                }
+                                ?>
+                            </select>
+                        </div>
                         <div class="form-group">
                             <label>Data de Lançamento</label>
                             <input class="form-control date" name="data" type="text" required>
@@ -154,17 +165,6 @@ require_once '../defines.php';
                         <div class="form-group">
                             <label>Valor</label>
                             <input class="form-control" type="number" min="0" step="0.01" name="valor" required/>
-                        </div>
-                        <div class="form-group">
-                            <label>Tipo</label>
-                            <select id="tipo" class="form-control" name="tipo" onchange="changeAIHSType();" required>
-                                <?php
-                                $query = Query::getInstance()->exe("SELECT id, nome FROM aihs_tipos;");
-                                while ($obj = $query->fetch_object()) {
-                                    echo "<option value=\"{$obj->id}\">{$obj->nome}</option>";
-                                }
-                                ?>
-                            </select>
                         </div>
                         <div class="form-group">
                             <label>Grupo</label>
