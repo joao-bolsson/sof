@@ -549,7 +549,15 @@ if (Busca::isActive()) {
     } else if ($users !== NULL && isset($_SESSION["id_setor"]) && $_SESSION["id_setor"] != 0) {
         switch ($form) {
 
+            case 'removeAIHS':
+                $id = filter_input(INPUT_POST, 'id');
+
+                Geral::removeAIHS($id);
+                echo "ok";
+                break;
+
             case 'cadAIHS':
+                $id = filter_input(INPUT_POST, 'id');
                 $data = filter_input(INPUT_POST, 'data');
                 $mes = filter_input(INPUT_POST, 'mes');
                 $qtd = filter_input(INPUT_POST, 'qtd');
@@ -566,7 +574,7 @@ if (Busca::isActive()) {
                     $descricao = "";
                 }
 
-                Geral::cadAIHS($data, $mes, $qtd, $valor, $tipo, $grupo, $descricao);
+                Geral::cadAIHS($id, $data, $mes, $qtd, $valor, $tipo, $grupo, $descricao);
                 echo "ok";
                 break;
 

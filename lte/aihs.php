@@ -58,7 +58,7 @@ require_once '../defines.php';
     <![endif]-->
 </head>
 <!-- ADD THE CLASS layout-top-nav TO REMOVE THE SIDEBAR. -->
-<body class="hold-transition skin-blue layout-top-nav">
+<body class="hold-transition skin-blue layout-top-nav" onload="loadTableAIHS()">
 <div class="wrapper">
 
     <header class="main-header">
@@ -104,17 +104,24 @@ require_once '../defines.php';
                                         class="fa fa-sign-in"></i>&nbsp;Adicionar
                             </button>
                         </div>
-                        <!--                        <table class="table table-bordered table-striped">-->
-                        <!--                            <thead>-->
-                        <!--                            <tr>-->
-                        <!--                                <th>Nome</th>-->
-                        <!--                                <th>Entrada/Saída</th>-->
-                        <!--                                <th>Hora</th>-->
-                        <!--                                <th>Data</th>-->
-                        <!--                            </tr>-->
-                        <!--                            </thead>-->
-                        <!--                            <tbody id="tboodyAIHS"></tbody>-->
-                        <!--                        </table>-->
+                        <table id="tableAIHS" class="table table-bordered table-striped">
+                            <thead>
+                            <tr>
+                                <th>Tipo</th>
+                                <th>Grupo</th>
+                                <th>Descrição</th>
+                                <th>Qtd</th>
+                                <th>Valor</th>
+                                <th>Mês</th>
+                                <th>Lançamento</th>
+                                <th>Opções</th>
+                            </tr>
+                            </thead>
+                            <tbody id="tboodyAIHS"></tbody>
+                        </table>
+                    </div>
+                    <div id="overlayLoadAIHS" class="overlay" style="display: none;">
+                        <i class="fa fa-refresh fa-spin"></i>
                     </div>
                 </div>
             </section>
@@ -131,6 +138,7 @@ require_once '../defines.php';
                 <form id="formCadAIHS">
                     <input type="hidden" name="users" value="1"/>
                     <input type="hidden" name="form" value="cadAIHS"/>
+                    <input type="hidden" name="id" value="0"/>
                     <div class="modal-body">
                         <div class="form-group">
                             <label>Tipo</label>
@@ -226,6 +234,6 @@ require_once '../defines.php';
 <!-- page script -->
 <script type="text/javascript" src="js/util_lte.min.js"></script>
 <script type="text/javascript" src="../iniLTE.min.js"></script>
-<script type="text/javascript" src="js/aihs.js"></script>
+<script type="text/javascript" src="js/aihs.min.js"></script>
 </body>
 </html>

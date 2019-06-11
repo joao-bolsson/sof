@@ -9,6 +9,12 @@ $(function () {
         $(".date").inputmask("dd/mm/yyyy", {"placeholder": "dd/mm/yyyy"});
     });
 
+    $("#cadAIHS").on('hidden.bs.modal', function () {
+        $('#formCadAIHS').trigger("reset");
+        $("#formCadAIHS input[name=id]").val(0);
+        changeAIHSType();
+    });
+
     $('#formCadAIHS').submit(function (event) {
         event.preventDefault();
 
@@ -22,10 +28,73 @@ $(function () {
             avisoSnack(msg);
         }).always(function () {
             $("#cadAIHS").modal('hide');
+            loadTableAIHS();
         });
     });
 
 });
+
+function editAIHS(id) {
+    $.post('../php/busca.php', {
+        users: 1,
+        form: 'editAIHS',
+        id: id
+    }).done(function (resposta) {
+        var obj = jQuery.parseJSON(resposta);
+        $("#formCadAIHS input[name=id]").val(id);
+        $("#formCadAIHS select[name=tipo]").val(obj.tipo);
+        $("#formCadAIHS input[name=data]").val(obj.data_lanc);
+        $("#formCadAIHS select[name=mes]").val(obj.mes);
+        $("#formCadAIHS input[name=qtd]").val(obj.qtd);
+        $("#formCadAIHS input[name=valor]").val(obj.valor);
+        $("#formCadAIHS input[name=grupo]").val(obj.grupo);
+        $("#formCadAIHS input[name=descricao]").val(obj.descricao);
+
+        changeAIHSType();
+
+        $('#cadAIHS').modal('show');
+    });
+}
+
+function loadTableAIHS() {
+    var element = document.getElementById('tboodyAIHS');
+    if (element === null) {
+        return;
+    }
+    var load = document.getElementById('overlayLoadAIHS');
+    if (load !== null) {
+        load.style.display = 'block';
+    }
+    $.post('../php/buscaLTE.php', {
+        users: 1,
+        form: 'loadTableAIHS'
+    }).done(function (resposta) {
+        if ($.fn.DataTable.isDataTable('#tableAIHS')) {
+            $('#tableAIHS').DataTable().destroy();
+        }
+        if (resposta.length > 0) {
+            element.innerHTML = resposta;
+        }
+        iniDataTable('#tableAIHS');
+
+        if (load !== null) {
+            load.style.display = 'none';
+        }
+    });
+}
+
+function removeAIHS(id) {
+    if (confirm("Esta operação não pode ser desfeita. Deseja remover esse item?")) {
+        $.post('../php/geral.php', {
+            users: 1,
+            form: 'removeAIHS',
+            id: id
+        }).done(function () {
+            console.log("done!");
+            loadTableAIHS();
+        });
+    }
+}
 
 function changeAIHSType() {
     var tipo = document.getElementById("tipo").value;
@@ -36,64 +105,5 @@ function changeAIHSType() {
     document.getElementById("grupo").required = !disabled;
     document.getElementById("descr").disabled = disabled;
     document.getElementById("descr").required = !disabled;
-}
-
-function iniDataTable(tabela) {
-    $(tabela).DataTable({
-        "destroy": true,
-        "paging": true,
-        "lengthChange": true,
-        "searching": true,
-        "ordering": true,
-        "order": [[1, "asc"]],
-        "info": true,
-        "autoWidth": true,
-        language: {
-            "decimal": "",
-            "emptyTable": "Nenhum dado na tabela",
-            "info": "_MAX_ resultados encontrados",
-            "infoEmpty": "",
-            "infoFiltered": "",
-            "infoPostFix": "",
-            "thousands": ",",
-            "lengthMenu": "Monstrando _MENU_ entradas",
-            "loadingRecords": "Carregando...",
-            "processing": "Processando...",
-            "search": "Pesquisar:",
-            "zeroRecords": "Nenhum resultado encontrado",
-            "paginate": {
-                "first": "Primeiro",
-                "last": "Último",
-                "next": "Próximo",
-                "previous": "Anterior"
-            },
-            "aria": {
-                "sortAscending": ": activate to sort column ascending",
-                "sortDescending": ": activate to sort column descending"
-            }
-        }
-    });
-}
-
-/**
- * Refres the table with logs.
- */
-function refreshTable() {
-    $.post('../php/buscaLTE.php', {
-        admin: 1,
-        form: 'refreshTableHora'
-    }, function (resposta) {
-        console.log('refreshing the table');
-        $('#tboodyHora').html(resposta);
-        document.getElementById('overlayLoad').style.display = 'none';
-    });
-}
-
-/**
- * Function that register a log in or out
- */
-function addAIHS() {
-    document.getElementById('overlayLoad').style.display = 'block';
-    console.log("Addin AIHS");
 }
 

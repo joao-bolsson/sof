@@ -26,6 +26,38 @@ final class BuscaLTE {
         // empty
     }
 
+    public static function getAIHS(): string {
+        $query = Query::getInstance()->exe("SELECT aihs.id, aihs.descricao, aihs.grupo, aihs.qtd, aihs.valor, mes.sigla_mes, DATE_FORMAT(aihs.data, '%d/%m/%Y') AS data, aihs_tipos.nome AS tipo FROM aihs, mes, aihs_tipos WHERE mes.id = aihs.mes AND aihs_tipos.id = aihs.tipo;");
+
+        $table = new Table('', '', [], true);
+
+        while ($obj = $query->fetch_object()) {
+            $row = new Row();
+            $row->addComponent(new Column($obj->tipo));
+            $row->addComponent(new Column($obj->grupo));
+            $row->addComponent(new Column($obj->descricao));
+            $row->addComponent(new Column($obj->qtd));
+            $row->addComponent(new Column("R$ " . $obj->valor));
+            $row->addComponent(new Column($obj->sigla_mes));
+            $row->addComponent(new Column($obj->data));
+
+            $div = "<div class=\"btn-group\">";
+
+            $div .= new Button('', BTN_DEFAULT . ' btn-sm', "editAIHS(" . $obj->id . ")", "data-toggle = \"tooltip\"", 'Editar', 'pencil');
+
+            $div .= new Button('', BTN_DANGER. ' btn-sm', "removeAIHS(" . $obj->id . ")", "data-toggle = \"tooltip\"", 'Remover', 'trash');
+
+            $div .= '</div>';
+
+            $row->addComponent(new Column($div));
+
+            $table->addComponent($row);
+        }
+
+        return $table->__toString();
+    }
+
+
     /**
      * Look for proccess that was not returned to SOF.
      *

@@ -132,6 +132,10 @@ if (!is_null($admin) && isset($_SESSION['id_setor']) && ($_SESSION['id_setor'] =
 
     switch ($form) {
 
+        case 'loadTableAIHS':
+            echo BuscaLTE::getAIHS();
+            break;
+
         case 'showInformation':
             $column = filter_input(INPUT_POST, 'column');
             $table = filter_input(INPUT_POST, 'table');

@@ -27,7 +27,14 @@ final class Geral {
         // empty
     }
 
-    public static function cadAIHS(string $data, int $mes, int $qtd, float $valor, int $tipo, string $grupo, string $descricao) {
+    public static function removeAIHS(int $id) {
+        Query::getInstance()->exe("DELETE FROM aihs WHERE id = " . $id);
+    }
+
+    public static function cadAIHS(int $id, string $data, int $mes, int $qtd, float $valor, int $tipo, string $grupo, string $descricao) {
+        if ($id > 0) {
+            self::removeAIHS($id);
+        }
         $dt = Util::dateFormat($data);
 
         $builder = new SQLBuilder(SQLBuilder::$INSERT);
