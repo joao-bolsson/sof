@@ -85,7 +85,7 @@ require_once '../defines.php';
                     <?= $_SESSION['nome_setor']; ?>
                 </h1>
                 <ol class="breadcrumb">
-                    <li><a href="aihs.php"><i class="fa fa-dashboard"></i>AIHS</a></li>
+                    <li><a href="aihs.php"><i class="fa fa-dashboard"></i>Faturamento</a></li>
                 </ol>
             </section>
 
@@ -96,7 +96,7 @@ require_once '../defines.php';
                         <i class="fa fa-refresh fa-spin"></i>
                     </div>
                     <div class="box-header with-border">
-                        <h3 class="box-title">AIHs</h3>
+                        <h3 class="box-title">Faturamento</h3>
                     </div>
                     <div class="box-body">
                         <div class="margin">
