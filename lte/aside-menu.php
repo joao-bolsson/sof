@@ -33,7 +33,7 @@ $permissao = BuscaLTE::getPermissoes($_SESSION["id"]);
             <?php if ($permissao->aihs): ?>
                 <li>
                     <a href="aihs.php">
-                        <i class="fa fa-clock-o"></i> <span>AIHs</span>
+                        <i class="fa fa-briefcase"></i> <span>AIHs</span>
                     </a>
                 </li>
             <?php endif; ?>
