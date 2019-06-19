@@ -22,6 +22,11 @@ final class ReportSIAFIPart extends Component implements Report {
     private $parts;
 
     /**
+     * @var float Sum of this part.
+     */
+    private $sum = 0.0;
+
+    /**
      * Default constructor.
      *
      * @param string $name Part name.
@@ -36,7 +41,7 @@ final class ReportSIAFIPart extends Component implements Report {
 
     public function buildHeader(): string {
         $fieldset = new Component('fieldset', '');
-        $fieldset->addComponent(new Component('h6', '', $this->name));
+        $fieldset->addComponent(new Component('h6', '', $this->name . " | Total: R$ " . number_format($this->sum, 3, ',', '.')));
 
         return $fieldset;
     }
@@ -99,6 +104,15 @@ final class ReportSIAFIPart extends Component implements Report {
             $len = count($this->parts);
             $this->parts[$len] = $component;
         }
+    }
+
+    /**
+     * Increment the sum of this report part.
+     *
+     * @param float $val Value to increment.
+     */
+    public function incrementSum(float $val) {
+        $this->sum += $val;
     }
 
 }

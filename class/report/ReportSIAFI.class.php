@@ -39,6 +39,16 @@ class ReportSIAFI implements Report {
     private $sql;
 
     /**
+     * @var float Sum of the values of this report.
+     */
+    private $sum = 0.0;
+
+    /**
+     * @var array Parts of this report.
+     */
+    private $parts = [];
+
+    /**
      * Default construct.
      *
      * @param int $sector Sector id.
@@ -61,6 +71,8 @@ class ReportSIAFI implements Report {
         foreach ($source as $moneySource) {
             $this->source[$i++] = $moneySource;
         }
+
+        $this->buildParts();
     }
 
     /**
@@ -72,6 +84,12 @@ class ReportSIAFI implements Report {
         $fieldset->addComponent(new Component('h6', '', 'SIAFI cadastrados por Setor e Fonte de Recurso'));
         $fieldset->addComponent(new Component('h6', '', 'Setor: ' . ARRAY_SETORES[$this->sector]));
 
+        $dateS = Util::dateFormat($this->dateS);
+        $dateE = Util::dateFormat($this->dateE);
+
+        $fieldset->addComponent(new Component('h6', '', 'Empenhos cadastrados: ' . $dateS . " ~ " . $dateE));
+        $fieldset->addComponent(new Component('h6', '', 'Total: R$ ' . number_format($this->sum, 3, ',', '.')));
+
         return $fieldset;
     }
 
@@ -81,6 +99,14 @@ class ReportSIAFI implements Report {
     function buildBody(): string {
         $fieldset = new Component('fieldset', '');
 
+        foreach ($this->parts as $part) {
+            $fieldset->addComponent($part);
+        }
+
+        return $fieldset;
+    }
+
+    private function buildParts() {
         $dateS = Util::dateFormat($this->dateS);
         $dateE = Util::dateFormat($this->dateE);
 
@@ -107,34 +133,35 @@ class ReportSIAFI implements Report {
 
         $this->sql = "SELECT pedido_empenho.id_pedido, pedido_empenho.empenho, DATE_FORMAT(pedido_empenho.data, '%d/%m/%Y') AS data, (SELECT itens.num_processo FROM itens, itens_pedido WHERE itens.id = itens_pedido.id_item AND itens_pedido.id_pedido = pedido_empenho.id_pedido LIMIT 1) AS num_processo, DATE_FORMAT((SELECT dt_inicio FROM itens, itens_pedido WHERE itens.id = itens_pedido.id_item AND itens_pedido.id_pedido = pedido_empenho.id_pedido LIMIT 1), '%d/%m/%Y') AS dt_inicio, DATE_FORMAT((SELECT dt_fim FROM itens, itens_pedido WHERE itens.id = itens_pedido.id_item AND itens_pedido.id_pedido = pedido_empenho.id_pedido LIMIT 1), '%d/%m/%Y') AS dt_fim, pedido.valor, licitacao_tipo.nome AS licitacao, pedido_fonte.fonte_recurso FROM pedido_empenho, pedido_fonte, pedido, licitacao, licitacao_tipo WHERE pedido.id = licitacao.id_pedido AND licitacao.tipo = licitacao_tipo.id AND pedido.id = pedido_empenho.id_pedido AND (pedido_empenho.data BETWEEN '" . $dateS . "' AND '" . $dateE . "') AND pedido_empenho.id_pedido = pedido_fonte.id_pedido AND " . $where_source . " AND pedido_empenho.id_pedido IN (SELECT DISTINCT itens_pedido.id_pedido FROM itens_pedido, itens WHERE itens_pedido.id_item = itens.id AND " . $where_num . ") ORDER BY num_processo ASC;";
 
-        Logger::info($this->sql);
-
         $query = Query::getInstance()->exe($this->sql);
         if ($query->num_rows > 0) {
             // initialize array with the parts of this report
-            $parts = [];
+            $this->parts = [];
             foreach ($this->source as $source) {
-                $parts['sourceId' . $source] = new ReportSIAFIPart('Fonte: ' . $source);
-                $fieldset->addComponent($parts['sourceId' . $source]);
+                $this->parts['sourceId' . $source] = new ReportSIAFIPart('Fonte: ' . $source);
             }
 
             while ($obj = $query->fetch_object()) {
                 $row = new Row();
                 $row->addComponent(new Column($obj->id_pedido));
                 $row->addComponent(new Column($obj->empenho));
-                $obj->valor = number_format($obj->valor, 3, ',', '.');
-                $row->addComponent(new Column("R$ " . $obj->valor));
+                $row->addComponent(new Column("R$ " . number_format($obj->valor, 3, ',', '.')));
                 $row->addComponent(new Column($obj->dt_inicio . " à " . $obj->dt_fim));
                 $row->addComponent(new Column($obj->licitacao));
 
-                $part = $parts['sourceId' . $obj->fonte_recurso];
+                $part = $this->parts['sourceId' . $obj->fonte_recurso];
                 if ($part instanceof ReportSIAFIPart) {
-                    $part->getPart('Processo: ' . $obj->num_processo)->addComponent($row);
+                    $procPart = $part->getPart('Processo: ' . $obj->num_processo);
+                    $procPart->addComponent($row);
+
+                    // increment the sum of all report and of the separated part as well
+                    $part->incrementSum($obj->valor);
+                    $procPart->incrementSum($obj->valor);
+
+                    $this->sum += $obj->valor;
                 }
             }
         }
-
-        return $fieldset;
     }
 
     /**
@@ -148,12 +175,7 @@ class ReportSIAFI implements Report {
      * @return string The string representation of this report.
      */
     public function __toString(): string {
-        $report = "";
-        try {
-            $report .= $this->buildHeader();
-        } catch (TypeError $ex) {
-            Logger::info("Error on build header of report SIAFI: " . $ex->getMessage());
-        }
+        $report = $this->buildHeader();
 
         $report .= "<br>" . $this->buildBody();
 
