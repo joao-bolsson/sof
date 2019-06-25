@@ -65,7 +65,7 @@ require_once '../defines.php';
         <nav class="navbar navbar-static-top">
             <div class="container">
                 <div class="navbar-header">
-                    <a href="index.php" class="navbar-brand"><b>SOF</b>HUSM</a>
+                    <a href="aihs.php" class="navbar-brand"><b>SOF</b>HUSM</a>
                     <button type="button" class="navbar-toggle collapsed" data-toggle="collapse"
                             data-target="#navbar-collapse">
                         <i class="fa fa-bars"></i>

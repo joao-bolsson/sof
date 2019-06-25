@@ -27,6 +27,8 @@ if (isset($_SESSION['id_setor']) && $_SESSION['id_setor'] == 12) {
     if ($permissao->pedidos || $permissao->saldos || $permissao->noticias || $permissao->recepcao) {
         //redireciona para a página do admin
         header('Location: lte/');
+    } else if ($permissao->aihs) {
+        header('Location: lte/aihs.php');
     } else {
         header('Location: lte/hora.php');
     }
