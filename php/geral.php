@@ -574,8 +574,12 @@ if (Busca::isActive()) {
                     $descricao = "";
                 }
 
-                Geral::cadAIHS($id, $data, $mes, $qtd, $valor, $tipo, $grupo, $descricao);
-                echo "ok";
+                $bool = Geral::cadAIHS($id, $data, $mes, $qtd, $valor, $tipo, $grupo, $descricao);
+                if ($bool) {
+                    echo "Registro inserido com sucesso.";
+                } else {
+                    echo "O registro não pode ser inserido. Não inserimos registros repetidos (com o mesmo tipo e a mesma competência). Caso não seja esse o caso, contate o administrador.";
+                }
                 break;
 
             case 'altUser':

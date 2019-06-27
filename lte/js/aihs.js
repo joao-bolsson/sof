@@ -21,11 +21,7 @@ $(function () {
         var data = $(this).serialize();
 
         $.post('../php/geral.php', data).done(function (resposta) {
-            var msg = "Erro interno no servidor";
-            if (resposta) {
-                msg = "Sucesso!";
-            }
-            avisoSnack(msg);
+            alert(resposta);
         }).always(function () {
             $("#cadAIHS").modal('hide');
             loadTableAIHS();
