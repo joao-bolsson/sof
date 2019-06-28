@@ -578,6 +578,23 @@ if (Busca::isActive()) {
                 echo "ok";
                 break;
 
+            case 'cadReceita':
+                $id = filter_input(INPUT_POST, 'id');
+                $tipo = filter_input(INPUT_POST, 'tipo');
+                $mes = filter_input(INPUT_POST, 'mes');
+                $data = filter_input(INPUT_POST, 'data');
+                $valor = filter_input(INPUT_POST, 'valor');
+                $pf = filter_input(INPUT_POST, 'pf');
+                $obs = filter_input(INPUT_POST, 'obs');
+
+                $bool = Geral::cadReceita($id, $tipo, $mes, $data, $valor, $pf, $obs);
+                if ($bool) {
+                    echo "Registro inserido com sucesso.";
+                } else {
+                    echo "O registro não pode ser inserido. Não inserimos registros repetidos (com o mesmo tipo e a mesma competência). Caso não seja esse o caso, contate o administrador.";
+                }
+                break;
+
             case 'altUser':
                 $user = filter_input(INPUT_POST, 'user');
                 if (!is_null($user)) {

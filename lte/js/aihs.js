@@ -32,6 +32,29 @@ $(function () {
         });
     });
 
+    $("#cadReceita").on('shown.bs.modal', function () {
+        $(".date").inputmask("dd/mm/yyyy", {"placeholder": "dd/mm/yyyy"});
+    });
+
+    $("#cadReceita").on('hidden.bs.modal', function () {
+        $('#formCadReceita').trigger("reset");
+        $("#formCadReceita input[name=id]").val(0);
+        changeAIHSType();
+    });
+
+    $('#formCadReceita').submit(function (event) {
+        event.preventDefault();
+
+        var data = $(this).serialize();
+
+        $.post('../php/geral.php', data).done(function (resposta) {
+            alert(resposta);
+        }).always(function () {
+            $("#cadReceita").modal('hide');
+        });
+    });
+
+
 });
 
 function editAIHS(id) {

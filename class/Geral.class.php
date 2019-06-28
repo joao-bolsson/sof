@@ -31,7 +31,21 @@ final class Geral {
         Query::getInstance()->exe("DELETE FROM aihs WHERE id = " . $id);
     }
 
-    public static function cadAIHS(int $id, string $data, int $mes, int $qtd, float $valor, int $tipo, string $grupo, string $descricao) {
+    public static function cadReceita(int $id, int $tipo, int $mes, string $data, float $valor, string $pf, string $obs): bool {
+        // TODO: use id for remove and update
+        $dt = Util::dateFormat($data);
+        $builder = new SQLBuilder(SQLBuilder::$INSERT);
+        $builder->setTables(['aihs_receita']);
+        $builder->setValues([NULL, $tipo, $mes, $dt, $valor, $pf, $obs]);
+
+        $query = Query::getInstance()->exe($builder->__toString());
+        if ($query) {
+            return true;
+        }
+        return false;
+    }
+
+    public static function cadAIHS(int $id, string $data, int $mes, int $qtd, float $valor, int $tipo, string $grupo, string $descricao): bool {
         if ($id > 0) {
             self::removeAIHS($id);
         }

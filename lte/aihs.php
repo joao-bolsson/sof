@@ -21,6 +21,13 @@ if (!isset($_SESSION["id_setor"]) || $_SESSION["id_setor"] != 2) {
 }
 $is_admin = ($_SESSION['id'] == 1 || $_SESSION['id'] == 11);
 require_once '../defines.php';
+
+$index = "aihs.php";
+
+if ($permission->pedidos || $permission->saldos || $permission->noticias || $permission->recepcao) {
+    $index = "index.php";
+}
+
 ?>
 <!DOCTYPE html>
 <html lang="pt">
@@ -65,15 +72,22 @@ require_once '../defines.php';
         <nav class="navbar navbar-static-top">
             <div class="container">
                 <div class="navbar-header">
-                    <a href="index.php" class="navbar-brand"><b>SOF</b>HUSM</a>
+                    <a href="<?= $index ?>" class="navbar-brand"><b>SOF</b>HUSM</a>
                     <button type="button" class="navbar-toggle collapsed" data-toggle="collapse"
                             data-target="#navbar-collapse">
                         <i class="fa fa-bars"></i>
                     </button>
                 </div>
+
+                <div class="collapse navbar-collapse pull-left">
+                    <ul class="nav navbar-nav">
+                        <li><a href="javascript:abreModal('#cadReceita');"><i class="fa fa-file-text"></i>
+                                Receita Recebida</a></li>
+                    </ul>
+                </div>
+
                 <?php include_once 'navbar-user.php' ?>
             </div>
-            <!-- /.container-fluid -->
         </nav>
     </header>
     <!-- Full Width Column -->
@@ -125,6 +139,67 @@ require_once '../defines.php';
                     </div>
                 </div>
             </section>
+        </div>
+    </div>
+    <div aria-hidden="true" class="modal fade" id="cadReceita" role="dialog" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                                aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">Receita Recebida</h4>
+                </div>
+                <form id="formCadReceita">
+                    <input type="hidden" name="users" value="1"/>
+                    <input type="hidden" name="form" value="cadReceita"/>
+                    <input type="hidden" name="id" value="0"/>
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <label>Tipo</label>
+                            <select id="tipo" class="form-control" name="tipo" required>
+                                <?php
+                                $query = Query::getInstance()->exe("SELECT id, nome FROM aihs_receita_tipo;");
+                                while ($obj = $query->fetch_object()) {
+                                    echo "<option value=\"{$obj->id}\">{$obj->nome}</option>";
+                                }
+                                ?>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Competência</label>
+                            <select class="form-control" name="mes" required>
+                                <?php
+                                $query = Query::getInstance()->exe("SELECT id, sigla_mes FROM mes LIMIT 12;");
+                                while ($obj = $query->fetch_object()) {
+                                    echo "<option value=\"{$obj->id}\">{$obj->sigla_mes}</option>";
+                                }
+                                ?>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Recebimento</label>
+                            <input class="form-control date" name="data" type="text" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Valor</label>
+                            <input class="form-control" type="number" min="0" step="0.01" name="valor" required/>
+                        </div>
+                        <div class="form-group">
+                            <label>PF</label>
+                            <input class="form-control" name="pf" maxlength="15" required/>
+                        </div>
+                        <div class="form-group">
+                            <label>Observações</label>
+                            <textarea class="form-control" rows="3" name="obs"></textarea>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn btn-primary" type="submit" style="width: 100%;"><i
+                                    class="fa fa-send"></i>&nbsp;Cadastrar
+                        </button>
+                    </div>
+                </form>
+            </div>
         </div>
     </div>
     <div aria-hidden="true" class="modal fade" id="cadAIHS" role="dialog" tabindex="-1">
