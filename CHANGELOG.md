@@ -1,5 +1,9 @@
 ## CHANGELOG ##
 
+#### v2.4.3 - 28/06/2019 ####
+- Implementação de formulário Receitas Recebidas (AIHS)
+- Correção do relatório SIAFI (com opção: ignorar fontes)
+
 #### v2.4.2 - 02/06/2019 ####
 - Inicio de implementação de AIHs (somente formulário inicial)
 
