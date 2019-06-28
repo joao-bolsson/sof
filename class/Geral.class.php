@@ -55,7 +55,11 @@ final class Geral {
         $builder->setTables(['aihs']);
         $builder->setValues([NULL, $dt, $mes, $qtd, $valor, $tipo, $grupo, $descricao]);
 
-        Query::getInstance()->exe($builder->__toString());
+        $query = Query::getInstance()->exe($builder->__toString());
+        if ($query) {
+            return true;
+        }
+        return false;
     }
 
     /**

@@ -52,7 +52,7 @@
                         </select>
                     </div>
                     <div class="form-group">
-                        <label>Data Início</label>
+                        <label>Data de Lançamento (início)</label>
                         <div class="input-group">
                             <div class="input-group-addon">
                                 <i class="fa fa-calendar"></i>
@@ -62,7 +62,7 @@
                         </div>
                     </div>
                     <div class="form-group">
-                        <label>Data Fim</label>
+                        <label>Data de Lançamento (fim)</label>
                         <div class="input-group">
                             <div class="input-group-addon">
                                 <i class="fa fa-calendar"></i>

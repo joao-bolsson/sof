@@ -18,10 +18,6 @@ spl_autoload_register(function (string $class_name) {
 require_once '../defines.php';
 $permissao = BuscaLTE::getPermissoes($_SESSION["id"]);
 
-if ($permissao->aihs) {
-    header("Location: aihs.php");
-}
-
 $count = BuscaLTE::getCountSolic();
 
 if (isset($_SESSION['editmode'])) {
@@ -29,7 +25,7 @@ if (isset($_SESSION['editmode'])) {
 }
 ?>
 <!DOCTYPE html>
-<html>
+<html lang="pt">
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
