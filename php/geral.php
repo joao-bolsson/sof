@@ -549,6 +549,13 @@ if (Busca::isActive()) {
     } else if ($users !== NULL && isset($_SESSION["id_setor"]) && $_SESSION["id_setor"] != 0) {
         switch ($form) {
 
+            case 'removeReceita':
+                $id = filter_input(INPUT_POST, 'id');
+
+                Geral::removeReceita($id);
+                echo "ok";
+                break;
+
             case 'removeAIHS':
                 $id = filter_input(INPUT_POST, 'id');
 

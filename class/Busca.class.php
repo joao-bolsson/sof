@@ -24,6 +24,12 @@ final class Busca {
         // empty
     }
 
+    public static function getReceita(int $id) {
+        $query = Query::getInstance()->exe("SELECT tipo, competencia, DATE_FORMAT(recebimento, '%d/%m/%Y') AS recebimento, valor, pf, observacoes FROM aihs_receita WHERE id = " . $id);
+
+        return $query->fetch_object();
+    }
+
     public static function getAIHS(int $id) {
         $query = Query::getInstance()->exe("SELECT descricao, grupo, qtd, valor, mes, DATE_FORMAT(data, '%d/%m/%Y') AS data_lanc, tipo FROM aihs WHERE id = " . $id);
 

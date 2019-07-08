@@ -130,7 +130,12 @@ if (!is_null($admin) && isset($_SESSION['id_setor']) && ($_SESSION['id_setor'] =
     }
 } else if (!is_null($users) && isset($_SESSION['id_setor']) && $_SESSION['id_setor'] != 0) {
 
-    switch ($form) {
+    switch ($form){
+
+        case 'editReceita':
+            $id = filter_input(INPUT_POST, 'id');
+            echo json_encode(Busca::getReceita($id));
+            break;
 
         case 'editAIHS':
             $id = filter_input(INPUT_POST, 'id');

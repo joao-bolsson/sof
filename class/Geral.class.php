@@ -27,12 +27,18 @@ final class Geral {
         // empty
     }
 
+    public static function removeReceita(int $id) {
+        Query::getInstance()->exe("DELETE FROM aihs_receita WHERE id = " . $id);
+    }
+
     public static function removeAIHS(int $id) {
         Query::getInstance()->exe("DELETE FROM aihs WHERE id = " . $id);
     }
 
     public static function cadReceita(int $id, int $tipo, int $mes, string $data, float $valor, string $pf, string $obs): bool {
-        // TODO: use id for remove and update
+        if ($id > 0) {
+            self::removeReceita($id);
+        }
         $dt = Util::dateFormat($data);
         $builder = new SQLBuilder(SQLBuilder::$INSERT);
         $builder->setTables(['aihs_receita']);

@@ -35,7 +35,6 @@ $(function () {
     $("#cadReceita").on('hidden.bs.modal', function () {
         $('#formCadReceita').trigger("reset");
         $("#formCadReceita input[name=id]").val(0);
-        changeAIHSType();
     });
 
     $('#formCadReceita').submit(function (event) {
@@ -75,6 +74,25 @@ function editAIHS(id) {
         changeAIHSType();
 
         $('#cadAIHS').modal('show');
+    });
+}
+
+function editReceita(id) {
+    $.post('../php/busca.php', {
+        users: 1,
+        form: 'editReceita',
+        id: id
+    }).done(function (resposta) {
+        var obj = jQuery.parseJSON(resposta);
+        $("#formCadReceita input[name=id]").val(id);
+        $("#formCadReceita select[name=tipo]").val(obj.tipo);
+        $("#formCadReceita select[name=mes]").val(obj.competencia);
+        $("#formCadReceita input[name=data]").val(obj.recebimento);
+        $("#formCadReceita input[name=valor]").val(obj.valor);
+        $("#formCadReceita input[name=pf]").val(obj.pf);
+        $("#formCadReceita textarea[name=obs]").val(obj.observacoes);
+
+        $('#cadReceita').modal('show');
     });
 }
 
@@ -141,6 +159,19 @@ function removeAIHS(id) {
         }).done(function () {
             console.log("done!");
             loadTableAIHS();
+        });
+    }
+}
+
+function removeReceita(id) {
+    if (confirm("Esta operação não pode ser desfeita. Deseja remover esse item?")) {
+        $.post('../php/geral.php', {
+            users: 1,
+            form: 'removeReceita',
+            id: id
+        }).done(function () {
+            console.log("done!");
+            loadTableReceitas();
         });
     }
 }
