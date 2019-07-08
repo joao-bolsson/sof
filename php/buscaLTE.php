@@ -132,6 +132,10 @@ if (!is_null($admin) && isset($_SESSION['id_setor']) && ($_SESSION['id_setor'] =
 
     switch ($form) {
 
+        case 'loadTableReceitas':
+            echo BuscaLTE::getReceitas();
+            break;
+
         case 'loadTableAIHS':
             echo BuscaLTE::getAIHS();
             break;

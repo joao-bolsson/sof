@@ -65,7 +65,7 @@ if ($permission->pedidos || $permission->saldos || $permission->noticias || $per
     <![endif]-->
 </head>
 <!-- ADD THE CLASS layout-top-nav TO REMOVE THE SIDEBAR. -->
-<body class="hold-transition skin-blue layout-top-nav" onload="loadTableAIHS()">
+<body class="hold-transition skin-blue layout-top-nav">
 <div class="wrapper">
 
     <header class="main-header">
@@ -106,11 +106,13 @@ if ($permission->pedidos || $permission->saldos || $permission->noticias || $per
             <!-- Main content -->
             <section class="content">
                 <div class="box box-primary">
-                    <div id="overlayLoad" class="overlay" style="display: none;">
-                        <i class="fa fa-refresh fa-spin"></i>
-                    </div>
                     <div class="box-header with-border">
                         <h3 class="box-title">Faturamento</h3>
+                        <div class="box-tools pull-right">
+                            <button type="button" class="btn btn-box-tool" data-widget="collapse"><i
+                                        class="fa fa-minus"></i>
+                            </button>
+                        </div>
                     </div>
                     <div class="box-body">
                         <div class="margin">
@@ -135,6 +137,40 @@ if ($permission->pedidos || $permission->saldos || $permission->noticias || $per
                         </table>
                     </div>
                     <div id="overlayLoadAIHS" class="overlay" style="display: none;">
+                        <i class="fa fa-refresh fa-spin"></i>
+                    </div>
+                </div>
+                <div class="box box-primary">
+                    <div class="box-header with-border">
+                        <h3 class="box-title">Receitas Recebidas</h3>
+                        <div class="box-tools pull-right">
+                            <button type="button" class="btn btn-box-tool" data-widget="collapse"><i
+                                        class="fa fa-minus"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="box-body">
+                        <div class="margin">
+                            <button class="btn btn-primary" type="button" onclick="abreModal('#cadReceita');"><i
+                                        class="fa fa-sign-in"></i>&nbsp;Adicionar
+                            </button>
+                        </div>
+                        <table id="tableReceitas" class="table table-bordered table-striped">
+                            <thead>
+                            <tr>
+                                <th>Tipo</th>
+                                <th>Mês</th>
+                                <th>Recebimento</th>
+                                <th>Valor</th>
+                                <th>PF</th>
+                                <th>Observações</th>
+                                <th>Opções</th>
+                            </tr>
+                            </thead>
+                            <tbody id="tboodyReceitas"></tbody>
+                        </table>
+                    </div>
+                    <div id="overlayLoadReceitas" class="overlay" style="display: none;">
                         <i class="fa fa-refresh fa-spin"></i>
                     </div>
                 </div>
@@ -309,6 +345,6 @@ if ($permission->pedidos || $permission->saldos || $permission->noticias || $per
 <!-- page script -->
 <script type="text/javascript" src="js/util_lte.min.js"></script>
 <script type="text/javascript" src="../iniLTE.min.js"></script>
-<script type="text/javascript" src="js/aihs.min.js"></script>
+<script type="text/javascript" src="js/aihs.js"></script>
 </body>
 </html>

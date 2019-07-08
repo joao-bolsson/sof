@@ -47,9 +47,12 @@ $(function () {
             alert(resposta);
         }).always(function () {
             $("#cadReceita").modal('hide');
+            loadTableReceitas();
         });
     });
 
+    loadTableAIHS();
+    loadTableReceitas();
 
 });
 
@@ -72,6 +75,33 @@ function editAIHS(id) {
         changeAIHSType();
 
         $('#cadAIHS').modal('show');
+    });
+}
+
+function loadTableReceitas() {
+    var element = document.getElementById('tboodyReceitas');
+    if (element === null) {
+        return;
+    }
+    var load = document.getElementById('overlayLoadReceitas');
+    if (load !== null) {
+        load.style.display = 'block';
+    }
+    $.post('../php/buscaLTE.php', {
+        users: 1,
+        form: 'loadTableReceitas'
+    }).done(function (resposta) {
+        if ($.fn.DataTable.isDataTable('#tableReceitas')) {
+            $('#tableReceitas').DataTable().destroy();
+        }
+        if (resposta.length > 0) {
+            element.innerHTML = resposta;
+        }
+        iniDataTable('#tableReceitas');
+
+        if (load !== null) {
+            load.style.display = 'none';
+        }
     });
 }
 

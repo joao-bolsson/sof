@@ -26,6 +26,36 @@ final class BuscaLTE {
         // empty
     }
 
+    public static function getReceitas(): string {
+        $query = Query::getInstance()->exe("SELECT receita.id, tipo.nome AS tipo, mes.sigla_mes, DATE_FORMAT(receita.recebimento, '%d/%m/%Y') AS data, receita.valor, receita.pf, receita.observacoes FROM aihs_receita AS receita, aihs_receita_tipo AS tipo, mes WHERE receita.tipo = tipo.id AND receita.competencia = mes.id;");
+
+        $table = new Table('', '', [], true);
+
+        while ($obj = $query->fetch_object()) {
+            $row = new Row();
+            $row->addComponent(new Column($obj->tipo));
+            $row->addComponent(new Column($obj->sigla_mes));
+            $row->addComponent(new Column($obj->data));
+            $row->addComponent(new Column("R$ " . $obj->valor));
+            $row->addComponent(new Column($obj->pf));
+            $row->addComponent(new Column($obj->observacoes));
+
+            $div = "<div class=\"btn-group\">";
+
+            $div .= new Button('', BTN_DEFAULT . ' btn-sm', "editReceita(" . $obj->id . ")", "data-toggle = \"tooltip\"", 'Editar', 'pencil');
+
+            $div .= new Button('', BTN_DANGER . ' btn-sm', "removeReceita(" . $obj->id . ")", "data-toggle = \"tooltip\"", 'Remover', 'trash');
+
+            $div .= '</div>';
+
+            $row->addComponent(new Column($div));
+
+            $table->addComponent($row);
+        }
+
+        return $table->__toString();
+    }
+
     public static function getAIHS(): string {
         $query = Query::getInstance()->exe("SELECT aihs.id, aihs.descricao, aihs.grupo, aihs.qtd, aihs.valor, mes.sigla_mes, DATE_FORMAT(aihs.data, '%d/%m/%Y') AS data, aihs_tipos.nome AS tipo FROM aihs, mes, aihs_tipos WHERE mes.id = aihs.mes AND aihs_tipos.id = aihs.tipo;");
 
@@ -45,7 +75,7 @@ final class BuscaLTE {
 
             $div .= new Button('', BTN_DEFAULT . ' btn-sm', "editAIHS(" . $obj->id . ")", "data-toggle = \"tooltip\"", 'Editar', 'pencil');
 
-            $div .= new Button('', BTN_DANGER. ' btn-sm', "removeAIHS(" . $obj->id . ")", "data-toggle = \"tooltip\"", 'Remover', 'trash');
+            $div .= new Button('', BTN_DANGER . ' btn-sm', "removeAIHS(" . $obj->id . ")", "data-toggle = \"tooltip\"", 'Remover', 'trash');
 
             $div .= '</div>';
 
