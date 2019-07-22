@@ -105,7 +105,7 @@ if ($permission->pedidos || $permission->saldos || $permission->noticias || $per
 
             <!-- Main content -->
             <section class="content">
-                <div class="box box-primary">
+                <div class="box box-primary collapsed-box">
                     <div class="box-header with-border">
                         <h3 class="box-title">Faturamento</h3>
                         <div class="box-tools pull-right">
@@ -190,9 +190,14 @@ if ($permission->pedidos || $permission->saldos || $permission->noticias || $per
                     <input type="hidden" name="form" value="cadReceita"/>
                     <input type="hidden" name="id" value="0"/>
                     <div class="modal-body">
+                        <div class="margin">
+                            <button class="btn btn-primary" type="button" onclick="abreModal('#cadTipoReceitaRec')"><i
+                                        class="fa fa-plus"></i> Tipo
+                            </button>
+                        </div>
                         <div class="form-group">
                             <label>Tipo</label>
-                            <select id="tipo" class="form-control" name="tipo" required>
+                            <select class="form-control" name="tipo" required>
                                 <?php
                                 $query = Query::getInstance()->exe("SELECT id, nome FROM aihs_receita_tipo;");
                                 while ($obj = $query->fetch_object()) {
@@ -227,6 +232,36 @@ if ($permission->pedidos || $permission->saldos || $permission->noticias || $per
                         <div class="form-group">
                             <label>Observações</label>
                             <textarea class="form-control" rows="3" name="obs"></textarea>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn btn-primary" type="submit" style="width: 100%;"><i
+                                    class="fa fa-send"></i>&nbsp;Cadastrar
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="cadTipoReceitaRec" role="dialog">
+        <div class="modal-dialog" style="width: 40%;">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                                aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">Cadastrar Tipo Receita Recebida</h4>
+                </div>
+                <form action="../php/geral.php" method="post">
+                    <input type="hidden" name="users" value="1">
+                    <input type="hidden" name="form" value="cadTipoReceitaRec">
+                    <div class="modal-body">
+                        <small class="label bg-gray"><i class="fa fa-exclamation-circle "></i> A página será
+                            recarregada em seguida
+                        </small>
+                        <div class="form-group">
+                            <label>Tipo</label>
+                            <input class="form-control" name="tipo" maxlength="30"
+                                   placeholder="Digite o tipo. Máx. 30 caracteres" required/>
                         </div>
                     </div>
                     <div class="modal-footer">
@@ -345,6 +380,6 @@ if ($permission->pedidos || $permission->saldos || $permission->noticias || $per
 <!-- page script -->
 <script type="text/javascript" src="js/util_lte.min.js"></script>
 <script type="text/javascript" src="../iniLTE.min.js"></script>
-<script type="text/javascript" src="js/aihs.min.js"></script>
+<script type="text/javascript" src="js/aihs.js"></script>
 </body>
 </html>

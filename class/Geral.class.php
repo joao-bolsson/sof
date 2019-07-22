@@ -27,6 +27,14 @@ final class Geral {
         // empty
     }
 
+    public static function cadReceitaTipo(string $tipo) {
+        $builder = new SQLBuilder(SQLBuilder::$INSERT);
+        $builder->setTables(['aihs_receita_tipo']);
+        $builder->setValues([NULL, $tipo]);
+
+        Query::getInstance()->exe($builder->__toString());
+    }
+
     public static function removeReceita(int $id) {
         Query::getInstance()->exe("DELETE FROM aihs_receita WHERE id = " . $id);
     }

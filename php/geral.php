@@ -549,6 +549,12 @@ if (Busca::isActive()) {
     } else if ($users !== NULL && isset($_SESSION["id_setor"]) && $_SESSION["id_setor"] != 0) {
         switch ($form) {
 
+            case 'cadTipoReceitaRec':
+                $tipo = filter_input(INPUT_POST, 'tipo');
+                Geral::cadReceitaTipo($tipo);
+                header("Location: ../lte/aihs.php");
+                break;
+
             case 'removeReceita':
                 $id = filter_input(INPUT_POST, 'id');
 
