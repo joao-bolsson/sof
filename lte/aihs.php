@@ -81,7 +81,9 @@ if ($permission->pedidos || $permission->saldos || $permission->noticias || $per
 
                 <div class="collapse navbar-collapse pull-left">
                     <ul class="nav navbar-nav">
-                        <li><a href="javascript:abreModal('#cadReceita');"><i class="fa fa-file-text"></i>
+                        <li><a href="javascript:mostra('rowFaturamento');"><i class="fa fa-file-text"></i>
+                                Faturamento</a></li>
+                        <li><a href="javascript:mostra('rowReceitas');"><i class="fa fa-file-text"></i>
                                 Receita Recebida</a></li>
                     </ul>
                 </div>
@@ -105,73 +107,77 @@ if ($permission->pedidos || $permission->saldos || $permission->noticias || $per
 
             <!-- Main content -->
             <section class="content">
-                <div class="box box-primary collapsed-box">
-                    <div class="box-header with-border">
-                        <h3 class="box-title">Faturamento</h3>
-                        <div class="box-tools pull-right">
-                            <button type="button" class="btn btn-box-tool" data-widget="collapse"><i
-                                        class="fa fa-minus"></i>
-                            </button>
+                <div id="rowFaturamento" class="row">
+                    <div class="box box-primary">
+                        <div class="box-header with-border">
+                            <h3 class="box-title">Faturamento</h3>
+                            <div class="box-tools pull-right">
+                                <button type="button" class="btn btn-box-tool" data-widget="collapse"><i
+                                            class="fa fa-minus"></i>
+                                </button>
+                            </div>
                         </div>
-                    </div>
-                    <div class="box-body">
-                        <div class="margin">
-                            <button class="btn btn-primary" type="button" onclick="abreModal('#cadAIHS');"><i
-                                        class="fa fa-sign-in"></i>&nbsp;Adicionar
-                            </button>
+                        <div class="box-body">
+                            <div class="margin">
+                                <button class="btn btn-primary" type="button" onclick="abreModal('#cadAIHS');"><i
+                                            class="fa fa-sign-in"></i>&nbsp;Adicionar
+                                </button>
+                            </div>
+                            <table id="tableAIHS" class="table table-bordered table-striped">
+                                <thead>
+                                <tr>
+                                    <th>Tipo</th>
+                                    <th>Grupo</th>
+                                    <th>Descrição</th>
+                                    <th>Qtd</th>
+                                    <th>Valor</th>
+                                    <th>Mês</th>
+                                    <th>Lançamento</th>
+                                    <th>Opções</th>
+                                </tr>
+                                </thead>
+                                <tbody id="tboodyAIHS"></tbody>
+                            </table>
                         </div>
-                        <table id="tableAIHS" class="table table-bordered table-striped">
-                            <thead>
-                            <tr>
-                                <th>Tipo</th>
-                                <th>Grupo</th>
-                                <th>Descrição</th>
-                                <th>Qtd</th>
-                                <th>Valor</th>
-                                <th>Mês</th>
-                                <th>Lançamento</th>
-                                <th>Opções</th>
-                            </tr>
-                            </thead>
-                            <tbody id="tboodyAIHS"></tbody>
-                        </table>
-                    </div>
-                    <div id="overlayLoadAIHS" class="overlay" style="display: none;">
-                        <i class="fa fa-refresh fa-spin"></i>
+                        <div id="overlayLoadAIHS" class="overlay" style="display: none;">
+                            <i class="fa fa-refresh fa-spin"></i>
+                        </div>
                     </div>
                 </div>
-                <div class="box box-primary">
-                    <div class="box-header with-border">
-                        <h3 class="box-title">Receitas Recebidas</h3>
-                        <div class="box-tools pull-right">
-                            <button type="button" class="btn btn-box-tool" data-widget="collapse"><i
-                                        class="fa fa-minus"></i>
-                            </button>
+                <div id="rowReceitas" class="row" style="display: none;">
+                    <div class="box box-primary">
+                        <div class="box-header with-border">
+                            <h3 class="box-title">Receitas Recebidas</h3>
+                            <div class="box-tools pull-right">
+                                <button type="button" class="btn btn-box-tool" data-widget="collapse"><i
+                                            class="fa fa-minus"></i>
+                                </button>
+                            </div>
                         </div>
-                    </div>
-                    <div class="box-body">
-                        <div class="margin">
-                            <button class="btn btn-primary" type="button" onclick="abreModal('#cadReceita');"><i
-                                        class="fa fa-sign-in"></i>&nbsp;Adicionar
-                            </button>
+                        <div class="box-body">
+                            <div class="margin">
+                                <button class="btn btn-primary" type="button" onclick="abreModal('#cadReceita');"><i
+                                            class="fa fa-sign-in"></i>&nbsp;Adicionar
+                                </button>
+                            </div>
+                            <table id="tableReceitas" class="table table-bordered table-striped">
+                                <thead>
+                                <tr>
+                                    <th>Tipo</th>
+                                    <th>Mês</th>
+                                    <th>Recebimento</th>
+                                    <th>Valor</th>
+                                    <th>PF</th>
+                                    <th>Observações</th>
+                                    <th>Opções</th>
+                                </tr>
+                                </thead>
+                                <tbody id="tboodyReceitas"></tbody>
+                            </table>
                         </div>
-                        <table id="tableReceitas" class="table table-bordered table-striped">
-                            <thead>
-                            <tr>
-                                <th>Tipo</th>
-                                <th>Mês</th>
-                                <th>Recebimento</th>
-                                <th>Valor</th>
-                                <th>PF</th>
-                                <th>Observações</th>
-                                <th>Opções</th>
-                            </tr>
-                            </thead>
-                            <tbody id="tboodyReceitas"></tbody>
-                        </table>
-                    </div>
-                    <div id="overlayLoadReceitas" class="overlay" style="display: none;">
-                        <i class="fa fa-refresh fa-spin"></i>
+                        <div id="overlayLoadReceitas" class="overlay" style="display: none;">
+                            <i class="fa fa-refresh fa-spin"></i>
+                        </div>
                     </div>
                 </div>
             </section>
