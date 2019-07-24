@@ -47,11 +47,16 @@ if (!is_null($type)) {
         $tipo = filter_input(INPUT_POST, 'tipo');
         switch ($tipo) {
 
+            case 'receitas':
+                $competencia = filter_input(INPUT_POST, 'competencia');
+                $mes = filter_input(INPUT_POST, 'mes');
+
+                $html .= PrintMod::getRelatorioReceitas($competencia, $mes);
+                break;
+
             case 'siafi':
                 $id_setor = filter_input(INPUT_POST, 'setor');
                 $fonte = filter_input(INPUT_POST, 'fonte', FILTER_DEFAULT, FILTER_FORCE_ARRAY);
-
-                Logger::info("Fonte: " . $fonte);
 
                 $num_processo = filter_input(INPUT_POST, 'num_processo', FILTER_DEFAULT, FILTER_FORCE_ARRAY);
                 $dataI = filter_input(INPUT_POST, 'dataI');

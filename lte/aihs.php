@@ -159,6 +159,9 @@ if ($permission->pedidos || $permission->saldos || $permission->noticias || $per
                                 <button class="btn btn-primary" type="button" onclick="abreModal('#cadReceita');"><i
                                             class="fa fa-sign-in"></i>&nbsp;Adicionar
                                 </button>
+                                <button class="btn btn-primary" type="button" onclick="abreModal('#relReceitas');"><i
+                                            class="fa fa-file-text"></i>&nbsp;Relatório
+                                </button>
                             </div>
                             <table id="tableReceitas" class="table table-bordered table-striped">
                                 <thead>
@@ -279,6 +282,50 @@ if ($permission->pedidos || $permission->saldos || $permission->noticias || $per
             </div>
         </div>
     </div>
+    <div aria-hidden="true" class="modal fade" id="relReceitas" role="dialog" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                                aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">Relatório de Receitas</h4>
+                </div>
+                <form action="../admin/printRelatorio.php" method="post" target="_blank">
+                    <input type="hidden" name="relatorio" value="1"/>
+                    <input type="hidden" name="tipo" value="receitas"/>
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <label>Competência</label>
+                            <select class="form-control" name="competencia" required>
+                                <?php
+                                $query = Query::getInstance()->exe("SELECT id, sigla_mes FROM mes LIMIT 12;");
+                                while ($obj = $query->fetch_object()) {
+                                    echo "<option value=\"{$obj->id}\">{$obj->sigla_mes}</option>";
+                                }
+                                ?>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Mês de Recebimento</label>
+                            <select class="form-control" name="mes" required>
+                                <?php
+                                $query = Query::getInstance()->exe("SELECT id, sigla_mes FROM mes LIMIT 12;");
+                                while ($obj = $query->fetch_object()) {
+                                    echo "<option value=\"{$obj->id}\">{$obj->sigla_mes}</option>";
+                                }
+                                ?>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn btn-primary" type="submit" style="width: 100%;"><i
+                                    class="fa fa-send"></i>&nbsp;Gerar Relatório
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
     <div aria-hidden="true" class="modal fade" id="cadAIHS" role="dialog" tabindex="-1">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -386,6 +433,6 @@ if ($permission->pedidos || $permission->saldos || $permission->noticias || $per
 <!-- page script -->
 <script type="text/javascript" src="js/util_lte.min.js"></script>
 <script type="text/javascript" src="../iniLTE.min.js"></script>
-<script type="text/javascript" src="js/aihs.js"></script>
+<script type="text/javascript" src="js/aihs.min.js"></script>
 </body>
 </html>
