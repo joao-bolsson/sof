@@ -81,7 +81,9 @@ if ($permission->pedidos || $permission->saldos || $permission->noticias || $per
 
                 <div class="collapse navbar-collapse pull-left">
                     <ul class="nav navbar-nav">
-                        <li><a href="javascript:abreModal('#cadReceita');"><i class="fa fa-file-text"></i>
+                        <li><a href="javascript:mostra('rowFaturamento');"><i class="fa fa-file-text"></i>
+                                Faturamento</a></li>
+                        <li><a href="javascript:mostra('rowReceitas');"><i class="fa fa-file-text"></i>
                                 Receita Recebida</a></li>
                     </ul>
                 </div>
@@ -105,73 +107,80 @@ if ($permission->pedidos || $permission->saldos || $permission->noticias || $per
 
             <!-- Main content -->
             <section class="content">
-                <div class="box box-primary">
-                    <div class="box-header with-border">
-                        <h3 class="box-title">Faturamento</h3>
-                        <div class="box-tools pull-right">
-                            <button type="button" class="btn btn-box-tool" data-widget="collapse"><i
-                                        class="fa fa-minus"></i>
-                            </button>
+                <div id="rowFaturamento" class="row">
+                    <div class="box box-primary">
+                        <div class="box-header with-border">
+                            <h3 class="box-title">Faturamento</h3>
+                            <div class="box-tools pull-right">
+                                <button type="button" class="btn btn-box-tool" data-widget="collapse"><i
+                                            class="fa fa-minus"></i>
+                                </button>
+                            </div>
                         </div>
-                    </div>
-                    <div class="box-body">
-                        <div class="margin">
-                            <button class="btn btn-primary" type="button" onclick="abreModal('#cadAIHS');"><i
-                                        class="fa fa-sign-in"></i>&nbsp;Adicionar
-                            </button>
+                        <div class="box-body">
+                            <div class="margin">
+                                <button class="btn btn-primary" type="button" onclick="abreModal('#cadAIHS');"><i
+                                            class="fa fa-sign-in"></i>&nbsp;Adicionar
+                                </button>
+                            </div>
+                            <table id="tableAIHS" class="table table-bordered table-striped">
+                                <thead>
+                                <tr>
+                                    <th>Tipo</th>
+                                    <th>Grupo</th>
+                                    <th>Descrição</th>
+                                    <th>Qtd</th>
+                                    <th>Valor</th>
+                                    <th>Mês</th>
+                                    <th>Lançamento</th>
+                                    <th>Opções</th>
+                                </tr>
+                                </thead>
+                                <tbody id="tboodyAIHS"></tbody>
+                            </table>
                         </div>
-                        <table id="tableAIHS" class="table table-bordered table-striped">
-                            <thead>
-                            <tr>
-                                <th>Tipo</th>
-                                <th>Grupo</th>
-                                <th>Descrição</th>
-                                <th>Qtd</th>
-                                <th>Valor</th>
-                                <th>Mês</th>
-                                <th>Lançamento</th>
-                                <th>Opções</th>
-                            </tr>
-                            </thead>
-                            <tbody id="tboodyAIHS"></tbody>
-                        </table>
-                    </div>
-                    <div id="overlayLoadAIHS" class="overlay" style="display: none;">
-                        <i class="fa fa-refresh fa-spin"></i>
+                        <div id="overlayLoadAIHS" class="overlay" style="display: none;">
+                            <i class="fa fa-refresh fa-spin"></i>
+                        </div>
                     </div>
                 </div>
-                <div class="box box-primary">
-                    <div class="box-header with-border">
-                        <h3 class="box-title">Receitas Recebidas</h3>
-                        <div class="box-tools pull-right">
-                            <button type="button" class="btn btn-box-tool" data-widget="collapse"><i
-                                        class="fa fa-minus"></i>
-                            </button>
+                <div id="rowReceitas" class="row" style="display: none;">
+                    <div class="box box-primary">
+                        <div class="box-header with-border">
+                            <h3 class="box-title">Receitas Recebidas</h3>
+                            <div class="box-tools pull-right">
+                                <button type="button" class="btn btn-box-tool" data-widget="collapse"><i
+                                            class="fa fa-minus"></i>
+                                </button>
+                            </div>
                         </div>
-                    </div>
-                    <div class="box-body">
-                        <div class="margin">
-                            <button class="btn btn-primary" type="button" onclick="abreModal('#cadReceita');"><i
-                                        class="fa fa-sign-in"></i>&nbsp;Adicionar
-                            </button>
+                        <div class="box-body">
+                            <div class="margin">
+                                <button class="btn btn-primary" type="button" onclick="abreModal('#cadReceita');"><i
+                                            class="fa fa-sign-in"></i>&nbsp;Adicionar
+                                </button>
+                                <button class="btn btn-primary" type="button" onclick="abreModal('#relReceitas');"><i
+                                            class="fa fa-file-text"></i>&nbsp;Relatório
+                                </button>
+                            </div>
+                            <table id="tableReceitas" class="table table-bordered table-striped">
+                                <thead>
+                                <tr>
+                                    <th>Tipo</th>
+                                    <th>Mês</th>
+                                    <th>Recebimento</th>
+                                    <th>Valor</th>
+                                    <th>PF</th>
+                                    <th>Observações</th>
+                                    <th>Opções</th>
+                                </tr>
+                                </thead>
+                                <tbody id="tboodyReceitas"></tbody>
+                            </table>
                         </div>
-                        <table id="tableReceitas" class="table table-bordered table-striped">
-                            <thead>
-                            <tr>
-                                <th>Tipo</th>
-                                <th>Mês</th>
-                                <th>Recebimento</th>
-                                <th>Valor</th>
-                                <th>PF</th>
-                                <th>Observações</th>
-                                <th>Opções</th>
-                            </tr>
-                            </thead>
-                            <tbody id="tboodyReceitas"></tbody>
-                        </table>
-                    </div>
-                    <div id="overlayLoadReceitas" class="overlay" style="display: none;">
-                        <i class="fa fa-refresh fa-spin"></i>
+                        <div id="overlayLoadReceitas" class="overlay" style="display: none;">
+                            <i class="fa fa-refresh fa-spin"></i>
+                        </div>
                     </div>
                 </div>
             </section>
@@ -267,6 +276,50 @@ if ($permission->pedidos || $permission->saldos || $permission->noticias || $per
                     <div class="modal-footer">
                         <button class="btn btn-primary" type="submit" style="width: 100%;"><i
                                     class="fa fa-send"></i>&nbsp;Cadastrar
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div aria-hidden="true" class="modal fade" id="relReceitas" role="dialog" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                                aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">Relatório de Receitas</h4>
+                </div>
+                <form action="../admin/printRelatorio.php" method="post" target="_blank">
+                    <input type="hidden" name="relatorio" value="1"/>
+                    <input type="hidden" name="tipo" value="receitas"/>
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <label>Competência</label>
+                            <select class="form-control" name="competencia" required>
+                                <?php
+                                $query = Query::getInstance()->exe("SELECT id, sigla_mes FROM mes LIMIT 12;");
+                                while ($obj = $query->fetch_object()) {
+                                    echo "<option value=\"{$obj->id}\">{$obj->sigla_mes}</option>";
+                                }
+                                ?>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Mês de Recebimento</label>
+                            <select class="form-control" name="mes" required>
+                                <?php
+                                $query = Query::getInstance()->exe("SELECT id, sigla_mes FROM mes LIMIT 12;");
+                                while ($obj = $query->fetch_object()) {
+                                    echo "<option value=\"{$obj->id}\">{$obj->sigla_mes}</option>";
+                                }
+                                ?>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn btn-primary" type="submit" style="width: 100%;"><i
+                                    class="fa fa-send"></i>&nbsp;Gerar Relatório
                         </button>
                     </div>
                 </form>
@@ -380,6 +433,6 @@ if ($permission->pedidos || $permission->saldos || $permission->noticias || $per
 <!-- page script -->
 <script type="text/javascript" src="js/util_lte.min.js"></script>
 <script type="text/javascript" src="../iniLTE.min.js"></script>
-<script type="text/javascript" src="js/aihs.js"></script>
+<script type="text/javascript" src="js/aihs.min.js"></script>
 </body>
 </html>

@@ -26,6 +26,35 @@ final class PrintMod {
         // empty
     }
 
+    public static function getRelatorioReceitas(int $competencia, int $mesRecebimento): string {
+        $query = Query::getInstance()->exe("SELECT aihs_receita_tipo.nome AS tipo, DATE_FORMAT(recebimento, '%d/%m/%Y') as recebimento, valor, pf, observacoes FROM aihs_receita, aihs_receita_tipo WHERE aihs_receita.tipo = aihs_receita_tipo.id AND competencia = " . $competencia . " AND MONTH(recebimento) = " . $mesRecebimento);
+        $return = "
+            <fieldset class=\"preg\">
+                    <h5>DESCRIÇÃO DO RELATÓRIO</h5>
+                    <h6>Relatório de Receitas Recebidas</h6>
+                    <h6>Competência: " . $competencia . "</h6>
+                    <h6>Mês de Recebimento: " . $mesRecebimento . "</h6>
+                </fieldset><br>
+            <fieldset>";
+
+        $table = new Table('', 'prod', ['Tipo', 'Recebimento', 'Valor', 'PF', 'Observações'], true);
+
+        while ($obj = $query->fetch_object()) {
+            $row = new Row();
+            $row->addComponent(new Column($obj->tipo));
+            $row->addComponent(new Column($obj->recebimento));
+            $row->addComponent(new Column("R$ " . number_format($obj->valor, 3, ',', '.')));
+            $row->addComponent(new Column($obj->pf));
+            $row->addComponent(new Column($obj->observacoes));
+
+            $table->addComponent($row);
+        }
+
+        $return .= $table . '</fieldset>';
+
+        return $return;
+    }
+
     /**
      * @param int $id_user User id.
      * @param string $period Period in the format DD/MM/YYYY - DD/MM/YYYY.
