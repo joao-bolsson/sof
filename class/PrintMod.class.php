@@ -49,10 +49,10 @@ final class PrintMod {
             <fieldset>";
 
 
-        $query_fixos_comp = Query::getInstance()->exe("SELECT sum(valor) AS sum FROM aihs_receita WHERE (tipo >= 1 AND tipo <= 4) OR tipo = 11;");
+        $query_fixos_comp = Query::getInstance()->exe("SELECT sum(valor) AS sum FROM aihs_receita WHERE competencia = " . $competencia . " AND MONTH(recebimento) = " . $mesRecebimento ." AND ((tipo >= 1 AND tipo <= 4) OR tipo = 11);");
         $fixos_comp = $query_fixos_comp->fetch_object()->sum;
 
-        $query_fixos_med = Query::getInstance()->exe("SELECT sum(valor) AS sum FROM aihs_receita WHERE tipo = 5;");
+        $query_fixos_med = Query::getInstance()->exe("SELECT sum(valor) AS sum FROM aihs_receita WHERE tipo = 5 AND competencia = " . $competencia . " AND MONTH(recebimento) = " . $mesRecebimento);
         $fixos_med = $query_fixos_med->fetch_object()->sum;
 
         $return .= "
@@ -63,18 +63,18 @@ final class PrintMod {
                     <h6>Total Fixo: R$ " . number_format($fixos_comp + $fixos_med, 2, ',', '.') . "</h6>
                 </fieldset><br>";
 
-        $query_fixos_alta = Query::getInstance()->exe("SELECT sum(valor) AS sum FROM aihs_receita WHERE tipo = 6;");
+        $query_fixos_alta = Query::getInstance()->exe("SELECT sum(valor) AS sum FROM aihs_receita WHERE tipo = 6 AND competencia = " . $competencia . " AND MONTH(recebimento) = " . $mesRecebimento);
         $fixos_alta = $query_fixos_alta->fetch_object()->sum;
 
         // tipos starts with 'FAEC'
         $query_ids = Query::getInstance()->exe("SELECT id FROM aihs_receita_tipo WHERE nome LIKE 'FAEC%'");
 
-        $where_id = "";
+        $where_id = "competencia = " . $competencia . " AND MONTH(recebimento) = " . $mesRecebimento . " AND (";
         while ($obj = $query_ids->fetch_object()) {
             $where_id .= "tipo = " . $obj->id . " OR ";
         }
 
-        $where_id .= "tipo = 0";
+        $where_id .= "tipo = 0)";
 
         $query_fixos_faec = Query::getInstance()->exe("SELECT sum(valor) AS sum FROM aihs_receita WHERE " . $where_id);
         $fixos_faec = $query_fixos_faec->fetch_object()->sum;
