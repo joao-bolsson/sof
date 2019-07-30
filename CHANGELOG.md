@@ -2,7 +2,7 @@
 
 #### v2.4.5 - 24/07/2019 ####
 - Organização da interface para AIHS
-- Relatório de Receitas Recebidas
+- Relatório de Receitas Recebidas com sub totais
 - Correção de bug na inserção de observações (<= 300 caracteres)
 - Cadastro de tipos para receitas
 
