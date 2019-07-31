@@ -34,10 +34,6 @@ final class PrintMod {
         $query_mes = Query::getInstance()->exe("SELECT sigla_mes FROM mes WHERE id = " . $competencia);
         $comp = $query_mes->fetch_object()->sigla_mes;
 
-        $query_sum = Query::getInstance()->exe("SELECT sum(valor) AS sum FROM aihs_receita, aihs_receita_tipo WHERE aihs_receita.tipo = aihs_receita_tipo.id AND competencia = " . $competencia . " AND MONTH(recebimento) = " . $mesRecebimento);
-
-        $sum = $query_sum->fetch_object()->sum;
-
         $query = Query::getInstance()->exe("SELECT aihs_receita_tipo.nome AS tipo, DATE_FORMAT(recebimento, '%d/%m/%Y') as recebimento, valor, pf FROM aihs_receita, aihs_receita_tipo WHERE aihs_receita.tipo = aihs_receita_tipo.id AND competencia = " . $competencia . " AND MONTH(recebimento) = " . $mesRecebimento);
         $return = "
             <fieldset class=\"preg\">
@@ -45,9 +41,7 @@ final class PrintMod {
                     <h6>Relatório de Receitas Recebidas</h6>
                     <h6>Competência: " . $comp . "</h6>
                     <h6>Mês de Recebimento: " . $receb . "</h6>
-                </fieldset><br>
-            <fieldset>";
-
+            </fieldset><br>";
 
         $query_fixos_comp = Query::getInstance()->exe("SELECT sum(valor) AS sum FROM aihs_receita WHERE competencia = " . $competencia . " AND MONTH(recebimento) = " . $mesRecebimento ." AND ((tipo >= 1 AND tipo <= 4) OR tipo = 11);");
         $fixos_comp = $query_fixos_comp->fetch_object()->sum;
@@ -61,7 +55,7 @@ final class PrintMod {
                     <h6>REHUF + IAC + FIDEPS + OUTROS + INTERMINISTERIAL: R$ " . number_format($fixos_comp, 3, ',', '.') . "</h6>
                     <h6>Média Complexidade: R$ " . number_format($fixos_med, 2, ',', '.') . "</h6>
                     <h6>Total Fixo: R$ " . number_format($fixos_comp + $fixos_med, 2, ',', '.') . "</h6>
-                </fieldset><br>";
+            </fieldset><br>";
 
         $query_fixos_alta = Query::getInstance()->exe("SELECT sum(valor) AS sum FROM aihs_receita WHERE tipo = 6 AND competencia = " . $competencia . " AND MONTH(recebimento) = " . $mesRecebimento);
         $fixos_alta = $query_fixos_alta->fetch_object()->sum;
@@ -81,19 +75,16 @@ final class PrintMod {
 
         $return .= "
             <fieldset class=\"preg\">
-                    <h5>Outros Valores</h5>
+                    <h5>Outros Valores Variáveis</h5>
                     <h6>Alta Complexidade: R$ " . number_format($fixos_alta, 2, ',', '.') . "</h6>
                     <h6>FAEC: R$ " . number_format($fixos_faec, 2, ',', '.') . "</h6>
                     <h6>Total: R$ " . number_format($fixos_alta + $fixos_faec, 2, ',', '.') . "</h6>
-                </fieldset><br>
-            <fieldset>";
+            </fieldset><br>";
 
         $return .= "
             <fieldset class=\"preg\">
-                    <h5>Totais</h5>
-                    <h6>Geral: R$ " . number_format($fixos_comp + $fixos_med + $fixos_alta + $fixos_faec, 2, ',', '.') . "</h6>
-                    <h6>Nesse Relatório: R$ " . number_format($sum, 2, ',', '.') . "</h6>
-                </fieldset><br>
+                    <h6>Total Geral: R$ " . number_format($fixos_comp + $fixos_med + $fixos_alta + $fixos_faec, 2, ',', '.') . "</h6>
+            </fieldset><br>
             <fieldset>";
 
         $table = new Table('', 'prod', ['Tipo', 'Recebimento', 'Valor', 'PF'], true);
