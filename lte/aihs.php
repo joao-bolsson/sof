@@ -85,6 +85,8 @@ if ($permission->pedidos || $permission->saldos || $permission->noticias || $per
                                 Faturamento</a></li>
                         <li><a href="javascript:mostra('rowReceitas');"><i class="fa fa-file-text"></i>
                                 Receita Recebida</a></li>
+                        <li><a href="javascript:mostra('rowFatAprov');"><i class="fa fa-file-text"></i>
+                                Faturamento Aprovado</a></li>
                     </ul>
                 </div>
 
@@ -179,6 +181,43 @@ if ($permission->pedidos || $permission->saldos || $permission->noticias || $per
                             </table>
                         </div>
                         <div id="overlayLoadReceitas" class="overlay" style="display: none;">
+                            <i class="fa fa-refresh fa-spin"></i>
+                        </div>
+                    </div>
+                </div>
+                <div id="rowFatAprov" class="row" style="display: none;">
+                    <div class="box box-primary">
+                        <div class="box-header with-border">
+                            <h3 class="box-title">Faturamento Aprovado</h3>
+                            <div class="box-tools pull-right">
+                                <button type="button" class="btn btn-box-tool" data-widget="collapse"><i
+                                            class="fa fa-minus"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="box-body">
+                            <div class="margin">
+                                <button class="btn btn-primary" type="button" onclick="abreModal('#cadFatAprov');"><i
+                                            class="fa fa-sign-in"></i>&nbsp;Adicionar
+                                </button>
+                            </div>
+                            <table id="tableFatAprov" class="table table-bordered table-striped">
+                                <thead>
+                                <tr>
+                                    <th>Tipo</th>
+                                    <th>Grupo</th>
+                                    <th>Descrição</th>
+                                    <th>Qtd</th>
+                                    <th>Valor</th>
+                                    <th>Mês</th>
+                                    <th>Lançamento</th>
+                                    <th>Opções</th>
+                                </tr>
+                                </thead>
+                                <tbody id="tboodyFat"></tbody>
+                            </table>
+                        </div>
+                        <div id="overlayLoadFat" class="overlay" style="display: none;">
                             <i class="fa fa-refresh fa-spin"></i>
                         </div>
                     </div>
@@ -380,6 +419,81 @@ if ($permission->pedidos || $permission->saldos || $permission->noticias || $per
                         <div class="form-group">
                             <label>Descrição (sub-grupo)</label>
                             <input id="descr" class="form-control" name="descricao" disabled/>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn btn-primary" type="submit" style="width: 100%;"><i
+                                    class="fa fa-send"></i>&nbsp;Cadastrar
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div aria-hidden="true" class="modal fade" id="cadFatAprov" role="dialog" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                                aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">Faturamento Aprovado</h4>
+                </div>
+                <form id="formCadFatAprov">
+                    <input type="hidden" name="users" value="1"/>
+                    <input type="hidden" name="form" value="cadFatAprov"/>
+                    <input type="hidden" name="id" value="0"/>
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <label>Data de Lançamento</label>
+                            <input class="form-control date" name="data" type="text" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Competência</label>
+                            <select class="form-control" name="mes" required>
+                                <?php
+                                $query = Query::getInstance()->exe("SELECT id, sigla_mes FROM mes LIMIT 12;");
+                                while ($obj = $query->fetch_object()) {
+                                    echo "<option value=\"{$obj->id}\">{$obj->sigla_mes}</option>";
+                                }
+                                ?>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Produção</label>
+                            <select class="form-control" name="producao" required>
+                                <?php
+                                $query = Query::getInstance()->exe("SELECT id, nome FROM faturamento_producao;");
+                                while ($obj = $query->fetch_object()) {
+                                    echo "<option value=\"{$obj->id}\">{$obj->nome}</option>";
+                                }
+                                ?>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Financiamento</label>
+                            <select class="form-control" name="financiamento" required>
+                                <?php
+                                $query = Query::getInstance()->exe("SELECT id, nome FROM faturamento_financiamento;");
+                                while ($obj = $query->fetch_object()) {
+                                    echo "<option value=\"{$obj->id}\">{$obj->nome}</option>";
+                                }
+                                ?>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Compexidade</label>
+                            <select class="form-control" name="complexidade" required>
+                                <?php
+                                $query = Query::getInstance()->exe("SELECT id, nome FROM faturamento_complexidade;");
+                                while ($obj = $query->fetch_object()) {
+                                    echo "<option value=\"{$obj->id}\">{$obj->nome}</option>";
+                                }
+                                ?>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Valor</label>
+                            <input class="form-control" type="number" min="0" step="0.01" name="valor" required/>
                         </div>
                     </div>
                     <div class="modal-footer">

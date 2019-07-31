@@ -50,6 +50,15 @@ $(function () {
         });
     });
 
+    $("#cadFatAprov").on('shown.bs.modal', function () {
+        $("#formCadFatAprov .date").inputmask("dd/mm/yyyy", {"placeholder": "dd/mm/yyyy"});
+    });
+
+    $("#cadFatAprov").on('hidden.bs.modal', function () {
+        $('#formCadFatAprov').trigger("reset");
+        $("#formCadFatAprov input[name=id]").val(0);
+    });
+
     loadTableAIHS();
     loadTableReceitas();
 
@@ -188,7 +197,7 @@ function changeAIHSType() {
 }
 
 function hideOthers() {
-    var divs = ['rowFaturamento', 'rowReceitas'];
+    var divs = ['rowFaturamento', 'rowReceitas', 'rowFatAprov'];
     for (i = 0; i < divs.length; i++) {
         var element = document.getElementById(divs[i]);
         if (element !== null) {
