@@ -549,6 +549,31 @@ if (Busca::isActive()) {
     } else if ($users !== NULL && isset($_SESSION["id_setor"]) && $_SESSION["id_setor"] != 0) {
         switch ($form) {
 
+            case 'cadFatAprov':
+                $id = filter_input(INPUT_POST, 'id');
+                $data = filter_input(INPUT_POST, 'data');
+                $competencia = filter_input(INPUT_POST, 'mes');
+                $producao = filter_input(INPUT_POST, 'producao');
+                $financiamento = filter_input(INPUT_POST, 'financiamento');
+                $complexidade = filter_input(INPUT_POST, 'complexidade');
+                $valor = filter_input(INPUT_POST, 'valor');
+
+                $insertId = Geral::cadFaturamento($id, $data, $competencia, $producao, $financiamento, $complexidade, $valor);
+
+                // contratualizacao
+                $contr = filter_input(INPUT_POST, 'contr');
+                $vigencia_ini = filter_input(INPUT_POST, 'vigencia_ini');
+                $vigencia_fim = filter_input(INPUT_POST, 'vigencia_fim');
+                $aditivo_ini = filter_input(INPUT_POST, 'aditivo_ini');
+                $aditivo_fim = filter_input(INPUT_POST, 'aditivo_fim');
+                $prefix = filter_input(INPUT_POST, 'prefix');
+                $valor = filter_input(INPUT_POST, 'valorContr');
+
+                Geral::cadContratualizacao($insertId, $contr, $vigencia_ini, $vigencia_fim, $aditivo_ini, $aditivo_fim, $prefix, $valor);
+
+                echo "ok";
+                break;
+
             case 'cadTipoReceitaRec':
                 $tipo = filter_input(INPUT_POST, 'tipo');
                 Geral::cadReceitaTipo($tipo);

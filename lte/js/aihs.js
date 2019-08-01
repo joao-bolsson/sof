@@ -50,6 +50,19 @@ $(function () {
         });
     });
 
+    $('#formCadFatAprov').submit(function (event) {
+        event.preventDefault();
+
+        var data = $(this).serialize();
+
+        $.post('../php/geral.php', data).done(function (resposta) {
+            alert(resposta);
+        }).always(function () {
+            $("#cadFatAprov").modal('hide');
+            loadTableFatAprov();
+        });
+    });
+
     $("#cadFatAprov").on('shown.bs.modal', function () {
         $("#formCadFatAprov .date").inputmask("dd/mm/yyyy", {"placeholder": "dd/mm/yyyy"});
     });
@@ -157,6 +170,10 @@ function loadTableAIHS() {
             load.style.display = 'none';
         }
     });
+}
+
+function loadTableFatAprov(){
+    // TODO
 }
 
 function removeAIHS(id) {

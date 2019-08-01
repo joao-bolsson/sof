@@ -27,6 +27,48 @@ final class Geral {
         // empty
     }
 
+    public static function cadFaturamento(int $id, string $data, int $competencia, int $producao, int $financiamento, int $complexidade, string $valor): int {
+        $dt = Util::dateFormat($data);
+
+        $type = ($id == 0) ? SQLBuilder::$INSERT : SQLBuilder::$UPDATE;
+
+        $builder = new SQLBuilder($type);
+        $builder->setTables(['faturamento']);
+
+        if ($id == 0) {
+            $builder->setValues([NULL, $dt, $competencia, $producao, $financiamento, $complexidade, $valor]);
+        } else {
+            $builder->setColumns(['lancamento', 'competencia', 'producao', 'financiamento', 'complexidade', 'valor']);
+            $builder->setValues([$dt, $competencia, $producao, $financiamento, $complexidade, $valor]);
+            $builder->setWhere("id = " . $id);
+        }
+
+        Query::getInstance()->exe($builder->__toString());
+        return Query::getInstance()->getInsertId();
+    }
+
+    public static function cadContratualizacao(int $id, string $contr, string $vigencia_ini, string $vigencia_fim, string $aditivo_ini, string $aditivo_fim, int $prefix, string $valor) {
+        if ($id == 0) {
+            Logger::error("Contratualização with id equals to zero");
+            return;
+        }
+
+        // guarantee the update
+        Query::getInstance()->exe("DELETE FROM contratualizacao WHERE id = " . $id);
+
+        $vigIni = Util::dateFormat($vigencia_ini);
+        $vigFim = Util::dateFormat($vigencia_fim);
+        $adIni = Util::dateFormat($aditivo_ini);
+        $adFim = Util::dateFormat($aditivo_fim);
+
+        $builder = new SQLBuilder(SQLBuilder::$INSERT);
+        $builder->setTables(['contratualizacao']);
+
+        $builder->setValues([$id, $contr, $vigIni, $vigFim, $adIni, $adFim, $prefix, $valor]);
+
+        Query::getInstance()->exe($builder->__toString());
+    }
+
     public static function cadReceitaTipo(string $tipo) {
         $builder = new SQLBuilder(SQLBuilder::$INSERT);
         $builder->setTables(['aihs_receita_tipo']);
