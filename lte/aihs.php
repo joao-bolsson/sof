@@ -495,6 +495,45 @@ if ($permission->pedidos || $permission->saldos || $permission->noticias || $per
                             <label>Valor</label>
                             <input class="form-control" type="number" min="0" step="0.01" name="valor" required/>
                         </div>
+                        <hr/>
+                        <h3>Contratualização</h3>
+                        <div class="form-group">
+                            <label>Número do Contrato</label>
+                            <input class="form-control" name="contr" type="text" required>
+                        </div>
+                        <h4>Vigência</h4>
+                        <div class="form-group">
+                            <label>Início</label>
+                            <input class="form-control date" name="vigencia_ini" type="text" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Fim</label>
+                            <input class="form-control date" name="vigencia_fim" type="text" required>
+                        </div>
+                        <h4>Aditivo</h4>
+                        <div class="form-group">
+                            <label>Início</label>
+                            <input class="form-control date" name="aditivo_ini" type="text" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Fim</label>
+                            <input class="form-control date" name="aditivo_fim" type="text" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Pré-Fixado</label>
+                            <select class="form-control" name="prefix" required>
+                                <?php
+                                $query = Query::getInstance()->exe("SELECT id, nome FROM contratualizacao_prefix;");
+                                while ($obj = $query->fetch_object()) {
+                                    echo "<option value=\"{$obj->id}\">{$obj->nome}</option>";
+                                }
+                                ?>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Valor</label>
+                            <input class="form-control" type="number" min="0" step="0.01" name="valorContr" required/>
+                        </div>
                     </div>
                     <div class="modal-footer">
                         <button class="btn btn-primary" type="submit" style="width: 100%;"><i
