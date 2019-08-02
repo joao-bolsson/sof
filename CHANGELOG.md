@@ -1,5 +1,10 @@
 ## CHANGELOG ##
 
+#### v2.4.6 - 02/08/2019 ####
+- Formulário para faturamento aprovado
+- Tabela para visualizar, editar e remover faturamentos aprovados
+- Melhoria no relatório de receitas
+
 #### v2.4.5 - 24/07/2019 ####
 - Organização da interface para AIHS
 - Relatório de Receitas Recebidas com sub totais
