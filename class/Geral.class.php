@@ -77,6 +77,11 @@ final class Geral {
         Query::getInstance()->exe($builder->__toString());
     }
 
+    public static function removeFatAprov(int $id) {
+        Query::getInstance()->exe("DELETE FROM contratualizacao WHERE id = " . $id);
+        Query::getInstance()->exe("DELETE FROM faturamento WHERE id = " . $id);
+    }
+
     public static function removeReceita(int $id) {
         Query::getInstance()->exe("DELETE FROM aihs_receita WHERE id = " . $id);
     }

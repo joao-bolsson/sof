@@ -24,6 +24,12 @@ final class Busca {
         // empty
     }
 
+    public static function getFatAprov(int $id) {
+        $query = Query::getInstance()->exe("SELECT DATE_FORMAT(lancamento, '%d/%m/%Y') as data, competencia, producao, financiamento, complexidade, faturamento.valor, numero_contr, DATE_FORMAT(vigenc_ini, '%d/%m/%Y') AS vigenc_ini, DATE_FORMAT(vigenc_fim, '%d/%m/%Y') AS vigenc_fim, DATE_FORMAT(aditivo_ini, '%d/%m/%Y') AS aditivo_ini, DATE_FORMAT(aditivo_fim, '%d/%m/%Y') AS aditivo_fim, prefixado, contratualizacao.valor AS valorContr FROM faturamento, contratualizacao WHERE faturamento.id = " . $id . " AND contratualizacao.id = " . $id);
+
+        return $query->fetch_object();
+    }
+
     public static function getReceita(int $id) {
         $query = Query::getInstance()->exe("SELECT tipo, competencia, DATE_FORMAT(recebimento, '%d/%m/%Y') AS recebimento, valor, pf, observacoes FROM aihs_receita WHERE id = " . $id);
 

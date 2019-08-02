@@ -580,6 +580,13 @@ if (Busca::isActive()) {
                 header("Location: ../lte/aihs.php");
                 break;
 
+            case 'removeFatAprov':
+                $id = filter_input(INPUT_POST, 'id');
+
+                Geral::removeFatAprov($id);
+                echo "ok";
+                break;
+
             case 'removeReceita':
                 $id = filter_input(INPUT_POST, 'id');
 

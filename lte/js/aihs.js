@@ -77,6 +77,35 @@ $(function () {
     loadTableFatAprov();
 });
 
+function editFatAprov(id) {
+    $.post('../php/busca.php', {
+        users: 1,
+        form: 'editFatAprov',
+        id: id
+    }).done(function (resposta) {
+        var obj = jQuery.parseJSON(resposta);
+
+        $("#formCadFatAprov input[name=id]").val(id);
+        $("#formCadFatAprov input[name=data]").val(obj.data);
+        $("#formCadFatAprov select[name=mes]").val(obj.competencia);
+        $("#formCadFatAprov select[name=producao]").val(obj.producao);
+        $("#formCadFatAprov select[name=financiamento]").val(obj.financiamento);
+        $("#formCadFatAprov select[name=complexidade]").val(obj.complexidade);
+        $("#formCadFatAprov input[name=valor]").val(obj.valor);
+
+        // contratualização
+        $("#formCadFatAprov input[name=contr]").val(obj.numero_contr);
+        $("#formCadFatAprov input[name=vigencia_ini]").val(obj.vigenc_ini);
+        $("#formCadFatAprov input[name=vigencia_fim]").val(obj.vigenc_fim);
+        $("#formCadFatAprov input[name=aditivo_ini]").val(obj.aditivo_ini);
+        $("#formCadFatAprov input[name=aditivo_fim]").val(obj.aditivo_fim);
+        $("#formCadFatAprov select[name=prefix]").val(obj.prefixado);
+        $("#formCadFatAprov input[name=valorContr]").val(obj.valorContr);
+
+        $('#cadFatAprov').modal('show');
+    });
+}
+
 function editAIHS(id) {
     $.post('../php/busca.php', {
         users: 1,
@@ -186,7 +215,7 @@ function loadTableFatAprov(){
         form: 'loadTableFatAprov'
     }).done(function (resposta) {
         if ($.fn.DataTable.isDataTable('#tableFatAprov')) {
-            $('#tableAIHS').DataTable().destroy();
+            $('#tableFatAprov').DataTable().destroy();
         }
         if (resposta.length > 0) {
             element.innerHTML = resposta;
@@ -197,6 +226,19 @@ function loadTableFatAprov(){
             load.style.display = 'none';
         }
     });
+}
+
+function removeFatAprov(id) {
+    if (confirm("Esta operação não pode ser desfeita. Deseja remover esse item?")) {
+        $.post('../php/geral.php', {
+            users: 1,
+            form: 'removeFatAprov',
+            id: id
+        }).done(function () {
+            console.log("done!");
+            loadTableFatAprov();
+        });
+    }
 }
 
 function removeAIHS(id) {

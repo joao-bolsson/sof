@@ -132,6 +132,11 @@ if (!is_null($admin) && isset($_SESSION['id_setor']) && ($_SESSION['id_setor'] =
 
     switch ($form){
 
+        case 'editFatAprov':
+            $id = filter_input(INPUT_POST, 'id');
+            echo json_encode(Busca::getFatAprov($id));
+            break;
+
         case 'editReceita':
             $id = filter_input(INPUT_POST, 'id');
             echo json_encode(Busca::getReceita($id));

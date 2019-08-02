@@ -58,7 +58,7 @@ final class BuscaLTE {
 
             $div .= '</div>';
 
-            $row->addComponent(new Column(""));
+            $row->addComponent(new Column($div));
 
             $table->addComponent($row);
         }
