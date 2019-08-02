@@ -74,7 +74,7 @@ $(function () {
 
     loadTableAIHS();
     loadTableReceitas();
-
+    loadTableFatAprov();
 });
 
 function editAIHS(id) {
@@ -173,7 +173,30 @@ function loadTableAIHS() {
 }
 
 function loadTableFatAprov(){
-    // TODO
+    var element = document.getElementById('tboodyFat');
+    if (element === null) {
+        return;
+    }
+    var load = document.getElementById('overlayLoadFat');
+    if (load !== null) {
+        load.style.display = 'block';
+    }
+    $.post('../php/buscaLTE.php', {
+        users: 1,
+        form: 'loadTableFatAprov'
+    }).done(function (resposta) {
+        if ($.fn.DataTable.isDataTable('#tableFatAprov')) {
+            $('#tableAIHS').DataTable().destroy();
+        }
+        if (resposta.length > 0) {
+            element.innerHTML = resposta;
+        }
+        iniDataTable('#tableFatAprov');
+
+        if (load !== null) {
+            load.style.display = 'none';
+        }
+    });
 }
 
 function removeAIHS(id) {

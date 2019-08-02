@@ -204,13 +204,12 @@ if ($permission->pedidos || $permission->saldos || $permission->noticias || $per
                             <table id="tableFatAprov" class="table table-bordered table-striped">
                                 <thead>
                                 <tr>
-                                    <th>Tipo</th>
-                                    <th>Grupo</th>
-                                    <th>Descrição</th>
-                                    <th>Qtd</th>
-                                    <th>Valor</th>
-                                    <th>Mês</th>
                                     <th>Lançamento</th>
+                                    <th>Competência</th>
+                                    <th>Produção</th>
+                                    <th>Financiamento</th>
+                                    <th>Complexidade</th>
+                                    <th>Valor</th>
                                     <th>Opções</th>
                                 </tr>
                                 </thead>
