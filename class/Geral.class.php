@@ -65,7 +65,8 @@ final class Geral {
         if ($id == 0) {
             $builder->setValues([NULL, $idFat, $contr, $vigIni, $vigFim, $adIni, $adFim, $prefix, $valor]);
         } else {
-            $builder->setColumns(['id_faturamento', 'numero_contr', 'vigenc_ini', 'vigenc_fim', 'aditivo_ini', 'aditivo_fim', 'prefixado', 'valor']);
+            $builder->setColumns(['numero_contr', 'vigenc_ini', 'vigenc_fim', 'aditivo_ini', 'aditivo_fim', 'prefixado', 'valor']);
+            $builder->setValues([$contr, $vigIni, $vigFim, $adIni, $adFim, $prefix, $valor]);
             $builder->setWhere("id = " . $id);
 
         }

@@ -74,7 +74,7 @@ final class BuscaLTE {
 
             $div .= new Button('', BTN_DEFAULT . ' btn-sm', "editFatAprov(" . $obj->id . ")", "data-toggle = \"tooltip\"", 'Editar', 'pencil');
 
-            $div .= new Button('', BTN_DEFAULT . ' btn-sm', "addContratualizacao(" . $obj->id . ")", "data-toggle = \"tooltip\"", 'Editar', 'plus');
+            $div .= new Button('', BTN_DEFAULT . ' btn-sm', "addContratualizacao(" . $obj->id . ")", "data-toggle = \"tooltip\"", 'Contratualização', 'plus');
 
             $div .= new Button('', BTN_DEFAULT . ' btn-sm', "showContrs(" . $obj->id . ")", "data-toggle = \"tooltip\"", 'Visualizar', 'eye');
 

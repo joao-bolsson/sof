@@ -504,7 +504,7 @@ if ($permission->pedidos || $permission->saldos || $permission->noticias || $per
             </div>
         </div>
     </div>
-    <div aria-hidden="true" class="modal fade" id="cadContratualizacao" role="dialog" tabindex="-1">
+    <div aria-hidden="true" class="modal fade" id="cadContratualizacao" role="dialog">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
@@ -633,6 +633,6 @@ if ($permission->pedidos || $permission->saldos || $permission->noticias || $per
 <!-- page script -->
 <script type="text/javascript" src="js/util_lte.min.js"></script>
 <script type="text/javascript" src="../iniLTE.min.js"></script>
-<script type="text/javascript" src="js/aihs.js"></script>
+<script type="text/javascript" src="js/aihs.min.js"></script>
 </body>
 </html>
