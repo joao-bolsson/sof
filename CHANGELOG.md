@@ -4,6 +4,7 @@
 - Formulário para faturamento aprovado
 - Tabela para visualizar, editar e remover faturamentos aprovados
 - Melhoria no relatório de receitas
+- Visualização, edição e remoção das contratualizações
 
 #### v2.4.5 - 24/07/2019 ####
 - Organização da interface para AIHS
