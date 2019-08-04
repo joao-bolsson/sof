@@ -72,7 +72,6 @@ $(function () {
             alert(resposta);
         }).always(function () {
             $("#cadContratualizacao").modal('hide');
-            loadTableContratualizacao();
         });
     });
 
@@ -98,7 +97,6 @@ $(function () {
     loadTableAIHS();
     loadTableReceitas();
     loadTableFatAprov();
-    loadTableContratualizacao();
 });
 
 function showContrs(id) {
@@ -257,10 +255,6 @@ function loadTableAIHS() {
     });
 }
 
-function loadTableContratualizacao() {
-    // TODO
-}
-
 function loadTableFatAprov() {
     var element = document.getElementById('tboodyFat');
     if (element === null) {
@@ -288,6 +282,18 @@ function loadTableFatAprov() {
     });
 }
 
+function removeContratualizacao(id) {
+    if (confirm("Esta operação não pode ser desfeita. Deseja remover esse item?")) {
+        $.post('../php/geral.php', {
+            users: 1,
+            form: 'removeContratualizacao',
+            id: id
+        }).done(function () {
+            $('#listContratualizacoes').modal('hide');
+        });
+    }
+}
+
 function removeFatAprov(id) {
     if (confirm("Esta operação não pode ser desfeita. Deseja remover esse item?")) {
         $.post('../php/geral.php', {
@@ -295,7 +301,6 @@ function removeFatAprov(id) {
             form: 'removeFatAprov',
             id: id
         }).done(function () {
-            console.log("done!");
             loadTableFatAprov();
         });
     }
@@ -308,7 +313,6 @@ function removeAIHS(id) {
             form: 'removeAIHS',
             id: id
         }).done(function () {
-            console.log("done!");
             loadTableAIHS();
         });
     }
@@ -321,7 +325,6 @@ function removeReceita(id) {
             form: 'removeReceita',
             id: id
         }).done(function () {
-            console.log("done!");
             loadTableReceitas();
         });
     }
