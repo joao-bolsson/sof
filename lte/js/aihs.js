@@ -63,6 +63,19 @@ $(function () {
         });
     });
 
+    $('#formCadContratualizacao').submit(function (event) {
+        event.preventDefault();
+
+        var data = $(this).serialize();
+
+        $.post('../php/geral.php', data).done(function (resposta) {
+            alert(resposta);
+        }).always(function () {
+            $("#cadContratualizacao").modal('hide');
+            loadTableContratualizacao();
+        });
+    });
+
     $("#cadFatAprov").on('shown.bs.modal', function () {
         $("#formCadFatAprov .date").inputmask("dd/mm/yyyy", {"placeholder": "dd/mm/yyyy"});
     });
@@ -85,6 +98,7 @@ $(function () {
     loadTableAIHS();
     loadTableReceitas();
     loadTableFatAprov();
+    loadTableContratualizacao();
 });
 
 function editFatAprov(id) {
@@ -105,6 +119,11 @@ function editFatAprov(id) {
 
         $('#cadFatAprov').modal('show');
     });
+}
+
+function addContratualizacao(id) {
+    $("#formCadContratualizacao input[name=idFaturamento]").val(id);
+    $('#cadContratualizacao').modal('show');
 }
 
 function editContratualizacao(id) {
@@ -222,7 +241,11 @@ function loadTableAIHS() {
     });
 }
 
-function loadTableFatAprov(){
+function loadTableContratualizacao() {
+    // TODO
+}
+
+function loadTableFatAprov() {
     var element = document.getElementById('tboodyFat');
     if (element === null) {
         return;

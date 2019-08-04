@@ -46,24 +46,29 @@ final class Geral {
         Query::getInstance()->exe($builder->__toString());
     }
 
-    public static function cadContratualizacao(int $id, string $contr, string $vigencia_ini, string $vigencia_fim, string $aditivo_ini, string $aditivo_fim, int $prefix, string $valor) {
-        if ($id == 0) {
-            Logger::error("Contratualização with id equals to zero");
+    public static function cadContratualizacao(int $id, int $idFat, string $contr, string $vigencia_ini, string $vigencia_fim, string $aditivo_ini, string $aditivo_fim, int $prefix, string $valor) {
+        if ($idFat == 0) {
+            Logger::error("Contratualização with idFat equals to zero");
             return;
         }
-
-        // guarantee the update
-        Query::getInstance()->exe("DELETE FROM contratualizacao WHERE id = " . $id);
 
         $vigIni = Util::dateFormat($vigencia_ini);
         $vigFim = Util::dateFormat($vigencia_fim);
         $adIni = Util::dateFormat($aditivo_ini);
         $adFim = Util::dateFormat($aditivo_fim);
 
-        $builder = new SQLBuilder(SQLBuilder::$INSERT);
+        $type = ($id == 0) ? SQLBuilder::$INSERT : SQLBuilder::$UPDATE;
+
+        $builder = new SQLBuilder($type);
         $builder->setTables(['contratualizacao']);
 
-        $builder->setValues([$id, $contr, $vigIni, $vigFim, $adIni, $adFim, $prefix, $valor]);
+        if ($id == 0) {
+            $builder->setValues([NULL, $idFat, $contr, $vigIni, $vigFim, $adIni, $adFim, $prefix, $valor]);
+        } else {
+            $builder->setColumns(['id_faturamento', 'numero_contr', 'vigenc_ini', 'vigenc_fim', 'aditivo_ini', 'aditivo_fim', 'prefixado', 'valor']);
+            $builder->setWhere("id = " . $id);
+
+        }
 
         Query::getInstance()->exe($builder->__toString());
     }
