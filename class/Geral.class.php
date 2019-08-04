@@ -27,7 +27,7 @@ final class Geral {
         // empty
     }
 
-    public static function cadFaturamento(int $id, string $data, int $competencia, int $producao, int $financiamento, int $complexidade, string $valor): int {
+    public static function cadFaturamento(int $id, string $data, int $competencia, int $producao, int $financiamento, int $complexidade, string $valor) {
         $dt = Util::dateFormat($data);
 
         $type = ($id == 0) ? SQLBuilder::$INSERT : SQLBuilder::$UPDATE;
@@ -44,7 +44,6 @@ final class Geral {
         }
 
         Query::getInstance()->exe($builder->__toString());
-        return Query::getInstance()->getInsertId();
     }
 
     public static function cadContratualizacao(int $id, string $contr, string $vigencia_ini, string $vigencia_fim, string $aditivo_ini, string $aditivo_fim, int $prefix, string $valor) {

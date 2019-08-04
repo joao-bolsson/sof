@@ -494,8 +494,30 @@ if ($permission->pedidos || $permission->saldos || $permission->noticias || $per
                             <label>Valor</label>
                             <input class="form-control" type="number" min="0" step="0.01" name="valor" required/>
                         </div>
-                        <hr/>
-                        <h3>Contratualização</h3>
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn btn-primary" type="submit" style="width: 100%;"><i
+                                    class="fa fa-send"></i>&nbsp;Cadastrar
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div aria-hidden="true" class="modal fade" id="cadContratualizacao" role="dialog" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                                aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">Contratualização</h4>
+                </div>
+                <form id="formCadContratualizacao">
+                    <input type="hidden" name="users" value="1"/>
+                    <input type="hidden" name="form" value="cadContratualizacao"/>
+                    <input type="hidden" name="id" value="0"/>
+                    <input type="hidden" name="idFaturamento" value="0"/>
+                    <div class="modal-body">
                         <div class="form-group">
                             <label>Número do Contrato</label>
                             <input class="form-control" name="contr" type="text" required>
@@ -585,6 +607,6 @@ if ($permission->pedidos || $permission->saldos || $permission->noticias || $per
 <!-- page script -->
 <script type="text/javascript" src="js/util_lte.min.js"></script>
 <script type="text/javascript" src="../iniLTE.min.js"></script>
-<script type="text/javascript" src="js/aihs.min.js"></script>
+<script type="text/javascript" src="js/aihs.js"></script>
 </body>
 </html>

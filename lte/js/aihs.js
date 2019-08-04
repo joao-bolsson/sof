@@ -72,6 +72,16 @@ $(function () {
         $("#formCadFatAprov input[name=id]").val(0);
     });
 
+    $("#cadContratualizacao").on('shown.bs.modal', function () {
+        $("#formCadContratualizacao .date").inputmask("dd/mm/yyyy", {"placeholder": "dd/mm/yyyy"});
+    });
+
+    $("#cadContratualizacao").on('hidden.bs.modal', function () {
+        $('#formCadContratualizacao').trigger("reset");
+        $("#formCadContratualizacao input[name=id]").val(0);
+        $("#formCadContratualizacao input[name=idFaturamento]").val(0);
+    });
+
     loadTableAIHS();
     loadTableReceitas();
     loadTableFatAprov();
@@ -93,7 +103,18 @@ function editFatAprov(id) {
         $("#formCadFatAprov select[name=complexidade]").val(obj.complexidade);
         $("#formCadFatAprov input[name=valor]").val(obj.valor);
 
-        // contratualização
+        $('#cadFatAprov').modal('show');
+    });
+}
+
+function editContratualizacao(id) {
+    $.post('../php/busca.php', {
+        users: 1,
+        form: 'editContratualizacao',
+        id: id
+    }).done(function (resposta) {
+        var obj = jQuery.parseJSON(resposta);
+
         $("#formCadFatAprov input[name=contr]").val(obj.numero_contr);
         $("#formCadFatAprov input[name=vigencia_ini]").val(obj.vigenc_ini);
         $("#formCadFatAprov input[name=vigencia_fim]").val(obj.vigenc_fim);
@@ -102,7 +123,7 @@ function editFatAprov(id) {
         $("#formCadFatAprov select[name=prefix]").val(obj.prefixado);
         $("#formCadFatAprov input[name=valorContr]").val(obj.valorContr);
 
-        $('#cadFatAprov').modal('show');
+        $('#cadContratualizacao').modal('show');
     });
 }
 

@@ -25,7 +25,7 @@ final class Busca {
     }
 
     public static function getFatAprov(int $id) {
-        $query = Query::getInstance()->exe("SELECT DATE_FORMAT(lancamento, '%d/%m/%Y') as data, competencia, producao, financiamento, complexidade, faturamento.valor, numero_contr, DATE_FORMAT(vigenc_ini, '%d/%m/%Y') AS vigenc_ini, DATE_FORMAT(vigenc_fim, '%d/%m/%Y') AS vigenc_fim, DATE_FORMAT(aditivo_ini, '%d/%m/%Y') AS aditivo_ini, DATE_FORMAT(aditivo_fim, '%d/%m/%Y') AS aditivo_fim, prefixado, contratualizacao.valor AS valorContr FROM faturamento, contratualizacao WHERE faturamento.id = " . $id . " AND contratualizacao.id = " . $id);
+        $query = Query::getInstance()->exe("SELECT DATE_FORMAT(lancamento, '%d/%m/%Y') as data, competencia, producao, financiamento, complexidade, valor FROM faturamento WHERE faturamento.id = " . $id);
 
         return $query->fetch_object();
     }

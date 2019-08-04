@@ -27,16 +27,6 @@ final class BuscaLTE {
     }
 
     public static function getFatAprov(): string {
-        /*
-         | id            | int(10) unsigned | NO   | PRI | NULL    | auto_increment |
-| lancamento    | date             | NO   |     | NULL    |                |
-| competencia   | int(2) unsigned  | NO   | MUL | NULL    |                |
-| producao      | int(10) unsigned | NO   | MUL | NULL    |                |
-| financiamento | int(10) unsigned | NO   | MUL | NULL    |                |
-| complexidade  | int(10) unsigned | NO   | MUL | NULL    |                |
-| valor         | varchar(30)      | NO   |     | NULL    |                |
-
-         */
         $query = Query::getInstance()->exe("SELECT faturamento.id, DATE_FORMAT(faturamento.lancamento, '%d/%m/%Y') AS lancamento, mes.sigla_mes as competencia, faturamento_producao.nome as producao, faturamento_financiamento.nome as financiamento, faturamento_complexidade.nome AS complexidade, faturamento.valor FROM faturamento, faturamento_complexidade, faturamento_financiamento, faturamento_producao, mes WHERE faturamento.competencia = mes.id AND faturamento.producao = faturamento_producao.id AND faturamento.financiamento = faturamento_financiamento.id AND faturamento.complexidade = faturamento_complexidade.id;");
 
         $table = new Table('', '', [], true);
@@ -53,6 +43,8 @@ final class BuscaLTE {
             $div = "<div class=\"btn-group\">";
 
             $div .= new Button('', BTN_DEFAULT . ' btn-sm', "editFatAprov(" . $obj->id . ")", "data-toggle = \"tooltip\"", 'Editar', 'pencil');
+
+            $div .= new Button('', BTN_DEFAULT . ' btn-sm', "addContratualizacao(" . $obj->id . ")", "data-toggle = \"tooltip\"", 'Editar', 'plus');
 
             $div .= new Button('', BTN_DANGER . ' btn-sm', "removeFatAprov(" . $obj->id . ")", "data-toggle = \"tooltip\"", 'Remover', 'trash');
 
