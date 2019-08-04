@@ -26,6 +26,36 @@ final class BuscaLTE {
         // empty
     }
 
+    public static function getContratualizacoes(int $id): string {
+        $query = Query::getInstance()->exe("SELECT contratualizacao.id, numero_contr, DATE_FORMAT(vigenc_ini, '%d/%m/%Y') AS vig_ini,DATE_FORMAT(vigenc_fim, '%d/%m/%Y') AS vig_fim, DATE_FORMAT(aditivo_ini, '%d/%m/%Y') AS adit_ini, DATE_FORMAT(aditivo_fim, '%d/%m/%Y') AS adit_fim, contratualizacao_prefix.nome AS prefixado, valor FROM contratualizacao, contratualizacao_prefix WHERE contratualizacao.prefixado = contratualizacao_prefix.id AND id_faturamento = " . $id);
+
+        $table = new Table('', '', [], true);
+
+        while ($obj = $query->fetch_object()) {
+            $row = new Row();
+
+            $row->addComponent(new Column($obj->numero_contr));
+            $row->addComponent(new Column($obj->vig_ini . " - " . $obj->vig_fim));
+            $row->addComponent(new Column($obj->adit_ini . " - " . $obj->adit_fim));
+            $row->addComponent(new Column($obj->prefixado));
+            $row->addComponent(new Column("R$ " . $obj->valor));
+
+            $div = "<div class=\"btn-group\">";
+
+            $div .= new Button('', BTN_DEFAULT . ' btn-sm', "editContratualizacao(" . $obj->id . ")", "data-toggle = \"tooltip\"", 'Editar', 'pencil');
+
+            $div .= new Button('', BTN_DANGER . ' btn-sm', "removeContratualizacao(" . $obj->id . ")", "data-toggle = \"tooltip\"", 'Remover', 'trash');
+
+            $div .= '</div>';
+
+            $row->addComponent(new Column($div));
+
+            $table->addComponent($row);
+        }
+
+        return $table->__toString();
+    }
+
     public static function getFatAprov(): string {
         $query = Query::getInstance()->exe("SELECT faturamento.id, DATE_FORMAT(faturamento.lancamento, '%d/%m/%Y') AS lancamento, mes.sigla_mes as competencia, faturamento_producao.nome as producao, faturamento_financiamento.nome as financiamento, faturamento_complexidade.nome AS complexidade, faturamento.valor FROM faturamento, faturamento_complexidade, faturamento_financiamento, faturamento_producao, mes WHERE faturamento.competencia = mes.id AND faturamento.producao = faturamento_producao.id AND faturamento.financiamento = faturamento_financiamento.id AND faturamento.complexidade = faturamento_complexidade.id;");
 
@@ -45,6 +75,8 @@ final class BuscaLTE {
             $div .= new Button('', BTN_DEFAULT . ' btn-sm', "editFatAprov(" . $obj->id . ")", "data-toggle = \"tooltip\"", 'Editar', 'pencil');
 
             $div .= new Button('', BTN_DEFAULT . ' btn-sm', "addContratualizacao(" . $obj->id . ")", "data-toggle = \"tooltip\"", 'Editar', 'plus');
+
+            $div .= new Button('', BTN_DEFAULT . ' btn-sm', "showContrs(" . $obj->id . ")", "data-toggle = \"tooltip\"", 'Visualizar', 'eye');
 
             $div .= new Button('', BTN_DANGER . ' btn-sm', "removeFatAprov(" . $obj->id . ")", "data-toggle = \"tooltip\"", 'Remover', 'trash');
 

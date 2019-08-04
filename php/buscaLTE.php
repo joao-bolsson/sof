@@ -132,6 +132,11 @@ if (!is_null($admin) && isset($_SESSION['id_setor']) && ($_SESSION['id_setor'] =
 
     switch ($form) {
 
+        case 'listContratualizacoes':
+            $id = filter_input(INPUT_POST, 'id');
+            echo BuscaLTE::getContratualizacoes($id);
+            break;
+
         case 'loadTableFatAprov':
             echo BuscaLTE::getFatAprov();
             break;

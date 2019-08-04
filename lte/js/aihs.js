@@ -101,6 +101,22 @@ $(function () {
     loadTableContratualizacao();
 });
 
+function showContrs(id) {
+    $.post('../php/buscaLTE.php', {
+        users: 1,
+        form: 'listContratualizacoes',
+        id: id
+    }).done(function (resposta) {
+        if (document.getElementById('tbodyContr').innerHTML.length > 0) {
+            $('#tableContr').DataTable().destroy();
+        }
+        $('#tbodyContr').html(resposta);
+        iniDataTable('#tableContr');
+
+        $('#listContratualizacoes').modal('show');
+    });
+}
+
 function editFatAprov(id) {
     $.post('../php/busca.php', {
         users: 1,

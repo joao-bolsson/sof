@@ -565,6 +565,32 @@ if ($permission->pedidos || $permission->saldos || $permission->noticias || $per
             </div>
         </div>
     </div>
+    <div aria-hidden="true" class="modal fade" id="listContratualizacoes" role="dialog" tabindex="-1">
+        <div class="modal-dialog" style="width: 90%;">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                                aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">Contratualizações</h4>
+                </div>
+                <div class="modal-body">
+                    <table id="tableContr" class="table table-bordered table-striped">
+                        <thead>
+                        <tr>
+                            <th>Contrato</th>
+                            <th>Vigência</th>
+                            <th>Aditivo</th>
+                            <th>Prefixado</th>
+                            <th>Valor</th>
+                            <th></th>
+                        </tr>
+                        </thead>
+                        <tbody id="tbodyContr"></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
     <div id="snackbar"></div>
     <footer class="main-footer">
         <div class="container">
@@ -607,6 +633,6 @@ if ($permission->pedidos || $permission->saldos || $permission->noticias || $per
 <!-- page script -->
 <script type="text/javascript" src="js/util_lte.min.js"></script>
 <script type="text/javascript" src="../iniLTE.min.js"></script>
-<script type="text/javascript" src="js/aihs.min.js"></script>
+<script type="text/javascript" src="js/aihs.js"></script>
 </body>
 </html>
