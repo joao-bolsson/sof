@@ -27,6 +27,42 @@ final class PrintMod {
         // empty
     }
 
+    public static function getRelatorioFaturamento(int $competencia):string {
+        $query_mes = Query::getInstance()->exe("SELECT sigla_mes FROM mes WHERE id = " . $competencia);
+        $comp = $query_mes->fetch_object()->sigla_mes;
+
+        $return = "
+            <fieldset class=\"preg\">
+                    <h5>DESCRIÇÃO DO RELATÓRIO</h5>
+                    <h6>Relatório de Faturamento</h6>
+                    <h6>Competência: " . $comp . "</h6>
+            </fieldset><br>";
+
+
+        $query = Query::getInstance()->exe("SELECT faturamento.id, DATE_FORMAT(lancamento, '%d/%m/%Y') AS lancamento, faturamento_producao.nome AS producao, faturamento_financiamento.nome AS financiamento, faturamento_complexidade.nome AS complexidade, valor FROM faturamento, faturamento_producao, faturamento_financiamento, faturamento_complexidade WHERE faturamento.producao = faturamento_producao.id AND faturamento.financiamento = faturamento_financiamento.id AND faturamento.complexidade = faturamento_complexidade.id AND  competencia = 2 ORDER BY faturamento.id;");
+
+        $return .= "<fieldset>";
+        $table = new Table('', 'prod', ['Lançamento', 'Produção', 'Financiamento', 'Compexidade', 'Valor'], true);
+
+        while($obj = $query->fetch_object()) {
+            $row = new Row();
+
+            $row->addComponent(new Column($obj->lancamento));
+            $row->addComponent(new Column($obj->producao));
+            $row->addComponent(new Column($obj->financiamento));
+            $row->addComponent(new Column($obj->complexidade));
+            $row->addComponent(new Column($obj->valor));
+
+            $table->addComponent($row);
+        }
+
+        $return .= $table->__toString() . "</fieldset>";
+
+
+        return $return;
+
+    }
+
     public static function getRelatorioReceitas(int $competencia, int $mesRecebimento): string {
         $query_mes = Query::getInstance()->exe("SELECT sigla_mes FROM mes WHERE id = " . $mesRecebimento);
         $receb = $query_mes->fetch_object()->sigla_mes;
@@ -95,8 +131,6 @@ final class PrintMod {
             $row->addComponent(new Column($obj->recebimento));
             $row->addComponent(new Column("R$ " . number_format($obj->valor, 2, ',', '.')));
             $row->addComponent(new Column($obj->pf));
-
-            $sum += $obj->valor;
 
             $table->addComponent($row);
         }
