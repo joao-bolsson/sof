@@ -27,7 +27,7 @@ final class PrintMod {
         // empty
     }
 
-    public static function getRelatorioFaturamento(int $competencia):string {
+    public static function getRelatorioFaturamento(int $competencia): string {
         $query_mes = Query::getInstance()->exe("SELECT sigla_mes FROM mes WHERE id = " . $competencia);
         $comp = $query_mes->fetch_object()->sigla_mes;
 
@@ -44,14 +44,14 @@ final class PrintMod {
         $return .= "<fieldset>";
         $table = new Table('', 'prod', ['Lançamento', 'Produção', 'Financiamento', 'Compexidade', 'Valor'], true);
 
-        while($obj = $query->fetch_object()) {
+        while ($obj = $query->fetch_object()) {
             $row = new Row();
 
             $row->addComponent(new Column($obj->lancamento));
             $row->addComponent(new Column($obj->producao));
             $row->addComponent(new Column($obj->financiamento));
             $row->addComponent(new Column($obj->complexidade));
-            $row->addComponent(new Column($obj->valor));
+            $row->addComponent(new Column("R$ " . $obj->valor));
 
             $table->addComponent($row);
         }
@@ -79,7 +79,7 @@ final class PrintMod {
                     <h6>Mês de Recebimento: " . $receb . "</h6>
             </fieldset><br>";
 
-        $query_fixos_comp = Query::getInstance()->exe("SELECT sum(valor) AS sum FROM aihs_receita WHERE competencia = " . $competencia . " AND MONTH(recebimento) = " . $mesRecebimento ." AND ((tipo >= 1 AND tipo <= 4) OR tipo = 11);");
+        $query_fixos_comp = Query::getInstance()->exe("SELECT sum(valor) AS sum FROM aihs_receita WHERE competencia = " . $competencia . " AND MONTH(recebimento) = " . $mesRecebimento . " AND ((tipo >= 1 AND tipo <= 4) OR tipo = 11);");
         $fixos_comp = $query_fixos_comp->fetch_object()->sum;
 
         $query_fixos_med = Query::getInstance()->exe("SELECT sum(valor) AS sum FROM aihs_receita WHERE tipo = 5 AND competencia = " . $competencia . " AND MONTH(recebimento) = " . $mesRecebimento);
