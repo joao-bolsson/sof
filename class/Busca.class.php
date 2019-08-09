@@ -25,7 +25,7 @@ final class Busca {
     }
 
     public static function getContratualizacao(int $id) {
-        $query = Query::getInstance()->exe("SELECT id_faturamento, numero_contr, DATE_FORMAT(vigenc_ini, '%d/%m/%Y') AS vigenc_ini,DATE_FORMAT(vigenc_fim, '%d/%m/%Y') AS vigenc_fim, DATE_FORMAT(aditivo_ini, '%d/%m/%Y') AS aditivo_ini, DATE_FORMAT(aditivo_fim, '%d/%m/%Y') AS aditivo_fim, prefixado, valor FROM contratualizacao WHERE id = " . $id);
+        $query = Query::getInstance()->exe("SELECT numero_contr, DATE_FORMAT(vigenc_ini, '%d/%m/%Y') AS vigenc_ini,DATE_FORMAT(vigenc_fim, '%d/%m/%Y') AS vigenc_fim, DATE_FORMAT(aditivo_ini, '%d/%m/%Y') AS aditivo_ini, DATE_FORMAT(aditivo_fim, '%d/%m/%Y') AS aditivo_fim FROM contratualizacao WHERE id = " . $id);
 
         return $query->fetch_object();
     }
