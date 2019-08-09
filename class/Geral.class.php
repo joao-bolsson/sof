@@ -46,12 +46,7 @@ final class Geral {
         Query::getInstance()->exe($builder->__toString());
     }
 
-    public static function cadContratualizacao(int $id, int $idFat, string $contr, string $vigencia_ini, string $vigencia_fim, string $aditivo_ini, string $aditivo_fim, int $prefix, string $valor) {
-        if ($idFat == 0) {
-            Logger::error("Contratualização with idFat equals to zero");
-            return;
-        }
-
+    public static function cadContratualizacao(int $id, string $contr, string $vigencia_ini, string $vigencia_fim, string $aditivo_ini, string $aditivo_fim) {
         $vigIni = Util::dateFormat($vigencia_ini);
         $vigFim = Util::dateFormat($vigencia_fim);
         $adIni = Util::dateFormat($aditivo_ini);
@@ -63,10 +58,10 @@ final class Geral {
         $builder->setTables(['contratualizacao']);
 
         if ($id == 0) {
-            $builder->setValues([NULL, $idFat, $contr, $vigIni, $vigFim, $adIni, $adFim, $prefix, $valor]);
+            $builder->setValues([NULL, $contr, $vigIni, $vigFim, $adIni, $adFim]);
         } else {
-            $builder->setColumns(['numero_contr', 'vigenc_ini', 'vigenc_fim', 'aditivo_ini', 'aditivo_fim', 'prefixado', 'valor']);
-            $builder->setValues([$contr, $vigIni, $vigFim, $adIni, $adFim, $prefix, $valor]);
+            $builder->setColumns(['numero_contr', 'vigenc_ini', 'vigenc_fim', 'aditivo_ini', 'aditivo_fim']);
+            $builder->setValues([$contr, $vigIni, $vigFim, $adIni, $adFim]);
             $builder->setWhere("id = " . $id);
 
         }

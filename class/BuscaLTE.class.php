@@ -35,8 +35,8 @@ final class BuscaLTE {
             $row = new Row();
 
             $row->addComponent(new Column($obj->numero_contr));
-            $row->addComponent(new Column($obj->vig_ini . " - " . $obj->vig_fim));
-            $row->addComponent(new Column($obj->adit_ini . " - " . $obj->adit_fim));
+            $row->addComponent(new Column($obj->vigenc_ini . " - " . $obj->vigenc_fim));
+            $row->addComponent(new Column($obj->aditivo_ini . " - " . $obj->aditivo_fim));
 
             $div = "<div class=\"btn-group\">";
 

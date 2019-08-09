@@ -24,7 +24,6 @@ $(function () {
             alert(resposta);
         }).always(function () {
             $("#cadAIHS").modal('hide');
-            loadTableAIHS();
         });
     });
 
@@ -72,6 +71,7 @@ $(function () {
             alert(resposta);
         }).always(function () {
             $("#cadContratualizacao").modal('hide');
+            loadTableFatAprov();
         });
     });
 
@@ -91,7 +91,6 @@ $(function () {
     $("#cadContratualizacao").on('hidden.bs.modal', function () {
         $('#formCadContratualizacao').trigger("reset");
         $("#formCadContratualizacao input[name=id]").val(0);
-        $("#formCadContratualizacao input[name=idFaturamento]").val(0);
 
         $('#listContratualizacoes').modal('hide');
     });
@@ -138,7 +137,6 @@ function editFatAprov(id) {
 }
 
 function addContratualizacao(id) {
-    $("#formCadContratualizacao input[name=idFaturamento]").val(id);
     $('#cadContratualizacao').modal('show');
 }
 
@@ -151,14 +149,11 @@ function editContratualizacao(id) {
         var obj = jQuery.parseJSON(resposta);
 
         $("#formCadContratualizacao input[name=id]").val(id);
-        $("#formCadContratualizacao input[name=idFaturamento]").val(obj.id_faturamento);
         $("#formCadContratualizacao input[name=contr]").val(obj.numero_contr);
         $("#formCadContratualizacao input[name=vigencia_ini]").val(obj.vigenc_ini);
         $("#formCadContratualizacao input[name=vigencia_fim]").val(obj.vigenc_fim);
         $("#formCadContratualizacao input[name=aditivo_ini]").val(obj.aditivo_ini);
         $("#formCadContratualizacao input[name=aditivo_fim]").val(obj.aditivo_fim);
-        $("#formCadContratualizacao select[name=prefix]").val(obj.prefixado);
-        $("#formCadContratualizacao input[name=valorContr]").val(obj.valor);
 
         $('#cadContratualizacao').modal('show');
     });

@@ -197,7 +197,7 @@ if ($permission->pedidos || $permission->saldos || $permission->noticias || $per
                         </div>
                         <div class="box-body">
                             <div class="margin">
-                                <button class="btn btn-primary" type="button" onclick="abreModal('#cadFatAprov');"><i
+                                <button class="btn btn-primary" type="button" onclick="abreModal('#cadContratualizacao');"><i
                                             class="fa fa-sign-in"></i>&nbsp;Adicionar
                                 </button>
                                 <button class="btn btn-primary" type="button" onclick="abreModal('#relFaturamento');"><i
@@ -543,13 +543,12 @@ if ($permission->pedidos || $permission->saldos || $permission->noticias || $per
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
                                 aria-hidden="true">&times;</span></button>
-                    <h4 class="modal-title">Contratualização</h4>
+                    <h4 class="modal-title">Cadastrar Contrato</h4>
                 </div>
                 <form id="formCadContratualizacao">
                     <input type="hidden" name="users" value="1"/>
                     <input type="hidden" name="form" value="cadContratualizacao"/>
                     <input type="hidden" name="id" value="0"/>
-                    <input type="hidden" name="idFaturamento" value="0"/>
                     <div class="modal-body">
                         <div class="form-group">
                             <label>Número do Contrato</label>
@@ -573,21 +572,21 @@ if ($permission->pedidos || $permission->saldos || $permission->noticias || $per
                             <label>Fim</label>
                             <input class="form-control date" name="aditivo_fim" type="text" required>
                         </div>
-                        <div class="form-group">
-                            <label>Pré-Fixado</label>
-                            <select class="form-control" name="prefix" required>
-                                <?php
-                                $query = Query::getInstance()->exe("SELECT id, nome FROM contratualizacao_prefix;");
-                                while ($obj = $query->fetch_object()) {
-                                    echo "<option value=\"{$obj->id}\">{$obj->nome}</option>";
-                                }
-                                ?>
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label>Valor</label>
-                            <input class="form-control" type="number" min="0" step="0.01" name="valorContr" required/>
-                        </div>
+<!--                        <div class="form-group">-->
+<!--                            <label>Pré-Fixado</label>-->
+<!--                            <select class="form-control" name="prefix" required>-->
+<!--                                --><?php
+//                                $query = Query::getInstance()->exe("SELECT id, nome FROM contratualizacao_prefix;");
+//                                while ($obj = $query->fetch_object()) {
+//                                    echo "<option value=\"{$obj->id}\">{$obj->nome}</option>";
+//                                }
+//                                ?>
+<!--                            </select>-->
+<!--                        </div>-->
+<!--                        <div class="form-group">-->
+<!--                            <label>Valor</label>-->
+<!--                            <input class="form-control" type="number" min="0" step="0.01" name="valorContr" required/>-->
+<!--                        </div>-->
                     </div>
                     <div class="modal-footer">
                         <button class="btn btn-primary" type="submit" style="width: 100%;"><i
@@ -666,6 +665,6 @@ if ($permission->pedidos || $permission->saldos || $permission->noticias || $per
 <!-- page script -->
 <script type="text/javascript" src="js/util_lte.min.js"></script>
 <script type="text/javascript" src="../iniLTE.min.js"></script>
-<script type="text/javascript" src="js/aihs.min.js"></script>
+<script type="text/javascript" src="js/aihs.js"></script>
 </body>
 </html>

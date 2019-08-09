@@ -571,16 +571,13 @@ if (Busca::isActive()) {
 
             case 'cadContratualizacao':
                 $id = filter_input(INPUT_POST, 'id');
-                $idFat = filter_input(INPUT_POST, 'idFaturamento');
                 $contr = filter_input(INPUT_POST, 'contr');
                 $vigencia_ini = filter_input(INPUT_POST, 'vigencia_ini');
                 $vigencia_fim = filter_input(INPUT_POST, 'vigencia_fim');
                 $aditivo_ini = filter_input(INPUT_POST, 'aditivo_ini');
                 $aditivo_fim = filter_input(INPUT_POST, 'aditivo_fim');
-                $prefix = filter_input(INPUT_POST, 'prefix');
-                $valor = filter_input(INPUT_POST, 'valorContr');
 
-                Geral::cadContratualizacao($id, $idFat, $contr, $vigencia_ini, $vigencia_fim, $aditivo_ini, $aditivo_fim, $prefix, $valor);
+                Geral::cadContratualizacao($id, $contr, $vigencia_ini, $vigencia_fim, $aditivo_ini, $aditivo_fim);
                 echo "ok";
                 break;
 
