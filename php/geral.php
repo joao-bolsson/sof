@@ -549,6 +549,15 @@ if (Busca::isActive()) {
     } else if ($users !== NULL && isset($_SESSION["id_setor"]) && $_SESSION["id_setor"] != 0) {
         switch ($form) {
 
+            case 'cadFixos':
+                $idContr = filter_input(INPUT_POST, 'idContr');
+                $tipo = filter_input(INPUT_POST, 'tipo');
+                $valor = filter_input(INPUT_POST, 'valor');
+
+                Geral::cadValFixos($idContr, $tipo, $valor);
+                echo "ok";
+                break;
+
             case 'removeContratualizacao':
                 $id = filter_input(INPUT_POST, 'id');
                 Geral::removeContratualizacao($id);

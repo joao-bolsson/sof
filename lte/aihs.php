@@ -572,21 +572,45 @@ if ($permission->pedidos || $permission->saldos || $permission->noticias || $per
                             <label>Fim</label>
                             <input class="form-control date" name="aditivo_fim" type="text" required>
                         </div>
-<!--                        <div class="form-group">-->
-<!--                            <label>Pré-Fixado</label>-->
-<!--                            <select class="form-control" name="prefix" required>-->
-<!--                                --><?php
-//                                $query = Query::getInstance()->exe("SELECT id, nome FROM contratualizacao_prefix;");
-//                                while ($obj = $query->fetch_object()) {
-//                                    echo "<option value=\"{$obj->id}\">{$obj->nome}</option>";
-//                                }
-//                                ?>
-<!--                            </select>-->
-<!--                        </div>-->
-<!--                        <div class="form-group">-->
-<!--                            <label>Valor</label>-->
-<!--                            <input class="form-control" type="number" min="0" step="0.01" name="valorContr" required/>-->
-<!--                        </div>-->
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn btn-primary" type="submit" style="width: 100%;"><i
+                                    class="fa fa-send"></i>&nbsp;Cadastrar
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div aria-hidden="true" class="modal fade" id="cadFixos" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                                aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">Cadastrar Valores Fixos</h4>
+                </div>
+                <form id="formCadFixos">
+                    <input type="hidden" name="users" value="1"/>
+                    <input type="hidden" name="form" value="cadFixos"/>
+                    <input type="hidden" name="idContr" value="0"/>
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <label>Pré-Fixado</label>
+                            <select class="form-control" name="tipo" required>
+                                <?php
+                                $query = Query::getInstance()->exe("SELECT id, nome FROM contratualizacao_prefix;");
+                                while ($obj = $query->fetch_object()) {
+                                    echo "<option value=\"{$obj->id}\">{$obj->nome}</option>";
+                                }
+                                ?>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Valor</label>
+                            <input class="form-control" type="number" min="0" step="0.01" name="valor" required/>
+                        </div>
                     </div>
                     <div class="modal-footer">
                         <button class="btn btn-primary" type="submit" style="width: 100%;"><i

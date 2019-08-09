@@ -95,6 +95,23 @@ $(function () {
         $('#listContratualizacoes').modal('hide');
     });
 
+    $('#formCadFixos').submit(function (event) {
+        event.preventDefault();
+
+        var data = $(this).serialize();
+
+        $.post('../php/geral.php', data).done(function (resposta) {
+            alert(resposta);
+        }).always(function () {
+            $("#cadFixos").modal('hide');
+        });
+    });
+
+    $("#cadFixos").on('hidden.bs.modal', function () {
+        $('#formCadFixos').trigger("reset");
+        $("#formCadFixos input[name=idContr]").val(0);
+    });
+
     loadTableAIHS();
     loadTableReceitas();
     loadTableFatAprov();
@@ -138,6 +155,11 @@ function editFatAprov(id) {
 
 function addContratualizacao(id) {
     $('#cadContratualizacao').modal('show');
+}
+
+function addValFixos(id) {
+    $("#formCadFixos input[name=idContr]").val(id);
+    $('#cadFixos').modal('show');
 }
 
 function editContratualizacao(id) {

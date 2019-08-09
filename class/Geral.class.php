@@ -27,6 +27,16 @@ final class Geral {
         // empty
     }
 
+    public static function cadValFixos(int $idContr, int $tipo, string $valor) {
+        Query::getInstance()->exe("DELETE FROM contratualizacao_valores WHERE id_contr = " . $idContr . " AND id_tipo = " . $tipo);
+
+        $builder = new SQLBuilder(SQLBuilder::$INSERT);
+        $builder->setTables(['contratualizacao_valores']);
+        $builder->setValues([$idContr, $tipo, $valor]);
+
+        Query::getInstance()->exe($builder->__toString());
+    }
+
     public static function cadFaturamento(int $id, string $data, int $competencia, int $producao, int $financiamento, int $complexidade, string $valor) {
         $dt = Util::dateFormat($data);
 
