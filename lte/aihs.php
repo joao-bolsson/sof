@@ -473,7 +473,7 @@ if ($permission->pedidos || $permission->saldos || $permission->noticias || $per
                 <form id="formCadFatAprov">
                     <input type="hidden" name="users" value="1"/>
                     <input type="hidden" name="form" value="cadFatAprov"/>
-                    <input type="hidden" name="id" value="0"/>
+                    <input type="hidden" name="idContr" value="0"/>
                     <div class="modal-body">
                         <div class="form-group">
                             <label>Data de Lançamento</label>
@@ -689,6 +689,6 @@ if ($permission->pedidos || $permission->saldos || $permission->noticias || $per
 <!-- page script -->
 <script type="text/javascript" src="js/util_lte.min.js"></script>
 <script type="text/javascript" src="../iniLTE.min.js"></script>
-<script type="text/javascript" src="js/aihs.js"></script>
+<script type="text/javascript" src="js/aihs.min.js"></script>
 </body>
 </html>

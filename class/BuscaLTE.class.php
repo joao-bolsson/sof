@@ -88,7 +88,7 @@ final class BuscaLTE {
     }
 
     public static function getFatAprov(): string {
-        $query = Query::getInstance()->exe("SELECT faturamento.id, DATE_FORMAT(faturamento.lancamento, '%d/%m/%Y') AS lancamento, mes.sigla_mes as competencia, faturamento_producao.nome as producao, faturamento_financiamento.nome as financiamento, faturamento_complexidade.nome AS complexidade, faturamento.valor FROM faturamento, faturamento_complexidade, faturamento_financiamento, faturamento_producao, mes WHERE faturamento.competencia = mes.id AND faturamento.producao = faturamento_producao.id AND faturamento.financiamento = faturamento_financiamento.id AND faturamento.complexidade = faturamento_complexidade.id;");
+        $query = Query::getInstance()->exe("SELECT id_contr, DATE_FORMAT(faturamento.lancamento, '%d/%m/%Y') AS lancamento, mes.sigla_mes as competencia, faturamento_producao.nome as producao, faturamento_financiamento.nome as financiamento, faturamento_complexidade.nome AS complexidade, faturamento.valor FROM faturamento, faturamento_complexidade, faturamento_financiamento, faturamento_producao, mes WHERE faturamento.competencia = mes.id AND faturamento.producao = faturamento_producao.id AND faturamento.financiamento = faturamento_financiamento.id AND faturamento.complexidade = faturamento_complexidade.id;");
 
         $table = new Table('', '', [], true);
 
@@ -103,7 +103,10 @@ final class BuscaLTE {
 
             $div = "<div class=\"btn-group\">";
 
-            $div .= new Button('', BTN_DEFAULT . ' btn-sm', "editFatAprov(" . $obj->id . ")", "data-toggle = \"tooltip\"", 'Editar', 'pencil');
+
+            $params = $obj->id_contr . ", " . $obj->competencia . ", " . $obj->producao . ", " . $obj->financiamento . ", " . $obj->complexidade;
+
+            $div .= new Button('', BTN_DEFAULT . ' btn-sm', "editFatAprov(" . $params . ")", "data-toggle = \"tooltip\"", 'Editar', 'pencil');
 
             $div .= new Button('', BTN_DEFAULT . ' btn-sm', "addContratualizacao(" . $obj->id . ")", "data-toggle = \"tooltip\"", 'Contratualização', 'plus');
 

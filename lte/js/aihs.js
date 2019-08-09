@@ -81,7 +81,6 @@ $(function () {
 
     $("#cadFatAprov").on('hidden.bs.modal', function () {
         $('#formCadFatAprov').trigger("reset");
-        $("#formCadFatAprov input[name=id]").val(0);
     });
 
     $("#cadContratualizacao").on('shown.bs.modal', function () {
@@ -134,6 +133,7 @@ function showContrs(id) {
 }
 
 function editFatAprov(id) {
+    // TODO
     $.post('../php/busca.php', {
         users: 1,
         form: 'editFatAprov',
@@ -141,7 +141,6 @@ function editFatAprov(id) {
     }).done(function (resposta) {
         var obj = jQuery.parseJSON(resposta);
 
-        $("#formCadFatAprov input[name=id]").val(id);
         $("#formCadFatAprov input[name=data]").val(obj.data);
         $("#formCadFatAprov select[name=mes]").val(obj.competencia);
         $("#formCadFatAprov select[name=producao]").val(obj.producao);
@@ -160,6 +159,11 @@ function addContratualizacao(id) {
 function addValFixos(id) {
     $("#formCadFixos input[name=idContr]").val(id);
     $('#cadFixos').modal('show');
+}
+
+function addValVariaveis(id) {
+    $("#formCadFatAprov input[name=idContr]").val(id);
+    $('#cadFatAprov').modal('show');
 }
 
 function editContratualizacao(id) {

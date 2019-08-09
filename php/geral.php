@@ -565,7 +565,7 @@ if (Busca::isActive()) {
                 break;
 
             case 'cadFatAprov':
-                $id = filter_input(INPUT_POST, 'id');
+                $idContr = filter_input(INPUT_POST, 'idContr');
                 $data = filter_input(INPUT_POST, 'data');
                 $competencia = filter_input(INPUT_POST, 'mes');
                 $producao = filter_input(INPUT_POST, 'producao');
@@ -573,7 +573,7 @@ if (Busca::isActive()) {
                 $complexidade = filter_input(INPUT_POST, 'complexidade');
                 $valor = filter_input(INPUT_POST, 'valor');
 
-                Geral::cadFaturamento($id, $data, $competencia, $producao, $financiamento, $complexidade, $valor);
+                Geral::cadFaturamento($idContr, $data, $competencia, $producao, $financiamento, $complexidade, $valor);
 
                 echo "ok";
                 break;

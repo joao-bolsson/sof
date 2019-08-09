@@ -37,21 +37,15 @@ final class Geral {
         Query::getInstance()->exe($builder->__toString());
     }
 
-    public static function cadFaturamento(int $id, string $data, int $competencia, int $producao, int $financiamento, int $complexidade, string $valor) {
+    public static function cadFaturamento(int $idContr, string $data, int $competencia, int $producao, int $financiamento, int $complexidade, string $valor) {
+
+        Query::getInstance()->exe("DELETE FROM faturamento WHERE id_contr = " . $idContr . " AND competencia = " . $competencia . " AND producao = " . $producao . " AND financiamento = " . $financiamento . " AND complexidade = " . $complexidade);
+
         $dt = Util::dateFormat($data);
 
-        $type = ($id == 0) ? SQLBuilder::$INSERT : SQLBuilder::$UPDATE;
-
-        $builder = new SQLBuilder($type);
+        $builder = new SQLBuilder(SQLBuilder::$INSERT);
         $builder->setTables(['faturamento']);
-
-        if ($id == 0) {
-            $builder->setValues([NULL, $dt, $competencia, $producao, $financiamento, $complexidade, $valor]);
-        } else {
-            $builder->setColumns(['lancamento', 'competencia', 'producao', 'financiamento', 'complexidade', 'valor']);
-            $builder->setValues([$dt, $competencia, $producao, $financiamento, $complexidade, $valor]);
-            $builder->setWhere("id = " . $id);
-        }
+        $builder->setValues([$idContr, $dt, $competencia, $producao, $financiamento, $complexidade, $valor]);
 
         Query::getInstance()->exe($builder->__toString());
     }
