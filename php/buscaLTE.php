@@ -138,7 +138,7 @@ if (!is_null($admin) && isset($_SESSION['id_setor']) && ($_SESSION['id_setor'] =
             break;
 
         case 'loadTableFatAprov':
-            echo BuscaLTE::getFatAprov();
+            echo BuscaLTE::getContrat();
             break;
 
         case 'loadTableReceitas':

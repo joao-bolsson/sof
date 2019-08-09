@@ -188,7 +188,7 @@ if ($permission->pedidos || $permission->saldos || $permission->noticias || $per
                 <div id="rowFatAprov" class="row" style="display: none;">
                     <div class="box box-primary">
                         <div class="box-header with-border">
-                            <h3 class="box-title">Faturamento Aprovado</h3>
+                            <h3 class="box-title">Contratos</h3>
                             <div class="box-tools pull-right">
                                 <button type="button" class="btn btn-box-tool" data-widget="collapse"><i
                                             class="fa fa-minus"></i>
@@ -207,12 +207,9 @@ if ($permission->pedidos || $permission->saldos || $permission->noticias || $per
                             <table id="tableFatAprov" class="table table-bordered table-striped">
                                 <thead>
                                 <tr>
-                                    <th>Lançamento</th>
-                                    <th>Competência</th>
-                                    <th>Produção</th>
-                                    <th>Financiamento</th>
-                                    <th>Complexidade</th>
-                                    <th>Valor</th>
+                                    <th>Número</th>
+                                    <th>Vigência</th>
+                                    <th>Aditivo</th>
                                     <th>Opções</th>
                                 </tr>
                                 </thead>

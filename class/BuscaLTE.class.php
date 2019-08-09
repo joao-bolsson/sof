@@ -26,6 +26,33 @@ final class BuscaLTE {
         // empty
     }
 
+    public static function getContrat(): string {
+        $query = Query::getInstance()->exe("SELECT id, numero_contr, DATE_FORMAT(vigenc_ini, '%d/%m/%Y') AS vigenc_ini, DATE_FORMAT(vigenc_fim, '%d/%m/%Y') AS vigenc_fim, DATE_FORMAT(aditivo_ini, '%d/%m/%Y') AS aditivo_ini, DATE_FORMAT(vigenc_ini, '%d/%m/%Y') AS aditivo_fim FROM contratualizacao;");
+
+        $table = new Table('', '', [], true);
+
+        while ($obj = $query->fetch_object()) {
+            $row = new Row();
+
+            $row->addComponent(new Column($obj->numero_contr));
+            $row->addComponent(new Column($obj->vig_ini . " - " . $obj->vig_fim));
+            $row->addComponent(new Column($obj->adit_ini . " - " . $obj->adit_fim));
+
+            $div = "<div class=\"btn-group\">";
+
+            $div .= new Button('', BTN_DEFAULT . ' btn-sm', "editContratualizacao(" . $obj->id . ")", "data-toggle = \"tooltip\"", 'Editar', 'pencil');
+
+            $div .= new Button('', BTN_DANGER . ' btn-sm', "removeContratualizacao(" . $obj->id . ")", "data-toggle = \"tooltip\"", 'Remover', 'trash');
+
+            $div .= '</div>';
+
+            $row->addComponent(new Column($div));
+
+            $table->addComponent($row);
+        }
+        return $table->__toString();
+    }
+
     public static function getContratualizacoes(int $id): string {
         $query = Query::getInstance()->exe("SELECT contratualizacao.id, numero_contr, DATE_FORMAT(vigenc_ini, '%d/%m/%Y') AS vig_ini,DATE_FORMAT(vigenc_fim, '%d/%m/%Y') AS vig_fim, DATE_FORMAT(aditivo_ini, '%d/%m/%Y') AS adit_ini, DATE_FORMAT(aditivo_fim, '%d/%m/%Y') AS adit_fim, contratualizacao_prefix.nome AS prefixado, valor FROM contratualizacao, contratualizacao_prefix WHERE contratualizacao.prefixado = contratualizacao_prefix.id AND id_faturamento = " . $id);
 
