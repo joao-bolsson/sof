@@ -27,37 +27,63 @@ final class PrintMod {
         // empty
     }
 
-    public static function getRelatorioFaturamento(int $competencia): string {
-        $query_mes = Query::getInstance()->exe("SELECT sigla_mes FROM mes WHERE id = " . $competencia);
-        $comp = $query_mes->fetch_object()->sigla_mes;
+    public static function getRelatorioFaturamento(int $id): string {
+        $query_contr = Query::getInstance()->exe("SELECT numero_contr FROM contratualizacao WHERE id = " . $id);
+
+        $num = $query_contr->fetch_object()->numero_contr;
 
         $return = "
             <fieldset class=\"preg\">
                     <h5>DESCRIÇÃO DO RELATÓRIO</h5>
                     <h6>Relatório de Faturamento</h6>
-                    <h6>Competência: " . $comp . "</h6>
+                    <h6>Contrato: " . $num . "</h6>
             </fieldset><br>";
 
+        $return .= "
+            <fieldset class=\"preg\">
+                    <h6>Valores Fixos</h6>
+            </fieldset><br>";
 
-        $query = Query::getInstance()->exe("SELECT faturamento.id, DATE_FORMAT(lancamento, '%d/%m/%Y') AS lancamento, faturamento_producao.nome AS producao, faturamento_financiamento.nome AS financiamento, faturamento_complexidade.nome AS complexidade, valor FROM faturamento, faturamento_producao, faturamento_financiamento, faturamento_complexidade WHERE faturamento.producao = faturamento_producao.id AND faturamento.financiamento = faturamento_financiamento.id AND faturamento.complexidade = faturamento_complexidade.id AND  competencia = 2 ORDER BY faturamento.id;");
+        $query = Query::getInstance()->exe("SELECT contratualizacao_prefix.nome, valor FROM contratualizacao_valores, contratualizacao_prefix WHERE contratualizacao_valores.id_tipo = contratualizacao_prefix.id AND contratualizacao_valores.id_contr = " . $id);
 
         $return .= "<fieldset>";
-        $table = new Table('', 'prod', ['Lançamento', 'Produção', 'Financiamento', 'Compexidade', 'Valor'], true);
+        $table = new Table('', 'prod', ['Pré-Fixado', 'Valor'], true);
+
+        while ($obj = $query->fetch_object()) {
+            $row = new Row();
+
+            $row->addComponent(new Column($obj->nome));
+            $row->addComponent(new Column("R$ " . number_format($obj->valor, 2, ',', '.')));
+
+            $table->addComponent($row);
+        }
+
+        $return .= $table->__toString() . "</fieldset><br>";
+
+        $return .= "
+            <fieldset class=\"preg\">
+                    <h6>Valores Variáveis</h6>
+            </fieldset><br>";
+
+        $query = Query::getInstance()->exe("SELECT DATE_FORMAT(lancamento, '%d/%m/%Y') AS lancamento, mes.sigla_mes AS competencia, faturamento_producao.nome AS producao, faturamento_financiamento.nome AS financiamento, faturamento_complexidade.nome AS complexidade FROM faturamento, mes, faturamento_producao, faturamento_financiamento, faturamento_complexidade WHERE faturamento.competencia = mes.id AND faturamento.producao = faturamento_producao.id AND faturamento.financiamento = faturamento_financiamento.id AND faturamento.complexidade = faturamento_complexidade.id AND id_contr = " . $id);
+
+        $return .= "<fieldset>";
+        $table = new Table('', 'prod', ['Lançamento', 'Competência', 'Produção', 'Financiamento', 'Complexidade', 'Valor'], true);
 
         while ($obj = $query->fetch_object()) {
             $row = new Row();
 
             $row->addComponent(new Column($obj->lancamento));
+            $row->addComponent(new Column($obj->competencia));
             $row->addComponent(new Column($obj->producao));
             $row->addComponent(new Column($obj->financiamento));
             $row->addComponent(new Column($obj->complexidade));
-            $row->addComponent(new Column("R$ " . $obj->valor));
+            $row->addComponent(new Column("R$ " . number_format($obj->valor, 2, ',', '.')));
 
             $table->addComponent($row);
         }
 
         $return .= $table->__toString() . "</fieldset>";
-
 
         return $return;
 

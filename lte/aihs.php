@@ -326,19 +326,19 @@ if ($permission->pedidos || $permission->saldos || $permission->noticias || $per
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
                                 aria-hidden="true">&times;</span></button>
-                    <h4 class="modal-title">Relatório de Faturamento</h4>
+                    <h4 class="modal-title">Relatório</h4>
                 </div>
                 <form action="../admin/printRelatorio.php" method="post" target="_blank">
                     <input type="hidden" name="relatorio" value="1"/>
                     <input type="hidden" name="tipo" value="faturamento"/>
                     <div class="modal-body">
                         <div class="form-group">
-                            <label>Competência</label>
-                            <select class="form-control" name="competencia" required>
+                            <label>Contrato</label>
+                            <select class="form-control" name="contrato" required>
                                 <?php
-                                $query = Query::getInstance()->exe("SELECT id, sigla_mes FROM mes LIMIT 12;");
+                                $query = Query::getInstance()->exe("SELECT id, numero_contr FROM contratualizacao;");
                                 while ($obj = $query->fetch_object()) {
-                                    echo "<option value=\"{$obj->id}\">{$obj->sigla_mes}</option>";
+                                    echo "<option value=\"{$obj->id}\">{$obj->numero_contr}</option>";
                                 }
                                 ?>
                             </select>
@@ -621,16 +621,17 @@ if ($permission->pedidos || $permission->saldos || $permission->noticias || $per
             </div>
         </div>
     </div>
-    <div aria-hidden="true" class="modal fade" id="listContratualizacoes" role="dialog" tabindex="-1">
+    <div aria-hidden="true" class="modal fade" id="listValores" role="dialog" tabindex="-1">
         <div class="modal-dialog" style="width: 90%;">
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
                                 aria-hidden="true">&times;</span></button>
-                    <h4 class="modal-title">Contratualizações</h4>
+                    <h4 class="modal-title">Valores do Contrato</h4>
                 </div>
                 <div class="modal-body">
-                    <table id="tableContr" class="table table-bordered table-striped">
+                    <h3>Valores Fixos</h3>
+                    <table id="tableValFixos" class="table table-bordered table-striped">
                         <thead>
                         <tr>
                             <th>Contrato</th>
@@ -689,6 +690,6 @@ if ($permission->pedidos || $permission->saldos || $permission->noticias || $per
 <!-- page script -->
 <script type="text/javascript" src="js/util_lte.min.js"></script>
 <script type="text/javascript" src="../iniLTE.min.js"></script>
-<script type="text/javascript" src="js/aihs.min.js"></script>
+<script type="text/javascript" src="js/aihs.js"></script>
 </body>
 </html>

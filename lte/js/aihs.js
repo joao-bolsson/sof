@@ -152,6 +152,23 @@ function editFatAprov(id) {
     });
 }
 
+function showValores(id) {
+    // show Valores fixos
+    $.post('../php/buscaLTE.php', {
+        users: 1,
+        form: 'showValoresFixos',
+        id: id
+    }).done(function (resposta) {
+        if (document.getElementById('tbodyContr').innerHTML.length > 0) {
+            $('#tableContr').DataTable().destroy();
+        }
+        $('#tbodyContr').html(resposta);
+        iniDataTable('#tableContr');
+
+        $('#listContratualizacoes').modal('show');
+    });
+}
+
 function addContratualizacao(id) {
     $('#cadContratualizacao').modal('show');
 }

@@ -44,6 +44,8 @@ final class BuscaLTE {
 
             $div .= new Button('', BTN_DEFAULT . ' btn-sm', "addValVariaveis(" . $obj->id . ")", "data-toggle = \"tooltip\"", 'Adicionar Valores Variáveis', 'bar-chart');
 
+//            $div .= new Button('', BTN_DEFAULT . ' btn-sm', "showValores(" . $obj->id . ")", "data-toggle = \"tooltip\"", 'Visualizar', 'eye');
+
             $div .= new Button('', BTN_DEFAULT . ' btn-sm', "editContratualizacao(" . $obj->id . ")", "data-toggle = \"tooltip\"", 'Editar', 'pencil');
 
             $div .= new Button('', BTN_DANGER . ' btn-sm', "removeContratualizacao(" . $obj->id . ")", "data-toggle = \"tooltip\"", 'Remover', 'trash');

@@ -48,9 +48,9 @@ if (!is_null($type)) {
         switch ($tipo) {
 
             case 'faturamento':
-                $competencia = filter_input(INPUT_POST, 'competencia');
+                $contrato = filter_input(INPUT_POST, 'contrato');
 
-                $html .= PrintMod::getRelatorioFaturamento($competencia);
+                $html .= PrintMod::getRelatorioFaturamento($contrato);
                 break;
 
             case 'receitas':
