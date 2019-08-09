@@ -65,7 +65,7 @@ final class PrintMod {
                     <h6>Valores Variáveis</h6>
             </fieldset><br>";
 
-        $query = Query::getInstance()->exe("SELECT DATE_FORMAT(lancamento, '%d/%m/%Y') AS lancamento, mes.sigla_mes AS competencia, faturamento_producao.nome AS producao, faturamento_financiamento.nome AS financiamento, faturamento_complexidade.nome AS complexidade FROM faturamento, mes, faturamento_producao, faturamento_financiamento, faturamento_complexidade WHERE faturamento.competencia = mes.id AND faturamento.producao = faturamento_producao.id AND faturamento.financiamento = faturamento_financiamento.id AND faturamento.complexidade = faturamento_complexidade.id AND id_contr = " . $id);
+        $query = Query::getInstance()->exe("SELECT DATE_FORMAT(lancamento, '%d/%m/%Y') AS lancamento, mes.sigla_mes AS competencia, faturamento_producao.nome AS producao, faturamento_financiamento.nome AS financiamento, faturamento_complexidade.nome AS complexidade, valor FROM faturamento, mes, faturamento_producao, faturamento_financiamento, faturamento_complexidade WHERE faturamento.competencia = mes.id AND faturamento.producao = faturamento_producao.id AND faturamento.financiamento = faturamento_financiamento.id AND faturamento.complexidade = faturamento_complexidade.id AND id_contr = " . $id);
 
         $return .= "<fieldset>";
         $table = new Table('', 'prod', ['Lançamento', 'Competência', 'Produção', 'Financiamento', 'Complexidade', 'Valor'], true);
