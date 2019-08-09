@@ -332,6 +332,7 @@ function removeContratualizacao(id) {
             id: id
         }).done(function () {
             $('#listContratualizacoes').modal('hide');
+            loadTableFatAprov();
         });
     }
 }

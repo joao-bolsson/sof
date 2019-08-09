@@ -87,6 +87,8 @@ final class Geral {
     }
 
     public static function removeContratualizacao(int $id) {
+        Query::getInstance()->exe("DELETE FROM faturamento WHERE id_contr  = " . $id);
+        Query::getInstance()->exe("DELETE FROM contratualizacao_valores WHERE id_contr  = " . $id);
         Query::getInstance()->exe("DELETE FROM contratualizacao WHERE id = " . $id);
     }
 

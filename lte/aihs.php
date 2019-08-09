@@ -690,6 +690,6 @@ if ($permission->pedidos || $permission->saldos || $permission->noticias || $per
 <!-- page script -->
 <script type="text/javascript" src="js/util_lte.min.js"></script>
 <script type="text/javascript" src="../iniLTE.min.js"></script>
-<script type="text/javascript" src="js/aihs.js"></script>
+<script type="text/javascript" src="js/aihs.min.js"></script>
 </body>
 </html>
