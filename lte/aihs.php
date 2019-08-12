@@ -557,11 +557,11 @@ if ($permission->pedidos || $permission->saldos || $permission->noticias || $per
                         <h4>Vigência</h4>
                         <div class="form-group">
                             <label>Início</label>
-                            <input class="form-control date" name="vigencia_ini" type="text" required>
+                            <input class="form-control date" name="vigencia_ini" type="text">
                         </div>
                         <div class="form-group">
                             <label>Fim</label>
-                            <input class="form-control date" name="vigencia_fim" type="text" required>
+                            <input class="form-control date" name="vigencia_fim" type="text">
                         </div>
                         <h4>Aditivo</h4>
                         <div class="form-group">

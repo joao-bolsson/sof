@@ -27,7 +27,7 @@ final class BuscaLTE {
     }
 
     public static function getContrat(): string {
-        $query = Query::getInstance()->exe("SELECT id, numero_contr, DATE_FORMAT(vigenc_ini, '%d/%m/%Y') AS vigenc_ini, DATE_FORMAT(vigenc_fim, '%d/%m/%Y') AS vigenc_fim, DATE_FORMAT(aditivo_ini, '%d/%m/%Y') AS aditivo_ini, DATE_FORMAT(vigenc_ini, '%d/%m/%Y') AS aditivo_fim FROM contratualizacao;");
+        $query = Query::getInstance()->exe("SELECT id, numero_contr, DATE_FORMAT(vigenc_ini, '%d/%m/%Y') AS vigenc_ini, DATE_FORMAT(vigenc_fim, '%d/%m/%Y') AS vigenc_fim, DATE_FORMAT(aditivo_ini, '%d/%m/%Y') AS aditivo_ini, DATE_FORMAT(aditivo_fim, '%d/%m/%Y') AS aditivo_fim FROM contratualizacao;");
 
         $table = new Table('', '', [], true);
 

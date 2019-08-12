@@ -70,6 +70,8 @@ final class Geral {
 
         }
 
+        Logger::info($builder->__toString());
+
         Query::getInstance()->exe($builder->__toString());
     }
 

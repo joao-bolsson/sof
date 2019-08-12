@@ -256,13 +256,15 @@ final class Util {
     }
 
     /**
-     *    Função para formatar uma data d/m/Y em Y-m-d
+     * Função para formatar uma data d/m/Y em Y-m-d.
      *
-     * @access public
-     * @param $data Data a ser formatada
-     * @return The date in format Y-m-d
+     * @param string $data
+     * @return string|null
      */
-    public static function dateFormat(string $data): string {
+    public static function dateFormat(string $data) {
+        if (empty($data)) {
+            return NULL;
+        }
         $array_data = explode('/', $data);
 
         if (count($array_data) == 3) {
