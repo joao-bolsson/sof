@@ -49,8 +49,11 @@ if (!is_null($type)) {
 
             case 'faturamento':
                 $contrato = filter_input(INPUT_POST, 'contrato');
+                $competencia = filter_input(INPUT_POST, 'competencia');
+                $dataI = filter_input(INPUT_POST, 'dataI');
+                $dataF = filter_input(INPUT_POST, 'dataF');
 
-                $html .= PrintMod::getRelatorioFaturamento($contrato);
+                $html .= PrintMod::getRelatorioFaturamento($contrato, $competencia, $dataI, $dataF);
                 break;
 
             case 'receitas':

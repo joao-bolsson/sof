@@ -27,7 +27,7 @@ final class PrintMod {
         // empty
     }
 
-    public static function getRelatorioFaturamento(int $id): string {
+    public static function getRelatorioFaturamento(int $id, int $comp, string $dataI, string $dataF): string {
         $query_contr = Query::getInstance()->exe("SELECT numero_contr FROM contratualizacao WHERE id = " . $id);
 
         $num = $query_contr->fetch_object()->numero_contr;
@@ -60,12 +60,20 @@ final class PrintMod {
 
         $return .= $table->__toString() . "</fieldset><br>";
 
+        $dI = Util::dateFormat($dataI);
+        $dF = Util::dateFormat($dataF);
+
+        $query_mes = Query::getInstance()->exe("SELECT sigla_mes FROM mes WHERE id = " . $comp);
+        $mes = $query_mes->fetch_object()->sigla_mes;
+
         $return .= "
             <fieldset class=\"preg\">
                     <h6>Valores Variáveis</h6>
+                    <h5>Período de Lançamento: {$dataI} - {$dataF}</h5>
+                    <h5>Competência: {$mes}</h5>
             </fieldset><br>";
 
-        $query = Query::getInstance()->exe("SELECT DATE_FORMAT(lancamento, '%d/%m/%Y') AS lancamento, mes.sigla_mes AS competencia, faturamento_producao.nome AS producao, faturamento_financiamento.nome AS financiamento, faturamento_complexidade.nome AS complexidade, valor FROM faturamento, mes, faturamento_producao, faturamento_financiamento, faturamento_complexidade WHERE faturamento.competencia = mes.id AND faturamento.producao = faturamento_producao.id AND faturamento.financiamento = faturamento_financiamento.id AND faturamento.complexidade = faturamento_complexidade.id AND id_contr = " . $id);
+        $query = Query::getInstance()->exe("SELECT DATE_FORMAT(lancamento, '%d/%m/%Y') AS lancamento, mes.sigla_mes AS competencia, faturamento_producao.nome AS producao, faturamento_financiamento.nome AS financiamento, faturamento_complexidade.nome AS complexidade, valor FROM faturamento, mes, faturamento_producao, faturamento_financiamento, faturamento_complexidade WHERE faturamento.competencia = " . $comp . " AND (faturamento.lancamento BETWEEN '" . $dI . "' AND '" . $dF . "') AND faturamento.competencia = mes.id AND faturamento.producao = faturamento_producao.id AND faturamento.financiamento = faturamento_financiamento.id AND faturamento.complexidade = faturamento_complexidade.id AND id_contr = " . $id);
 
         $return .= "<fieldset>";
         $table = new Table('', 'prod', ['Lançamento', 'Competência', 'Produção', 'Financiamento', 'Complexidade', 'Valor'], true);

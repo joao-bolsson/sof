@@ -188,7 +188,7 @@ if ($permission->pedidos || $permission->saldos || $permission->noticias || $per
                 <div id="rowFatAprov" class="row" style="display: none;">
                     <div class="box box-primary">
                         <div class="box-header with-border">
-                            <h3 class="box-title">Contratos</h3>
+                            <h3 class="box-title">Contratualizações</h3>
                             <div class="box-tools pull-right">
                                 <button type="button" class="btn btn-box-tool" data-widget="collapse"><i
                                             class="fa fa-minus"></i>
@@ -342,6 +342,25 @@ if ($permission->pedidos || $permission->saldos || $permission->noticias || $per
                                 }
                                 ?>
                             </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Competência</label>
+                            <select class="form-control" name="competencia" required>
+                                <?php
+                                $query = Query::getInstance()->exe("SELECT id, sigla_mes FROM mes LIMIT 12;");
+                                while ($obj = $query->fetch_object()) {
+                                    echo "<option value=\"{$obj->id}\">{$obj->sigla_mes}</option>";
+                                }
+                                ?>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Data de Lançamento Inicial</label>
+                            <input class="form-control date" name="dataI" type="text" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Data de Lançamento Final</label>
+                            <input class="form-control date" name="dataF" type="text" required>
                         </div>
                     </div>
                     <div class="modal-footer">
