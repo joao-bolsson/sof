@@ -41,7 +41,7 @@ final class PrintMod {
 
         $return .= "
             <fieldset class=\"preg\">
-                    <h6>Valores Fixos</h6>
+                    <h5>Valores Fixos</h5>
             </fieldset><br>";
 
         $query = Query::getInstance()->exe("SELECT contratualizacao_prefix.nome, valor FROM contratualizacao_valores, contratualizacao_prefix WHERE contratualizacao_valores.id_tipo = contratualizacao_prefix.id AND contratualizacao_valores.id_contr = " . $id);
@@ -58,19 +58,25 @@ final class PrintMod {
             $table->addComponent($row);
         }
 
+        $queryTotFix = Query::getInstance()->exe("SELECT SUM(valor) as soma FROM contratualizacao_valores, contratualizacao_prefix WHERE contratualizacao_valores.id_tipo = contratualizacao_prefix.id AND contratualizacao_valores.id_contr = " . $id);
+
+        $totFixos = $queryTotFix->fetch_object()->soma;
+
+        $row = new Row();
+        $row->addComponent(new Column("<b>Total</b>"));
+        $row->addComponent(new Column("R$ " . number_format($totFixos, 2, ',', '.')));
+
+        $table->addComponent($row);
+
         $return .= $table->__toString() . "</fieldset><br>";
 
         $dI = Util::dateFormat($dataI);
         $dF = Util::dateFormat($dataF);
 
-        $query_mes = Query::getInstance()->exe("SELECT sigla_mes FROM mes WHERE id = " . $comp);
-        $mes = $query_mes->fetch_object()->sigla_mes;
-
         $return .= "
             <fieldset class=\"preg\">
-                    <h6>Valores Variáveis</h6>
-                    <h5>Período de Lançamento: {$dataI} - {$dataF}</h5>
-                    <h5>Competência: {$mes}</h5>
+                    <h5>Valores Variáveis</h5>
+                    <h6>Período de Lançamento: {$dataI} - {$dataF}</h6>
             </fieldset><br>";
 
         $query = Query::getInstance()->exe("SELECT DATE_FORMAT(lancamento, '%d/%m/%Y') AS lancamento, mes.sigla_mes AS competencia, faturamento_producao.nome AS producao, faturamento_financiamento.nome AS financiamento, faturamento_complexidade.nome AS complexidade, valor FROM faturamento, mes, faturamento_producao, faturamento_financiamento, faturamento_complexidade WHERE faturamento.competencia = " . $comp . " AND (faturamento.lancamento BETWEEN '" . $dI . "' AND '" . $dF . "') AND faturamento.competencia = mes.id AND faturamento.producao = faturamento_producao.id AND faturamento.financiamento = faturamento_financiamento.id AND faturamento.complexidade = faturamento_complexidade.id AND id_contr = " . $id);
@@ -78,6 +84,7 @@ final class PrintMod {
         $return .= "<fieldset>";
         $table = new Table('', 'prod', ['Lançamento', 'Competência', 'Produção', 'Financiamento', 'Complexidade', 'Valor'], true);
 
+        $totVar = 0;
         while ($obj = $query->fetch_object()) {
             $row = new Row();
 
@@ -89,9 +96,25 @@ final class PrintMod {
             $row->addComponent(new Column("R$ " . number_format($obj->valor, 2, ',', '.')));
 
             $table->addComponent($row);
+
+            if ($obj->producao == "SIA" && $obj->financiamento == "MAC" && $obj->complexidade == "MC") {
+                // nao soma
+            } else if ($obj->producao == "SIH" && $obj->financiamento == "MAC" && $obj->complexidade == "MC") {
+                // nao soma
+            } else {
+                $totVar += $obj->valor;
+            }
         }
 
-        $return .= $table->__toString() . "</fieldset>";
+        $return .= $table->__toString() . "</fieldset><br>";
+
+        $return .= "
+            <fieldset class=\"preg\">
+                    <h5>Totais</h5>
+                    <h6><b>Fixos:</b> R$ " . number_format($totFixos, 2, ',', '.') . "</h6>
+                    <h6><b>Variáveis:</b> R$ " . number_format($totVar, 2, ',', '.') . "</h6>
+                    <h6><b>Total:</b> R$ " . number_format($totFixos + $totVar, 2, ',', '.') . "</h6>
+            </fieldset>";
 
         return $return;
 
