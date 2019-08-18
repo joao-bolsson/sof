@@ -568,12 +568,13 @@ if (Busca::isActive()) {
                 $idContr = filter_input(INPUT_POST, 'idContr');
                 $data = filter_input(INPUT_POST, 'data');
                 $competencia = filter_input(INPUT_POST, 'mes');
+                $ano = filter_input(INPUT_POST, 'ano');
                 $producao = filter_input(INPUT_POST, 'producao');
                 $financiamento = filter_input(INPUT_POST, 'financiamento');
                 $complexidade = filter_input(INPUT_POST, 'complexidade');
                 $valor = filter_input(INPUT_POST, 'valor');
 
-                Geral::cadFaturamento($idContr, $data, $competencia, $producao, $financiamento, $complexidade, $valor);
+                Geral::cadFaturamento($idContr, $data, $competencia, $ano, $producao, $financiamento, $complexidade, $valor);
 
                 echo "ok";
                 break;
