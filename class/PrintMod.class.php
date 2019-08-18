@@ -27,7 +27,7 @@ final class PrintMod {
         // empty
     }
 
-    public static function getRelatorioFaturamento(int $id, int $comp, string $dataI, string $dataF): string {
+    public static function getRelatorioFaturamento(int $id, int $comp, int $ano, string $dataI, string $dataF): string {
         $query_contr = Query::getInstance()->exe("SELECT numero_contr FROM contratualizacao WHERE id = " . $id);
 
         $num = $query_contr->fetch_object()->numero_contr;
@@ -73,23 +73,27 @@ final class PrintMod {
         $dI = Util::dateFormat($dataI);
         $dF = Util::dateFormat($dataF);
 
+        $query_mes = Query::getInstance()->exe("SELECT sigla_mes FROM mes WHERE id = " . $comp);
+        $mes = $query_mes->fetch_object()->sigla_mes;
+
         $return .= "
             <fieldset class=\"preg\">
                     <h5>Valores Variáveis</h5>
-                    <h6>Período de Lançamento: {$dataI} - {$dataF}</h6>
+                    <h6>Período de Lançamento: " . $dataI . " - " . $dataF . "</h6>
+                    <h6>Competência: " . $mes . "</h6>
+                    <h6>Ano: " . $ano . "</h6>
             </fieldset><br>";
 
-        $query = Query::getInstance()->exe("SELECT DATE_FORMAT(lancamento, '%d/%m/%Y') AS lancamento, mes.sigla_mes AS competencia, faturamento_producao.nome AS producao, faturamento_financiamento.nome AS financiamento, faturamento_complexidade.nome AS complexidade, valor FROM faturamento, mes, faturamento_producao, faturamento_financiamento, faturamento_complexidade WHERE faturamento.competencia = " . $comp . " AND (faturamento.lancamento BETWEEN '" . $dI . "' AND '" . $dF . "') AND faturamento.competencia = mes.id AND faturamento.producao = faturamento_producao.id AND faturamento.financiamento = faturamento_financiamento.id AND faturamento.complexidade = faturamento_complexidade.id AND id_contr = " . $id);
+        $query = Query::getInstance()->exe("SELECT DATE_FORMAT(lancamento, '%d/%m/%Y') AS lancamento, faturamento_producao.nome AS producao, faturamento_financiamento.nome AS financiamento, faturamento_complexidade.nome AS complexidade, valor FROM faturamento, faturamento_producao, faturamento_financiamento, faturamento_complexidade WHERE faturamento.competencia = " . $comp . " AND faturamento.ano = " . $ano . " AND (faturamento.lancamento BETWEEN '" . $dI . "' AND '" . $dF . "') AND faturamento.producao = faturamento_producao.id AND faturamento.financiamento = faturamento_financiamento.id AND faturamento.complexidade = faturamento_complexidade.id AND id_contr = " . $id);
 
         $return .= "<fieldset>";
-        $table = new Table('', 'prod', ['Lançamento', 'Competência', 'Produção', 'Financiamento', 'Complexidade', 'Valor'], true);
+        $table = new Table('', 'prod', ['Lançamento', 'Produção', 'Financiamento', 'Complexidade', 'Valor'], true);
 
         $totVar = 0;
         while ($obj = $query->fetch_object()) {
             $row = new Row();
 
             $row->addComponent(new Column($obj->lancamento));
-            $row->addComponent(new Column($obj->competencia));
             $row->addComponent(new Column($obj->producao));
             $row->addComponent(new Column($obj->financiamento));
             $row->addComponent(new Column($obj->complexidade));

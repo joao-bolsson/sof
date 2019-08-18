@@ -349,6 +349,10 @@ if ($permission->pedidos || $permission->saldos || $permission->noticias || $per
                             </select>
                         </div>
                         <div class="form-group">
+                            <label>Ano</label>
+                            <input class="form-control" type="number" min="2015" step="1" name="ano" required/>
+                        </div>
+                        <div class="form-group">
                             <label>Data de Lançamento Inicial</label>
                             <input class="form-control date" name="dataI" type="text" required>
                         </div>

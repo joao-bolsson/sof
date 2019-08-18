@@ -1,3 +1,7 @@
 RewriteEngine On
 RewriteCond %{HTTPS} !=on
 RewriteRule ^/?(.*) https://%{SERVER_NAME}/$1 [R,L]
+
+<IfModule mod_php7.c>
+php_value max_execution_time 3000
+</IfModule>

@@ -41,7 +41,7 @@ final class Busca {
     }
 
     public static function getFatAprov(int $id) {
-        $query = Query::getInstance()->exe("SELECT DATE_FORMAT(lancamento, '%d/%m/%Y') as data, competencia, producao, financiamento, complexidade, valor FROM faturamento WHERE faturamento.id = " . $id);
+        $query = Query::getInstance()->exe("SELECT DATE_FORMAT(lancamento, '%d/%m/%Y') as data, competencia, producao, financiamento, complexidade, valor FROM faturamento WHERE id = " . $id);
 
         return $query->fetch_object();
     }
