@@ -132,6 +132,10 @@ if (!is_null($admin) && isset($_SESSION['id_setor']) && ($_SESSION['id_setor'] =
 
     switch ($form) {
 
+        case 'getOptContratos':
+            echo Busca::getOptionsContratualizacoes();
+            break;
+
         case 'editContratualizacao':
             $id = filter_input(INPUT_POST, 'id');
             echo json_encode(Busca::getContratualizacao($id));

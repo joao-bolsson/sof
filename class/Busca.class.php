@@ -24,6 +24,16 @@ final class Busca {
         // empty
     }
 
+    public static function getOptionsContratualizacoes() {
+        $query = Query::getInstance()->exe("SELECT id, numero_contr FROM contratualizacao;");
+        $return = "";
+        while ($obj = $query->fetch_object()) {
+            $return .= "<option value=\"" . $obj->id . "\">" . $obj->numero_contr . "</option>";
+        }
+
+        return $return;
+    }
+
     public static function getContratualizacao(int $id) {
         $query = Query::getInstance()->exe("SELECT numero_contr, DATE_FORMAT(vigenc_ini, '%d/%m/%Y') AS vigenc_ini,DATE_FORMAT(vigenc_fim, '%d/%m/%Y') AS vigenc_fim, DATE_FORMAT(aditivo_ini, '%d/%m/%Y') AS aditivo_ini, DATE_FORMAT(aditivo_fim, '%d/%m/%Y') AS aditivo_fim FROM contratualizacao WHERE id = " . $id);
 

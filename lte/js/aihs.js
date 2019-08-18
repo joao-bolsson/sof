@@ -29,6 +29,13 @@ $(function () {
 
     $("#relFaturamento").on('shown.bs.modal', function () {
         $(".date").inputmask("dd/mm/yyyy", {"placeholder": "dd/mm/yyyy"});
+
+        $.post('../php/busca.php', {
+            users: 1,
+            form: 'getOptContratos'
+        }).done(function (resposta) {
+            $("#relFaturamento select[name=contrato]").html(resposta);
+        });
     });
 
     $("#cadReceita").on('shown.bs.modal', function () {

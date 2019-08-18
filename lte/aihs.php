@@ -197,7 +197,8 @@ if ($permission->pedidos || $permission->saldos || $permission->noticias || $per
                         </div>
                         <div class="box-body">
                             <div class="margin">
-                                <button class="btn btn-primary" type="button" onclick="abreModal('#cadContratualizacao');"><i
+                                <button class="btn btn-primary" type="button"
+                                        onclick="abreModal('#cadContratualizacao');"><i
                                             class="fa fa-sign-in"></i>&nbsp;Adicionar
                                 </button>
                                 <button class="btn btn-primary" type="button" onclick="abreModal('#relFaturamento');"><i
@@ -334,14 +335,7 @@ if ($permission->pedidos || $permission->saldos || $permission->noticias || $per
                     <div class="modal-body">
                         <div class="form-group">
                             <label>Contrato</label>
-                            <select class="form-control" name="contrato" required>
-                                <?php
-                                $query = Query::getInstance()->exe("SELECT id, numero_contr FROM contratualizacao;");
-                                while ($obj = $query->fetch_object()) {
-                                    echo "<option value=\"{$obj->id}\">{$obj->numero_contr}</option>";
-                                }
-                                ?>
-                            </select>
+                            <select class="form-control" name="contrato" required></select>
                         </div>
                         <div class="form-group">
                             <label>Competência</label>
