@@ -112,9 +112,33 @@ final class PrintMod {
 
         $return .= $table->__toString() . "</fieldset><br>";
 
+        // mes anterior
+        $otherComp = $comp - 1;
+        $otherAno = $ano;
+        if ($comp == 1) {
+            $otherComp = 12;
+            $otherAno = $ano - 1;
+        }
+
+        // AJUSTE SIA
+        $querySIA = Query::getInstance()->exe("SELECT COALESCE(SUM(valor), 0) AS sum1 FROM faturamento WHERE (faturamento.lancamento BETWEEN '" . $dI . "' AND '" . $dF . "') AND producao = 1 AND financiamento = 2 AND complexidade = 2 AND id_contr = " . $id . " AND competencia = " . $comp . " AND ano = " . $ano);
+
+        $querySIA2 = Query::getInstance()->exe("SELECT COALESCE(SUM(valor), 0) AS sum2 FROM faturamento WHERE (faturamento.lancamento BETWEEN '" . $dI . "' AND '" . $dF . "') AND producao = 1 AND financiamento = 2 AND complexidade = 2 AND id_contr = " . $id . " AND competencia = " . $otherComp . " AND ano = " . $otherAno);
+
+        $ajusteSIA = $querySIA->fetch_object()->sum1 - $querySIA2->fetch_object()->sum2;
+
+        // AJUSTE SIH
+        $querySIH = Query::getInstance()->exe("SELECT COALESCE(SUM(valor), 0) AS sum1 FROM faturamento WHERE (faturamento.lancamento BETWEEN '" . $dI . "' AND '" . $dF . "') AND producao = 2 AND financiamento = 2 AND complexidade = 2 AND id_contr = " . $id . " AND competencia = " . $comp . " AND ano = " . $ano);
+
+        $querySIH2 = Query::getInstance()->exe("SELECT COALESCE(SUM(valor), 0) AS sum2 FROM faturamento WHERE (faturamento.lancamento BETWEEN '" . $dI . "' AND '" . $dF . "') AND producao = 2 AND financiamento = 2 AND complexidade = 2 AND id_contr = " . $id . " AND competencia = " . $otherComp . " AND ano = " . $otherAno);
+
+        $ajusteSIH = $querySIH->fetch_object()->sum1 - $querySIH2->fetch_object()->sum2;
+
         $return .= "
             <fieldset class=\"preg\">
                     <h5>Totais</h5>
+                    <h6><b>Ajuste SIA - Alta Complexidade:</b> R$ " . number_format($ajusteSIA, 2, ',', '.') . "</h6>
+                    <h6><b>Ajuste SIH - Alta Complexidade:</b> R$ " . number_format($ajusteSIH, 2, ',', '.') . "</h6>                    
                     <h6><b>Fixos:</b> R$ " . number_format($totFixos, 2, ',', '.') . "</h6>
                     <h6><b>Variáveis:</b> R$ " . number_format($totVar, 2, ',', '.') . "</h6>
                     <h6><b>Total:</b> R$ " . number_format($totFixos + $totVar, 2, ',', '.') . "</h6>
