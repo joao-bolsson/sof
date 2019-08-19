@@ -26,3 +26,8 @@ defined('BTN_DANGER') or define('BTN_DANGER', 'btn btn-danger');
 defined('MAX_UPLOAD_SIZE') or define('MAX_UPLOAD_SIZE', 3);
 
 defined('ARRAY_DATABASES') or define('ARRAY_DATABASES', ['main', 'sof_2018', 'sof_2017']);
+
+// faturamento AIHS
+defined('ARRAY_PRODUCAO') or define('ARRAY_PRODUCAO', [NULL, 'SIA', 'SIH']);
+defined('ARRAY_FINANCIAMENTO') or define('ARRAY_FINANCIAMENTO', [NULL, 'FAEC', 'MAC', 'NAO SE APLICA']);
+defined('ARRAY_COMPLEXIDADE') or define('ARRAY_COMPLEXIDADE', [NULL, 'MC', 'AC']);

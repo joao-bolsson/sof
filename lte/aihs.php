@@ -338,6 +338,39 @@ if ($permission->pedidos || $permission->saldos || $permission->noticias || $per
                             <select class="form-control" name="contrato" required></select>
                         </div>
                         <div class="form-group">
+                            <label>Produção</label>
+                            <select class="form-control" name="producao" required>
+                                <?php
+                                $query = Query::getInstance()->exe("SELECT id, nome FROM faturamento_producao;");
+                                while ($obj = $query->fetch_object()) {
+                                    echo "<option value=\"{$obj->id}\">{$obj->nome}</option>";
+                                }
+                                ?>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Financiamento</label>
+                            <select class="form-control" name="financiamento" required>
+                                <?php
+                                $query = Query::getInstance()->exe("SELECT id, nome FROM faturamento_financiamento;");
+                                while ($obj = $query->fetch_object()) {
+                                    echo "<option value=\"{$obj->id}\">{$obj->nome}</option>";
+                                }
+                                ?>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Compexidade</label>
+                            <select class="form-control" name="complexidade" required>
+                                <?php
+                                $query = Query::getInstance()->exe("SELECT id, nome FROM faturamento_complexidade;");
+                                while ($obj = $query->fetch_object()) {
+                                    echo "<option value=\"{$obj->id}\">{$obj->nome}</option>";
+                                }
+                                ?>
+                            </select>
+                        </div>
+                        <div class="form-group">
                             <label>Competência</label>
                             <select class="form-control" name="competencia" required>
                                 <?php
