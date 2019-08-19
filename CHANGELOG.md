@@ -1,5 +1,12 @@
 ## CHANGELOG ##
 
+#### v2.4.7 - 19/08/2019 ####
+- Adiciona campo ano para parte de faturamento (aihs)
+- Relatórios de AIHs mais filtratos
+- Mostra ajustes SIA e SIH no relatório de faturamento
+- Mostra sub totais no relatório de faturamento
+- Carrega dinamicamento select com opções de contrato para fazer relatório (bug)
+
 #### v2.4.6 - 02/08/2019 ####
 - Formulário para faturamento aprovado
 - Tabela para visualizar, editar e remover faturamentos aprovados
