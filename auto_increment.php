@@ -12,9 +12,9 @@ $i = 1;
 while ($obj = $query->fetch_object()) {
     foreach ($tables as $table) {
         Query::getInstance()->exe("UPDATE " . $table . " SET id_pedido = " . $i . " WHERE id_pedido = " . $obj->id);
-        Query::getInstance()->exe("UPDATE pedido SET id= " . $i . " WHERE id= " . $obj->id);
-        $i++;
     }
+    Query::getInstance()->exe("UPDATE pedido SET id= " . $i . " WHERE id= " . $obj->id);
+    $i++;
 }
 
 Query::getInstance()->exe("ALTER TABLE pedido AUTO_INCREMENT = " . $i);
