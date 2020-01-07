@@ -2,7 +2,7 @@
 
 include_once 'class/Query.class.php';
 
-$tables = ["pedido_contrato", "pedido_empenho", "pedido_fonte", "pedido_grupo", "pedido_id_fonte", "pedido_log_status", "pedido_plano"];
+$tables = ["pedido_contrato", "pedido_empenho", "pedido_fonte", "pedido_grupo", "pedido_id_fonte", "pedido_log_status", "pedido_plano", "itens_pedido"];
 
 Query::getInstance()->exe("SET FOREIGN_KEY_CHECKS = 0;");
 $query = Query::getInstance()->exe("SELECT id FROM pedido");
