@@ -115,7 +115,7 @@ class RequestReport implements Report {
 
         $this->title = 'Relatório de Pedidos por Setor e Nível de Prioridade';
         $this->sql = "";
-        $this->headers = ['Pedido', 'Fornecedor', 'Enviado em', 'Prioridade', 'Status', 'Valor'];
+        $this->headers = ['Pedido', 'SEI', 'Fornecedor', 'Enviado em', 'Prioridade', 'Status', 'Valor'];
 
         // where values
         $this->where_sector = 'AND pedido.id_setor = ' . $this->sector;
@@ -210,7 +210,7 @@ class RequestReport implements Report {
         $obj_count = Query::getInstance()->exe("SELECT COUNT(pedido.id) AS total FROM " . $from)->fetch_object();
         $this->foundEntries = $obj_count->total;
 
-        $this->sql = "SELECT pedido.id, DATE_FORMAT(pedido.data_pedido, '%d/%m/%Y') AS data_pedido, prioridade.nome AS prioridade, status.nome AS status, pedido.valor {$this->effort} FROM " . $from . " ORDER BY pedido.id DESC";
+        $this->sql = "SELECT pedido.id, pedido.pedSei, DATE_FORMAT(pedido.data_pedido, '%d/%m/%Y') AS data_pedido, prioridade.nome AS prioridade, status.nome AS status, pedido.valor {$this->effort} FROM " . $from . " ORDER BY pedido.id DESC";
 
         $query_tot = Query::getInstance()->exe("SELECT round(replace(sum(pedido.valor), ',', '.'), 3) AS total FROM " . $from);
         $tot = $query_tot->fetch_object();
@@ -251,6 +251,7 @@ class RequestReport implements Report {
             while ($request = $query->fetch_object()) {
                 $row = new Row();
                 $row->addComponent(new Column($request->id));
+                $row->addComponent(new Column($request->pedSei));
                 $forn = BuscaLTE::getFornecedor($request->id);
 
                 $mb = mb_detect_encoding($forn, 'UTF-8, ISO-8859-1');
