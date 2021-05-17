@@ -8,6 +8,7 @@
 * PHP 7.0+
 * MySQL 5.7+
 
+
 ##### PDF
 
 Para geração de PDF, precisa criar um diretório na raiz do projeto com o nome 'temp'. É onde ficarão os arquivos temporários necessários para a criação e visualização dos PDFs gerados no site.
